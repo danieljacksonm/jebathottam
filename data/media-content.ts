@@ -1,0 +1,38 @@
+export const mediaItems = [
+  {
+    id: 1,
+    title: 'God\'s Faithfulness',
+    type: 'poster',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1200&fit=crop',
+    message: 'Trust in the Lord with all your heart and lean not on your own understanding.',
+    scripture: 'Proverbs 3:5',
+    date: '2024-01-15',
+  },
+  {
+    id: 2,
+    title: 'Prayer Changes Everything',
+    type: 'poster',
+    image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&h=1200&fit=crop',
+    message: 'The prayer of a righteous person is powerful and effective.',
+    scripture: 'James 5:16',
+    date: '2024-01-10',
+  },
+  {
+    id: 3,
+    title: 'Sunday Service Highlights',
+    type: 'youtube',
+    videoId: 'dQw4w9WgXcQ',
+    thumbnail: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=450&fit=crop',
+    description: 'Watch highlights from our recent Sunday worship service.',
+    date: '2024-01-14',
+  },
+  {
+    id: 4,
+    title: 'Walking in Faith',
+    type: 'youtube-shorts',
+    videoId: 'dQw4w9WgXcQ',
+    thumbnail: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1200&fit=crop',
+    description: 'A short message about walking in faith daily.',
+    date: '2024-01-12',
+  },
+];

@@ -1,46 +1,149 @@
 'use client';
 
-import { FadeInUp } from '@/components/animations/page-transition';
+import { useState } from 'react';
+import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Breadcrumbs } from '@/components/admin/breadcrumbs';
+import { mediaItems } from '@/data/media-content';
 
 export default function AdminMedia() {
+  const [showForm, setShowForm] = useState(false);
+  const [activeTab, setActiveTab] = useState<'posters' | 'videos'>('posters');
+
+  const posters = mediaItems.filter(item => item.type === 'poster');
+  const videos = mediaItems.filter(item => item.type === 'youtube' || item.type === 'youtube-shorts');
+
   return (
     <div>
+      <Breadcrumbs items={[
+        { label: 'Dashboard', href: '/admin' },
+        { label: 'Media Library' },
+      ]} />
+
       <FadeInUp>
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
               Media Library
             </h1>
             <p className="text-gray-600 dark:text-gray-400">
-              Manage all media files and uploads
+              Manage posters, videos, and media content
             </p>
           </div>
-          <Button size="lg">
-            + Upload Media
-          </Button>
+          <div className="flex space-x-4">
+            <Button variant="secondary" size="lg" onClick={() => setActiveTab('posters')}>
+              + New Poster
+            </Button>
+            <Button size="lg" onClick={() => setActiveTab('videos')}>
+              + New Video
+            </Button>
+          </div>
         </div>
       </FadeInUp>
 
-      <FadeInUp delay={0.2}>
-        <Card className="dark:bg-gray-900 dark:border-gray-800">
-          <CardHeader>
-            <CardTitle>All Media</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
-                <div key={item} className="aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center cursor-pointer hover:ring-2 hover:ring-primary-500 transition-all">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+      {/* Tabs */}
+      <FadeInUp delay={0.1}>
+        <div className="border-b border-gray-200 dark:border-gray-800 mb-6">
+          <nav className="flex space-x-8">
+            <button
+              onClick={() => setActiveTab('posters')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'posters'
+                  ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
+            >
+              Posters ({posters.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('videos')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                activeTab === 'videos'
+                  ? 'border-primary-500 text-primary-600 dark:text-primary-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
+            >
+              Videos ({videos.length})
+            </button>
+          </nav>
+        </div>
       </FadeInUp>
+
+      {/* Posters */}
+      {activeTab === 'posters' && (
+        <StaggerContainer>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {posters.map((poster) => (
+              <StaggerItem key={poster.id}>
+                <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                  <div className="relative h-64 bg-gray-100 dark:bg-gray-800">
+                    <img
+                      src={poster.image}
+                      alt={poster.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{poster.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">{poster.message}</p>
+                    <div className="flex space-x-2">
+                      <Button variant="ghost" size="sm" className="flex-1 dark:text-gray-400 dark:hover:text-white">
+                        Edit
+                      </Button>
+                      <Button variant="ghost" size="sm" className="flex-1 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </div>
+        </StaggerContainer>
+      )}
+
+      {/* Videos */}
+      {activeTab === 'videos' && (
+        <StaggerContainer>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {videos.map((video) => (
+              <StaggerItem key={video.id}>
+                <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
+                  <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
+                    {video.thumbnail && (
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-16 h-16 bg-black/60 rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">{video.title}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{video.description}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mb-4">YouTube ID: {video.videoId}</p>
+                    <div className="flex space-x-2">
+                      <Button variant="ghost" size="sm" className="flex-1 dark:text-gray-400 dark:hover:text-white">
+                        Edit
+                      </Button>
+                      <Button variant="ghost" size="sm" className="flex-1 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </StaggerItem>
+            ))}
+          </div>
+        </StaggerContainer>
+      )}
     </div>
   );
 }

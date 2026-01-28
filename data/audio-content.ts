@@ -1,0 +1,38 @@
+export const audioTracks = [
+  {
+    id: 1,
+    title: 'Morning Devotion',
+    artist: 'Jebathottam Worship Team',
+    duration: '45:30',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+    url: '#',
+    scripture: 'This is the day that the Lord has made; let us rejoice and be glad in it. - Psalm 118:24',
+  },
+  {
+    id: 2,
+    title: 'Prayer & Intercession',
+    artist: 'Jebathottam Worship Team',
+    duration: '38:15',
+    image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=400&h=400&fit=crop',
+    url: '#',
+    scripture: 'Pray without ceasing. - 1 Thessalonians 5:17',
+  },
+  {
+    id: 3,
+    title: 'Evening Reflection',
+    artist: 'Jebathottam Worship Team',
+    duration: '42:20',
+    image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=400&fit=crop',
+    url: '#',
+    scripture: 'Be still, and know that I am God. - Psalm 46:10',
+  },
+  {
+    id: 4,
+    title: 'Night Watch',
+    artist: 'Jebathottam Worship Team',
+    duration: '50:00',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+    url: '#',
+    scripture: 'I will bless the Lord who guides me; even at night my heart instructs me. - Psalm 16:7',
+  },
+];

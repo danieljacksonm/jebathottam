@@ -47,7 +47,7 @@ export function EnhancedImageSlider({ images, autoRotateInterval = 5000 }: Image
   }
 
   return (
-    <div className="relative w-full h-[500px] md:h-[600px] lg:h-[700px] overflow-hidden rounded-lg shadow-2xl">
+    <div className="absolute inset-0 w-full h-full overflow-hidden">
       <AnimatePresence mode="wait">
         {images.map((image, index) => (
           index === currentIndex && (
@@ -68,28 +68,7 @@ export function EnhancedImageSlider({ images, autoRotateInterval = 5000 }: Image
                   target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1200" height="600"%3E%3Crect fill="%23e0e7ff" width="1200" height="600"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="24" fill="%236366f1"%3EMinistry Image%3C/text%3E%3C/svg%3E';
                 }}
               />
-              {(image.title || image.description) && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent flex items-end">
-                  <div className="w-full p-8 md:p-12 text-white">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3, duration: 0.5 }}
-                    >
-                      {image.title && (
-                        <h3 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold mb-3">
-                          {image.title}
-                        </h3>
-                      )}
-                      {image.description && (
-                        <p className="text-lg md:text-xl max-w-3xl opacity-90">
-                          {image.description}
-                        </p>
-                      )}
-                    </motion.div>
-                  </div>
-                </div>
-              )}
+              {/* Overlay removed - will be handled by parent */}
             </motion.div>
           )
         ))}

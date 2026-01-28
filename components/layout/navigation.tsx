@@ -39,6 +39,12 @@ export function Navigation() {
               Blog
             </Link>
             <Link
+              href="/#testimony"
+              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
+            >
+              Testimonies
+            </Link>
+            <Link
               href="/#events"
               className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
             >
@@ -49,6 +55,24 @@ export function Navigation() {
               className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
             >
               Gallery
+            </Link>
+            <Link
+              href="/#media"
+              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
+            >
+              Media
+            </Link>
+            <Link
+              href="/notes"
+              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
+            >
+              Notes
+            </Link>
+            <Link
+              href="/audio-conference"
+              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
+            >
+              Audio Conference
             </Link>
             <Link
               href="/contact"
@@ -125,11 +149,46 @@ export function Navigation() {
                 Blog
               </Link>
               <Link
+                href="/#testimony"
+                className="block text-gray-700 hover:text-primary-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Testimonies
+              </Link>
+              <Link
                 href="/#events"
                 className="block text-gray-700 hover:text-primary-600 transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Events
+              </Link>
+              <Link
+                href="/gallery"
+                className="block text-gray-700 hover:text-primary-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Gallery
+              </Link>
+              <Link
+                href="/#media"
+                className="block text-gray-700 hover:text-primary-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Media
+              </Link>
+              <Link
+                href="/notes"
+                className="block text-gray-700 hover:text-primary-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Notes
+              </Link>
+              <Link
+                href="/audio-conference"
+                className="block text-gray-700 hover:text-primary-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Audio Conference
               </Link>
               <Link
                 href="/contact"

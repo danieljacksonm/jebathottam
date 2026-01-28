@@ -15,56 +15,6 @@ function calculateReadingTime(content: string): number {
 }
 
 export default function BlogPage() {
-    {
-      id: 1,
-      title: 'The Power of Prophetic Words',
-      excerpt: 'Understanding how God-spoken words can transform lives and guide us in our spiritual journey. This article explores the biblical foundation of prophecy and its role in the modern church.',
-      date: '2024-01-15',
-      author: 'Pastor John',
-      category: 'Teaching',
-    },
-    {
-      id: 2,
-      title: 'Walking in Faith: A Journey of Trust',
-      excerpt: 'Exploring what it means to walk by faith and trust in God\'s perfect timing and plan. Learn practical ways to strengthen your faith and overcome doubt.',
-      date: '2024-01-10',
-      author: 'Pastor Sarah',
-      category: 'Reflection',
-    },
-    {
-      id: 3,
-      title: 'Building Community Through Love',
-      excerpt: 'How authentic Christian community strengthens our faith and supports one another. Discover the importance of fellowship and practical ways to build deeper relationships.',
-      date: '2024-01-05',
-      author: 'Pastor Michael',
-      category: 'Community',
-    },
-    {
-      id: 4,
-      title: 'The Importance of Preserving God\'s Word',
-      excerpt: 'Why we are committed to preserving prophecies and revelations for future generations. Learn about our mission and the value of documenting God\'s spoken words.',
-      date: '2023-12-28',
-      author: 'Pastor John',
-      category: 'Mission',
-    },
-    {
-      id: 5,
-      title: 'Prayer: The Foundation of Ministry',
-      excerpt: 'Exploring the vital role of prayer in effective ministry and personal spiritual growth. Practical guidance for developing a consistent prayer life.',
-      date: '2023-12-20',
-      author: 'Lisa Williams',
-      category: 'Prayer',
-    },
-    {
-      id: 6,
-      title: 'Discerning God\'s Voice in Daily Life',
-      excerpt: 'Practical wisdom for recognizing when God is speaking to you and how to respond in obedience. Biblical principles for spiritual discernment.',
-      date: '2023-12-15',
-      author: 'Pastor Sarah',
-      category: 'Teaching',
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navigation />
