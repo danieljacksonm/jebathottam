@@ -6,12 +6,12 @@ import { StatsCard } from '@/components/admin/stats-card';
 
 export default function AdminDashboard() {
   const stats = [
-    { label: 'Total Blog Posts', value: '24', icon: '📝', change: '+3 this month', trend: 'up' as const },
-    { label: 'Upcoming Events', value: '8', icon: '📅', change: '2 this week', trend: 'neutral' as const },
-    { label: 'Team Members', value: '12', icon: '👥', change: 'Active', trend: 'neutral' as const },
-    { label: 'Stored Prophecies', value: '156', icon: '✨', change: '+12 this month', trend: 'up' as const },
-    { label: 'Sermons Archive', value: '89', icon: '📖', change: '+5 this month', trend: 'up' as const },
-    { label: 'Notes', value: '342', icon: '📄', change: '+28 this month', trend: 'up' as const },
+    { title: 'Total Blog Posts', value: '24', icon: '📝', change: '+3 this month', trend: 'up' as const },
+    { title: 'Upcoming Events', value: '8', icon: '📅', change: '2 this week', trend: 'neutral' as const },
+    { title: 'Team Members', value: '12', icon: '👥', change: 'Active', trend: 'neutral' as const },
+    { title: 'Stored Prophecies', value: '156', icon: '✨', change: '+12 this month', trend: 'up' as const },
+    { title: 'Sermons Archive', value: '89', icon: '📖', change: '+5 this month', trend: 'up' as const },
+    { title: 'Notes', value: '342', icon: '📄', change: '+28 this month', trend: 'up' as const },
   ];
 
   const recentActivity = [

@@ -13,6 +13,7 @@ const navigation = [
   { name: 'Gallery', href: '/admin/gallery', icon: '🖼️' },
   { name: 'Events', href: '/admin/events', icon: '📅' },
   { name: 'Team Members', href: '/admin/team', icon: '👥' },
+  { name: 'Followers & Members', href: '/admin/followers', icon: '🙏' },
   { name: 'Notes & Sermons', href: '/admin/notes', icon: '📖' },
   { name: 'Prophecy', href: '/admin/prophecy', icon: '✨' },
   { name: 'Media Library', href: '/admin/media', icon: '📁' },

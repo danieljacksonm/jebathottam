@@ -102,12 +102,12 @@ export default function AdminSlider() {
               <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                 <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
                   <img
-                    src={slide.image}
-                    alt={slide.text}
+                    src={slide.src}
+                    alt={slide.alt}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-4">
-                    <p className="text-white text-center font-serif text-lg">{slide.text}</p>
+                    <p className="text-white text-center font-serif text-lg">{slide.title}</p>
                   </div>
                 </div>
                 <div className="p-4">

@@ -92,60 +92,95 @@ export default function AdminProphecy() {
 
       {/* Prophecies List */}
       <FadeInUp delay={0.2}>
-        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Prophecies</h2>
-          </div>
-          <div className="divide-y divide-gray-200 dark:divide-gray-800">
-            <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">January 2024 Prophecy</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Received: January 15, 2024</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Prophecies</h2>
+            </div>
+            <div className="divide-y divide-gray-200 dark:divide-gray-800">
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">January 2024 Prophecy</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Received: January 15, 2024</p>
+                  </div>
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-sm font-medium">
+                    Verified
+                  </span>
                 </div>
-                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-sm font-medium">
-                  Verified
-                </span>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  "The Lord says, 'I am bringing a season of restoration and renewal. Trust in My timing, for I am working all things together for your good...'"
+                </p>
+                <div className="flex space-x-2">
+                  <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
+                    View Full
+                  </Button>
+                  <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
+                    Edit
+                  </Button>
+                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                    Delete
+                  </Button>
+                </div>
               </div>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                "The Lord says, 'I am bringing a season of restoration and renewal. Trust in My timing, for I am working all things together for your good...'"
-              </p>
-              <div className="flex space-x-2">
-                <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
-                  View Full
-                </Button>
-                <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
-                  Edit
-                </Button>
-                <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
-                  Delete
-                </Button>
+
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">December 2023 Prophecy</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Received: December 28, 2023</p>
+                  </div>
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-sm font-medium">
+                    Verified
+                  </span>
+                </div>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  "My children, prepare your hearts for what I am about to do. This is a time of preparation and alignment..."
+                </p>
+                <div className="flex space-x-2">
+                  <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
+                    View Full
+                  </Button>
+                  <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
+                    Edit
+                  </Button>
+                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                    Delete
+                  </Button>
+                </div>
               </div>
             </div>
+          </div>
 
-            <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">December 2023 Prophecy</h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Received: December 28, 2023</p>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Pending Verification</h2>
+            </div>
+            <div className="divide-y divide-gray-200 dark:divide-gray-800">
+              <div className="p-6 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">New Year Prophecy</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Received: January 1, 2024</p>
+                  </div>
+                  <span className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded text-sm font-medium">
+                    Pending
+                  </span>
                 </div>
-                <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-sm font-medium">
-                  Verified
-                </span>
-              </div>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                "My children, prepare your hearts for what I am about to do. This is a time of preparation and alignment..."
-              </p>
-              <div className="flex space-x-2">
-                <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
-                  View Full
-                </Button>
-                <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
-                  Edit
-                </Button>
-                <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
-                  Delete
-                </Button>
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                  "A new season is upon you. Step forward in faith and watch as I open doors that no man can shut..."
+                </p>
+                <div className="flex space-x-2">
+                  <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
+                    Review
+                  </Button>
+                  <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
+                    Edit
+                  </Button>
+                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                    Delete
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
