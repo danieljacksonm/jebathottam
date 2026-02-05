@@ -20,10 +20,11 @@ This website is designed for a Christian ministry with the following goals:
 ## Architecture
 
 - **Frontend**: Next.js 16 (App Router) with TypeScript
-- **Backend API**: Laravel (to be integrated)
-- **Database**: MySQL (to be integrated)
+- **Backend API**: Next.js API Routes (Node.js/Express)
+- **Database**: MySQL (PlanetScale, Railway, or other hosting)
 - **Styling**: Tailwind CSS v4
 - **Font**: Inter (Google Fonts)
+- **Hosting**: Vercel (recommended)
 
 ## User Roles
 
@@ -69,6 +70,31 @@ npm run build
 npm start
 ```
 
+## Deployment to Vercel
+
+This project is ready to deploy to Vercel. See [VERCEL-DEPLOYMENT.md](./VERCEL-DEPLOYMENT.md) for complete deployment instructions.
+
+### Quick Deploy Steps:
+
+1. **Push code to Git repository**
+2. **Set up database** (PlanetScale, Railway, or other MySQL hosting)
+3. **Import database schema** from `database/schema.sql`
+4. **Deploy to Vercel**:
+   - Connect your Git repository
+   - Add environment variables (see VERCEL-DEPLOYMENT.md)
+   - Deploy!
+
+### Required Environment Variables:
+
+- `DB_HOST` - Database hostname
+- `DB_USER` - Database username
+- `DB_PASSWORD` - Database password
+- `DB_NAME` - Database name
+- `JWT_SECRET` - Strong random string for JWT tokens
+- `NEXT_PUBLIC_API_URL` - Your Vercel domain + /api
+
+See [VERCEL-DEPLOYMENT.md](./VERCEL-DEPLOYMENT.md) for detailed instructions.
+
 ## Project Structure
 
 ```
@@ -110,14 +136,22 @@ All UI components follow the design system documented in `/docs/design-system.md
 - When improving UI, change only JSX and Tailwind classes
 - No new dependencies unless explicitly approved
 
+## Documentation
+
+- [Backend Setup Guide](./README-BACKEND.md) - Database and API setup
+- [Vercel Deployment Guide](./VERCEL-DEPLOYMENT.md) - Complete deployment instructions
+- [Deployment Checklist](./DEPLOYMENT-CHECKLIST.md) - Pre-deployment checklist
+- [Design System](./docs/design-system.md) - UI/UX guidelines
+
 ## Next Steps
 
-1. Set up Laravel backend API
-2. Connect authentication endpoints
-3. Implement API integration layer
-4. Add database models and migrations
-5. Implement role-based access control
-6. Add content management features
+1. ✅ Backend API implemented (Next.js API Routes)
+2. ✅ Database schema created
+3. ✅ Authentication system ready
+4. ⏳ Deploy to Vercel
+5. ⏳ Set up production database
+6. ⏳ Connect frontend to backend APIs
+7. ⏳ Test all features
 
 ## License
 
