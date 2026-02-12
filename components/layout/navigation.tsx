@@ -63,6 +63,13 @@ export function Navigation() {
               Media
             </Link>
             <Link
+              href="/social-feed"
+              className="text-gray-700 hover:text-primary-600 transition-colors font-medium flex items-center space-x-1"
+            >
+              <span>🌐</span>
+              <span>Social Feed</span>
+            </Link>
+            <Link
               href="/notes"
               className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
             >
@@ -175,6 +182,13 @@ export function Navigation() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Media
+              </Link>
+              <Link
+                href="/social-feed"
+                className="block text-gray-700 hover:text-primary-600 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                🌐 Social Feed
               </Link>
               <Link
                 href="/notes"

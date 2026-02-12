@@ -91,7 +91,35 @@ export async function requireRole(
   
   if (!allowedRoles.includes(user.role)) {
     return NextResponse.json(
-      { error: 'Forbidden' },
+      { error: 'Forbidden - Insufficient permissions' },
+      { status: 403 }
+    );
+  }
+
+  return { user };
+}
+
+// Middleware to check specific permission on a resource
+export async function requirePermission(
+  request: NextRequest,
+  resource: string,
+  permission: 'create' | 'read' | 'update' | 'delete'
+): Promise<{ user: UserPayload } | NextResponse> {
+  const authResult = await requireAuth(request);
+  
+  if (authResult instanceof NextResponse) {
+    return authResult;
+  }
+
+  const { user } = authResult;
+  
+  // Import permissions dynamically to avoid circular dependency
+  const { hasPermission } = await import('./permissions');
+  const allowed = await hasPermission(user, resource as any, permission);
+  
+  if (!allowed) {
+    return NextResponse.json(
+      { error: `Forbidden - You don't have ${permission} permission for ${resource}` },
       { status: 403 }
     );
   }

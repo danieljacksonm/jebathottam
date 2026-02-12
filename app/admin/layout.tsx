@@ -9,6 +9,7 @@ import { ChatWidget } from '@/components/chat/chat-widget';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: '📊' },
+  { name: 'Social Media', href: '/admin/social-media', icon: '🌐', badge: 'NEW' },
   { name: 'Blogs', href: '/admin/blogs', icon: '📝' },
   { name: 'Gallery', href: '/admin/gallery', icon: '🖼️' },
   { name: 'Events', href: '/admin/events', icon: '📅' },
@@ -61,7 +62,12 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
                   }`}
                 >
                   <span className="text-lg">{item.icon}</span>
-                  <span>{item.name}</span>
+                  <span className="flex-1">{item.name}</span>
+                  {(item as any).badge && (
+                    <span className="px-2 py-0.5 text-xs font-semibold bg-primary-600 text-white rounded-full">
+                      {(item as any).badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}
