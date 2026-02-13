@@ -6,7 +6,7 @@ import { logActivity } from '@/lib/permissions';
 // GET - Get single post with platform details
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'read');
   
@@ -14,7 +14,7 @@ export async function GET(
     return authResult;
   }
 
-  const { id } = await params;
+  const { id } = await context.params;
 
   try {
     const posts = await query<any[]>(
@@ -68,7 +68,7 @@ export async function GET(
 // PUT - Update post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'update');
   
@@ -77,7 +77,7 @@ export async function PUT(
   }
 
   const { user } = authResult;
-  const { id } = await params;
+  const { id } = await context.params;
 
   try {
     const data = await request.json();
@@ -203,7 +203,7 @@ export async function PUT(
 // DELETE - Delete post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'delete');
   
@@ -212,7 +212,7 @@ export async function DELETE(
   }
 
   const { user } = authResult;
-  const { id } = await params;
+  const { id } = await context.params;
 
   try {
     const posts = await query<any[]>(

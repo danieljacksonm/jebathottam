@@ -9,7 +9,7 @@ import { logActivity } from '@/lib/permissions';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'update');
   
@@ -20,7 +20,7 @@ export async function POST(
   const { user } = authResult;
   let id: string;
   try {
-    const resolved = await params;
+    const resolved = await context.params;
     id = resolved.id;
   } catch {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
