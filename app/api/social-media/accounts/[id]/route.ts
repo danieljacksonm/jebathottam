@@ -6,7 +6,7 @@ import { logActivity } from '@/lib/permissions';
 // GET - Get single account
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_accounts', 'read');
   
@@ -14,10 +14,12 @@ export async function GET(
     return authResult;
   }
 
+  const { id } = await params;
+
   try {
     const accounts = await query<any[]>(
       'SELECT * FROM social_media_accounts WHERE id = ?',
-      [params.id]
+      [id]
     );
 
     if (accounts.length === 0) {
@@ -40,7 +42,7 @@ export async function GET(
 // PUT - Update account
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_accounts', 'update');
   
@@ -49,6 +51,7 @@ export async function PUT(
   }
 
   const { user } = authResult;
+  const { id } = await params;
 
   try {
     const data = await request.json();
@@ -106,7 +109,7 @@ export async function PUT(
       );
     }
 
-    values.push(params.id);
+    values.push(id);
 
     await query(
       `UPDATE social_media_accounts SET ${updates.join(', ')} WHERE id = ?`,
@@ -118,13 +121,13 @@ export async function PUT(
       user.id,
       'social_media_account_updated',
       'social_media_accounts',
-      parseInt(params.id),
+      parseInt(id),
       { updated_fields: Object.keys(data) }
     );
 
     const updated = await query<any[]>(
       'SELECT * FROM social_media_accounts WHERE id = ?',
-      [params.id]
+      [id]
     );
 
     return NextResponse.json({
@@ -143,7 +146,7 @@ export async function PUT(
 // DELETE - Delete account
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_accounts', 'delete');
   
@@ -152,11 +155,12 @@ export async function DELETE(
   }
 
   const { user } = authResult;
+  const { id } = await params;
 
   try {
     const accounts = await query<any[]>(
       'SELECT * FROM social_media_accounts WHERE id = ?',
-      [params.id]
+      [id]
     );
 
     if (accounts.length === 0) {
@@ -166,14 +170,14 @@ export async function DELETE(
       );
     }
 
-    await query('DELETE FROM social_media_accounts WHERE id = ?', [params.id]);
+    await query('DELETE FROM social_media_accounts WHERE id = ?', [id]);
 
     // Log activity
     await logActivity(
       user.id,
       'social_media_account_deleted',
       'social_media_accounts',
-      parseInt(params.id),
+      parseInt(id),
       { account_name: accounts[0].account_name, platform: accounts[0].platform }
     );
 

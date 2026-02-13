@@ -9,7 +9,7 @@ import { logActivity } from '@/lib/permissions';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'update');
   
@@ -18,12 +18,19 @@ export async function POST(
   }
 
   const { user } = authResult;
+  let id: string;
+  try {
+    const resolved = await params;
+    id = resolved.id;
+  } catch {
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+  }
 
   try {
     // Get post details
     const posts = await query<any[]>(
       'SELECT * FROM social_media_posts WHERE id = ?',
-      [params.id]
+      [id]
     );
 
     if (posts.length === 0) {
@@ -44,7 +51,7 @@ export async function POST(
        FROM social_media_post_platforms pp
        JOIN social_media_accounts sa ON pp.account_id = sa.id
        WHERE pp.post_id = ? AND pp.status IN ('pending', 'failed')`,
-      [params.id]
+      [id]
     );
 
     if (platforms.length === 0) {
@@ -57,7 +64,7 @@ export async function POST(
     // Update post status to publishing
     await query(
       'UPDATE social_media_posts SET status = "publishing" WHERE id = ?',
-      [params.id]
+      [id]
     );
 
     const results = [];
@@ -107,7 +114,7 @@ export async function POST(
             `INSERT INTO social_media_analytics 
              (post_id, account_id, platform)
              VALUES (?, ?, ?)`,
-            [params.id, platform.id, platform.platform]
+            [id, platform.id, platform.platform]
           );
 
           successCount++;
@@ -152,7 +159,7 @@ export async function POST(
 
     await query(
       'UPDATE social_media_posts SET status = ?, published_at = NOW() WHERE id = ?',
-      [finalStatus, params.id]
+      [finalStatus, id]
     );
 
     // Log activity
@@ -160,7 +167,7 @@ export async function POST(
       user.id,
       'social_media_post_published',
       'social_media_posts',
-      parseInt(params.id),
+      parseInt(id),
       { 
         successCount, 
         failCount, 
@@ -184,8 +191,8 @@ export async function POST(
     // Update post status back to draft on critical error
     await query(
       'UPDATE social_media_posts SET status = "draft" WHERE id = ?',
-      [params.id]
-    );
+      [id]
+    ).catch(() => {});
 
     return NextResponse.json(
       { error: 'Failed to publish post' },

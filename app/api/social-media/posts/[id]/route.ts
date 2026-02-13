@@ -6,7 +6,7 @@ import { logActivity } from '@/lib/permissions';
 // GET - Get single post with platform details
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'read');
   
@@ -14,13 +14,15 @@ export async function GET(
     return authResult;
   }
 
+  const { id } = await params;
+
   try {
     const posts = await query<any[]>(
       `SELECT p.*, u.name as creator_name
        FROM social_media_posts p
        LEFT JOIN users u ON p.created_by = u.id
        WHERE p.id = ?`,
-      [params.id]
+      [id]
     );
 
     if (posts.length === 0) {
@@ -40,13 +42,13 @@ export async function GET(
        FROM social_media_post_platforms pp
        JOIN social_media_accounts sa ON pp.account_id = sa.id
        WHERE pp.post_id = ?`,
-      [params.id]
+      [id]
     );
 
     // Get analytics
     const analytics = await query<any[]>(
       `SELECT * FROM social_media_analytics WHERE post_id = ?`,
-      [params.id]
+      [id]
     );
 
     return NextResponse.json({ 
@@ -66,7 +68,7 @@ export async function GET(
 // PUT - Update post
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'update');
   
@@ -75,6 +77,7 @@ export async function PUT(
   }
 
   const { user } = authResult;
+  const { id } = await params;
 
   try {
     const data = await request.json();
@@ -139,7 +142,7 @@ export async function PUT(
     }
 
     if (updates.length > 0) {
-      values.push(params.id);
+      values.push(id);
       await query(
         `UPDATE social_media_posts SET ${updates.join(', ')} WHERE id = ?`,
         values
@@ -151,13 +154,13 @@ export async function PUT(
       // Remove existing platforms
       await query(
         'DELETE FROM social_media_post_platforms WHERE post_id = ? AND status = "pending"',
-        [params.id]
+        [id]
       );
 
       // Add new platforms
       if (platforms.length > 0) {
         const platformValues = platforms.map((accountId: number) => 
-          `(${params.id}, ${accountId}, 'pending')`
+          `(${id}, ${accountId}, 'pending')`
         ).join(', ');
 
         await query(
@@ -172,7 +175,7 @@ export async function PUT(
       user.id,
       'social_media_post_updated',
       'social_media_posts',
-      parseInt(params.id),
+      parseInt(id),
       { updated_fields: Object.keys(data) }
     );
 
@@ -181,7 +184,7 @@ export async function PUT(
        FROM social_media_posts p
        LEFT JOIN users u ON p.created_by = u.id
        WHERE p.id = ?`,
-      [params.id]
+      [id]
     );
 
     return NextResponse.json({
@@ -200,7 +203,7 @@ export async function PUT(
 // DELETE - Delete post
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const authResult = await requirePermission(request, 'social_media_posts', 'delete');
   
@@ -209,11 +212,12 @@ export async function DELETE(
   }
 
   const { user } = authResult;
+  const { id } = await params;
 
   try {
     const posts = await query<any[]>(
       'SELECT * FROM social_media_posts WHERE id = ?',
-      [params.id]
+      [id]
     );
 
     if (posts.length === 0) {
@@ -226,14 +230,14 @@ export async function DELETE(
     // Check if post is already published
     const publishedPlatforms = await query<any[]>(
       'SELECT COUNT(*) as count FROM social_media_post_platforms WHERE post_id = ? AND status = "published"',
-      [params.id]
+      [id]
     );
 
     if (publishedPlatforms[0].count > 0) {
       // Instead of deleting, archive it
       await query(
         'UPDATE social_media_posts SET status = "archived" WHERE id = ?',
-        [params.id]
+        [id]
       );
 
       return NextResponse.json({
@@ -241,14 +245,14 @@ export async function DELETE(
       });
     }
 
-    await query('DELETE FROM social_media_posts WHERE id = ?', [params.id]);
+    await query('DELETE FROM social_media_posts WHERE id = ?', [id]);
 
     // Log activity
     await logActivity(
       user.id,
       'social_media_post_deleted',
       'social_media_posts',
-      parseInt(params.id),
+      parseInt(id),
       { title: posts[0].title }
     );
 

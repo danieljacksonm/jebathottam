@@ -2,16 +2,19 @@
 
 This guide will help you deploy your Ministry Platform to Vercel.
 
+> **Quick path:** For a short, ordered checklist, use **[DEPLOY-TO-VERCEL.md](./DEPLOY-TO-VERCEL.md)** and follow the steps in order.
+
 ## Prerequisites
 
 1. **GitHub/GitLab/Bitbucket Account** - Your code needs to be in a Git repository
 2. **Vercel Account** - Sign up at [vercel.com](https://vercel.com)
-3. **Database Hosting** - Vercel doesn't host MySQL databases. You'll need:
-   - **PlanetScale** (Recommended - MySQL compatible, free tier available)
-   - **Railway** (MySQL hosting)
-   - **Supabase** (PostgreSQL - requires schema changes)
-   - **AWS RDS** (MySQL)
-   - **DigitalOcean** (Managed MySQL)
+3. **Database Hosting** - Vercel doesn't host databases. Use **MySQL 8.0** or **MariaDB 10.x** compatible hosting:
+   - **PlanetScale** (MySQL compatible, free tier, SSL required)
+   - **Railway** (MySQL)
+   - **AWS RDS** (MySQL 8.0 or MariaDB 10.x)
+   - **DigitalOcean** (Managed MySQL or MariaDB)
+   - **Azure Database for MySQL**
+   - **Supabase** (PostgreSQL only - would require schema/code changes)
 
 ## Step 1: Push Code to Git Repository
 
@@ -86,6 +89,9 @@ Follow your provider's instructions to:
    DB_PASSWORD=your-database-password
    DB_NAME=ministry_platform
 
+   # Set to "true" for PlanetScale or any MySQL host that requires SSL
+   DB_SSL=true
+
    # JWT Secret (generate a strong random string)
    JWT_SECRET=your-super-secret-jwt-key-min-32-characters-long
 
@@ -96,6 +102,7 @@ Follow your provider's instructions to:
    **Important:** 
    - Generate a strong JWT_SECRET (at least 32 characters)
    - Use your actual Vercel domain for NEXT_PUBLIC_API_URL initially
+   - Set **DB_SSL=true** when using PlanetScale (or any SSL-required MySQL)
    - You can update NEXT_PUBLIC_API_URL after adding a custom domain
 
 6. **Deploy!**
@@ -130,6 +137,7 @@ Follow your provider's instructions to:
    vercel env add DB_USER
    vercel env add DB_PASSWORD
    vercel env add DB_NAME
+   vercel env add DB_SSL
    vercel env add JWT_SECRET
    vercel env add NEXT_PUBLIC_API_URL
    ```
@@ -188,8 +196,11 @@ Follow your provider's instructions to:
 | `DB_USER` | Database username | `root` |
 | `DB_PASSWORD` | Database password | `your-secure-password` |
 | `DB_NAME` | Database name | `ministry_platform` |
+| `DB_SSL` | Use SSL for DB connection (required for PlanetScale) | `true` or `false` |
 | `JWT_SECRET` | Secret for JWT tokens | `generate-strong-random-string-32-chars-min` |
 | `NEXT_PUBLIC_API_URL` | Public API URL | `https://your-domain.vercel.app/api` |
+
+See **.env.example** in the project root for a template.
 
 ## Troubleshooting
 
@@ -201,10 +212,11 @@ Follow your provider's instructions to:
 
 ### Database Connection Errors
 
-1. **Verify environment variables** are set correctly
-2. **Check database host** allows connections from Vercel IPs
-3. **Test connection** using database client
-4. **Verify SSL** settings if required by your database provider
+1. **Verify environment variables** are set correctly (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME)
+2. **Set DB_SSL=true** if using PlanetScale or any host that requires SSL
+3. **Check database host** allows connections from the internet (Vercel serverless runs from dynamic IPs)
+4. **Test connection** using a database client (e.g. from your laptop) with the same credentials
+5. **Verify SSL** settings if required by your database provider
 
 ### API Routes Not Working
 
