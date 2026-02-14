@@ -4,16 +4,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
 import { FadeInUp } from '@/components/animations/page-transition';
+import { socialPlatformIcons } from '@/components/ui/icons';
+import { Link2, Loader2, Info, AlertTriangle } from 'lucide-react';
 
 const platforms = [
-  { id: 'facebook', name: 'Facebook', icon: '📘', color: 'bg-blue-600' },
-  { id: 'instagram', name: 'Instagram', icon: '📷', color: 'bg-pink-600' },
-  { id: 'twitter', name: 'Twitter / X', icon: '🐦', color: 'bg-sky-600' },
-  { id: 'linkedin', name: 'LinkedIn', icon: '💼', color: 'bg-blue-700' },
-  { id: 'youtube', name: 'YouTube', icon: '📹', color: 'bg-red-600' },
-  { id: 'tiktok', name: 'TikTok', icon: '🎵', color: 'bg-black' },
-  { id: 'telegram', name: 'Telegram', icon: '✈️', color: 'bg-blue-500' },
-  { id: 'whatsapp', name: 'WhatsApp', icon: '💬', color: 'bg-green-600' },
+  { id: 'facebook', name: 'Facebook' },
+  { id: 'instagram', name: 'Instagram' },
+  { id: 'twitter', name: 'Twitter / X' },
+  { id: 'linkedin', name: 'LinkedIn' },
+  { id: 'youtube', name: 'YouTube' },
+  { id: 'tiktok', name: 'TikTok' },
+  { id: 'telegram', name: 'Telegram' },
+  { id: 'whatsapp', name: 'WhatsApp' },
 ];
 
 export default function ConnectSocialMediaAccount() {
@@ -75,8 +77,9 @@ export default function ConnectSocialMediaAccount() {
 
       <FadeInUp>
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
-            🔗 Connect Social Media Account
+          <h1 className="flex items-center gap-2 text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
+            <Link2 className="w-9 h-9 text-primary-600 dark:text-primary-400" />
+            Connect Social Media Account
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
             Connect your social media accounts to start publishing
@@ -93,7 +96,9 @@ export default function ConnectSocialMediaAccount() {
                 Select Platform
               </h2>
               <div className="space-y-2">
-                {platforms.map((platform) => (
+                {platforms.map((platform) => {
+                  const Icon = socialPlatformIcons[platform.id];
+                  return (
                   <button
                     key={platform.id}
                     type="button"
@@ -104,12 +109,13 @@ export default function ConnectSocialMediaAccount() {
                         : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
                     }`}
                   >
-                    <span className="text-3xl">{platform.icon}</span>
+                    {Icon && <Icon className="w-7 h-7 text-gray-600 dark:text-gray-400 flex-shrink-0" />}
                     <span className="text-sm font-medium text-gray-900 dark:text-white">
                       {platform.name}
                     </span>
                   </button>
-                ))}
+                );
+                })}
               </div>
             </div>
           </FadeInUp>
@@ -125,7 +131,9 @@ export default function ConnectSocialMediaAccount() {
 
               {!selectedPlatform ? (
                 <div className="text-center py-12">
-                  <span className="text-6xl mb-4 block">👈</span>
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-400 mb-4">
+                    <Link2 className="w-8 h-8" />
+                  </div>
                   <p className="text-gray-600 dark:text-gray-400">
                     Please select a platform to continue
                   </p>
@@ -135,7 +143,7 @@ export default function ConnectSocialMediaAccount() {
                   {/* Info Box */}
                   <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
                     <div className="flex items-start space-x-3">
-                      <span className="text-2xl">ℹ️</span>
+                      <Info className="w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                       <div className="flex-1">
                         <h3 className="text-sm font-semibold text-blue-900 dark:text-blue-300 mb-1">
                           How to connect {platforms.find(p => p.id === selectedPlatform)?.name}
@@ -225,7 +233,7 @@ export default function ConnectSocialMediaAccount() {
                   {/* Warning Box */}
                   <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
                     <div className="flex items-start space-x-3">
-                      <span className="text-xl">⚠️</span>
+                      <AlertTriangle className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0" />
                       <div className="flex-1">
                         <h3 className="text-xs font-semibold text-yellow-900 dark:text-yellow-300 mb-1">
                           Security Note
@@ -242,9 +250,10 @@ export default function ConnectSocialMediaAccount() {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="flex-1 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors shadow-sm"
+                      className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors shadow-sm"
                     >
-                      {loading ? '⏳ Connecting...' : '🔗 Connect Account'}
+                      {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Link2 className="w-5 h-5" />}
+                      {loading ? 'Connecting...' : 'Connect Account'}
                     </button>
                     <button
                       type="button"

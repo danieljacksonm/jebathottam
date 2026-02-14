@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
+import { socialPlatformIcons } from '@/components/ui/icons';
+import { Globe, Calendar } from 'lucide-react';
 
 interface SocialPost {
   id: number;
@@ -15,17 +17,6 @@ interface SocialPost {
   creator_name: string;
   published_count: number;
 }
-
-const platformIcons: Record<string, string> = {
-  facebook: '📘',
-  instagram: '📷',
-  twitter: '🐦',
-  linkedin: '💼',
-  youtube: '📹',
-  tiktok: '🎵',
-  telegram: '✈️',
-  whatsapp: '💬',
-};
 
 export default function SocialFeedPage() {
   const [posts, setPosts] = useState<SocialPost[]>([]);
@@ -76,7 +67,9 @@ export default function SocialFeedPage() {
         <div className="container mx-auto px-4">
           <FadeInUp>
             <div className="text-center max-w-3xl mx-auto">
-              <span className="text-6xl mb-4 block">🌐</span>
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-white/10 mb-4">
+                <Globe className="w-10 h-10 text-white" />
+              </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 Social Media Feed
               </h1>
@@ -98,7 +91,9 @@ export default function SocialFeedPage() {
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center py-12">
-              <span className="text-6xl mb-4 block">📱</span>
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 mb-4">
+                <Globe className="w-8 h-8" />
+              </div>
               <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">
                 No posts yet
               </h3>
@@ -122,10 +117,10 @@ export default function SocialFeedPage() {
                               <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                                 {post.title || 'Update'}
                               </h2>
-                              <div className="flex items-center space-x-3 text-sm text-gray-600 dark:text-gray-400">
-                                <span>📅 {formatDate(post.published_at)}</span>
+                              <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-sm text-gray-600 dark:text-gray-400">
+                                <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {formatDate(post.published_at)}</span>
                                 <span>•</span>
-                                <span>🌐 Published on {post.published_count} platform{post.published_count !== 1 ? 's' : ''}</span>
+                                <span className="flex items-center gap-1"><Globe className="w-4 h-4" /> Published on {post.published_count} platform{post.published_count !== 1 ? 's' : ''}</span>
                               </div>
                             </div>
                           </div>
@@ -189,10 +184,8 @@ export default function SocialFeedPage() {
                               Find us on all major platforms
                             </p>
                             <div className="flex items-center space-x-2">
-                              {Object.values(platformIcons).slice(0, 5).map((icon, index) => (
-                                <span key={index} className="text-xl opacity-50">
-                                  {icon}
-                                </span>
+                              {Object.entries(socialPlatformIcons).slice(0, 5).map(([key, Icon]) => (
+                                Icon ? <span key={key} className="text-gray-400"><Icon className="w-5 h-5 inline" /></span> : null
                               ))}
                             </div>
                           </div>
@@ -218,13 +211,16 @@ export default function SocialFeedPage() {
               Follow us on your favorite social media platforms to never miss an update
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              {Object.entries(platformIcons).map(([platform, icon]) => (
+              {Object.entries(socialPlatformIcons).map(([platform, Icon]) => (
+                Icon ? (
                 <button
                   key={platform}
-                  className="px-6 py-3 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors shadow-lg"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors shadow-lg"
                 >
-                  {icon} {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                  <Icon className="w-5 h-5" />
+                  {platform.charAt(0).toUpperCase() + platform.slice(1)}
                 </button>
+                ) : null
               ))}
             </div>
           </div>

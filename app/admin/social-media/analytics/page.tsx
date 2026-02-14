@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
+import { socialPlatformIcons, analyticsIcons } from '@/components/ui/icons';
+import type { LucideIcon } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 
 interface AnalyticsSummary {
   total_posts: number;
@@ -25,17 +28,6 @@ interface PlatformStats {
   total_views: number;
   avg_engagement_rate: number;
 }
-
-const platformIcons: Record<string, string> = {
-  facebook: '📘',
-  instagram: '📷',
-  twitter: '🐦',
-  linkedin: '💼',
-  youtube: '📹',
-  tiktok: '🎵',
-  telegram: '✈️',
-  whatsapp: '💬',
-};
 
 export default function SocialMediaAnalytics() {
   const [summary, setSummary] = useState<AnalyticsSummary>({
@@ -92,19 +84,21 @@ export default function SocialMediaAnalytics() {
   };
 
   const StatCard = ({ 
-    icon, 
+    icon: Icon, 
     title, 
     value, 
     subtitle 
   }: { 
-    icon: string; 
+    icon: LucideIcon; 
     title: string; 
     value: string | number; 
     subtitle?: string;
   }) => (
     <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-3">
-        <span className="text-3xl">{icon}</span>
+        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400">
+          <Icon className="w-6 h-6" strokeWidth={1.5} />
+        </div>
         <span className="text-3xl font-bold text-gray-900 dark:text-white">
           {value}
         </span>
@@ -195,7 +189,7 @@ export default function SocialMediaAnalytics() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <StaggerItem>
                 <StatCard
-                  icon="❤️"
+                  icon={analyticsIcons.likes}
                   title="Total Likes"
                   value={formatNumber(summary.total_likes)}
                   subtitle="Across all platforms"
@@ -203,7 +197,7 @@ export default function SocialMediaAnalytics() {
               </StaggerItem>
               <StaggerItem>
                 <StatCard
-                  icon="💬"
+                  icon={analyticsIcons.comments}
                   title="Total Comments"
                   value={formatNumber(summary.total_comments)}
                   subtitle="Engagement conversations"
@@ -211,7 +205,7 @@ export default function SocialMediaAnalytics() {
               </StaggerItem>
               <StaggerItem>
                 <StatCard
-                  icon="🔄"
+                  icon={analyticsIcons.shares}
                   title="Total Shares"
                   value={formatNumber(summary.total_shares)}
                   subtitle="Content distribution"
@@ -219,7 +213,7 @@ export default function SocialMediaAnalytics() {
               </StaggerItem>
               <StaggerItem>
                 <StatCard
-                  icon="👁️"
+                  icon={analyticsIcons.views}
                   title="Total Views"
                   value={formatNumber(summary.total_views)}
                   subtitle="Content impressions"
@@ -232,7 +226,7 @@ export default function SocialMediaAnalytics() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <StaggerItem>
                 <StatCard
-                  icon="📈"
+                  icon={analyticsIcons.reach}
                   title="Total Reach"
                   value={formatNumber(summary.total_reach)}
                   subtitle="Unique accounts reached"
@@ -240,7 +234,7 @@ export default function SocialMediaAnalytics() {
               </StaggerItem>
               <StaggerItem>
                 <StatCard
-                  icon="🎯"
+                  icon={analyticsIcons.impressions}
                   title="Total Impressions"
                   value={formatNumber(summary.total_impressions)}
                   subtitle="Times content was displayed"
@@ -248,7 +242,7 @@ export default function SocialMediaAnalytics() {
               </StaggerItem>
               <StaggerItem>
                 <StatCard
-                  icon="⚡"
+                  icon={analyticsIcons.engagement}
                   title="Avg Engagement Rate"
                   value={`${summary.avg_engagement_rate?.toFixed(2) || 0}%`}
                   subtitle="Overall performance"
@@ -268,7 +262,9 @@ export default function SocialMediaAnalytics() {
 
               {platformBreakdown.length === 0 ? (
                 <div className="text-center py-12">
-                  <span className="text-6xl mb-4 block">📊</span>
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 mb-4">
+                    <BarChart3 className="w-8 h-8" />
+                  </div>
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                     No analytics data yet
                   </h3>
@@ -312,10 +308,19 @@ export default function SocialMediaAnalytics() {
                         >
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center space-x-3">
-                              <span className="text-2xl">{platformIcons[platform.platform] || '🌐'}</span>
-                              <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
-                                {platform.platform}
-                              </span>
+                              {(() => {
+                                const PlatformIcon = socialPlatformIcons[platform.platform];
+                                return (
+                                  <>
+                                    <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800">
+                                      {PlatformIcon && <PlatformIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />}
+                                    </div>
+                                    <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                                      {platform.platform}
+                                    </span>
+                                  </>
+                                );
+                              })()}
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">

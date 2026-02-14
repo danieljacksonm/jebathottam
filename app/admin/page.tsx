@@ -3,22 +3,23 @@
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
 import { StatsCard } from '@/components/admin/stats-card';
+import { statsIcons } from '@/components/ui/icons';
 
 export default function AdminDashboard() {
   const stats = [
-    { title: 'Total Blog Posts', value: '24', icon: '📝', change: '+3 this month', trend: 'up' as const },
-    { title: 'Upcoming Events', value: '8', icon: '📅', change: '2 this week', trend: 'neutral' as const },
-    { title: 'Team Members', value: '12', icon: '👥', change: 'Active', trend: 'neutral' as const },
-    { title: 'Stored Prophecies', value: '156', icon: '✨', change: '+12 this month', trend: 'up' as const },
-    { title: 'Sermons Archive', value: '89', icon: '📖', change: '+5 this month', trend: 'up' as const },
-    { title: 'Notes', value: '342', icon: '📄', change: '+28 this month', trend: 'up' as const },
+    { title: 'Total Blog Posts', value: '24', icon: statsIcons.blog, change: '+3 this month', trend: 'up' as const },
+    { title: 'Upcoming Events', value: '8', icon: statsIcons.events, change: '2 this week', trend: 'neutral' as const },
+    { title: 'Team Members', value: '12', icon: statsIcons.team, change: 'Active', trend: 'neutral' as const },
+    { title: 'Stored Prophecies', value: '156', icon: statsIcons.prophecy, change: '+12 this month', trend: 'up' as const },
+    { title: 'Sermons Archive', value: '89', icon: statsIcons.sermons, change: '+5 this month', trend: 'up' as const },
+    { title: 'Notes', value: '342', icon: statsIcons.notes, change: '+28 this month', trend: 'up' as const },
   ];
 
   const recentActivity = [
-    { type: 'Blog', action: 'New post published', title: 'The Power of Prophetic Words', time: '2 hours ago', icon: '📝' },
-    { type: 'Event', action: 'Event created', title: 'Sunday Worship Service', time: '5 hours ago', icon: '📅' },
-    { type: 'Team', action: 'Member added', title: 'Emily Rodriguez', time: '1 day ago', icon: '👥' },
-    { type: 'Prophecy', action: 'New prophecy stored', title: 'January 2024 Prophecy', time: '2 days ago', icon: '✨' },
+    { type: 'Blog', action: 'New post published', title: 'The Power of Prophetic Words', time: '2 hours ago', icon: statsIcons.blog },
+    { type: 'Event', action: 'Event created', title: 'Sunday Worship Service', time: '5 hours ago', icon: statsIcons.events },
+    { type: 'Team', action: 'Member added', title: 'Emily Rodriguez', time: '1 day ago', icon: statsIcons.team },
+    { type: 'Prophecy', action: 'New prophecy stored', title: 'January 2024 Prophecy', time: '2 days ago', icon: statsIcons.prophecy },
   ];
 
   return (
@@ -54,14 +55,16 @@ export default function AdminDashboard() {
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h2>
           </div>
           <div className="divide-y divide-gray-200 dark:divide-gray-800">
-            {recentActivity.map((activity, index) => (
+            {recentActivity.map((activity, index) => {
+              const ActivityIcon = activity.icon;
+              return (
               <div
                 key={index}
                 className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
               >
                 <div className="flex items-start space-x-4">
-                  <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <span className="text-lg">{activity.icon}</span>
+                  <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center flex-shrink-0 text-primary-600 dark:text-primary-400">
+                    <ActivityIcon className="w-5 h-5" strokeWidth={1.75} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
@@ -78,7 +81,8 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         </div>
       </FadeInUp>

@@ -1,9 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
-import Link from 'next/link';
+import { socialPlatformIcons } from '@/components/ui/icons';
+import { BarChart3, Send, Clock, Link2, FileText, Plus, Globe, User, Calendar } from 'lucide-react';
 
 interface SocialMediaPost {
   id: number;
@@ -28,17 +30,6 @@ interface SocialMediaAccount {
   last_posted_at: string | null;
   created_at: string;
 }
-
-const platformIcons: Record<string, string> = {
-  facebook: '📘',
-  instagram: '📷',
-  twitter: '🐦',
-  linkedin: '💼',
-  youtube: '📹',
-  tiktok: '🎵',
-  telegram: '✈️',
-  whatsapp: '💬',
-};
 
 const statusColors: Record<string, string> = {
   draft: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300',
@@ -136,9 +127,10 @@ export default function SocialMediaDashboard() {
             </div>
             <Link
               href="/admin/social-media/create"
-              className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm"
             >
-              ✨ Create Post
+              <Plus className="w-5 h-5" />
+              Create Post
             </Link>
           </div>
         </div>
@@ -150,7 +142,7 @@ export default function SocialMediaDashboard() {
           <StaggerItem>
             <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-2xl">📊</span>
+                <BarChart3 className="w-8 h-8 text-primary-600 dark:text-primary-400" />
                 <span className="text-2xl font-bold text-gray-900 dark:text-white">
                   {stats.totalPosts}
                 </span>
@@ -164,7 +156,7 @@ export default function SocialMediaDashboard() {
           <StaggerItem>
             <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-2xl">🚀</span>
+                <Send className="w-8 h-8 text-green-600 dark:text-green-400" />
                 <span className="text-2xl font-bold text-green-600 dark:text-green-400">
                   {stats.publishedToday}
                 </span>
@@ -178,7 +170,7 @@ export default function SocialMediaDashboard() {
           <StaggerItem>
             <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-2xl">⏰</span>
+                <Clock className="w-8 h-8 text-blue-600 dark:text-blue-400" />
                 <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                   {stats.scheduledPosts}
                 </span>
@@ -192,7 +184,7 @@ export default function SocialMediaDashboard() {
           <StaggerItem>
             <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-6">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-2xl">🔗</span>
+                <Link2 className="w-8 h-8 text-purple-600 dark:text-purple-400" />
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                   {stats.connectedAccounts}
                 </span>
@@ -210,23 +202,25 @@ export default function SocialMediaDashboard() {
         <div className="flex space-x-8">
           <button
             onClick={() => setActiveTab('posts')}
-            className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+            className={`flex items-center gap-2 pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'posts'
                 ? 'border-primary-600 text-primary-600 dark:text-primary-400'
                 : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
-            📝 Posts
+            <FileText className="w-4 h-4" />
+            Posts
           </button>
           <button
             onClick={() => setActiveTab('accounts')}
-            className={`pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+            className={`flex items-center gap-2 pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               activeTab === 'accounts'
                 ? 'border-primary-600 text-primary-600 dark:text-primary-400'
                 : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
-            🔗 Connected Accounts
+            <Link2 className="w-4 h-4" />
+            Connected Accounts
           </button>
         </div>
       </div>
@@ -242,7 +236,9 @@ export default function SocialMediaDashboard() {
           <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
             {posts.length === 0 ? (
               <div className="text-center py-12">
-                <span className="text-6xl mb-4 block">📱</span>
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 mb-4">
+                  <FileText className="w-8 h-8" />
+                </div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   No posts yet
                 </h3>
@@ -251,8 +247,9 @@ export default function SocialMediaDashboard() {
                 </p>
                 <Link
                   href="/admin/social-media/create"
-                  className="inline-block px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
                 >
+                  <Plus className="w-5 h-5" />
                   Create Post
                 </Link>
               </div>
@@ -276,12 +273,10 @@ export default function SocialMediaDashboard() {
                         <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-3">
                           {post.content}
                         </p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
-                          <span>👤 {post.creator_name}</span>
-                          <span>📅 {formatDate(post.created_at)}</span>
-                          <span>
-                            🌐 Published to {post.published_count}/{post.total_platforms} platforms
-                          </span>
+                        <div className="flex items-center flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="flex items-center gap-1"><User className="w-3.5 h-3.5" /> {post.creator_name}</span>
+                          <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {formatDate(post.created_at)}</span>
+                          <span className="flex items-center gap-1"><Globe className="w-3.5 h-3.5" /> Published to {post.published_count}/{post.total_platforms} platforms</span>
                         </div>
                       </div>
                       <div className="flex items-center space-x-2 ml-4">
@@ -312,15 +307,18 @@ export default function SocialMediaDashboard() {
               </h2>
               <Link
                 href="/admin/social-media/accounts/connect"
-                className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-medium transition-colors"
               >
-                + Connect Account
+                <Plus className="w-4 h-4" />
+                Connect Account
               </Link>
             </div>
             
             {accounts.length === 0 ? (
               <div className="text-center py-12">
-                <span className="text-6xl mb-4 block">🔗</span>
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 mb-4">
+                  <Link2 className="w-8 h-8" />
+                </div>
                 <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                   No accounts connected
                 </h3>
@@ -329,21 +327,26 @@ export default function SocialMediaDashboard() {
                 </p>
                 <Link
                   href="/admin/social-media/accounts/connect"
-                  className="inline-block px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors"
                 >
+                  <Link2 className="w-5 h-5" />
                   Connect Account
                 </Link>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6">
-                {accounts.map((account) => (
+                {accounts.map((account) => {
+                  const PlatformIcon = socialPlatformIcons[account.platform] || Globe;
+                  return (
                   <div
                     key={account.id}
                     className="border border-gray-200 dark:border-gray-800 rounded-lg p-4 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center space-x-3">
-                        <span className="text-3xl">{platformIcons[account.platform] || '🌐'}</span>
+                        <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                          <PlatformIcon className="w-6 h-6" />
+                        </div>
                         <div>
                           <h3 className="font-medium text-gray-900 dark:text-white">
                             {account.account_name}
@@ -374,7 +377,8 @@ export default function SocialMediaDashboard() {
                       </Link>
                     </div>
                   </div>
-                ))}
+                );
+                })}
               </div>
             )}
           </div>

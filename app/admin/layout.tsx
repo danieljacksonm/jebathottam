@@ -6,20 +6,21 @@ import { usePathname } from 'next/navigation';
 import { ThemeProvider, useTheme } from '@/components/admin/theme-provider';
 import { Logo } from '@/components/ui/logo';
 import { ChatWidget } from '@/components/chat/chat-widget';
+import { adminNavIcons } from '@/components/ui/icons';
 
 const navigation = [
-  { name: 'Dashboard', href: '/admin', icon: '📊' },
-  { name: 'Social Media', href: '/admin/social-media', icon: '🌐', badge: 'NEW' },
-  { name: 'Blogs', href: '/admin/blogs', icon: '📝' },
-  { name: 'Gallery', href: '/admin/gallery', icon: '🖼️' },
-  { name: 'Events', href: '/admin/events', icon: '📅' },
-  { name: 'Team Members', href: '/admin/team', icon: '👥' },
-  { name: 'Followers & Members', href: '/admin/followers', icon: '🙏' },
-  { name: 'Notes & Sermons', href: '/admin/notes', icon: '📖' },
-  { name: 'Prophecy', href: '/admin/prophecy', icon: '✨' },
-  { name: 'Media Library', href: '/admin/media', icon: '📁' },
-  { name: 'Chat', href: '/admin/chat', icon: '💬' },
-  { name: 'Settings', href: '/admin/settings', icon: '⚙️' },
+  { name: 'Dashboard', href: '/admin', iconKey: 'dashboard' as const },
+  { name: 'Social Media', href: '/admin/social-media', iconKey: 'socialMedia' as const, badge: 'NEW' },
+  { name: 'Blogs', href: '/admin/blogs', iconKey: 'blogs' as const },
+  { name: 'Gallery', href: '/admin/gallery', iconKey: 'gallery' as const },
+  { name: 'Events', href: '/admin/events', iconKey: 'events' as const },
+  { name: 'Team Members', href: '/admin/team', iconKey: 'team' as const },
+  { name: 'Followers & Members', href: '/admin/followers', iconKey: 'followers' as const },
+  { name: 'Notes & Sermons', href: '/admin/notes', iconKey: 'notes' as const },
+  { name: 'Prophecy', href: '/admin/prophecy', iconKey: 'prophecy' as const },
+  { name: 'Media Library', href: '/admin/media', iconKey: 'media' as const },
+  { name: 'Chat', href: '/admin/chat', iconKey: 'chat' as const },
+  { name: 'Settings', href: '/admin/settings', iconKey: 'settings' as const },
 ];
 
 function AdminLayoutInner({ children }: { children: React.ReactNode }) {
@@ -51,6 +52,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
           <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
             {navigation.map((item) => {
               const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
+              const Icon = adminNavIcons[item.iconKey];
               return (
                 <Link
                   key={item.name}
@@ -61,11 +63,11 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  <span className="text-lg">{item.icon}</span>
+                  <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.75} />
                   <span className="flex-1">{item.name}</span>
-                  {(item as any).badge && (
+                  {'badge' in item && item.badge && (
                     <span className="px-2 py-0.5 text-xs font-semibold bg-primary-600 text-white rounded-full">
-                      {(item as any).badge}
+                      {item.badge}
                     </span>
                   )}
                 </Link>
