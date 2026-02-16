@@ -4,7 +4,9 @@ import { verifyPassword, generateToken } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    const body = await request.json().catch(() => ({}));
+    const email = typeof body.email === 'string' ? body.email.trim() : '';
+    const password = typeof body.password === 'string' ? body.password : '';
 
     if (!email || !password) {
       return NextResponse.json(
@@ -13,23 +15,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find user
-    const users = await query<any[]>(
-      'SELECT id, email, password, role, name FROM users WHERE email = ?',
-      [email]
-    );
+    let users: any[];
+    try {
+      users = await query<any[]>(
+        'SELECT id, email, password, role, name FROM users WHERE email = ?',
+        [email]
+      );
+    } catch (dbError: any) {
+      console.error('Login DB error:', dbError);
+      return NextResponse.json(
+        { error: 'Database connection failed. Check your server configuration and environment variables (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME).' },
+        { status: 503 }
+      );
+    }
 
-    if (users.length === 0) {
+    const list = Array.isArray(users) ? users : [];
+    if (list.length === 0) {
       return NextResponse.json(
         { error: 'Invalid email or password' },
         { status: 401 }
       );
     }
 
-    const user = users[0];
+    const user = list[0];
+    const hash = user.password;
+    if (!hash) {
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
+    }
 
-    // Verify password
-    const isValid = await verifyPassword(password, user.password);
+    let isValid: boolean;
+    try {
+      isValid = await verifyPassword(password, hash);
+    } catch (verifyErr) {
+      console.error('Login verify error:', verifyErr);
+      return NextResponse.json(
+        { error: 'Invalid email or password' },
+        { status: 401 }
+      );
+    }
+
     if (!isValid) {
       return NextResponse.json(
         { error: 'Invalid email or password' },
@@ -37,39 +64,36 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate token
     const token = generateToken({
       id: user.id,
       email: user.email,
       role: user.role,
-      name: user.name,
+      name: user.name || '',
     });
 
-    // Return user data (without password) and token
     const response = NextResponse.json({
       user: {
         id: user.id,
         email: user.email,
         role: user.role,
-        name: user.name,
+        name: user.name || '',
       },
       token,
     });
 
-    // Set HTTP-only cookie (path=/ so it is sent to all routes including /api)
     response.cookies.set('auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
     });
 
     return response;
   } catch (error: any) {
     console.error('Login error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error.message || 'Internal server error' },
       { status: 500 }
     );
   }
