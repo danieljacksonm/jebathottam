@@ -61,7 +61,7 @@ export default function AdminDashboard() {
             </p>
           </div>
           <Button
-            variant="outline"
+            variant="secondary"
             onClick={handleSeedExample}
             disabled={seeding}
             className="w-full sm:w-auto shrink-0"
