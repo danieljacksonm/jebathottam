@@ -11,11 +11,11 @@ export async function GET(request: NextRequest) {
     let sql = 'SELECT * FROM slider_images WHERE 1=1';
     const params: any[] = [];
 
-    // Public can only see active slides
+    // Public can only see active slides; admins can filter
     const user = await getUserFromRequest(request);
-    if (!user || !['master_admin', 'pastor'].includes(user.role)) {
+    if (!user || user.role !== 'super_admin') {
       sql += ' AND status = "active"';
-    } else if (active !== null) {
+    } else if (active !== null && active !== undefined) {
       sql += ' AND status = ?';
       params.push(active === 'true' ? 'active' : 'inactive');
     }
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 // POST create slider image
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { image_url, text, title, description, order_index, status = 'active' } = await request.json();

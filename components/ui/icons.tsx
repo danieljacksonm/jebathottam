@@ -14,6 +14,7 @@ import {
   MessageCircle,
   Settings,
   BarChart3,
+  Sliders,
   Share2,
   MessageSquare,
   Eye,
@@ -49,6 +50,8 @@ export const adminNavIcons = {
   prophecy: Sparkles,
   media: FolderOpen,
   chat: MessageCircle,
+  slider: Sliders,
+  testimonies: MessageSquare,
   settings: Settings,
 } as const;
 

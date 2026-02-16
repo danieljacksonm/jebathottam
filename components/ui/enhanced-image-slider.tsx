@@ -40,8 +40,8 @@ export function EnhancedImageSlider({ images, autoRotateInterval = 5000 }: Image
 
   if (images.length === 0) {
     return (
-      <div className="w-full h-[500px] md:h-[600px] bg-gradient-to-br from-primary-100 via-primary-200 to-primary-300 rounded-lg flex items-center justify-center">
-        <p className="text-gray-600 text-lg">Ministry images coming soon</p>
+      <div className="w-full h-[280px] sm:h-[380px] md:h-[500px] lg:h-[600px] bg-gradient-to-br from-primary-100 via-primary-200 to-primary-300 flex items-center justify-center">
+        <p className="text-gray-600 text-sm sm:text-base md:text-lg px-4">Ministry images coming soon</p>
       </div>
     );
   }
@@ -74,41 +74,41 @@ export function EnhancedImageSlider({ images, autoRotateInterval = 5000 }: Image
         ))}
       </AnimatePresence>
 
-      {/* Navigation Arrows */}
+      {/* Navigation Arrows - responsive touch targets */}
       {images.length > 1 && (
         <>
           <button
             onClick={goToPrevious}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all z-10"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2.5 sm:p-3 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all z-10 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation"
             aria-label="Previous image"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
           <button
             onClick={goToNext}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all z-10"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-gray-800 p-2.5 sm:p-3 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all z-10 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation"
             aria-label="Next image"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
         </>
       )}
 
-      {/* Dots Indicator */}
+      {/* Dots Indicator - responsive, touch-friendly */}
       {images.length > 1 && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2 z-10">
+        <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`h-2 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+              className={`min-w-[28px] min-h-[28px] sm:min-w-[32px] sm:min-h-[32px] rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary-500 touch-manipulation flex items-center justify-center ${
                 index === currentIndex
-                  ? 'bg-white w-8'
-                  : 'bg-white/50 w-2 hover:bg-white/75'
+                  ? 'bg-white w-6 sm:w-8 h-2 sm:h-2'
+                  : 'bg-white/50 w-2 h-2 hover:bg-white/75'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

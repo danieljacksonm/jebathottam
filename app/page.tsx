@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -8,9 +9,8 @@ import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { motion } from 'framer-motion';
-import { ministryInfo, sliderImages, blogPosts, teamMembers, events, missionVision } from '@/data/demo-content';
+import { ministryInfo, blogPosts, teamMembers, events, missionVision } from '@/data/demo-content';
 import { galleryImages } from '@/data/gallery-content';
-import { testimonies } from '@/data/testimonies-content';
 import { AudioPlayer } from '@/components/audio/audio-player';
 import { mediaItems } from '@/data/media-content';
 import { PrayerForm } from '@/components/prayer/prayer-form';
@@ -23,7 +23,39 @@ function calculateReadingTime(content: string): number {
   return Math.ceil(words / wordsPerMinute);
 }
 
+type SliderImage = { src: string; alt: string; title?: string; description?: string };
+
 export default function Home() {
+  const [sliderImages, setSliderImages] = useState<SliderImage[]>([]);
+  const [homeTestimonies, setHomeTestimonies] = useState<Array<{ id: number; name: string; content: string; image_url: string | null; created_at: string }>>([]);
+
+  useEffect(() => {
+    fetch('/api/slider')
+      .then((res) => res.ok ? res.json() : { data: [] })
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        setSliderImages(
+          list.map((s: { image_url: string; title?: string; text?: string; description?: string }) => ({
+            src: s.image_url,
+            alt: s.title || s.text || 'Ministry',
+            title: s.title || undefined,
+            description: s.description || undefined,
+          }))
+        );
+      })
+      .catch(() => setSliderImages([]));
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/testimonies')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        setHomeTestimonies(list.slice(0, 3));
+      })
+      .catch(() => setHomeTestimonies([]));
+  }, []);
+
   const featuredBlog = blogPosts.find(post => post.featured) || blogPosts[0];
   const regularBlogs = blogPosts.filter(post => !post.featured).slice(0, 3);
 
@@ -31,8 +63,8 @@ export default function Home() {
     <div className="min-h-screen bg-white flex flex-col">
       <Navigation />
 
-      {/* 1. HERO IMAGE SLIDER */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      {/* 1. HERO IMAGE SLIDER - dynamic from API */}
+      <section className="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden">
         <EnhancedImageSlider images={sliderImages} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-10" />
         <div className="absolute inset-0 z-20 container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
@@ -298,38 +330,35 @@ export default function Home() {
             </div>
           </FadeInUp>
           <StaggerContainer>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-12">
-              {testimonies.slice(0, 3).map((testimony) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto mb-12">
+              {homeTestimonies.map((testimony) => (
                 <StaggerItem key={testimony.id}>
                   <Link href={`/testimony/${testimony.id}`}>
                     <motion.div
                       whileHover={{ y: -8 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Card className="h-full hover:shadow-xl transition-shadow cursor-pointer">
-                        <CardContent className="p-6">
-                          <div className="flex items-center space-x-4 mb-4">
-                            <div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-primary-100">
+                      <Card className="h-full hover:shadow-xl transition-shadow cursor-pointer border-gray-200 dark:border-gray-800">
+                        <CardContent className="p-4 sm:p-6">
+                          <div className="flex items-center space-x-3 sm:space-x-4 mb-3 sm:mb-4">
+                            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden ring-2 ring-primary-100 dark:ring-primary-900/30 flex-shrink-0">
                               <img
-                                src={testimony.image}
+                                src={testimony.image_url || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="64" height="64"%3E%3Crect fill="%23e5e7eb" width="64" height="64"/%3E%3C/svg%3E'}
                                 alt={testimony.name}
                                 className="w-full h-full object-cover"
                               />
                             </div>
-                            <div>
-                              <h3 className="font-semibold text-gray-900">{testimony.name}</h3>
-                              <p className="text-sm text-gray-600">{testimony.location}</p>
+                            <div className="min-w-0">
+                              <h3 className="font-semibold text-gray-900 dark:text-white truncate">{testimony.name}</h3>
+                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                                {new Date(testimony.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                              </p>
                             </div>
                           </div>
-                          <p className="text-gray-700 mb-4 line-clamp-4 leading-relaxed">
-                            "{testimony.testimony}"
+                          <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base mb-4 line-clamp-4 leading-relaxed">
+                            &ldquo;{testimony.content}&rdquo;
                           </p>
-                          <div className="flex items-center justify-between">
-                            <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium">
-                              {testimony.category}
-                            </span>
-                            <span className="text-xs text-primary-600 font-medium">Read More →</span>
-                          </div>
+                          <span className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 font-medium">Read More →</span>
                         </CardContent>
                       </Card>
                     </motion.div>

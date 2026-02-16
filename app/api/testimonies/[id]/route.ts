@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { requireRole, getUserFromRequest } from '@/lib/auth';
+import { requireRole } from '@/lib/auth';
 
-// GET single slide (admin or public for active)
+// GET single testimony (public)
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -10,22 +10,15 @@ export async function GET(
   try {
     const { id } = await params;
     const rows = await query<any[]>(
-      'SELECT * FROM slider_images WHERE id = ?',
+      'SELECT id, name, content, image_url, created_at, updated_at FROM testimonies WHERE id = ?',
       [id]
     );
     if (rows.length === 0) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
-    const slide = rows[0];
-    const user = await getUserFromRequest(request);
-    if (!user || user.role !== 'super_admin') {
-      if (slide.status !== 'active') {
-        return NextResponse.json({ error: 'Not found' }, { status: 404 });
-      }
-    }
-    return NextResponse.json({ data: slide });
+    return NextResponse.json({ data: rows[0] });
   } catch (error: any) {
-    console.error('Get slider error:', error);
+    console.error('Get testimony error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -33,7 +26,7 @@ export async function GET(
   }
 }
 
-// PUT update slider
+// PUT update testimony (super_admin only)
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -43,21 +36,32 @@ export async function PUT(
     const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
-    const { image_url, text, title, description, order_index, status } = await request.json();
+    const body = await request.json();
+    const name = body.name?.trim();
+    const content = body.content?.trim();
+    const image_url = body.image_url?.trim() || null;
+
+    if (!name || !content) {
+      return NextResponse.json(
+        { error: 'Name and content are required' },
+        { status: 400 }
+      );
+    }
 
     await query(
-      'UPDATE slider_images SET image_url = ?, text = ?, title = ?, description = ?, order_index = ?, status = ? WHERE id = ?',
-      [image_url, text || null, title || null, description || null, order_index || 0, status, id]
+      'UPDATE testimonies SET name = ?, content = ?, image_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+      [name, content, image_url, id]
     );
-
-    const slides = await query<any[]>(
-      'SELECT * FROM slider_images WHERE id = ?',
+    const rows = await query<any[]>(
+      'SELECT id, name, content, image_url, created_at, updated_at FROM testimonies WHERE id = ?',
       [id]
     );
-
-    return NextResponse.json({ data: slides[0] });
+    if (rows.length === 0) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+    return NextResponse.json({ data: rows[0] });
   } catch (error: any) {
-    console.error('Update slider error:', error);
+    console.error('Update testimony error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -65,7 +69,7 @@ export async function PUT(
   }
 }
 
-// DELETE slider
+// DELETE testimony (super_admin only)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -75,11 +79,10 @@ export async function DELETE(
     const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
-    await query('DELETE FROM slider_images WHERE id = ?', [id]);
-
-    return NextResponse.json({ message: 'Slider image deleted successfully' });
+    await query('DELETE FROM testimonies WHERE id = ?', [id]);
+    return NextResponse.json({ message: 'Testimony deleted successfully' });
   } catch (error: any) {
-    console.error('Delete slider error:', error);
+    console.error('Delete testimony error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

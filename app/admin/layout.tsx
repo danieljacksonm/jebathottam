@@ -19,6 +19,8 @@ const navigation = [
   { name: 'Notes & Sermons', href: '/admin/notes', iconKey: 'notes' as const },
   { name: 'Prophecy', href: '/admin/prophecy', iconKey: 'prophecy' as const },
   { name: 'Media Library', href: '/admin/media', iconKey: 'media' as const },
+  { name: 'Hero Slider', href: '/admin/slider', iconKey: 'slider' as const },
+  { name: 'Testimonies', href: '/admin/testimonies', iconKey: 'testimonies' as const },
   { name: 'Chat', href: '/admin/chat', iconKey: 'chat' as const },
   { name: 'Settings', href: '/admin/settings', iconKey: 'settings' as const },
 ];

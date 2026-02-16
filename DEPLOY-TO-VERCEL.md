@@ -2,6 +2,9 @@
 
 Follow these steps **in order** to move your app to Vercel.
 
+**Want to go Vercel first, then move to VPS using the same database?**  
+→ Use **[VERCEL-THEN-VPS-SAME-DB.md](./VERCEL-THEN-VPS-SAME-DB.md)** for one DB used by both, then switch traffic when the VPS is ready.
+
 ---
 
 ## Before you start
