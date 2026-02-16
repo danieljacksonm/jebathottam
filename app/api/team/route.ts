@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 // POST create team member
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { name, role, bio, image_url, email, phone, order_index } = await request.json();

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { requireRole, getUserFromRequest } from '@/lib/auth';
+import { exampleSliderSlides } from '@/lib/example-data';
 
-// GET all slider images
+// GET all slider images (returns example data when DB empty or fails)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -11,7 +12,6 @@ export async function GET(request: NextRequest) {
     let sql = 'SELECT * FROM slider_images WHERE 1=1';
     const params: any[] = [];
 
-    // Public can only see active slides; admins can filter
     const user = await getUserFromRequest(request);
     if (!user || user.role !== 'super_admin') {
       sql += ' AND status = "active"';
@@ -23,14 +23,11 @@ export async function GET(request: NextRequest) {
     sql += ' ORDER BY order_index ASC, created_at ASC';
 
     const slides = await query<any[]>(sql, params);
-
-    return NextResponse.json({ data: slides });
+    const data = Array.isArray(slides) && slides.length > 0 ? slides : exampleSliderSlides;
+    return NextResponse.json({ data });
   } catch (error: any) {
     console.error('Get slider error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ data: exampleSliderSlides });
   }
 }
 

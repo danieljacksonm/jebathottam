@@ -17,16 +17,16 @@ export default function AdminBlogs() {
       ]} />
 
       <FadeInUp>
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-1 sm:mb-2">
               Manage Blogs
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Create, edit, and manage your blog posts
             </p>
           </div>
-          <Button size="lg" onClick={() => setShowForm(!showForm)}>
+          <Button size="lg" onClick={() => setShowForm(!showForm)} className="w-full sm:w-auto shrink-0">
             {showForm ? 'Cancel' : '+ New Blog Post'}
           </Button>
         </div>
@@ -35,18 +35,18 @@ export default function AdminBlogs() {
       {/* Add/Edit Form */}
       {showForm && (
         <FadeInUp delay={0.1}>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm mb-8 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm mb-6 md:mb-8 p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
               Create New Blog Post
             </h2>
-            <form className="space-y-6">
+            <form className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Title
                 </label>
                 <input
                   type="text"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
                   placeholder="Enter blog post title"
                 />
               </div>
@@ -55,11 +55,11 @@ export default function AdminBlogs() {
                   Content
                 </label>
                 <textarea
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 min-h-[200px] dark:bg-gray-800 dark:text-white"
+                  className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 min-h-[160px] sm:min-h-[200px] dark:bg-gray-800 dark:text-white text-sm sm:text-base"
                   placeholder="Write your blog post content here..."
                 />
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Author
@@ -81,11 +81,11 @@ export default function AdminBlogs() {
                   </select>
                 </div>
               </div>
-              <div className="flex justify-end space-x-4">
-                <Button variant="secondary" onClick={() => setShowForm(false)}>
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-4">
+                <Button variant="secondary" onClick={() => setShowForm(false)} className="w-full sm:w-auto">
                   Cancel
                 </Button>
-                <Button>Save Blog Post</Button>
+                <Button className="w-full sm:w-auto">Save Blog Post</Button>
               </div>
             </form>
           </div>
@@ -95,14 +95,14 @@ export default function AdminBlogs() {
       {/* Blog Posts Table */}
       <FadeInUp delay={0.2}>
         <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">All Blog Posts</h2>
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+            <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">All Blog Posts</h2>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <table className="w-full min-w-[600px]">
               <thead className="bg-gray-50 dark:bg-gray-800/50">
                 <tr>
-                  <th className="text-left py-3 px-6 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="text-left py-3 px-4 sm:px-6 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">
                     Title
                   </th>
                   <th className="text-left py-3 px-6 text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider">

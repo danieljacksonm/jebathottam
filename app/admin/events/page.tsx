@@ -18,16 +18,16 @@ export default function AdminEvents() {
       ]} />
 
       <FadeInUp>
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-1 sm:mb-2">
               Manage Events
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Create and manage ministry events and meetings
             </p>
           </div>
-          <Button size="lg" onClick={() => setShowForm(!showForm)}>
+          <Button size="lg" onClick={() => setShowForm(!showForm)} className="w-full sm:w-auto shrink-0">
             {showForm ? 'Cancel' : '+ New Event'}
           </Button>
         </div>
@@ -36,19 +36,19 @@ export default function AdminEvents() {
       {/* Add Form */}
       {showForm && (
         <FadeInUp delay={0.1}>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm mb-8 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm mb-6 md:mb-8 p-4 sm:p-6">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
               Create New Event
             </h2>
-            <form className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
+            <form className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Title
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
                     placeholder="Event title"
                   />
                 </div>
@@ -56,7 +56,7 @@ export default function AdminEvents() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Type
                   </label>
-                  <select className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white">
+                  <select className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base">
                     <option>Worship</option>
                     <option>Study</option>
                     <option>Prayer</option>
@@ -64,14 +64,14 @@ export default function AdminEvents() {
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Date
                   </label>
                   <input
                     type="date"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
                   />
                 </div>
                 <div>
@@ -80,7 +80,7 @@ export default function AdminEvents() {
                   </label>
                   <input
                     type="time"
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+                    className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
                   />
                 </div>
               </div>
@@ -103,11 +103,11 @@ export default function AdminEvents() {
                   placeholder="Event description"
                 />
               </div>
-              <div className="flex justify-end space-x-4">
-                <Button variant="secondary" onClick={() => setShowForm(false)}>
+              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-4">
+                <Button variant="secondary" onClick={() => setShowForm(false)} className="w-full sm:w-auto">
                   Cancel
                 </Button>
-                <Button>Create Event</Button>
+                <Button className="w-full sm:w-auto">Create Event</Button>
               </div>
             </form>
           </div>
@@ -120,9 +120,9 @@ export default function AdminEvents() {
           {events.map((event) => (
             <StaggerItem key={event.id}>
               <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow">
-                <div className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-6">
+                <div className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex flex-wrap items-center gap-4 sm:gap-6">
                       <div className="bg-primary-600 text-white rounded-lg p-4 text-center min-w-[80px]">
                         <div className="text-2xl font-bold">
                           {new Date(event.date).getDate()}

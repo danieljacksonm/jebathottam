@@ -22,10 +22,8 @@ export async function GET(request: NextRequest) {
 // POST create gallery image
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
-    const { user } = authResult;
-
     const { title, description, image_url } = await request.json();
 
     if (!title || !image_url) {
@@ -37,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     const result = await query<any>(
       'INSERT INTO gallery (title, description, image_url, created_by) VALUES (?, ?, ?, ?)',
-      [title, description || null, image_url, user.id]
+      [title, description || null, image_url, null]
     );
 
     const galleryId = (result as any).insertId;

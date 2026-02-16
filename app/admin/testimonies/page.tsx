@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
-import { MessageSquare, Plus, Pencil, Trash2, Loader2, X } from 'lucide-react';
+import { MessageSquare, Plus, Pencil, Trash2, Loader2, X, Upload } from 'lucide-react';
 
 export interface TestimonyItem {
   id: number;
@@ -34,7 +34,34 @@ export default function AdminTestimoniesPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({ name: '', content: '', image_url: '' });
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.set('file', file);
+      formData.set('type', 'testimony');
+      const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      if (data.url) setForm((f) => ({ ...f, image_url: data.url }));
+    } catch (err: any) {
+      setError(err.message || 'Upload failed');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
 
   const fetchList = useCallback(async () => {
     try {
@@ -42,7 +69,8 @@ export default function AdminTestimoniesPage() {
       const res = await fetch('/api/testimonies');
       if (!res.ok) throw new Error('Failed to load testimonies');
       const data = await res.json();
-      setList(Array.isArray(data.data) ? data.data : []);
+      const raw = Array.isArray(data.data) ? data.data : [];
+      setList(raw.filter((t: TestimonyItem) => t.id > 0));
     } catch (e: any) {
       setError(e.message || 'Failed to load');
       setList([]);
@@ -215,14 +243,27 @@ export default function AdminTestimoniesPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Image URL (optional)
+                  Image (optional – upload or paste URL)
                 </label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <label className="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                    <Upload className="w-4 h-4 mr-2" />
+                    {uploading ? 'Uploading…' : 'Upload image'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                    />
+                  </label>
+                </div>
                 <input
                   type="url"
                   value={form.image_url}
                   onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
                   className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="https://..."
+                  placeholder="https://... or upload above"
                 />
                 {form.image_url && (
                   <div className="mt-2 w-20 h-20 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800">

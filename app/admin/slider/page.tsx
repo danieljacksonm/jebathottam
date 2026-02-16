@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
-import { Sliders, Plus, Pencil, Trash2, ChevronUp, ChevronDown, Loader2, X } from 'lucide-react';
+import { Sliders, Plus, Pencil, Trash2, ChevronUp, ChevronDown, Loader2, X, Upload } from 'lucide-react';
 
 export interface SliderSlide {
   id: number;
@@ -37,6 +37,7 @@ export default function AdminSliderPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({
     image_url: '',
     text: '',
@@ -55,7 +56,8 @@ export default function AdminSliderPage() {
         throw new Error(data.error || `Failed to load slides (${res.status})`);
       }
       const data = await res.json();
-      setSlides(Array.isArray(data.data) ? data.data : []);
+      const raw = Array.isArray(data.data) ? data.data : [];
+      setSlides(raw.filter((s: SliderSlide) => s.id > 0));
     } catch (e: any) {
       setError(e.message || 'Failed to load slides');
       setSlides([]);
@@ -164,6 +166,32 @@ export default function AdminSliderPage() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.set('file', file);
+      formData.set('type', 'slider');
+      const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: formData,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Upload failed');
+      if (data.url) setForm((f) => ({ ...f, image_url: data.url }));
+    } catch (err: any) {
+      setError(err.message || 'Upload failed');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
   const moveOrder = async (id: number, direction: 'up' | 'down') => {
     const index = slides.findIndex((s) => s.id === id);
     if (index < 0) return;
@@ -256,15 +284,27 @@ export default function AdminSliderPage() {
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Image URL
+                  Image (upload or paste URL)
                 </label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <label className="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                    <Upload className="w-4 h-4 mr-2" />
+                    {uploading ? 'Uploading…' : 'Upload image'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={handleImageUpload}
+                      disabled={uploading}
+                    />
+                  </label>
+                </div>
                 <input
                   type="url"
                   value={form.image_url}
                   onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
                   className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="https://..."
-                  required
+                  placeholder="https://... or upload above"
                 />
                 {form.image_url && (
                   <div className="mt-2 rounded-lg overflow-hidden max-w-xs aspect-video bg-gray-100 dark:bg-gray-800">
