@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { requireRole, getUserFromRequest } from '@/lib/auth';
-import { exampleSliderSlides } from '@/lib/example-data';
 
-// GET all slider images (returns example data when DB empty or fails)
+// GET all slider images (from database only)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -23,11 +22,11 @@ export async function GET(request: NextRequest) {
     sql += ' ORDER BY order_index ASC, created_at ASC';
 
     const slides = await query<any[]>(sql, params);
-    const data = Array.isArray(slides) && slides.length > 0 ? slides : exampleSliderSlides;
+    const data = Array.isArray(slides) ? slides : [];
     return NextResponse.json({ data });
   } catch (error: any) {
     console.error('Get slider error:', error);
-    return NextResponse.json({ data: exampleSliderSlides });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 

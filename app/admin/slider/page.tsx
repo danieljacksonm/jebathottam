@@ -50,7 +50,7 @@ export default function AdminSliderPage() {
   const fetchSlides = useCallback(async () => {
     try {
       setError(null);
-      const res = await fetch('/api/slider', { headers: getAuthHeaders() });
+      const res = await fetch('/api/slider', { headers: getAuthHeaders(), credentials: 'include' });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || `Failed to load slides (${res.status})`);
@@ -118,6 +118,7 @@ export default function AdminSliderPage() {
           method: 'PUT',
           headers: getAuthHeaders(),
           body: JSON.stringify(payload),
+          credentials: 'include',
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -128,6 +129,7 @@ export default function AdminSliderPage() {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify(payload),
+          credentials: 'include',
         });
         if (!res.ok) {
           const data = await res.json().catch(() => ({}));
@@ -151,6 +153,7 @@ export default function AdminSliderPage() {
       const res = await fetch(`/api/slider/${id}`, {
         method: 'DELETE',
         headers: getAuthHeaders(),
+        credentials: 'include',
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -178,8 +181,8 @@ export default function AdminSliderPage() {
       const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
       const res = await fetch('/api/upload', {
         method: 'POST',
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
+        credentials: 'include',
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Upload failed');
@@ -205,18 +208,14 @@ export default function AdminSliderPage() {
       await fetch(`/api/slider/${slide.id}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
-        body: JSON.stringify({
-          ...slide,
-          order_index: newOrder,
-        }),
+        body: JSON.stringify({ ...slide, order_index: newOrder }),
+        credentials: 'include',
       });
       await fetch(`/api/slider/${other.id}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
-        body: JSON.stringify({
-          ...other,
-          order_index: slide.order_index ?? index,
-        }),
+        body: JSON.stringify({ ...other, order_index: slide.order_index ?? index }),
+        credentials: 'include',
       });
       await fetchSlides();
     } finally {

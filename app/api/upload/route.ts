@@ -45,15 +45,27 @@ export async function POST(request: NextRequest) {
     await mkdir(dir, { recursive: true });
     const filePath = path.join(dir, name);
     const buffer = Buffer.from(await file.arrayBuffer());
-    await writeFile(filePath, buffer);
+    try {
+      await writeFile(filePath, buffer);
+    } catch (writeErr: any) {
+      const code = writeErr?.code || '';
+      if (code === 'EACCES' || code === 'EROFS' || code === 'READONLY') {
+        return NextResponse.json(
+          { error: 'Image upload not available on this server. Use an image URL (e.g. from imgur.com or your CDN) instead.' },
+          { status: 503 }
+        );
+      }
+      throw writeErr;
+    }
 
     const url = `/uploads/${folder}/${name}`;
     return NextResponse.json({ url });
   } catch (error: any) {
     console.error('Upload error:', error);
+    const status = error.message?.includes('Unauthorized') ? 401 : 500;
     return NextResponse.json(
-      { error: error.message || 'Upload failed' },
-      { status: 500 }
+      { error: status === 401 ? 'Please log in again' : (error.message || 'Upload failed') },
+      { status }
     );
   }
 }

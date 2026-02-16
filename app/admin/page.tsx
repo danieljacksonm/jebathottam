@@ -1,11 +1,35 @@
 'use client';
 
+import { useState } from 'react';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
 import { StatsCard } from '@/components/admin/stats-card';
+import { Button } from '@/components/ui/button';
 import { statsIcons } from '@/components/ui/icons';
+import { Database, Loader2 } from 'lucide-react';
 
 export default function AdminDashboard() {
+  const [seeding, setSeeding] = useState(false);
+  const [seedMessage, setSeedMessage] = useState<string | null>(null);
+
+  const handleSeedExample = async () => {
+    setSeeding(true);
+    setSeedMessage(null);
+    try {
+      const res = await fetch('/api/seed', { method: 'POST', credentials: 'include' });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Seed failed');
+      const parts = [];
+      if (data.slider_inserted) parts.push('slider');
+      if (data.testimonies_inserted) parts.push('testimonies');
+      setSeedMessage(parts.length ? `Added example ${parts.join(' and ')} to the database.` : 'Database already has content. Nothing added.');
+    } catch (e: any) {
+      setSeedMessage(e.message || 'Seed failed');
+    } finally {
+      setSeeding(false);
+    }
+  };
+
   const stats = [
     { title: 'Total Blog Posts', value: '24', icon: statsIcons.blog, change: '+3 this month', trend: 'up' as const },
     { title: 'Upcoming Events', value: '8', icon: statsIcons.events, change: '2 this week', trend: 'neutral' as const },
@@ -27,14 +51,30 @@ export default function AdminDashboard() {
       <Breadcrumbs items={[{ label: 'Dashboard' }]} />
       
       <FadeInUp>
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
-            Dashboard
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Welcome back! Here's an overview of your ministry platform.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
+              Dashboard
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Welcome back! Here&apos;s an overview of your ministry platform.
+            </p>
+          </div>
+          <Button
+            variant="outline"
+            onClick={handleSeedExample}
+            disabled={seeding}
+            className="w-full sm:w-auto shrink-0"
+          >
+            {seeding ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Database className="w-4 h-4 mr-2" />}
+            Seed example content
+          </Button>
         </div>
+        {seedMessage && (
+          <p className="mb-4 text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-lg">
+            {seedMessage}
+          </p>
+        )}
       </FadeInUp>
 
       {/* Stats Grid */}

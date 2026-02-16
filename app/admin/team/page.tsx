@@ -37,7 +37,7 @@ export default function AdminTeamPage() {
   const fetchList = useCallback(async () => {
     try {
       setError(null);
-      const res = await fetch('/api/team');
+      const res = await fetch('/api/team', { credentials: 'include' });
       if (!res.ok) throw new Error('Failed to load team');
       const data = await res.json();
       setList(Array.isArray(data?.data) ? data.data : []);
@@ -63,7 +63,7 @@ export default function AdminTeamPage() {
       formData.set('file', file);
       formData.set('type', 'team');
       const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
-      const res = await fetch('/api/upload', { method: 'POST', headers: token ? { Authorization: `Bearer ${token}` } : {}, body: formData });
+      const res = await fetch('/api/upload', { method: 'POST', body: formData, credentials: 'include' });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Upload failed');
       if (data.url) setForm((f) => ({ ...f, image_url: data.url }));
@@ -114,10 +114,10 @@ export default function AdminTeamPage() {
         order_index: Number(form.order_index) || 0,
       };
       if (editingId) {
-        const res = await fetch(`/api/team/${editingId}`, { method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(payload) });
+        const res = await fetch(`/api/team/${editingId}`, { method: 'PUT', headers: getAuthHeaders(), body: JSON.stringify(payload), credentials: 'include' });
         if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Update failed'); }
       } else {
-        const res = await fetch('/api/team', { method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(payload) });
+        const res = await fetch('/api/team', { method: 'POST', headers: getAuthHeaders(), body: JSON.stringify(payload), credentials: 'include' });
         if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Create failed'); }
       }
       resetForm();
@@ -134,7 +134,7 @@ export default function AdminTeamPage() {
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`/api/team/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+      const res = await fetch(`/api/team/${id}`, { method: 'DELETE', headers: getAuthHeaders(), credentials: 'include' });
       if (!res.ok) { const d = await res.json().catch(() => ({})); throw new Error(d.error || 'Delete failed'); }
       if (editingId === id) resetForm();
       await fetchList();

@@ -33,7 +33,7 @@ export default function AdminGalleryPage() {
   const fetchItems = useCallback(async () => {
     try {
       setError(null);
-      const res = await fetch('/api/gallery');
+      const res = await fetch('/api/gallery', { credentials: 'include' });
       if (!res.ok) throw new Error('Failed to load gallery');
       const data = await res.json();
       setItems(Array.isArray(data?.data) ? data.data : []);
@@ -59,7 +59,7 @@ export default function AdminGalleryPage() {
       formData.set('file', file);
       formData.set('type', 'gallery');
       const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
-      const res = await fetch('/api/upload', { method: 'POST', headers: token ? { Authorization: `Bearer ${token}` } : {}, body: formData });
+      const res = await fetch('/api/upload', { method: 'POST', body: formData, credentials: 'include' });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Upload failed');
       if (data.url) setForm((f) => ({ ...f, image_url: data.url }));
@@ -98,6 +98,7 @@ export default function AdminGalleryPage() {
           method: 'PUT',
           headers: getAuthHeaders(),
           body: JSON.stringify(payload),
+          credentials: 'include',
         });
         if (!res.ok) {
           const d = await res.json().catch(() => ({}));
@@ -108,6 +109,7 @@ export default function AdminGalleryPage() {
           method: 'POST',
           headers: getAuthHeaders(),
           body: JSON.stringify(payload),
+          credentials: 'include',
         });
         if (!res.ok) {
           const d = await res.json().catch(() => ({}));
@@ -128,7 +130,7 @@ export default function AdminGalleryPage() {
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`/api/gallery/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
+      const res = await fetch(`/api/gallery/${id}`, { method: 'DELETE', headers: getAuthHeaders(), credentials: 'include' });
       if (!res.ok) {
         const d = await res.json().catch(() => ({}));
         throw new Error(d.error || 'Delete failed');

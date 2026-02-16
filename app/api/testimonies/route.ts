@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { requireRole } from '@/lib/auth';
-import { exampleTestimonies } from '@/lib/example-data';
 
-// GET all testimonies (returns example data when DB empty or fails)
+// GET all testimonies (from database only)
 export async function GET() {
   try {
     const rows = await query<any[]>(
       'SELECT id, name, content, image_url, created_at, updated_at FROM testimonies ORDER BY created_at DESC'
     );
-    const data = Array.isArray(rows) && rows.length > 0 ? rows : exampleTestimonies;
+    const data = Array.isArray(rows) ? rows : [];
     return NextResponse.json({ data });
   } catch (error: any) {
     console.error('Get testimonies error:', error);
-    return NextResponse.json({ data: exampleTestimonies });
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
