@@ -23,8 +23,13 @@ export async function POST(request: NextRequest) {
       );
     } catch (dbError: any) {
       console.error('Login DB error:', dbError);
+      const isDev = process.env.NODE_ENV !== 'production';
+      const msg = dbError?.message || String(dbError);
+      const hint = isDev
+        ? ` Database error: ${msg}. Check DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT (default 3306), and DB_SSL (use false for IONOS).`
+        : ' Check your server configuration and environment variables (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME).';
       return NextResponse.json(
-        { error: 'Database connection failed. Check your server configuration and environment variables (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME).' },
+        { error: 'Database connection failed.' + hint },
         { status: 503 }
       );
     }
