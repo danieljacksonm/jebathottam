@@ -56,11 +56,12 @@ export async function POST(request: NextRequest) {
       token,
     });
 
-    // Set HTTP-only cookie
+    // Set HTTP-only cookie (path=/ so it is sent to all routes including /api)
     response.cookies.set('auth_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 

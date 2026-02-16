@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ThemeProvider, useTheme } from '@/components/admin/theme-provider';
 import { Logo } from '@/components/ui/logo';
 import { ChatWidget } from '@/components/chat/chat-widget';
@@ -26,9 +26,39 @@ const navigation = [
 ];
 
 function AdminLayoutInner({ children }: { children: React.ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
   const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then((res) => {
+        if (res.status === 401) {
+          router.replace('/login?from=' + encodeURIComponent(pathname));
+          return;
+        }
+        setAuthChecked(true);
+      })
+      .catch(() => {
+        router.replace('/login');
+      });
+  }, [router, pathname]);
+
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    router.replace('/login');
+    router.refresh();
+  };
+
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center">
+        <div className="text-gray-500 dark:text-gray-400">Loading…</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors">
@@ -130,9 +160,16 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
                   </svg>
                 )}
               </button>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
+              <div className="text-sm text-gray-600 dark:text-gray-400 hidden sm:block">
                 Welcome, Admin
               </div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white min-h-[44px] flex items-center px-2 touch-manipulation"
+              >
+                Log out
+              </button>
               <button className="min-w-[44px] min-h-[44px] rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center touch-manipulation" aria-label="Profile">
                 <svg className="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
