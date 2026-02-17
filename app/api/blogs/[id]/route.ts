@@ -20,7 +20,7 @@ export async function GET(
     const params_arr: any[] = [id];
 
     // Public can only see published blogs
-    if (!user || !['master_admin', 'pastor'].includes(user.role)) {
+    if (!user || user.role !== 'super_admin') {
       sql += ' AND b.published = 1';
     }
 
@@ -50,7 +50,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { title, content, excerpt, author, category, featured, published } = await request.json();
@@ -85,7 +85,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
     await query('DELETE FROM blogs WHERE id = ?', [id]);

@@ -8,21 +8,46 @@ import { Logo } from '@/components/ui/logo';
 import { ChatWidget } from '@/components/chat/chat-widget';
 import { adminNavIcons } from '@/components/ui/icons';
 
-const navigation = [
-  { name: 'Dashboard', href: '/admin', iconKey: 'dashboard' as const },
-  { name: 'Social Media', href: '/admin/social-media', iconKey: 'socialMedia' as const, badge: 'NEW' },
-  { name: 'Blogs', href: '/admin/blogs', iconKey: 'blogs' as const },
-  { name: 'Gallery', href: '/admin/gallery', iconKey: 'gallery' as const },
-  { name: 'Events', href: '/admin/events', iconKey: 'events' as const },
-  { name: 'Team Members', href: '/admin/team', iconKey: 'team' as const },
-  { name: 'Followers & Members', href: '/admin/followers', iconKey: 'followers' as const },
-  { name: 'Notes & Sermons', href: '/admin/notes', iconKey: 'notes' as const },
-  { name: 'Prophecy', href: '/admin/prophecy', iconKey: 'prophecy' as const },
-  { name: 'Media Library', href: '/admin/media', iconKey: 'media' as const },
-  { name: 'Hero Slider', href: '/admin/slider', iconKey: 'slider' as const },
-  { name: 'Testimonies', href: '/admin/testimonies', iconKey: 'testimonies' as const },
-  { name: 'Chat', href: '/admin/chat', iconKey: 'chat' as const },
-  { name: 'Settings', href: '/admin/settings', iconKey: 'settings' as const },
+const navSections = [
+  {
+    label: 'Overview',
+    items: [
+      { name: 'Dashboard', href: '/admin', iconKey: 'dashboard' as const },
+    ],
+  },
+  {
+    label: 'Website content',
+    items: [
+      { name: 'Hero Slider', href: '/admin/slider', iconKey: 'slider' as const },
+      { name: 'Blogs', href: '/admin/blogs', iconKey: 'blogs' as const },
+      { name: 'Gallery', href: '/admin/gallery', iconKey: 'gallery' as const },
+      { name: 'Events', href: '/admin/events', iconKey: 'events' as const },
+      { name: 'Testimonies', href: '/admin/testimonies', iconKey: 'testimonies' as const },
+    ],
+  },
+  {
+    label: 'People',
+    items: [
+      { name: 'Team', href: '/admin/team', iconKey: 'team' as const },
+      { name: 'Followers & Members', href: '/admin/followers', iconKey: 'followers' as const },
+    ],
+  },
+  {
+    label: 'Media & communication',
+    items: [
+      { name: 'Social Media', href: '/admin/social-media', iconKey: 'socialMedia' as const, badge: 'New' },
+      { name: 'Media Library', href: '/admin/media', iconKey: 'media' as const },
+      { name: 'Notes & Sermons', href: '/admin/notes', iconKey: 'notes' as const },
+      { name: 'Prophecy', href: '/admin/prophecy', iconKey: 'prophecy' as const },
+      { name: 'Chat', href: '/admin/chat', iconKey: 'chat' as const },
+    ],
+  },
+  {
+    label: 'System',
+    items: [
+      { name: 'Settings', href: '/admin/settings', iconKey: 'settings' as const },
+    ],
+  },
 ];
 
 function AdminLayoutInner({ children }: { children: React.ReactNode }) {
@@ -81,30 +106,40 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-            {navigation.map((item) => {
-              const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
-              const Icon = adminNavIcons[item.iconKey];
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`flex items-center space-x-3 px-3 py-3 min-h-[44px] rounded-lg text-sm font-medium transition-colors touch-manipulation ${
-                    isActive
-                      ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
-                >
-                  <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.75} />
-                  <span className="flex-1">{item.name}</span>
-                  {'badge' in item && item.badge && (
-                    <span className="px-2 py-0.5 text-xs font-semibold bg-primary-600 text-white rounded-full">
-                      {item.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
+          <nav className="flex-1 px-3 py-5 space-y-6 overflow-y-auto">
+            {navSections.map((section) => (
+              <div key={section.label}>
+                <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                  {section.label}
+                </p>
+                <ul className="space-y-0.5">
+                  {section.items.map((item) => {
+                    const isActive = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
+                    const Icon = adminNavIcons[item.iconKey];
+                    return (
+                      <li key={item.name}>
+                        <Link
+                          href={item.href}
+                          className={`flex items-center gap-3 px-3 py-2.5 min-h-[44px] rounded-lg text-sm font-medium transition-colors touch-manipulation ${
+                            isActive
+                              ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400'
+                              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                          }`}
+                        >
+                          <Icon className="w-5 h-5 flex-shrink-0" strokeWidth={1.75} />
+                          <span className="flex-1 truncate">{item.name}</span>
+                          {'badge' in item && item.badge && (
+                            <span className="px-2 py-0.5 text-xs font-semibold bg-primary-600 text-white rounded-full flex-shrink-0">
+                              {item.badge}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
           </nav>
 
           {/* Footer */}

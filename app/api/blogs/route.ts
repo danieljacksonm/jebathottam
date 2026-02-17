@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 
     // Public can only see published blogs
     const user = await getUserFromRequest(request);
-    if (!user || !['master_admin', 'pastor'].includes(user.role)) {
+    if (!user || user.role !== 'super_admin') {
       sql += ' AND b.published = 1';
     } else if (published !== null) {
       sql += ' AND b.published = ?';
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 // POST create blog
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 

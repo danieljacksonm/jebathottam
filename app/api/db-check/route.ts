@@ -28,6 +28,9 @@ export async function GET() {
 
 function getHint(message: string, code: string): string {
   const m = (message + code).toLowerCase();
+  if (m.includes('enotfound') || m.includes('getaddrinfo')) {
+    return 'Hostname not found (DNS). Check DB_HOST for typos. Copy the exact host from your provider (e.g. IONOS → Database → Connection data). If deploying to Vercel, ensure the host is a public hostname.';
+  }
   if (m.includes('econnrefused') || m.includes('connection refused')) {
     return 'Server not reachable. Check DB_HOST and DB_PORT (default 3306). Ensure MySQL is running and allows remote connections.';
   }

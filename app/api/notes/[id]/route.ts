@@ -20,7 +20,7 @@ export async function GET(
     const params_arr: any[] = [id];
 
     // Users can only see their own notes, admins can see all
-    if (user && !['master_admin', 'pastor'].includes(user.role)) {
+    if (user && user.role !== 'super_admin') {
       sql += ' AND n.user_id = ?';
       params_arr.push(user.id);
     }
@@ -56,7 +56,8 @@ export async function PUT(
     const { user } = authResult;
 
     // Check if user owns this note (unless admin)
-    if (!['master_admin', 'pastor'].includes(user.role)) {
+    const canManageAny = ['super_admin', 'master_admin', 'pastor'].includes(user.role);
+    if (!canManageAny) {
       const notes = await query<any[]>(
         'SELECT user_id FROM notes WHERE id = ?',
         [id]
@@ -103,7 +104,8 @@ export async function DELETE(
     const { user } = authResult;
 
     // Check if user owns this note (unless admin)
-    if (!['master_admin', 'pastor'].includes(user.role)) {
+    const canManageAny = ['super_admin', 'master_admin', 'pastor'].includes(user.role);
+    if (!canManageAny) {
       const notes = await query<any[]>(
         'SELECT user_id FROM notes WHERE id = ?',
         [id]

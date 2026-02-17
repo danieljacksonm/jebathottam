@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
 // POST create event
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 

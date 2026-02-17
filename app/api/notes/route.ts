@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Users can only see their own notes, admins can see all
-    if (user && !['master_admin', 'pastor'].includes(user.role)) {
+    if (user && user.role !== 'super_admin') {
       sql += ' AND n.user_id = ?';
       params.push(user.id);
     }
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 // POST create note/sermon
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'master_admin', 'pastor', 'member']);
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 

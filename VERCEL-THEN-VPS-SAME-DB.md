@@ -47,10 +47,10 @@ Pick **one** host. This DB will be used by **Vercel now** and **VPS later**.
 
 **Option C: IONOS database**
 
-1. In IONOS: **Contracts** → **Products** → your **MySQL database** (or the one included with your package).
-2. In the database product, open **Connection data** / **Access data** and note: **Host**, **User**, **Password**, **Database name**.
-3. Run **`database/schema.sql`** using IONOS’s phpMyAdmin, HeidiSQL, or any MySQL client connected to that host.
-4. For IONOS MySQL, use **`DB_SSL=false`** unless IONOS explicitly says “SSL” or “secure connection” is required (then set **`DB_SSL=true`**).
+⚠️ **IONOS shared hosting MySQL** (hostnames like `db5019687516.hosting-data.io`) **does not allow remote/external connections**. It only works from PHP or apps running on IONOS hosting. Your Next.js app on **Vercel or your PC cannot connect** to it (you will get `ENOTFOUND` or connection refused).  
+→ Use **Option A (PlanetScale)** or **Option B (Railway)** for Vercel, or use an IONOS **VPS/Dedicated** product where you can enable remote MySQL.
+
+If you have IONOS **VPS or Dedicated Server** (not shared hosting), you can enable remote MySQL there and use that host instead.
 
 Save these somewhere safe: **DB_HOST**, **DB_USER**, **DB_PASSWORD**, **DB_NAME**, and **DB_SSL** (true or false).
 

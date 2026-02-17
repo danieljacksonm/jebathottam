@@ -38,7 +38,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { title, description, type, date, time, location } = await request.json();
@@ -72,7 +72,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
     await query('DELETE FROM events WHERE id = ?', [id]);

@@ -5,6 +5,7 @@ import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
 import { MessageSquare, Plus, Pencil, Trash2, Loader2, X, Upload } from 'lucide-react';
+import { HtmlEditor } from '@/components/ui/html-editor';
 
 export interface TestimonyItem {
   id: number;
@@ -236,12 +237,11 @@ export default function AdminTestimoniesPage() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Content
                 </label>
-                <textarea
+                <HtmlEditor
                   value={form.content}
-                  onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
-                  className="w-full px-3 py-2 sm:px-4 min-h-[120px] sm:min-h-[160px] border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="Their testimony / story"
-                  required
+                  onChange={(content) => setForm((f) => ({ ...f, content }))}
+                  placeholder="Their testimony / story (HTML supported)"
+                  minHeight="160px"
                 />
               </div>
               <div>
@@ -339,7 +339,7 @@ export default function AdminTestimoniesPage() {
                   </div>
                   <div className="flex-1 p-4 sm:p-4 min-w-0">
                     <h3 className="font-semibold text-gray-900 dark:text-white truncate">{t.name}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-3">{t.content}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-3">{t.content.replace(/<[^>]+>/g, ' ').trim() || '—'}</p>
                     <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
                       {new Date(t.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
