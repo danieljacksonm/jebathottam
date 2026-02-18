@@ -115,24 +115,22 @@ export default function SocialMediaDashboard() {
       />
 
       <FadeInUp>
-        <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
-                Social Media Manager
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400">
-                Publish to all your social media platforms from one place
-              </p>
-            </div>
-            <Link
-              href="/admin/social-media/create"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm"
-            >
-              <Plus className="w-5 h-5" />
-              Create Post
-            </Link>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
+          <div>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-1 sm:mb-2">
+              Social Media Manager
+            </h1>
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+              Publish to all your social media platforms from one place
+            </p>
           </div>
+          <Link
+            href="/admin/social-media/create"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-medium transition-colors shadow-sm w-full sm:w-auto shrink-0"
+          >
+            <Plus className="w-5 h-5" />
+            Create Post
+          </Link>
         </div>
       </FadeInUp>
 

@@ -14,7 +14,7 @@ export function Logo({ variant = 'default', className = '' }: LogoProps) {
             <div className="w-3 h-3 border-2 border-white border-t-0 border-b-0 rounded-sm"></div>
           </div>
         </div>
-        <span className="text-xl font-serif font-bold text-gray-900">JITW</span>
+        <span className="text-xl font-serif font-bold text-gray-900 dark:text-white">JITW</span>
       </Link>
     );
   }
@@ -28,8 +28,8 @@ export function Logo({ variant = 'default', className = '' }: LogoProps) {
           </div>
         </div>
         <div className="flex flex-col">
-          <span className="text-sm font-serif font-bold text-white leading-tight">Jesus Is</span>
-          <span className="text-xs font-serif text-white/80 leading-tight">The Way</span>
+          <span className="text-sm font-serif font-bold text-gray-900 dark:text-white leading-tight">Jesus Is</span>
+          <span className="text-xs font-serif text-gray-500 dark:text-gray-400 leading-tight">The Way</span>
         </div>
       </div>
     );
@@ -44,10 +44,10 @@ export function Logo({ variant = 'default', className = '' }: LogoProps) {
         <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full border-2 border-white"></div>
       </div>
       <div className="flex flex-col">
-        <span className="text-xl md:text-2xl font-serif font-bold text-gray-900 leading-tight">
+        <span className="text-xl md:text-2xl font-serif font-bold text-gray-900 dark:text-white leading-tight">
           Jesus Is The Way
         </span>
-        <span className="text-sm md:text-base font-serif text-primary-600 font-semibold leading-tight">
+        <span className="text-sm md:text-base font-serif text-primary-600 dark:text-primary-400 font-semibold leading-tight">
           Jebathottam
         </span>
       </div>

@@ -5,96 +5,51 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Logo } from '@/components/ui/logo';
 
+const navLinks = [
+  { href: '/#about', label: 'About' },
+  { href: '/#mission', label: 'Mission' },
+  { href: '/#team', label: 'Team' },
+  { href: '/#blog', label: 'Blog', highlight: true },
+  { href: '/#testimony', label: 'Testimonies' },
+  { href: '/#events', label: 'Events' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/#media', label: 'Media' },
+  { href: '/social-feed', label: 'Social Feed' },
+  { href: '/notes', label: 'Notes' },
+  { href: '/audio-conference', label: 'Audio Conference' },
+  { href: '/contact', label: 'Contact' },
+];
+
 export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           <Logo />
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/#about"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              About
-            </Link>
-            <Link
-              href="/#mission"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Mission
-            </Link>
-            <Link
-              href="/#team"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Team
-            </Link>
-            <Link
-              href="/#blog"
-              className="text-primary-600 hover:text-primary-700 transition-colors font-semibold"
-            >
-              Blog
-            </Link>
-            <Link
-              href="/#testimony"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Testimonies
-            </Link>
-            <Link
-              href="/#events"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Events
-            </Link>
-            <Link
-              href="/gallery"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Gallery
-            </Link>
-            <Link
-              href="/#media"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Media
-            </Link>
-            <Link
-              href="/social-feed"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium flex items-center space-x-1"
-            >
-              <span>🌐</span>
-              <span>Social Feed</span>
-            </Link>
-            <Link
-              href="/notes"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Notes
-            </Link>
-            <Link
-              href="/audio-conference"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Audio Conference
-            </Link>
-            <Link
-              href="/contact"
-              className="text-gray-700 hover:text-primary-600 transition-colors font-medium"
-            >
-              Contact
-            </Link>
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`px-2.5 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
+                  link.highlight
+                    ? 'text-primary-600 hover:text-primary-700 hover:bg-primary-50 font-semibold'
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
           <button
-            className="md:hidden p-2"
+            className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menu"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
             <svg
-              className="w-6 h-6"
+              className="w-6 h-6 text-gray-700"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -124,93 +79,23 @@ export function Navigation() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-t border-gray-200"
+            className="lg:hidden bg-white border-t border-gray-200 shadow-lg"
           >
-            <nav className="container mx-auto px-4 py-4 space-y-4">
-              <Link
-                href="/#about"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                About
-              </Link>
-              <Link
-                href="/#mission"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Mission
-              </Link>
-              <Link
-                href="/#team"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Team
-              </Link>
-              <Link
-                href="/#blog"
-                className="block text-primary-600 font-semibold"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Blog
-              </Link>
-              <Link
-                href="/#testimony"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Testimonies
-              </Link>
-              <Link
-                href="/#events"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Events
-              </Link>
-              <Link
-                href="/gallery"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Gallery
-              </Link>
-              <Link
-                href="/#media"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Media
-              </Link>
-              <Link
-                href="/social-feed"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                🌐 Social Feed
-              </Link>
-              <Link
-                href="/notes"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Notes
-              </Link>
-              <Link
-                href="/audio-conference"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Audio Conference
-              </Link>
-              <Link
-                href="/contact"
-                className="block text-gray-700 hover:text-primary-600 transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Contact
-              </Link>
+            <nav className="container mx-auto px-4 py-3 space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    link.highlight
+                      ? 'text-primary-600 bg-primary-50 font-semibold'
+                      : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </nav>
           </motion.div>
         )}
@@ -218,4 +103,3 @@ export function Navigation() {
     </header>
   );
 }
-

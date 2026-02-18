@@ -8,10 +8,10 @@ interface CardProps {
 
 export function Card({ children, className = '', hover = true }: CardProps) {
   const hoverStyles = hover ? 'hover:shadow-md' : '';
-  
+
   return (
     <div
-      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 transition-shadow ${hoverStyles} ${className}`}
+      className={`bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 transition-shadow ${hoverStyles} ${className}`}
     >
       {children}
     </div>
@@ -38,7 +38,7 @@ interface CardTitleProps {
 
 export function CardTitle({ children, className = '' }: CardTitleProps) {
   return (
-    <h3 className={`text-xl font-semibold text-gray-900 ${className}`}>
+    <h3 className={`text-xl font-semibold text-gray-900 dark:text-white ${className}`}>
       {children}
     </h3>
   );
@@ -51,7 +51,7 @@ interface CardDescriptionProps {
 
 export function CardDescription({ children, className = '' }: CardDescriptionProps) {
   return (
-    <p className={`text-sm text-gray-600 mt-1 ${className}`}>
+    <p className={`text-sm text-gray-600 dark:text-gray-400 mt-1 ${className}`}>
       {children}
     </p>
   );

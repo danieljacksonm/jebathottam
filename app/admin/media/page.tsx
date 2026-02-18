@@ -21,20 +21,20 @@ export default function AdminMedia() {
       ]} />
 
       <FadeInUp>
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-1 sm:mb-2">
               Media Library
             </h1>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
               Manage posters, videos, and media content
             </p>
           </div>
-          <div className="flex space-x-4">
-            <Button variant="secondary" size="lg" onClick={() => setActiveTab('posters')}>
+          <div className="flex flex-wrap gap-2 sm:gap-4">
+            <Button variant="secondary" size="lg" onClick={() => setActiveTab('posters')} className="flex-1 sm:flex-none">
               + New Poster
             </Button>
-            <Button size="lg" onClick={() => setActiveTab('videos')}>
+            <Button size="lg" onClick={() => setActiveTab('videos')} className="flex-1 sm:flex-none">
               + New Video
             </Button>
           </div>

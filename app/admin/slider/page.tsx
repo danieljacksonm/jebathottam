@@ -294,7 +294,7 @@ export default function AdminSliderPage() {
     <div className="min-h-screen pb-8">
       <Breadcrumbs items={[{ label: 'Dashboard', href: '/admin' }, { label: 'Hero Slider' }]} />
 
-      <div className="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <FadeInUp>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>

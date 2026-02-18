@@ -6,7 +6,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-auto">
+    <footer className="bg-gray-900 text-gray-300 mt-auto dark">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Scripture Quote */}
         <div className="text-center mb-12 pb-8 border-b border-gray-800">
@@ -20,10 +20,6 @@ export function Footer() {
           <div>
             <Logo variant="admin" className="mb-4" />
             <p className="text-gray-400 text-sm leading-relaxed mt-4">
-              Preserving God-spoken words for future generations. A trusted platform
-              for ministry growth and spiritual development.
-            </p>
-            <p className="text-gray-400 text-sm leading-relaxed">
               Preserving God-spoken words for future generations. A trusted platform
               for ministry growth and spiritual development.
             </p>
