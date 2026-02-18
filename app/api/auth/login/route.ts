@@ -86,9 +86,12 @@ export async function POST(request: NextRequest) {
       token,
     });
 
+    // Set Secure only when the request is over HTTPS. On HTTP (e.g. http://YOUR_IP) the browser would otherwise ignore the cookie and you could not stay logged in.
+    const isSecure = request.headers.get('x-forwarded-proto') === 'https';
+
     response.cookies.set('auth_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecure,
       sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24 * 7,

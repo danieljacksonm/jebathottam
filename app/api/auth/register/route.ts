@@ -62,11 +62,13 @@ export async function POST(request: NextRequest) {
       token,
     });
 
-    // Set HTTP-only cookie
+    // Set Secure only when over HTTPS so cookie works on http://YOUR_IP in production
+    const isSecure = request.headers.get('x-forwarded-proto') === 'https';
     response.cookies.set('auth_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: isSecure,
       sameSite: 'lax',
+      path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     });
 
