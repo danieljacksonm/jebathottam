@@ -539,7 +539,7 @@ export default function AdminSliderPage() {
                       </div>
                       <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           size="sm"
                           className="col-span-2 sm:col-span-1 min-h-10"
                           onClick={() => openEdit(slide)}
@@ -548,7 +548,7 @@ export default function AdminSliderPage() {
                           Edit
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           size="sm"
                           className="min-h-10 px-3"
                           onClick={() => moveOrder(slide.id, 'up')}
@@ -558,7 +558,7 @@ export default function AdminSliderPage() {
                           <ChevronUp className="w-4 h-4" />
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           size="sm"
                           className="min-h-10 px-3"
                           onClick={() => moveOrder(slide.id, 'down')}
@@ -568,7 +568,7 @@ export default function AdminSliderPage() {
                           <ChevronDown className="w-4 h-4" />
                         </Button>
                         <Button
-                          variant="outline"
+                          variant="secondary"
                           size="sm"
                           className="min-h-10 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border-red-200 dark:border-red-800"
                           onClick={() => handleDelete(slide.id)}
