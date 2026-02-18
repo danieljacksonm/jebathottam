@@ -38,6 +38,7 @@ export default function AdminSliderPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [previewBlobUrl, setPreviewBlobUrl] = useState<string | null>(null);
   const [form, setForm] = useState({
     image_url: '',
     text: '',
@@ -70,7 +71,17 @@ export default function AdminSliderPage() {
     fetchSlides();
   }, [fetchSlides]);
 
+  useEffect(() => {
+    return () => {
+      if (previewBlobUrl) URL.revokeObjectURL(previewBlobUrl);
+    };
+  }, [previewBlobUrl]);
+
   const resetForm = () => {
+    if (previewBlobUrl) {
+      URL.revokeObjectURL(previewBlobUrl);
+      setPreviewBlobUrl(null);
+    }
     setForm({
       image_url: '',
       text: '',
@@ -84,6 +95,10 @@ export default function AdminSliderPage() {
   };
 
   const openEdit = (slide: SliderSlide) => {
+    if (previewBlobUrl) {
+      URL.revokeObjectURL(previewBlobUrl);
+      setPreviewBlobUrl(null);
+    }
     setForm({
       image_url: slide.image_url || '',
       text: slide.text || '',
@@ -172,13 +187,22 @@ export default function AdminSliderPage() {
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
+    if (!file.type.startsWith('image/')) {
+      setError('Please select an image file (JPEG, PNG, WebP, GIF).');
+      return;
+    }
+    if (previewBlobUrl) {
+      URL.revokeObjectURL(previewBlobUrl);
+      setPreviewBlobUrl(null);
+    }
+    const blobUrl = URL.createObjectURL(file);
+    setPreviewBlobUrl(blobUrl);
     setError(null);
+    setUploading(true);
     try {
       const formData = new FormData();
       formData.set('file', file);
       formData.set('type', 'slider');
-      const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
       const res = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
@@ -186,7 +210,11 @@ export default function AdminSliderPage() {
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Upload failed');
-      if (data.url) setForm((f) => ({ ...f, image_url: data.url }));
+      if (data.url) {
+        setForm((f) => ({ ...f, image_url: data.url }));
+        URL.revokeObjectURL(blobUrl);
+        setPreviewBlobUrl(null);
+      }
     } catch (err: any) {
       setError(err.message || 'Upload failed');
     } finally {
@@ -301,20 +329,36 @@ export default function AdminSliderPage() {
                 <input
                   type="text"
                   value={form.image_url}
-                  onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value.trim() }))}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setForm((f) => ({ ...f, image_url: v }));
+                    if (!v && previewBlobUrl) {
+                      URL.revokeObjectURL(previewBlobUrl);
+                      setPreviewBlobUrl(null);
+                    }
+                  }}
                   className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
                   placeholder="Upload above (path like /uploads/slider/…) or paste full URL"
                 />
-                {form.image_url && (
-                  <div className="mt-2 rounded-lg overflow-hidden max-w-xs aspect-video bg-gray-100 dark:bg-gray-800">
+                {(previewBlobUrl || form.image_url) && (
+                  <div className="relative mt-2 rounded-lg overflow-hidden max-w-xs aspect-video bg-gray-100 dark:bg-gray-800">
                     <img
-                      src={form.image_url}
+                      key={previewBlobUrl || form.image_url}
+                      src={previewBlobUrl || form.image_url}
                       alt="Preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
+                        const el = e.target as HTMLImageElement;
+                        if (form.image_url && !previewBlobUrl) {
+                          el.style.display = 'none';
+                          const fallback = el.nextElementSibling as HTMLElement | null;
+                          if (fallback) fallback.classList.remove('hidden');
+                        }
                       }}
                     />
+                    <span className="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-500 dark:text-gray-400 p-4 text-center" aria-hidden>
+                      Image could not be loaded from URL.
+                    </span>
                   </div>
                 )}
               </div>
