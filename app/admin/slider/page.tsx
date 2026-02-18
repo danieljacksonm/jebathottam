@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
@@ -30,6 +30,18 @@ function getAuthHeaders(): HeadersInit {
   };
 }
 
+function getUploadHeaders(): HeadersInit {
+  if (typeof window === 'undefined') return {};
+  const token = document.cookie
+    .split('; ')
+    .find((row) => row.startsWith('auth_token='))
+    ?.split('=')[1];
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+const PLACEHOLDER_IMG =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23e5e7eb" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14"%3ENo image%3C/text%3E%3C/svg%3E';
+
 export default function AdminSliderPage() {
   const [slides, setSlides] = useState<SliderSlide[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +59,7 @@ export default function AdminSliderPage() {
     order_index: 0,
     status: 'active',
   });
+  const formSectionRef = useRef<HTMLDivElement>(null);
 
   const fetchSlides = useCallback(async () => {
     try {
@@ -77,11 +90,21 @@ export default function AdminSliderPage() {
     };
   }, [previewBlobUrl]);
 
-  const resetForm = () => {
+  useEffect(() => {
+    if (showForm && formSectionRef.current) {
+      formSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [showForm]);
+
+  const clearPreviewBlob = useCallback(() => {
     if (previewBlobUrl) {
       URL.revokeObjectURL(previewBlobUrl);
       setPreviewBlobUrl(null);
     }
+  }, [previewBlobUrl]);
+
+  const resetForm = useCallback(() => {
+    clearPreviewBlob();
     setForm({
       image_url: '',
       text: '',
@@ -92,28 +115,46 @@ export default function AdminSliderPage() {
     });
     setShowForm(false);
     setEditingId(null);
-  };
+  }, [slides.length, clearPreviewBlob]);
 
-  const openEdit = (slide: SliderSlide) => {
-    if (previewBlobUrl) {
-      URL.revokeObjectURL(previewBlobUrl);
-      setPreviewBlobUrl(null);
-    }
+  const openAdd = useCallback(() => {
+    clearPreviewBlob();
     setForm({
-      image_url: slide.image_url || '',
-      text: slide.text || '',
-      title: slide.title || '',
-      description: slide.description || '',
-      order_index: slide.order_index ?? 0,
-      status: slide.status || 'active',
+      image_url: '',
+      text: '',
+      title: '',
+      description: '',
+      order_index: slides.length,
+      status: 'active',
     });
-    setEditingId(slide.id);
+    setEditingId(null);
     setShowForm(true);
-  };
+    setError(null);
+  }, [slides.length, clearPreviewBlob]);
+
+  const openEdit = useCallback(
+    (slide: SliderSlide) => {
+      clearPreviewBlob();
+      setForm({
+        image_url: slide.image_url || '',
+        text: slide.text || '',
+        title: slide.title || '',
+        description: slide.description || '',
+        order_index: slide.order_index ?? 0,
+        status: slide.status || 'active',
+      });
+      setEditingId(slide.id);
+      setShowForm(true);
+      setError(null);
+      setTimeout(() => formSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    },
+    [clearPreviewBlob]
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+    setError(null);
     try {
       const payload = {
         image_url: form.image_url.trim(),
@@ -124,7 +165,7 @@ export default function AdminSliderPage() {
         status: form.status,
       };
       if (!payload.image_url) {
-        setError('Image URL is required');
+        setError('Image is required. Upload an image or paste a URL.');
         setSaving(false);
         return;
       }
@@ -151,7 +192,6 @@ export default function AdminSliderPage() {
           throw new Error(data.error || 'Failed to add slide');
         }
       }
-      setError(null);
       resetForm();
       await fetchSlides();
     } catch (e: any) {
@@ -164,6 +204,7 @@ export default function AdminSliderPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this slide?')) return;
     setSaving(true);
+    setError(null);
     try {
       const res = await fetch(`/api/slider/${id}`, {
         method: 'DELETE',
@@ -174,7 +215,6 @@ export default function AdminSliderPage() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || 'Failed to delete');
       }
-      setError(null);
       if (editingId === id) resetForm();
       await fetchSlides();
     } catch (e: any) {
@@ -188,13 +228,10 @@ export default function AdminSliderPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      setError('Please select an image file (JPEG, PNG, WebP, GIF).');
+      setError('Please select an image (JPEG, PNG, WebP, GIF).');
       return;
     }
-    if (previewBlobUrl) {
-      URL.revokeObjectURL(previewBlobUrl);
-      setPreviewBlobUrl(null);
-    }
+    clearPreviewBlob();
     const blobUrl = URL.createObjectURL(file);
     setPreviewBlobUrl(blobUrl);
     setError(null);
@@ -205,6 +242,7 @@ export default function AdminSliderPage() {
       formData.set('type', 'slider');
       const res = await fetch('/api/upload', {
         method: 'POST',
+        headers: getUploadHeaders(),
         body: formData,
         credentials: 'include',
       });
@@ -230,13 +268,12 @@ export default function AdminSliderPage() {
     if (newIndex < 0 || newIndex >= slides.length) return;
     const slide = slides[index];
     const other = slides[newIndex];
-    const newOrder = other.order_index;
     setSaving(true);
     try {
       await fetch(`/api/slider/${slide.id}`, {
         method: 'PUT',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ ...slide, order_index: newOrder }),
+        body: JSON.stringify({ ...slide, order_index: other.order_index ?? newIndex }),
         credentials: 'include',
       });
       await fetch(`/api/slider/${other.id}`, {
@@ -251,298 +288,304 @@ export default function AdminSliderPage() {
     }
   };
 
+  const previewSrc = previewBlobUrl || form.image_url.trim() || null;
+
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-8">
       <Breadcrumbs items={[{ label: 'Dashboard', href: '/admin' }, { label: 'Hero Slider' }]} />
 
-      <FadeInUp>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 md:mb-8">
-          <div>
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white mb-1 sm:mb-2">
-              Manage Hero Slider
-            </h1>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-              Control the images and messages on the homepage hero
-            </p>
-          </div>
-          <Button
-            size="lg"
-            onClick={() => {
-              setForm({
-                image_url: '',
-                text: '',
-                title: '',
-                description: '',
-                order_index: slides.length,
-                status: 'active',
-              });
-              setEditingId(null);
-              setShowForm(!showForm);
-            }}
-            className="w-full sm:w-auto shrink-0"
-          >
-            {showForm ? (
-              <>
-                <X className="w-4 h-4 mr-2" />
-                Cancel
-              </>
-            ) : (
-              <>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Slide
-              </>
-            )}
-          </Button>
-        </div>
-      </FadeInUp>
-
-      {error && (
-        <div className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
-          {error}
-        </div>
-      )}
-
-      {showForm && (
-        <FadeInUp delay={0.1}>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm mb-6 md:mb-8 p-4 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
-              {editingId ? 'Edit Slide' : 'Add New Slide'}
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Image (upload or paste URL)
-                </label>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  <label className="inline-flex items-center justify-center px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
-                    <Upload className="w-4 h-4 mr-2" />
-                    {uploading ? 'Uploading…' : 'Upload image'}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="sr-only"
-                      onChange={handleImageUpload}
-                      disabled={uploading}
-                    />
-                  </label>
-                </div>
-                <input
-                  type="text"
-                  value={form.image_url}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    setForm((f) => ({ ...f, image_url: v }));
-                    if (!v && previewBlobUrl) {
-                      URL.revokeObjectURL(previewBlobUrl);
-                      setPreviewBlobUrl(null);
-                    }
-                  }}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="Upload above (path like /uploads/slider/…) or paste full URL"
-                />
-                {(previewBlobUrl || form.image_url) && (
-                  <div className="relative mt-2 rounded-lg overflow-hidden max-w-xs aspect-video bg-gray-100 dark:bg-gray-800">
-                    <img
-                      key={previewBlobUrl || form.image_url}
-                      src={previewBlobUrl || form.image_url}
-                      alt="Preview"
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const el = e.target as HTMLImageElement;
-                        if (form.image_url && !previewBlobUrl) {
-                          el.style.display = 'none';
-                          const fallback = el.nextElementSibling as HTMLElement | null;
-                          if (fallback) fallback.classList.remove('hidden');
-                        }
-                      }}
-                    />
-                    <span className="hidden absolute inset-0 flex items-center justify-center text-sm text-gray-500 dark:text-gray-400 p-4 text-center" aria-hidden>
-                      Image could not be loaded from URL.
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Title (overlay)
-                </label>
-                <input
-                  type="text"
-                  value={form.title}
-                  onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="Slide title"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Scripture / Text overlay
-                </label>
-                <textarea
-                  value={form.text}
-                  onChange={(e) => setForm((f) => ({ ...f, text: e.target.value }))}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 min-h-[80px] sm:min-h-[100px] dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="Scripture or inspirational text"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Description (optional)
-                </label>
-                <input
-                  type="text"
-                  value={form.description}
-                  onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                  className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="Short description"
-                />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Order
-                  </label>
-                  <input
-                    type="number"
-                    min={0}
-                    value={form.order_index}
-                    onChange={(e) => setForm((f) => ({ ...f, order_index: parseInt(e.target.value, 10) || 0 }))}
-                    className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Status
-                  </label>
-                  <select
-                    value={form.status}
-                    onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
-                    className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                  </select>
-                </div>
-              </div>
-              <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-4">
-                <Button type="button" variant="secondary" onClick={resetForm} className="w-full sm:w-auto">
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={saving} className="w-full sm:w-auto">
-                  {saving ? (
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  ) : null}
-                  {editingId ? 'Update Slide' : 'Add Slide'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </FadeInUp>
-      )}
-
-      {loading ? (
-        <div className="flex items-center justify-center py-12 sm:py-16">
-          <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
-        </div>
-      ) : slides.length === 0 ? (
+      <div className="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
         <FadeInUp>
-          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-8 sm:p-12 text-center">
-            <Sliders className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No slides yet</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm mx-auto">
-              Add your first hero slide to show on the homepage.
-            </p>
-            <Button onClick={() => setShowForm(true)}>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div>
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-1">
+                Manage Hero Slider
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Control the images and messages on the homepage hero
+              </p>
+            </div>
+            <Button size="lg" onClick={openAdd} className="w-full sm:w-auto shrink-0">
               <Plus className="w-4 h-4 mr-2" />
               Add Slide
             </Button>
           </div>
         </FadeInUp>
-      ) : (
-        <StaggerContainer>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-            {slides.map((slide, index) => (
-              <StaggerItem key={slide.id}>
-                <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm hover:shadow-md transition-shadow overflow-hidden">
-                  <div className="relative h-40 sm:h-48 bg-gray-100 dark:bg-gray-800">
-                    <img
-                      src={slide.image_url}
-                      alt={slide.title || 'Slide'}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const t = e.target as HTMLImageElement;
-                        t.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23e5e7eb" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14"%3ENo image%3C/text%3E%3C/svg%3E';
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center p-3 sm:p-4">
-                      <p className="text-white text-center font-serif text-sm sm:text-lg line-clamp-2">
-                        {slide.title || slide.text || `Slide ${index + 1}`}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-                      <span className="px-2 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded text-xs font-medium">
-                        Order: {slide.order_index}
-                      </span>
-                      <span
-                        className={`px-2 py-1 rounded text-xs font-medium ${
-                          slide.status === 'active'
-                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                            : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
-                        }`}
-                      >
-                        {slide.status}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex-1 min-w-0 dark:text-gray-400 dark:hover:text-white"
-                        onClick={() => openEdit(slide)}
-                      >
-                        <Pencil className="w-4 h-4 sm:mr-1" />
-                        <span className="hidden sm:inline">Edit</span>
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="min-w-0 p-2"
-                        onClick={() => moveOrder(slide.id, 'up')}
-                        disabled={index === 0 || saving}
-                        title="Move up"
-                      >
-                        <ChevronUp className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="min-w-0 p-2"
-                        onClick={() => moveOrder(slide.id, 'down')}
-                        disabled={index === slides.length - 1 || saving}
-                        title="Move down"
-                      >
-                        <ChevronDown className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="flex-1 min-w-0 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                        onClick={() => handleDelete(slide.id)}
-                        disabled={saving}
-                      >
-                        <Trash2 className="w-4 h-4 sm:mr-1" />
-                        <span className="hidden sm:inline">Delete</span>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </StaggerItem>
-            ))}
+
+        {error && (
+          <div
+            className="mb-6 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm"
+            role="alert"
+          >
+            {error}
           </div>
-        </StaggerContainer>
-      )}
+        )}
+
+        {/* Form panel – scrolls into view when opened */}
+        {showForm && (
+          <div ref={formSectionRef} className="mb-8 scroll-mt-4">
+            <FadeInUp delay={0.05}>
+              <div className="rounded-xl border-2 border-primary-500 dark:border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 shadow-lg overflow-hidden">
+                <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-primary-200 dark:border-primary-800 bg-primary-100/50 dark:bg-primary-900/30">
+                  <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                    {editingId ? (
+                      <>
+                        <Pencil className="w-5 h-5 text-primary-600 dark:text-primary-400 shrink-0" />
+                        Editing slide
+                        {form.title?.trim() && (
+                          <span className="font-normal text-gray-600 dark:text-gray-300 truncate">
+                            — {form.title.trim()}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-5 h-5 text-primary-600 dark:text-primary-400 shrink-0" />
+                        Add new slide
+                      </>
+                    )}
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
+                    {editingId
+                      ? 'Update the fields below and click Update Slide.'
+                      : 'Upload an image or paste a URL, then fill in the details.'}
+                  </p>
+                </div>
+                <div className="p-4 sm:p-6 bg-white dark:bg-gray-900">
+                  <form onSubmit={handleSubmit} className="space-y-5">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Image (required)
+                      </label>
+                      <div className="flex flex-col sm:flex-row sm:items-start gap-3">
+                        <label className="inline-flex items-center justify-center px-4 py-3 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors shrink-0">
+                          <Upload className="w-4 h-4 mr-2 shrink-0" />
+                          {uploading ? 'Uploading…' : 'Choose image'}
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="sr-only"
+                            onChange={handleImageUpload}
+                            disabled={uploading}
+                          />
+                        </label>
+                        <input
+                          type="text"
+                          value={form.image_url}
+                          onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
+                          className="flex-1 min-w-0 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm"
+                          placeholder="Or paste image URL"
+                        />
+                      </div>
+                      {previewSrc && (
+                        <div className="mt-3 w-full max-w-sm aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                          <img
+                            key={previewSrc}
+                            src={previewSrc}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = PLACEHOLDER_IMG;
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Title (overlay)
+                      </label>
+                      <input
+                        type="text"
+                        value={form.title}
+                        onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm"
+                        placeholder="Slide title"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Scripture / Text overlay
+                      </label>
+                      <textarea
+                        value={form.text}
+                        onChange={(e) => setForm((f) => ({ ...f, text: e.target.value }))}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 min-h-[80px] dark:bg-gray-800 dark:text-white text-sm"
+                        placeholder="Scripture or inspirational text"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Description (optional)
+                      </label>
+                      <input
+                        type="text"
+                        value={form.description}
+                        onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm"
+                        placeholder="Short description"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Order
+                        </label>
+                        <input
+                          type="number"
+                          min={0}
+                          value={form.order_index}
+                          onChange={(e) =>
+                            setForm((f) => ({ ...f, order_index: parseInt(e.target.value, 10) || 0 }))
+                          }
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                          Status
+                        </label>
+                        <select
+                          value={form.status}
+                          onChange={(e) => setForm((f) => ({ ...f, status: e.target.value }))}
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm"
+                        >
+                          <option value="active">Active</option>
+                          <option value="inactive">Inactive</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+                      <Button type="button" variant="secondary" onClick={resetForm} className="w-full sm:w-auto">
+                        <X className="w-4 h-4 mr-2" />
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={saving} className="w-full sm:w-auto">
+                        {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
+                        {editingId ? 'Update Slide' : 'Add Slide'}
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </FadeInUp>
+          </div>
+        )}
+
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
+          </div>
+        ) : slides.length === 0 ? (
+          <FadeInUp>
+            <div className="rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-8 text-center">
+              <Sliders className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-500 mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No slides yet</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm mx-auto text-sm">
+                Add your first hero slide to show on the homepage.
+              </p>
+              <Button onClick={openAdd}>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Slide
+              </Button>
+            </div>
+          </FadeInUp>
+        ) : (
+          <StaggerContainer>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              {slides.map((slide, index) => (
+                <StaggerItem key={slide.id}>
+                  <div
+                    className={`rounded-xl border-2 overflow-hidden bg-white dark:bg-gray-900 shadow-sm transition-all ${
+                      editingId === slide.id
+                        ? 'border-primary-500 dark:border-primary-600 ring-2 ring-primary-500/30'
+                        : 'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
+                    }`}
+                  >
+                    <div className="relative h-36 sm:h-44 bg-gray-100 dark:bg-gray-800">
+                      <img
+                        src={slide.image_url}
+                        alt={slide.title || 'Slide'}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = PLACEHOLDER_IMG;
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center p-3">
+                        <p className="text-white text-center text-sm sm:text-base line-clamp-2 font-medium">
+                          {slide.title || slide.text || `Slide ${index + 1}`}
+                        </p>
+                      </div>
+                      {editingId === slide.id && (
+                        <div className="absolute top-2 left-2 px-2 py-1 rounded bg-primary-600 text-white text-xs font-medium">
+                          Editing
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 sm:p-4">
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <span className="px-2 py-0.5 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400 rounded text-xs font-medium">
+                          Order {slide.order_index}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded text-xs font-medium ${
+                            slide.status === 'active'
+                              ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                          }`}
+                        >
+                          {slide.status}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="col-span-2 sm:col-span-1 min-h-10"
+                          onClick={() => openEdit(slide)}
+                        >
+                          <Pencil className="w-4 h-4 mr-2 shrink-0" />
+                          Edit
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="min-h-10 px-3"
+                          onClick={() => moveOrder(slide.id, 'up')}
+                          disabled={index === 0 || saving}
+                          title="Move up"
+                        >
+                          <ChevronUp className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="min-h-10 px-3"
+                          onClick={() => moveOrder(slide.id, 'down')}
+                          disabled={index === slides.length - 1 || saving}
+                          title="Move down"
+                        >
+                          <ChevronDown className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="min-h-10 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 border-red-200 dark:border-red-800"
+                          onClick={() => handleDelete(slide.id)}
+                          disabled={saving}
+                        >
+                          <Trash2 className="w-4 h-4 mr-2 shrink-0" />
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </StaggerItem>
+              ))}
+            </div>
+          </StaggerContainer>
+        )}
+      </div>
     </div>
   );
 }
