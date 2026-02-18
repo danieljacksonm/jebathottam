@@ -12,12 +12,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Write key to file so newlines are preserved (avoids "no key found")
+      - name: Prepare SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
+          chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key_path: ${{ github.workspace }}/.deploy_key
           script: |
             cd ${{ secrets.VPS_DEPLOY_PATH }}
             git pull origin main
