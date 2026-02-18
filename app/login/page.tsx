@@ -21,12 +21,16 @@ function LoginForm() {
     setError('');
     setLoading(true);
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim(), password }),
         credentials: 'include',
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
         setError(data.error || 'Invalid email or password');
@@ -35,8 +39,9 @@ function LoginForm() {
       }
       router.replace(from.startsWith('/admin') ? from : '/admin');
       router.refresh();
-    } catch {
-      setError('Something went wrong. Please try again.');
+    } catch (err) {
+      const isAbort = err instanceof Error && err.name === 'AbortError';
+      setError(isAbort ? 'Request timed out. Check your connection and try again.' : 'Something went wrong. Please try again.');
       setLoading(false);
     }
   };
