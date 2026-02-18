@@ -35,12 +35,14 @@ export default function Home() {
       .then((data) => {
         const list = Array.isArray(data?.data) ? data.data : [];
         setSliderImages(
-          list.map((s: { image_url: string; title?: string; text?: string; description?: string }) => ({
-            src: s.image_url,
-            alt: s.title || s.text || 'Ministry',
-            title: s.title || undefined,
-            description: s.description || undefined,
-          }))
+          list
+            .filter((s: { image_url?: string }) => s?.image_url && String(s.image_url).trim())
+            .map((s: { image_url: string; title?: string; text?: string; description?: string }) => ({
+              src: s.image_url.startsWith('/') || s.image_url.startsWith('http') ? s.image_url : `/${s.image_url.replace(/^\//, '')}`,
+              alt: s.title || s.text || 'Ministry',
+              title: s.title || undefined,
+              description: s.description || undefined,
+            }))
         );
       })
       .catch(() => setSliderImages([]));

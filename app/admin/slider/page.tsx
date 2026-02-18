@@ -299,11 +299,11 @@ export default function AdminSliderPage() {
                   </label>
                 </div>
                 <input
-                  type="url"
+                  type="text"
                   value={form.image_url}
-                  onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
+                  onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value.trim() }))}
                   className="w-full px-3 py-2 sm:px-4 sm:py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="https://... or upload above"
+                  placeholder="Upload above (path like /uploads/slider/…) or paste full URL"
                 />
                 {form.image_url && (
                   <div className="mt-2 rounded-lg overflow-hidden max-w-xs aspect-video bg-gray-100 dark:bg-gray-800">

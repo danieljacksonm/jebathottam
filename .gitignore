@@ -16,6 +16,9 @@
 # production
 /build
 
+# uploaded media (stored under public/uploads by /api/upload)
+/public/uploads
+
 # misc
 .DS_Store
 *.pem
