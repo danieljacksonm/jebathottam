@@ -60,6 +60,7 @@ export default function AdminSliderPage() {
     status: 'active',
   });
   const formSectionRef = useRef<HTMLDivElement>(null);
+  const uploadIdRef = useRef(0);
 
   const fetchSlides = useCallback(async () => {
     try {
@@ -231,6 +232,11 @@ export default function AdminSliderPage() {
       setError('Please select an image (JPEG, PNG, WebP, GIF).');
       return;
     }
+    // Clear input immediately so choosing another (or same) file again will fire change
+    const input = e.target;
+    if (input) input.value = '';
+
+    const currentUploadId = ++uploadIdRef.current;
     clearPreviewBlob();
     const blobUrl = URL.createObjectURL(file);
     setPreviewBlobUrl(blobUrl);
@@ -247,6 +253,10 @@ export default function AdminSliderPage() {
         credentials: 'include',
       });
       const data = await res.json().catch(() => ({}));
+
+      // Only apply this response if it's still the latest upload (avoid second image overwritten by slow first response)
+      if (currentUploadId !== uploadIdRef.current) return;
+
       if (!res.ok) {
         const msg =
           res.status === 401
@@ -267,12 +277,12 @@ export default function AdminSliderPage() {
         setError(null);
       }
     } catch (err: any) {
+      if (currentUploadId !== uploadIdRef.current) return;
       setError(err?.message || 'Upload failed');
       clearPreviewBlob();
       setForm((f) => ({ ...f, image_url: f.image_url }));
     } finally {
-      setUploading(false);
-      if (e?.target) (e.target as HTMLInputElement).value = '';
+      if (currentUploadId === uploadIdRef.current) setUploading(false);
     }
   };
 
