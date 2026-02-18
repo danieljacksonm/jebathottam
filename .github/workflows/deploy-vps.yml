@@ -18,7 +18,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
-          chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
+          chmod 644 "$GITHUB_WORKSPACE/.deploy_key"
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
