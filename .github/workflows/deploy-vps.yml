@@ -12,7 +12,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # Write key to file so newlines are preserved (avods "no key found")
+      # Write key to file so newlines are preserved (avoids "no key found")
       - name: Prepare SSH key
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
