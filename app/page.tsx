@@ -62,7 +62,7 @@ export default function Home() {
   const regularBlogs = blogPosts.filter(post => !post.featured).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <Navigation />
 
       {/* 1. HERO IMAGE SLIDER */}
@@ -228,7 +228,7 @@ export default function Home() {
       </section>
 
       {/* 3. ABOUT US */}
-      <section id="about" className="py-16 sm:py-20 bg-white">
+      <section id="about" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
@@ -243,15 +243,15 @@ export default function Home() {
               </FadeInUp>
               <FadeInUp delay={0.2}>
                 <div>
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4 sm:mb-6">
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
                     About Us
                   </h2>
-                  <p className="text-lg sm:text-xl text-gray-700 mb-4 sm:mb-6 leading-relaxed">
+                  <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-4 sm:mb-6 leading-relaxed">
                     We are a Christian ministry dedicated to preserving God-spoken words and
                     encouraging believers through digital tools. Our mission is to create a
                     trustworthy platform that serves our community and future generations.
                   </p>
-                  <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed">
+                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">
                     With reverence and care, we document prophecies, teachings, and revelations
                     that God speaks to His people, ensuring these precious words are preserved
                     for future generations.
@@ -269,36 +269,36 @@ export default function Home() {
       </section>
 
       {/* 4. MISSION & VISION */}
-      <section id="mission" className="py-16 sm:py-20 bg-gradient-to-br from-primary-50 via-white to-primary-50">
+      <section id="mission" className="py-16 sm:py-20 bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-900 dark:to-primary-950/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-10 sm:mb-12 text-center">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-10 sm:mb-12 text-center">
               Mission &amp; Vision
             </h2>
           </FadeInUp>
           <StaggerContainer>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
               <StaggerItem>
-                <Card className="h-full border-2 border-primary-200 hover:shadow-xl transition-shadow">
+                <Card className="h-full border-2 border-primary-200 dark:border-primary-800 hover:shadow-xl transition-shadow">
                   <CardHeader>
                     <div className="text-5xl mb-4">{missionVision.mission.icon}</div>
                     <CardTitle className="text-2xl font-serif">{missionVision.mission.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
                       {missionVision.mission.description}
                     </p>
                   </CardContent>
                 </Card>
               </StaggerItem>
               <StaggerItem>
-                <Card className="h-full border-2 border-primary-200 hover:shadow-xl transition-shadow">
+                <Card className="h-full border-2 border-primary-200 dark:border-primary-800 hover:shadow-xl transition-shadow">
                   <CardHeader>
                     <div className="text-5xl mb-4">{missionVision.vision.icon}</div>
                     <CardTitle className="text-2xl font-serif">{missionVision.vision.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 leading-relaxed text-base sm:text-lg">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
                       {missionVision.vision.description}
                     </p>
                   </CardContent>
@@ -319,14 +319,14 @@ export default function Home() {
       </section>
 
       {/* 5. TESTIMONIES */}
-      <section id="testimony" className="py-16 sm:py-20 bg-white">
+      <section id="testimony" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
             <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
                 Testimonies
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 Stories of God&apos;s faithfulness and transformation
               </p>
             </div>
@@ -351,13 +351,13 @@ export default function Home() {
                               />
                             </div>
                             <div className="min-w-0">
-                              <h3 className="font-semibold text-gray-900 truncate">{testimony.name}</h3>
-                              <p className="text-xs sm:text-sm text-gray-500">
+                              <h3 className="font-semibold text-gray-900 dark:text-white truncate">{testimony.name}</h3>
+                              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                                 {new Date(testimony.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                               </p>
                             </div>
                           </div>
-                          <p className="text-gray-700 text-sm sm:text-base mb-4 line-clamp-4 leading-relaxed">
+                          <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base mb-4 line-clamp-4 leading-relaxed">
                             &ldquo;{testimony.content}&rdquo;
                           </p>
                           <span className="text-xs sm:text-sm text-primary-600 font-medium">Read More &rarr;</span>
@@ -382,14 +382,14 @@ export default function Home() {
       </section>
 
       {/* 6. EVENTS */}
-      <section id="events" className="py-16 sm:py-20 bg-gray-50">
+      <section id="events" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
             <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
                 Upcoming Events
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 Join us for worship, fellowship, and spiritual growth
               </p>
             </div>
@@ -416,11 +416,11 @@ export default function Home() {
                             </div>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 font-serif">
+                            <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2 font-serif">
                               {event.title}
                             </h3>
-                            <p className="text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">{event.description}</p>
-                            <div className="flex flex-wrap gap-3 sm:gap-4 text-sm text-gray-500">
+                            <p className="text-gray-600 dark:text-gray-300 mb-3 sm:mb-4 text-sm sm:text-base">{event.description}</p>
+                            <div className="flex flex-wrap gap-3 sm:gap-4 text-sm text-gray-500 dark:text-gray-400">
                               <span className="flex items-center">
                                 <svg className="w-4 h-4 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -457,14 +457,14 @@ export default function Home() {
       </section>
 
       {/* 7. GALLERY */}
-      <section id="gallery" className="py-16 sm:py-20 bg-white">
+      <section id="gallery" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
             <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
                 Gallery
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 Moments from our ministry gatherings and events
               </p>
             </div>
@@ -509,21 +509,21 @@ export default function Home() {
       </section>
 
       {/* 8. 24 HOURS AUDIO */}
-      <section id="audio" className="py-16 sm:py-20 bg-gray-50">
+      <section id="audio" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <AudioPlayer />
         </div>
       </section>
 
       {/* 9. MEDIA SECTION */}
-      <section id="media" className="py-16 sm:py-20 bg-white">
+      <section id="media" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
             <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
                 Media
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 Inspirational posters, videos, and messages
               </p>
             </div>
@@ -536,7 +536,7 @@ export default function Home() {
                     <motion.div
                       whileHover={{ y: -4 }}
                       transition={{ duration: 0.3 }}
-                      className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl cursor-pointer border border-gray-100"
+                      className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl cursor-pointer border border-gray-100 dark:border-gray-700"
                     >
                       {item.type === 'poster' ? (
                         <div className="aspect-[2/3] overflow-hidden">
@@ -547,7 +547,7 @@ export default function Home() {
                           />
                         </div>
                       ) : (
-                        <div className="aspect-video bg-gray-100 relative">
+                        <div className="aspect-video bg-gray-100 dark:bg-gray-700 relative">
                           <img
                             src={item.thumbnail}
                             alt={item.title}
@@ -568,7 +568,7 @@ export default function Home() {
                         </div>
                       )}
                       <div className="p-3 sm:p-4">
-                        <h3 className="font-semibold text-gray-900 mb-1 text-sm sm:text-base">{item.title}</h3>
+                        <h3 className="font-semibold text-gray-900 dark:text-white mb-1 text-sm sm:text-base">{item.title}</h3>
                         {item.type === 'poster' && (
                           <p className="text-xs sm:text-sm text-primary-600">{item.scripture}</p>
                         )}
@@ -592,7 +592,7 @@ export default function Home() {
       </section>
 
       {/* 10. PRAYER POINT FORM */}
-      <section id="prayer" className="py-16 sm:py-20 bg-gray-50">
+      <section id="prayer" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <PrayerForm />
         </div>

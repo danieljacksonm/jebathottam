@@ -247,17 +247,32 @@ export default function AdminSliderPage() {
         credentials: 'include',
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'Upload failed');
-      if (data.url) {
-        setForm((f) => ({ ...f, image_url: data.url }));
+      if (!res.ok) {
+        const msg =
+          res.status === 401
+            ? 'Please log in again.'
+            : res.status === 403
+              ? 'You do not have permission to upload.'
+              : (data?.error || `Upload failed (${res.status})`);
+        throw new Error(msg);
+      }
+      if (typeof data?.url !== 'string' || !data.url.trim()) {
+        setError('Upload succeeded but no image URL was returned. Try again or use a pasted URL.');
+        clearPreviewBlob();
+        setForm((f) => ({ ...f, image_url: '' }));
+      } else {
+        setForm((f) => ({ ...f, image_url: data.url.trim() }));
         URL.revokeObjectURL(blobUrl);
         setPreviewBlobUrl(null);
+        setError(null);
       }
     } catch (err: any) {
-      setError(err.message || 'Upload failed');
+      setError(err?.message || 'Upload failed');
+      clearPreviewBlob();
+      setForm((f) => ({ ...f, image_url: f.image_url }));
     } finally {
       setUploading(false);
-      e.target.value = '';
+      if (e?.target) (e.target as HTMLInputElement).value = '';
     }
   };
 
