@@ -1,0 +1,27 @@
+# Deploy to VPS when you push to main (like Vercel auto-deploy).
+# Requires GitHub repo secrets: VPS_HOST, VPS_USER, SSH_PRIVATE_KEY, VPS_DEPLOY_PATH.
+
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # Allow manual run from Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.VPS_DEPLOY_PATH }}
+            git pull origin main
+            npm ci
+            npm run build
+            pm2 restart ministry-app || pm2 start npm --name "ministry-app" -- start
+            pm2 save

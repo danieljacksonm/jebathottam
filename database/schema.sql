@@ -383,7 +383,7 @@ INSERT INTO role_permissions (role, resource, can_create, can_read, can_update, 
 ('visitor', 'gallery', FALSE, TRUE, FALSE, FALSE),
 ('visitor', 'team', FALSE, TRUE, FALSE, FALSE),
 ('visitor', 'media', FALSE, TRUE, FALSE, FALSE)
-ON DUPLICATE KEY UPDATE can_read=VALUES(can_read);
+AS pr ON DUPLICATE KEY UPDATE can_read = pr.can_read;
 
 -- Insert default admin user (password: admin123 - should be changed in production)
 -- Run: node scripts/setup-admin.js admin123 to generate hash
@@ -391,4 +391,4 @@ ON DUPLICATE KEY UPDATE can_read=VALUES(can_read);
 -- Example hash for 'admin123': $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
 INSERT INTO users (name, email, password, role) 
 VALUES ('Super Admin', 'admin@ministry.com', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'super_admin')
-ON DUPLICATE KEY UPDATE email=email;
+AS u ON DUPLICATE KEY UPDATE password = u.password, name = u.name, role = u.role;

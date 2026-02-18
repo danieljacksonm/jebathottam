@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     let users: any[];
     try {
       users = await query<any[]>(
-        'SELECT id, email, password, role, name FROM users WHERE email = ?',
+        'SELECT id, email, password, role, name FROM users WHERE LOWER(email) = LOWER(?)',
         [email]
       );
     } catch (dbError: any) {
