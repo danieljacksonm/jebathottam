@@ -4,7 +4,19 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
-import { Sliders, Plus, Pencil, Trash2, ChevronUp, ChevronDown, Loader2, X, Upload } from 'lucide-react';
+import {
+  Sliders,
+  Plus,
+  Pencil,
+  Trash2,
+  ChevronUp,
+  ChevronDown,
+  Loader2,
+  X,
+  Upload,
+  CheckCircle2,
+  AlertCircle,
+} from 'lucide-react';
 
 export interface SliderSlide {
   id: number;
@@ -17,6 +29,14 @@ export interface SliderSlide {
   created_at?: string;
   updated_at?: string;
 }
+
+interface Toast {
+  id: number;
+  type: 'success' | 'error';
+  message: string;
+}
+
+const TOAST_DURATION = 4000;
 
 function getAuthHeaders(): HeadersInit {
   if (typeof window === 'undefined') return {};
@@ -42,6 +62,74 @@ function getUploadHeaders(): HeadersInit {
 const PLACEHOLDER_IMG =
   'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300"%3E%3Crect fill="%23e5e7eb" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14"%3ENo image%3C/text%3E%3C/svg%3E';
 
+function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id: number) => void }) {
+  return (
+    <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none max-w-sm w-full">
+      {toasts.map((toast) => (
+        <div
+          key={toast.id}
+          className={`pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm animate-slide-in-right ${
+            toast.type === 'success'
+              ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
+              : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
+          }`}
+          role="alert"
+        >
+          {toast.type === 'success' ? (
+            <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+          ) : (
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+          )}
+          <span className="flex-1 break-words">{toast.message}</span>
+          <button
+            onClick={() => onDismiss(toast.id)}
+            className="shrink-0 p-0.5 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+            aria-label="Dismiss"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      ))}
+      <style jsx>{`
+        @keyframes slide-in-right {
+          from {
+            opacity: 0;
+            transform: translateX(100%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        .animate-slide-in-right {
+          animation: slide-in-right 0.25s ease-out;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function useToasts() {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const nextId = useRef(0);
+
+  const dismiss = useCallback((id: number) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const addToast = useCallback(
+    (type: 'success' | 'error', message: string) => {
+      const id = ++nextId.current;
+      setToasts((prev) => [...prev, { id, type, message }]);
+      setTimeout(() => dismiss(id), TOAST_DURATION);
+      return id;
+    },
+    [dismiss]
+  );
+
+  return { toasts, addToast, dismiss };
+}
+
 export default function AdminSliderPage() {
   const [slides, setSlides] = useState<SliderSlide[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,8 +147,11 @@ export default function AdminSliderPage() {
     order_index: 0,
     status: 'active',
   });
+
   const formSectionRef = useRef<HTMLDivElement>(null);
   const uploadIdRef = useRef(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toasts, addToast, dismiss } = useToasts();
 
   const fetchSlides = useCallback(async () => {
     try {
@@ -73,8 +164,9 @@ export default function AdminSliderPage() {
       const data = await res.json();
       const raw = Array.isArray(data.data) ? data.data : [];
       setSlides(raw.filter((s: SliderSlide) => s.id > 0));
-    } catch (e: any) {
-      setError(e.message || 'Failed to load slides');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Failed to load slides';
+      setError(msg);
       setSlides([]);
     } finally {
       setLoading(false);
@@ -155,7 +247,6 @@ export default function AdminSliderPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setError(null);
     try {
       const payload = {
         image_url: form.image_url.trim(),
@@ -166,7 +257,7 @@ export default function AdminSliderPage() {
         status: form.status,
       };
       if (!payload.image_url) {
-        setError('Image is required. Upload an image or paste a URL.');
+        addToast('error', 'Image is required. Upload an image or paste a URL.');
         setSaving(false);
         return;
       }
@@ -181,6 +272,7 @@ export default function AdminSliderPage() {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.error || 'Failed to update slide');
         }
+        addToast('success', 'Slide updated successfully');
       } else {
         const res = await fetch('/api/slider', {
           method: 'POST',
@@ -192,11 +284,13 @@ export default function AdminSliderPage() {
           const data = await res.json().catch(() => ({}));
           throw new Error(data.error || 'Failed to add slide');
         }
+        addToast('success', 'Slide saved successfully');
       }
       resetForm();
       await fetchSlides();
-    } catch (e: any) {
-      setError(e.message || 'Request failed');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Request failed';
+      addToast('error', msg);
     } finally {
       setSaving(false);
     }
@@ -205,7 +299,6 @@ export default function AdminSliderPage() {
   const handleDelete = async (id: number) => {
     if (!confirm('Delete this slide?')) return;
     setSaving(true);
-    setError(null);
     try {
       const res = await fetch(`/api/slider/${id}`, {
         method: 'DELETE',
@@ -217,9 +310,11 @@ export default function AdminSliderPage() {
         throw new Error(data.error || 'Failed to delete');
       }
       if (editingId === id) resetForm();
+      addToast('success', 'Slide deleted');
       await fetchSlides();
-    } catch (e: any) {
-      setError(e.message || 'Delete failed');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Delete failed';
+      addToast('error', msg);
     } finally {
       setSaving(false);
     }
@@ -229,19 +324,18 @@ export default function AdminSliderPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     if (!file.type.startsWith('image/')) {
-      setError('Please select an image (JPEG, PNG, WebP, GIF).');
+      addToast('error', 'Please select an image (JPEG, PNG, WebP, GIF).');
       return;
     }
-    // Clear input immediately so choosing another (or same) file again will fire change
-    const input = e.target;
-    if (input) input.value = '';
+
+    if (fileInputRef.current) fileInputRef.current.value = '';
 
     const currentUploadId = ++uploadIdRef.current;
     clearPreviewBlob();
     const blobUrl = URL.createObjectURL(file);
     setPreviewBlobUrl(blobUrl);
-    setError(null);
     setUploading(true);
+
     try {
       const formData = new FormData();
       formData.set('file', file);
@@ -254,7 +348,6 @@ export default function AdminSliderPage() {
       });
       const data = await res.json().catch(() => ({}));
 
-      // Only apply this response if it's still the latest upload (avoid second image overwritten by slow first response)
       if (currentUploadId !== uploadIdRef.current) return;
 
       if (!res.ok) {
@@ -266,19 +359,21 @@ export default function AdminSliderPage() {
               : (data?.error || `Upload failed (${res.status})`);
         throw new Error(msg);
       }
+
       if (typeof data?.url !== 'string' || !data.url.trim()) {
-        setError('Upload succeeded but no image URL was returned. Try again or use a pasted URL.');
+        addToast('error', 'Upload succeeded but no image URL was returned. Try again or use a pasted URL.');
         clearPreviewBlob();
         setForm((f) => ({ ...f, image_url: '' }));
       } else {
         setForm((f) => ({ ...f, image_url: data.url.trim() }));
         URL.revokeObjectURL(blobUrl);
         setPreviewBlobUrl(null);
-        setError(null);
+        addToast('success', 'Image uploaded successfully');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (currentUploadId !== uploadIdRef.current) return;
-      setError(err?.message || 'Upload failed');
+      const msg = err instanceof Error ? err.message : 'Upload failed';
+      addToast('error', msg);
       clearPreviewBlob();
       setForm((f) => ({ ...f, image_url: f.image_url }));
     } finally {
@@ -308,6 +403,9 @@ export default function AdminSliderPage() {
         credentials: 'include',
       });
       await fetchSlides();
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : 'Reorder failed';
+      addToast('error', msg);
     } finally {
       setSaving(false);
     }
@@ -317,6 +415,8 @@ export default function AdminSliderPage() {
 
   return (
     <div className="min-h-screen pb-8">
+      <ToastContainer toasts={toasts} onDismiss={dismiss} />
+
       <Breadcrumbs items={[{ label: 'Dashboard', href: '/admin' }, { label: 'Hero Slider' }]} />
 
       <div className="max-w-6xl mx-auto">
@@ -346,7 +446,6 @@ export default function AdminSliderPage() {
           </div>
         )}
 
-        {/* Form panel – scrolls into view when opened */}
         {showForm && (
           <div ref={formSectionRef} className="mb-8 scroll-mt-4">
             <FadeInUp delay={0.05}>
@@ -383,10 +482,21 @@ export default function AdminSliderPage() {
                         Image (required)
                       </label>
                       <div className="flex flex-col sm:flex-row sm:items-start gap-3">
-                        <label className="inline-flex items-center justify-center px-4 py-3 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer transition-colors shrink-0">
-                          <Upload className="w-4 h-4 mr-2 shrink-0" />
+                        <label
+                          className={`inline-flex items-center justify-center px-4 py-3 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors shrink-0 ${
+                            uploading
+                              ? 'opacity-60 cursor-not-allowed'
+                              : 'hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer'
+                          }`}
+                        >
+                          {uploading ? (
+                            <Loader2 className="w-4 h-4 mr-2 shrink-0 animate-spin" />
+                          ) : (
+                            <Upload className="w-4 h-4 mr-2 shrink-0" />
+                          )}
                           {uploading ? 'Uploading…' : 'Choose image'}
                           <input
+                            ref={fileInputRef}
                             type="file"
                             accept="image/*"
                             className="sr-only"
@@ -416,6 +526,7 @@ export default function AdminSliderPage() {
                         </div>
                       )}
                     </div>
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Title (overlay)
@@ -428,6 +539,7 @@ export default function AdminSliderPage() {
                         placeholder="Slide title"
                       />
                     </div>
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Scripture / Text overlay
@@ -439,6 +551,7 @@ export default function AdminSliderPage() {
                         placeholder="Scripture or inspirational text"
                       />
                     </div>
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Description (optional)
@@ -451,6 +564,7 @@ export default function AdminSliderPage() {
                         placeholder="Short description"
                       />
                     </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -480,12 +594,13 @@ export default function AdminSliderPage() {
                         </select>
                       </div>
                     </div>
+
                     <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
                       <Button type="button" variant="secondary" onClick={resetForm} className="w-full sm:w-auto">
                         <X className="w-4 h-4 mr-2" />
                         Cancel
                       </Button>
-                      <Button type="submit" disabled={saving} className="w-full sm:w-auto">
+                      <Button type="submit" disabled={saving || uploading} className="w-full sm:w-auto">
                         {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                         {editingId ? 'Update Slide' : 'Add Slide'}
                       </Button>

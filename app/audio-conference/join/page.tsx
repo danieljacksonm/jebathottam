@@ -1,18 +1,18 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, Suspense } from 'react';
 import Link from 'next/link';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { FadeInUp } from '@/components/animations/page-transition';
-import { Phone, Copy, Check, ExternalLink } from 'lucide-react';
+import { Phone, Copy, Check, ExternalLink, Loader2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
 const JITSI_BASE = 'https://meet.jit.si';
 const ROOM_PREFIX = 'Ministry';
 
-export default function JoinConferencePage() {
+function JoinConferenceContent() {
   const searchParams = useSearchParams();
   const [meetingId, setMeetingId] = useState(() => {
     const id = searchParams.get('meetingId');
@@ -47,99 +47,111 @@ export default function JoinConferencePage() {
   };
 
   return (
+    <div className="max-w-xl mx-auto">
+      <Link
+        href="/audio-conference"
+        className="text-primary-600 dark:text-primary-400 hover:underline text-sm font-medium mb-6 inline-flex items-center"
+      >
+        &larr; Back to Audio Conferences
+      </Link>
+      <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-2">
+        Join audio conference
+      </h1>
+      <p className="text-gray-600 dark:text-gray-400 mb-4">
+        Meetings use the <strong>public Jitsi Meet</strong> site (meet.jit.si). We only open a link to your room &mdash; no Jitsi API key or paid plan is used.
+      </p>
+      <p className="text-sm text-gray-500 dark:text-gray-500 mb-8">
+        meet.jit.si is free to use (no account required). For full control and no third-party limits, you can self-host Jitsi (open source) and point the app to your own server.
+      </p>
+
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Meeting ID (6 digits)
+        </label>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            inputMode="numeric"
+            maxLength={6}
+            value={meetingId}
+            onChange={(e) => setMeetingId(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            placeholder="000000"
+            className="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-lg tracking-widest text-center font-mono"
+          />
+          <Button type="button" variant="secondary" onClick={createMeeting}>
+            New
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={copyMeetingId}
+            disabled={meetingId.length !== 6}
+            title="Copy meeting ID"
+          >
+            {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+          </Button>
+        </div>
+      </div>
+
+      <div className="mb-8 rounded-xl border-2 border-primary-200 dark:border-primary-800 bg-primary-50/50 dark:bg-primary-900/20 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+          Join meeting
+        </h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Opens in a new tab. Everyone with this link or meeting ID is in the same room. Mute, video, and host controls are in Jitsi.
+        </p>
+        {meetingUrl ? (
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={meetingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors"
+            >
+              Open meeting (Jitsi) <ExternalLink className="w-4 h-4" />
+            </a>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={copyMeetingLink}
+              className="inline-flex items-center gap-2"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              Copy link
+            </Button>
+          </div>
+        ) : (
+          <p className="text-sm text-amber-700 dark:text-amber-400">Enter a 6-digit meeting ID above first.</p>
+        )}
+      </div>
+
+      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+          <Phone className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+          Add people by phone (no internet)
+        </h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          After you open the meeting in Jitsi, click the <strong>phone icon</strong> in the left toolbar. Jitsi will show dial-in numbers and a PIN. Share those with people who want to call in &mdash; they will join the same meeting.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function JoinConferencePage() {
+  return (
     <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <Navigation />
 
       <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <FadeInUp>
-          <div className="max-w-xl mx-auto">
-            <Link
-              href="/audio-conference"
-              className="text-primary-600 dark:text-primary-400 hover:underline text-sm font-medium mb-6 inline-flex items-center"
-            >
-              ← Back to Audio Conferences
-            </Link>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-2">
-              Join audio conference
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mb-8">
-              Free meetings powered by <strong>Jitsi Meet</strong>. One room for everyone — join in the browser or add phone participants via the phone icon inside the meeting.
-            </p>
-
-            {/* Meeting ID */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Meeting ID (6 digits)
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={6}
-                  value={meetingId}
-                  onChange={(e) => setMeetingId(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                  placeholder="000000"
-                  className="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-lg tracking-widest text-center font-mono"
-                />
-                <Button type="button" variant="secondary" onClick={createMeeting}>
-                  New
-                </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={copyMeetingId}
-                  disabled={meetingId.length !== 6}
-                  title="Copy meeting ID"
-                >
-                  {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
-                </Button>
-              </div>
+          <Suspense fallback={
+            <div className="flex justify-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-primary-600" />
             </div>
-
-            {/* Join meeting (Jitsi) */}
-            <div className="mb-8 rounded-xl border-2 border-primary-200 dark:border-primary-800 bg-primary-50/50 dark:bg-primary-900/20 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                Join meeting
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Opens in a new tab. Everyone with this link or meeting ID is in the same room. Mute, video, and host controls are in Jitsi.
-              </p>
-              {meetingUrl ? (
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <a
-                    href={meetingUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium"
-                  >
-                    Open meeting (Jitsi) <ExternalLink className="w-4 h-4" />
-                  </a>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={copyMeetingLink}
-                    className="inline-flex items-center gap-2"
-                  >
-                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    Copy link
-                  </Button>
-                </div>
-              ) : (
-                <p className="text-sm text-amber-700 dark:text-amber-400">Enter a 6-digit meeting ID above first.</p>
-              )}
-            </div>
-
-            {/* Dial-in (via Jitsi) */}
-            <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                <Phone className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                Add people by phone (no internet)
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                After you open the meeting in Jitsi, click the <strong>phone icon</strong> in the left toolbar. Jitsi will show dial-in numbers and a PIN. Share those with people who want to call in — they will join the same meeting.
-              </p>
-            </div>
-          </div>
+          }>
+            <JoinConferenceContent />
+          </Suspense>
         </FadeInUp>
       </main>
 

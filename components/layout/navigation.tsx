@@ -24,19 +24,19 @@ export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white/95 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <header className="bg-white/95 dark:bg-gray-950/95 backdrop-blur-md border-b border-gray-200/80 dark:border-gray-800/80 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           <Logo />
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={`px-2.5 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${
                   link.highlight
-                    ? 'text-primary-600 hover:text-primary-700 hover:bg-primary-50 font-semibold'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                    ? 'text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 hover:bg-primary-50 dark:hover:bg-primary-950/50 font-semibold'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
                 }`}
               >
                 {link.label}
@@ -44,12 +44,12 @@ export function Navigation() {
             ))}
           </nav>
           <button
-            className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+            className="lg:hidden min-w-[44px] min-h-[44px] flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           >
             <svg
-              className="w-6 h-6 text-gray-700"
+              className="w-6 h-6 text-gray-700 dark:text-gray-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -79,7 +79,7 @@ export function Navigation() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white border-t border-gray-200 shadow-lg"
+            className="lg:hidden bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 shadow-lg"
           >
             <nav className="container mx-auto px-4 py-3 space-y-1">
               {navLinks.map((link) => (
@@ -88,8 +88,8 @@ export function Navigation() {
                   href={link.href}
                   className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                     link.highlight
-                      ? 'text-primary-600 bg-primary-50 font-semibold'
-                      : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                      ? 'text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/50 font-semibold'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800/50'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >

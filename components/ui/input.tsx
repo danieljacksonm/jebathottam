@@ -20,10 +20,10 @@ export function Input({ label, error, className = '', ...props }: InputProps) {
       )}
       <input
         id={inputId}
-        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all dark:bg-gray-800 dark:text-white dark:placeholder-gray-500 ${
+        className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
           error
             ? 'border-red-300 dark:border-red-700'
-            : 'border-gray-300 dark:border-gray-700'
+            : 'border-gray-200 dark:border-gray-700'
         } ${className}`}
         {...props}
       />
