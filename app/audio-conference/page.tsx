@@ -12,18 +12,29 @@ export default function AudioConferencePage() {
   const ended = audioConferences.filter(c => c.status === 'ended');
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <Navigation />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1">
         <FadeInUp>
           <div className="max-w-4xl mx-auto mb-12 text-center">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-gray-900 mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-gray-900 dark:text-white mb-4">
               Audio Conferences
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
               Join our live audio conferences for prayer, teaching, and fellowship
             </p>
+            <div>
+              <Link
+                href="/audio-conference/join"
+                className="inline-flex items-center justify-center px-6 py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                Start or join a meeting (Jitsi — free)
+              </Link>
+              <p className="text-sm text-white/80 mt-3 max-w-md mx-auto">
+                Free conferences with Jitsi Meet. Join in the browser; add phone participants via the phone icon in the meeting.
+              </p>
+            </div>
           </div>
         </FadeInUp>
 

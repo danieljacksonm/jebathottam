@@ -65,161 +65,143 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <Navigation />
 
-      {/* 1. HERO IMAGE SLIDER */}
-      <section className="relative min-h-[70vh] sm:min-h-[80vh] md:min-h-[90vh] flex items-center justify-center overflow-hidden">
+      {/* 1. HERO */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         <EnhancedImageSlider images={sliderImages} />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-10" />
-        <div className="absolute inset-0 z-20 container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-          <div className="text-center text-white max-w-4xl">
+        <div className="absolute inset-0 bg-black/50 z-10" />
+        <div className="absolute inset-0 z-20 container mx-auto px-4 sm:px-6 lg:px-8 flex items-end sm:items-center justify-center pb-16 sm:pb-0">
+          <div className="text-center text-white max-w-3xl">
             <FadeInUp>
-              <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif font-bold mb-4 sm:mb-6 leading-tight">
+              <p className="text-sm sm:text-base uppercase tracking-[0.2em] text-white/80 mb-3">
+                {ministryInfo.subtitle}
+              </p>
+            </FadeInUp>
+            <FadeInUp delay={0.1}>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-4 sm:mb-5 leading-[1.1]">
                 {ministryInfo.name}
               </h1>
             </FadeInUp>
             <FadeInUp delay={0.2}>
-              <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-4 font-light opacity-90">
+              <p className="text-lg sm:text-xl text-white/90 mb-6 max-w-xl mx-auto">
                 {ministryInfo.tagline}
               </p>
             </FadeInUp>
-            <FadeInUp delay={0.4}>
-              <p className="text-base sm:text-lg md:text-xl mb-8 font-serif italic opacity-90 max-w-3xl mx-auto">
+            <FadeInUp delay={0.3}>
+              <p className="text-sm sm:text-base font-serif italic text-white/80 mb-8 max-w-md mx-auto">
                 &ldquo;{ministryInfo.scripture}&rdquo;
               </p>
+            </FadeInUp>
+            <FadeInUp delay={0.4}>
+              <div className="flex flex-wrap justify-center gap-3">
+                <Link href="/#blog">
+                  <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 shadow-lg">
+                    Read &amp; reflect
+                  </Button>
+                </Link>
+                <Link href="/audio-conference/join">
+                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                    Join a call
+                  </Button>
+                </Link>
+              </div>
             </FadeInUp>
           </div>
         </div>
       </section>
 
-      {/* 2. BLOG SECTION */}
-      <section id="blog" className="py-16 sm:py-20 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white">
+      {/* 2. BLOG SECTION — editorial, light bg */}
+      <section id="blog" className="py-20 lg:py-28 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
-            <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-4">
-                Latest Blog Posts
+            <div className="max-w-2xl mb-14">
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                From the blog
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-2 mb-4">
+                Latest reflections
               </h2>
-              <p className="text-lg sm:text-xl md:text-2xl opacity-90 max-w-2xl mx-auto">
-                Insights, teachings, and reflections from our ministry
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Teachings, testimonies, and insights from our ministry
               </p>
             </div>
           </FadeInUp>
 
-          {/* Featured Blog */}
-          <FadeInUp delay={0.2}>
-            <div className="max-w-5xl mx-auto mb-10 sm:mb-12">
-              <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all" hover={false}>
+          {/* Featured */}
+          <FadeInUp delay={0.1}>
+            <Link href={`/blog/${featuredBlog.id}`} className="block group mb-14">
+              <article className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow border border-gray-200 dark:border-gray-800">
                 <div className="grid md:grid-cols-2 gap-0">
-                  <div className="relative h-64 md:h-full min-h-[280px] sm:min-h-[300px]">
+                  <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[320px]">
                     <img
                       src={featuredBlog.image}
                       alt={featuredBlog.title}
-                      className="w-full h-full object-cover rounded-t-lg md:rounded-l-lg md:rounded-tr-none"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
                     />
                   </div>
-                  <CardContent className="p-5 sm:p-6 flex flex-col justify-center">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="text-sm uppercase tracking-wide opacity-80">
-                        {featuredBlog.category} &bull; Featured
-                      </div>
-                      <div className="flex items-center text-xs opacity-70">
-                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        {calculateReadingTime(featuredBlog.content)} min read
-                      </div>
+                  <div className="p-8 md:p-10 flex flex-col justify-center">
+                    <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-3">
+                      <span className="font-medium text-primary-600 dark:text-primary-400">{featuredBlog.category}</span>
+                      <span>&bull;</span>
+                      <span>{calculateReadingTime(featuredBlog.content)} min read</span>
                     </div>
-                    <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-serif mb-3 sm:mb-4 text-white">
+                    <h3 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                       {featuredBlog.title}
-                    </CardTitle>
-                    <CardDescription className="text-white/80 mb-4 text-base sm:text-lg">
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-5 line-clamp-2">
                       {featuredBlog.excerpt}
-                    </CardDescription>
-                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4 mb-4 border border-white/20">
-                      <p className="text-sm text-white/90 italic">
-                        &ldquo;For the word of God is living and active, sharper than any two-edged sword.&rdquo;
-                      </p>
-                      <p className="text-xs text-white/70 mt-1">- Hebrews 4:12</p>
-                    </div>
-                    <div className="text-sm text-white/70 mb-4 sm:mb-6">
-                      {new Date(featuredBlog.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })} &bull; {featuredBlog.author}
-                    </div>
-                    <Link href={`/blog/${featuredBlog.id}`}>
-                      <Button className="bg-white text-primary-700 hover:bg-gray-100 w-full md:w-auto text-base sm:text-lg py-3 sm:py-4">
-                        Continue Reading &rarr;
-                      </Button>
-                    </Link>
-                  </CardContent>
+                    </p>
+                    <span className="text-primary-600 dark:text-primary-400 font-medium">
+                      Continue reading &rarr;
+                    </span>
+                  </div>
                 </div>
-              </Card>
-            </div>
+              </article>
+            </Link>
           </FadeInUp>
 
-          {/* Regular Blog Posts */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-7xl mx-auto mb-10 sm:mb-12">
-            <StaggerContainer>
+          {/* More posts */}
+          <StaggerContainer>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
               {regularBlogs.map((post) => (
                 <StaggerItem key={post.id}>
-                  <motion.div
-                    whileHover={{ y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Card className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/15 transition-all h-full" hover={false}>
-                      <div className="relative h-48 mb-4">
+                  <Link href={`/blog/${post.id}`} className="block group">
+                    <motion.article
+                      whileHover={{ y: -4 }}
+                      className="bg-white dark:bg-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-800 h-full flex flex-col"
+                    >
+                      <div className="aspect-[16/10] overflow-hidden">
                         <img
                           src={post.image}
                           alt={post.title}
-                          className="w-full h-full object-cover rounded-t-lg"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       </div>
-                      <CardHeader>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="text-xs uppercase tracking-wide opacity-80">
-                            {post.category}
-                          </div>
-                          <div className="flex items-center text-xs opacity-70">
-                            <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            {calculateReadingTime(post.content)} min
-                          </div>
-                        </div>
-                        <CardTitle className="text-xl font-serif text-white">
+                      <div className="p-5 flex-1 flex flex-col">
+                        <span className="text-xs font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                          {post.category}
+                        </span>
+                        <h3 className="text-lg font-serif font-bold text-gray-900 dark:text-white mt-2 mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors line-clamp-2">
                           {post.title}
-                        </CardTitle>
-                        <CardDescription className="text-white/70 text-sm">
-                          {new Date(post.date).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric',
-                          })}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-white/80 mb-4 line-clamp-3">
+                        </h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 flex-1 line-clamp-2">
                           {post.excerpt}
                         </p>
-                        <Link href={`/blog/${post.id}`}>
-                          <Button variant="ghost" className="text-white hover:bg-white/20 w-full">
-                            Read More &rarr;
-                          </Button>
-                        </Link>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
+                        <span className="text-sm font-medium text-primary-600 dark:text-primary-400">
+                          Read more &rarr;
+                        </span>
+                      </div>
+                    </motion.article>
+                  </Link>
                 </StaggerItem>
               ))}
-            </StaggerContainer>
-          </div>
+            </div>
+          </StaggerContainer>
 
-          <FadeInUp delay={0.6}>
+          <FadeInUp delay={0.3}>
             <div className="text-center">
               <Link href="/blog">
-                <Button size="lg" className="bg-white text-primary-700 hover:bg-gray-100">
-                  View All Blog Posts
+                <Button variant="outline" size="lg">
+                  View all posts
                 </Button>
               </Link>
             </div>
@@ -228,12 +210,12 @@ export default function Home() {
       </section>
 
       {/* 3. ABOUT US */}
-      <section id="about" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
+      <section id="about" className="py-20 lg:py-28 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
               <FadeInUp>
-                <div className="relative h-72 sm:h-96 rounded-lg overflow-hidden shadow-2xl">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg">
                   <img
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop"
                     alt="About our ministry"
@@ -241,27 +223,28 @@ export default function Home() {
                   />
                 </div>
               </FadeInUp>
-              <FadeInUp delay={0.2}>
-                <div>
-                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
-                    About Us
-                  </h2>
-                  <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 mb-4 sm:mb-6 leading-relaxed">
-                    We are a Christian ministry dedicated to preserving God-spoken words and
-                    encouraging believers through digital tools. Our mission is to create a
-                    trustworthy platform that serves our community and future generations.
-                  </p>
-                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 leading-relaxed">
-                    With reverence and care, we document prophecies, teachings, and revelations
-                    that God speaks to His people, ensuring these precious words are preserved
-                    for future generations.
-                  </p>
-                  <Link href="/about">
-                    <Button size="lg">
-                      Read More About Us
-                    </Button>
-                  </Link>
-                </div>
+              <FadeInUp delay={0.15}>
+                <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                  Who we are
+                </span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-2 mb-6">
+                  About Us
+                </h2>
+                <p className="text-lg text-gray-700 dark:text-gray-300 mb-5 leading-relaxed">
+                  We are a Christian ministry dedicated to preserving God-spoken words and
+                  encouraging believers through digital tools. Our mission is to create a
+                  trustworthy platform that serves our community and future generations.
+                </p>
+                <p className="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                  With reverence and care, we document prophecies, teachings, and revelations
+                  that God speaks to His people, ensuring these precious words are preserved
+                  for future generations.
+                </p>
+                <Link href="/about">
+                  <Button size="lg">
+                    Our story
+                  </Button>
+                </Link>
               </FadeInUp>
             </div>
           </div>
@@ -269,48 +252,49 @@ export default function Home() {
       </section>
 
       {/* 4. MISSION & VISION */}
-      <section id="mission" className="py-16 sm:py-20 bg-gradient-to-br from-primary-50 via-white to-primary-50 dark:from-gray-900 dark:via-gray-900 dark:to-primary-950/30">
+      <section id="mission" className="py-20 lg:py-28 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-10 sm:mb-12 text-center">
-              Mission &amp; Vision
-            </h2>
+            <div className="text-center max-w-2xl mx-auto mb-14">
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                Purpose
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-2">
+                Mission &amp; Vision
+              </h2>
+            </div>
           </FadeInUp>
           <StaggerContainer>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               <StaggerItem>
-                <Card className="h-full border-2 border-primary-200 dark:border-primary-800 hover:shadow-xl transition-shadow">
-                  <CardHeader>
-                    <div className="text-5xl mb-4">{missionVision.mission.icon}</div>
-                    <CardTitle className="text-2xl font-serif">{missionVision.mission.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
-                      {missionVision.mission.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-10 border border-gray-200 dark:border-gray-800 shadow-sm h-full">
+                  <div className="text-4xl mb-5">{missionVision.mission.icon}</div>
+                  <h3 className="text-xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+                    {missionVision.mission.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {missionVision.mission.description}
+                  </p>
+                </div>
               </StaggerItem>
               <StaggerItem>
-                <Card className="h-full border-2 border-primary-200 dark:border-primary-800 hover:shadow-xl transition-shadow">
-                  <CardHeader>
-                    <div className="text-5xl mb-4">{missionVision.vision.icon}</div>
-                    <CardTitle className="text-2xl font-serif">{missionVision.vision.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-base sm:text-lg">
-                      {missionVision.vision.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-10 border border-gray-200 dark:border-gray-800 shadow-sm h-full">
+                  <div className="text-4xl mb-5">{missionVision.vision.icon}</div>
+                  <h3 className="text-xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+                    {missionVision.vision.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                    {missionVision.vision.description}
+                  </p>
+                </div>
               </StaggerItem>
             </div>
           </StaggerContainer>
-          <FadeInUp delay={0.6}>
-            <div className="text-center mt-10 sm:mt-12">
+          <FadeInUp delay={0.3}>
+            <div className="text-center mt-12">
               <Link href="/mission">
                 <Button variant="outline" size="lg">
-                  Read Full Mission Statement
+                  Full mission statement
                 </Button>
               </Link>
             </div>
@@ -319,14 +303,17 @@ export default function Home() {
       </section>
 
       {/* 5. TESTIMONIES */}
-      <section id="testimony" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
+      <section id="testimony" className="py-20 lg:py-28 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
-            <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+            <div className="max-w-2xl mb-14">
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                Stories
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-2 mb-4">
                 Testimonies
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              <p className="text-lg text-gray-600 dark:text-gray-400">
                 Stories of God&apos;s faithfulness and transformation
               </p>
             </div>
@@ -382,15 +369,18 @@ export default function Home() {
       </section>
 
       {/* 6. EVENTS */}
-      <section id="events" className="py-16 sm:py-20 bg-gray-50 dark:bg-gray-900/50">
+      <section id="events" className="py-20 lg:py-28 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
-            <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
-                Upcoming Events
+            <div className="max-w-2xl mb-14">
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                Join us
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-2 mb-4">
+                Upcoming events
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Join us for worship, fellowship, and spiritual growth
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Worship, fellowship, and spiritual growth
               </p>
             </div>
           </FadeInUp>
@@ -457,15 +447,18 @@ export default function Home() {
       </section>
 
       {/* 7. GALLERY */}
-      <section id="gallery" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
+      <section id="gallery" className="py-20 lg:py-28 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
-            <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+            <div className="max-w-2xl mb-14">
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                Moments
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-2 mb-4">
                 Gallery
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Moments from our ministry gatherings and events
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                From our ministry gatherings and events
               </p>
             </div>
           </FadeInUp>
@@ -515,16 +508,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 9. MEDIA SECTION */}
-      <section id="media" className="py-16 sm:py-20 bg-white dark:bg-gray-900">
+      {/* 9. MEDIA */}
+      <section id="media" className="py-20 lg:py-28 bg-gray-50 dark:bg-gray-900/50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <FadeInUp>
-            <div className="mb-10 sm:mb-12 text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mb-4">
+            <div className="max-w-2xl mb-14">
+              <span className="text-sm font-medium text-primary-600 dark:text-primary-400 uppercase tracking-wider">
+                Watch &amp; listen
+              </span>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-2 mb-4">
                 Media
               </h2>
-              <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-                Inspirational posters, videos, and messages
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Posters, videos, and messages
               </p>
             </div>
           </FadeInUp>
