@@ -26,9 +26,14 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key_path: ${{ github.workspace }}/.deploy_key
           script: |
-            cd ${{ secrets.VPS_DEPLOY_PATH }}
-            git pull origin main
+            cd ${{ secrets.VPS_DEPLOY_PATH }} || { echo "ERROR: VPS_DEPLOY_PATH not found"; exit 1; }
+            echo "=== Deploy path: $(pwd) ==="
+            git fetch origin main
+            git reset --hard origin/main
+            echo "=== Commit now on server: $(git rev-parse --short HEAD) ==="
+            rm -rf .next
             npm ci
             npm run build
             pm2 restart ministry-app || pm2 start npm --name "ministry-app" -- start
             pm2 save
+            echo "=== Deploy done. Running: $(git rev-parse --short HEAD) ==="
