@@ -117,6 +117,9 @@ export function Footer() {
         <div className="border-t border-gray-800/60 pt-8 text-center">
           <p className="text-gray-500 text-xs tracking-wide">
             &copy; {currentYear} {ministryInfo.name} &mdash; {ministryInfo.subtitle}. All rights reserved.
+            {typeof process.env.NEXT_PUBLIC_BUILD_TIME === 'string' && process.env.NEXT_PUBLIC_BUILD_TIME && (
+              <span className="opacity-60"> &middot; Built {new Date(process.env.NEXT_PUBLIC_BUILD_TIME).toLocaleString()}</span>
+            )}
           </p>
         </div>
       </div>

@@ -33,6 +33,7 @@ jobs:
             echo "=== Commit now on server: $(git rev-parse --short HEAD) ==="
             rm -rf .next
             npm ci
+            export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
             pm2 restart ministry-app || pm2 start npm --name "ministry-app" -- start
             pm2 save
