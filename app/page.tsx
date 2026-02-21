@@ -3,16 +3,15 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { EnhancedImageSlider } from '@/components/ui/enhanced-image-slider';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { motion } from 'framer-motion';
-import { ministryInfo, blogPosts, teamMembers, events, missionVision } from '@/data/demo-content';
+import { ministryInfo as defaultInfo, blogPosts, events, missionVision as defaultMV } from '@/data/demo-content';
 import { galleryImages } from '@/data/gallery-content';
 import { AudioPlayer } from '@/components/audio/audio-player';
-import { mediaItems } from '@/data/media-content';
+import { mediaItems as fallbackMedia } from '@/data/media-content';
 import { PrayerForm } from '@/components/prayer/prayer-form';
 import { ChatWidget } from '@/components/chat/chat-widget';
 
@@ -24,12 +23,20 @@ function calculateReadingTime(content: string): number {
 }
 
 type SliderImage = { src: string; alt: string; title?: string; description?: string };
+type MediaItem = { id: number; title: string; type: string; image_url?: string; video_id?: string; thumbnail_url?: string; message?: string; description?: string; scripture?: string; image?: string; thumbnail?: string; videoId?: string };
 
 export default function Home() {
   const [sliderImages, setSliderImages] = useState<SliderImage[]>([]);
   const [homeTestimonies, setHomeTestimonies] = useState<Array<{ id: number; name: string; content: string; image_url: string | null; created_at: string }>>([]);
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>(fallbackMedia as unknown as MediaItem[]);
+  const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    fetch('/api/settings?scope=public')
+      .then((res) => (res.ok ? res.json() : { data: {} }))
+      .then((data) => { if (data?.data) setSiteSettings(data.data); })
+      .catch(() => {});
+
     fetch('/api/slider')
       .then((res) => res.ok ? res.json() : { data: [] })
       .then((data) => {
@@ -38,7 +45,7 @@ export default function Home() {
           list
             .filter((s: { image_url?: string }) => s?.image_url && String(s.image_url).trim())
             .map((s: { image_url: string; title?: string; text?: string; description?: string }) => ({
-              src: s.image_url.startsWith('/') || s.image_url.startsWith('http') ? s.image_url : `/${s.image_url.replace(/^\//, '')}`,
+              src: (() => { const url = s.image_url.startsWith('/') || s.image_url.startsWith('http') ? s.image_url : `/${s.image_url.replace(/^\//, '')}`; return url.startsWith('/uploads/') ? `${url}?v=${Date.now()}` : url; })(),
               alt: s.title || s.text || 'Ministry',
               title: s.title || undefined,
               description: s.description || undefined,
@@ -46,9 +53,7 @@ export default function Home() {
         );
       })
       .catch(() => setSliderImages([]));
-  }, []);
 
-  useEffect(() => {
     fetch('/api/testimonies')
       .then((res) => (res.ok ? res.json() : { data: [] }))
       .then((data) => {
@@ -56,7 +61,42 @@ export default function Home() {
         setHomeTestimonies(list.slice(0, 3));
       })
       .catch(() => setHomeTestimonies([]));
+
+    fetch('/api/media')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) setMediaItems(list);
+      })
+      .catch(() => {});
   }, []);
+
+  const info = {
+    name: siteSettings.ministry_name || defaultInfo.name,
+    subtitle: siteSettings.ministry_subtitle || defaultInfo.subtitle,
+    tagline: siteSettings.ministry_tagline || defaultInfo.tagline,
+    scripture: siteSettings.ministry_scripture || defaultInfo.scripture,
+    email: siteSettings.ministry_email || defaultInfo.email,
+    phone: siteSettings.ministry_phone || defaultInfo.phone,
+    address: siteSettings.ministry_address || defaultInfo.address,
+  };
+  const about = {
+    heading: siteSettings.about_heading || 'About Us',
+    text: siteSettings.about_text || 'We are a Christian ministry dedicated to preserving God-spoken words and encouraging believers through digital tools. Our mission is to create a trustworthy platform that serves our community and future generations.',
+    textSecondary: siteSettings.about_text_secondary || 'With reverence and care, we document prophecies, teachings, and revelations that God speaks to His people, ensuring these precious words are preserved for future generations.',
+  };
+  const mv = {
+    mission: {
+      title: siteSettings.mission_title || defaultMV.mission.title,
+      description: siteSettings.mission_description || defaultMV.mission.description,
+      icon: defaultMV.mission.icon,
+    },
+    vision: {
+      title: siteSettings.vision_title || defaultMV.vision.title,
+      description: siteSettings.vision_description || defaultMV.vision.description,
+      icon: defaultMV.vision.icon,
+    },
+  };
 
   const featuredBlog = blogPosts.find(post => post.featured) || blogPosts[0];
   const regularBlogs = blogPosts.filter(post => !post.featured).slice(0, 3);
@@ -76,26 +116,26 @@ export default function Home() {
           <div className="text-center text-white max-w-3xl">
             <FadeInUp>
               <span className="inline-block text-[11px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-white/70 border border-white/20 rounded-full px-5 py-2 mb-6 backdrop-blur-sm bg-white/5">
-                {ministryInfo.subtitle}
+                {info.subtitle}
               </span>
             </FadeInUp>
 
             <FadeInUp delay={0.1}>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold mb-5 leading-[1.05] tracking-tight">
-                {ministryInfo.name}
+                {info.name}
               </h1>
             </FadeInUp>
 
             <FadeInUp delay={0.2}>
               <p className="text-base sm:text-lg md:text-xl text-white/85 mb-5 max-w-xl mx-auto leading-relaxed font-light">
-                {ministryInfo.tagline}
+                {info.tagline}
               </p>
             </FadeInUp>
 
             <FadeInUp delay={0.3}>
               <div className="w-12 h-px bg-white/30 mx-auto mb-5" />
               <p className="text-sm sm:text-base font-serif italic text-white/60 mb-10 max-w-lg mx-auto">
-                &ldquo;{ministryInfo.scripture}&rdquo;
+                &ldquo;{info.scripture}&rdquo;
               </p>
             </FadeInUp>
 
@@ -250,18 +290,14 @@ export default function Home() {
                     Who we are
                   </span>
                   <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-3 mb-6 tracking-tight">
-                    About Us
+                    {about.heading}
                   </h2>
                   <div className="w-12 h-0.5 bg-primary-600 dark:bg-primary-400 mb-8" />
                   <p className="text-lg text-gray-700 dark:text-gray-300 mb-5 leading-relaxed">
-                    We are a Christian ministry dedicated to preserving God-spoken words and
-                    encouraging believers through digital tools. Our mission is to create a
-                    trustworthy platform that serves our community and future generations.
+                    {about.text}
                   </p>
                   <p className="text-gray-500 dark:text-gray-400 mb-10 leading-relaxed">
-                    With reverence and care, we document prophecies, teachings, and revelations
-                    that God speaks to His people, ensuring these precious words are preserved
-                    for future generations.
+                    {about.textSecondary}
                   </p>
                   <Link href="/about">
                     <Button size="lg" className="rounded-full px-8 text-sm font-medium tracking-wide">
@@ -303,12 +339,12 @@ export default function Home() {
                   className="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-10 lg:p-12 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl transition-all duration-500 h-full relative overflow-hidden group"
                 >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="text-5xl mb-6">{missionVision.mission.icon}</div>
+                  <div className="text-5xl mb-6">{mv.mission.icon}</div>
                   <h3 className="text-xl lg:text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">
-                    {missionVision.mission.title}
+                    {mv.mission.title}
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                    {missionVision.mission.description}
+                    {mv.mission.description}
                   </p>
                 </motion.div>
               </StaggerItem>
@@ -320,12 +356,12 @@ export default function Home() {
                   className="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-10 lg:p-12 border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-xl transition-all duration-500 h-full relative overflow-hidden group"
                 >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="text-5xl mb-6">{missionVision.vision.icon}</div>
+                  <div className="text-5xl mb-6">{mv.vision.icon}</div>
                   <h3 className="text-xl lg:text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">
-                    {missionVision.vision.title}
+                    {mv.vision.title}
                   </h3>
                   <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-                    {missionVision.vision.description}
+                    {mv.vision.description}
                   </p>
                 </motion.div>
               </StaggerItem>
@@ -609,55 +645,61 @@ export default function Home() {
 
           <StaggerContainer>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-7xl mb-14">
-              {mediaItems.slice(0, 4).map((item) => (
-                <StaggerItem key={item.id}>
-                  <Link href={`/media/${item.id}`}>
-                    <motion.div
-                      whileHover={{ y: -6 }}
-                      transition={{ duration: 0.3, ease: 'easeOut' }}
-                      className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer border border-gray-100 dark:border-gray-800 group"
-                    >
-                      {item.type === 'poster' ? (
-                        <div className="aspect-[2/3] overflow-hidden">
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                          />
-                        </div>
-                      ) : (
-                        <div className="aspect-video relative overflow-hidden">
-                          <img
-                            src={item.thumbnail}
-                            alt={item.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                          />
-                          <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300">
-                            <div className="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                              <svg className="w-5 h-5 text-primary-600 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
-                            </div>
+              {mediaItems.slice(0, 4).map((item) => {
+                const imgSrc = item.image_url || item.image || '';
+                const thumbSrc = item.thumbnail_url || item.thumbnail || '';
+                const vidId = item.video_id || item.videoId || '';
+                const posterScripture = item.message || item.scripture || '';
+                return (
+                  <StaggerItem key={item.id}>
+                    <Link href={`/media/${item.id}`}>
+                      <motion.div
+                        whileHover={{ y: -6 }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
+                        className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer border border-gray-100 dark:border-gray-800 group"
+                      >
+                        {item.type === 'poster' ? (
+                          <div className="aspect-[2/3] overflow-hidden">
+                            <img
+                              src={imgSrc}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                            />
                           </div>
-                          {item.type === 'youtube-shorts' && (
-                            <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider">
-                              Shorts
+                        ) : (
+                          <div className="aspect-video relative overflow-hidden">
+                            <img
+                              src={thumbSrc || (vidId ? `https://img.youtube.com/vi/${vidId}/hqdefault.jpg` : '')}
+                              alt={item.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors duration-300">
+                              <div className="w-12 h-12 bg-white/95 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <svg className="w-5 h-5 text-primary-600 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                  <path d="M8 5v14l11-7z" />
+                                </svg>
+                              </div>
                             </div>
+                            {item.type === 'youtube-shorts' && (
+                              <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-white px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider">
+                                Shorts
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        <div className="p-4 sm:p-5">
+                          <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base leading-snug group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
+                            {item.title}
+                          </h3>
+                          {item.type === 'poster' && posterScripture && (
+                            <p className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 mt-1.5 font-medium">{posterScripture}</p>
                           )}
                         </div>
-                      )}
-                      <div className="p-4 sm:p-5">
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base leading-snug group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">
-                          {item.title}
-                        </h3>
-                        {item.type === 'poster' && (
-                          <p className="text-xs sm:text-sm text-primary-600 dark:text-primary-400 mt-1.5 font-medium">{item.scripture}</p>
-                        )}
-                      </div>
-                    </motion.div>
-                  </Link>
-                </StaggerItem>
-              ))}
+                      </motion.div>
+                    </Link>
+                  </StaggerItem>
+                );
+              })}
             </div>
           </StaggerContainer>
 

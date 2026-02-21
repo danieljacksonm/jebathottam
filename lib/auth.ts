@@ -89,7 +89,7 @@ export async function requireRole(
 
   const { user } = authResult;
   
-  if (!allowedRoles.includes(user.role)) {
+  if (user.role !== 'super_admin' && !allowedRoles.includes(user.role)) {
     return NextResponse.json(
       { error: 'Forbidden - Insufficient permissions' },
       { status: 403 }

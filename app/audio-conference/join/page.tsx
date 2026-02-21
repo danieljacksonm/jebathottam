@@ -130,8 +130,25 @@ function JoinConferenceContent() {
           <Phone className="w-5 h-5 text-primary-600 dark:text-primary-400" />
           Add people by phone (no internet)
         </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          After you open the meeting in Jitsi, click the <strong>phone icon</strong> in the left toolbar. Jitsi will show dial-in numbers and a PIN. Share those with people who want to call in &mdash; they will join the same meeting.
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          After you open the meeting in Jitsi, click the <strong>&ldquo;Invite&rdquo;</strong> or <strong>phone icon</strong> in the toolbar. Jitsi will show dial-in numbers and a PIN. Share those with people who want to call in.
+        </p>
+
+        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-4">
+          <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">India dial-in</h3>
+          <p className="text-xs text-amber-700 dark:text-amber-400">
+            The free Jitsi public instance (meet.jit.si) may not list an India dial-in number. If India is not shown:
+          </p>
+          <ul className="text-xs text-amber-700 dark:text-amber-400 mt-2 space-y-1 list-disc list-inside">
+            <li>Callers can dial the <strong>US or UK number</strong> shown in Jitsi and enter the PIN (international calling charges apply)</li>
+            <li>Use a VoIP app (like Google Voice, Skype) to dial the number at low cost</li>
+            <li>For a free alternative, the caller can join via <strong>WhatsApp call or Telegram call</strong> while other members use Jitsi</li>
+            <li>Self-hosting Jitsi with Twilio SIP/Jigasi can add India toll numbers</li>
+          </ul>
+        </div>
+
+        <p className="text-xs text-gray-500 dark:text-gray-500">
+          <strong>Tip:</strong> For Indian callers without internet, the most practical free option is to have someone in the Jitsi meeting call them via WhatsApp audio call or a regular phone call and put them on speaker.
         </p>
       </div>
     </div>
