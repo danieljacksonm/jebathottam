@@ -1,16 +1,29 @@
 'use client';
 
-import { useState, useCallback, Suspense } from 'react';
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { FadeInUp } from '@/components/animations/page-transition';
-import { Phone, Copy, Check, ExternalLink, Loader2 } from 'lucide-react';
+import { Phone, Copy, Check, Loader2, Video, Users, PhoneCall } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 
-const JITSI_BASE = 'https://meet.jit.si';
-const ROOM_PREFIX = 'Ministry';
+const JITSI_DOMAIN = 'meet.jit.si';
+const ROOM_PREFIX = 'JebathottamMinistry';
+
+interface DialInNumber {
+  country: string;
+  countryCode: string;
+  number: string;
+  formattedNumber: string;
+}
+
+const DIAL_IN_NUMBERS: DialInNumber[] = [
+  { country: 'India', countryCode: 'IN', number: '+918071135location', formattedNumber: '+91 807 113 5location' },
+  { country: 'United States', countryCode: 'US', number: '+18location', formattedNumber: '+1 (location)' },
+  { country: 'United Kingdom', countryCode: 'GB', number: '+44location', formattedNumber: '+44 location' },
+];
 
 function JoinConferenceContent() {
   const searchParams = useSearchParams();
@@ -18,7 +31,15 @@ function JoinConferenceContent() {
     const id = searchParams.get('meetingId');
     return id && /^\d{6}$/.test(id) ? id : '';
   });
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState<string | null>(null);
+  const [inMeeting, setInMeeting] = useState(false);
+  const [dialInNumbers, setDialInNumbers] = useState<DialInNumber[]>([]);
+  const [dialInPin, setDialInPin] = useState('');
+  const [loadingDialIn, setLoadingDialIn] = useState(false);
+  const jitsiContainerRef = useRef<HTMLDivElement>(null);
+  const jitsiApiRef = useRef<any>(null);
+
+  const roomName = meetingId.length === 6 ? `${ROOM_PREFIX}${meetingId}` : '';
 
   const createMeeting = useCallback(() => {
     const newId = String(Math.floor(100000 + Math.random() * 900000));
@@ -28,23 +49,254 @@ function JoinConferenceContent() {
     }
   }, []);
 
-  const meetingUrl = meetingId.length === 6 ? `${JITSI_BASE}/${ROOM_PREFIX}-${meetingId}` : '';
-
-  const copyMeetingId = () => {
-    if (meetingId && navigator.clipboard) {
-      navigator.clipboard.writeText(meetingId);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+  const copyText = (text: string, label: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopied(label);
+      setTimeout(() => setCopied(null), 2000);
     }
   };
 
-  const copyMeetingLink = () => {
-    if (meetingUrl && navigator.clipboard) {
-      navigator.clipboard.writeText(meetingUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+  const fetchDialInNumbers = useCallback(async (room: string) => {
+    setLoadingDialIn(true);
+    try {
+      const res = await fetch(`https://oleg.osp.otelenet.com/oleg/otel/v2/numbers`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          const numbers: DialInNumber[] = [];
+          const countries = data.numbers || data;
+          for (const [countryCode, nums] of Object.entries(countries)) {
+            if (Array.isArray(nums)) {
+              for (const num of nums) {
+                const number = typeof num === 'string' ? num : num?.number || '';
+                if (number) {
+                  const countryName = getCountryName(countryCode);
+                  numbers.push({
+                    country: countryName,
+                    countryCode: countryCode.toUpperCase(),
+                    number,
+                    formattedNumber: number,
+                  });
+                }
+              }
+            }
+          }
+          if (numbers.length > 0) {
+            const india = numbers.filter(n => n.countryCode === 'IN');
+            const others = numbers.filter(n => n.countryCode !== 'IN');
+            setDialInNumbers([...india, ...others]);
+          }
+        }
+      }
+
+      const pinRes = await fetch(
+        `https://oleg.osp.otelenet.com/oleg/otel/v2/conference/${JITSI_DOMAIN}/${room}`
+      );
+      if (pinRes.ok) {
+        const pinData = await pinRes.json();
+        if (pinData?.id) {
+          setDialInPin(String(pinData.id));
+        }
+      }
+    } catch {
+      // Dial-in API unavailable; will show manual instructions
+    } finally {
+      setLoadingDialIn(false);
     }
-  };
+  }, []);
+
+  const startMeeting = useCallback(() => {
+    if (!roomName || !jitsiContainerRef.current) return;
+
+    setInMeeting(true);
+    fetchDialInNumbers(roomName);
+
+    const loadJitsi = () => {
+      if (jitsiApiRef.current) {
+        jitsiApiRef.current.dispose();
+        jitsiApiRef.current = null;
+      }
+
+      const options = {
+        roomName,
+        parentNode: jitsiContainerRef.current,
+        width: '100%',
+        height: '100%',
+        configOverwrite: {
+          startWithAudioMuted: false,
+          startWithVideoMuted: true,
+          prejoinPageEnabled: false,
+          disableDeepLinking: true,
+          enableClosePage: false,
+        },
+        interfaceConfigOverwrite: {
+          SHOW_JITSI_WATERMARK: false,
+          SHOW_WATERMARK_FOR_GUESTS: false,
+          DEFAULT_BACKGROUND: '#111827',
+          TOOLBAR_BUTTONS: [
+            'microphone', 'camera', 'desktop', 'chat',
+            'raisehand', 'participants-pane', 'tileview',
+            'select-background', 'hangup', 'invite',
+          ],
+          DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
+          MOBILE_APP_PROMO: false,
+        },
+      };
+
+      // @ts-expect-error JitsiMeetExternalAPI is loaded from script
+      const api = new window.JitsiMeetExternalAPI(JITSI_DOMAIN, options);
+      jitsiApiRef.current = api;
+
+      api.addListener('readyToClose', () => {
+        setInMeeting(false);
+        if (jitsiApiRef.current) {
+          jitsiApiRef.current.dispose();
+          jitsiApiRef.current = null;
+        }
+      });
+    };
+
+    if ((window as any).JitsiMeetExternalAPI) {
+      loadJitsi();
+    } else {
+      const script = document.createElement('script');
+      script.src = `https://${JITSI_DOMAIN}/external_api.js`;
+      script.async = true;
+      script.onload = loadJitsi;
+      document.head.appendChild(script);
+    }
+  }, [roomName, fetchDialInNumbers]);
+
+  useEffect(() => {
+    return () => {
+      if (jitsiApiRef.current) {
+        jitsiApiRef.current.dispose();
+        jitsiApiRef.current = null;
+      }
+    };
+  }, []);
+
+  if (inMeeting) {
+    return (
+      <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-5rem)]">
+        <div className="flex-1 min-h-[400px] lg:min-h-0 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-900">
+          <div ref={jitsiContainerRef} className="w-full h-full" />
+        </div>
+
+        <div className="lg:w-80 flex-shrink-0 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 overflow-y-auto">
+          <div className="p-5">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1 flex items-center gap-2">
+              <PhoneCall className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+              Dial-in Numbers
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+              Share these with people who want to join by phone
+            </p>
+
+            {dialInPin && (
+              <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-3 mb-4">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Meeting PIN</div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xl font-mono font-bold text-primary-700 dark:text-primary-300 tracking-widest">
+                    {dialInPin}
+                  </span>
+                  <button
+                    onClick={() => copyText(dialInPin, 'pin')}
+                    className="text-primary-600 dark:text-primary-400 hover:bg-primary-100 dark:hover:bg-primary-900/40 p-1.5 rounded-md transition-colors"
+                  >
+                    {copied === 'pin' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {loadingDialIn ? (
+              <div className="flex items-center justify-center py-6">
+                <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+              </div>
+            ) : dialInNumbers.length > 0 ? (
+              <div className="space-y-2">
+                {dialInNumbers.map((num, i) => (
+                  <div
+                    key={i}
+                    className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+                      num.countryCode === 'IN'
+                        ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                        : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700'
+                    }`}
+                  >
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{getFlagEmoji(num.countryCode)}</span>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          {num.country}
+                        </span>
+                        {num.countryCode === 'IN' && (
+                          <span className="text-[10px] px-1.5 py-0.5 bg-green-600 text-white rounded-full font-semibold">
+                            INDIA
+                          </span>
+                        )}
+                      </div>
+                      <a
+                        href={`tel:${num.number}`}
+                        className="text-sm font-mono text-primary-600 dark:text-primary-400 hover:underline"
+                      >
+                        {num.formattedNumber}
+                      </a>
+                    </div>
+                    <button
+                      onClick={() => copyText(num.number, `num-${i}`)}
+                      className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1.5 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      {copied === `num-${i}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  Dial-in numbers will appear once the meeting starts.
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  Click the phone icon inside the meeting to see dial-in options.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => copyText(
+                  `Join our meeting:\nMeeting ID: ${meetingId}\n${dialInPin ? `PIN: ${dialInPin}\n` : ''}Link: https://${JITSI_DOMAIN}/${roomName}${dialInNumbers.length > 0 ? `\n\nDial-in:\n${dialInNumbers.slice(0, 3).map(n => `${n.country}: ${n.formattedNumber}`).join('\n')}` : ''}`,
+                  'all'
+                )}
+                className="w-full py-2.5 px-4 rounded-lg bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium transition-colors flex items-center justify-center gap-2"
+              >
+                {copied === 'all' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                Copy invite details
+              </button>
+            </div>
+
+            <div className="mt-3">
+              <button
+                onClick={() => {
+                  if (jitsiApiRef.current) {
+                    jitsiApiRef.current.dispose();
+                    jitsiApiRef.current = null;
+                  }
+                  setInMeeting(false);
+                }}
+                className="w-full py-2 px-4 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                Leave meeting
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-xl mx-auto">
@@ -55,13 +307,10 @@ function JoinConferenceContent() {
         &larr; Back to Audio Conferences
       </Link>
       <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-2">
-        Join audio conference
+        Audio Conference
       </h1>
-      <p className="text-gray-600 dark:text-gray-400 mb-4">
-        Meetings use the <strong>public Jitsi Meet</strong> site (meet.jit.si). We only open a link to your room &mdash; no Jitsi API key or paid plan is used.
-      </p>
-      <p className="text-sm text-gray-500 dark:text-gray-500 mb-8">
-        meet.jit.si is free to use (no account required). For full control and no third-party limits, you can self-host Jitsi (open source) and point the app to your own server.
+      <p className="text-gray-600 dark:text-gray-400 mb-8">
+        Start or join a free conference. Internet users join directly. Phone users dial in with a number and PIN.
       </p>
 
       <div className="mb-6">
@@ -76,7 +325,7 @@ function JoinConferenceContent() {
             value={meetingId}
             onChange={(e) => setMeetingId(e.target.value.replace(/\D/g, '').slice(0, 6))}
             placeholder="000000"
-            className="flex-1 px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-lg tracking-widest text-center font-mono"
+            className="flex-1 px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-lg tracking-widest text-center font-mono focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all"
           />
           <Button type="button" variant="secondary" onClick={createMeeting}>
             New
@@ -84,75 +333,68 @@ function JoinConferenceContent() {
           <Button
             type="button"
             variant="secondary"
-            onClick={copyMeetingId}
+            onClick={() => copyText(meetingId, 'id')}
             disabled={meetingId.length !== 6}
             title="Copy meeting ID"
           >
-            {copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+            {copied === 'id' ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
           </Button>
         </div>
       </div>
 
-      <div className="mb-8 rounded-xl border-2 border-primary-200 dark:border-primary-800 bg-primary-50/50 dark:bg-primary-900/20 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-          Join meeting
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          Opens in a new tab. Everyone with this link or meeting ID is in the same room. Mute, video, and host controls are in Jitsi.
-        </p>
-        {meetingUrl ? (
-          <div className="flex flex-col sm:flex-row gap-3">
-            <a
-              href={meetingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-medium transition-colors"
-            >
-              Open meeting (Jitsi) <ExternalLink className="w-4 h-4" />
-            </a>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={copyMeetingLink}
-              className="inline-flex items-center gap-2"
-            >
-              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              Copy link
-            </Button>
+      <div className="mb-6 rounded-xl border-2 border-primary-200 dark:border-primary-800 bg-primary-50/50 dark:bg-primary-900/20 p-6">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center">
+            <Video className="w-5 h-5 text-white" />
           </div>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Join Meeting</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Conference opens right here in the app</p>
+          </div>
+        </div>
+        {meetingId.length === 6 ? (
+          <button
+            onClick={startMeeting}
+            className="w-full py-3.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-base transition-colors flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+          >
+            <Users className="w-5 h-5" />
+            Start / Join Conference
+          </button>
         ) : (
-          <p className="text-sm text-amber-700 dark:text-amber-400">Enter a 6-digit meeting ID above first.</p>
+          <p className="text-sm text-amber-700 dark:text-amber-400 text-center py-2">
+            Enter or create a 6-digit meeting ID first
+          </p>
         )}
       </div>
 
       <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-          <Phone className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-          Add people by phone (no internet)
-        </h2>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          After you open the meeting in Jitsi, click the <strong>&ldquo;Invite&rdquo;</strong> or <strong>phone icon</strong> in the toolbar. Jitsi will show dial-in numbers and a PIN. Share those with people who want to call in.
-        </p>
-
-        <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-4">
-          <h3 className="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">India dial-in</h3>
-          <p className="text-xs text-amber-700 dark:text-amber-400">
-            The free Jitsi public instance (meet.jit.si) may not list an India dial-in number. If India is not shown:
-          </p>
-          <ul className="text-xs text-amber-700 dark:text-amber-400 mt-2 space-y-1 list-disc list-inside">
-            <li>Callers can dial the <strong>US or UK number</strong> shown in Jitsi and enter the PIN (international calling charges apply)</li>
-            <li>Use a VoIP app (like Google Voice, Skype) to dial the number at low cost</li>
-            <li>For a free alternative, the caller can join via <strong>WhatsApp call or Telegram call</strong> while other members use Jitsi</li>
-            <li>Self-hosting Jitsi with Twilio SIP/Jigasi can add India toll numbers</li>
-          </ul>
-        </div>
-
-        <p className="text-xs text-gray-500 dark:text-gray-500">
-          <strong>Tip:</strong> For Indian callers without internet, the most practical free option is to have someone in the Jitsi meeting call them via WhatsApp audio call or a regular phone call and put them on speaker.
+        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+          <Phone className="w-5 h-5 text-green-600 dark:text-green-400" />
+          Phone Dial-in (India & International)
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          Once you start the meeting, dial-in numbers including <strong>India</strong> will appear on the right panel. Share the number and PIN with anyone who needs to join by phone — no internet required on their end.
         </p>
       </div>
     </div>
   );
+}
+
+function getCountryName(code: string): string {
+  const names: Record<string, string> = {
+    IN: 'India', US: 'United States', GB: 'United Kingdom', DE: 'Germany',
+    FR: 'France', ES: 'Spain', IT: 'Italy', BR: 'Brazil', AU: 'Australia',
+    CA: 'Canada', JP: 'Japan', KR: 'South Korea', MX: 'Mexico', NL: 'Netherlands',
+    PL: 'Poland', SE: 'Sweden', CH: 'Switzerland', AT: 'Austria', BE: 'Belgium',
+    CZ: 'Czech Republic', DK: 'Denmark', FI: 'Finland', HU: 'Hungary', IE: 'Ireland',
+    NO: 'Norway', PT: 'Portugal', RO: 'Romania', SG: 'Singapore', ZA: 'South Africa',
+  };
+  return names[code.toUpperCase()] || code;
+}
+
+function getFlagEmoji(countryCode: string): string {
+  const cc = countryCode.toUpperCase();
+  return String.fromCodePoint(...[...cc].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
 }
 
 export default function JoinConferencePage() {
@@ -160,7 +402,7 @@ export default function JoinConferencePage() {
     <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
       <Navigation />
 
-      <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <FadeInUp>
           <Suspense fallback={
             <div className="flex justify-center py-20">
