@@ -4,7 +4,7 @@ import path from 'path';
 import { randomBytes } from 'crypto';
 import { requireRole } from '@/lib/auth';
 
-const ALLOWED_TYPES = ['slider', 'testimony', 'gallery', 'team', 'general'] as const;
+const ALLOWED_TYPES = ['slider', 'testimony', 'gallery', 'team', 'media', 'general'] as const;
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function POST(request: NextRequest) {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       throw writeErr;
     }
 
-    const url = `/uploads/${folder}/${name}`;
+    const url = `/api/uploads/${folder}/${name}`;
     return NextResponse.json({ url });
   } catch (error: any) {
     console.error('Upload error:', error);

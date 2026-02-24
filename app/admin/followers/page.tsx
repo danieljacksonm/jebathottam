@@ -1,11 +1,95 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { Button } from '@/components/ui/button';
 import { Breadcrumbs } from '@/components/admin/breadcrumbs';
+import { CheckCircle2, AlertCircle, X, Search, Plus } from 'lucide-react';
 
-// Enhanced data structure with families and prayer points
+// Toast system
+interface Toast {
+  id: number;
+  type: 'success' | 'error';
+  message: string;
+}
+
+const TOAST_DURATION = 4000;
+
+function getAuthHeaders(): HeadersInit {
+  if (typeof window === 'undefined') return {};
+  const token = document.cookie.split('; ').find(row => row.startsWith('auth_token='))?.split('=')[1];
+  return { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) };
+}
+
+function ToastContainer({ toasts, onDismiss }: { toasts: Toast[]; onDismiss: (id: number) => void }) {
+  return (
+    <div className="fixed top-4 left-4 right-4 sm:left-auto sm:right-4 z-[100] flex flex-col gap-2 pointer-events-none sm:max-w-sm sm:w-full">
+      {toasts.map((toast) => (
+        <div
+          key={toast.id}
+          className={`pointer-events-auto flex items-start gap-3 px-4 py-3 rounded-lg shadow-lg border text-sm animate-slide-in-right ${
+            toast.type === 'success'
+              ? 'bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
+              : 'bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
+          }`}
+          role="alert"
+        >
+          {toast.type === 'success' ? (
+            <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
+          ) : (
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+          )}
+          <span className="flex-1 break-words">{toast.message}</span>
+          <button
+            onClick={() => onDismiss(toast.id)}
+            className="shrink-0 p-0.5 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+            aria-label="Dismiss"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      ))}
+      <style jsx>{`
+        @keyframes slide-in-right {
+          from {
+            opacity: 0;
+            transform: translateX(100%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        .animate-slide-in-right {
+          animation: slide-in-right 0.25s ease-out;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function useToasts() {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const nextId = useRef(0);
+
+  const dismiss = useCallback((id: number) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const addToast = useCallback(
+    (type: 'success' | 'error', message: string) => {
+      const id = ++nextId.current;
+      setToasts((prev) => [...prev, { id, type, message }]);
+      setTimeout(() => dismiss(id), TOAST_DURATION);
+      return id;
+    },
+    [dismiss]
+  );
+
+  return { toasts, addToast, dismiss };
+}
+
+// Data interfaces
 interface PrayerPoint {
   id: number;
   text: string;
@@ -18,13 +102,15 @@ interface Follower {
   id: number;
   name: string;
   email: string;
-  phone: string;
-  joinDate: string;
+  phone: string | null;
+  join_date: string;
   status: 'active' | 'inactive';
-  notes: string;
-  familyId?: number;
-  familyName?: string;
-  prayerPoints: PrayerPoint[];
+  notes: string | null;
+  family_id: number | null;
+  family_name: string | null;
+  prayerPoints?: PrayerPoint[];
+  prayer_count?: number;
+  pending_prayers?: number;
 }
 
 interface Family {
@@ -33,80 +119,28 @@ interface Family {
   members: Follower[];
 }
 
-const initialFamilies: Family[] = [
-  {
-    id: 1,
-    name: 'Smith Family',
-    members: [
-      {
-        id: 1,
-        name: 'John Smith',
-        email: 'john.smith@example.com',
-        phone: '(555) 123-4567',
-        joinDate: '2024-01-15',
-        status: 'active',
-        notes: 'Regular attendee, very engaged',
-        familyId: 1,
-        familyName: 'Smith Family',
-        prayerPoints: [
-          { id: 1, text: 'Prayer for job opportunity', date: '2024-01-20', status: 'happened', notes: 'Got the job!' },
-          { id: 2, text: 'Healing for mother', date: '2024-01-25', status: 'pending' },
-        ],
-      },
-      {
-        id: 2,
-        name: 'Mary Smith',
-        email: 'mary.smith@example.com',
-        phone: '(555) 123-4567',
-        joinDate: '2024-01-15',
-        status: 'active',
-        notes: 'John\'s wife',
-        familyId: 1,
-        familyName: 'Smith Family',
-        prayerPoints: [
-          { id: 3, text: 'Prayer for children\'s education', date: '2024-01-22', status: 'pending' },
-        ],
-      },
-    ],
-  },
-];
-
-const initialFollowers: Follower[] = [
-  {
-    id: 3,
-    name: 'Sarah Johnson',
-    email: 'sarah.j@example.com',
-    phone: '(555) 234-5678',
-    joinDate: '2023-12-20',
-    status: 'active',
-    notes: 'Interested in volunteering',
-    prayerPoints: [
-      { id: 4, text: 'Guidance for ministry service', date: '2024-01-18', status: 'happened' },
-      { id: 5, text: 'Financial provision', date: '2024-01-28', status: 'pending' },
-    ],
-  },
-  {
-    id: 4,
-    name: 'Michael Chen',
-    email: 'michael.chen@example.com',
-    phone: '(555) 345-6789',
-    joinDate: '2024-01-05',
-    status: 'active',
-    notes: 'New member, needs follow-up',
-    prayerPoints: [
-      { id: 6, text: 'Prayer for family reconciliation', date: '2024-01-15', status: 'not-happened' },
-    ],
-  },
-];
-
 export default function AdminFollowers() {
+  const { toasts, addToast, dismiss } = useToasts();
+  
+  // State
+  const [loading, setLoading] = useState(true);
+  const [followers, setFollowers] = useState<Follower[]>([]);
+  const [families, setFamilies] = useState<Family[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [showFamilyForm, setShowFamilyForm] = useState(false);
   const [showPrayerForm, setShowPrayerForm] = useState(false);
   const [selectedFollower, setSelectedFollower] = useState<Follower | null>(null);
+  const [editingFollower, setEditingFollower] = useState<Follower | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'families'>('list');
   const [activeTab, setActiveTab] = useState<'all' | 'active' | 'inactive'>('all');
-  const [families, setFamilies] = useState(initialFamilies);
-  const [followers, setFollowers] = useState(initialFollowers);
+  
+  // Search/filter state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterFamily, setFilterFamily] = useState<string>('');
+  const [filterType, setFilterType] = useState<string>('');
+  
+  // Form state
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -114,16 +148,79 @@ export default function AdminFollowers() {
     notes: '',
     familyId: '',
     familyName: '',
+    type: 'member' as 'member' | 'visitor' | 'new_believer',
+    status: 'active' as 'active' | 'inactive',
   });
+  
+  const [familyFormData, setFamilyFormData] = useState({
+    name: '',
+  });
+  
   const [prayerFormData, setPrayerFormData] = useState({
     text: '',
     date: new Date().toISOString().split('T')[0],
     notes: '',
   });
 
+  // Fetch followers
+  const fetchFollowers = useCallback(async () => {
+    try {
+      const response = await fetch('/api/followers', {
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch followers');
+      }
+      
+      const result = await response.json();
+      setFollowers(result.data || []);
+    } catch (error: any) {
+      console.error('Error fetching followers:', error);
+      addToast('error', 'Failed to load followers');
+    }
+  }, [addToast]);
+
+  // Fetch families
+  const fetchFamilies = useCallback(async () => {
+    try {
+      const response = await fetch('/api/families', {
+        headers: getAuthHeaders(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch families');
+      }
+      
+      const result = await response.json();
+      setFamilies(result.data || []);
+    } catch (error: any) {
+      console.error('Error fetching families:', error);
+      addToast('error', 'Failed to load families');
+    }
+  }, [addToast]);
+
+  // Load data on mount
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      await Promise.all([fetchFollowers(), fetchFamilies()]);
+      setLoading(false);
+    };
+    loadData();
+  }, [fetchFollowers, fetchFamilies]);
+
+  // Handlers
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFamilyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFamilyFormData({
+      ...familyFormData,
       [e.target.name]: e.target.value,
     });
   };
@@ -135,115 +232,210 @@ export default function AdminFollowers() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Create follower
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newFollower: Follower = {
-      id: followers.length + families.reduce((acc, f) => acc + f.members.length, 0) + 1,
-      ...formData,
-      joinDate: new Date().toISOString().split('T')[0],
-      status: 'active' as const,
-      familyId: formData.familyId ? parseInt(formData.familyId) : undefined,
-      familyName: formData.familyName || undefined,
-      prayerPoints: [],
-    };
+    
+    try {
+      const payload: any = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || null,
+        status: formData.status,
+        notes: formData.notes || null,
+      };
 
-    if (formData.familyId) {
-      // Add to existing family
-      setFamilies(families.map(family => 
-        family.id === parseInt(formData.familyId)
-          ? { ...family, members: [...family.members, newFollower] }
-          : family
-      ));
-    } else if (formData.familyName) {
-      // Create new family
-      setFamilies([...families, {
-        id: families.length + 1,
-        name: formData.familyName,
-        members: [newFollower],
-      }]);
-    } else {
-      // Add as individual
-      setFollowers([...followers, newFollower]);
+      if (formData.familyId) {
+        payload.family_id = parseInt(formData.familyId);
+      } else if (formData.familyName) {
+        payload.family_name = formData.familyName;
+      }
+
+      const response = await fetch('/api/followers', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create follower');
+      }
+
+      addToast('success', 'Follower added successfully');
+      setFormData({ name: '', email: '', phone: '', notes: '', familyId: '', familyName: '', type: 'member', status: 'active' });
+      setShowForm(false);
+      await fetchFollowers();
+      await fetchFamilies();
+    } catch (error: any) {
+      console.error('Error creating follower:', error);
+      addToast('error', error.message || 'Failed to add follower');
     }
-
-    setFormData({ name: '', email: '', phone: '', notes: '', familyId: '', familyName: '' });
-    setShowForm(false);
   };
 
-  const handlePrayerSubmit = (e: React.FormEvent) => {
+  // Update follower
+  const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedFollower) return;
+    if (!editingFollower) return;
 
-    const newPrayerPoint: PrayerPoint = {
-      id: Date.now(),
-      ...prayerFormData,
-      status: 'pending',
-    };
+    try {
+      const payload: any = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || null,
+        status: formData.status,
+        notes: formData.notes || null,
+      };
 
-    // Update in followers list
-    setFollowers(followers.map(f => 
-      f.id === selectedFollower.id
-        ? { ...f, prayerPoints: [...f.prayerPoints, newPrayerPoint] }
-        : f
-    ));
+      if (formData.familyId) {
+        payload.family_id = parseInt(formData.familyId);
+      } else {
+        payload.family_id = null;
+      }
 
-    // Update in families
-    setFamilies(families.map(family => ({
-      ...family,
-      members: family.members.map(member =>
-        member.id === selectedFollower.id
-          ? { ...member, prayerPoints: [...member.prayerPoints, newPrayerPoint] }
-          : member
-      ),
-    })));
+      const response = await fetch(`/api/followers/${editingFollower.id}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(payload),
+      });
 
-    setPrayerFormData({ text: '', date: new Date().toISOString().split('T')[0], notes: '' });
-    setShowPrayerForm(false);
-    setSelectedFollower(null);
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to update follower');
+      }
+
+      addToast('success', 'Follower updated successfully');
+      setEditingFollower(null);
+      setFormData({ name: '', email: '', phone: '', notes: '', familyId: '', familyName: '', type: 'member', status: 'active' });
+      setShowForm(false);
+      await fetchFollowers();
+      await fetchFamilies();
+    } catch (error: any) {
+      console.error('Error updating follower:', error);
+      addToast('error', error.message || 'Failed to update follower');
+    }
   };
 
-  const updatePrayerStatus = (followerId: number, prayerId: number, status: 'happened' | 'not-happened' | 'pending') => {
-    // Update in followers
-    setFollowers(followers.map(f =>
-      f.id === followerId
-        ? {
-            ...f,
-            prayerPoints: f.prayerPoints.map(p => p.id === prayerId ? { ...p, status } : p),
-          }
-        : f
-    ));
+  // Delete follower
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`/api/followers/${id}`, {
+        method: 'DELETE',
+        headers: getAuthHeaders(),
+      });
 
-    // Update in families
-    setFamilies(families.map(family => ({
-      ...family,
-      members: family.members.map(member =>
-        member.id === followerId
-          ? {
-              ...member,
-              prayerPoints: member.prayerPoints.map(p => p.id === prayerId ? { ...p, status } : p),
-            }
-          : member
-      ),
-    })));
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to delete follower');
+      }
+
+      addToast('success', 'Follower deleted successfully');
+      setDeleteConfirm(null);
+      await fetchFollowers();
+      await fetchFamilies();
+    } catch (error: any) {
+      console.error('Error deleting follower:', error);
+      addToast('error', error.message || 'Failed to delete follower');
+    }
   };
 
+  // Create family
+  const handleFamilySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    try {
+      const response = await fetch('/api/families', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ name: familyFormData.name }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create family');
+      }
+
+      addToast('success', 'Family created successfully');
+      setFamilyFormData({ name: '' });
+      setShowFamilyForm(false);
+      await fetchFamilies();
+    } catch (error: any) {
+      console.error('Error creating family:', error);
+      addToast('error', error.message || 'Failed to create family');
+    }
+  };
+
+  // Edit follower handler
+  const handleEditClick = (follower: Follower) => {
+    setEditingFollower(follower);
+    setFormData({
+      name: follower.name,
+      email: follower.email,
+      phone: follower.phone || '',
+      notes: follower.notes || '',
+      familyId: follower.family_id ? follower.family_id.toString() : '',
+      familyName: '',
+      type: 'member', // Default since API doesn't support this yet
+      status: follower.status,
+    });
+    setShowForm(true);
+  };
+
+  // Filter logic
   const allFollowers = [
     ...followers,
     ...families.flatMap(family => family.members),
   ];
 
-  const filteredFollowers = allFollowers.filter((follower) => {
-    if (activeTab === 'active') return follower.status === 'active';
-    if (activeTab === 'inactive') return follower.status === 'inactive';
+  // Remove duplicates (followers might appear in both lists)
+  const uniqueFollowers = allFollowers.reduce((acc, follower) => {
+    if (!acc.find(f => f.id === follower.id)) {
+      acc.push(follower);
+    }
+    return acc;
+  }, [] as Follower[]);
+
+  const filteredFollowers = uniqueFollowers.filter((follower) => {
+    // Status filter
+    if (activeTab === 'active' && follower.status !== 'active') return false;
+    if (activeTab === 'inactive' && follower.status !== 'inactive') return false;
+
+    // Search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      if (!follower.name.toLowerCase().includes(query) &&
+          !follower.email.toLowerCase().includes(query) &&
+          !(follower.phone && follower.phone.toLowerCase().includes(query))) {
+        return false;
+      }
+    }
+
+    // Family filter
+    if (filterFamily) {
+      const familyId = parseInt(filterFamily);
+      if (follower.family_id !== familyId) return false;
+    }
+
+    // Type filter (if implemented in future)
+    // For now, we'll skip this as the API doesn't support it yet
+
     return true;
   });
 
-  const pendingPrayers = allFollowers.flatMap(f => 
-    f.prayerPoints.filter(p => p.status === 'pending').map(p => ({ follower: f, prayer: p }))
+  const pendingPrayers = uniqueFollowers.flatMap(f => 
+    (f.prayerPoints || []).filter(p => p.status === 'pending').map(p => ({ follower: f, prayer: p }))
   );
-  const happenedPrayers = allFollowers.flatMap(f => 
-    f.prayerPoints.filter(p => p.status === 'happened').map(p => ({ follower: f, prayer: p }))
+  const happenedPrayers = uniqueFollowers.flatMap(f => 
+    (f.prayerPoints || []).filter(p => p.status === 'happened').map(p => ({ follower: f, prayer: p }))
   );
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-gray-600 dark:text-gray-400">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -279,21 +471,34 @@ export default function AdminFollowers() {
             >
               Family View
             </Button>
-            <Button size="lg" onClick={() => setShowForm(!showForm)} className="text-xs sm:text-sm">
+            <Button 
+              size="sm" 
+              variant="secondary"
+              onClick={() => setShowFamilyForm(!showFamilyForm)}
+              className="text-xs sm:text-sm"
+            >
+              <Plus className="w-4 h-4 mr-1" />
+              Add Family
+            </Button>
+            <Button size="lg" onClick={() => {
+              setShowForm(!showForm);
+              setEditingFollower(null);
+              setFormData({ name: '', email: '', phone: '', notes: '', familyId: '', familyName: '', type: 'member', status: 'active' });
+            }} className="text-xs sm:text-sm">
               {showForm ? 'Cancel' : '+ Add'}
             </Button>
           </div>
         </div>
       </FadeInUp>
 
-      {/* Stats Cards - Mobile Optimized */}
+      {/* Stats Cards */}
       <FadeInUp delay={0.1}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-4 sm:p-6">
             <div className="flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1 truncate">Total Followers</p>
-                <p className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-white">{allFollowers.length}</p>
+                <p className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-white">{uniqueFollowers.length}</p>
               </div>
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 dark:bg-primary-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
                 <span className="text-xl sm:text-2xl">👥</span>
@@ -305,7 +510,7 @@ export default function AdminFollowers() {
               <div className="flex-1 min-w-0">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1 truncate">Active Members</p>
                 <p className="text-2xl sm:text-3xl font-semibold text-gray-900 dark:text-white">
-                  {allFollowers.filter(f => f.status === 'active').length}
+                  {uniqueFollowers.filter(f => f.status === 'active').length}
                 </p>
               </div>
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0 ml-2">
@@ -338,14 +543,98 @@ export default function AdminFollowers() {
         </div>
       </FadeInUp>
 
-      {/* Add Follower Form - Mobile Optimized */}
+      {/* Search and Filters */}
+      <FadeInUp delay={0.1}>
+        <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm mb-6 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search by name, email, phone..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+              />
+            </div>
+            <div>
+              <select
+                value={filterFamily}
+                onChange={(e) => setFilterFamily(e.target.value)}
+                className="w-full px-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+              >
+                <option value="">All Families</option>
+                {families.map(family => (
+                  <option key={family.id} value={family.id}>{family.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <select
+                value={filterType}
+                onChange={(e) => setFilterType(e.target.value)}
+                className="w-full px-4 py-2 text-sm border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+              >
+                <option value="">All Types</option>
+                <option value="member">Member</option>
+                <option value="visitor">Visitor</option>
+                <option value="new_believer">New Believer</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </FadeInUp>
+
+      {/* Add Family Form Modal */}
+      {showFamilyForm && (
+        <FadeInUp delay={0.1}>
+          <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-lg max-w-md w-full p-6">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                Add New Family
+              </h2>
+              <form onSubmit={handleFamilySubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Family Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={familyFormData.name}
+                    onChange={handleFamilyInputChange}
+                    required
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+                    placeholder="e.g., Smith Family"
+                  />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button 
+                    variant="secondary" 
+                    type="button" 
+                    onClick={() => {
+                      setShowFamilyForm(false);
+                      setFamilyFormData({ name: '' });
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit">Create Family</Button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </FadeInUp>
+      )}
+
+      {/* Add/Edit Follower Form */}
       {showForm && (
         <FadeInUp delay={0.1}>
           <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm mb-6 sm:mb-8 p-4 sm:p-6">
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
-              Add New Follower
+              {editingFollower ? 'Edit Follower' : 'Add New Follower'}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            <form onSubmit={editingFollower ? handleUpdate : handleSubmit} className="space-y-4 sm:space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -392,30 +681,34 @@ export default function AdminFollowers() {
                 </div>
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Status
+                    Type
                   </label>
                   <select
+                    name="type"
+                    value={formData.type}
+                    onChange={handleInputChange}
                     className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
-                    defaultValue="active"
                   >
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
+                    <option value="member">Member</option>
+                    <option value="visitor">Visitor</option>
+                    <option value="new_believer">New Believer</option>
                   </select>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Family Name (Optional)
+                    Status
                   </label>
-                  <input
-                    type="text"
-                    name="familyName"
-                    value={formData.familyName}
+                  <select
+                    name="status"
+                    value={formData.status}
                     onChange={handleInputChange}
                     className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
-                    placeholder="e.g., Smith Family"
-                  />
+                  >
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -436,6 +729,19 @@ export default function AdminFollowers() {
               </div>
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Family Name (Optional - creates new family)
+                </label>
+                <input
+                  type="text"
+                  name="familyName"
+                  value={formData.familyName}
+                  onChange={handleInputChange}
+                  className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white"
+                  placeholder="e.g., Smith Family"
+                />
+              </div>
+              <div>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Notes
                 </label>
                 <textarea
@@ -448,10 +754,21 @@ export default function AdminFollowers() {
                 />
               </div>
               <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
-                <Button variant="secondary" type="button" onClick={() => setShowForm(false)} className="w-full sm:w-auto">
+                <Button 
+                  variant="secondary" 
+                  type="button" 
+                  onClick={() => {
+                    setShowForm(false);
+                    setEditingFollower(null);
+                    setFormData({ name: '', email: '', phone: '', notes: '', familyId: '', familyName: '', type: 'member', status: 'active' });
+                  }} 
+                  className="w-full sm:w-auto"
+                >
                   Cancel
                 </Button>
-                <Button type="submit" className="w-full sm:w-auto">Add Follower</Button>
+                <Button type="submit" className="w-full sm:w-auto">
+                  {editingFollower ? 'Update Follower' : 'Add Follower'}
+                </Button>
               </div>
             </form>
           </div>
@@ -465,7 +782,14 @@ export default function AdminFollowers() {
             <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
               Add Prayer Point for {selectedFollower.name}
             </h2>
-            <form onSubmit={handlePrayerSubmit} className="space-y-4 sm:space-y-6">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              // Prayer point submission would go here - API endpoint needed
+              addToast('success', 'Prayer point added (feature coming soon)');
+              setPrayerFormData({ text: '', date: new Date().toISOString().split('T')[0], notes: '' });
+              setShowPrayerForm(false);
+              setSelectedFollower(null);
+            }} className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Prayer Point *
@@ -508,7 +832,15 @@ export default function AdminFollowers() {
                 />
               </div>
               <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
-                <Button variant="secondary" type="button" onClick={() => { setShowPrayerForm(false); setSelectedFollower(null); }} className="w-full sm:w-auto">
+                <Button 
+                  variant="secondary" 
+                  type="button" 
+                  onClick={() => { 
+                    setShowPrayerForm(false); 
+                    setSelectedFollower(null); 
+                  }} 
+                  className="w-full sm:w-auto"
+                >
                   Cancel
                 </Button>
                 <Button type="submit" className="w-full sm:w-auto">Add Prayer Point</Button>
@@ -518,7 +850,36 @@ export default function AdminFollowers() {
         </FadeInUp>
       )}
 
-      {/* Tabs - Mobile Optimized */}
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm !== null && (
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-lg max-w-md w-full p-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Confirm Delete
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Are you sure you want to delete this follower? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <Button 
+                variant="secondary" 
+                onClick={() => setDeleteConfirm(null)}
+              >
+                Cancel
+              </Button>
+              <Button 
+                variant="secondary"
+                onClick={() => handleDelete(deleteConfirm)}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tabs */}
       <FadeInUp delay={0.1}>
         <div className="border-b border-gray-200 dark:border-gray-800 mb-4 sm:mb-6 overflow-x-auto">
           <nav className="flex space-x-4 sm:space-x-8 min-w-max sm:min-w-0">
@@ -530,7 +891,7 @@ export default function AdminFollowers() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
             >
-              All ({allFollowers.length})
+              All ({uniqueFollowers.length})
             </button>
             <button
               onClick={() => setActiveTab('active')}
@@ -540,7 +901,7 @@ export default function AdminFollowers() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
             >
-              Active ({allFollowers.filter(f => f.status === 'active').length})
+              Active ({uniqueFollowers.filter(f => f.status === 'active').length})
             </button>
             <button
               onClick={() => setActiveTab('inactive')}
@@ -550,7 +911,7 @@ export default function AdminFollowers() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
               }`}
             >
-              Inactive ({allFollowers.filter(f => f.status === 'inactive').length})
+              Inactive ({uniqueFollowers.filter(f => f.status === 'inactive').length})
             </button>
           </nav>
         </div>
@@ -560,89 +921,93 @@ export default function AdminFollowers() {
       {viewMode === 'families' && (
         <FadeInUp delay={0.2}>
           <div className="space-y-4 sm:space-y-6">
-            {families.map((family) => (
-              <div key={family.id} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-                <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-gray-800 bg-primary-50 dark:bg-primary-900/20">
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
-                    {family.name} ({family.members.length} {family.members.length === 1 ? 'member' : 'members'})
-                  </h3>
-                </div>
-                <div className="divide-y divide-gray-200 dark:divide-gray-800">
-                  {family.members.map((member) => (
-                    <div key={member.id} className="p-4 sm:p-6">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm sm:text-base">{member.name}</h4>
-                          <div className="space-y-1 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                            <p>{member.email}</p>
-                            {member.phone && <p>{member.phone}</p>}
-                            {member.notes && <p className="italic">{member.notes}</p>}
-                          </div>
-                          
-                          {/* Prayer Points */}
-                          {member.prayerPoints.length > 0 && (
-                            <div className="mt-4 space-y-2">
-                              <p className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Prayer Points:</p>
-                              {member.prayerPoints.map((prayer) => (
-                                <div key={prayer.id} className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 text-xs sm:text-sm">
-                                  <p className="text-gray-900 dark:text-white mb-2">{prayer.text}</p>
-                                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                                      prayer.status === 'happened' 
-                                        ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
-                                        : prayer.status === 'not-happened'
-                                        ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
-                                        : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
-                                    }`}>
-                                      {prayer.status === 'happened' ? '✓ Happened' : prayer.status === 'not-happened' ? '✗ Not Happened' : 'Pending'}
-                                    </span>
-                                    <span className="text-gray-500 dark:text-gray-500">{new Date(prayer.date).toLocaleDateString()}</span>
-                                  </div>
-                                  <div className="flex flex-wrap gap-2">
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      onClick={() => updatePrayerStatus(member.id, prayer.id, 'happened')}
-                                      className="text-xs h-7 px-2 text-green-600 hover:text-green-700 dark:text-green-400"
-                                    >
-                                      ✓ Happened
-                                    </Button>
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      onClick={() => updatePrayerStatus(member.id, prayer.id, 'not-happened')}
-                                      className="text-xs h-7 px-2 text-red-600 hover:text-red-700 dark:text-red-400"
-                                    >
-                                      ✗ Not Happened
-                                    </Button>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => { setSelectedFollower(member); setShowPrayerForm(true); }}
-                            className="text-xs sm:text-sm dark:text-gray-400 dark:hover:text-white"
-                          >
-                            + Prayer
-                          </Button>
-                          <Button size="sm" variant="ghost" className="text-xs sm:text-sm dark:text-gray-400 dark:hover:text-white">
-                            Edit
-                          </Button>
-                          <Button size="sm" variant="ghost" className="text-xs sm:text-sm text-red-600 hover:text-red-700 dark:text-red-400">
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {families.length === 0 ? (
+              <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-12 text-center">
+                <p className="text-gray-500 dark:text-gray-400">No families found. Create one to get started.</p>
               </div>
-            ))}
+            ) : (
+              families.map((family) => (
+                <div key={family.id} className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
+                  <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 dark:border-gray-800 bg-primary-50 dark:bg-primary-900/20">
+                    <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+                      {family.name} ({family.members.length} {family.members.length === 1 ? 'member' : 'members'})
+                    </h3>
+                  </div>
+                  <div className="divide-y divide-gray-200 dark:divide-gray-800">
+                    {family.members.length === 0 ? (
+                      <div className="p-6 text-center text-gray-500 dark:text-gray-400">
+                        No members in this family
+                      </div>
+                    ) : (
+                      family.members.map((member) => (
+                        <div key={member.id} className="p-4 sm:p-6">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm sm:text-base">{member.name}</h4>
+                              <div className="space-y-1 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                                <p>{member.email}</p>
+                                {member.phone && <p>{member.phone}</p>}
+                                {member.notes && <p className="italic">{member.notes}</p>}
+                              </div>
+                              
+                              {/* Prayer Points */}
+                              {(member.prayerPoints && member.prayerPoints.length > 0) && (
+                                <div className="mt-4 space-y-2">
+                                  <p className="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">Prayer Points:</p>
+                                  {member.prayerPoints.map((prayer) => (
+                                    <div key={prayer.id} className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 text-xs sm:text-sm">
+                                      <p className="text-gray-900 dark:text-white mb-2">{prayer.text}</p>
+                                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                                        <span className={`px-2 py-1 rounded text-xs font-medium ${
+                                          prayer.status === 'happened' 
+                                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+                                            : prayer.status === 'not-happened'
+                                            ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+                                            : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                        }`}>
+                                          {prayer.status === 'happened' ? '✓ Happened' : prayer.status === 'not-happened' ? '✗ Not Happened' : 'Pending'}
+                                        </span>
+                                        <span className="text-gray-500 dark:text-gray-500">{new Date(prayer.date).toLocaleDateString()}</span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => { setSelectedFollower(member); setShowPrayerForm(true); }}
+                                className="text-xs sm:text-sm dark:text-gray-400 dark:hover:text-white"
+                              >
+                                + Prayer
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                onClick={() => handleEditClick(member)}
+                                className="text-xs sm:text-sm dark:text-gray-400 dark:hover:text-white"
+                              >
+                                Edit
+                              </Button>
+                              <Button 
+                                size="sm" 
+                                variant="ghost" 
+                                onClick={() => setDeleteConfirm(member.id)}
+                                className="text-xs sm:text-sm text-red-600 hover:text-red-700 dark:text-red-400"
+                              >
+                                Delete
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </FadeInUp>
       )}
@@ -697,17 +1062,17 @@ export default function AdminFollowers() {
                         </td>
                         <td className="py-4 px-6">
                           <span className="text-sm text-gray-600 dark:text-gray-400">
-                            {follower.familyName || 'Individual'}
+                            {follower.family_name || 'Individual'}
                           </span>
                         </td>
                         <td className="py-4 px-6">
                           <div className="flex items-center gap-2">
                             <span className="text-sm text-gray-600 dark:text-gray-400">
-                              {follower.prayerPoints.length} {follower.prayerPoints.length === 1 ? 'prayer' : 'prayers'}
+                              {follower.prayer_count || (follower.prayerPoints?.length || 0)} {((follower.prayer_count || follower.prayerPoints?.length || 0) === 1) ? 'prayer' : 'prayers'}
                             </span>
-                            {follower.prayerPoints.filter(p => p.status === 'pending').length > 0 && (
+                            {(follower.pending_prayers || (follower.prayerPoints?.filter(p => p.status === 'pending').length || 0)) > 0 && (
                               <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded text-xs">
-                                {follower.prayerPoints.filter(p => p.status === 'pending').length} pending
+                                {follower.pending_prayers || follower.prayerPoints?.filter(p => p.status === 'pending').length || 0} pending
                               </span>
                             )}
                           </div>
@@ -731,10 +1096,20 @@ export default function AdminFollowers() {
                             >
                               + Prayer
                             </Button>
-                            <Button variant="ghost" size="sm" className="dark:text-gray-400 dark:hover:text-white">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => handleEditClick(follower)}
+                              className="dark:text-gray-400 dark:hover:text-white"
+                            >
                               Edit
                             </Button>
-                            <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700 dark:text-red-400">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => setDeleteConfirm(follower.id)}
+                              className="text-red-600 hover:text-red-700 dark:text-red-400"
+                            >
                               Delete
                             </Button>
                           </div>
@@ -772,12 +1147,12 @@ export default function AdminFollowers() {
                       </span>
                     </div>
                     
-                    {follower.familyName && (
-                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Family: {follower.familyName}</p>
+                    {follower.family_name && (
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">Family: {follower.family_name}</p>
                     )}
 
                     {/* Prayer Points - Mobile */}
-                    {follower.prayerPoints.length > 0 && (
+                    {(follower.prayerPoints && follower.prayerPoints.length > 0) && (
                       <div className="mb-3 space-y-2">
                         <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
                           Prayer Points ({follower.prayerPoints.length}):
@@ -818,10 +1193,20 @@ export default function AdminFollowers() {
                       >
                         + Prayer
                       </Button>
-                      <Button size="sm" variant="ghost" className="text-xs h-7 px-2 dark:text-gray-400 dark:hover:text-white">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => handleEditClick(follower)}
+                        className="text-xs h-7 px-2 dark:text-gray-400 dark:hover:text-white"
+                      >
                         Edit
                       </Button>
-                      <Button size="sm" variant="ghost" className="text-xs h-7 px-2 text-red-600 hover:text-red-700 dark:text-red-400">
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => setDeleteConfirm(follower.id)}
+                        className="text-xs h-7 px-2 text-red-600 hover:text-red-700 dark:text-red-400"
+                      >
                         Delete
                       </Button>
                     </div>
@@ -851,24 +1236,6 @@ export default function AdminFollowers() {
                       <div key={prayer.id} className="bg-white dark:bg-gray-900 rounded p-3 text-xs sm:text-sm">
                         <p className="font-medium text-gray-900 dark:text-white mb-1">{follower.name}</p>
                         <p className="text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{prayer.text}</p>
-                        <div className="flex gap-2">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => updatePrayerStatus(follower.id, prayer.id, 'happened')}
-                            className="text-xs h-6 px-2 text-green-600 hover:text-green-700 dark:text-green-400"
-                          >
-                            ✓ Happened
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => updatePrayerStatus(follower.id, prayer.id, 'not-happened')}
-                            className="text-xs h-6 px-2 text-red-600 hover:text-red-700 dark:text-red-400"
-                          >
-                            ✗ Not Happened
-                          </Button>
-                        </div>
                       </div>
                     ))
                   )}
@@ -900,7 +1267,7 @@ export default function AdminFollowers() {
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Total Prayers:</span>
                     <span className="font-semibold text-gray-900 dark:text-white">
-                      {allFollowers.reduce((acc, f) => acc + f.prayerPoints.length, 0)}
+                      {uniqueFollowers.reduce((acc, f) => acc + (f.prayerPoints?.length || 0), 0)}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -914,15 +1281,15 @@ export default function AdminFollowers() {
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Not Happened:</span>
                     <span className="font-semibold text-red-600 dark:text-red-400">
-                      {allFollowers.reduce((acc, f) => acc + f.prayerPoints.filter(p => p.status === 'not-happened').length, 0)}
+                      {uniqueFollowers.reduce((acc, f) => acc + (f.prayerPoints?.filter(p => p.status === 'not-happened').length || 0), 0)}
                     </span>
                   </div>
                   <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
                     <div className="flex justify-between">
                       <span className="text-gray-600 dark:text-gray-400">Answer Rate:</span>
                       <span className="font-semibold text-primary-600 dark:text-primary-400">
-                        {allFollowers.reduce((acc, f) => acc + f.prayerPoints.length, 0) > 0
-                          ? Math.round((happenedPrayers.length / allFollowers.reduce((acc, f) => acc + f.prayerPoints.length, 0)) * 100)
+                        {uniqueFollowers.reduce((acc, f) => acc + (f.prayerPoints?.length || 0), 0) > 0
+                          ? Math.round((happenedPrayers.length / uniqueFollowers.reduce((acc, f) => acc + (f.prayerPoints?.length || 0), 0)) * 100)
                           : 0}%
                       </span>
                     </div>
@@ -933,6 +1300,9 @@ export default function AdminFollowers() {
           </div>
         </div>
       </FadeInUp>
+
+      {/* Toast Container */}
+      <ToastContainer toasts={toasts} onDismiss={dismiss} />
     </div>
   );
 }

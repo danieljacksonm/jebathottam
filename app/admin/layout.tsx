@@ -221,7 +221,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Chat Widget */}
-      <ChatWidget isAdmin={true} />
+      <ChatWidget />
     </div>
   );
 }
