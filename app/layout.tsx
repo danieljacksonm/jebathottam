@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Jebathottam Ministry - Preserving God's Word",
+  title: "Jebathottam Ministry - Preserving God's Word for Generations",
   description: "A trusted platform for preserving prophecies, revelations, and teachings for future generations",
 };
 
