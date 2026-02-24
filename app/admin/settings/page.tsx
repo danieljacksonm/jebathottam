@@ -110,9 +110,15 @@ const DEFAULTS: Record<string, string> = {
   mission_description: missionVision.mission.description,
   vision_title: missionVision.vision.title,
   vision_description: missionVision.vision.description,
+  logo_url: 'https://jesusisthewayjebathottam.com/images/logo.png',
+  primary_color: '#4f46e5',
+  dial_in_india: '+91 22 4970 4059',
+  dial_in_us: '+1 (605) 475-4000',
+  dial_in_uk: '+44 330 001 0116',
+  dial_in_pin: '',
 };
 
-type SectionKey = 'general' | 'about' | 'mission';
+type SectionKey = 'general' | 'about' | 'mission' | 'brand' | 'dialin';
 
 const SECTION_KEYS: Record<SectionKey, string[]> = {
   general: [
@@ -126,6 +132,8 @@ const SECTION_KEYS: Record<SectionKey, string[]> = {
   ],
   about: ['about_heading', 'about_text', 'about_text_secondary'],
   mission: ['mission_title', 'mission_description', 'vision_title', 'vision_description'],
+  brand: ['logo_url', 'primary_color'],
+  dialin: ['dial_in_india', 'dial_in_us', 'dial_in_uk', 'dial_in_pin'],
 };
 
 const inputClass =
@@ -451,6 +459,86 @@ export default function AdminSettings() {
                   ) : (
                     'Save Changes'
                   )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </FadeInUp>
+
+        {/* Logo & Brand Colors */}
+        <FadeInUp delay={0.17}>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Logo &amp; Brand</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Logo from your site. Primary color (hex) matches site accents.</p>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <FieldLabel htmlFor="logo_url">Logo URL</FieldLabel>
+                <input
+                  id="logo_url"
+                  type="url"
+                  placeholder="https://jesusisthewayjebathottam.com/images/logo.png"
+                  className={inputClass}
+                  value={settings.logo_url ?? ''}
+                  onChange={(e) => handleChange('logo_url', e.target.value)}
+                />
+              </div>
+              <div>
+                <FieldLabel htmlFor="primary_color">Primary Color (hex, e.g. #4f46e5)</FieldLabel>
+                <div className="flex gap-2">
+                  <input
+                    id="primary_color"
+                    type="text"
+                    placeholder="#4f46e5"
+                    className={inputClass}
+                    value={settings.primary_color ?? ''}
+                    onChange={(e) => handleChange('primary_color', e.target.value)}
+                  />
+                  <input
+                    type="color"
+                    className="w-12 h-10 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                    value={settings.primary_color?.startsWith('#') ? settings.primary_color : '#4f46e5'}
+                    onChange={(e) => handleChange('primary_color', e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button disabled={savingSection === 'brand'} onClick={() => saveSection('brand', 'Logo & Brand')}>
+                  {savingSection === 'brand' ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Saving…</> : 'Save Changes'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </FadeInUp>
+
+        {/* Dial-in Numbers (Your Own) */}
+        <FadeInUp delay={0.18}>
+          <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Dial-in Numbers</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Your own numbers (from Twilio, etc.). Shown in conference page.</p>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <FieldLabel htmlFor="dial_in_india">India</FieldLabel>
+                <input id="dial_in_india" type="tel" placeholder="+91 22 4970 4059" className={inputClass} value={settings.dial_in_india ?? ''} onChange={(e) => handleChange('dial_in_india', e.target.value)} />
+              </div>
+              <div>
+                <FieldLabel htmlFor="dial_in_us">United States</FieldLabel>
+                <input id="dial_in_us" type="tel" placeholder="+1 (605) 475-4000" className={inputClass} value={settings.dial_in_us ?? ''} onChange={(e) => handleChange('dial_in_us', e.target.value)} />
+              </div>
+              <div>
+                <FieldLabel htmlFor="dial_in_uk">United Kingdom</FieldLabel>
+                <input id="dial_in_uk" type="tel" placeholder="+44 330 001 0116" className={inputClass} value={settings.dial_in_uk ?? ''} onChange={(e) => handleChange('dial_in_uk', e.target.value)} />
+              </div>
+              <div>
+                <FieldLabel htmlFor="dial_in_pin">Meeting PIN (optional)</FieldLabel>
+                <input id="dial_in_pin" type="text" placeholder="123456" className={inputClass} value={settings.dial_in_pin ?? ''} onChange={(e) => handleChange('dial_in_pin', e.target.value)} />
+              </div>
+              <div className="flex justify-end pt-2">
+                <Button disabled={savingSection === 'dialin'} onClick={() => saveSection('dialin', 'Dial-in numbers')}>
+                  {savingSection === 'dialin' ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Saving…</> : 'Save Changes'}
                 </Button>
               </div>
             </div>

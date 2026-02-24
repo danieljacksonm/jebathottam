@@ -8,6 +8,12 @@ const nextConfig: NextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || '/api',
   },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'jesusisthewayjebathottam.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'images.unsplash.com', pathname: '/**' },
+    ],
+  },
 };
 
 export default nextConfig;

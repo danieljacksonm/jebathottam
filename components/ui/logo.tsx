@@ -1,4 +1,8 @@
+'use client';
+
 import Link from 'next/link';
+import Image from 'next/image';
+import { usePublicSettings } from '@/lib/public-settings';
 
 interface LogoProps {
   variant?: 'default' | 'compact' | 'admin';
@@ -6,14 +10,21 @@ interface LogoProps {
 }
 
 export function Logo({ variant = 'default', className = '' }: LogoProps) {
+  const { logo_url } = usePublicSettings();
+  const useImage = logo_url?.trim().length > 0;
+
   if (variant === 'compact') {
     return (
       <Link href="/" className={`flex items-center space-x-2 ${className}`}>
-        <div className="relative">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded flex items-center justify-center">
-            <div className="w-3 h-3 border-2 border-white border-t-0 border-b-0 rounded-sm"></div>
+        {useImage ? (
+          <Image src={logo_url} alt="Logo" width={32} height={32} className="h-8 w-auto object-contain" unoptimized />
+        ) : (
+          <div className="relative">
+            <div className="w-8 h-8 bg-gradient-to-br from-primary-600 to-primary-800 rounded flex items-center justify-center">
+              <div className="w-3 h-3 border-2 border-white border-t-0 border-b-0 rounded-sm"></div>
+            </div>
           </div>
-        </div>
+        )}
         <span className="text-xl font-serif font-bold text-gray-900 dark:text-white">JITW</span>
       </Link>
     );
@@ -22,11 +33,15 @@ export function Logo({ variant = 'default', className = '' }: LogoProps) {
   if (variant === 'admin') {
     return (
       <div className={`flex items-center space-x-3 ${className}`}>
-        <div className="relative">
-          <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center shadow-lg">
-            <div className="w-4 h-4 border-2 border-white border-t-0 border-b-0 rounded-sm"></div>
+        {useImage ? (
+          <Image src={logo_url} alt="Logo" width={40} height={40} className="h-10 w-auto object-contain" unoptimized />
+        ) : (
+          <div className="relative">
+            <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center shadow-lg">
+              <div className="w-4 h-4 border-2 border-white border-t-0 border-b-0 rounded-sm"></div>
+            </div>
           </div>
-        </div>
+        )}
         <div className="flex flex-col">
           <span className="text-sm font-serif font-bold text-gray-900 dark:text-white leading-tight">Jesus Is</span>
           <span className="text-xs font-serif text-gray-500 dark:text-gray-400 leading-tight">The Way</span>
@@ -37,12 +52,16 @@ export function Logo({ variant = 'default', className = '' }: LogoProps) {
 
   return (
     <Link href="/" className={`flex items-center space-x-3 ${className}`}>
-      <div className="relative">
-        <div className="w-12 h-12 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-lg flex items-center justify-center shadow-lg">
-          <div className="w-5 h-5 border-2 border-white border-t-0 border-b-0 rounded-sm"></div>
+      {useImage ? (
+        <Image src={logo_url} alt="Jesus Is The Way Jebathottam" width={48} height={48} className="h-12 w-auto object-contain" unoptimized />
+      ) : (
+        <div className="relative">
+          <div className="w-12 h-12 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 rounded-lg flex items-center justify-center shadow-lg">
+            <div className="w-5 h-5 border-2 border-white border-t-0 border-b-0 rounded-sm"></div>
+          </div>
+          <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full border-2 border-white"></div>
         </div>
-        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full border-2 border-white"></div>
-      </div>
+      )}
       <div className="flex flex-col">
         <span className="text-xl md:text-2xl font-serif font-bold text-gray-900 dark:text-white leading-tight">
           Jesus Is The Way

@@ -7,6 +7,8 @@ const PUBLIC_KEYS = [
   'ministry_email', 'ministry_phone', 'ministry_address',
   'about_heading', 'about_text', 'about_text_secondary',
   'mission_title', 'mission_description', 'vision_title', 'vision_description',
+  'logo_url', 'primary_color',
+  'dial_in_india', 'dial_in_us', 'dial_in_uk', 'dial_in_pin',
 ];
 
 // GET settings - public keys are available without auth, all keys require admin

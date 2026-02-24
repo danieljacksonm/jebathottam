@@ -173,11 +173,22 @@ type MediaItem = { id: number; title: string; type: string; image_url?: string; 
    HOME PAGE
    ═══════════════════════════════════════════════════════════════════════════ */
 
+type HeroVariant = 'slider' | 'blog' | 'team' | 'about';
+const HERO_VARIANTS: HeroVariant[] = ['slider', 'blog', 'team', 'about'];
+
+type TeamMember = { id: number; name: string; role: string; bio?: string; image_url?: string | null };
+type BlogPost = { id: number; title: string; excerpt?: string; content?: string; image?: string; image_url?: string; category?: string; featured?: boolean };
+function getBlogImage(post: BlogPost | { image?: string; image_url?: string }): string {
+  return (post as { image?: string; image_url?: string }).image || (post as { image?: string; image_url?: string }).image_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop';
+}
+
 export default function Home() {
   const [sliderImages, setSliderImages] = useState<SliderImage[]>([]);
   const [homeTestimonies, setHomeTestimonies] = useState<Array<{ id: number; name: string; content: string; image_url: string | null; created_at: string }>>([]);
   const [mediaItems, setMediaItems] = useState<MediaItem[]>(fallbackMedia as unknown as MediaItem[]);
   const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [apiBlogs, setApiBlogs] = useState<BlogPost[]>([]);
 
   const [sectionOrder, setSectionOrder] = useState(SHUFFLABLE_KEYS);
   const [currentHour, setCurrentHour] = useState(0);
@@ -223,6 +234,22 @@ export default function Home() {
       .then((data) => {
         const list = Array.isArray(data?.data) ? data.data : [];
         if (list.length > 0) setMediaItems(list);
+      })
+      .catch(() => {});
+
+    fetch('/api/team')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) setTeamMembers(list.slice(0, 6));
+      })
+      .catch(() => {});
+
+    fetch('/api/blogs?published=true')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) setApiBlogs(list);
       })
       .catch(() => {});
   }, []);
@@ -276,8 +303,11 @@ export default function Home() {
     },
   };
 
-  const featuredBlog = blogPosts.find(post => post.featured) || blogPosts[0];
-  const regularBlogs = blogPosts.filter(post => !post.featured).slice(0, 3);
+  const blogSource = apiBlogs.length > 0 ? apiBlogs : blogPosts;
+  const featuredBlog = blogSource.find((post: BlogPost) => post.featured) || blogSource[0];
+  const regularBlogs = blogSource.filter((post: BlogPost) => !post.featured).slice(0, 3);
+
+  const heroVariant = HERO_VARIANTS[currentHour % HERO_VARIANTS.length];
 
   /* ════════════════════════════════════════════════════════════════════════
      SECTION RENDERERS  (keyed by shufflable id)
@@ -312,7 +342,7 @@ export default function Home() {
               >
                 <div className="grid md:grid-cols-2 gap-0">
                   <AnimatedImage
-                    src={featuredBlog.image}
+                    src={getBlogImage(featuredBlog)}
                     alt={featuredBlog.title}
                     className="relative aspect-[4/3] md:aspect-auto md:min-h-[380px]"
                   />
@@ -320,13 +350,13 @@ export default function Home() {
                     <div className="flex items-center gap-3 text-sm text-gray-400 dark:text-gray-500 mb-4">
                       <span className="font-semibold text-primary-600 dark:text-primary-400 text-xs uppercase tracking-wider">{featuredBlog.category}</span>
                       <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />
-                      <span className="text-xs">{calculateReadingTime(featuredBlog.content)} min read</span>
+                      <span className="text-xs">{calculateReadingTime(featuredBlog.content || featuredBlog.excerpt || '')} min read</span>
                     </div>
                     <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-gray-900 dark:text-white mb-4 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 leading-tight tracking-tight">
                       {featuredBlog.title}
                     </h3>
                     <p className="text-gray-500 dark:text-gray-400 mb-8 line-clamp-3 leading-relaxed">
-                      {featuredBlog.excerpt}
+                      {featuredBlog.excerpt || (featuredBlog as { content?: string }).content?.replace(/<[^>]*>/g, '').slice(0, 200) || ''}
                     </p>
                     <span className="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium text-sm group-hover:gap-3 transition-all duration-300">
                       Continue reading
@@ -349,12 +379,12 @@ export default function Home() {
                       className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm transition-all duration-500 border border-gray-100 dark:border-gray-800 h-full flex flex-col"
                     >
                       <div className="aspect-[16/10] overflow-hidden">
-                        <img src={post.image} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                        <img src={getBlogImage(post)} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
                       </div>
                       <div className="p-6 lg:p-7 flex-1 flex flex-col">
                         <span className="text-[10px] sm:text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-[0.15em]">{post.category}</span>
                         <h3 className="text-lg lg:text-xl font-serif font-bold text-gray-900 dark:text-white mt-2.5 mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300 line-clamp-2 leading-snug">{post.title}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5 flex-1 line-clamp-2 leading-relaxed">{post.excerpt}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5 flex-1 line-clamp-2 leading-relaxed">{post.excerpt || (post as { content?: string }).content?.replace(/<[^>]*>/g, '').slice(0, 150) || ''}</p>
                         <span className="inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 dark:text-primary-400 group-hover:gap-2.5 transition-all duration-300">
                           Read more
                           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
@@ -758,57 +788,201 @@ export default function Home() {
     <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col antialiased">
       <Navigation />
 
-      {/* ── HERO (always first) ────────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <EnhancedImageSlider images={sliderImages} />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-10" />
+      {/* ── HERO (rotates: slider, blog, team, about) ───────────────────── */}
+      {heroVariant === 'slider' && (
+        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+          <EnhancedImageSlider images={sliderImages} />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-10" />
+          <div className="absolute inset-0 z-20 container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+            <div className="text-center text-white max-w-3xl">
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }}>
+                <span className="inline-block text-[11px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-white/70 border border-white/20 rounded-full px-5 py-2 mb-6 backdrop-blur-sm bg-white/5">
+                  {info.subtitle}
+                </span>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold mb-5 leading-[1.05] tracking-tight">
+                  {info.name}
+                </h1>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}>
+                <p className="text-base sm:text-lg md:text-xl text-white/85 mb-5 max-w-xl mx-auto leading-relaxed font-light">
+                  {info.tagline}
+                </p>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}>
+                <div className="w-12 h-px bg-white/30 mx-auto mb-5" />
+                <p className="text-sm sm:text-base font-serif italic text-white/60 mb-10 max-w-lg mx-auto">
+                  &ldquo;{info.scripture}&rdquo;
+                </p>
+              </motion.div>
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}>
+                <div className="flex flex-wrap justify-center gap-4">
+                  <Link href="/#blog">
+                    <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 shadow-lg rounded-full px-8 font-medium text-sm tracking-wide">
+                      Read &amp; reflect
+                    </Button>
+                  </Link>
+                  <Link href="/audio-conference/join">
+                    <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 rounded-full px-8 font-medium text-sm tracking-wide backdrop-blur-sm">
+                      Join a call
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-gray-950 to-transparent z-20 pointer-events-none" />
+        </section>
+      )}
 
-        <div className="absolute inset-0 z-20 container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-          <div className="text-center text-white max-w-3xl">
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'easeOut' }}>
-              <span className="inline-block text-[11px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-white/70 border border-white/20 rounded-full px-5 py-2 mb-6 backdrop-blur-sm bg-white/5">
-                {info.subtitle}
-              </span>
-            </motion.div>
+      {heroVariant === 'blog' && featuredBlog && (
+        <section className="relative min-h-[85vh] flex items-center overflow-hidden bg-gray-900">
+          <div className="absolute inset-0">
+            <img
+              src={getBlogImage(featuredBlog)}
+              alt={featuredBlog.title}
+              className="w-full h-full object-cover opacity-70"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/80 to-transparent" />
+          </div>
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="max-w-2xl">
+              <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
+                <span className="text-xs font-semibold text-primary-400 uppercase tracking-widest">
+                  {featuredBlog.category || 'Featured'}
+                </span>
+              </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mt-4 mb-6 leading-tight"
+              >
+                {featuredBlog.title}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-lg text-white/85 mb-8 line-clamp-3"
+              >
+                {featuredBlog.excerpt || (featuredBlog as { content?: string }).content?.replace(/<[^>]*>/g, '').slice(0, 200) || ''}
+              </motion.p>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.4 }}>
+                <Link href={`/blog/${featuredBlog.id}`}>
+                  <Button size="lg" className="bg-primary-600 hover:bg-primary-700 text-white rounded-full px-8">
+                    Read article
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-gray-950 to-transparent z-10 pointer-events-none" />
+        </section>
+      )}
 
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-serif font-bold mb-5 leading-[1.05] tracking-tight">
+      {heroVariant === 'team' && (
+        <section className="relative min-h-[85vh] py-16 bg-gradient-to-br from-primary-900 via-primary-800 to-gray-900 overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-20 left-10 w-72 h-72 rounded-full bg-white blur-3xl" />
+            <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full bg-primary-400 blur-3xl" />
+          </div>
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mb-12"
+            >
+              <span className="text-xs font-semibold text-primary-300 uppercase tracking-[0.2em]">Meet our leaders</span>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white mt-3 mb-4">
                 {info.name}
               </h1>
+              <p className="text-lg text-white/80 max-w-xl mx-auto">{info.tagline}</p>
             </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}>
-              <p className="text-base sm:text-lg md:text-xl text-white/85 mb-5 max-w-xl mx-auto leading-relaxed font-light">
-                {info.tagline}
-              </p>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3, ease: 'easeOut' }}>
-              <div className="w-12 h-px bg-white/30 mx-auto mb-5" />
-              <p className="text-sm sm:text-base font-serif italic text-white/60 mb-10 max-w-lg mx-auto">
-                &ldquo;{info.scripture}&rdquo;
-              </p>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link href="/#blog">
-                  <Button size="lg" className="bg-white text-gray-900 hover:bg-gray-100 shadow-lg rounded-full px-8 font-medium text-sm tracking-wide">
-                    Read &amp; reflect
-                  </Button>
-                </Link>
-                <Link href="/audio-conference/join">
-                  <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 rounded-full px-8 font-medium text-sm tracking-wide backdrop-blur-sm">
-                    Join a call
-                  </Button>
-                </Link>
+            <InViewStagger>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 sm:gap-6 max-w-6xl mx-auto">
+                {(teamMembers.length > 0 ? teamMembers : [
+                  { id: 1, name: 'Pastor John', role: 'Senior Pastor', image_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop' },
+                  { id: 2, name: 'Pastor Sarah', role: 'Associate Pastor', image_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop' },
+                  { id: 3, name: 'Michael', role: 'Worship', image_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop' },
+                  { id: 4, name: 'Emily', role: 'Youth', image_url: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop' },
+                  { id: 5, name: 'David', role: 'Admin', image_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop' },
+                  { id: 6, name: 'Lisa', role: 'Prayer', image_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop' },
+                ]).slice(0, 6).map((member: TeamMember, i: number) => (
+                  <InViewStaggerItem key={member.id}>
+                    <Link href="/team" className="block group">
+                      <motion.div
+                        whileHover={{ y: -8, scale: 1.02 }}
+                        className="text-center"
+                      >
+                        <div className="aspect-square rounded-2xl overflow-hidden ring-2 ring-white/20 group-hover:ring-primary-400 transition-all mb-3">
+                          <img
+                            src={member.image_url || `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop`}
+                            alt={member.name}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
+                        <h3 className="font-semibold text-white text-sm truncate">{member.name}</h3>
+                        <p className="text-xs text-primary-200 truncate">{member.role}</p>
+                      </motion.div>
+                    </Link>
+                  </InViewStaggerItem>
+                ))}
               </div>
+            </InViewStagger>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center mt-10">
+              <Link href="/team">
+                <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 rounded-full px-8">
+                  Meet the full team
+                </Button>
+              </Link>
             </motion.div>
           </div>
-        </div>
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-gray-950 to-transparent z-10 pointer-events-none" />
+        </section>
+      )}
 
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-gray-950 to-transparent z-20 pointer-events-none" />
-      </section>
+      {heroVariant === 'about' && (
+        <section className="relative min-h-[85vh] flex items-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-primary-950 to-gray-900" />
+          <div className="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1920&h=1080&fit=crop"
+              alt="Ministry"
+              className="w-full h-full object-cover opacity-30"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-gray-950/50" />
+          </div>
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="max-w-4xl mx-auto text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <span className="text-xs font-semibold text-primary-400 uppercase tracking-[0.2em]">Who we are</span>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-bold text-white mt-4 mb-6 leading-tight">
+                  {about.heading}
+                </h1>
+                <div className="w-16 h-1 bg-primary-500 mx-auto mb-8" />
+                <p className="text-xl sm:text-2xl text-white/90 leading-relaxed max-w-2xl mx-auto mb-6">
+                  {about.text}
+                </p>
+                <p className="text-lg text-white/70 italic max-w-xl mx-auto mb-10">
+                  &ldquo;{info.scripture}&rdquo;
+                </p>
+                <Link href="/about">
+                  <Button size="lg" className="bg-primary-600 hover:bg-primary-700 text-white rounded-full px-8">
+                    Our story
+                  </Button>
+                </Link>
+              </motion.div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-gray-950 to-transparent z-10 pointer-events-none" />
+        </section>
+      )}
 
       {/* ── SHUFFLED MIDDLE SECTIONS ───────────────────────────────────── */}
       <div>

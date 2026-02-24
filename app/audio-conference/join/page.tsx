@@ -55,16 +55,35 @@ function JoinConferenceContent() {
   const fetchDialInNumbers = useCallback(async (room: string) => {
     setLoadingDialIn(true);
     try {
-      await new Promise(r => setTimeout(r, 300));
+      const res = await fetch('/api/settings?scope=public');
+      const data = res.ok ? await res.json() : { data: {} };
+      const s = data?.data || {};
+      const pin = (s.dial_in_pin || '').trim() || room.replace(ROOM_PREFIX, '').slice(-6) || meetingId;
+      setDialInPin(pin);
+      const nums: DialInNumber[] = [];
+      if ((s.dial_in_india || '').trim()) {
+        nums.push({ country: 'India', countryCode: 'IN', number: s.dial_in_india.trim(), formattedNumber: s.dial_in_india.trim() });
+      }
+      if ((s.dial_in_us || '').trim()) {
+        nums.push({ country: 'United States', countryCode: 'US', number: s.dial_in_us.trim(), formattedNumber: s.dial_in_us.trim() });
+      }
+      if ((s.dial_in_uk || '').trim()) {
+        nums.push({ country: 'United Kingdom', countryCode: 'GB', number: s.dial_in_uk.trim(), formattedNumber: s.dial_in_uk.trim() });
+      }
+      if (nums.length > 0) {
+        setDialInNumbers(nums);
+      } else {
+        setDialInNumbers([
+          { country: 'India', countryCode: 'IN', number: '+91 22 4970 4059', formattedNumber: '+91 22 4970 4059' },
+          { country: 'United States', countryCode: 'US', number: '+1 (605) 475-4000', formattedNumber: '+1 (605) 475-4000' },
+          { country: 'United Kingdom', countryCode: 'GB', number: '+44 330 001 0116', formattedNumber: '+44 330 001 0116' },
+        ]);
+      }
+    } catch {
       setDialInNumbers([
         { country: 'India', countryCode: 'IN', number: '+91 22 4970 4059', formattedNumber: '+91 22 4970 4059' },
         { country: 'United States', countryCode: 'US', number: '+1 (605) 475-4000', formattedNumber: '+1 (605) 475-4000' },
         { country: 'United Kingdom', countryCode: 'GB', number: '+44 330 001 0116', formattedNumber: '+44 330 001 0116' },
-      ]);
-      setDialInPin(room.replace(ROOM_PREFIX, '').slice(-6) || meetingId);
-    } catch {
-      setDialInNumbers([
-        { country: 'India', countryCode: 'IN', number: '+91 22 4970 4059', formattedNumber: '+91 22 4970 4059' },
       ]);
     } finally {
       setLoadingDialIn(false);
