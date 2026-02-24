@@ -1,5 +1,6 @@
 # Deploy to VPS when you push to main (like Vercel auto-deploy).
 # Requires GitHub repo secrets: VPS_HOST, VPS_USER, SSH_PRIVATE_KEY, VPS_DEPLOY_PATH.
+# VPS_DEPLOY_PATH should be the project folder, e.g. /home/dani/ministry-platform
 
 name: Deploy to VPS
 

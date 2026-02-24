@@ -6,14 +6,7 @@ import { Button } from '@/components/ui/button';
 import { EnhancedImageSlider } from '@/components/ui/enhanced-image-slider';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
-import {
-  motion,
-  AnimatePresence,
-  useInView,
-  useScroll,
-  useTransform,
-  LayoutGroup,
-} from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ministryInfo as defaultInfo, blogPosts, events, missionVision as defaultMV } from '@/data/demo-content';
 import { galleryImages } from '@/data/gallery-content';
 import { AudioPlayer } from '@/components/audio/audio-player';
@@ -131,15 +124,17 @@ function FloatingDecorations({ count = 6, color = 'rgba(99,102,241,0.08)' }: { c
   );
 }
 
-function ParallaxImage({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] });
-  const y = useTransform(scrollYProgress, [0, 1], [-30, 30]);
-
+function AnimatedImage({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
   return (
-    <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.img src={src} alt={alt} style={{ y }} className="w-full h-full object-cover scale-110" />
-    </div>
+    <motion.div
+      initial={{ opacity: 0, scale: 1.05 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+      className={`overflow-hidden ${className}`}
+    >
+      <img src={src} alt={alt} className="w-full h-full object-cover" />
+    </motion.div>
   );
 }
 
@@ -203,7 +198,10 @@ export default function Home() {
           list
             .filter((s: { image_url?: string }) => s?.image_url && String(s.image_url).trim())
             .map((s: { image_url: string; title?: string; text?: string; description?: string }) => ({
-              src: (() => { const url = s.image_url.startsWith('/') || s.image_url.startsWith('http') ? s.image_url : `/${s.image_url.replace(/^\//, '')}`; return url.startsWith('/uploads/') ? `${url}?v=${Date.now()}` : url; })(),
+              src: (() => {
+                const raw = s.image_url.startsWith('/') || s.image_url.startsWith('http') ? s.image_url : `/${s.image_url.replace(/^\//, '')}`;
+                return (raw.startsWith('/uploads/') || raw.startsWith('/api/uploads/')) ? `${raw}${raw.includes('?') ? '&' : '?'}v=${Date.now()}` : raw;
+              })(),
               alt: s.title || s.text || 'Ministry',
               title: s.title || undefined,
               description: s.description || undefined,
@@ -313,7 +311,7 @@ export default function Home() {
                 className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 dark:border-gray-800"
               >
                 <div className="grid md:grid-cols-2 gap-0">
-                  <ParallaxImage
+                  <AnimatedImage
                     src={featuredBlog.image}
                     alt={featuredBlog.title}
                     className="relative aspect-[4/3] md:aspect-auto md:min-h-[380px]"
@@ -389,7 +387,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
               <ScrollReveal>
                 <div className="relative">
-                  <ParallaxImage
+                  <AnimatedImage
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop"
                     alt="About our ministry"
                     className="aspect-[4/3] rounded-2xl shadow-2xl"
@@ -813,24 +811,24 @@ export default function Home() {
       </section>
 
       {/* ── SHUFFLED MIDDLE SECTIONS ───────────────────────────────────── */}
-      <LayoutGroup>
-        <AnimatePresence mode="sync">
-          {sectionOrder.map((key, idx) => {
-            const bg = idx % 2 === 0
-              ? 'bg-white dark:bg-gray-950'
-              : 'bg-gray-50 dark:bg-gray-900/50';
-            return (
-              <motion.div
-                key={key}
-                layout
-                transition={{ layout: { type: 'spring', stiffness: 200, damping: 30 } }}
-              >
-                {sections[key](bg)}
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
-      </LayoutGroup>
+      <div>
+        {sectionOrder.map((key, idx) => {
+          const bg = idx % 2 === 0
+            ? 'bg-white dark:bg-gray-950'
+            : 'bg-gray-50 dark:bg-gray-900/50';
+          return (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            >
+              {sections[key](bg)}
+            </motion.div>
+          );
+        })}
+      </div>
 
       {/* ── PRAYER FORM (always last) ──────────────────────────────────── */}
       <section id="prayer" className={`py-20 lg:py-28 ${prayerBg}`}>

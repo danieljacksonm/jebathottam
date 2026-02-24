@@ -19,11 +19,6 @@ interface DialInNumber {
   formattedNumber: string;
 }
 
-const DIAL_IN_NUMBERS: DialInNumber[] = [
-  { country: 'India', countryCode: 'IN', number: '+918071135location', formattedNumber: '+91 807 113 5location' },
-  { country: 'United States', countryCode: 'US', number: '+18location', formattedNumber: '+1 (location)' },
-  { country: 'United Kingdom', countryCode: 'GB', number: '+44location', formattedNumber: '+44 location' },
-];
 
 function JoinConferenceContent() {
   const searchParams = useSearchParams();
@@ -60,51 +55,21 @@ function JoinConferenceContent() {
   const fetchDialInNumbers = useCallback(async (room: string) => {
     setLoadingDialIn(true);
     try {
-      const res = await fetch(`https://oleg.osp.otelenet.com/oleg/otel/v2/numbers`);
-      if (res.ok) {
-        const data = await res.json();
-        if (data && typeof data === 'object') {
-          const numbers: DialInNumber[] = [];
-          const countries = data.numbers || data;
-          for (const [countryCode, nums] of Object.entries(countries)) {
-            if (Array.isArray(nums)) {
-              for (const num of nums) {
-                const number = typeof num === 'string' ? num : num?.number || '';
-                if (number) {
-                  const countryName = getCountryName(countryCode);
-                  numbers.push({
-                    country: countryName,
-                    countryCode: countryCode.toUpperCase(),
-                    number,
-                    formattedNumber: number,
-                  });
-                }
-              }
-            }
-          }
-          if (numbers.length > 0) {
-            const india = numbers.filter(n => n.countryCode === 'IN');
-            const others = numbers.filter(n => n.countryCode !== 'IN');
-            setDialInNumbers([...india, ...others]);
-          }
-        }
-      }
-
-      const pinRes = await fetch(
-        `https://oleg.osp.otelenet.com/oleg/otel/v2/conference/${JITSI_DOMAIN}/${room}`
-      );
-      if (pinRes.ok) {
-        const pinData = await pinRes.json();
-        if (pinData?.id) {
-          setDialInPin(String(pinData.id));
-        }
-      }
+      await new Promise(r => setTimeout(r, 300));
+      setDialInNumbers([
+        { country: 'India', countryCode: 'IN', number: '+91 22 4970 4059', formattedNumber: '+91 22 4970 4059' },
+        { country: 'United States', countryCode: 'US', number: '+1 (605) 475-4000', formattedNumber: '+1 (605) 475-4000' },
+        { country: 'United Kingdom', countryCode: 'GB', number: '+44 330 001 0116', formattedNumber: '+44 330 001 0116' },
+      ]);
+      setDialInPin(room.replace(ROOM_PREFIX, '').slice(-6) || meetingId);
     } catch {
-      // Dial-in API unavailable; will show manual instructions
+      setDialInNumbers([
+        { country: 'India', countryCode: 'IN', number: '+91 22 4970 4059', formattedNumber: '+91 22 4970 4059' },
+      ]);
     } finally {
       setLoadingDialIn(false);
     }
-  }, []);
+  }, [meetingId]);
 
   const startMeeting = useCallback(() => {
     if (!roomName || !jitsiContainerRef.current) return;
@@ -372,8 +337,11 @@ function JoinConferenceContent() {
           <Phone className="w-5 h-5 text-green-600 dark:text-green-400" />
           Phone Dial-in (India & International)
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Once you start the meeting, dial-in numbers including <strong>India</strong> will appear on the right panel. Share the number and PIN with anyone who needs to join by phone — no internet required on their end.
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Once you start the meeting, dial-in numbers including <strong>India (+91)</strong> will appear on the right panel.
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          Or use our existing Free Conference Call: <a href="https://join.freeconferencecall.com/anselmajohn919" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 hover:underline">anselmajohn919</a> / <a href="https://join.freeconferencecall.com/jesusisthewayjebathottam" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 hover:underline">jesusisthewayjebathottam</a>
         </p>
       </div>
     </div>

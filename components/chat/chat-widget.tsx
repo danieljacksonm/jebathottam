@@ -15,7 +15,7 @@ function getChatId(): string {
   if (typeof window === 'undefined') return '';
   let chatId = localStorage.getItem('chat_id');
   if (!chatId) {
-    chatId = 'chat_' + crypto.randomUUID();
+    chatId = 'chat_' + (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
     localStorage.setItem('chat_id', chatId);
   }
   return chatId;
