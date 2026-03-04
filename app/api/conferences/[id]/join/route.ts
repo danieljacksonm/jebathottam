@@ -5,11 +5,12 @@ import { getCurrentUser } from '@/lib/auth';
 // POST - Join conference
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = await getCurrentUser(request);
-    const conferenceId = parseInt(params.id);
+    const conferenceId = parseInt(id);
     const body = await request.json();
 
     // Check conference exists and is active

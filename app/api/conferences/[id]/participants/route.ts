@@ -5,15 +5,16 @@ import { getCurrentUser } from '@/lib/auth';
 // GET - List participants in conference
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = await getCurrentUser(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const conferenceId = parseInt(params.id);
+    const conferenceId = parseInt(id);
 
     // Check conference exists
     const conferenceResult = await query(
@@ -74,15 +75,16 @@ export async function GET(
 // POST - Manually add participant (for admin dial-in setup)
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = await getCurrentUser(request);
     if (!user || !['super_admin', 'media_team'].includes(user.role)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
 
-    const conferenceId = parseInt(params.id);
+    const conferenceId = parseInt(id);
     const body = await request.json();
 
     const {

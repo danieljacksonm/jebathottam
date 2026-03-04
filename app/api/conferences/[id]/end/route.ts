@@ -5,15 +5,16 @@ import { getCurrentUser } from '@/lib/auth';
 // POST - End conference (mark as ended)
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = await getCurrentUser(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const conferenceId = parseInt(params.id);
+    const conferenceId = parseInt(id);
 
     // Check conference exists and user has permission
     const conferenceResult = await query(
@@ -39,17 +40,17 @@ export async function POST(
       UPDATE conferences 
       SET status = 'ended', actual_end = NOW()
     `;
-    const params: any[] = [];
+    const queryParams: any[] = [];
 
     if (recording_url) {
       updateSql += `, recording_url = ?`;
-      params.push(recording_url);
+      queryParams.push(recording_url);
     }
 
     updateSql += ` WHERE id = ?`;
-    params.push(conferenceId);
+    queryParams.push(conferenceId);
 
-    await query(updateSql, params);
+    await query(updateSql, queryParams);
 
     // Update all participants with leave_time if not already set
     await query(

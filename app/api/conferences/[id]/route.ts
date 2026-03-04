@@ -5,15 +5,16 @@ import { getCurrentUser } from '@/lib/auth';
 // GET - Get conference by ID with participants
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = await getCurrentUser(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const conferenceId = parseInt(params.id);
+    const conferenceId = parseInt(id);
 
     // Get conference details
     const conferenceResult = await query(
@@ -68,15 +69,16 @@ export async function GET(
 // PUT - Update conference
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = await getCurrentUser(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const conferenceId = parseInt(params.id);
+    const conferenceId = parseInt(id);
     const body = await request.json();
 
     // Check ownership
@@ -151,15 +153,16 @@ export async function PUT(
 // DELETE - Delete conference
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const user = await getCurrentUser(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const conferenceId = parseInt(params.id);
+    const conferenceId = parseInt(id);
 
     // Check ownership
     const conferenceResult = await query(
