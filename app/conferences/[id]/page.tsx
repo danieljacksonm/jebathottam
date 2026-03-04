@@ -6,7 +6,7 @@ import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { apiGet, apiPost } from '@/lib/api';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '@/lib/api-client';
 
 interface Conference {
   id: number;
