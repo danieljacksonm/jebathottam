@@ -7,7 +7,7 @@ import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { motion } from 'framer-motion';
 import { galleryImages as fallbackGallery } from '@/data/gallery-content';
-import { getOptimizedImageUrl } from '@/lib/image-utils';
+import { getOptimizedImageUrl, getImageSrc } from '@/lib/image-utils';
 
 type GalleryItem = {
   id: number;
@@ -82,7 +82,7 @@ export default function GalleryPage() {
           <StaggerContainer>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {galleryImages.map((image) => {
-                const src = image.image_url || image.image || '';
+                const src = getImageSrc(image);
                 const optimizedSrc = getOptimizedImageUrl(src, 600);
                 return (
                   <StaggerItem key={image.id}>

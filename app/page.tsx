@@ -9,7 +9,7 @@ import { Footer } from '@/components/layout/footer';
 import { motion, useInView } from 'framer-motion';
 import { ministryInfo as defaultInfo, blogPosts, events, missionVision as defaultMV } from '@/data/demo-content';
 import { galleryImages as fallbackGalleryImages } from '@/data/gallery-content';
-import { getOptimizedImageUrl } from '@/lib/image-utils';
+import { getOptimizedImageUrl, getImageSrc } from '@/lib/image-utils';
 import { AudioPlayer } from '@/components/audio/audio-player';
 import { mediaItems as fallbackMedia } from '@/data/media-content';
 import { PrayerForm } from '@/components/prayer/prayer-form';
@@ -180,7 +180,7 @@ const HERO_VARIANTS: HeroVariant[] = ['slider', 'blog', 'team', 'about'];
 type TeamMember = { id: number; name: string; role: string; bio?: string; image_url?: string | null };
 type BlogPost = { id: number; title: string; excerpt?: string; content?: string; image?: string; image_url?: string; category?: string; featured?: boolean };
 function getBlogImage(post: BlogPost | { image?: string; image_url?: string }): string {
-  return (post as { image?: string; image_url?: string }).image || (post as { image?: string; image_url?: string }).image_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop';
+  return getImageSrc(post) || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop';
 }
 
 export default function Home() {
@@ -669,7 +669,7 @@ export default function Home() {
           <InViewStagger>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-7xl mb-14">
               {(homeGallery.length > 0 ? homeGallery : fallbackGalleryImages).slice(0, 8).map((image) => {
-                const imgSrc = image.image_url || image.image || '';
+                const imgSrc = getImageSrc(image);
                 const optSrc = getOptimizedImageUrl(imgSrc, 400);
                 return (
                 <InViewStaggerItem key={image.id}>
@@ -741,7 +741,7 @@ export default function Home() {
           <InViewStagger>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-7xl mb-14">
               {mediaItems.slice(0, 4).map((item) => {
-                const imgSrc = getOptimizedImageUrl(item.image_url || item.image || '', 500) || item.image_url || item.image || '';
+                const imgSrc = getOptimizedImageUrl(getImageSrc(item), 500) || getImageSrc(item) || '';
                 const thumbSrc = getOptimizedImageUrl(item.thumbnail_url || item.thumbnail || '', 400) || item.thumbnail_url || item.thumbnail || '';
                 const vidId = item.video_id || item.videoId || '';
                 const posterScripture = item.message || item.scripture || '';

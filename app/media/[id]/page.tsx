@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { ViewCounter } from '@/components/ui/view-counter';
 import { mediaItems } from '@/data/media-content';
-import { getOptimizedImageUrl } from '@/lib/image-utils';
+import { getOptimizedImageUrl, getImageSrc } from '@/lib/image-utils';
 
 export default function MediaDetailPage({ params }: { params: { id: string } }) {
   const media = mediaItems.find(m => m.id === parseInt(params.id)) || mediaItems[0];
@@ -66,7 +66,7 @@ export default function MediaDetailPage({ params }: { params: { id: string } }) 
               <FadeInUp delay={0.2}>
                 <div className="mb-12 rounded-2xl overflow-hidden shadow-2xl bg-gray-100">
                   <img
-                    src={getOptimizedImageUrl((media as { image_url?: string }).image_url || media.image, 1200) || media.image}
+                    src={getOptimizedImageUrl(getImageSrc(media), 1200) || getImageSrc(media) || media.image}
                     alt={media.title}
                     className="w-full h-auto"
                   />

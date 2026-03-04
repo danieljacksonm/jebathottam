@@ -9,7 +9,7 @@ import { FadeInUp } from '@/components/animations/page-transition';
 import { Button } from '@/components/ui/button';
 import { ViewCounter } from '@/components/ui/view-counter';
 import { galleryImages as fallbackGallery } from '@/data/gallery-content';
-import { getOptimizedImageUrl } from '@/lib/image-utils';
+import { getOptimizedImageUrl, getImageSrc } from '@/lib/image-utils';
 
 type GalleryItem = {
   id: number;
@@ -59,7 +59,7 @@ export default function GalleryDetailPage({ params }: { params: Promise<{ id: st
   const prevImage = galleryImages[currentIndex - 1] || galleryImages[galleryImages.length - 1];
   const relatedImages = galleryImages.filter((img) => img.id !== currentId && (img.category === image?.category)).slice(0, 3);
 
-  const imageSrc = image?.image_url || image?.image || '';
+  const imageSrc = getImageSrc(image);
   const mainOptimized = getOptimizedImageUrl(imageSrc, 1200);
 
   if (loading || !image) {
@@ -223,7 +223,7 @@ export default function GalleryDetailPage({ params }: { params: Promise<{ id: st
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {relatedImages.map((relatedImage) => {
-                    const relatedSrc = relatedImage.image_url || relatedImage.image || '';
+                    const relatedSrc = getImageSrc(relatedImage);
                     const relatedOpt = getOptimizedImageUrl(relatedSrc, 400);
                     return (
                       <Link key={relatedImage.id} href={`/gallery/${relatedImage.id}`}>

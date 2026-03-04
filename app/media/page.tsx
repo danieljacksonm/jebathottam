@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { motion } from 'framer-motion';
 import { mediaItems } from '@/data/media-content';
-import { getOptimizedImageUrl } from '@/lib/image-utils';
+import { getOptimizedImageUrl, getImageSrc } from '@/lib/image-utils';
 
 export default function MediaPage() {
   const posters = mediaItems.filter(m => m.type === 'poster');
@@ -55,7 +55,7 @@ export default function MediaPage() {
                         >
                           <div className="aspect-[2/3] overflow-hidden">
                             <img
-                              src={getOptimizedImageUrl((poster as { image_url?: string }).image_url || poster.image, 500) || poster.image}
+                              src={getOptimizedImageUrl(getImageSrc(poster), 500) || getImageSrc(poster) || poster.image}
                               alt={poster.title}
                               className="w-full h-full object-cover"
                               loading="lazy"
