@@ -334,4 +334,48 @@ export const reportsApi = {
 // ==================== DASHBOARD ====================
 export const dashboardApi = {
   stats: () => apiGet<{ data: any }>('/dashboard/stats'),
+
+};
+
+// ==================== CONFERENCES ====================
+export const conferencesApi = {
+  list: (params?: { status?: string; limit?: number; offset?: number }) =>
+    apiGet<{ success: boolean; data: any[] }>('/conferences', params as Record<string, string>),
+
+  get: (id: number) =>
+    apiGet<{ success: boolean; data: any }>(`/conferences/${id}`),
+
+  create: (data: {
+    title: string;
+    description?: string;
+    scheduled_start?: string;
+    scheduled_end?: string;
+    is_public?: boolean;
+    allow_recordings?: boolean;
+    max_participants?: number;
+  }) => apiPost<{ success: boolean; data: any }>('/conferences', data),
+
+  update: (id: number, data: Partial<any>) =>
+    apiPut<{ success: boolean; data: any }>(`/conferences/${id}`, data),
+
+  delete: (id: number) =>
+    apiDelete<{ success: boolean; data: any }>(`/conferences/${id}`),
+
+  join: (id: number, data: { participant_name: string; participant_phone?: string; join_method?: string; follower_id?: number }) =>
+    apiPost<{ success: boolean; data: any }>(`/conferences/${id}/join`, data),
+
+  end: (id: number, data?: { recording_url?: string; reason?: string }) =>
+    apiPost<{ success: boolean; data: any }>(`/conferences/${id}/end`, data || {}),
+
+  participants: (id: number) =>
+    apiGet<{ success: boolean; data: any }>(`/conferences/${id}/participants`),
+
+  addParticipant: (id: number, data: { participant_name: string; participant_phone: string; join_method?: string; follower_id?: number }) =>
+    apiPost<{ success: boolean; data: any }>(`/conferences/${id}/participants`, data),
+
+  getSipConfig: () =>
+    apiGet<{ success: boolean; data: any }>('/conferences/sip-config'),
+
+  updateSipConfig: (data: any) =>
+    apiPut<{ success: boolean; data: any }>('/conferences/sip-config', data),
 };

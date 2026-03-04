@@ -8,7 +8,8 @@ import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { motion, useInView } from 'framer-motion';
 import { ministryInfo as defaultInfo, blogPosts, events, missionVision as defaultMV } from '@/data/demo-content';
-import { galleryImages } from '@/data/gallery-content';
+import { galleryImages as fallbackGalleryImages } from '@/data/gallery-content';
+import { getOptimizedImageUrl } from '@/lib/image-utils';
 import { AudioPlayer } from '@/components/audio/audio-player';
 import { mediaItems as fallbackMedia } from '@/data/media-content';
 import { PrayerForm } from '@/components/prayer/prayer-form';
@@ -189,6 +190,7 @@ export default function Home() {
   const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [apiBlogs, setApiBlogs] = useState<BlogPost[]>([]);
+  const [homeGallery, setHomeGallery] = useState<Array<{ id: number; title: string; description?: string | null; image_url?: string; image?: string; category?: string }>>([]);
 
   const [sectionOrder, setSectionOrder] = useState(SHUFFLABLE_KEYS);
   const [currentHour, setCurrentHour] = useState(0);
@@ -208,15 +210,11 @@ export default function Home() {
         setSliderImages(
           list
             .filter((s: { image_url?: string }) => s?.image_url && String(s.image_url).trim())
-            .map((s: { image_url: string; title?: string; text?: string; description?: string }) => ({
-              src: (() => {
-                const raw = s.image_url.startsWith('/') || s.image_url.startsWith('http') ? s.image_url : `/${s.image_url.replace(/^\//, '')}`;
-                return (raw.startsWith('/uploads/') || raw.startsWith('/api/uploads/')) ? `${raw}${raw.includes('?') ? '&' : '?'}v=${Date.now()}` : raw;
-              })(),
-              alt: s.title || s.text || 'Ministry',
-              title: s.title || undefined,
-              description: s.description || undefined,
-            }))
+            .map((s: { image_url: string; title?: string; text?: string; description?: string }) => {
+              const raw = s.image_url.startsWith('/') || s.image_url.startsWith('http') ? s.image_url : `/${s.image_url.replace(/^\//, '')}`;
+              const src = getOptimizedImageUrl(raw, 1200) || raw;
+              return { src, alt: s.title || s.text || 'Ministry', title: s.title || undefined, description: s.description || undefined };
+            })
         );
       })
       .catch(() => setSliderImages([]));
@@ -252,6 +250,25 @@ export default function Home() {
         if (list.length > 0) setApiBlogs(list);
       })
       .catch(() => {});
+
+    fetch('/api/gallery')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) {
+          setHomeGallery(list.map((g: { id: number; title: string; description?: string; image_url: string }) => ({
+            id: g.id,
+            title: g.title,
+            description: g.description ?? null,
+            image_url: g.image_url,
+            image: g.image_url,
+            category: 'Ministry',
+          })));
+        } else {
+          setHomeGallery(fallbackGalleryImages.map((g) => ({ ...g, image_url: g.image })));
+        }
+      })
+      .catch(() => setHomeGallery(fallbackGalleryImages.map((g) => ({ ...g, image_url: g.image }))));
   }, []);
 
   /* ── Section shuffle on the hour ─────────────────────────────────────── */
@@ -541,8 +558,9 @@ export default function Home() {
                         <div className="flex items-center gap-3.5 pt-5 border-t border-gray-100 dark:border-gray-800">
                           <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-primary-100 dark:ring-primary-900/30 flex-shrink-0">
                             <img
-                              src={testimony.image_url || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="64" height="64"%3E%3Crect fill="%23e5e7eb" width="64" height="64"/%3E%3C/svg%3E'}
+                              src={getOptimizedImageUrl(testimony.image_url, 128) || testimony.image_url || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="64" height="64"%3E%3Crect fill="%23e5e7eb" width="64" height="64"/%3E%3C/svg%3E'}
                               alt={testimony.name}
+                              loading="lazy"
                               className="w-full h-full object-cover"
                             />
                           </div>
@@ -650,7 +668,10 @@ export default function Home() {
 
           <InViewStagger>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-7xl mb-14">
-              {galleryImages.slice(0, 8).map((image) => (
+              {(homeGallery.length > 0 ? homeGallery : fallbackGalleryImages).slice(0, 8).map((image) => {
+                const imgSrc = image.image_url || image.image || '';
+                const optSrc = getOptimizedImageUrl(imgSrc, 400);
+                return (
                 <InViewStaggerItem key={image.id}>
                   <Link href={`/gallery/${image.id}`}>
                     <motion.div
@@ -658,17 +679,18 @@ export default function Home() {
                       transition={{ duration: 0.4, ease: 'easeOut' }}
                       className="group relative aspect-square overflow-hidden rounded-2xl shadow-sm cursor-pointer"
                     >
-                      <img src={image.image} alt={image.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
+                      <img src={optSrc || imgSrc} alt={image.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" loading="lazy" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400">
                         <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 text-white translate-y-2 group-hover:translate-y-0 transition-transform duration-400">
                           <h3 className="text-sm sm:text-base font-semibold mb-0.5 leading-tight">{image.title}</h3>
-                          <p className="text-xs text-white/75">{image.category}</p>
+                          <p className="text-xs text-white/75">{image.category || 'Ministry'}</p>
                         </div>
                       </div>
                     </motion.div>
                   </Link>
                 </InViewStaggerItem>
-              ))}
+              );
+              })}
             </div>
           </InViewStagger>
 
@@ -719,8 +741,8 @@ export default function Home() {
           <InViewStagger>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6 max-w-7xl mb-14">
               {mediaItems.slice(0, 4).map((item) => {
-                const imgSrc = item.image_url || item.image || '';
-                const thumbSrc = item.thumbnail_url || item.thumbnail || '';
+                const imgSrc = getOptimizedImageUrl(item.image_url || item.image || '', 500) || item.image_url || item.image || '';
+                const thumbSrc = getOptimizedImageUrl(item.thumbnail_url || item.thumbnail || '', 400) || item.thumbnail_url || item.thumbnail || '';
                 const vidId = item.video_id || item.videoId || '';
                 const posterScripture = item.message || item.scripture || '';
                 return (
@@ -733,7 +755,7 @@ export default function Home() {
                       >
                         {item.type === 'poster' ? (
                           <div className="aspect-[2/3] overflow-hidden">
-                            <img src={imgSrc} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
+                            <img src={imgSrc} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy" />
                           </div>
                         ) : (
                           <div className="aspect-video relative overflow-hidden">
@@ -918,8 +940,9 @@ export default function Home() {
                       >
                         <div className="aspect-square rounded-2xl overflow-hidden ring-2 ring-white/20 group-hover:ring-primary-400 transition-all mb-3">
                           <img
-                            src={member.image_url || `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop`}
+                            src={getOptimizedImageUrl(member.image_url, 300) || member.image_url || `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop`}
                             alt={member.name}
+                            loading="lazy"
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
                         </div>

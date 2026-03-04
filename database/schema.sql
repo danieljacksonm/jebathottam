@@ -336,6 +336,105 @@ CREATE TABLE IF NOT EXISTS activity_logs (
   INDEX idx_created_at (created_at)
 );
 
+-- Conferences/Meetings table
+CREATE TABLE IF NOT EXISTS conferences (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  jitsi_room_id VARCHAR(255) UNIQUE NOT NULL,
+  dial_in_number VARCHAR(50),
+  dial_in_pin VARCHAR(10),
+  creator_id INT NOT NULL,
+  status ENUM('scheduled', 'live', 'ended', 'cancelled') DEFAULT 'scheduled',
+  scheduled_start TIMESTAMP NULL,
+  scheduled_end TIMESTAMP NULL,
+  actual_start TIMESTAMP NULL,
+  actual_end TIMESTAMP NULL,
+  max_participants INT DEFAULT 100,
+  is_public BOOLEAN DEFAULT FALSE,
+  allow_recordings BOOLEAN DEFAULT TRUE,
+  recording_url VARCHAR(500),
+  meeting_link VARCHAR(500),
+  metadata JSON,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_status (status),
+  INDEX idx_jitsi_room (jitsi_room_id),
+  INDEX idx_scheduled_start (scheduled_start),
+  INDEX idx_created_at (created_at)
+);
+
+-- Conference Participants table
+CREATE TABLE IF NOT EXISTS conference_participants (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  conference_id INT NOT NULL,
+  user_id INT,
+  follower_id INT,
+  participant_name VARCHAR(255) NOT NULL,
+  participant_phone VARCHAR(50),
+  join_method ENUM('browser', 'phone', 'app') DEFAULT 'browser',
+  join_time TIMESTAMP NULL,
+  leave_time TIMESTAMP NULL,
+  duration_seconds INT DEFAULT 0,
+  is_admin BOOLEAN DEFAULT FALSE,
+  metadata JSON,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (conference_id) REFERENCES conferences(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (follower_id) REFERENCES followers(id) ON DELETE SET NULL,
+  INDEX idx_conference (conference_id),
+  INDEX idx_user (user_id),
+  INDEX idx_join_time (join_time)
+);
+
+-- Call Records/History table
+CREATE TABLE IF NOT EXISTS call_records (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  conference_id INT NOT NULL,
+  from_participant_id INT,
+  to_participant_id INT,
+  call_type ENUM('incoming', 'outgoing', 'internal') DEFAULT 'internal',
+  phone_number VARCHAR(50),
+  duration_seconds INT DEFAULT 0,
+  call_status ENUM('connected', 'busy', 'no_answer', 'failed', 'dropped') DEFAULT 'connected',
+  call_quality VARCHAR(50),
+  recordings JSON,
+  metadata JSON,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (conference_id) REFERENCES conferences(id) ON DELETE CASCADE,
+  FOREIGN KEY (from_participant_id) REFERENCES conference_participants(id) ON DELETE SET NULL,
+  FOREIGN KEY (to_participant_id) REFERENCES conference_participants(id) ON DELETE SET NULL,
+  INDEX idx_conference (conference_id),
+  INDEX idx_created_at (created_at)
+);
+
+-- SIP Configuration table (for dial-in setup)
+CREATE TABLE IF NOT EXISTS sip_config (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  sip_server_url VARCHAR(255) NOT NULL,
+  sip_username VARCHAR(255),
+  sip_password VARCHAR(255),
+  dial_in_number VARCHAR(50),
+  country_code VARCHAR(5) DEFAULT '+91',
+  sip_provider VARCHAR(100),
+  is_active BOOLEAN DEFAULT TRUE,
+  max_dial_in_participants INT DEFAULT 50,
+  recording_enabled BOOLEAN DEFAULT TRUE,
+  metadata JSON,
+  created_by INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
+  INDEX idx_active (is_active)
+);
+
+-- Insert default India SIP configuration
+INSERT INTO sip_config (sip_server_url, country_code, sip_provider, is_active, dial_in_number)
+VALUES ('sip.jitsi.net', '+91', 'Jitsi SIP Bridge', TRUE, '+91-self-hosted')
+AS sc ON DUPLICATE KEY UPDATE sip_provider = sc.sip_provider;
+
 -- Insert default permissions for each role
 INSERT INTO role_permissions (role, resource, can_create, can_read, can_update, can_delete) VALUES
 -- Super Admin permissions (everything except social media management)

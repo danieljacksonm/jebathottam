@@ -42,6 +42,20 @@ This website is designed for a Christian ministry with the following goals:
 - ✅ Sermons / teachings archive (UI ready)
 - ✅ Admin management panel (UI ready)
 
+## Core Features (Phase 2)
+
+- ✅ **Video Conferences** (Jitsi Meet integration)
+    - 📹 Free browser-based video conferencing
+    - 📞 Free phone dial-in for non-internet users (India +91)
+    - 🔐 Conference PIN & security
+    - 👥 Participant tracking & analytics
+    - 📊 Call duration & join method statistics
+- ✅ **India-Specific Features**
+    - Self-hosted Asterisk/FreeSWITCH SIP server
+    - Completely **FREE** dial-in (no per-minute charges)
+    - Support for +91 Indian phone numbers
+    - Cost: ₹500-1000/month (no call charges)
+
 ## Getting Started
 
 ### Prerequisites

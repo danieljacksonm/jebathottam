@@ -7,6 +7,7 @@ import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { FadeInUp } from '@/components/animations/page-transition';
 import { Loader2, Quote } from 'lucide-react';
+import { getOptimizedImageUrl } from '@/lib/image-utils';
 
 type TestimonyItem = {
   id: number;
@@ -101,7 +102,7 @@ export default function TestimonyDetailPage() {
               <div className="relative inline-block mb-6 sm:mb-8">
                 <div className="w-28 h-28 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-full overflow-hidden ring-4 ring-primary-100 dark:ring-primary-900/30 shadow-xl mx-auto">
                   <img
-                    src={testimony.image_url || placeholderImg}
+                    src={getOptimizedImageUrl(testimony.image_url, 320) || testimony.image_url || placeholderImg}
                     alt={testimony.name}
                     className="w-full h-full object-cover"
                     onError={(e) => {

@@ -29,10 +29,10 @@ export default function AudioConferencePage() {
                 href="/audio-conference/join"
                 className="inline-flex items-center justify-center px-6 py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all"
               >
-                Start or join a meeting (Jitsi — free)
+                Join conference (dial-in or online)
               </Link>
               <p className="text-sm text-white/80 mt-3 max-w-md mx-auto">
-                Free conferences with Jitsi Meet. Join in the browser; add phone participants via the phone icon in the meeting.
+                Ministry line (like Free Conference Call): same dial-in numbers every time, or join online. You can also start an instant meeting (Jitsi) for one-off calls.
               </p>
             </div>
           </div>

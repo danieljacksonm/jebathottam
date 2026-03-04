@@ -6,8 +6,9 @@ import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { Button } from '@/components/ui/button';
 import { FadeInUp } from '@/components/animations/page-transition';
-import { Phone, Copy, Check, Loader2, Video, Users, PhoneCall } from 'lucide-react';
+import { Phone, Copy, Check, Loader2, Video, Users, PhoneCall, PhoneIncoming } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
+import { usePublicSettings } from '@/lib/public-settings';
 
 const JITSI_DOMAIN = 'meet.jit.si';
 const ROOM_PREFIX = 'JebathottamMinistry';
@@ -20,8 +21,14 @@ interface DialInNumber {
 }
 
 
+function getFlagEmoji(countryCode: string): string {
+  const cc = countryCode.toUpperCase();
+  return String.fromCodePoint(...[...cc].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
+}
+
 function JoinConferenceContent() {
   const searchParams = useSearchParams();
+  const settings = usePublicSettings();
   const [meetingId, setMeetingId] = useState(() => {
     const id = searchParams.get('meetingId');
     return id && /^\d{6}$/.test(id) ? id : '';
@@ -282,6 +289,14 @@ function JoinConferenceContent() {
     );
   }
 
+  const dialNumbers: DialInNumber[] = [];
+  if ((settings.dial_in_india || '').trim()) dialNumbers.push({ country: 'India', countryCode: 'IN', number: settings.dial_in_india.trim(), formattedNumber: settings.dial_in_india.trim() });
+  if ((settings.dial_in_us || '').trim()) dialNumbers.push({ country: 'United States', countryCode: 'US', number: settings.dial_in_us.trim(), formattedNumber: settings.dial_in_us.trim() });
+  if ((settings.dial_in_uk || '').trim()) dialNumbers.push({ country: 'United Kingdom', countryCode: 'GB', number: settings.dial_in_uk.trim(), formattedNumber: settings.dial_in_uk.trim() });
+  const accessCode = (settings.dial_in_pin || '').trim();
+  const webUrl = (settings.conference_web_url || '').trim();
+  const hasFccStyle = dialNumbers.length > 0 || webUrl;
+
   return (
     <div className="max-w-xl mx-auto">
       <Link
@@ -294,12 +309,60 @@ function JoinConferenceContent() {
         Audio Conference
       </h1>
       <p className="text-gray-600 dark:text-gray-400 mb-8">
-        Start or join a free conference. Internet users join directly. Phone users dial in with a number and PIN.
+        Join our ministry line (dial-in or web) or start an instant meeting.
       </p>
+
+      {/* Free Conference Call style: fixed dial-in + web link */}
+      {hasFccStyle && (
+        <div className="mb-8 rounded-xl border-2 border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-900/20 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center">
+              <PhoneIncoming className="w-5 h-5 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Ministry conference line</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Like Free Conference Call — same numbers every time</p>
+            </div>
+          </div>
+          {dialNumbers.length > 0 && (
+            <div className="space-y-2 mb-4">
+              {dialNumbers.map((num, i) => (
+                <div key={i} className="flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700">
+                  <span className="text-lg mr-2">{getFlagEmoji(num.countryCode)}</span>
+                  <span className="text-sm font-medium text-gray-900 dark:text-white flex-1">{num.country}</span>
+                  <a href={`tel:${num.number}`} className="text-sm font-mono text-primary-600 dark:text-primary-400 font-semibold">{num.formattedNumber}</a>
+                  <button type="button" onClick={() => copyText(num.number, `dial-${i}`)} className="ml-2 p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500">
+                    {copied === `dial-${i}` ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          {accessCode && (
+            <div className="mb-4 flex items-center justify-between py-2 px-3 rounded-lg bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Access code / PIN</span>
+              <span className="font-mono font-bold text-gray-900 dark:text-white">{accessCode}</span>
+              <button type="button" onClick={() => copyText(accessCode, 'pin')} className="ml-2 p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500">
+                {copied === 'pin' ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+          )}
+          {webUrl && (
+            <a
+              href={webUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full py-3.5 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold text-center transition-colors"
+            >
+              Join online (open in new tab)
+            </a>
+          )}
+        </div>
+      )}
 
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Meeting ID (6 digits)
+          Or: Instant meeting — Meeting ID (6 digits)
         </label>
         <div className="flex gap-2">
           <input
@@ -332,8 +395,8 @@ function JoinConferenceContent() {
             <Video className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Join Meeting</h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400">Conference opens right here in the app</p>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Instant meeting (Jitsi)</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400">Conference opens here in the browser</p>
           </div>
         </div>
         {meetingId.length === 6 ? (
@@ -351,18 +414,9 @@ function JoinConferenceContent() {
         )}
       </div>
 
-      <div className="rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 p-6">
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-          <Phone className="w-5 h-5 text-green-600 dark:text-green-400" />
-          Phone Dial-in (India & International)
-        </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          Once you start the meeting, dial-in numbers including <strong>India (+91)</strong> will appear on the right panel.
-        </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          Or use our existing Free Conference Call: <a href="https://join.freeconferencecall.com/anselmajohn919" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 hover:underline">anselmajohn919</a> / <a href="https://join.freeconferencecall.com/jesusisthewayjebathottam" target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 hover:underline">jesusisthewayjebathottam</a>
-        </p>
-      </div>
+      <p className="text-xs text-gray-500 dark:text-gray-400">
+        For the instant meeting, dial-in numbers are also shown in the sidebar after you start.
+      </p>
     </div>
   );
 }
@@ -377,11 +431,6 @@ function getCountryName(code: string): string {
     NO: 'Norway', PT: 'Portugal', RO: 'Romania', SG: 'Singapore', ZA: 'South Africa',
   };
   return names[code.toUpperCase()] || code;
-}
-
-function getFlagEmoji(countryCode: string): string {
-  const cc = countryCode.toUpperCase();
-  return String.fromCodePoint(...[...cc].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
 }
 
 export default function JoinConferencePage() {

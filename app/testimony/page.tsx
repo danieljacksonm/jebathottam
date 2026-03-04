@@ -8,6 +8,7 @@ import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { getOptimizedImageUrl } from '@/lib/image-utils';
 
 type TestimonyItem = {
   id: number;
@@ -85,9 +86,10 @@ export default function TestimonyPage() {
                           <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
                             <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden ring-2 ring-primary-100 dark:ring-primary-900/30 flex-shrink-0">
                               <img
-                                src={testimony.image_url || placeholderImg}
+                                src={getOptimizedImageUrl(testimony.image_url, 200) || testimony.image_url || placeholderImg}
                                 alt={testimony.name}
                                 className="w-full h-full object-cover"
+                                loading="lazy"
                                 onError={(e) => {
                                   (e.target as HTMLImageElement).src = placeholderImg;
                                 }}

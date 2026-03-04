@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { motion } from 'framer-motion';
 import { mediaItems } from '@/data/media-content';
+import { getOptimizedImageUrl } from '@/lib/image-utils';
 
 export default function MediaPage() {
   const posters = mediaItems.filter(m => m.type === 'poster');
@@ -54,9 +55,10 @@ export default function MediaPage() {
                         >
                           <div className="aspect-[2/3] overflow-hidden">
                             <img
-                              src={poster.image}
+                              src={getOptimizedImageUrl((poster as { image_url?: string }).image_url || poster.image, 500) || poster.image}
                               alt={poster.title}
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                           </div>
                           <div className="p-4">
@@ -90,9 +92,10 @@ export default function MediaPage() {
                         >
                           <div className="aspect-video bg-gray-100 relative">
                             <img
-                              src={video.thumbnail}
+                              src={getOptimizedImageUrl((video as { thumbnail_url?: string }).thumbnail_url || video.thumbnail, 600) || video.thumbnail}
                               alt={video.title}
                               className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                             <div className="absolute inset-0 flex items-center justify-center bg-black/20">
                               <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center">

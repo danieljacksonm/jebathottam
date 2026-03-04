@@ -9,6 +9,7 @@ const PUBLIC_KEYS = [
   'mission_title', 'mission_description', 'vision_title', 'vision_description',
   'logo_url', 'primary_color',
   'dial_in_india', 'dial_in_us', 'dial_in_uk', 'dial_in_pin',
+  'conference_web_url',
 ];
 
 // GET settings - public keys are available without auth, all keys require admin

@@ -19,6 +19,7 @@ const defaults: PublicSettings = {
   dial_in_us: '+1 (605) 475-4000',
   dial_in_uk: '+44 330 001 0116',
   dial_in_pin: '',
+  conference_web_url: 'https://join.freeconferencecall.com/jesusisthewayjebathottam',
 };
 
 const PublicSettingsContext = createContext<PublicSettings>(defaults);
