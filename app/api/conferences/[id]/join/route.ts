@@ -8,7 +8,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    const user = await getCurrentUser();
+    const user = await getCurrentUser(request);
     const conferenceId = parseInt(params.id);
     const body = await request.json();
 

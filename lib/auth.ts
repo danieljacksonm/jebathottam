@@ -36,6 +36,11 @@ export function verifyToken(token: string): UserPayload | null {
   }
 }
 
+// Get current user from request (alias for route handlers)
+export async function getCurrentUser(request: NextRequest): Promise<UserPayload | null> {
+  return getUserFromRequest(request);
+}
+
 // Get user from request
 export async function getUserFromRequest(request: NextRequest): Promise<UserPayload | null> {
   const token = request.headers.get('authorization')?.replace('Bearer ', '') ||

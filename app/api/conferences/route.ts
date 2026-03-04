@@ -22,7 +22,7 @@ function generateDialInPin(): string {
 // GET - List all conferences
 export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const user = await getCurrentUser(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
 // POST - Create new conference
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const user = await getCurrentUser(request);
     if (!user || !['super_admin', 'media_team', 'ministry_member'].includes(user.role)) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }

@@ -5,7 +5,7 @@ import { getCurrentUser } from '@/lib/auth';
 // GET - Get SIP configuration
 export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const user = await getCurrentUser(request);
     if (!user || user.role !== 'super_admin') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 // PUT - Update SIP configuration
 export async function PUT(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    const user = await getCurrentUser(request);
     if (!user || user.role !== 'super_admin') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
     }
