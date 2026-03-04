@@ -48,7 +48,7 @@ export async function GET(
         } else {
           pipeline = pipeline.jpeg({ quality, mozjpeg: true });
         }
-        const out = await pipeline.toBuffer();
+        const out = Buffer.from(await pipeline.toBuffer());
         const outContentType = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg';
         return new NextResponse(out, {
           headers: {
