@@ -58,11 +58,11 @@ export async function POST(request: NextRequest) {
           pipeline = pipeline.resize(MAX_WIDTH, undefined, { withoutEnlargement: true });
         }
         if (mime.includes('png')) {
-          buffer = await pipeline.png({ compressionLevel: 9 }).toBuffer();
+          buffer = Buffer.from(await pipeline.png({ compressionLevel: 9 }).toBuffer());
         } else if (mime.includes('webp')) {
-          buffer = await pipeline.webp({ quality: UPLOAD_QUALITY }).toBuffer();
+          buffer = Buffer.from(await pipeline.webp({ quality: UPLOAD_QUALITY }).toBuffer());
         } else {
-          buffer = await pipeline.jpeg({ quality: UPLOAD_QUALITY, mozjpeg: true }).toBuffer();
+          buffer = Buffer.from(await pipeline.jpeg({ quality: UPLOAD_QUALITY, mozjpeg: true }).toBuffer());
         }
       }
       await writeFile(filePath, buffer);
