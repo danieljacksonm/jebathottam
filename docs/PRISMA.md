@@ -4,6 +4,8 @@ The app is set up to use **Prisma** as the main ORM so you can use typed queries
 
 ## Setup
 
+**On the server (e.g. VPS):** Ensure the `prisma` folder and `prisma/schema.prisma` file are present in the project root. If you get “Could not find Prisma Schema”, run `git pull` (or re-deploy) so the repo includes the `prisma/` directory.
+
 1. **Install dependencies** (includes `prisma` and `@prisma/client`):
    ```bash
    npm install
