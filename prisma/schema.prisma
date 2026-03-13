@@ -1,0 +1,663 @@
+// Ministry Platform - Prisma schema (MySQL)
+// Matches database/schema.sql. Run: npx prisma generate
+// Migrate existing DB: npx prisma db pull (optional, to sync) or keep schema in sync manually.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Users & auth
+// ---------------------------------------------------------------------------
+
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  email      String    @unique @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  role       UserRole  @default(visitor)
+  avatar_url String?   @db.VarChar(500)
+  bio        String?   @db.Text
+  phone      String?   @db.VarChar(50)
+  status     UserStatus @default(active)
+  last_login DateTime? @db.Timestamp(0)
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @updatedAt @db.Timestamp(0)
+
+  blogs              Blog[]
+  events             Event[]
+  gallery            GalleryItem[]
+  media              MediaItem[]
+  notes              Note[]
+  prophecies         Prophecy[]
+  conference_created Conference[]       @relation("ConferenceCreator")
+  conference_participants ConferenceParticipant[]
+  social_media_accounts SocialMediaAccount[]
+  social_media_posts    SocialMediaPost[]
+  activity_logs      ActivityLog[]
+  sip_config_created SipConfig[]
+
+  @@index([email])
+  @@index([role])
+  @@index([status])
+  @@map("users")
+}
+
+enum UserRole {
+  super_admin
+  media_team
+  ministry_member
+  visitor
+}
+
+enum UserStatus {
+  active
+  inactive
+  suspended
+}
+
+// ---------------------------------------------------------------------------
+// Families & followers
+// ---------------------------------------------------------------------------
+
+model Family {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  created_at DateTime   @default(now()) @db.Timestamp(0)
+  updated_at DateTime   @updatedAt @db.Timestamp(0)
+  followers  Follower[]
+
+  @@index([name])
+  @@map("families")
+}
+
+model Follower {
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(255)
+  email      String       @db.VarChar(255)
+  phone      String?      @db.VarChar(50)
+  family_id  Int?
+  status     FollowerStatus @default(active)
+  notes      String?      @db.Text
+  join_date  DateTime?    @db.Date
+  created_at DateTime    @default(now()) @db.Timestamp(0)
+  updated_at DateTime    @updatedAt @db.Timestamp(0)
+
+  family_id_follower Family?  @relation(fields: [family_id], references: [id], onDelete: SetNull)
+  prayer_points       PrayerPoint[]
+  conference_participants ConferenceParticipant[]
+
+  @@index([email])
+  @@index([family_id])
+  @@index([status])
+  @@map("followers")
+}
+
+enum FollowerStatus {
+  active
+  inactive
+}
+
+model PrayerPoint {
+  id           Int            @id @default(autoincrement())
+  follower_id  Int
+  text         String         @db.Text
+  date         DateTime       @db.Date
+  status       PrayerStatus   @default(pending)
+  notes        String?        @db.Text
+  created_at   DateTime       @default(now()) @db.Timestamp(0)
+  updated_at   DateTime       @updatedAt @db.Timestamp(0)
+
+  follower Follower @relation(fields: [follower_id], references: [id], onDelete: Cascade)
+
+  @@index([follower_id])
+  @@index([status])
+  @@index([date])
+  @@map("prayer_points")
+}
+
+enum PrayerStatus {
+  pending
+  happened
+  not_happened
+}
+
+// ---------------------------------------------------------------------------
+// Content
+// ---------------------------------------------------------------------------
+
+model Blog {
+  id           Int       @id @default(autoincrement())
+  title        String    @db.VarChar(500)
+  content      String    @db.Text
+  excerpt      String?   @db.Text
+  author       String?   @db.VarChar(255)
+  category     String?   @db.VarChar(100)
+  featured     Boolean   @default(false)
+  published    Boolean   @default(false)
+  published_at DateTime? @db.Timestamp(0)
+  created_by   Int?
+  created_at   DateTime  @default(now()) @db.Timestamp(0)
+  updated_at   DateTime  @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+
+  @@index([published])
+  @@index([category])
+  @@index([created_at])
+  @@map("blogs")
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String    @db.VarChar(255)
+  description String?   @db.Text
+  type        String?   @db.VarChar(100)
+  date        DateTime  @db.Date
+  time        DateTime? @db.Time(0)
+  location    String?   @db.VarChar(255)
+  created_by  Int?
+  created_at  DateTime  @default(now()) @db.Timestamp(0)
+  updated_at  DateTime  @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+
+  @@index([date])
+  @@index([type])
+  @@map("events")
+}
+
+model GalleryItem {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  description String?  @db.Text
+  image_url   String   @db.VarChar(500)
+  created_by  Int?
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  updated_at  DateTime @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+
+  @@index([created_at])
+  @@map("gallery")
+}
+
+model TeamMember {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  role        String   @db.VarChar(255)
+  bio         String?  @db.Text
+  image_url   String?  @db.VarChar(500)
+  email       String?  @db.VarChar(255)
+  phone       String?  @db.VarChar(50)
+  order_index Int      @default(0)
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  updated_at  DateTime @updatedAt @db.Timestamp(0)
+
+  @@index([order_index])
+  @@map("team_members")
+}
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  title     String?  @db.VarChar(255)
+  content   String   @db.Text
+  type      NoteType @default(note)
+  user_id   Int?
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt @db.Timestamp(0)
+
+  user User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([type])
+  @@index([created_at])
+  @@map("notes")
+}
+
+enum NoteType {
+  note
+  sermon
+}
+
+model Prophecy {
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(255)
+  content     String        @db.Text
+  date        DateTime      @db.Date
+  reference   String?       @db.VarChar(255)
+  status      ProphecyStatus @default(pending)
+  created_by  Int?
+  created_at  DateTime      @default(now()) @db.Timestamp(0)
+  updated_at  DateTime      @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+
+  @@index([date])
+  @@index([status])
+  @@map("prophecies")
+}
+
+enum ProphecyStatus {
+  pending
+  verified
+  archived
+}
+
+model MediaItem {
+  id            Int         @id @default(autoincrement())
+  title         String      @db.VarChar(255)
+  description   String?     @db.Text
+  type          MediaType
+  image_url     String?     @db.VarChar(500)
+  video_id      String?     @db.VarChar(255)
+  thumbnail_url String?     @db.VarChar(500)
+  message       String?     @db.Text
+  created_by    Int?
+  created_at    DateTime    @default(now()) @db.Timestamp(0)
+  updated_at    DateTime    @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+
+  @@index([type])
+  @@index([created_at])
+  @@map("media")
+}
+
+enum MediaType {
+  poster
+  youtube
+  youtube_shorts
+}
+
+model SliderImage {
+  id          Int           @id @default(autoincrement())
+  image_url   String        @db.VarChar(500)
+  text        String?       @db.Text
+  title       String?       @db.VarChar(255)
+  description String?       @db.Text
+  order_index Int           @default(0)
+  status      SliderStatus  @default(active)
+  created_at  DateTime      @default(now()) @db.Timestamp(0)
+  updated_at  DateTime      @updatedAt @db.Timestamp(0)
+
+  @@index([order_index])
+  @@index([status])
+  @@map("slider_images")
+}
+
+enum SliderStatus {
+  active
+  inactive
+}
+
+model AudioTrack {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(255)
+  artist      String?  @db.VarChar(255)
+  duration    String?  @db.VarChar(50)
+  image_url   String?  @db.VarChar(500)
+  url         String   @db.VarChar(1000)
+  scripture   String?  @db.Text
+  order_index Int      @default(0)
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  updated_at  DateTime @updatedAt @db.Timestamp(0)
+
+  @@index([order_index])
+  @@map("audio_tracks")
+}
+
+model Testimony {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(255)
+  content    String   @db.Text
+  image_url  String?  @db.VarChar(500)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt @db.Timestamp(0)
+
+  @@index([created_at])
+  @@map("testimonies")
+}
+
+model Setting {
+  id         Int      @id @default(autoincrement())
+  key_name   String   @unique @db.VarChar(255)
+  value      String?  @db.Text
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt @db.Timestamp(0)
+
+  @@index([key_name])
+  @@map("settings")
+}
+
+// ---------------------------------------------------------------------------
+// Social media
+// ---------------------------------------------------------------------------
+
+model SocialMediaAccount {
+  id               Int              @id @default(autoincrement())
+  platform         SocialPlatform
+  account_name     String           @db.VarChar(255)
+  account_username String?          @db.VarChar(255)
+  access_token     String?          @db.Text
+  refresh_token    String?          @db.Text
+  token_expires_at DateTime?        @db.Timestamp(0)
+  page_id          String?          @db.VarChar(255)
+  account_id       String?          @db.VarChar(255)
+  status           SocialAccountStatus @default(active)
+  last_posted_at   DateTime?        @db.Timestamp(0)
+  metadata         Json?            @db.Json
+  created_by       Int?
+  created_at       DateTime        @default(now()) @db.Timestamp(0)
+  updated_at       DateTime        @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+  post_platforms  SocialMediaPostPlatform[]
+  analytics       SocialMediaAnalytic[]
+
+  @@unique([platform, account_id])
+  @@index([platform])
+  @@index([status])
+  @@map("social_media_accounts")
+}
+
+enum SocialPlatform {
+  facebook
+  instagram
+  twitter
+  linkedin
+  youtube
+  tiktok
+  telegram
+  whatsapp
+}
+
+enum SocialAccountStatus {
+  active
+  inactive
+  expired
+  error
+}
+
+model SocialMediaPost {
+  id                 Int              @id @default(autoincrement())
+  title              String?          @db.VarChar(255)
+  content            String           @db.Text
+  media_type         SocialPostMedia  @default(text)
+  media_urls         Json?            @db.Json
+  hashtags           String?          @db.Text
+  status             SocialPostStatus @default(draft)
+  scheduled_at       DateTime?        @db.Timestamp(0)
+  published_at       DateTime?        @db.Timestamp(0)
+  publish_to_website Boolean          @default(true)
+  website_category   String?          @db.VarChar(100)
+  created_by         Int?
+  created_at         DateTime         @default(now()) @db.Timestamp(0)
+  updated_at         DateTime         @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+  post_platforms  SocialMediaPostPlatform[]
+  analytics       SocialMediaAnalytic[]
+
+  @@index([status])
+  @@index([created_at])
+  @@index([scheduled_at])
+  @@index([publish_to_website])
+  @@map("social_media_posts")
+}
+
+enum SocialPostMedia {
+  text
+  image
+  video
+  carousel
+  story
+  reel
+}
+
+enum SocialPostStatus {
+  draft
+  scheduled
+  publishing
+  published
+  failed
+  archived
+}
+
+model SocialMediaPostPlatform {
+  id               Int                  @id @default(autoincrement())
+  post_id          Int
+  account_id       Int
+  platform_post_id String?              @db.VarChar(255)
+  platform_post_url String?             @db.VarChar(500)
+  status           PlatformPublishStatus @default(pending)
+  error_message    String?             @db.Text
+  engagement_stats Json?               @db.Json
+  published_at     DateTime?            @db.Timestamp(0)
+  created_at       DateTime            @default(now()) @db.Timestamp(0)
+  updated_at       DateTime            @updatedAt @db.Timestamp(0)
+
+  post    SocialMediaPost    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  account SocialMediaAccount @relation(fields: [account_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, account_id])
+  @@index([post_id])
+  @@index([account_id])
+  @@index([status])
+  @@map("social_media_post_platforms")
+}
+
+enum PlatformPublishStatus {
+  pending
+  publishing
+  published
+  failed
+}
+
+model SocialMediaAnalytic {
+  id              Int            @id @default(autoincrement())
+  post_id         Int
+  account_id      Int
+  platform        SocialPlatform
+  likes           Int            @default(0)
+  comments        Int            @default(0)
+  shares          Int            @default(0)
+  views           Int            @default(0)
+  clicks          Int            @default(0)
+  reach           Int            @default(0)
+  impressions     Int            @default(0)
+  engagement_rate Decimal?       @db.Decimal(5, 2)
+  synced_at       DateTime       @default(now()) @db.Timestamp(0)
+  created_at      DateTime       @default(now()) @db.Timestamp(0)
+  updated_at      DateTime       @updatedAt @db.Timestamp(0)
+
+  post    SocialMediaPost    @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  account SocialMediaAccount @relation(fields: [account_id], references: [id], onDelete: Cascade)
+
+  @@unique([post_id, account_id])
+  @@index([post_id])
+  @@index([platform])
+  @@index([synced_at])
+  @@map("social_media_analytics")
+}
+
+// ---------------------------------------------------------------------------
+// Permissions & activity
+// ---------------------------------------------------------------------------
+
+model RolePermission {
+  id         Int      @id @default(autoincrement())
+  role       UserRole
+  resource   String   @db.VarChar(100)
+  can_create Boolean  @default(false)
+  can_read   Boolean  @default(false)
+  can_update Boolean  @default(false)
+  can_delete Boolean  @default(false)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt @db.Timestamp(0)
+
+  @@unique([role, resource])
+  @@index([role])
+  @@map("role_permissions")
+}
+
+model ActivityLog {
+  id           Int      @id @default(autoincrement())
+  user_id      Int?
+  action       String   @db.VarChar(100)
+  resource_type String? @db.VarChar(100)
+  resource_id  Int?
+  details      Json?    @db.Json
+  ip_address   String?  @db.VarChar(45)
+  user_agent   String?  @db.Text
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+
+  user User? @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([user_id])
+  @@index([action])
+  @@index([created_at])
+  @@map("activity_logs")
+}
+
+// ---------------------------------------------------------------------------
+// Conferences & SIP
+// ---------------------------------------------------------------------------
+
+model Conference {
+  id                   Int          @id @default(autoincrement())
+  title                String       @db.VarChar(255)
+  description          String?     @db.Text
+  jitsi_room_id        String       @unique @db.VarChar(255)
+  dial_in_number       String?      @db.VarChar(50)
+  dial_in_pin          String?      @db.VarChar(10)
+  creator_id           Int
+  status               ConferenceStatus @default(scheduled)
+  scheduled_start      DateTime?    @db.Timestamp(0)
+  scheduled_end        DateTime?    @db.Timestamp(0)
+  actual_start         DateTime?    @db.Timestamp(0)
+  actual_end           DateTime?    @db.Timestamp(0)
+  max_participants     Int          @default(100)
+  is_public            Boolean      @default(false)
+  allow_recordings     Boolean      @default(true)
+  recording_url        String?      @db.VarChar(500)
+  meeting_link         String?      @db.VarChar(500)
+  metadata             Json?       @db.Json
+  created_at           DateTime     @default(now()) @db.Timestamp(0)
+  updated_at           DateTime     @updatedAt @db.Timestamp(0)
+
+  creator     User                     @relation("ConferenceCreator", fields: [creator_id], references: [id], onDelete: Cascade)
+  participants ConferenceParticipant[]
+  call_records CallRecord[]
+
+  @@index([status])
+  @@index([jitsi_room_id])
+  @@index([scheduled_start])
+  @@index([created_at])
+  @@map("conferences")
+}
+
+enum ConferenceStatus {
+  scheduled
+  live
+  ended
+  cancelled
+}
+
+model ConferenceParticipant {
+  id               Int            @id @default(autoincrement())
+  conference_id    Int
+  user_id          Int?
+  follower_id      Int?
+  participant_name String         @db.VarChar(255)
+  participant_phone String?       @db.VarChar(50)
+  join_method      JoinMethod     @default(browser)
+  join_time        DateTime?      @db.Timestamp(0)
+  leave_time       DateTime?      @db.Timestamp(0)
+  duration_seconds Int            @default(0)
+  is_admin         Boolean        @default(false)
+  metadata         Json?          @db.Json
+  created_at       DateTime       @default(now()) @db.Timestamp(0)
+  updated_at       DateTime       @updatedAt @db.Timestamp(0)
+
+  conference Conference @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+  user       User?      @relation(fields: [user_id], references: [id], onDelete: SetNull)
+  follower   Follower?  @relation(fields: [follower_id], references: [id], onDelete: SetNull)
+  call_records_from CallRecord[] @relation("FromParticipant")
+  call_records_to   CallRecord[] @relation("ToParticipant")
+
+  @@index([conference_id])
+  @@index([user_id])
+  @@index([join_time])
+  @@map("conference_participants")
+}
+
+enum JoinMethod {
+  browser
+  phone
+  app
+}
+
+model CallRecord {
+  id                  Int            @id @default(autoincrement())
+  conference_id       Int
+  from_participant_id Int?
+  to_participant_id   Int?
+  call_type           CallType       @default(internal)
+  phone_number        String?        @db.VarChar(50)
+  duration_seconds    Int            @default(0)
+  call_status         CallStatus     @default(connected)
+  call_quality        String?        @db.VarChar(50)
+  recordings          Json?          @db.Json
+  metadata            Json?          @db.Json
+  created_at          DateTime       @default(now()) @db.Timestamp(0)
+
+  conference Conference  @relation(fields: [conference_id], references: [id], onDelete: Cascade)
+  from_participant ConferenceParticipant? @relation("FromParticipant", fields: [from_participant_id], references: [id], onDelete: SetNull)
+  to_participant   ConferenceParticipant? @relation("ToParticipant", fields: [to_participant_id], references: [id], onDelete: SetNull)
+
+  @@index([conference_id])
+  @@index([created_at])
+  @@map("call_records")
+}
+
+enum CallType {
+  incoming
+  outgoing
+  internal
+}
+
+enum CallStatus {
+  connected
+  busy
+  no_answer
+  failed
+  dropped
+}
+
+model SipConfig {
+  id                     Int      @id @default(autoincrement())
+  sip_server_url         String   @db.VarChar(255)
+  sip_username            String?  @db.VarChar(255)
+  sip_password           String?  @db.VarChar(255)
+  dial_in_number         String?  @db.VarChar(50)
+  country_code           String   @default("+91") @db.VarChar(5)
+  sip_provider           String?   @db.VarChar(100)
+  is_active              Boolean  @default(true)
+  max_dial_in_participants Int    @default(50)
+  recording_enabled      Boolean  @default(true)
+  metadata               Json?    @db.Json
+  created_by             Int?
+  created_at             DateTime @default(now()) @db.Timestamp(0)
+  updated_at             DateTime @updatedAt @db.Timestamp(0)
+
+  created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
+
+  @@index([is_active])
+  @@map("sip_config")
+}

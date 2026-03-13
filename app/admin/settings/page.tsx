@@ -117,6 +117,7 @@ const DEFAULTS: Record<string, string> = {
   dial_in_uk: '+44 330 001 0116',
   dial_in_pin: '',
   conference_web_url: 'https://join.freeconferencecall.com/jesusisthewayjebathottam',
+  jitsi_room_name: 'MinistryLine',
 };
 
 type SectionKey = 'general' | 'about' | 'mission' | 'brand' | 'dialin';
@@ -134,7 +135,7 @@ const SECTION_KEYS: Record<SectionKey, string[]> = {
   about: ['about_heading', 'about_text', 'about_text_secondary'],
   mission: ['mission_title', 'mission_description', 'vision_title', 'vision_description'],
   brand: ['logo_url', 'primary_color'],
-  dialin: ['dial_in_india', 'dial_in_us', 'dial_in_uk', 'dial_in_pin', 'conference_web_url'],
+  dialin: ['dial_in_india', 'dial_in_us', 'dial_in_uk', 'dial_in_pin', 'conference_web_url', 'jitsi_room_name'],
 };
 
 const inputClass =
@@ -540,7 +541,12 @@ export default function AdminSettings() {
               <div>
                 <FieldLabel htmlFor="conference_web_url">Conference web link (Free Conference Call style)</FieldLabel>
                 <input id="conference_web_url" type="url" placeholder="https://join.freeconferencecall.com/your-room" className={inputClass} value={settings.conference_web_url ?? ''} onChange={(e) => handleChange('conference_web_url', e.target.value)} />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">e.g. Free Conference Call join URL. Leave empty to hide &quot;Join online&quot;.</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">e.g. Free Conference Call join URL, or your Jitsi room URL (https://meet.yourdomain.com/RoomName). Leave empty to hide &quot;Join online&quot;.</p>
+              </div>
+              <div>
+                <FieldLabel htmlFor="jitsi_room_name">Jitsi room name (for SIP bridge)</FieldLabel>
+                <input id="jitsi_room_name" type="text" placeholder="MinistryLine" className={inputClass} value={settings.jitsi_room_name ?? ''} onChange={(e) => handleChange('jitsi_room_name', e.target.value)} />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Room name your VPS bridge (Jigasi/Asterisk) joins. Must match the room in the conference web link above. Used by GET /api/sip/dial-in-info.</p>
               </div>
               <div className="flex justify-end pt-2">
                 <Button disabled={savingSection === 'dialin'} onClick={() => saveSection('dialin', 'Dial-in numbers')}>

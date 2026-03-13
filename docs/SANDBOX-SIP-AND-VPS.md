@@ -6,7 +6,22 @@ Use **sandbox SIP first** to test your bridge (FreeSWITCH/Asterisk) without payi
 
 ## 1. Sandbox SIP – Test Before Production
 
-These providers offer **free trial or sandbox SIP** so you can verify your VPS bridge works before buying a number.
+### Which providers give you a sandbox number?
+
+These providers give you a **free or trial phone number** (or SIP trunk) so you can test your VPS bridge without paying for a production number:
+
+| Provider | Sandbox / trial number? | What you get |
+|----------|--------------------------|--------------|
+| **Twilio** | Yes | Trial account: **1 free number** (US), 1 SIP trunk, 4 concurrent calls. Inbound: anyone can call your number. Outbound: only to **verified** numbers. [twilio.com/try-twilio](https://www.twilio.com/try-twilio) |
+| **SIP.US** | Yes | Free trial with **60 minutes** outbound (US). No credit card. You get SIP credentials; use with a softphone or point termination to your VPS. [sip.us](https://www.sip.us/) |
+| **Vapi-Ready SIP** | Yes | **Free test DID** (US number for testing). Pay-as-you-go after. [vapisiptrunking.com](https://vapisiptrunking.com/) |
+| **GoTrunk** | Yes | **30-day free trial** (number/SIP via VoIPstudio). [gotrunk.com](https://gotrunk.com/register/) |
+| **handSIP (Imecom)** | Yes | Free **demo account**, unlimited call paths (US). Request trial. [Alhambra IT / handSIP](https://info.us.alhambrait.com/lp/sip-trunk-trial) |
+| **Siply** | Yes | **Free testing** accounts; wholesale SIP. [siply.com](https://www.siply.com/) |
+
+**India (+91) sandbox:** Most India SIP providers (Trikon, Exotel) do **not** offer a free India number. Trikon sometimes offers **demo minutes** for US/Canada; for an India DID you usually pay from day one (~₹250). Use a **US trial number** (e.g. Twilio) to test your bridge, then switch to an India number from Trikon/Exotel.
+
+### Full sandbox table (SIP trunk / credentials)
 
 | Provider | What they offer | Signup / Notes |
 |----------|-----------------|----------------|
@@ -25,7 +40,26 @@ These providers offer **free trial or sandbox SIP** so you can verify your VPS b
 4. **Configure FreeSWITCH/Asterisk** on the VPS to accept that trunk and send calls into your conference app.
 5. **Test:** Call the trial number (or Twilio test number); confirm audio reaches your bridge and conference.
 
-After sandbox works, **switch to production**: e.g. Trikon/Exotel for India number (~₹250) and same VPS.
+After sandbox works, **switch to production**: use an **India (+91) number** from a local SIP provider. Twilio does not offer Indian numbers.
+
+- **India providers and step-by-step setup:** **`docs/INDIA-NUMBER-PROVIDERS.md`** (Trikon from ~₹250/month, Exotel, DIDWW, BuyDIDNumber, etc., with steps to point the number to your VPS).
+
+**Using your personal number:** You cannot use your personal mobile/landline as the SIP endpoint. Use a dedicated number from a SIP provider (or call-forward your personal number to that dedicated number). See **`docs/TWILIO-SAME-BRIDGE-SETUP.md`** §1.5.
+
+### Testing without international calls (no international pack on mobile)
+
+US sandbox numbers (Twilio, SIP.US, etc.) require calling a US number from India = **international call** if you use your mobile. If you **don’t have an international pack**, use one of these instead:
+
+1. **SIP softphone over WiFi/data (no phone call)**  
+   Install a **SIP softphone** on your **phone or PC** (e.g. **Zoiper**, **Linphone**, **MicroSIP** on PC). Configure it to register to **your VPS Asterisk/FreeSWITCH** (create a SIP extension for testing). Place a “call” to the conference extension from the softphone. The call uses **internet (WiFi/data)** only – no GSM/international minutes. You can join the same Jitsi room as a “dial-in” leg and test the bridge. No need to call any US number.
+
+2. **Use an India number from day one**  
+   Get an **India (+91) number** from **Trikon** (~₹250/month) or **Exotel**. Put it in Admin → Settings and point it to your VPS. Then **call that India number from your mobile** – it’s a **local/national** call (or low-cost STD), so no international pack needed. See **`docs/INDIA-NUMBER-PROVIDERS.md`**.
+
+3. **Browser + softphone on same device**  
+   Open **Jitsi in the browser** (one “participant”). On the **same PC**, open **MicroSIP** (or another softphone) registered to your VPS and dial the conference. You’ll hear both legs in the same room. No mobile call at all.
+
+**Summary:** You don’t need to call a US number to test. Use a **SIP softphone** over internet to your VPS, or get an **India number** (Trikon) and call it locally.
 
 ---
 

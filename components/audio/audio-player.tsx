@@ -2,12 +2,37 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { audioTracks } from '@/data/audio-content';
+import { audioTracks as fallbackTracks } from '@/data/audio-content';
+
+type Track = { id: number; title: string; artist?: string; duration?: string; image?: string; image_url?: string; url: string; scripture?: string };
+
+function normalizeTrack(t: { id: number; title: string; artist?: string | null; duration?: string | null; image?: string; image_url?: string | null; url: string; scripture?: string | null }): Track {
+  return {
+    id: t.id,
+    title: t.title,
+    artist: t.artist ?? undefined,
+    duration: t.duration ?? undefined,
+    image: (t as any).image || t.image_url || undefined,
+    url: t.url,
+    scripture: t.scripture ?? undefined,
+  };
+}
 
 export function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
 
+  const [tracks, setTracks] = useState<Track[]>(() =>
+    fallbackTracks.map((t) => ({
+      id: t.id,
+      title: t.title,
+      artist: t.artist,
+      duration: t.duration,
+      image: (t as { image?: string }).image,
+      url: (t as { url: string }).url,
+      scripture: (t as { scripture?: string }).scripture,
+    }))
+  );
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +43,17 @@ export function AudioPlayer() {
   const [error, setError] = useState<string | null>(null);
   const [autoPlayNext, setAutoPlayNext] = useState(true);
 
-  const currentTrack = audioTracks[currentTrackIndex];
+  useEffect(() => {
+    fetch('/api/audio')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) setTracks(list.map(normalizeTrack));
+      })
+      .catch(() => {});
+  }, []);
+
+  const currentTrack = tracks[currentTrackIndex];
 
   const formatTime = (seconds: number) => {
     if (!isFinite(seconds) || seconds < 0) return '0:00';
@@ -60,9 +95,9 @@ export function AudioPlayer() {
   }, []);
 
   const playNext = useCallback(() => {
-    const nextIndex = (currentTrackIndex + 1) % audioTracks.length;
+    const nextIndex = (currentTrackIndex + 1) % tracks.length;
     selectTrack(nextIndex);
-  }, [currentTrackIndex, selectTrack]);
+  }, [currentTrackIndex, tracks.length, selectTrack]);
 
   const playPrevious = useCallback(() => {
     const audio = audioRef.current;
@@ -70,9 +105,9 @@ export function AudioPlayer() {
       audio.currentTime = 0;
       return;
     }
-    const prevIndex = (currentTrackIndex - 1 + audioTracks.length) % audioTracks.length;
+    const prevIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
     selectTrack(prevIndex);
-  }, [currentTrackIndex, selectTrack]);
+  }, [currentTrackIndex, tracks.length, selectTrack]);
 
   const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current;
@@ -172,6 +207,14 @@ export function AudioPlayer() {
 
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
+  if (!currentTrack || tracks.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">
+        No audio tracks available. Add tracks in Admin → 24-Hour Audio.
+      </div>
+    );
+  }
+
   return (
     <div>
       <audio ref={audioRef} preload="metadata" />
@@ -183,8 +226,8 @@ export function AudioPlayer() {
             {/* Album Art */}
             <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-xl overflow-hidden flex-shrink-0 shadow-lg">
               <img
-                src={currentTrack.image}
-                alt={currentTrack.title}
+                src={currentTrack?.image || currentTrack?.image_url || ''}
+                alt={currentTrack?.title ?? ''}
                 className="w-full h-full object-cover"
               />
               {isPlaying && (
@@ -346,7 +389,7 @@ export function AudioPlayer() {
         {/* Playlist */}
         <div className="space-y-2">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-3">Playlist</h3>
-          {audioTracks.map((track, index) => (
+          {tracks.map((track, index) => (
             <motion.div
               key={track.id}
               whileHover={{ x: 3 }}
@@ -359,7 +402,7 @@ export function AudioPlayer() {
             >
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
                 <img
-                  src={track.image}
+                  src={track.image || track.image_url || ''}
                   alt={track.title}
                   className="w-full h-full object-cover"
                 />

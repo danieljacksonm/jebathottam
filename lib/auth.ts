@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { query } from './db';
+import { prisma } from './prisma';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
@@ -52,18 +52,17 @@ export async function getUserFromRequest(request: NextRequest): Promise<UserPayl
   if (!payload) return null;
 
   // Verify user still exists
-  const users = await query<any[]>(
-    'SELECT id, email, role, name FROM users WHERE id = ?',
-    [payload.id]
-  );
-
-  if (users.length === 0) return null;
+  const user = await prisma.user.findUnique({
+    where: { id: payload.id },
+    select: { id: true, email: true, role: true, name: true },
+  });
+  if (!user) return null;
 
   return {
-    id: users[0].id,
-    email: users[0].email,
-    role: users[0].role,
-    name: users[0].name,
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    name: user.name,
   };
 }
 

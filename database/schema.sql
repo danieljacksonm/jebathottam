@@ -191,6 +191,21 @@ CREATE TABLE IF NOT EXISTS slider_images (
   INDEX idx_status (status)
 );
 
+-- Audio tracks (24-hour audio section on homepage)
+CREATE TABLE IF NOT EXISTS audio_tracks (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(255) NOT NULL,
+  artist VARCHAR(255),
+  duration VARCHAR(50),
+  image_url VARCHAR(500),
+  url VARCHAR(1000) NOT NULL COMMENT 'Audio file URL (MP3 etc.)',
+  scripture TEXT,
+  order_index INT DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_order (order_index)
+);
+
 -- Testimonies table
 CREATE TABLE IF NOT EXISTS testimonies (
   id INT PRIMARY KEY AUTO_INCREMENT,

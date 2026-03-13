@@ -23,7 +23,8 @@ const CATEGORIES = ['Teaching', 'Reflection', 'Community', 'Mission'];
 
 function getAuthHeaders(): HeadersInit {
   if (typeof window === 'undefined') return {};
-  return { 'Content-Type': 'application/json', credentials: 'include' };
+  const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
+  return { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) };
 }
 
 export default function AdminBlogsPage() {

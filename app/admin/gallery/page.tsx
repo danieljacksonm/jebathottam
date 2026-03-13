@@ -58,11 +58,13 @@ export default function AdminGalleryPage() {
       const formData = new FormData();
       formData.set('file', file);
       formData.set('type', 'gallery');
+      const headers: HeadersInit = {};
       const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
-      const res = await fetch('/api/upload', { method: 'POST', body: formData, credentials: 'include' });
+      if (token) headers.Authorization = `Bearer ${token}`;
+      const res = await fetch('/api/upload', { method: 'POST', body: formData, credentials: 'include', headers });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || 'Upload failed');
-      if (data.url) setForm((f) => ({ ...f, image_url: data.url }));
+      if (data.url) setForm((f) => ({ ...f, image_url: data.url.trim() }));
     } catch (err: any) {
       setError(err.message || 'Upload failed');
     } finally {
@@ -187,11 +189,11 @@ export default function AdminGalleryPage() {
                   </label>
                 </div>
                 <input
-                  type="url"
+                  type="text"
                   value={form.image_url}
                   onChange={(e) => setForm((f) => ({ ...f, image_url: e.target.value }))}
                   className="w-full px-3 py-2 sm:px-4 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-800 dark:text-white text-sm sm:text-base"
-                  placeholder="https://... or upload above"
+                  placeholder="Upload above or paste image URL (e.g. https://... or /api/uploads/...)"
                 />
                 {form.image_url && (
                   <div className="mt-2 rounded-lg overflow-hidden max-w-xs aspect-video bg-gray-100 dark:bg-gray-800">

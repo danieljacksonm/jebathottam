@@ -37,6 +37,7 @@ const navSections = [
     items: [
       { name: 'Social Media', href: '/admin/social-media', iconKey: 'socialMedia' as const, badge: 'New' },
       { name: 'Media Library', href: '/admin/media', iconKey: 'media' as const },
+      { name: '24-Hour Audio', href: '/admin/audio', iconKey: 'audio' as const },
       { name: 'Notes & Sermons', href: '/admin/notes', iconKey: 'notes' as const },
       { name: 'Prophecy', href: '/admin/prophecy', iconKey: 'prophecy' as const },
       { name: 'Chat', href: '/admin/chat', iconKey: 'chat' as const },

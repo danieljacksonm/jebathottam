@@ -52,6 +52,7 @@ export const adminNavIcons = {
   chat: MessageCircle,
   slider: Sliders,
   testimonies: MessageSquare,
+  audio: Music2,
   settings: Settings,
 } as const;
 

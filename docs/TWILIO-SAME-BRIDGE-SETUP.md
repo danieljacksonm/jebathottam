@@ -71,15 +71,66 @@ See **`docs/SANDBOX-SIP-AND-VPS.md`** for firewall (5060 UDP/TCP, RTP range), ch
 2. Name it (e.g. `Ministry Bridge`).
 3. **Termination** (where Twilio sends inbound calls to your system):
    - **Termination SIP URI:** `sip:YOUR_VPS_PUBLIC_IP:5060` (or `sip:jitsi.yourdomain.com:5060` if you use a hostname).
-   - Create a **Termination Credential List** if Twilio asks for auth; otherwise IP-based auth may be used (Twilio docs vary by region).
+   - If Twilio requires authentication for termination, create a **Credential List** and attach it to the trunk (see **§1.3a** below). Many setups use **IP allowlisting** only (no credential list).
 4. **Origination** (where your system sends outbound SIP to Twilio):
    - Add your VPS public IP so Twilio accepts SIP from you.
 5. **Link the number** to this trunk: Phone Numbers → assign your number to the new trunk.
+
+### 1.3a How to add a Credential List in Twilio (if required)
+
+Use this when Twilio asks for username/password auth (e.g. for termination or origination).
+
+**Step 1 – Create the credential list (account level)**
+
+1. In Twilio Console go to **Explore Products** → **Voice** → **Manage** → **SIP** (or open **Programmable Voice** → **SIP** in the left menu).
+2. Click **Credential Lists** (under “SIP” or “Account”).
+3. Click **Create new** / **+**.
+4. Enter a **Friendly Name** (e.g. `Ministry VPS`) and click **Create**.
+5. Note the **Credential List SID** (starts with `CL...`). You’ll need it when linking to the trunk.
+
+**Step 2 – Add credentials (username + password)**
+
+1. Open the credential list you just created.
+2. Click **Add credential** / **+**.
+3. **Username:** e.g. a name or extension (e.g. `asterisk` or your VPS IP). Must match what your Asterisk/FreeSWITCH will send when Twilio challenges.
+4. **Password:** At least 12 characters, include at least one digit and mixed case (e.g. `MySecurePass123`). Save the same username/password in your Asterisk SIP config so it can respond to Twilio’s challenge.
+5. Click **Save**.
+
+**Step 3 – Attach the credential list to your Trunk**
+
+1. Go to **Elastic SIP Trunking** → **Trunks** → open your trunk (e.g. Ministry Bridge).
+2. In the trunk page, find **Termination** (or **Origination** if you use auth there).
+3. Under **Credential Lists**, click **Add Credential List** (or **Associate**).
+4. Select the credential list you created (or paste the **Credential List SID** `CL...`).
+5. Save.
+
+**Step 4 – Configure your VPS (Asterisk/FreeSWITCH)**
+
+- When Twilio sends a call to your VPS, Twilio may send an auth challenge. Your Asterisk must respond with the **same username and password** you added in Step 2. In Asterisk `sip.conf` (or the trunk peer), set `username` and `secret` (or `auth`) to those values so outbound/inbound auth succeeds.
+
+**Reference:** [Twilio – CredentialList resource](https://www.twilio.com/docs/sip-trunking/api/credentiallist-resource)
 
 ### 1.4 Twilio trial limits
 
 - Only **verified** caller IDs can be called (for outbound). For **inbound** (someone dials your number), anyone can call.
 - 4 concurrent calls on trial — enough to test “same bridge” with a few phone + browser users.
+
+### 1.5 Twilio and Indian numbers / using your personal number
+
+**Twilio does not offer Indian (+91) numbers** in the same way as US/UK. For India dial-in you need an **Indian SIP/VoIP provider** (e.g. Trikon, Exotel, VoiceWave) that gives you a +91 number and sends calls to your VPS. The same bridge (Jitsi + Jigasi + Asterisk) on your VPS works; only the “who sends calls to you” changes.
+
+**Can I use my personal mobile number for SIP?**  
+**No, not directly.** Your personal number (Airtel, Jio, BSNL, etc.) is owned and controlled by the telco. You cannot point it to your VPS as a SIP termination. You have two practical options:
+
+1. **Use a dedicated number for the ministry (recommended)**  
+   Get a separate number from an Indian SIP provider (e.g. Trikon ~₹250/month) or use a Twilio US number for testing. Put that number in Admin → Settings as the dial-in. Your personal number stays private and is not used for the bridge.
+
+2. **Call forwarding from your personal number**  
+   You can set **conditional or unconditional call forwarding** on your personal number to forward to another number that *does* terminate to your bridge (e.g. a Twilio US number or an Indian number from Exotel/Trikon). That second number is configured to send SIP to your VPS. Downsides: your personal number is exposed as the one people call, and you may pay for forwarding and for the terminating number.
+
+**Summary:** Use Twilio (or another provider) to get a **number that you own on their platform** and that they send to your VPS via SIP. Do not try to use your personal SIM number as the SIP endpoint itself.
+
+**For an India (+91) number:** Twilio does not offer Indian numbers. Use an Indian SIP provider and the same VPS bridge. See **`docs/INDIA-NUMBER-PROVIDERS.md`** for providers (Trikon, Exotel, DIDWW, etc.) and step-by-step setup to get a number and point it to your VPS.
 
 ---
 
@@ -156,9 +207,50 @@ Example idea (Asterisk dialplan): when someone calls your Twilio number, play �
 
 ---
 
+## Part 4: App SIP API and scripts (implemented)
+
+The ministry app implements the SIP process so the VPS bridge can read room name and PIN from the app:
+
+- **Public API (no auth):** `GET /api/sip/dial-in-info`  
+  Returns `{ data: { numbers: { india, us, uk }, pin, jitsi_room_name, conference_web_url } }`.  
+  The VPS can `curl` this URL to get the current Jitsi room name and PIN.
+
+- **Admin → Settings → Dial-in:**  
+  Configure dial-in numbers, PIN, conference web link, and **Jitsi room name**. The room name is what Jigasi must join so phone and browser users are in the same room.
+
+- **Scripts:** See **`scripts/sip/README.md`** and **`scripts/sip/fetch-dial-in-info.sh`** for fetching dial-in info from the app. **`scripts/sip/asterisk-extensions-sample.conf`** is a sample Asterisk dialplan for inbound Twilio → Jigasi.
+
+---
+
+## Troubleshooting
+
+### "Cannot rename subdomain null because the parent domain does not exist or this account doesn't own it"
+
+This happens when saving the SIP Trunk if a **Domain** or **Subdomain** field is empty (null). Twilio expects the trunk to have a valid **domain name** under `pstn.twilio.com` (e.g. `mytrunk.pstn.twilio.com`).
+
+**Fix:**
+
+1. **In Twilio Console:** When creating or editing the trunk, do **not** clear or leave blank any **Domain** or **Subdomain** field. If you see such a field:
+   - Leave the **auto-generated** value (e.g. a random subdomain Twilio suggests), or
+   - Enter a valid subdomain using only letters, numbers, and hyphens (e.g. `ministry-bridge`). The full domain will be `ministry-bridge.pstn.twilio.com`.
+
+2. **Create the trunk via API instead:** If the Console keeps sending null, create the trunk with the REST API and set `DomainName` explicitly:
+   ```http
+   POST https://trunking.twilio.com/v1/Trunks
+   Content-Type: application/x-www-form-urlencoded
+
+   FriendlyName=Ministry Bridge&DomainName=ministry-bridge.pstn.twilio.com
+   ```
+   Then in the Console, add **Termination URI** and **Origination** (IP) to that trunk.
+
+3. **New trunk from scratch:** Delete the trunk that fails, then create a **new** trunk. When prompted for domain/subdomain, enter a value (e.g. `ministry-bridge`) and do not clear it before saving.
+
+---
+
 ## References
 
 - **VPS + firewall:** `docs/SANDBOX-SIP-AND-VPS.md`
+- **App SIP API and scripts:** `scripts/sip/README.md`
 - **Asterisk basics:** `docs/INDIA-SIP-SETUP.md`
 - **Twilio Elastic SIP Trunking:** [Twilio SIP Trunking](https://www.twilio.com/docs/sip-trunking)
 - **Jigasi (SIP ↔ Jitsi):** [Jitsi Jigasi with SIP provider](https://jitsi.guide/jitsi-jigasi-connect-sip-provider/)

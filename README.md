@@ -152,10 +152,14 @@ All UI components follow the design system documented in `/docs/design-system.md
 
 ## Documentation
 
+- [Launch checklist](./docs/LAUNCH-CHECKLIST.md) - Admin editability, image/audio/video uploads before launch
+- [Prisma](./docs/PRISMA.md) - Using Prisma ORM (setup, migration from raw queries)
 - [Backend Setup Guide](./README-BACKEND.md) - Database and API setup
 - [Vercel Deployment Guide](./VERCEL-DEPLOYMENT.md) - Complete deployment instructions
 - [Deployment Checklist](./DEPLOYMENT-CHECKLIST.md) - Pre-deployment checklist
 - [Design System](./docs/design-system.md) - UI/UX guidelines
+- [SIP / Dial-in bridge](./scripts/sip/README.md) - App API and VPS scripts for Twilio → Asterisk → Jitsi
+- [Twilio same-bridge setup](./docs/TWILIO-SAME-BRIDGE-SETUP.md) - Phone + browser in one Jitsi room
 
 ## Next Steps
 

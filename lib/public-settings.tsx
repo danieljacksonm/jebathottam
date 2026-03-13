@@ -9,6 +9,8 @@ interface PublicSettings {
   dial_in_us: string;
   dial_in_uk: string;
   dial_in_pin: string;
+  conference_web_url: string;
+  jitsi_room_name: string;
   [key: string]: string;
 }
 
@@ -20,6 +22,7 @@ const defaults: PublicSettings = {
   dial_in_uk: '+44 330 001 0116',
   dial_in_pin: '',
   conference_web_url: 'https://join.freeconferencecall.com/jesusisthewayjebathottam',
+  jitsi_room_name: 'MinistryLine',
 };
 
 const PublicSettingsContext = createContext<PublicSettings>(defaults);
