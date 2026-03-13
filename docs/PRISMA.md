@@ -77,6 +77,10 @@ Model names in `prisma/schema.prisma` are PascalCase (e.g. `AudioTrack`, `Galler
 
 `npm run build` runs `prisma generate` before `next build`, so the client is always up to date.
 
+## Vercel deployment
+
+The schema sets `binaryTargets = ["native", "rhel-openssl-3.0.x"]` so the Prisma query engine works on Vercel’s Linux runtime. Prisma and `@prisma/client` are pinned to the same version (e.g. 5.22.0) to avoid “Cannot find module … query_engine_bg.mysql.wasm” errors. If you see that error, ensure both packages use the same version and that `postinstall` does not run `prisma generate` (only the build step does).
+
 ## Optional: Prisma Studio
 
 To inspect or edit data in the browser:
