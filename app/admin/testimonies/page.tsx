@@ -47,7 +47,6 @@ export default function AdminTestimoniesPage() {
       const formData = new FormData();
       formData.set('file', file);
       formData.set('type', 'testimony');
-      const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
       const headers: HeadersInit = {};
       const token = document.cookie.split('; ').find((row) => row.startsWith('auth_token='))?.split('=')[1];
       if (token) headers.Authorization = `Bearer ${token}`;
