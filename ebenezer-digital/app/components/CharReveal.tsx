@@ -27,7 +27,7 @@ export default function CharReveal({
   mode = "up",
   triggerOnView = false,
 }: Props) {
-  const ref = useRef<HTMLSpanElement>(null);
+  const ref = useRef<HTMLElement | null>(null);
   const [run, setRun] = useState(!triggerOnView);
 
   useEffect(() => {
