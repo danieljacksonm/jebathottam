@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState, type ReactNode } from "react";
+import { useRef, useEffect, useState } from "react";
 
 type Props = {
   text: string;
@@ -27,10 +27,7 @@ export default function CharReveal({
   mode = "up",
   triggerOnView = false,
 }: Props) {
-  const ref = useRef<HTMLElement | null>(null);
-  const setRef = (node: HTMLElement | null) => {
-    ref.current = node;
-  };
+  const observeRef = useRef<HTMLDivElement | null>(null);
   const [run, setRun] = useState(!triggerOnView);
 
   useEffect(() => {
@@ -38,7 +35,7 @@ export default function CharReveal({
       setRun(true);
       return;
     }
-    const el = ref.current;
+    const el = observeRef.current;
     if (!el) return;
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -54,12 +51,10 @@ export default function CharReveal({
 
   const inViewClass = triggerOnView && run ? " in-view" : "";
   const heroClass = !triggerOnView ? " char-reveal-hero" : "";
-  return (
-    <Tag
-      // Callback ref works for any tag (p/span/h1/...)
-      ref={setRef as unknown as React.LegacyRef<never>}
-      className={`char-reveal-root char-reveal-${mode}${inViewClass}${heroClass} ${className}`.trim()}
-    >
+  const rootClass = `char-reveal-root char-reveal-${mode}${inViewClass}${heroClass} ${className}`.trim();
+
+  const content = (
+    <>
       {chars.map((char, i) => (
         <span
           key={`${char}-${i}`}
@@ -76,6 +71,16 @@ export default function CharReveal({
           {char === " " ? "\u00A0" : char}
         </span>
       ))}
-    </Tag>
+    </>
   );
+
+  if (triggerOnView) {
+    return (
+      <div ref={observeRef} className="inline-block">
+        <Tag className={rootClass}>{content}</Tag>
+      </div>
+    );
+  }
+
+  return <Tag className={rootClass}>{content}</Tag>;
 }
