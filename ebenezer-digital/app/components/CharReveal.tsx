@@ -28,6 +28,9 @@ export default function CharReveal({
   triggerOnView = false,
 }: Props) {
   const ref = useRef<HTMLElement | null>(null);
+  const setRef = (node: HTMLElement | null) => {
+    ref.current = node;
+  };
   const [run, setRun] = useState(!triggerOnView);
 
   useEffect(() => {
@@ -52,7 +55,11 @@ export default function CharReveal({
   const inViewClass = triggerOnView && run ? " in-view" : "";
   const heroClass = !triggerOnView ? " char-reveal-hero" : "";
   return (
-    <Tag ref={ref} className={`char-reveal-root char-reveal-${mode}${inViewClass}${heroClass} ${className}`.trim()}>
+    <Tag
+      // Callback ref works for any tag (p/span/h1/...)
+      ref={setRef as unknown as React.LegacyRef<never>}
+      className={`char-reveal-root char-reveal-${mode}${inViewClass}${heroClass} ${className}`.trim()}
+    >
       {chars.map((char, i) => (
         <span
           key={`${char}-${i}`}
