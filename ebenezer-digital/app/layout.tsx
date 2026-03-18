@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, Source_Serif_4 } from "next/font/google";
+import type { ReactNode } from "react";
 import "./globals.css";
 import Header from "./components/Header";
 import ScrollProgressBar from "./components/ScrollProgressBar";
@@ -71,7 +72,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const jsonLd = {
     "@context": "https://schema.org",
