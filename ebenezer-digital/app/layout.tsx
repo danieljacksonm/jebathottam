@@ -90,15 +90,68 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={`${syne.variable} ${dmSans.variable} ${sourceSerif.variable}`}>
-      <body className="font-sans min-h-screen bg-[var(--bg)] text-[var(--text)] antialiased">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#1e40af" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
+      <body className="font-sans min-h-screen bg-gray-900 text-white antialiased overflow-x-hidden">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Header />
-        <ScrollProgressBar />
-        <main>{children}</main>
-        <Footer />
+        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20 pointer-events-none" />
+        <main className="relative z-10">{children}</main>
+        
+        {/* Global Styles */}
+        <style jsx global>{`
+          * {
+            scroll-behavior: smooth;
+          }
+          
+          html {
+            scroll-padding-top: 80px;
+          }
+          
+          body {
+            font-family: var(--font-dm-sans);
+          }
+          
+          h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-syne);
+          }
+          
+          /* Custom scrollbar */
+          ::-webkit-scrollbar {
+            width: 8px;
+          }
+          
+          ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+          }
+          
+          ::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.5);
+            border-radius: 4px;
+          }
+          
+          ::-webkit-scrollbar-thumb:hover {
+            background: rgba(59, 130, 246, 0.7);
+          }
+          
+          /* Selection styles */
+          ::selection {
+            background: rgba(59, 130, 246, 0.3);
+            color: white;
+          }
+          
+          /* Focus styles */
+          :focus-visible {
+            outline: 2px solid rgba(59, 130, 246, 0.5);
+            outline-offset: 2px;
+          }
+        `}</style>
       </body>
     </html>
   );
