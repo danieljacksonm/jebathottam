@@ -1,3 +1,5 @@
+'use client'
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimateSection, AnimateOne } from "./components/AnimateOnScroll";
@@ -8,142 +10,296 @@ import CharReveal from "./components/CharReveal";
 import { IMG } from "@/lib/images";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    
+    // Simulate loading
+    setTimeout(() => setIsLoading(false), 2000);
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 bg-gray-900 z-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="mb-8">
+            <div className="inline-block">
+              <div className="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2">Ebenezer Digital</h2>
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-white/60 text-sm">Loading</span>
+            <span className="loading-dots">
+              <span className="dot">.</span>
+              <span className="dot">.</span>
+              <span className="dot">.</span>
+            </span>
+          </div>
+        </div>
+        <style jsx>{`
+          .loading-dots .dot {
+            display: inline-block;
+            animation: dotPulse 1.4s infinite ease-in-out both;
+          }
+          .loading-dots .dot:nth-child(1) { animation-delay: -0.32s; }
+          .loading-dots .dot:nth-child(2) { animation-delay: -0.16s; }
+          @keyframes dotPulse {
+            0%, 80%, 100% { opacity: 0; }
+            40% { opacity: 1; }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   return (
     <>
-      {/* Hero */}
-      <ScrollParallax className="hero-banner relative min-h-screen flex flex-col justify-end overflow-hidden">
-        <div className="absolute inset-0 hero-banner-bg">
-          <div className="absolute inset-0 overflow-hidden">
-            <Image
-              src={IMG.hero}
-              alt="Professional workspace - Ebenezer Digital Services"
-              fill
-              sizes="100vw"
-              className="object-cover img-parallax-inner"
-              priority
-            />
+      {/* Sophisticated Navigation */}
+      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${scrollY > 50 ? 'bg-gray-900/95 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
+              <Link href="/" className="text-2xl font-bold text-white">
+                Ebenezer<span className="text-blue-400">.</span>
+              </Link>
+              <div className="hidden md:flex items-center gap-6">
+                <Link href="/services" className="text-white/80 hover:text-white transition-colors">Services</Link>
+                <Link href="/work" className="text-white/80 hover:text-white transition-colors">Work</Link>
+                <Link href="/about" className="text-white/80 hover:text-white transition-colors">About</Link>
+                <Link href="/contact" className="text-white/80 hover:text-white transition-colors">Contact</Link>
+              </div>
+            </div>
+            <button 
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+            >
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${menuOpen ? 'opacity-0' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${menuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></span>
+            </button>
           </div>
-          <div className="absolute inset-0 hero-banner-overlay" aria-hidden />
         </div>
-        <div className="hero-ambient" aria-hidden>
-          <span className="hero-ambient-line hero-ambient-line-1" />
-          <span className="hero-ambient-line hero-ambient-line-2" />
-          <span className="hero-ambient-line hero-ambient-line-3" />
-          <span className="hero-ambient-shimmer" />
-          <span className="float-dot absolute top-[20%] right-[12%] w-2 h-2" aria-hidden />
-          <span className="float-dot absolute bottom-[30%] left-[8%] w-2 h-2" style={{ animationDelay: "-1.5s" }} aria-hidden />
+        
+        {/* Mobile Menu Overlay */}
+        <div className={`fixed inset-0 bg-gray-900/95 backdrop-blur-md transition-all duration-300 md:hidden ${menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+          <div className="flex flex-col items-center justify-center min-h-screen gap-8">
+            <Link href="/services" className="text-3xl font-light text-white/80 hover:text-white transition-colors">Services</Link>
+            <Link href="/work" className="text-3xl font-light text-white/80 hover:text-white transition-colors">Work</Link>
+            <Link href="/about" className="text-3xl font-light text-white/80 hover:text-white transition-colors">About</Link>
+            <Link href="/contact" className="text-3xl font-light text-white/80 hover:text-white transition-colors">Contact</Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Enhanced Hero Section */}
+      <ScrollParallax className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-20 left-1/3 w-40 h-40 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
         </div>
 
-        <div className="relative z-10 flex flex-col justify-center min-h-[calc(100vh-5rem)] pt-hero pb-24 section-padding">
-          <div className="hero-content-reveal container-wide max-w-4xl relative z-20">
-            <p className="hero-banner-item hero-banner-item-1 hero-parallax-layer hero-parallax-layer-1 font-display text-xs sm:text-sm font-semibold uppercase tracking-[0.28em] text-[var(--accent)] mb-5 hero-eyebrow hero-eyebrow-expand">
-              Digital work, done right
-            </p>
-            <h1 className="hero-banner-item hero-banner-item-2 hero-parallax-layer hero-parallax-layer-2 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight leading-[1.05] text-[var(--text)] mb-3 hero-headline">
-              <span className="hero-headline-wrap inline-block">
-                <TextReveal text="We handle the work." as="span" delay={200} wordDelay={50} />
-                <br />
-                <TextReveal text="You run the business." as="span" delay={600} wordDelay={45} className="text-gradient" />
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+
+        <div className="relative z-10 text-center px-6 max-w-6xl mx-auto">
+          <AnimateOne variant="fade-up" delay={200}>
+            <div className="inline-block mb-6">
+              <span className="text-sm font-medium text-blue-400 tracking-wider uppercase bg-blue-400/10 px-4 py-2 rounded-full border border-blue-400/20">
+                Digital Excellence Since 2020
               </span>
+            </div>
+          </AnimateOne>
+
+          <AnimateOne variant="fade-up" delay={400}>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight">
+              <span className="block">Transform Your</span>
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Digital Presence</span>
             </h1>
-            <p className="hero-banner-item hero-banner-item-3 hero-parallax-layer hero-parallax-layer-3 font-display text-lg sm:text-xl text-[var(--accent)]/90 mb-6 hero-tagline">
-              <CharReveal text={"That's the deal."} as="span" mode="up" charDelay={42} triggerOnView={false} />
+          </AnimateOne>
+
+          <AnimateOne variant="fade-up" delay={600}>
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+              We craft exceptional digital experiences that drive growth, 
+              engage audiences, and deliver measurable results for businesses worldwide.
             </p>
-            <p className="hero-banner-item hero-banner-item-4 hero-parallax-layer hero-parallax-layer-4 text-base sm:text-lg text-[var(--text-muted)] max-w-xl mb-8 hero-sub">
-              On time. On budget. Every time. Data entry, travel, web dev & virtual support—for clients everywhere.
-            </p>
-            <div className="hero-banner-item hero-banner-item-5 hero-parallax-layer hero-parallax-layer-5 flex flex-col sm:flex-row sm:items-center gap-4 hero-cta">
+          </AnimateOne>
+
+          <AnimateOne variant="fade-up" delay={800}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
               <MagneticButton
                 href="/contact"
-                className="btn-primary btn-shine btn-ripple w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-[var(--accent)] text-[var(--bg)] px-8 py-4 text-base font-bold hover:bg-[var(--accent-hover)] transition-colors btn-hover shadow-lg shadow-[var(--accent)]/30"
+                className="group relative px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold rounded-full overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25"
               >
-                <span className="link-arrow-hover btn-arrow-wiggle">Get my free quote <span>→</span></span>
+                <span className="relative z-10 flex items-center gap-2">
+                  Start Your Project
+                  <svg className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </MagneticButton>
-              <span className="hero-pill pill-pulse hidden sm:inline-flex items-center gap-1.5 rounded-full border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-4 py-2 text-sm font-medium text-[var(--accent)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)] animate-pulse" aria-hidden /> Reply in 24h
-              </span>
+              
               <Link
                 href="/work"
-                className="btn-outline-hover w-full sm:w-auto inline-flex items-center justify-center rounded-full border-2 border-[var(--text-muted)]/40 text-[var(--text)] px-8 py-4 text-base font-semibold hover:border-[var(--accent)] hover:text-[var(--accent)] btn-hover"
+                className="px-8 py-4 border-2 border-white/20 text-white font-semibold rounded-full hover:bg-white/10 transition-all duration-300 hover:border-white/40"
               >
-                See our work
+                View Our Work
               </Link>
             </div>
-          </div>
-          <div className="hero-ticker-wrap hero-ticker-pause absolute left-0 right-0 bottom-20 sm:bottom-24" aria-hidden>
-            <div className="hero-ticker">
-              <span>Data entry</span>
-              <span className="text-[var(--accent)]">·</span>
-              <span>Travel booking</span>
-              <span className="text-[var(--accent)]">·</span>
-              <span>Web development</span>
-              <span className="text-[var(--accent)]">·</span>
-              <span>Virtual assistance</span>
-              <span className="text-[var(--accent)]">·</span>
-              <span>Trusted worldwide</span>
-              <span className="text-[var(--accent)]">·</span>
+          </AnimateOne>
+
+          {/* Animated Stats */}
+          <AnimateOne variant="fade-up" delay={1000}>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+              {[
+                { number: "150+", label: "Projects Completed" },
+                { number: "98%", label: "Client Satisfaction" },
+                { number: "24/7", label: "Support Available" },
+                { number: "50+", label: "Team Members" }
+              ].map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    <span className="counter">{stat.number}</span>
+                  </div>
+                  <div className="text-sm text-gray-400">{stat.label}</div>
+                </div>
+              ))}
             </div>
-            <div className="hero-ticker ticker-row-reverse mt-2 opacity-60">
-              <span>On time</span>
-              <span className="text-[var(--accent)]">·</span>
-              <span>On budget</span>
-              <span className="text-[var(--accent)]">·</span>
-              <span>Global clients</span>
-              <span className="text-[var(--accent)]">·</span>
-            </div>
-          </div>
-          <Link
-            href="/trust"
-            className="hero-scroll-cue absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent)] transition-colors"
-            aria-label="Explore site"
-          >
-            <span className="hero-scroll-cue-bounce text-xs uppercase tracking-widest">Explore</span>
-            <span className="hero-scroll-line" />
-          </Link>
+          </AnimateOne>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <svg className="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
         </div>
       </ScrollParallax>
 
-      {/* Explore – links to all sections (separate pages) */}
-      <ScrollParallax>
-        <section className="section-padding border-t border-[var(--border)] bg-[var(--bg-soft)]">
-          <div className="section-reveal container-wide">
-            <AnimateOne variant="zoom-in">
-              <h2 className="section-h2-reveal font-display text-2xl sm:text-3xl font-bold text-[var(--text)] mb-4 text-center">
-                Explore our site
-              </h2>
-              <p className="section-sub-p text-[var(--text-muted)] text-center max-w-xl mx-auto mb-12">
-                Each section has its own page. Jump to what interests you.
-              </p>
-            </AnimateOne>
-            <AnimateSection variant="slide-up-strong" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {[
-                { href: "/trust", label: "Why clients trust us" },
-                { href: "/stats", label: "By the numbers" },
-                { href: "/services", label: "Services" },
-                { href: "/products", label: "Products" },
-                { href: "/process", label: "How we work" },
-                { href: "/work", label: "Our work" },
-                { href: "/website-showcase", label: "Website showcase" },
-                { href: "/completed-projects", label: "Completed projects" },
-                { href: "/why", label: "Why choose us" },
-                { href: "/testimonials", label: "Testimonials" },
-                { href: "/careers", label: "Careers" },
-                { href: "/contact", label: "Contact" },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="aos-item card-dark rounded-xl p-5 card-shine-bottom border border-[var(--border)] hover:border-[var(--accent)]/30 transition-colors group"
-                >
-                  <span className="font-display font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
-                    {item.label}
-                  </span>
-                </Link>
-              ))}
-            </AnimateSection>
-          </div>
-        </section>
+      {/* Services Preview Section */}
+      <ScrollParallax className="py-20 bg-gray-900">
+        <div className="container mx-auto px-6">
+          <AnimateOne variant="fade-up">
+            <h2 className="text-4xl md:text-5xl font-bold text-white text-center mb-4">
+              What We Do Best
+            </h2>
+            <p className="text-xl text-gray-400 text-center mb-16 max-w-3xl mx-auto">
+              From strategy to execution, we deliver comprehensive digital solutions 
+              tailored to your unique business needs.
+            </p>
+          </AnimateOne>
+
+          <AnimateSection variant="fade-up" className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: "🚀",
+                title: "Web Development",
+                description: "Custom websites and web applications built with cutting-edge technologies",
+                features: ["React/Next.js", "Node.js", "Responsive Design", "SEO Optimized"]
+              },
+              {
+                icon: "📱",
+                title: "Mobile Solutions",
+                description: "Native and cross-platform mobile applications for iOS and Android",
+                features: ["React Native", "Flutter", "iOS/Android", "App Store Deployment"]
+              },
+              {
+                icon: "🎨",
+                title: "UI/UX Design",
+                description: "Beautiful, intuitive designs that delight users and drive engagement",
+                features: ["User Research", "Prototyping", "Design Systems", "User Testing"]
+              },
+              {
+                icon: "⚡",
+                title: "Performance Optimization",
+                description: "Speed and performance improvements for existing applications",
+                features: ["Code Optimization", "CDN Setup", "Database Tuning", "Caching"]
+              },
+              {
+                icon: "🔒",
+                title: "Security Solutions",
+                description: "Comprehensive security audits and implementation for your applications",
+                features: ["Security Audits", "Encryption", "Authentication", "Compliance"]
+              },
+              {
+                icon: "☁️",
+                title: "Cloud Services",
+                description: "Cloud migration, setup, and management for scalable infrastructure",
+                features: ["AWS/Azure", "DevOps", "Monitoring", "Backup Solutions"]
+              }
+            ].map((service, index) => (
+              <div key={index} className="group relative bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:transform hover:scale-105">
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-2xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">
+                  {service.title}
+                </h3>
+                <p className="text-gray-400 mb-6">{service.description}</p>
+                <ul className="space-y-2">
+                  {service.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center gap-2 text-sm text-gray-300">
+                      <svg className="w-4 h-4 text-blue-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </AnimateSection>
+        </div>
       </ScrollParallax>
+
+      {/* CTA Section */}
+      <ScrollParallax className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="container mx-auto px-6 text-center">
+          <AnimateOne variant="fade-up">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Ready to Transform Your Digital Presence?
+            </h2>
+            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+              Let's discuss how we can help you achieve your digital goals. 
+              Get a free consultation and project estimate today.
+            </p>
+            <MagneticButton
+              href="/contact"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 font-semibold rounded-full hover:bg-gray-100 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+            >
+              Get Started Today
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </MagneticButton>
+          </AnimateOne>
+        </div>
+      </ScrollParallax>
+
+      <style jsx global>{`
+        .bg-grid-pattern {
+          background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+          background-size: 50px 50px;
+        }
+        
+        .counter {
+          animation: countUp 2s ease-out;
+        }
+        
+        @keyframes countUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
     </>
   );
 }
