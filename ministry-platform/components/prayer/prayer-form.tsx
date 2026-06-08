@@ -14,24 +14,41 @@ export function PrayerForm() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrorMessage('');
 
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      // TODO: Replace with actual API endpoint when backend is ready
+      // const response = await fetch('/api/prayer-requests', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData),
+      // });
+      // 
+      // if (!response.ok) throw new Error('Failed to submit prayer request');
+      
+      // Simulate API call for now
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      setIsSubmitting(false);
+      setIsSuccess(true);
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        prayerPoint: '',
+      });
 
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      prayerPoint: '',
-    });
-
-    setTimeout(() => setIsSuccess(false), 5000);
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (error) {
+      setIsSubmitting(false);
+      setErrorMessage('Failed to submit prayer request. Please try again or contact us directly.');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -74,51 +91,80 @@ export function PrayerForm() {
             onSubmit={handleSubmit}
             className="space-y-5"
           >
+            {errorMessage && (
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200" role="alert">
+                <p className="text-sm">{errorMessage}</p>
+              </div>
+            )}
+            
             <p className="text-sm text-primary-600 dark:text-primary-400 italic mb-2">
               &ldquo;The prayer of a righteous person is powerful and effective.&rdquo; &mdash; James 5:16
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+              <div>
+                <label htmlFor="prayerName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Your Name <span className="text-red-500" aria-hidden="true">*</span>
+                </label>
+                <Input
+                  id="prayerName"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  aria-required="true"
+                  placeholder="Enter your name"
+                  disabled={isSubmitting}
+                />
+              </div>
+              <div>
+                <label htmlFor="prayerEmail" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Email Address <span className="text-red-500" aria-hidden="true">*</span>
+                </label>
+                <Input
+                  id="prayerEmail"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  aria-required="true"
+                  placeholder="your.email@example.com"
+                  disabled={isSubmitting}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="prayerPhone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Phone Number (Optional)
+              </label>
               <Input
-                label="Your Name"
-                name="name"
-                type="text"
-                value={formData.name}
+                id="prayerPhone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
                 onChange={handleChange}
-                required
-                placeholder="Enter your name"
-              />
-              <Input
-                label="Email Address"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="your.email@example.com"
+                placeholder="(555) 123-4567"
+                disabled={isSubmitting}
               />
             </div>
 
-            <Input
-              label="Phone Number (Optional)"
-              name="phone"
-              type="tel"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="(555) 123-4567"
-            />
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Prayer Point <span className="text-red-500">*</span>
+              <label htmlFor="prayerPoint" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Prayer Point <span className="text-red-500" aria-hidden="true">*</span>
               </label>
               <textarea
+                id="prayerPoint"
                 name="prayerPoint"
                 value={formData.prayerPoint}
                 onChange={handleChange}
                 required
+                aria-required="true"
                 rows={5}
-                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+                disabled={isSubmitting}
+                className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 placeholder="Share your prayer request here..."
               />
             </div>

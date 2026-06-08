@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { EnhancedImageSlider } from '@/components/ui/enhanced-image-slider';
 import { Navigation } from '@/components/layout/navigation';

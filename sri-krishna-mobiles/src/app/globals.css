@@ -1,24 +1,409 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
+/* ============================================
+   DESIGN TOKENS - Light Mode (Default)
+   ============================================ */
 :root {
-  --background: #fafafa;
+  /* Background */
+  --background: #ffffff;
+  --background-secondary: #f8fafc;
+  --background-tertiary: #f1f5f9;
+  
+  /* Foreground/Text */
   --foreground: #0f172a;
-  --accent: #0ea5e9;
-  --accent-dark: #0284c7;
+  --foreground-secondary: #334155;
+  --foreground-tertiary: #64748b;
+  --foreground-muted: #94a3b8;
+  
+  /* Primary Brand Color (Blue) */
+  --primary: #0ea5e9;
+  --primary-hover: #0284c7;
+  --primary-light: #e0f2fe;
+  
+  /* Accent/Secondary */
+  --accent: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-light: #ede9fe;
+  
+  /* Semantic Colors */
+  --success: #22c55e;
+  --success-light: #dcfce7;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+  
+  /* Surface */
   --card: #ffffff;
-  --muted: #64748b;
+  --card-hover: #f8fafc;
+  --popover: #ffffff;
+  --modal: #ffffff;
+  
+  /* Borders */
   --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --border-focus: #0ea5e9;
+  --divider: #f1f5f9;
+  
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  
+  /* Typography */
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Z-Index Scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 300;
+  --z-popover: 400;
+  --z-tooltip: 500;
+  --z-toast: 600;
 }
 
+/* ============================================
+   DARK MODE
+   ============================================ */
+.dark {
+  --background: #0f172a;
+  --background-secondary: #1e293b;
+  --background-tertiary: #334155;
+  
+  --foreground: #f8fafc;
+  --foreground-secondary: #e2e8f0;
+  --foreground-tertiary: #94a3b8;
+  --foreground-muted: #64748b;
+  
+  --primary: #38bdf8;
+  --primary-hover: #0ea5e9;
+  --primary-light: #0c4a6e;
+  
+  --accent: #a78bfa;
+  --accent-hover: #8b5cf6;
+  --accent-light: #4c1d95;
+  
+  --success: #4ade80;
+  --success-light: #14532d;
+  --warning: #fbbf24;
+  --warning-light: #713f12;
+  --error: #f87171;
+  --error-light: #7f1d1d;
+  --info: #60a5fa;
+  --info-light: #1e3a8a;
+  
+  --card: #1e293b;
+  --card-hover: #334155;
+  --popover: #1e293b;
+  --modal: #1e293b;
+  
+  --border: #334155;
+  --border-hover: #475569;
+  --border-focus: #38bdf8;
+  --divider: #334155;
+  
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.4), 0 8px 10px -6px rgb(0 0 0 / 0.4);
+}
+
+/* ============================================
+   TAILWIND THEME CONFIGURATION
+   ============================================ */
 @theme inline {
+  /* Colors */
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
+  
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-tertiary: var(--foreground-tertiary);
+  --color-foreground-muted: var(--foreground-muted);
+  
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-light: var(--primary-light);
+  
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-light: var(--accent-light);
+  
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-warning: var(--warning);
+  --color-warning-light: var(--warning-light);
+  --color-error: var(--error);
+  --color-error-light: var(--error-light);
+  --color-info: var(--info);
+  --color-info-light: var(--info-light);
+  
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-popover: var(--popover);
+  --color-modal: var(--modal);
+  
+  --color-border: var(--border);
+  --color-border-hover: var(--border-hover);
+  --color-border-focus: var(--border-focus);
+  --color-divider: var(--divider);
+  
+  /* Fonts */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  
+  /* Shadows */
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* ============================================
+   SELECTION STYLES
+   ============================================ */
+::selection {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.dark ::selection {
+  background: var(--primary-light);
+  color: var(--foreground);
+}
+
+/* ============================================
+   SCROLLBAR STYLES
+   ============================================ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-muted);
+}
+
+/* ============================================
+   FOCUS STYLES
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-normal) ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown var(--transition-normal) ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--transition-normal) ease-out;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.7);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================
+   COMPONENT PATTERNS
+   ============================================ */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-all duration-200;
+}
+
+.btn-primary {
+  @apply btn bg-primary text-white hover:bg-primary-hover shadow-sm hover:shadow-md;
+}
+
+.btn-secondary {
+  @apply btn bg-background-secondary text-foreground hover:bg-background-tertiary border border-border;
+}
+
+.btn-ghost {
+  @apply btn text-foreground-secondary hover:bg-background-secondary hover:text-foreground;
+}
+
+.card {
+  @apply bg-card rounded-xl border border-border shadow-sm;
+}
+
+.input {
+  @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground placeholder:text-foreground-muted;
+  @apply focus:border-border-focus focus:outline-none focus:ring-2 focus:ring-border-focus/20;
+}
+
+/* ============================================
+   RESPONSIVE TYPOGRAPHY
+   ============================================ */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1536px) {
+  html {
+    font-size: 18px;
+  }
 }
