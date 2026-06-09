@@ -9,36 +9,6 @@ on:
   workflow_dispatch: # Allow manual run from Actions tab
 
 jobs:
-  deploy-ministry-platform:
-    name: Deploy Ministry Platform
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prepare SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
-          chmod 644 "$GITHUB_WORKSPACE/.deploy_key"
-      - name: Deploy Ministry Platform to VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key_path: ${{ github.workspace }}/.deploy_key
-          command_timeout: 20m
-          script: |
-            cd /home/dani/ministry-platform || { echo "ERROR: Directory not found"; exit 1; }
-            echo "=== Deploying Ministry Platform ==="
-            git fetch origin main
-            git reset --hard origin/main
-            rm -rf .next
-            npm ci
-            export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
-            npm run build
-            pm2 restart ministry-platform || pm2 start npm --name "ministry-platform" -- start
-            pm2 save
-            echo "=== Ministry Platform deployed ==="
-
   deploy-ebenezer:
     name: Deploy Ebenezer Digital
     runs-on: ubuntu-latest
@@ -48,7 +18,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
-          chmod 644 "$GITHUB_WORKSPACE/.deploy_key"
+          chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
       - name: Deploy Ebenezer Digital to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -65,11 +35,43 @@ jobs:
             npm ci
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
-            pm2 restart ebenezer || pm2 start npm --name "ebenezer" -- start
+            pm2 restart ebenezer-digital || pm2 start ecosystem.config.js --only ebenezer-digital
             pm2 save
+            echo "✅ Ebenezer Digital deployed at: $(date)" > .deploy-timestamp
             echo "=== Ebenezer Digital deployed ==="
 
-  deploy-mobiles:
+  deploy-ministry-platform:
+    name: Deploy Ministry Platform
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare SSH key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
+          chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
+      - name: Deploy Ministry Platform to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key_path: ${{ github.workspace }}/.deploy_key
+          command_timeout: 20m
+          script: |
+            cd /home/dani/ministry-platform || { echo "ERROR: Directory not found"; exit 1; }
+            echo "=== Deploying Ministry Platform ==="
+            git fetch origin main
+            git reset --hard origin/main
+            rm -rf .next
+            npm ci
+            export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
+            npm run build
+            pm2 restart ministry-platform || pm2 start ecosystem.config.js --only ministry-platform
+            pm2 save
+            echo "✅ Ministry Platform deployed at: $(date)" > .deploy-timestamp
+            echo "=== Ministry Platform deployed ==="
+
+  deploy-sri-krishna-mobiles:
     name: Deploy Sri Krishna Mobiles
     runs-on: ubuntu-latest
     steps:
@@ -78,7 +80,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: |
           printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
-          chmod 644 "$GITHUB_WORKSPACE/.deploy_key"
+          chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
       - name: Deploy Sri Krishna Mobiles to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -95,6 +97,7 @@ jobs:
             npm ci
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
-            pm2 restart mobiles || pm2 start npm --name "mobiles" -- start
+            pm2 restart sri-krishna-mobiles || pm2 start ecosystem.config.js --only sri-krishna-mobiles
             pm2 save
+            echo "✅ Sri Krishna Mobiles deployed at: $(date)" > .deploy-timestamp
             echo "=== Sri Krishna Mobiles deployed ==="
