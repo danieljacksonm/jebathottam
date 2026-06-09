@@ -1,0 +1,60 @@
+# COPY THIS TO: ministry-platform/.github/workflows/deploy.yml
+
+name: Deploy Ministry Platform to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "🚀 Deploying Ministry Platform..."
+            cd /home/dani/ministry-platform
+            
+            # Ensure log directory exists
+            mkdir -p /home/dani/logs
+            
+            # Clone if not a git repo
+            if [ ! -d .git ]; then
+              echo "📦 Cloning repository..."
+              git clone https://github.com/${{ github.repository }}.git .
+            fi
+            
+            # Pull latest changes
+            echo "📥 Pulling latest code..."
+            git fetch origin main
+            git reset --hard origin/main
+            
+            # Install dependencies
+            echo "📦 Installing dependencies..."
+            npm ci
+            
+            # Build project
+            echo "🔨 Building project..."
+            npm run build
+            
+            # Restart with PM2 using ecosystem config
+            echo "🔄 Restarting PM2..."
+            if pm2 describe ministry-platform > /dev/null 2>&1; then
+              pm2 reload ecosystem.config.js --only ministry-platform
+            else
+              cd /home/dani
+              pm2 start ecosystem.config.js --only ministry-platform
+            fi
+            
+            pm2 save
+            
+            # Create deployment timestamp
+            echo "✅ Ministry Platform deployed at: $(date)" > /home/dani/ministry-platform/.deploy-timestamp
+            echo "🎉 Deployment complete!"
