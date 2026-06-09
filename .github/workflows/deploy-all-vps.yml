@@ -28,8 +28,8 @@ jobs:
             cd /home/dani/ebenezer-digital || { echo "ERROR: ebenezer-digital directory not found"; exit 1; }
             git fetch origin main
             git reset --hard origin/main
-            rm -rf .next
-            npm ci
+            rm -rf .next node_modules package-lock.json
+            npm install --legacy-peer-deps
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
             pm2 restart ebenezer-digital || pm2 start ecosystem.config.js --only ebenezer-digital
@@ -40,8 +40,8 @@ jobs:
             cd /home/dani/ministry-platform || { echo "ERROR: ministry-platform directory not found"; exit 1; }
             git fetch origin main
             git reset --hard origin/main
-            rm -rf .next
-            npm ci
+            rm -rf .next node_modules package-lock.json
+            npm install --legacy-peer-deps
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
             pm2 restart ministry-platform || pm2 start ecosystem.config.js --only ministry-platform
@@ -52,8 +52,8 @@ jobs:
             cd /home/dani/sri-krishna-mobiles || { echo "ERROR: sri-krishna-mobiles directory not found"; exit 1; }
             git fetch origin main
             git reset --hard origin/main
-            rm -rf .next
-            npm ci
+            rm -rf .next node_modules package-lock.json
+            npm install --legacy-peer-deps
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
             pm2 restart sri-krishna-mobiles || pm2 start ecosystem.config.js --only sri-krishna-mobiles
