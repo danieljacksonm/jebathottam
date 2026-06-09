@@ -13,19 +13,12 @@ jobs:
     name: Deploy All Sites to VPS
     runs-on: ubuntu-latest
     steps:
-      - name: Prepare SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          mkdir -p ~/.ssh
-          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
       - name: Deploy All Sites to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key_path: ~/.ssh/deploy_key
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: 30m
           script: |
             echo "🚀 Starting deployment of all sites..."
