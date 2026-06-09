@@ -9,8 +9,8 @@ on:
   workflow_dispatch: # Allow manual run from Actions tab
 
 jobs:
-  deploy-ebenezer:
-    name: Deploy Ebenezer Digital
+  deploy-all:
+    name: Deploy All Sites to VPS
     runs-on: ubuntu-latest
     steps:
       - name: Prepare SSH key
@@ -19,16 +19,19 @@ jobs:
         run: |
           printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
           chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
-      - name: Deploy Ebenezer Digital to VPS
+      - name: Deploy All Sites to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key_path: ${{ github.workspace }}/.deploy_key
-          command_timeout: 20m
+          command_timeout: 30m
           script: |
-            cd /home/dani/ebenezer-digital || { echo "ERROR: Directory not found"; exit 1; }
+            echo "🚀 Starting deployment of all sites..."
+            
+            # Deploy Ebenezer Digital
             echo "=== Deploying Ebenezer Digital ==="
+            cd /home/dani/ebenezer-digital || { echo "ERROR: ebenezer-digital directory not found"; exit 1; }
             git fetch origin main
             git reset --hard origin/main
             rm -rf .next
@@ -36,30 +39,11 @@ jobs:
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
             pm2 restart ebenezer-digital || pm2 start ecosystem.config.js --only ebenezer-digital
-            pm2 save
             echo "✅ Ebenezer Digital deployed at: $(date)" > .deploy-timestamp
-            echo "=== Ebenezer Digital deployed ==="
-
-  deploy-ministry-platform:
-    name: Deploy Ministry Platform
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prepare SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
-          chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
-      - name: Deploy Ministry Platform to VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key_path: ${{ github.workspace }}/.deploy_key
-          command_timeout: 20m
-          script: |
-            cd /home/dani/ministry-platform || { echo "ERROR: Directory not found"; exit 1; }
+            
+            # Deploy Ministry Platform
             echo "=== Deploying Ministry Platform ==="
+            cd /home/dani/ministry-platform || { echo "ERROR: ministry-platform directory not found"; exit 1; }
             git fetch origin main
             git reset --hard origin/main
             rm -rf .next
@@ -67,30 +51,11 @@ jobs:
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
             pm2 restart ministry-platform || pm2 start ecosystem.config.js --only ministry-platform
-            pm2 save
             echo "✅ Ministry Platform deployed at: $(date)" > .deploy-timestamp
-            echo "=== Ministry Platform deployed ==="
-
-  deploy-sri-krishna-mobiles:
-    name: Deploy Sri Krishna Mobiles
-    runs-on: ubuntu-latest
-    steps:
-      - name: Prepare SSH key
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: |
-          printf '%s\n' "$SSH_PRIVATE_KEY" > "$GITHUB_WORKSPACE/.deploy_key"
-          chmod 600 "$GITHUB_WORKSPACE/.deploy_key"
-      - name: Deploy Sri Krishna Mobiles to VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key_path: ${{ github.workspace }}/.deploy_key
-          command_timeout: 20m
-          script: |
-            cd /home/dani/sri-krishna-mobiles || { echo "ERROR: Directory not found"; exit 1; }
+            
+            # Deploy Sri Krishna Mobiles
             echo "=== Deploying Sri Krishna Mobiles ==="
+            cd /home/dani/sri-krishna-mobiles || { echo "ERROR: sri-krishna-mobiles directory not found"; exit 1; }
             git fetch origin main
             git reset --hard origin/main
             rm -rf .next
@@ -98,6 +63,14 @@ jobs:
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
             pm2 restart sri-krishna-mobiles || pm2 start ecosystem.config.js --only sri-krishna-mobiles
-            pm2 save
             echo "✅ Sri Krishna Mobiles deployed at: $(date)" > .deploy-timestamp
-            echo "=== Sri Krishna Mobiles deployed ==="
+            
+            # Save PM2 configuration
+            cd /home/dani
+            pm2 save
+            
+            echo "🎉 All sites deployed successfully!"
+            echo "📊 Deployment Summary:"
+            echo "  - Ebenezer Digital: http://localhost:3000"
+            echo "  - Ministry Platform: http://localhost:3001"
+            echo "  - Sri Krishna Mobiles: http://localhost:3002"
