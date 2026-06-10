@@ -11,7 +11,7 @@ import {
   Check,
   Mail,
   Linkedin,
-  Twitter,
+  TwitterX,
   Github,
   Upload,
   Image as ImageIcon,
@@ -292,7 +292,7 @@ export default function TeamManagerPage() {
                       rel="noopener noreferrer"
                       className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
                     >
-                      <Twitter className="w-4 h-4" />
+                      <TwitterX className="w-4 h-4" />
                     </a>
                   )}
                   {member.socialLinks?.github && (
@@ -473,7 +473,7 @@ export default function TeamManagerPage() {
                   </div>
 
                   <div className="relative">
-                    <Twitter className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                    <TwitterX className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                     <input
                       type="url"
                       value={formData.twitter}

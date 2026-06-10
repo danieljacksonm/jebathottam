@@ -8,7 +8,7 @@ import {
   Mail,
   Phone,
   MapPin,
-  Twitter,
+  TwitterX,
   Linkedin,
   Github,
   Instagram,
@@ -135,7 +135,7 @@ export default function SettingsPage() {
       <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-1 w-fit">
         {[
           { id: "general", label: "General", icon: Globe },
-          { id: "social", label: "Social Links", icon: Twitter },
+          { id: "social", label: "Social Links", icon: TwitterX },
           { id: "email", label: "Email Settings", icon: Mail },
         ].map((tab) => (
           <button
@@ -242,7 +242,7 @@ export default function SettingsPage() {
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">
                   <div className="flex items-center gap-2">
-                    <Twitter className="w-4 h-4 text-sky-400" />
+                    <TwitterX className="w-4 h-4 text-sky-400" />
                     Twitter / X
                   </div>
                 </label>

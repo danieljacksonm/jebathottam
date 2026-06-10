@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import {
   Mail,
   ArrowRight,
-  Twitter,
+  TwitterX,
   Linkedin,
   Github,
   Instagram,
@@ -34,7 +34,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Twitter, href: "#", label: "Twitter" },
+  { icon: TwitterX, href: "#", label: "Twitter" },
   { icon: Linkedin, href: "#", label: "LinkedIn" },
   { icon: Github, href: "#", label: "GitHub" },
   { icon: Instagram, href: "#", label: "Instagram" },
