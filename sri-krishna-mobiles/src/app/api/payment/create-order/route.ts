@@ -133,30 +133,25 @@ export async function POST(req: NextRequest) {
       })),
       shippingAddress,
       billingAddress: billingAddress || shippingAddress,
-      pricing: {
-        subtotal,
-        discount: discountAmount,
-        discountCode: couponCode,
-        gstRate: 18,
-        gstAmount,
-        shipping: shippingAmount,
-        total: totalAmount,
-      },
+      subtotal,
+      discountAmount,
+      discountCode: couponCode,
+      taxAmount: gstAmount,
+      shippingAmount,
+      total: totalAmount,
       payment: {
         method: "razorpay",
         status: "pending",
         razorpayOrderId: razorpayOrder.id,
       },
       status: "pending",
-      statusHistory: [
+      timeline: [
         {
           status: "pending",
           timestamp: new Date(),
-          note: "Order created, awaiting payment",
+          description: "Order created, awaiting payment",
         },
       ],
-      coupon: couponId,
-      notes: notes || {},
     });
 
     // Clear cart after order creation

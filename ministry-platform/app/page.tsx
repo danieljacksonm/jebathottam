@@ -230,6 +230,22 @@ export default function Home() {
 
   const accent = ACCENT_PALETTES[currentHour % ACCENT_PALETTES.length];
 
+  const heroVariant = HERO_VARIANTS[currentHour % HERO_VARIANTS.length];
+
+  const allBlogs: BlogPost[] = blogPosts || [];
+  const featuredBlog: BlogPost | undefined = allBlogs.find((p) => p.featured) || allBlogs[0];
+  const regularBlogs: BlogPost[] = allBlogs.filter((p) => p !== featuredBlog).slice(0, 3);
+
+  const sliderImages: SliderImage[] = (allBlogs.slice(0, 5)).map((p) => ({
+    src: getBlogImage(p),
+    alt: p.title,
+    title: p.title,
+    description: p.excerpt,
+  }));
+
+  const homeGallery: Array<{ id: number; title: string; image?: string; image_url?: string }> = [];
+  const teamMembers: TeamMember[] = [];
+
   const info = {
     name: siteSettings.ministry_name || 'Digital Ministry Platform',
     subtitle: siteSettings.ministry_subtitle || 'Spreading Faith Through Technology',
