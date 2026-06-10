@@ -97,7 +97,7 @@ export default function InquiriesPage() {
     setFilteredInquiries(filtered);
   };
 
-  const updateStatus = async (id: string, status: string) => {
+  const updateStatus = async (id: string, status: Inquiry['status']) => {
     try {
       const response = await fetch("/api/admin/inquiries", {
         method: "PATCH",
@@ -379,7 +379,7 @@ export default function InquiriesPage() {
                     .map((status) => (
                       <button
                         key={status.value}
-                        onClick={() => updateStatus(selectedInquiry.id, status.value)}
+                        onClick={() => updateStatus(selectedInquiry.id, status.value as Inquiry['status'])}
                         className={`px-3 py-1.5 text-sm font-medium rounded-lg border transition-colors ${
                           selectedInquiry.status === status.value
                             ? statusColors[status.value]

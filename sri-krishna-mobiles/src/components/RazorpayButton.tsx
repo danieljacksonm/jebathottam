@@ -5,24 +5,6 @@ import { useState } from "react";
 
 type CartItem = { productId: number; name: string; price: number; quantity: number };
 
-declare global {
-  interface Window {
-    Razorpay?: new (options: {
-      key: string;
-      amount: number;
-      order_id: string;
-      name: string;
-      description: string;
-      handler: (res: {
-        razorpay_payment_id: string;
-        razorpay_order_id: string;
-        razorpay_signature: string;
-      }) => void;
-      modal?: { ondismiss?: () => void };
-    }) => { open: () => void };
-  }
-}
-
 export default function RazorpayButton({
   cart,
   email,
