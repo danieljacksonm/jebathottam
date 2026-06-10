@@ -373,15 +373,15 @@ body {
 }
 
 .btn-primary {
-  @apply btn bg-primary text-white hover:bg-primary-hover shadow-sm hover:shadow-md;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-all duration-200 bg-primary text-white shadow-sm hover:shadow-md;
 }
 
 .btn-secondary {
-  @apply btn bg-background-secondary text-foreground hover:bg-background-tertiary border border-border;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-all duration-200 bg-background-secondary text-foreground border border-border;
 }
 
 .btn-ghost {
-  @apply btn text-foreground-secondary hover:bg-background-secondary hover:text-foreground;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-medium transition-all duration-200 text-foreground-secondary;
 }
 
 .card {

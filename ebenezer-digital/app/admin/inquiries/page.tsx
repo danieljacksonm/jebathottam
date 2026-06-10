@@ -107,10 +107,10 @@ export default function InquiriesPage() {
 
       if (response.ok) {
         setInquiries((prev) =>
-          prev.map((i) => (i.id === id ? { ...i, status } : i))
+          prev.map((i) => (i.id === id ? { ...i, status: status as Inquiry['status'] } : i))
         );
         if (selectedInquiry?.id === id) {
-          setSelectedInquiry((prev) => (prev ? { ...prev, status } : null));
+          setSelectedInquiry((prev) => (prev ? { ...prev, status: status as Inquiry['status'] } : null));
         }
       }
     } catch (error) {
