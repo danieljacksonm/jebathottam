@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectToDatabase } from "@/lib/mongoose";
+import connectDB from "@/lib/mongoose";
 import { Order } from "@/models/Order";
 import crypto from "crypto";
 
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
     const payment = event.payload?.payment?.entity;
     const order = event.payload?.order?.entity;
 
-    await connectToDatabase();
+    await connectDB();
 
     // Handle different webhook events
     switch (eventType) {

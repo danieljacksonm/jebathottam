@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { connectToDatabase } from "@/lib/mongoose";
+import connectDB from "@/lib/mongoose";
 import { Order } from "@/models/Order";
 import crypto from "crypto";
 
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await connectToDatabase();
+    await connectDB();
 
     // Find the order
     const order = await Order.findOne({

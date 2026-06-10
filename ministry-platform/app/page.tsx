@@ -436,27 +436,6 @@ export default function Home() {
       </section>
     ),
 
-    /* ... rest of the code remains the same ... */
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                </InViewStaggerItem>
-              ))}
-            </div>
-          </InViewStagger>
-
-          <ScrollReveal delay={0.4}>
-            <div>
-              <Link href="/events">
-                <Button variant="outline" size="lg" className="rounded-full px-8 text-sm font-medium tracking-wide">View all events</Button>
-              </Link>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-    ),
-
     /* ── GALLERY ───────────────────────────────────────────────────────── */
     gallery: (bg) => (
       <section id="gallery" className={`py-20 lg:py-28 ${bg}`}>
