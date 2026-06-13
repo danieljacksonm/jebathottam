@@ -117,7 +117,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Payment successful - update order
-    order.payment.status = "completed";
+    order.payment.status = "captured";
     order.payment.razorpayPaymentId = razorpay_payment_id;
     order.payment.razorpaySignature = razorpay_signature;
     order.payment.paidAt = new Date();

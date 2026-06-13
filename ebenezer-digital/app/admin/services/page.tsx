@@ -77,7 +77,7 @@ export default function ServicesManagerPage() {
     icon: "FileText",
     category: "digital" as "digital" | "travel" | "web" | "other",
     features: [""] as string[],
-    status: "draft" as const,
+    status: "draft" as "draft" | "published",
   });
 
   useEffect(() => {
