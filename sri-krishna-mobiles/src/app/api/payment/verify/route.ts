@@ -102,9 +102,9 @@ export async function POST(req: NextRequest) {
     if (paymentData.status !== "captured") {
       // Update order status to failed
       order.payment.status = "failed";
-      order.status = "payment_failed";
+      order.status = "cancelled";
       order.timeline.push({
-        status: "payment_failed",
+        status: "cancelled",
         timestamp: new Date(),
         description: `Payment failed with status: ${paymentData.status}`,
       });
@@ -124,30 +124,11 @@ export async function POST(req: NextRequest) {
     order.payment.amountPaid = paymentData.amount / 100; // Convert from paise
 
     order.status = "processing";
-    order.statusHistory.push({
+    order.timeline.push({
       status: "processing",
       timestamp: new Date(),
-      note: "Payment verified and captured",
+      description: "Payment verified and captured",
     });
-
-    order.paymentDetails = {
-      method: paymentData.method,
-      card: paymentData.card
-        ? {
-            network: paymentData.card.network,
-            last4: paymentData.card.last4,
-            type: paymentData.card.type,
-          }
-        : undefined,
-      upi: paymentData.upi
-        ? {
-            vpa: paymentData.upi.vpa,
-            flow: paymentData.upi.flow,
-          }
-        : undefined,
-      bank: paymentData.bank,
-      wallet: paymentData.wallet,
-    };
 
     await order.save();
 

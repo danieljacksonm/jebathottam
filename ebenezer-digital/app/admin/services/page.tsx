@@ -75,7 +75,7 @@ export default function ServicesManagerPage() {
     title: "",
     description: "",
     icon: "FileText",
-    category: "digital" as const,
+    category: "digital" as "digital" | "travel" | "web" | "other",
     features: [""] as string[],
     status: "draft" as const,
   });

@@ -243,8 +243,11 @@ export default function Home() {
     description: p.excerpt,
   }));
 
-  const homeGallery: Array<{ id: number; title: string; image?: string; image_url?: string }> = [];
+  const homeGallery: Array<{ id: number; title: string; image?: string; image_url?: string; category?: string }> = [];
   const teamMembers: TeamMember[] = [];
+  const mv = defaultMV;
+  const mediaItems: MediaItem[] = fallbackMedia || [];
+  const sectionOrder: string[] = getShuffledSections(currentHour);
 
   const about = {
     heading: siteSettings.about_heading || 'Our Story',
