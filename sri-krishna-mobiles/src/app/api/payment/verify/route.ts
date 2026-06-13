@@ -102,12 +102,11 @@ export async function POST(req: NextRequest) {
     if (paymentData.status !== "captured") {
       // Update order status to failed
       order.payment.status = "failed";
-      order.payment.failureReason = paymentData.status;
       order.status = "payment_failed";
-      order.statusHistory.push({
+      order.timeline.push({
         status: "payment_failed",
         timestamp: new Date(),
-        note: `Payment failed with status: ${paymentData.status}`,
+        description: `Payment failed with status: ${paymentData.status}`,
       });
       await order.save();
 

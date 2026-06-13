@@ -246,6 +246,12 @@ export default function Home() {
   const homeGallery: Array<{ id: number; title: string; image?: string; image_url?: string }> = [];
   const teamMembers: TeamMember[] = [];
 
+  const about = {
+    heading: siteSettings.about_heading || 'Our Story',
+    text: siteSettings.about_text || 'We are a community dedicated to spreading faith and hope.',
+    textSecondary: siteSettings.about_text_secondary || 'Join us in our mission to make a difference.',
+  };
+
   const info = {
     name: siteSettings.ministry_name || 'Digital Ministry Platform',
     subtitle: siteSettings.ministry_subtitle || 'Spreading Faith Through Technology',
