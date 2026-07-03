@@ -22,17 +22,13 @@ export function PrayerForm() {
     setErrorMessage('');
 
     try {
-      // TODO: Replace with actual API endpoint when backend is ready
-      // const response = await fetch('/api/prayer-requests', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(formData),
-      // });
-      // 
-      // if (!response.ok) throw new Error('Failed to submit prayer request');
-      
-      // Simulate API call for now
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const response = await fetch('/api/prayer-requests', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) throw new Error('Failed to submit prayer request');
       
       setIsSubmitting(false);
       setIsSuccess(true);

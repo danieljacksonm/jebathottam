@@ -4,7 +4,8 @@ import { hashPassword, generateToken } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password, role = 'member' } = await request.json();
+    const { name, email, password } = await request.json();
+    const role = 'visitor';
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -59,7 +60,6 @@ export async function POST(request: NextRequest) {
         role,
         name,
       },
-      token,
     });
 
     // Set Secure only when over HTTPS so cookie works on http://YOUR_IP in production

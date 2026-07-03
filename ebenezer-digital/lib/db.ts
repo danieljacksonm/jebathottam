@@ -1,4 +1,5 @@
-// Database types and mock data for Ebenezar Digital Admin
+import { loadStore, saveStore } from './persist';
+import bcrypt from 'bcryptjs';
 
 export type UserRole = "admin" | "editor";
 
@@ -141,7 +142,7 @@ export const mockUsers: User[] = [
   {
     id: "1",
     email: "admin@ebenezar.com",
-    password: "$2b$10$YourHashedPasswordHere", // "admin123"
+    password: "$2b$10$PLACEHOLDER_HASH_WILL_BE_SET_ON_FIRST_LOGIN",
     name: "Admin User",
     role: "admin",
     createdAt: new Date("2024-01-01"),
@@ -240,21 +241,80 @@ export const mockTestimonials: Testimonial[] = [
   },
 ];
 
-// In-memory storage (replace with real database in production)
+// File-backed storage with in-memory fallback
+type StoreData = {
+  users: User[];
+  services: Service[];
+  portfolio: PortfolioItem[];
+  inquiries: Inquiry[];
+  testimonials: Testimonial[];
+  blogPosts: BlogPost[];
+  team: TeamMember[];
+  settings: SiteSettings;
+};
+
 class Database {
-  users: User[] = [...mockUsers];
-  services: Service[] = [...mockServices];
-  portfolio: PortfolioItem[] = [...mockPortfolio];
-  inquiries: Inquiry[] = [...mockInquiries];
-  testimonials: Testimonial[] = [...mockTestimonials];
-  blogPosts: BlogPost[] = [];
-  team: TeamMember[] = [];
-  settings: SiteSettings = {
-    siteName: "Ebenezar Digital Services",
-    siteDescription: "Reliable digital work for businesses everywhere.",
-    contactEmail: "contact@ebenezar.com",
-    socialLinks: {},
-  };
+  users: User[];
+  services: Service[];
+  portfolio: PortfolioItem[];
+  inquiries: Inquiry[];
+  testimonials: Testimonial[];
+  blogPosts: BlogPost[];
+  team: TeamMember[];
+  settings: SiteSettings;
+  private adminHashReady = false;
+
+  constructor() {
+    const stored = loadStore<StoreData | null>(null);
+    if (stored) {
+      this.users = stored.users.map((u) => ({ ...u, createdAt: new Date(u.createdAt), lastLogin: u.lastLogin ? new Date(u.lastLogin) : undefined }));
+      this.services = stored.services.map((s) => ({ ...s, createdAt: new Date(s.createdAt), updatedAt: new Date(s.updatedAt) }));
+      this.portfolio = stored.portfolio.map((p) => ({ ...p, createdAt: new Date(p.createdAt), updatedAt: new Date(p.updatedAt) }));
+      this.inquiries = stored.inquiries.map((i) => ({ ...i, createdAt: new Date(i.createdAt), repliedAt: i.repliedAt ? new Date(i.repliedAt) : undefined }));
+      this.testimonials = stored.testimonials.map((t) => ({ ...t, createdAt: new Date(t.createdAt) }));
+      this.blogPosts = (stored.blogPosts || []).map((b) => ({ ...b, createdAt: new Date(b.createdAt), updatedAt: new Date(b.updatedAt), publishedAt: b.publishedAt ? new Date(b.publishedAt) : undefined }));
+      this.team = (stored.team || []).map((t) => ({ ...t, createdAt: new Date(t.createdAt) }));
+      this.settings = stored.settings;
+    } else {
+      this.users = [...mockUsers];
+      this.services = [...mockServices];
+      this.portfolio = [...mockPortfolio];
+      this.inquiries = [...mockInquiries];
+      this.testimonials = [...mockTestimonials];
+      this.blogPosts = [];
+      this.team = [];
+      this.settings = {
+        siteName: "Ebenezar Digital Services",
+        siteDescription: "Reliable digital work for businesses everywhere.",
+        contactEmail: "contact@ebenezar.com",
+        socialLinks: {},
+      };
+      this.persist();
+    }
+  }
+
+  private persist() {
+    saveStore({
+      users: this.users,
+      services: this.services,
+      portfolio: this.portfolio,
+      inquiries: this.inquiries,
+      testimonials: this.testimonials,
+      blogPosts: this.blogPosts,
+      team: this.team,
+      settings: this.settings,
+    });
+  }
+
+  async ensureAdminPassword(defaultPassword: string) {
+    if (this.adminHashReady) return;
+    const admin = this.users.find((u) => u.role === 'admin');
+    if (admin && admin.password.includes('PLACEHOLDER')) {
+      admin.password = await bcrypt.hash(defaultPassword, 10);
+      this.persist();
+    }
+    this.adminHashReady = true;
+  }
 
   // User methods
   async findUserByEmail(email: string): Promise<User | undefined> {
@@ -274,10 +334,23 @@ class Database {
     return this.inquiries.find((i) => i.id === id);
   }
 
+  async createInquiry(data: Omit<Inquiry, 'id' | 'status' | 'createdAt'>): Promise<Inquiry> {
+    const inquiry: Inquiry = {
+      id: String(Date.now()),
+      ...data,
+      status: 'new',
+      createdAt: new Date(),
+    };
+    this.inquiries.unshift(inquiry);
+    this.persist();
+    return inquiry;
+  }
+
   async updateInquiry(id: string, data: Partial<Inquiry>): Promise<Inquiry | undefined> {
     const index = this.inquiries.findIndex((i) => i.id === id);
     if (index === -1) return undefined;
     this.inquiries[index] = { ...this.inquiries[index], ...data };
+    this.persist();
     return this.inquiries[index];
   }
 
@@ -285,6 +358,7 @@ class Database {
     const index = this.inquiries.findIndex((i) => i.id === id);
     if (index === -1) return false;
     this.inquiries.splice(index, 1);
+    this.persist();
     return true;
   }
 

@@ -40,13 +40,19 @@ export interface IPayment {
   orderId?: string; // Razorpay/PayPal order ID
   paymentId?: string; // Razorpay payment ID
   amount: number;
-  status: "pending" | "captured" | "failed" | "refunded" | "partially_refunded";
+  status: "pending" | "captured" | "completed" | "failed" | "refunded" | "partially_refunded";
   capturedAt?: Date;
   refundedAt?: Date;
   refundAmount?: number;
   refundReason?: string;
   metadata?: Record<string, any>;
   createdAt: Date;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+  paidAt?: Date;
+  amountPaid?: number;
+  failureReason?: string;
 }
 
 // Order Timeline/Status History
@@ -129,6 +135,8 @@ export interface IOrder extends Document {
   
   createdAt: Date;
   updatedAt: Date;
+  statusHistory: any[];
+  refundDetails?: any;
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
@@ -169,7 +177,7 @@ const PaymentSchema = new Schema<IPayment>({
   amount: { type: Number, required: true },
   status: {
     type: String,
-    enum: ["pending", "captured", "failed", "refunded", "partially_refunded"],
+    enum: ["pending", "captured", "completed", "failed", "refunded", "partially_refunded"],
     default: "pending",
   },
   capturedAt: Date,
@@ -178,6 +186,12 @@ const PaymentSchema = new Schema<IPayment>({
   refundReason: String,
   metadata: Schema.Types.Mixed,
   createdAt: { type: Date, default: Date.now },
+  razorpayOrderId: String,
+  razorpayPaymentId: String,
+  razorpaySignature: String,
+  paidAt: Date,
+  amountPaid: Number,
+  failureReason: String,
 });
 
 const OrderTimelineSchema = new Schema<IOrderTimeline>({
@@ -259,6 +273,8 @@ const OrderSchema = new Schema<IOrder>(
     ipAddress: String,
     userAgent: String,
     referrer: String,
+    statusHistory: [Schema.Types.Mixed],
+    refundDetails: Schema.Types.Mixed,
   },
   {
     timestamps: true,

@@ -1,38 +1,27 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { verifyToken } from "@/lib/auth";
-import AdminSidebar from "./components/AdminSidebar";
-import AdminHeader from "./components/AdminHeader";
+'use client';
 
-export default async function AdminLayout({
+import { usePathname } from 'next/navigation';
+import AdminSidebar from './components/AdminSidebar';
+import AdminHeader from './components/AdminHeader';
+
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("auth-token")?.value;
+  const pathname = usePathname();
 
-  if (!token) {
-    redirect("/admin/login");
-  }
-
-  const payload = verifyToken(token);
-  if (!payload) {
-    redirect("/admin/login");
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
   }
 
   return (
     <div className="min-h-screen bg-slate-950">
       <div className="flex h-screen overflow-hidden">
-        {/* Sidebar */}
-        <AdminSidebar user={payload} />
-
-        {/* Main Content */}
+        <AdminSidebar user={{ userId: '1', email: 'admin@ebenezar.com', role: 'admin' }} />
         <div className="flex-1 flex flex-col overflow-hidden">
-          <AdminHeader user={payload} />
-          <main className="flex-1 overflow-y-auto p-6">
-            {children}
-          </main>
+          <AdminHeader user={{ userId: '1', email: 'admin@ebenezar.com', role: 'admin' }} />
+          <main className="flex-1 overflow-y-auto p-6">{children}</main>
         </div>
       </div>
     </div>

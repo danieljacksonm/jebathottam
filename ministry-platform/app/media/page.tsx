@@ -1,16 +1,42 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
 import { motion } from 'framer-motion';
-import { mediaItems } from '@/data/media-content';
+import { mediaItems as fallbackMedia } from '@/data/media-content';
 import { getOptimizedImageUrl, getImageSrc } from '@/lib/image-utils';
 
+type MediaItem = {
+  id: number;
+  title: string;
+  type: string;
+  image?: string;
+  image_url?: string;
+  thumbnail?: string;
+  thumbnail_url?: string;
+  scripture?: string;
+  description?: string;
+  message?: string;
+};
+
 export default function MediaPage() {
-  const posters = mediaItems.filter(m => m.type === 'poster');
-  const videos = mediaItems.filter(m => m.type === 'youtube' || m.type === 'youtube-shorts');
+  const [items, setItems] = useState<MediaItem[]>(fallbackMedia);
+
+  useEffect(() => {
+    fetch('/api/media')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) setItems(list);
+      })
+      .catch(() => {});
+  }, []);
+
+  const posters = items.filter(m => m.type === 'poster');
+  const videos = items.filter(m => m.type === 'youtube' || m.type === 'youtube-shorts' || m.type === 'video');
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -63,7 +89,7 @@ export default function MediaPage() {
                           </div>
                           <div className="p-4">
                             <h3 className="font-semibold text-gray-900 mb-2">{poster.title}</h3>
-                            <p className="text-sm text-primary-600">{poster.scripture}</p>
+                            <p className="text-sm text-primary-600">{poster.scripture || poster.message}</p>
                           </div>
                         </motion.div>
                       </Link>
@@ -112,7 +138,7 @@ export default function MediaPage() {
                           </div>
                           <div className="p-4">
                             <h3 className="font-semibold text-gray-900 mb-2">{video.title}</h3>
-                            <p className="text-sm text-gray-600">{video.description}</p>
+                            <p className="text-sm text-gray-600">{video.description || video.message}</p>
                           </div>
                         </motion.div>
                       </Link>

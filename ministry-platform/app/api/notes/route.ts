@@ -22,8 +22,12 @@ export async function GET(request: NextRequest) {
       params.push(type);
     }
 
-    // Users can only see their own notes, admins can see all
-    if (user && user.role !== 'super_admin') {
+    const scope = searchParams.get('scope');
+
+    // Public visitors only see sermon/teaching notes
+    if (!user && scope === 'public') {
+      sql += " AND n.type = 'sermon'";
+    } else if (user && user.role !== 'super_admin') {
       sql += ' AND n.user_id = ?';
       params.push(user.id);
     }

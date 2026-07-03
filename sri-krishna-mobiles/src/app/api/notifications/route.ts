@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { sendNotification } from "@/lib/notifications";
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions);
+    const apiKey = req.headers.get("x-api-key");
+    const internalKey = process.env.INTERNAL_API_KEY;
+
+    if (!session?.user && (!internalKey || apiKey !== internalKey)) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const body = await req.json();
     const { email, phone, template, data } = body;
 

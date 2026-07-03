@@ -31,22 +31,22 @@ interface RazorpayResponse {
 interface RazorpayOptions {
   key: string;
   amount: number;
-  currency: string;
+  currency?: string;
   name: string;
   description: string;
   image?: string;
   order_id: string;
   handler: (response: RazorpayResponse) => void;
-  prefill: {
+  prefill?: {
     name?: string;
     email?: string;
     contact?: string;
   };
-  notes: Record<string, string>;
-  theme: {
+  notes?: Record<string, string>;
+  theme?: {
     color: string;
   };
-  modal: {
+  modal?: {
     ondismiss: () => void;
   };
 }

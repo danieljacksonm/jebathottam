@@ -1,0 +1,129 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "email": "admin@ebenezar.com",
+      "password": "$2b$10$PLACEHOLDER_HASH_WILL_BE_SET_ON_FIRST_LOGIN",
+      "name": "Admin User",
+      "role": "admin",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "lastLogin": "2026-07-03T19:51:00.915Z"
+    }
+  ],
+  "services": [
+    {
+      "id": "1",
+      "title": "Data Entry",
+      "description": "Accurate, timely data entry from forms, spreadsheets, or documents.",
+      "icon": "FileText",
+      "category": "digital",
+      "features": [
+        "Fast turnaround",
+        "99% accuracy",
+        "Multiple formats",
+        "Confidential"
+      ],
+      "status": "published",
+      "order": 1,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "2",
+      "title": "Web Development",
+      "description": "Custom websites built with modern technologies.",
+      "icon": "Globe",
+      "category": "web",
+      "features": [
+        "Responsive design",
+        "SEO optimized",
+        "Fast loading",
+        "Secure"
+      ],
+      "status": "published",
+      "order": 2,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "3",
+      "title": "Travel Booking",
+      "description": "End-to-end travel assistance for business and personal trips.",
+      "icon": "Plane",
+      "category": "travel",
+      "features": [
+        "Flight booking",
+        "Hotel reservations",
+        "Itinerary planning",
+        "24/7 support"
+      ],
+      "status": "published",
+      "order": 3,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    }
+  ],
+  "portfolio": [
+    {
+      "id": "1",
+      "title": "E-Commerce Migration",
+      "clientName": "Retail Co",
+      "category": [
+        "data"
+      ],
+      "description": "Migrated 2000+ products to new platform.",
+      "coverImage": "/images/work-1.jpg",
+      "galleryImages": [],
+      "techStack": [
+        "Excel",
+        "CSV",
+        "SQL"
+      ],
+      "status": "published",
+      "order": 1,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    }
+  ],
+  "inquiries": [
+    {
+      "id": "1",
+      "name": "John Smith",
+      "email": "john@example.com",
+      "service": "web",
+      "message": "Need a website for my restaurant.",
+      "status": "new",
+      "createdAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "2",
+      "name": "Sarah Johnson",
+      "email": "sarah@company.com",
+      "service": "data",
+      "message": "Looking for data entry assistance for Q4 reports.",
+      "status": "in-progress",
+      "createdAt": "2026-07-02T19:51:00.915Z"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "1",
+      "name": "Sarah Mitchell",
+      "role": "CEO",
+      "company": "TravelWise Agency",
+      "content": "Excellent service and support!",
+      "rating": 5,
+      "status": "published",
+      "order": 1,
+      "createdAt": "2026-07-03T19:51:00.915Z"
+    }
+  ],
+  "blogPosts": [],
+  "team": [],
+  "settings": {
+    "siteName": "Ebenezar Digital Services",
+    "siteDescription": "Reliable digital work for businesses everywhere.",
+    "contactEmail": "contact@ebenezar.com",
+    "socialLinks": {}
+  }
+}

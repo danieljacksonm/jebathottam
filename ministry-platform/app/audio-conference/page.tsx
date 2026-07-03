@@ -1,15 +1,71 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
-import { audioConferences } from '@/data/audio-conference-content';
+import { audioConferences as fallbackConferences } from '@/data/audio-conference-content';
+
+type Conference = {
+  id: number | string;
+  title: string;
+  description: string;
+  status: string;
+  scheduledDate?: string;
+  scheduled_start?: string;
+  scheduledTime?: string;
+  category?: string;
+  participants?: number;
+  maxParticipants?: number;
+  max_participants?: number;
+  speaker?: { name: string; role: string; image: string };
+};
+
+function mapApiStatus(status: string): string {
+  if (status === 'scheduled') return 'upcoming';
+  if (status === 'live') return 'live';
+  if (status === 'ended') return 'ended';
+  return status;
+}
 
 export default function AudioConferencePage() {
-  const upcoming = audioConferences.filter(c => c.status === 'upcoming');
-  const live = audioConferences.filter(c => c.status === 'live');
-  const ended = audioConferences.filter(c => c.status === 'ended');
+  const [conferences, setConferences] = useState<Conference[]>(fallbackConferences);
+
+  useEffect(() => {
+    fetch('/api/conferences?scope=public')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) {
+          setConferences(list.map((c: Conference) => ({
+            ...c,
+            status: mapApiStatus(c.status),
+            scheduledDate: c.scheduled_start || c.scheduledDate,
+            maxParticipants: c.max_participants || c.maxParticipants || 100,
+            speaker: c.speaker || { name: 'Ministry Team', role: 'Speaker', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop' },
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const upcoming = conferences.filter(c => c.status === 'upcoming');
+  const live = conferences.filter(c => c.status === 'live');
+  const ended = conferences.filter(c => c.status === 'ended');
+
+  const formatDate = (conf: Conference) => {
+    const d = conf.scheduledDate || conf.scheduled_start;
+    if (!d) return 'TBA';
+    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  const formatTime = (conf: Conference) => {
+    if (conf.scheduledTime) return conf.scheduledTime;
+    const d = conf.scheduled_start;
+    if (!d) return 'TBA';
+    return new Date(d).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 flex flex-col">
@@ -31,55 +87,26 @@ export default function AudioConferencePage() {
               >
                 Join conference (dial-in or online)
               </Link>
-              <p className="text-sm text-white/80 mt-3 max-w-md mx-auto">
-                Ministry line (like Free Conference Call): same dial-in numbers every time, or join online. You can also start an instant meeting (Jitsi) for one-off calls.
-              </p>
             </div>
           </div>
         </FadeInUp>
 
-        {/* Live Conferences */}
         {live.length > 0 && (
           <FadeInUp delay={0.1}>
             <div className="mb-12">
               <div className="flex items-center space-x-3 mb-6">
                 <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900">
-                  Live Now
-                </h2>
+                <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 dark:text-white">Live Now</h2>
               </div>
               <StaggerContainer>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {live.map((conference) => (
                     <StaggerItem key={conference.id}>
-                      <Link href={`/audio-conference/${conference.id}`}>
+                      <Link href={`/conferences/${conference.id}`}>
                         <div className="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-6 hover:shadow-xl transition-all cursor-pointer">
-                          <div className="flex items-center justify-between mb-4">
-                            <span className="px-3 py-1 bg-red-500 text-white rounded-full text-xs font-medium uppercase tracking-wide flex items-center space-x-2">
-                              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                              <span>LIVE</span>
-                            </span>
-                            <span className="text-sm text-gray-600">
-                              {conference.participants}/{conference.maxParticipants} participants
-                            </span>
-                          </div>
-                          <h3 className="text-2xl font-serif font-bold text-gray-900 mb-3">
-                            {conference.title}
-                          </h3>
-                          <p className="text-gray-700 mb-4 line-clamp-2">
-                            {conference.description}
-                          </p>
-                          <div className="flex items-center space-x-4 text-sm text-gray-600">
-                            <div className="flex items-center space-x-2">
-                              <div className="w-8 h-8 rounded-full bg-white overflow-hidden">
-                                <img src={conference.speaker.image} alt={conference.speaker.name} className="w-full h-full object-cover" />
-                              </div>
-                              <div>
-                                <p className="font-semibold text-gray-900">{conference.speaker.name}</p>
-                                <p className="text-xs">{conference.speaker.role}</p>
-                              </div>
-                            </div>
-                          </div>
+                          <span className="px-3 py-1 bg-red-500 text-white rounded-full text-xs font-medium uppercase">LIVE</span>
+                          <h3 className="text-2xl font-serif font-bold text-gray-900 mt-4 mb-3">{conference.title}</h3>
+                          <p className="text-gray-700 line-clamp-2">{conference.description}</p>
                         </div>
                       </Link>
                     </StaggerItem>
@@ -90,57 +117,19 @@ export default function AudioConferencePage() {
           </FadeInUp>
         )}
 
-        {/* Upcoming Conferences */}
         {upcoming.length > 0 && (
           <FadeInUp delay={0.2}>
             <div className="mb-12">
-              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 mb-6">
-                Upcoming
-              </h2>
+              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 dark:text-white mb-6">Upcoming</h2>
               <StaggerContainer>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {upcoming.map((conference) => (
                     <StaggerItem key={conference.id}>
-                      <Link href={`/audio-conference/${conference.id}`}>
-                        <div className="bg-white rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all p-6 cursor-pointer">
-                          <div className="mb-4">
-                            <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-medium uppercase tracking-wide">
-                              {conference.category}
-                            </span>
-                          </div>
-                          <h3 className="text-xl font-serif font-bold text-gray-900 mb-3">
-                            {conference.title}
-                          </h3>
-                          <p className="text-gray-600 mb-4 text-sm line-clamp-2">
-                            {conference.description}
-                          </p>
-                          <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-10 h-10 rounded-full bg-gray-100 overflow-hidden">
-                              <img src={conference.speaker.image} alt={conference.speaker.name} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-semibold text-gray-900 text-sm">{conference.speaker.name}</p>
-                              <p className="text-xs text-gray-600">{conference.speaker.role}</p>
-                            </div>
-                          </div>
-                          <div className="pt-4 border-t border-gray-200">
-                            <div className="flex items-center justify-between text-sm">
-                              <div className="flex items-center space-x-2 text-gray-600">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <span>
-                                  {new Date(conference.scheduledDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                                </span>
-                              </div>
-                              <div className="flex items-center space-x-2 text-gray-600">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span>{conference.scheduledTime}</span>
-                              </div>
-                            </div>
-                          </div>
+                      <Link href={`/conferences/${conference.id}`}>
+                        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-xl transition-all p-6 cursor-pointer">
+                          <h3 className="text-xl font-serif font-bold text-gray-900 dark:text-white mb-3">{conference.title}</h3>
+                          <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm line-clamp-2">{conference.description}</p>
+                          <div className="text-sm text-gray-500">{formatDate(conference)} · {formatTime(conference)}</div>
                         </div>
                       </Link>
                     </StaggerItem>
@@ -151,44 +140,18 @@ export default function AudioConferencePage() {
           </FadeInUp>
         )}
 
-        {/* Past Conferences */}
         {ended.length > 0 && (
           <FadeInUp delay={0.3}>
             <div>
-              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 mb-6">
-                Past Conferences
-              </h2>
+              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-gray-900 dark:text-white mb-6">Past Conferences</h2>
               <StaggerContainer>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {ended.map((conference) => (
                     <StaggerItem key={conference.id}>
-                      <Link href={`/audio-conference/${conference.id}`}>
-                        <div className="bg-gray-50 rounded-xl border border-gray-200 hover:shadow-lg transition-all p-6 cursor-pointer">
-                          <div className="mb-4">
-                            <span className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-xs font-medium uppercase tracking-wide">
-                              {conference.category}
-                            </span>
-                          </div>
-                          <h3 className="text-xl font-serif font-bold text-gray-900 mb-3">
-                            {conference.title}
-                          </h3>
-                          <p className="text-gray-600 mb-4 text-sm line-clamp-2">
-                            {conference.description}
-                          </p>
-                          <div className="flex items-center space-x-3 mb-4">
-                            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-                              <img src={conference.speaker.image} alt={conference.speaker.name} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-semibold text-gray-900 text-sm">{conference.speaker.name}</p>
-                              <p className="text-xs text-gray-600">{conference.speaker.role}</p>
-                            </div>
-                          </div>
-                          <div className="pt-4 border-t border-gray-200">
-                            <p className="text-xs text-gray-500">
-                              Ended • {conference.participants} participants
-                            </p>
-                          </div>
+                      <Link href={`/conferences/${conference.id}`}>
+                        <div className="bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 hover:shadow-lg transition-all p-6 cursor-pointer">
+                          <h3 className="text-xl font-serif font-bold text-gray-900 dark:text-white mb-3">{conference.title}</h3>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2">{conference.description}</p>
                         </div>
                       </Link>
                     </StaggerItem>
@@ -197,6 +160,10 @@ export default function AudioConferencePage() {
               </StaggerContainer>
             </div>
           </FadeInUp>
+        )}
+
+        {conferences.length === 0 && (
+          <p className="text-center text-gray-500">No conferences scheduled. Check back soon.</p>
         )}
       </main>
 

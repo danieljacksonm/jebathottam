@@ -144,6 +144,49 @@ const mockProducts = [
   },
 ];
 
+type ShopProduct = {
+  id: number;
+  name: string;
+  slug: string;
+  category: { name: string; slug: string };
+  brand: string;
+  price: number;
+  originalPrice: number;
+  rating: number;
+  reviews: number;
+  image: string | null;
+  inStock: boolean;
+  badge: string | null;
+  compatibility: string[];
+};
+
+function mapApiProduct(p: {
+  id: number;
+  name: string;
+  slug: string;
+  price: number;
+  inStock: boolean;
+  imageUrl?: string | null;
+  description?: string;
+  category?: { name: string; slug: string };
+}): ShopProduct {
+  return {
+    id: p.id,
+    name: p.name,
+    slug: p.slug,
+    category: p.category || { name: "General", slug: "general" },
+    brand: p.category?.name || "General",
+    price: p.price,
+    originalPrice: Math.round(p.price * 1.15),
+    rating: 4.5,
+    reviews: 0,
+    image: p.imageUrl ? p.imageUrl : null,
+    inStock: p.inStock,
+    badge: null,
+    compatibility: [],
+  };
+}
+
 const sortOptions = [
   { value: "relevance", label: "Relevance" },
   { value: "price-low", label: "Price: Low to High" },
@@ -159,7 +202,22 @@ function ShopContent() {
   const [sortBy, setSortBy] = useState("relevance");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredProducts, setFilteredProducts] = useState(mockProducts);
+  const [products, setProducts] = useState<ShopProduct[]>(mockProducts);
+  const [filteredProducts, setFilteredProducts] = useState<ShopProduct[]>(mockProducts);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        const list = Array.isArray(data) ? data : [];
+        if (list.length > 0) {
+          const mapped = list.map(mapApiProduct);
+          setProducts(mapped);
+          setFilteredProducts(mapped);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Get filter values from URL
   const category = searchParams.get("category");
@@ -171,7 +229,7 @@ function ShopContent() {
 
   // Apply filters and sorting
   useEffect(() => {
-    let result = [...mockProducts];
+    let result = [...products];
 
     // Search filter
     if (query) {
@@ -224,7 +282,7 @@ function ShopContent() {
 
     setFilteredProducts(result);
     setCurrentPage(1);
-  }, [category, brand, minPrice, maxPrice, inStock, sortBy, query]);
+  }, [category, brand, minPrice, maxPrice, inStock, sortBy, query, products]);
 
   const productsPerPage = 12;
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);

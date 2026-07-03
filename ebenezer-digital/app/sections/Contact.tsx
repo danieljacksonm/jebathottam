@@ -53,22 +53,25 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
 
-    setIsSubmitting(false);
-    setSubmitStatus("success");
-    setFormData({
-      name: "",
-      email: "",
-      service: "",
-      budget: "",
-      message: "",
-    });
+      if (!response.ok) throw new Error('Failed to submit');
 
-    // Reset status after 5 seconds
-    setTimeout(() => setSubmitStatus("idle"), 5000);
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', service: '', budget: '', message: '' });
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    } catch {
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (

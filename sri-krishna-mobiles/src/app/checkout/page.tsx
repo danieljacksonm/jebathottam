@@ -103,7 +103,7 @@ export default function CheckoutPage() {
       // Handle Cash on Delivery
       setIsProcessing(true);
       try {
-        const response = await fetch("/api/orders", {
+        const response = await fetch("/api/payment/cod-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

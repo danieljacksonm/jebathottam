@@ -19,28 +19,45 @@ function generateDialInPin(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-// GET - List all conferences
+// GET - List conferences (public or authenticated)
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser(request);
+    const searchParams = request.nextUrl.searchParams;
+    const scope = searchParams.get('scope');
+    const status = searchParams.get('status');
+    const limit = parseInt(searchParams.get('limit') || '20');
+    const offset = parseInt(searchParams.get('offset') || '0');
+
+    // Public listing for website pages
+    if (scope === 'public') {
+      let sql = 'SELECT id, title, description, status, scheduled_start, scheduled_end, meeting_link, is_public FROM conferences WHERE is_public = 1 AND status != ?';
+      const params: (string | number)[] = ['cancelled'];
+
+      if (status) {
+        sql += ' AND status = ?';
+        params.push(status);
+      }
+
+      sql += ' ORDER BY scheduled_start DESC LIMIT ? OFFSET ?';
+      params.push(limit, offset);
+
+      const conferences = await query(sql, params);
+      return NextResponse.json({ success: true, data: conferences, pagination: { limit, offset } });
+    }
+
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const searchParams = request.nextUrl.searchParams;
-    const status = searchParams.get('status'); // 'scheduled', 'live', 'ended', 'cancelled'
-    const limit = parseInt(searchParams.get('limit') || '20');
-    const offset = parseInt(searchParams.get('offset') || '0');
-
     let sql = 'SELECT * FROM conferences WHERE 1=1';
-    const params: any[] = [];
+    const params: (string | number)[] = [];
 
     if (status) {
       sql += ' AND status = ?';
       params.push(status);
     }
 
-    // Super admin can see all, others only their own
     if (user.role !== 'super_admin') {
       sql += ' AND creator_id = ?';
       params.push(user.id);
@@ -56,10 +73,11 @@ export async function GET(request: NextRequest) {
       data: conferences,
       pagination: { limit, offset },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error fetching conferences:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch conferences', details: error.message },
+      { error: 'Failed to fetch conferences', details: message },
       { status: 500 }
     );
   }

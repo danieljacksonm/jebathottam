@@ -1,20 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations/page-transition';
-import { notes, noteCategories, noteTags } from '@/data/notes-content';
+import { notes as fallbackNotes, noteCategories, noteTags } from '@/data/notes-content';
 import type { Note } from '@/data/notes-content';
 
 export default function NotesPage() {
+  const [notesList, setNotesList] = useState<Note[]>(fallbackNotes);
   const [activeType, setActiveType] = useState<'all' | 'personal' | 'teaching' | 'prophecy'>('all');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const filteredNotes = notes.filter((note) => {
+  useEffect(() => {
+    fetch('/api/notes?scope=public')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) {
+          setNotesList(list.map((n: { id: number; title: string; content: string; type: string; created_at: string; author_name?: string }) => ({
+            id: n.id,
+            title: n.title || 'Untitled',
+            content: n.content,
+            type: n.type === 'sermon' ? 'teaching' as const : 'personal' as const,
+            category: 'Teaching',
+            tags: [],
+            author: n.author_name || 'Ministry',
+            date: n.created_at?.split('T')[0] || new Date().toISOString().split('T')[0],
+            isPrivate: false,
+            scripture: '',
+          })));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const filteredNotes = notesList.filter((note) => {
     if (activeType !== 'all' && note.type !== activeType) return false;
     if (selectedCategory !== 'All' && note.category !== selectedCategory) return false;
     if (searchQuery && !note.title.toLowerCase().includes(searchQuery.toLowerCase()) && !note.content.toLowerCase().includes(searchQuery.toLowerCase())) return false;

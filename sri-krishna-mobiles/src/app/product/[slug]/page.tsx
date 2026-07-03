@@ -7,44 +7,7 @@ import { CompatibilityChecker } from "@/components/product/CompatibilityChecker"
 import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { Breadcrumbs } from "@/components/shop/Breadcrumbs";
 import { Shield, Truck, RotateCcw } from "lucide-react";
-
-// Mock product data for demo
-const mockProduct = {
-  id: 1,
-  name: "iPhone 14 Pro Max OLED Display - Original Quality",
-  slug: "iphone-14-pro-max-oled-display",
-  brand: "Apple",
-  category: { name: "Screens", slug: "screens" },
-  price: 15499,
-  originalPrice: 18999,
-  rating: 4.8,
-  reviews: 245,
-  stock: 15,
-  sku: "SCR-IP14PM-OLED",
-  description:
-    "Genuine OLED display replacement for iPhone 14 Pro Max. Features Super Retina XDR display with ProMotion technology, 120Hz refresh rate, and True Tone. Perfect color accuracy and touch responsiveness. Comes with pre-installed front camera and sensor assembly.",
-  images: [
-    { id: 1, url: "/products/screen-1.jpg", alt: "Front view" },
-    { id: 2, url: "/products/screen-2.jpg", alt: "Side view" },
-    { id: 3, url: "/products/screen-3.jpg", alt: "Back view" },
-    { id: 4, url: "/products/screen-4.jpg", alt: "Detail view" },
-  ],
-  compatibility: [
-    "iPhone 14 Pro Max (A2894, A2895, A2896)",
-    "All carriers - Worldwide",
-  ],
-  specifications: [
-    { label: "Display Type", value: "Super Retina XDR OLED" },
-    { label: "Resolution", value: "2796 x 1290 pixels" },
-    { label: "Refresh Rate", value: "120Hz ProMotion" },
-    { label: "Brightness", value: "2000 nits peak" },
-    { label: "Touch Technology", value: "3D Touch / Haptic Touch" },
-    { label: "Warranty", value: "6 Months" },
-    { label: "Origin", value: "OEM Quality" },
-  ],
-  inStock: true,
-  badge: "Best Seller",
-};
+import { prisma } from "@/lib/db";
 
 const relatedProducts = [
   {
@@ -91,12 +54,39 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const slug = (await params).slug;
-  
-  // In real implementation, fetch from API
-  // const product = await getProduct(slug);
-  // if (!product) notFound();
-  
-  const product = mockProduct;
+
+  const dbProduct = await prisma.product.findUnique({
+    where: { slug },
+    include: { category: true },
+  });
+
+  if (!dbProduct) notFound();
+
+  const product = {
+    id: dbProduct.id,
+    name: dbProduct.name,
+    slug: dbProduct.slug,
+    brand: dbProduct.category?.name || "General",
+    category: { name: dbProduct.category?.name || "General", slug: dbProduct.category?.slug || "general" },
+    price: dbProduct.price,
+    originalPrice: Math.round(dbProduct.price * 1.15),
+    rating: 4.5,
+    reviews: 0,
+    stock: dbProduct.inStock ? 10 : 0,
+    sku: `SKU-${dbProduct.id}`,
+    description: dbProduct.description,
+    images: dbProduct.imageUrl
+      ? [{ id: 1, url: dbProduct.imageUrl, alt: dbProduct.name }]
+      : [{ id: 1, url: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800", alt: dbProduct.name }],
+    compatibility: ["Check product description for compatibility"],
+    specifications: [
+      { label: "Category", value: dbProduct.category?.name || "General" },
+      { label: "Availability", value: dbProduct.inStock ? "In Stock" : "Out of Stock" },
+      { label: "Warranty", value: "6 Months" },
+    ],
+    inStock: dbProduct.inStock,
+    badge: dbProduct.inStock ? null : "Out of Stock",
+  };
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

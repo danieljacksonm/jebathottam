@@ -36,6 +36,10 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Account is disabled or blocked");
         }
 
+        if (!user.password) {
+          throw new Error("Invalid email or password");
+        }
+
         const isPasswordValid = await bcrypt.compare(credentials.password, user.password);
 
         if (!isPasswordValid) {
@@ -86,11 +90,10 @@ export const authOptions: NextAuthOptions = {
         let dbUser = await User.findOne({ email: token.email });
         
         if (!dbUser) {
-          // Create new user from Google OAuth
           dbUser = await User.create({
             email: token.email,
             name: token.name || token.email.split("@")[0],
-            image: token.picture,
+            image: token.picture || undefined,
             emailVerified: new Date(),
             role: "customer",
           });

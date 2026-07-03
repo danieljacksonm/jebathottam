@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { getUserFromRequest } from '@/lib/auth';
 
 const TABLE_CREATED_KEY = '__chat_table_created';
 let tableCreated = false;
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
   try {
     await ensureTable();
 
-    const { chatId, text, sender } = await request.json();
+    const { chatId, text } = await request.json();
 
     if (!chatId || !text) {
       return NextResponse.json(
@@ -61,7 +62,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const validSender = sender === 'admin' ? 'admin' : 'user';
+    const user = await getUserFromRequest(request);
+    const isAdmin = user?.role === 'super_admin' || user?.role === 'media_team';
+    const validSender = isAdmin ? 'admin' : 'user';
 
     const result = await query<any>(
       'INSERT INTO chat_messages (chat_id, text, sender) VALUES (?, ?, ?)',

@@ -191,7 +191,12 @@ export default function Home() {
   const [currentHour, setCurrentHour] = useState(0);
   const [siteSettings, setSiteSettings] = useState<Record<string, string>>({});
   const [testimonies, setTestimonies] = useState<Array<{ id: number; name: string; content: string; image_url: string | null; created_at: string }>>([]);
-  const [events, setEvents] = useState<Array<{ id: number; title: string; description: string; date: string; image_url?: string }>>([]);
+  const [events, setEvents] = useState<Array<{ id: number; title: string; description: string; date: string; time?: string; location?: string; image_url?: string }>>([]);
+  const [apiBlogs, setApiBlogs] = useState<BlogPost[]>([]);
+  const [sliderSlides, setSliderSlides] = useState<SliderImage[]>([]);
+  const [homeGallery, setHomeGallery] = useState<Array<{ id: number; title: string; image?: string; image_url?: string; category?: string }>>([]);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>(fallbackMedia || []);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -222,6 +227,53 @@ export default function Home() {
       })
       .catch(() => setEvents([]));
 
+    fetch('/api/blogs')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        setApiBlogs(list);
+      })
+      .catch(() => setApiBlogs([]));
+
+    fetch('/api/slider')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) {
+          setSliderSlides(list.map((s: { image_url: string; title?: string; text?: string; description?: string }) => ({
+            src: s.image_url,
+            alt: s.title || s.text || 'Ministry',
+            title: s.title || s.text,
+            description: s.description,
+          })));
+        }
+      })
+      .catch(() => {});
+
+    fetch('/api/gallery')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        setHomeGallery(list.slice(0, 6));
+      })
+      .catch(() => setHomeGallery([]));
+
+    fetch('/api/team')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        setTeamMembers(list.slice(0, 4));
+      })
+      .catch(() => setTeamMembers([]));
+
+    fetch('/api/media')
+      .then((res) => (res.ok ? res.json() : { data: [] }))
+      .then((data) => {
+        const list = Array.isArray(data?.data) ? data.data : [];
+        if (list.length > 0) setMediaItems(list);
+      })
+      .catch(() => {});
+
     const hour = new Date().getHours();
     setCurrentHour(hour);
     
@@ -232,21 +284,21 @@ export default function Home() {
 
   const heroVariant = HERO_VARIANTS[currentHour % HERO_VARIANTS.length];
 
-  const allBlogs: BlogPost[] = blogPosts || [];
+  const allBlogs: BlogPost[] = apiBlogs.length > 0 ? apiBlogs : (blogPosts || []);
   const featuredBlog: BlogPost | undefined = allBlogs.find((p) => p.featured) || allBlogs[0];
   const regularBlogs: BlogPost[] = allBlogs.filter((p) => p !== featuredBlog).slice(0, 3);
 
-  const sliderImages: SliderImage[] = (allBlogs.slice(0, 5)).map((p) => ({
-    src: getBlogImage(p),
-    alt: p.title,
-    title: p.title,
-    description: p.excerpt,
-  }));
+  const sliderImages: SliderImage[] = sliderSlides.length > 0
+    ? sliderSlides
+    : (allBlogs.slice(0, 5)).map((p) => ({
+        src: getBlogImage(p),
+        alt: p.title,
+        title: p.title,
+        description: p.excerpt,
+      }));
 
-  const homeGallery: Array<{ id: number; title: string; image?: string; image_url?: string; category?: string }> = [];
-  const teamMembers: TeamMember[] = [];
+  const galleryForHome = homeGallery.length > 0 ? homeGallery : fallbackGalleryImages.slice(0, 6);
   const mv = defaultMV;
-  const mediaItems: MediaItem[] = fallbackMedia || [];
   const sectionOrder: string[] = getShuffledSections(currentHour);
 
   const about = {
@@ -461,6 +513,135 @@ export default function Home() {
       </section>
     ),
 
+    /* ── TESTIMONIES ───────────────────────────────────────────────────── */
+    testimonies: (bg) => (
+      <section id="testimony" className={`py-20 lg:py-28 ${bg} relative`}>
+        <FloatingDecorations count={4} color={accent.dot} />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="max-w-2xl mb-16">
+              <span className="text-[11px] sm:text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-[0.2em]">Stories of faith</span>
+              <AnimatedHeading text="Testimonies" className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-3 mb-4 tracking-tight" />
+              <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">God&apos;s faithfulness witnessed through transformed lives</p>
+            </div>
+          </ScrollReveal>
+
+          <InViewStagger>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mb-14">
+              {testimonies.map((testimony) => (
+                <InViewStaggerItem key={testimony.id}>
+                  <Link href={`/testimony/${testimony.id}`} className="block h-full">
+                    <motion.div whileHover={{ y: -6, boxShadow: `0 25px 50px -12px ${accent.glow}` }} transition={{ duration: 0.3, ease: 'easeOut' }} className="h-full">
+                      <div className="bg-white dark:bg-gray-900 rounded-2xl p-7 sm:p-8 border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-500 h-full flex flex-col relative overflow-hidden group">
+                        <div className="absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: accent.gradient }} />
+
+                        <svg className="w-8 h-8 text-primary-200 dark:text-primary-900 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+
+                        <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base mb-6 flex-1 line-clamp-4 leading-relaxed italic">
+                          &ldquo;{testimony.content}&rdquo;
+                        </p>
+
+                        <div className="flex items-center gap-3.5 pt-5 border-t border-gray-100 dark:border-gray-800">
+                          <div className="w-11 h-11 rounded-full overflow-hidden ring-2 ring-primary-100 dark:ring-primary-900/30 flex-shrink-0">
+                            <img
+                              src={getOptimizedImageUrl(testimony.image_url, 128) || testimony.image_url || 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="64" height="64"%3E%3Crect fill="%23e5e7eb" width="64" height="64"/%3E%3C/svg%3E'}
+                              alt={testimony.name}
+                              loading="lazy"
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-white text-sm truncate">{testimony.name}</h3>
+                            <p className="text-xs text-gray-400 dark:text-gray-500">
+                              {new Date(testimony.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </p>
+                          </div>
+                          <span className="text-xs text-primary-600 dark:text-primary-400 font-medium flex-shrink-0 group-hover:translate-x-0.5 transition-transform duration-300">
+                            Read &rarr;
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </Link>
+                </InViewStaggerItem>
+              ))}
+            </div>
+          </InViewStagger>
+
+          <ScrollReveal delay={0.4}>
+            <div>
+              <Link href="/testimony">
+                <Button variant="outline" size="lg" className="rounded-full px-8 text-sm font-medium tracking-wide">View all testimonies</Button>
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+    ),
+
+    /* ── EVENTS ────────────────────────────────────────────────────────── */
+    events: (bg) => (
+      <section id="events" className={`py-20 lg:py-28 ${bg}`}>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="max-w-2xl mb-16">
+              <span className="text-[11px] sm:text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-[0.2em]">Join us</span>
+              <AnimatedHeading text="Upcoming events" className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-3 mb-4 tracking-tight" />
+              <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">Worship, fellowship, and spiritual growth</p>
+            </div>
+          </ScrollReveal>
+
+          <InViewStagger>
+            <div className="max-w-4xl space-y-5 mb-14">
+              {events.map((event) => (
+                <InViewStaggerItem key={event.id}>
+                  <motion.div whileHover={{ x: 4, boxShadow: `0 20px 40px -12px ${accent.glow}` }} transition={{ duration: 0.3, ease: 'easeOut' }}>
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-500 overflow-hidden group">
+                      <div className="flex flex-col sm:flex-row">
+                        <div className="flex-shrink-0 sm:w-28 lg:w-32">
+                          <div className="text-white p-5 sm:p-0 sm:h-full flex sm:flex-col items-center sm:justify-center gap-2 sm:gap-0 text-center" style={{ background: accent.gradient }}>
+                            <span className="text-3xl sm:text-4xl font-bold leading-none">{new Date(event.date).getDate()}</span>
+                            <span className="text-xs sm:text-sm uppercase tracking-wider font-medium text-white/80">{new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}</span>
+                          </div>
+                        </div>
+                        <div className="flex-1 p-6 sm:p-7 lg:p-8">
+                          <h3 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors duration-300">{event.title}</h3>
+                          <p className="text-gray-500 dark:text-gray-400 mb-4 text-sm sm:text-base leading-relaxed">{event.description}</p>
+                          <div className="flex flex-wrap gap-4 text-sm text-gray-400 dark:text-gray-500">
+                            <span className="flex items-center gap-1.5">
+                              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                              {event.time}
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                              </svg>
+                              {event.location}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </InViewStaggerItem>
+              ))}
+            </div>
+          </InViewStagger>
+
+          <ScrollReveal delay={0.4}>
+            <div>
+              <Link href="/events">
+                <Button variant="outline" size="lg" className="rounded-full px-8 text-sm font-medium tracking-wide">View all events</Button>
+              </Link>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+    ),
+
     /* ── GALLERY ───────────────────────────────────────────────────────── */
     gallery: (bg) => (
       <section id="gallery" className={`py-20 lg:py-28 ${bg}`}>
@@ -475,7 +656,7 @@ export default function Home() {
 
           <InViewStagger>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 max-w-7xl mb-14">
-              {(homeGallery.length > 0 ? homeGallery : fallbackGalleryImages).slice(0, 8).map((image) => {
+              {galleryForHome.slice(0, 8).map((image) => {
                 const imgSrc = getImageSrc(image);
                 const optSrc = getOptimizedImageUrl(imgSrc, 400);
                 return (

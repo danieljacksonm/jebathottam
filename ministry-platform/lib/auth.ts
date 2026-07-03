@@ -3,7 +3,18 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (secret) return secret;
+  // Allow production builds without JWT_SECRET; require it at runtime on Vercel/server
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return 'build-time-placeholder-not-used-at-runtime';
+  }
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('JWT_SECRET environment variable is required in production');
+  }
+  return 'dev-only-secret-change-before-production';
+}
 
 export interface UserPayload {
   id: number;
@@ -24,13 +35,13 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 
 // Generate JWT token
 export function generateToken(payload: UserPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(payload, getJwtSecret(), { expiresIn: '7d' });
 }
 
 // Verify JWT token
 export function verifyToken(token: string): UserPayload | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as UserPayload;
+    return jwt.verify(token, getJwtSecret()) as UserPayload;
   } catch (error) {
     return null;
   }
