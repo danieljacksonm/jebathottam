@@ -61,16 +61,16 @@ export async function POST(req: NextRequest) {
           "payment.razorpayOrderId": order?.id,
         });
 
-        if (orderDoc && orderDoc.payment.status !== "completed") {
+        if (orderDoc && orderDoc.payment.status !== "captured") {
           orderDoc.payment.status = "captured";
           orderDoc.payment.razorpayPaymentId = payment.id;
           orderDoc.payment.paidAt = new Date(payment.created_at * 1000);
           orderDoc.payment.amountPaid = payment.amount / 100;
           orderDoc.status = "confirmed";
-          orderDoc.statusHistory.push({
+          orderDoc.timeline.push({
             status: "confirmed",
             timestamp: new Date(),
-            note: "Payment captured via webhook",
+            description: "Payment captured via webhook",
           });
           await orderDoc.save();
           console.log(`Order ${orderDoc._id} payment captured via webhook`);
@@ -88,10 +88,10 @@ export async function POST(req: NextRequest) {
           orderDoc.payment.status = "failed";
           orderDoc.payment.failureReason = payment.error_description || "Payment failed";
           orderDoc.status = "cancelled";
-          orderDoc.statusHistory.push({
+          orderDoc.timeline.push({
             status: "cancelled",
             timestamp: new Date(),
-            note: `Payment failed: ${payment.error_description}`,
+            description: `Payment failed: ${payment.error_description}`,
           });
           await orderDoc.save();
           console.log(`Order ${orderDoc._id} payment failed via webhook`);
@@ -116,10 +116,10 @@ export async function POST(req: NextRequest) {
             processedAt: new Date(refund.created_at * 1000),
           };
           orderDoc.status = "refunded";
-          orderDoc.statusHistory.push({
+          orderDoc.timeline.push({
             status: "refunded",
             timestamp: new Date(),
-            note: `Refund processed: ${refund.amount / 100}`,
+            description: `Refund processed: ${refund.amount / 100}`,
           });
           await orderDoc.save();
           console.log(`Order ${orderDoc._id} refund processed via webhook`);
@@ -133,15 +133,15 @@ export async function POST(req: NextRequest) {
           "payment.razorpayOrderId": order?.id,
         });
 
-        if (orderDoc && orderDoc.payment.status !== "completed") {
-          orderDoc.payment.status = "completed";
+        if (orderDoc && orderDoc.payment.status !== "captured") {
+          orderDoc.payment.status = "captured";
           orderDoc.payment.razorpayPaymentId = payment.id;
           orderDoc.payment.paidAt = new Date();
           orderDoc.status = "confirmed";
-          orderDoc.statusHistory.push({
+          orderDoc.timeline.push({
             status: "confirmed",
             timestamp: new Date(),
-            note: "Order paid via webhook",
+            description: "Order paid via webhook",
           });
           await orderDoc.save();
           console.log(`Order ${orderDoc._id} marked as paid via webhook`);
