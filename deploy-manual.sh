@@ -12,17 +12,17 @@ rm -rf .next
 npm ci
 export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
 npm run build
-pm2 restart ministry-platform || pm2 start npm --name "ministry-platform" -- start
+pm2 restart ministry-platform || pm2 start /home/dani/ecosystem.config.js --only ministry-platform
 
-# Deploy Ebenezar Digital
-echo "=== Deploying Ebenezar Digital ==="
+# Deploy Ebenezer Digital
+echo "=== Deploying Ebenezer Digital ==="
 cd /home/dani/ebenezer-digital
 git pull origin main
 rm -rf .next
 npm ci
 export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
 npm run build
-pm2 restart ebenezar || pm2 start npm --name "ebenezar" -- start
+pm2 restart ebenezer-digital || pm2 start /home/dani/ecosystem.config.js --only ebenezer-digital
 
 # Deploy Sri Krishna Mobiles
 echo "=== Deploying Sri Krishna Mobiles ==="
@@ -32,9 +32,10 @@ rm -rf .next
 npm ci
 export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
 npm run build
-pm2 restart mobiles || pm2 start npm --name "mobiles" -- start
+pm2 restart sri-krishna-mobiles || pm2 start /home/dani/ecosystem.config.js --only sri-krishna-mobiles
 
 # Save PM2 configuration
+cd /home/dani
 pm2 save
 
 echo "=== All deployments completed! ==="

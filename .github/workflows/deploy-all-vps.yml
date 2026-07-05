@@ -32,7 +32,7 @@ jobs:
             npm install --legacy-peer-deps
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
-            pm2 restart ebenezer-digital || pm2 start ecosystem.config.js --only ebenezer-digital
+            pm2 restart ebenezer-digital || pm2 start /home/dani/ecosystem.config.js --only ebenezer-digital
             echo "✅ Ebenezer Digital deployed at: $(date)" > .deploy-timestamp
             
             # Deploy Ministry Platform
@@ -44,7 +44,7 @@ jobs:
             npm install --legacy-peer-deps
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
-            pm2 restart ministry-platform || pm2 start ecosystem.config.js --only ministry-platform
+            pm2 restart ministry-platform || pm2 start /home/dani/ecosystem.config.js --only ministry-platform
             echo "✅ Ministry Platform deployed at: $(date)" > .deploy-timestamp
             
             # Deploy Sri Krishna Mobiles
@@ -56,7 +56,7 @@ jobs:
             npm install --legacy-peer-deps
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
-            pm2 restart sri-krishna-mobiles || pm2 start ecosystem.config.js --only sri-krishna-mobiles
+            pm2 restart sri-krishna-mobiles || pm2 start /home/dani/ecosystem.config.js --only sri-krishna-mobiles
             echo "✅ Sri Krishna Mobiles deployed at: $(date)" > .deploy-timestamp
             
             # Save PM2 configuration
