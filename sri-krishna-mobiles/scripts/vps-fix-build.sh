@@ -12,6 +12,24 @@ sed -i 's/!== "completed"/!== "captured"/g' src/app/api/payment/webhook/route.ts
 echo "Removing deprecated webhook config export"
 sed -i '/^\/\/ Disable body parsing for webhook/,/^};$/d' src/app/api/payment/webhook/route.ts
 
+echo "Adding missing Razorpay fields to Order.ts (if not already present)"
+if ! grep -q 'razorpayPaymentId' src/models/Order.ts; then
+  sed -i '/paymentId?: string;/a\
+  razorpayOrderId?: string;\
+  razorpayPaymentId?: string;\
+  razorpaySignature?: string;\
+  paidAt?: Date;\
+  amountPaid?: number;\
+  failureReason?: string;' src/models/Order.ts
+  sed -i '/paymentId: String,/a\
+  razorpayOrderId: String,\
+  razorpayPaymentId: String,\
+  razorpaySignature: String,\
+  paidAt: Date,\
+  amountPaid: Number,\
+  failureReason: String,' src/models/Order.ts
+fi
+
 echo "Building..."
 npm run build
 
