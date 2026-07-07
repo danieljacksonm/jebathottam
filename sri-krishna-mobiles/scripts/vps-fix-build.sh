@@ -12,6 +12,10 @@ sed -i 's/!== "completed"/!== "captured"/g' src/app/api/payment/webhook/route.ts
 echo "Removing deprecated webhook config export"
 sed -i '/^\/\/ Disable body parsing for webhook/,/^};$/d' src/app/api/payment/webhook/route.ts
 
+echo "Fixing webhook: statusHistory -> timeline"
+sed -i 's/\.statusHistory/.timeline/g' src/app/api/payment/webhook/route.ts
+sed -i 's/note:/description:/g' src/app/api/payment/webhook/route.ts
+
 echo "Adding missing Razorpay fields to Order.ts (if not already present)"
 if ! grep -q 'razorpayPaymentId' src/models/Order.ts; then
   sed -i '/paymentId?: string;/a\
