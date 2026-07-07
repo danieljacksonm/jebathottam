@@ -34,6 +34,15 @@ if ! grep -q 'razorpayPaymentId' src/models/Order.ts; then
   failureReason: String,' src/models/Order.ts
 fi
 
+# Fix RazorpayButton missing options (if build fails on RazorpayOptions)
+if [ -f src/components/RazorpayButton.tsx ] && ! grep -q 'currency: "INR"' src/components/RazorpayButton.tsx; then
+  sed -i '/order_id: razorpayOrderId,/a\
+        currency: "INR",\
+        prefill: { email, name: name || undefined },\
+        notes: {},\
+        theme: { color: "#4F46E5" },' src/components/RazorpayButton.tsx
+fi
+
 echo "Building..."
 npm run build
 

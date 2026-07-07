@@ -50,9 +50,18 @@ export default function RazorpayButton({
       const rzp = new window.Razorpay({
         key: k || keyId,
         amount,
+        currency: "INR",
         order_id: razorpayOrderId,
         name: "Sri Krishna Mobiles",
         description: "Mobile spares & accessories",
+        prefill: {
+          email,
+          name: name || undefined,
+        },
+        notes: {},
+        theme: {
+          color: "#4F46E5",
+        },
         handler: async (response) => {
           try {
             const verifyRes = await fetch("/api/orders/razorpay-verify", {
