@@ -52,6 +52,9 @@ if [ -f src/lib/auth.ts ] && ! grep -q 'if (!user.password)' src/lib/auth.ts; th
 ' src/lib/auth.ts
 fi
 
+# Fix auth.ts: token.picture can be null
+sed -i 's/image: token\.picture,/image: token.picture || undefined,/' src/lib/auth.ts
+
 echo "Building..."
 npm run build
 
