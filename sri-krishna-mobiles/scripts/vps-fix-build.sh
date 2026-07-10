@@ -43,6 +43,15 @@ if [ -f src/components/RazorpayButton.tsx ] && ! grep -q 'currency: "INR"' src/c
         theme: { color: "#4F46E5" },' src/components/RazorpayButton.tsx
 fi
 
+# Fix auth.ts: user.password may be undefined (OAuth users)
+if [ -f src/lib/auth.ts ] && ! grep -q 'if (!user.password)' src/lib/auth.ts; then
+  sed -i '/const isPasswordValid = await bcrypt.compare/i\
+        if (!user.password) {\
+          throw new Error("Invalid email or password");\
+        }\
+' src/lib/auth.ts
+fi
+
 echo "Building..."
 npm run build
 
