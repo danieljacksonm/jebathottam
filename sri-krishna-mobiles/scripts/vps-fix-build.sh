@@ -55,10 +55,62 @@ fi
 # Fix auth.ts: token.picture can be null
 sed -i 's/image: token\.picture,/image: token.picture || undefined,/' src/lib/auth.ts
 
-# Fix email.ts: createTransporter typo (correct API is createTransport)
-if [ -f src/lib/notifications/email.ts ]; then
-  sed -i 's/createTransporter/createTransport/g' src/lib/notifications/email.ts
-fi
+# Fix nodemailer types + email.ts (VPS had wrong createTransporter in .d.ts)
+echo "Fixing nodemailer types and email.ts"
+mkdir -p src/types
+cat > src/types/nodemailer.d.ts << 'NODETYPE'
+declare module "nodemailer" {
+  export interface Transporter {
+    sendMail(mailOptions: {
+      from?: string;
+      to: string;
+      subject: string;
+      html?: string;
+      text?: string;
+    }): Promise<{ messageId: string }>;
+  }
+
+  export interface TransportOptions {
+    host?: string;
+    port?: number;
+    secure?: boolean;
+    auth?: { user?: string; pass?: string };
+  }
+
+  export function createTransport(options: TransportOptions): Transporter;
+}
+NODETYPE
+
+python3 - << 'PYEOF'
+from pathlib import Path
+path = Path("src/lib/notifications/email.ts")
+lines = path.read_text().splitlines()
+start = next(i for i, l in enumerate(lines) if l.startswith("export type EmailTemplate"))
+header = [
+    'import { createTransport, type Transporter } from "nodemailer";',
+    '',
+    'let transporter: Transporter | null = null;',
+    '',
+    'function getTransporter(): Transporter {',
+    '  if (!transporter) {',
+    '    transporter = createTransport({',
+    '      host: process.env.EMAIL_HOST || "smtp.gmail.com",',
+    '      port: parseInt(process.env.EMAIL_PORT || "587"),',
+    '      secure: false,',
+    '      auth: {',
+    '        user: process.env.EMAIL_USER,',
+    '        pass: process.env.EMAIL_PASSWORD,',
+    '      },',
+    '    });',
+    '  }',
+    '  return transporter;',
+    '}',
+]
+body = "\n".join(lines[start:])
+text = "\n".join(header) + "\n\n" + body
+text = text.replace("await transporter.sendMail", "await getTransporter().sendMail")
+path.write_text(text + "\n")
+PYEOF
 
 echo "Building..."
 npm run build
