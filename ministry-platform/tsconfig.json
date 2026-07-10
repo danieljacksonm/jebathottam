@@ -30,5 +30,11 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "../ebenezer-digital", "../sri-krishna-mobiles"]
+  "exclude": [
+    "node_modules",
+    "ebenezer-digital",
+    "sri-krishna-mobiles",
+    "../ebenezer-digital",
+    "../sri-krishna-mobiles"
+  ]
 }
