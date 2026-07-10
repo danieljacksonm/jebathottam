@@ -1,14 +1,21 @@
-import nodemailer from "nodemailer";
+import { createTransport, type Transporter } from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.EMAIL_PORT || "587"),
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+let transporter: Transporter | null = null;
+
+function getTransporter(): Transporter {
+  if (!transporter) {
+    transporter = createTransport({
+      host: process.env.EMAIL_HOST || "smtp.gmail.com",
+      port: parseInt(process.env.EMAIL_PORT || "587"),
+      secure: false,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
+  }
+  return transporter;
+}
 
 export type EmailTemplate =
   | "order_confirmation"
@@ -158,7 +165,7 @@ export async function sendEmail({ to, template, data }: Omit<EmailData, "subject
   const emailTemplate = getEmailTemplate(template, data);
 
   try {
-    await transporter.sendMail({
+    await getTransporter().sendMail({
       from: `"Sri Krishna Mobiles" <${process.env.EMAIL_USER}>`,
       to,
       subject: emailTemplate.subject,

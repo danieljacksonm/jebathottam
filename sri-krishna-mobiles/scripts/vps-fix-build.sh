@@ -55,6 +55,11 @@ fi
 # Fix auth.ts: token.picture can be null
 sed -i 's/image: token\.picture,/image: token.picture || undefined,/' src/lib/auth.ts
 
+# Fix email.ts: createTransporter typo (correct API is createTransport)
+if [ -f src/lib/notifications/email.ts ]; then
+  sed -i 's/createTransporter/createTransport/g' src/lib/notifications/email.ts
+fi
+
 echo "Building..."
 npm run build
 
