@@ -3,8 +3,9 @@ module.exports = {
     {
       name: "ebenezer-digital",
       cwd: "/home/dani/ebenezer-digital",
-      script: "npm",
+      script: "node_modules/next/dist/bin/next",
       args: "start",
+      exec_mode: "fork",
       env: {
         NODE_ENV: "production",
         PORT: 3000
@@ -20,8 +21,9 @@ module.exports = {
     {
       name: "ministry-platform",
       cwd: "/home/dani/ministry-platform",
-      script: "npm",
+      script: "node_modules/next/dist/bin/next",
       args: "start",
+      exec_mode: "fork",
       env: {
         NODE_ENV: "production",
         PORT: 3001
@@ -37,8 +39,9 @@ module.exports = {
     {
       name: "sri-krishna-mobiles",
       cwd: "/home/dani/sri-krishna-mobiles",
-      script: "npm",
+      script: "node_modules/next/dist/bin/next",
       args: "start",
+      exec_mode: "fork",
       env: {
         NODE_ENV: "production",
         PORT: 3002

@@ -56,6 +56,15 @@ const statusColors: Record<string, string> = {
   draft: "bg-slate-500/10 text-slate-400 border-slate-500/20",
 };
 
+type ServiceFormData = {
+  title: string;
+  description: string;
+  icon: string;
+  category: Service["category"];
+  features: string[];
+  status: Service["status"];
+};
+
 function getIconComponent(iconName: string) {
   const icon = iconOptions.find((i) => i.value === iconName);
   return icon?.icon || FileText;
@@ -71,13 +80,13 @@ export default function ServicesManagerPage() {
   const [isReordering, setIsReordering] = useState(false);
 
   // Form state
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<ServiceFormData>({
     title: "",
     description: "",
     icon: "FileText",
-    category: "digital" as "digital" | "travel" | "web" | "other",
-    features: [""] as string[],
-    status: "draft" as "draft" | "published",
+    category: "digital",
+    features: [""],
+    status: "draft",
   });
 
   useEffect(() => {
