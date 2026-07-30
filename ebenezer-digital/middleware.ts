@@ -2,7 +2,11 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 function isLoginPath(pathname: string): boolean {
-  return pathname === '/admin/login' || pathname === '/admin/login/';
+  return (
+    pathname === '/admin/login' ||
+    pathname === '/admin/login/' ||
+    pathname.startsWith('/admin/login?')
+  );
 }
 
 function isTokenPresent(token: string | undefined): boolean {
@@ -13,22 +17,26 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('auth-token')?.value;
 
-  // Always allow the login page through — never redirect it to itself
+  // ALWAYS show login page. Do not redirect based on cookie.
+  // (Cookie redirects were causing ERR_TOO_MANY_REDIRECTS.)
   if (isLoginPath(pathname)) {
-    // If already logged in, go to dashboard (not back to login)
-    if (isTokenPresent(token)) {
-      return NextResponse.redirect(new URL('/admin', request.nextUrl.origin));
-    }
     return NextResponse.next();
   }
 
   // Protect other /admin routes
   if (pathname.startsWith('/admin') && !isTokenPresent(token)) {
-    const loginUrl = new URL('/admin/login', request.nextUrl.origin);
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = '/admin/login';
+    loginUrl.search = '';
     loginUrl.searchParams.set('from', pathname);
     const res = NextResponse.redirect(loginUrl);
-    // Clear bad/partial cookie so it cannot keep looping
-    res.cookies.set('auth-token', '', { path: '/', maxAge: 0 });
+    res.cookies.set('auth-token', '', {
+      path: '/',
+      maxAge: 0,
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: true,
+    });
     return res;
   }
 

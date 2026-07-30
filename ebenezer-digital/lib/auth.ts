@@ -63,10 +63,11 @@ export async function authenticateUser(email: string, password: string): Promise
 
 // Cookie helpers
 export function setAuthCookie(token: string): string {
+  // SameSite=Lax works better behind HTTPS reverse proxy than Strict
   const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-  return `auth-token=${token}; Path=/; HttpOnly; SameSite=Strict${secure}; Max-Age=${7 * 24 * 60 * 60}`;
+  return `auth-token=${token}; Path=/; HttpOnly; SameSite=Lax${secure}; Max-Age=${7 * 24 * 60 * 60}`;
 }
 
 export function clearAuthCookie(): string {
-  return `auth-token=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0`;
+  return `auth-token=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0; Secure`;
 }
