@@ -27,7 +27,15 @@ function RegisterForm() {
         body: JSON.stringify(form),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Registration failed');
+      if (!res.ok) {
+        const detail =
+          data.details && typeof data.details === "object"
+            ? Object.entries(data.details)
+                .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`)
+                .join(" | ")
+            : "";
+        throw new Error(detail || data.error || "Registration failed");
+      }
 
       await signIn('credentials', { email: form.email, password: form.password, redirect: false });
       router.push(callbackUrl);
@@ -53,9 +61,9 @@ function RegisterForm() {
           <Input placeholder="Full name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
           <Input type="email" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
           <Input type="tel" placeholder="Phone (optional, 10 digits)" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-          <Input type="password" placeholder="Password e.g. Admin@123" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required minLength={8} />
+          <Input type="password" placeholder="Password (min 6 characters)" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required minLength={6} />
           <p className="text-xs text-[var(--foreground-muted)]">
-            Password needs: 8+ characters, 1 uppercase (A-Z), 1 lowercase (a-z), 1 number, 1 special (!@#$)
+            Password minimum 6 characters. Phone optional (10 digits).
           </p>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? 'Creating account...' : 'Create account'}
