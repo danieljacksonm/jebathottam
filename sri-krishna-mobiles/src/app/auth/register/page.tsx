@@ -52,8 +52,11 @@ function RegisterForm() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input placeholder="Full name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
           <Input type="email" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-          <Input type="tel" placeholder="Phone (optional)" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-          <Input type="password" placeholder="Password (min 8 characters)" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required minLength={8} />
+          <Input type="tel" placeholder="Phone (optional, 10 digits)" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+          <Input type="password" placeholder="Password e.g. Admin@123" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required minLength={8} />
+          <p className="text-xs text-[var(--foreground-muted)]">
+            Password needs: 8+ characters, 1 uppercase (A-Z), 1 lowercase (a-z), 1 number, 1 special (!@#$)
+          </p>
           <Button type="submit" className="w-full" disabled={loading}>
             {loading ? 'Creating account...' : 'Create account'}
           </Button>

@@ -19,30 +19,39 @@ const registerSchema = z.object({
     .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number")
-    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
+    .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character (!@#$% etc)"),
   phone: z
     .string()
     .regex(/^[0-9]{10}$/, "Phone number must be 10 digits")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
 });
 
 export async function POST(request: NextRequest) {
   try {
     // Parse and validate request body
     const body = await request.json();
+    // Empty phone should be treated as missing
+    if (body.phone === "" || body.phone === null) {
+      delete body.phone;
+    }
     const validation = registerSchema.safeParse(body);
 
     if (!validation.success) {
+      const fieldErrors = validation.error.flatten().fieldErrors;
+      const firstError =
+        Object.values(fieldErrors).flat()[0] || "Validation failed";
       return NextResponse.json(
         {
-          error: "Validation failed",
-          details: validation.error.flatten().fieldErrors,
+          error: firstError,
+          details: fieldErrors,
         },
         { status: 400 }
       );
     }
 
     const { name, email, password, phone } = validation.data;
+    const phoneValue = phone && phone.length === 10 ? phone : undefined;
 
     // Connect to database
     await connectDB();
@@ -57,8 +66,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if phone already exists (if provided)
-    if (phone) {
-      const existingPhone = await User.findOne({ phone });
+    if (phoneValue) {
+      const existingPhone = await User.findOne({ phone: phoneValue });
       if (existingPhone) {
         return NextResponse.json(
           { error: "An account with this phone number already exists" },
@@ -72,7 +81,7 @@ export async function POST(request: NextRequest) {
       name,
       email: email.toLowerCase(),
       password,
-      phone,
+      phone: phoneValue,
       role: "customer",
       isActive: true,
       isBlocked: false,
