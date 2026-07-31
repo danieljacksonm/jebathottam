@@ -8,8 +8,10 @@ function getJwtSecret(): string {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return 'build-time-placeholder-not-used-at-runtime';
   }
+  // Do not crash the whole site if env is missing; log and use a fallback.
   if (process.env.NODE_ENV === 'production') {
-    throw new Error('JWT_SECRET is required in production');
+    console.error('WARNING: JWT_SECRET is missing. Set it in .env on the VPS.');
+    return 'INSECURE-fallback-set-JWT_SECRET-in-env';
   }
   return 'dev-only-ebenezer-secret';
 }
