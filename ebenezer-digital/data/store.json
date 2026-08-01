@@ -3,7 +3,7 @@
     {
       "id": "1",
       "email": "admin@ebenezar.com",
-      "password": "$2b$10$PLACEHOLDER_HASH_WILL_BE_SET_ON_FIRST_LOGIN",
+      "password": "$2a$10$/MN/PDE1BQOvX0kq92d8COroVHvT.esnhYM7fM0oVFtxHQGKzYs0C",
       "name": "Admin User",
       "role": "admin",
       "createdAt": "2024-01-01T00:00:00.000Z",
@@ -12,75 +12,220 @@
   ],
   "services": [
     {
-      "id": "1",
+      "id": "s1",
       "title": "Data Entry",
-      "description": "Accurate, timely data entry from forms, spreadsheets, or documents.",
+      "description": "Accurate, timely data entry from forms, spreadsheets, or documents into your preferred format.",
       "icon": "FileText",
       "category": "digital",
-      "features": [
-        "Fast turnaround",
-        "99% accuracy",
-        "Multiple formats",
-        "Confidential"
-      ],
+      "features": ["Fast turnaround", "99% accuracy", "Multiple formats", "Confidential"],
       "status": "published",
       "order": 1,
       "createdAt": "2026-07-03T19:51:00.915Z",
       "updatedAt": "2026-07-03T19:51:00.915Z"
     },
     {
-      "id": "2",
-      "title": "Web Development",
-      "description": "Custom websites built with modern technologies.",
-      "icon": "Globe",
-      "category": "web",
-      "features": [
-        "Responsive design",
-        "SEO optimized",
-        "Fast loading",
-        "Secure"
-      ],
+      "id": "s2",
+      "title": "Document Conversion",
+      "description": "Convert between PDF, Word, Excel, images—with care for layout and content integrity.",
+      "icon": "FileText",
+      "category": "digital",
+      "features": ["PDF to Word", "OCR", "Batch conversion"],
       "status": "published",
       "order": 2,
       "createdAt": "2026-07-03T19:51:00.915Z",
       "updatedAt": "2026-07-03T19:51:00.915Z"
     },
     {
-      "id": "3",
-      "title": "Travel Booking",
-      "description": "End-to-end travel assistance for business and personal trips.",
-      "icon": "Plane",
-      "category": "travel",
-      "features": [
-        "Flight booking",
-        "Hotel reservations",
-        "Itinerary planning",
-        "24/7 support"
-      ],
+      "id": "s3",
+      "title": "Online Form Handling",
+      "description": "Fill forms, submit applications, and manage form-based workflows on your behalf.",
+      "icon": "Globe",
+      "category": "digital",
+      "features": ["Applications", "Registrations", "Follow-ups"],
       "status": "published",
       "order": 3,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s4",
+      "title": "Virtual Assistance",
+      "description": "Email management, scheduling, research, and other administrative tasks handled remotely.",
+      "icon": "Users",
+      "category": "digital",
+      "features": ["Email", "Scheduling", "Research"],
+      "status": "published",
+      "order": 4,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s5",
+      "title": "Flight & Transport Booking",
+      "description": "Assistance searching and booking flights, buses, and trains to your preferences.",
+      "icon": "Plane",
+      "category": "travel",
+      "features": ["Flights", "Buses", "Trains"],
+      "status": "published",
+      "order": 5,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s6",
+      "title": "Tour Planning",
+      "description": "Help with itinerary ideas, tour options, and activity bookings for your trips.",
+      "icon": "Globe",
+      "category": "travel",
+      "features": ["Itineraries", "Activities", "Custom tours"],
+      "status": "published",
+      "order": 6,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s7",
+      "title": "Reservation Management",
+      "description": "Hotel and reservation support, changes, and follow-up to keep plans organized.",
+      "icon": "Database",
+      "category": "travel",
+      "features": ["Hotels", "Changes", "Confirmations"],
+      "status": "published",
+      "order": 7,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s8",
+      "title": "Website Development",
+      "description": "Custom websites from simple business sites to complex solutions using modern technologies.",
+      "icon": "Globe",
+      "category": "web",
+      "features": ["Responsive", "SEO", "Fast", "Secure"],
+      "status": "published",
+      "order": 8,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s9",
+      "title": "Landing Pages",
+      "description": "Conversion-focused landing pages for campaigns, products, or lead generation.",
+      "icon": "Code",
+      "category": "web",
+      "features": ["High conversion", "Fast load", "Mobile-first"],
+      "status": "published",
+      "order": 9,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s10",
+      "title": "PHP & Laravel",
+      "description": "Backend applications, APIs, and web apps built with PHP and Laravel framework.",
+      "icon": "Code",
+      "category": "web",
+      "features": ["APIs", "Dashboards", "Custom apps"],
+      "status": "published",
+      "order": 10,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "s11",
+      "title": "Fixes & Optimization",
+      "description": "Bug fixes, speed improvements, and updates to keep your site running smoothly.",
+      "icon": "Code",
+      "category": "web",
+      "features": ["Bug fixes", "Speed", "Updates"],
+      "status": "published",
+      "order": 11,
       "createdAt": "2026-07-03T19:51:00.915Z",
       "updatedAt": "2026-07-03T19:51:00.915Z"
     }
   ],
   "portfolio": [
     {
-      "id": "1",
-      "title": "E-Commerce Migration",
+      "id": "p1",
+      "title": "E-Commerce Product Data Migration",
       "clientName": "Retail Co",
-      "category": [
-        "data"
-      ],
-      "description": "Migrated 2000+ products to new platform.",
+      "category": ["data"],
+      "description": "Migrated 2,000+ product listings from an old platform to a new store with clean categories and images.",
       "coverImage": "/images/work-1.jpg",
       "galleryImages": [],
-      "techStack": [
-        "Excel",
-        "CSV",
-        "SQL"
-      ],
+      "techStack": ["Data Entry", "Migration"],
       "status": "published",
       "order": 1,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "p2",
+      "title": "Travel Agency Booking Portal",
+      "clientName": "TravelWise",
+      "category": ["web"],
+      "description": "Custom portal for a small travel agency to manage flight and hotel bookings with client dashboards.",
+      "coverImage": "/images/work-2.jpg",
+      "galleryImages": [],
+      "techStack": ["Web Development", "Dashboard"],
+      "status": "published",
+      "order": 2,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "p3",
+      "title": "Restaurant Reservation System",
+      "clientName": "Local Restaurant",
+      "category": ["web"],
+      "description": "PHP-based reservation and table management system with email confirmations.",
+      "coverImage": "/images/work-3.jpg",
+      "galleryImages": [],
+      "techStack": ["PHP", "Laravel", "Booking"],
+      "status": "published",
+      "order": 3,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "p4",
+      "title": "Lead Generation Landing Page",
+      "clientName": "GrowthLab",
+      "category": ["web"],
+      "description": "Single-page site for a consulting firm with form capture and thank-you flow; fast load and mobile.",
+      "coverImage": "/images/work-4.jpg",
+      "galleryImages": [],
+      "techStack": ["Landing Page", "Conversion"],
+      "status": "published",
+      "order": 4,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "p5",
+      "title": "Document Conversion for Law Firm",
+      "clientName": "Thompson Legal",
+      "category": ["data"],
+      "description": "Bulk conversion of scanned legal documents to searchable PDF and Word with consistent formatting.",
+      "coverImage": "/images/work-5.jpg",
+      "galleryImages": [],
+      "techStack": ["Document", "OCR"],
+      "status": "published",
+      "order": 5,
+      "createdAt": "2026-07-03T19:51:00.915Z",
+      "updatedAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "p6",
+      "title": "Tour Itinerary & Booking Support",
+      "clientName": "Global Tours",
+      "category": ["travel"],
+      "description": "Ongoing support for a tour operator: itinerary updates, booking confirmations, and client communication.",
+      "coverImage": "/images/work-6.jpg",
+      "galleryImages": [],
+      "techStack": ["Travel", "Support"],
+      "status": "published",
+      "order": 6,
       "createdAt": "2026-07-03T19:51:00.915Z",
       "updatedAt": "2026-07-03T19:51:00.915Z"
     }
@@ -107,23 +252,89 @@
   ],
   "testimonials": [
     {
-      "id": "1",
+      "id": "t1",
       "name": "Sarah Mitchell",
       "role": "CEO",
       "company": "TravelWise Agency",
-      "content": "Excellent service and support!",
+      "content": "Ebenezer Digital transformed our booking process completely. The custom portal they built streamlined our operations and improved customer satisfaction by 40%. Their attention to detail and ongoing support have been exceptional.",
       "rating": 5,
+      "avatar": "SM",
       "status": "published",
       "order": 1,
+      "createdAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "t2",
+      "name": "James Chen",
+      "role": "Restaurant Owner",
+      "company": "",
+      "content": "The reservation system they developed has been a game-changer for our restaurant. We went from manual booking headaches to a seamless automated system. Our staff loves it, and our customers appreciate the instant confirmations.",
+      "rating": 5,
+      "avatar": "JC",
+      "status": "published",
+      "order": 2,
+      "createdAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "t3",
+      "name": "Emily Rodriguez",
+      "role": "Marketing Director",
+      "company": "GrowthLab",
+      "content": "Our landing page conversion rate doubled after working with Ebenezer. They understood our goals immediately and delivered a beautiful, fast-loading page that actually converts visitors into leads.",
+      "rating": 5,
+      "avatar": "ER",
+      "status": "published",
+      "order": 3,
+      "createdAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "t4",
+      "name": "Michael Thompson",
+      "role": "Partner",
+      "company": "Thompson Legal",
+      "content": "The document conversion project for our law firm was handled with incredible precision. Thousands of documents converted flawlessly, with perfect formatting maintained. Saved us months of manual work.",
+      "rating": 5,
+      "avatar": "MT",
+      "status": "published",
+      "order": 4,
+      "createdAt": "2026-07-03T19:51:00.915Z"
+    },
+    {
+      "id": "t5",
+      "name": "Lisa Park",
+      "role": "Operations Manager",
+      "company": "Global Tours",
+      "content": "Their ongoing support for our tour operations has been invaluable. From itinerary updates to booking management, they handle it all with professionalism. Our clients consistently praise the smooth booking experience.",
+      "rating": 5,
+      "avatar": "LP",
+      "status": "published",
+      "order": 5,
       "createdAt": "2026-07-03T19:51:00.915Z"
     }
   ],
   "blogPosts": [],
-  "team": [],
+  "team": [
+    {
+      "id": "tm1",
+      "name": "Admin User",
+      "role": "Founder",
+      "bio": "Leading digital services for businesses worldwide.",
+      "email": "admin@ebenezar.com",
+      "order": 1,
+      "createdAt": "2026-07-03T19:51:00.915Z"
+    }
+  ],
   "settings": {
     "siteName": "Ebenezar Digital Services",
     "siteDescription": "Reliable digital work for businesses everywhere.",
     "contactEmail": "contact@ebenezar.com",
-    "socialLinks": {}
+    "contactPhone": "",
+    "address": "Remote / Worldwide",
+    "socialLinks": {
+      "twitter": "",
+      "linkedin": "",
+      "github": "",
+      "instagram": ""
+    }
   }
 }

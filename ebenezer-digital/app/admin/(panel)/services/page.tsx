@@ -104,94 +104,67 @@ export default function ServicesManagerPage() {
 
   const fetchServices = async () => {
     try {
-      // Mock API call - replace with actual API
-      const mockServices: Service[] = [
-        {
-          id: "1",
-          title: "Data Entry",
-          description: "Accurate, timely data entry from forms, spreadsheets, or documents into your preferred format.",
-          icon: "FileText",
-          category: "digital",
-          features: ["Fast turnaround", "99% accuracy", "Multiple formats", "Confidential"],
-          status: "published",
-          order: 1,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: "2",
-          title: "Web Development",
-          description: "Custom websites built with modern technologies.",
-          icon: "Globe",
-          category: "web",
-          features: ["Responsive design", "SEO optimized", "Fast loading", "Secure"],
-          status: "published",
-          order: 2,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: "3",
-          title: "Travel Booking",
-          description: "End-to-end travel assistance for business and personal trips.",
-          icon: "Plane",
-          category: "travel",
-          features: ["Flight booking", "Hotel reservations", "Itinerary planning", "24/7 support"],
-          status: "published",
-          order: 3,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ];
-      setServices(mockServices.sort((a, b) => a.order - b.order));
-      setIsLoading(false);
+      const res = await fetch("/api/admin/services");
+      if (!res.ok) throw new Error("Failed to load");
+      const data = await res.json();
+      const list = (data.services || []).map((s: Service & { createdAt: string | Date; updatedAt: string | Date }) => ({
+        ...s,
+        createdAt: typeof s.createdAt === "string" ? s.createdAt : new Date(s.createdAt).toISOString(),
+        updatedAt: typeof s.updatedAt === "string" ? s.updatedAt : new Date(s.updatedAt).toISOString(),
+      }));
+      setServices(list.sort((a: Service, b: Service) => a.order - b.order));
     } catch (error) {
       console.error("Failed to fetch services:", error);
+    } finally {
       setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (editingService) {
-      // Update existing
-      setServices((prev) =>
-        prev.map((s) =>
-          s.id === editingService.id
-            ? { ...s, ...formData, updatedAt: new Date().toISOString() }
-            : s
-        )
-      );
-    } else {
-      // Create new
-      const newService: Service = {
-        id: Date.now().toString(),
-        ...formData,
-        features: formData.features.filter(Boolean),
-        order: services.length + 1,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setServices((prev) => [...prev, newService]);
-    }
+    const payload = {
+      ...formData,
+      features: formData.features.filter(Boolean),
+    };
 
-    closeModal();
+    try {
+      if (editingService) {
+        await fetch("/api/admin/services", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingService.id, ...payload }),
+        });
+      } else {
+        await fetch("/api/admin/services", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+      await fetchServices();
+      closeModal();
+    } catch (error) {
+      console.error("Save service failed:", error);
+      alert("Failed to save service");
+    }
   };
 
   const deleteService = async (id: string) => {
     if (!confirm("Are you sure you want to delete this service?")) return;
-    setServices((prev) => prev.filter((s) => s.id !== id));
+    await fetch(`/api/admin/services?id=${id}`, { method: "DELETE" });
+    await fetchServices();
   };
 
-  const toggleStatus = (id: string) => {
-    setServices((prev) =>
-      prev.map((s) =>
-        s.id === id
-          ? { ...s, status: s.status === "published" ? "draft" : "published" }
-          : s
-      )
-    );
+  const toggleStatus = async (id: string) => {
+    const current = services.find((s) => s.id === id);
+    if (!current) return;
+    const next = current.status === "published" ? "draft" : "published";
+    await fetch("/api/admin/services", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status: next }),
+    });
+    await fetchServices();
   };
 
   const openEditModal = (service: Service) => {

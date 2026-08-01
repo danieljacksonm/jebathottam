@@ -51,12 +51,13 @@ export function verifyToken(token: string): AuthToken | null {
 
 export async function authenticateUser(email: string, password: string): Promise<{ user: User; token: string } | null> {
   const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || 'admin123';
-  await db.ensureAdminPassword(defaultPassword);
+  const forceReset = process.env.ADMIN_FORCE_PASSWORD_RESET === '1';
+  await db.ensureAdminPassword(defaultPassword, forceReset);
 
   const user = await db.findUserByEmail(email);
   if (!user) return null;
 
-  const isValid = await verifyPassword(password, user.password);
+  const isValid = await verifyPassword(password.trim(), user.password);
   if (!isValid) return null;
 
   const token = generateToken(user);

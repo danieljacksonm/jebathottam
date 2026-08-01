@@ -84,82 +84,62 @@ export default function PortfolioManagerPage() {
 
   const fetchItems = async () => {
     try {
-      const mockItems: PortfolioItem[] = [
-        {
-          id: "1",
-          title: "E-Commerce Product Migration",
-          clientName: "Retail Co",
-          category: ["Data Entry"],
-          description: "Migrated 2000+ products to new platform",
-          coverImage: "/images/work-1.jpg",
-          galleryImages: [],
-          techStack: ["Excel", "CSV", "SQL"],
-          status: "published",
-          order: 1,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: "2",
-          title: "Travel Agency Portal",
-          clientName: "TravelWise",
-          category: ["Web Development"],
-          description: "Custom booking portal with client dashboard",
-          coverImage: "/images/work-2.jpg",
-          galleryImages: [],
-          techStack: ["React", "Node.js", "MongoDB"],
-          status: "published",
-          order: 2,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ];
-      setItems(mockItems.sort((a, b) => a.order - b.order));
-      setIsLoading(false);
+      const res = await fetch("/api/admin/portfolio");
+      if (!res.ok) throw new Error("Failed to load");
+      const data = await res.json();
+      const list = (data.portfolio || []).map((p: PortfolioItem & { createdAt: string | Date; updatedAt: string | Date }) => ({
+        ...p,
+        createdAt: typeof p.createdAt === "string" ? p.createdAt : new Date(p.createdAt).toISOString(),
+        updatedAt: typeof p.updatedAt === "string" ? p.updatedAt : new Date(p.updatedAt).toISOString(),
+      }));
+      setItems(list.sort((a: PortfolioItem, b: PortfolioItem) => a.order - b.order));
     } catch (error) {
       console.error("Failed to fetch items:", error);
+    } finally {
       setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (editingItem) {
-      setItems((prev) =>
-        prev.map((i) =>
-          i.id === editingItem.id
-            ? { ...i, ...formData, updatedAt: new Date().toISOString() }
-            : i
-        )
-      );
-    } else {
-      const newItem: PortfolioItem = {
-        id: Date.now().toString(),
-        ...formData,
-        order: items.length + 1,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      setItems((prev) => [...prev, newItem]);
+    try {
+      if (editingItem) {
+        await fetch("/api/admin/portfolio", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingItem.id, ...formData }),
+        });
+      } else {
+        await fetch("/api/admin/portfolio", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+      }
+      await fetchItems();
+      closeModal();
+    } catch (error) {
+      console.error("Save portfolio failed:", error);
+      alert("Failed to save portfolio item");
     }
-
-    closeModal();
   };
 
   const deleteItem = async (id: string) => {
     if (!confirm("Are you sure you want to delete this item?")) return;
-    setItems((prev) => prev.filter((i) => i.id !== id));
+    await fetch(`/api/admin/portfolio?id=${id}`, { method: "DELETE" });
+    await fetchItems();
   };
 
-  const toggleStatus = (id: string) => {
-    setItems((prev) =>
-      prev.map((i) =>
-        i.id === id
-          ? { ...i, status: i.status === "published" ? "draft" : "published" }
-          : i
-      )
-    );
+  const toggleStatus = async (id: string) => {
+    const current = items.find((i) => i.id === id);
+    if (!current) return;
+    const next = current.status === "published" ? "draft" : "published";
+    await fetch("/api/admin/portfolio", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status: next }),
+    });
+    await fetchItems();
   };
 
   const openEditModal = (item: PortfolioItem) => {

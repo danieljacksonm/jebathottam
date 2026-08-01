@@ -142,7 +142,8 @@ export const mockUsers: User[] = [
   {
     id: "1",
     email: "admin@ebenezar.com",
-    password: "$2b$10$PLACEHOLDER_HASH_WILL_BE_SET_ON_FIRST_LOGIN",
+    // bcrypt hash for: admin123
+    password: "$2a$10$/MN/PDE1BQOvX0kq92d8COroVHvT.esnhYM7fM0oVFtxHQGKzYs0C",
     name: "Admin User",
     role: "admin",
     createdAt: new Date("2024-01-01"),
@@ -306,10 +307,16 @@ class Database {
     });
   }
 
-  async ensureAdminPassword(defaultPassword: string) {
-    if (this.adminHashReady) return;
+  async ensureAdminPassword(defaultPassword: string, forceReset = false) {
     const admin = this.users.find((u) => u.role === 'admin');
-    if (admin && admin.password.includes('PLACEHOLDER')) {
+    if (!admin) return;
+
+    const needsHash =
+      forceReset ||
+      !admin.password ||
+      admin.password.includes('PLACEHOLDER');
+
+    if (needsHash) {
       admin.password = await bcrypt.hash(defaultPassword, 10);
       this.persist();
     }
@@ -318,7 +325,8 @@ class Database {
 
   // User methods
   async findUserByEmail(email: string): Promise<User | undefined> {
-    return this.users.find((u) => u.email === email);
+    const normalized = email.trim().toLowerCase();
+    return this.users.find((u) => u.email.trim().toLowerCase() === normalized);
   }
 
   async findUserById(id: string): Promise<User | undefined> {
@@ -360,6 +368,205 @@ class Database {
     this.inquiries.splice(index, 1);
     this.persist();
     return true;
+  }
+
+  // ---- Services ----
+  async getServices(publishedOnly = false): Promise<Service[]> {
+    let list = [...this.services];
+    if (publishedOnly) list = list.filter((s) => s.status === "published");
+    return list.sort((a, b) => a.order - b.order);
+  }
+
+  async createService(data: Omit<Service, "id" | "createdAt" | "updatedAt" | "order"> & { order?: number }): Promise<Service> {
+    const item: Service = {
+      ...data,
+      id: String(Date.now()),
+      order: data.order ?? this.services.length + 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.services.push(item);
+    this.persist();
+    return item;
+  }
+
+  async updateService(id: string, data: Partial<Service>): Promise<Service | undefined> {
+    const index = this.services.findIndex((s) => s.id === id);
+    if (index === -1) return undefined;
+    this.services[index] = { ...this.services[index], ...data, id, updatedAt: new Date() };
+    this.persist();
+    return this.services[index];
+  }
+
+  async deleteService(id: string): Promise<boolean> {
+    const index = this.services.findIndex((s) => s.id === id);
+    if (index === -1) return false;
+    this.services.splice(index, 1);
+    this.persist();
+    return true;
+  }
+
+  async reorderServices(ids: string[]): Promise<Service[]> {
+    ids.forEach((id, i) => {
+      const item = this.services.find((s) => s.id === id);
+      if (item) item.order = i + 1;
+    });
+    this.persist();
+    return this.getServices();
+  }
+
+  // ---- Portfolio ----
+  async getPortfolio(publishedOnly = false): Promise<PortfolioItem[]> {
+    let list = [...this.portfolio];
+    if (publishedOnly) list = list.filter((p) => p.status === "published");
+    return list.sort((a, b) => a.order - b.order);
+  }
+
+  async createPortfolioItem(data: Omit<PortfolioItem, "id" | "createdAt" | "updatedAt" | "order"> & { order?: number }): Promise<PortfolioItem> {
+    const item: PortfolioItem = {
+      ...data,
+      id: String(Date.now()),
+      order: data.order ?? this.portfolio.length + 1,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.portfolio.push(item);
+    this.persist();
+    return item;
+  }
+
+  async updatePortfolioItem(id: string, data: Partial<PortfolioItem>): Promise<PortfolioItem | undefined> {
+    const index = this.portfolio.findIndex((p) => p.id === id);
+    if (index === -1) return undefined;
+    this.portfolio[index] = { ...this.portfolio[index], ...data, id, updatedAt: new Date() };
+    this.persist();
+    return this.portfolio[index];
+  }
+
+  async deletePortfolioItem(id: string): Promise<boolean> {
+    const index = this.portfolio.findIndex((p) => p.id === id);
+    if (index === -1) return false;
+    this.portfolio.splice(index, 1);
+    this.persist();
+    return true;
+  }
+
+  // ---- Testimonials ----
+  async getTestimonials(publishedOnly = false): Promise<Testimonial[]> {
+    let list = [...this.testimonials];
+    if (publishedOnly) list = list.filter((t) => t.status === "published");
+    return list.sort((a, b) => a.order - b.order);
+  }
+
+  async createTestimonial(data: Omit<Testimonial, "id" | "createdAt" | "order"> & { order?: number }): Promise<Testimonial> {
+    const item: Testimonial = {
+      ...data,
+      id: String(Date.now()),
+      order: data.order ?? this.testimonials.length + 1,
+      createdAt: new Date(),
+    };
+    this.testimonials.push(item);
+    this.persist();
+    return item;
+  }
+
+  async updateTestimonial(id: string, data: Partial<Testimonial>): Promise<Testimonial | undefined> {
+    const index = this.testimonials.findIndex((t) => t.id === id);
+    if (index === -1) return undefined;
+    this.testimonials[index] = { ...this.testimonials[index], ...data, id };
+    this.persist();
+    return this.testimonials[index];
+  }
+
+  async deleteTestimonial(id: string): Promise<boolean> {
+    const index = this.testimonials.findIndex((t) => t.id === id);
+    if (index === -1) return false;
+    this.testimonials.splice(index, 1);
+    this.persist();
+    return true;
+  }
+
+  // ---- Blog ----
+  async getBlogPosts(publishedOnly = false): Promise<BlogPost[]> {
+    let list = [...this.blogPosts];
+    if (publishedOnly) list = list.filter((b) => b.status === "published");
+    return list.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+    return this.blogPosts.find((b) => b.slug === slug && b.status === "published");
+  }
+
+  async createBlogPost(data: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost> {
+    const item: BlogPost = {
+      ...data,
+      id: String(Date.now()),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.blogPosts.unshift(item);
+    this.persist();
+    return item;
+  }
+
+  async updateBlogPost(id: string, data: Partial<BlogPost>): Promise<BlogPost | undefined> {
+    const index = this.blogPosts.findIndex((b) => b.id === id);
+    if (index === -1) return undefined;
+    this.blogPosts[index] = { ...this.blogPosts[index], ...data, id, updatedAt: new Date() };
+    this.persist();
+    return this.blogPosts[index];
+  }
+
+  async deleteBlogPost(id: string): Promise<boolean> {
+    const index = this.blogPosts.findIndex((b) => b.id === id);
+    if (index === -1) return false;
+    this.blogPosts.splice(index, 1);
+    this.persist();
+    return true;
+  }
+
+  // ---- Team ----
+  async getTeam(): Promise<TeamMember[]> {
+    return [...this.team].sort((a, b) => a.order - b.order);
+  }
+
+  async createTeamMember(data: Omit<TeamMember, "id" | "createdAt" | "order"> & { order?: number }): Promise<TeamMember> {
+    const item: TeamMember = {
+      ...data,
+      id: String(Date.now()),
+      order: data.order ?? this.team.length + 1,
+      createdAt: new Date(),
+    };
+    this.team.push(item);
+    this.persist();
+    return item;
+  }
+
+  async updateTeamMember(id: string, data: Partial<TeamMember>): Promise<TeamMember | undefined> {
+    const index = this.team.findIndex((t) => t.id === id);
+    if (index === -1) return undefined;
+    this.team[index] = { ...this.team[index], ...data, id };
+    this.persist();
+    return this.team[index];
+  }
+
+  async deleteTeamMember(id: string): Promise<boolean> {
+    const index = this.team.findIndex((t) => t.id === id);
+    if (index === -1) return false;
+    this.team.splice(index, 1);
+    this.persist();
+    return true;
+  }
+
+  // ---- Settings ----
+  async getSettings(): Promise<SiteSettings> {
+    return this.settings;
+  }
+
+  async updateSettings(data: Partial<SiteSettings>): Promise<SiteSettings> {
+    this.settings = { ...this.settings, ...data };
+    this.persist();
+    return this.settings;
   }
 
   // Stats

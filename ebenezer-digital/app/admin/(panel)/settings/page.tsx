@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Save,
@@ -68,6 +68,30 @@ export default function SettingsPage() {
   const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">("idle");
   const [activeTab, setActiveTab] = useState<"general" | "social" | "email">("general");
 
+  useEffect(() => {
+    fetch("/api/admin/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.settings) {
+          setSettings((prev) => ({
+            ...prev,
+            ...data.settings,
+            socialLinks: { ...prev.socialLinks, ...(data.settings.socialLinks || {}) },
+            smtpSettings: {
+              ...prev.smtpSettings,
+              ...(data.settings.smtpSettings
+                ? {
+                    ...data.settings.smtpSettings,
+                    port: String(data.settings.smtpSettings.port ?? prev.smtpSettings.port),
+                  }
+                : {}),
+            },
+          }));
+        }
+      })
+      .catch((err) => console.error("Failed to load settings", err));
+  }, []);
+
   const handleChange = (section: keyof Settings | "", field: string, value: string) => {
     if (section === "") {
       setSettings((prev) => ({ ...prev, [field]: value }));
@@ -82,14 +106,31 @@ export default function SettingsPage() {
   const handleSave = async () => {
     setIsSaving(true);
     setSaveStatus("idle");
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    setSaveStatus("success");
-    setIsSaving(false);
-
-    setTimeout(() => setSaveStatus("idle"), 3000);
+    try {
+      const res = await fetch("/api/admin/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          siteName: settings.siteName,
+          siteDescription: settings.siteDescription,
+          contactEmail: settings.contactEmail,
+          contactPhone: settings.contactPhone,
+          address: settings.address,
+          socialLinks: settings.socialLinks,
+          smtpSettings: {
+            ...settings.smtpSettings,
+            port: Number(settings.smtpSettings.port) || 587,
+          },
+        }),
+      });
+      if (!res.ok) throw new Error("Save failed");
+      setSaveStatus("success");
+    } catch {
+      setSaveStatus("error");
+    } finally {
+      setIsSaving(false);
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    }
   };
 
   const handleTestEmail = async () => {

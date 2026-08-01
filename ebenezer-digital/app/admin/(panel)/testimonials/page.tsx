@@ -69,87 +69,65 @@ export default function TestimonialsManagerPage() {
 
   const fetchTestimonials = async () => {
     try {
-      const mockTestimonials: Testimonial[] = [
-        {
-          id: "1",
-          name: "Sarah Mitchell",
-          role: "CEO",
-          company: "TravelWise Agency",
-          content: "Ebenezer Digital transformed our booking process completely. The custom portal they built streamlined our operations and improved customer satisfaction by 40%.",
-          rating: 5,
-          status: "published",
-          order: 1,
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: "2",
-          name: "James Chen",
-          role: "Restaurant Owner",
-          company: "Chen's Kitchen",
-          content: "The reservation system has been a game-changer. We went from manual booking headaches to a seamless automated system.",
-          rating: 5,
-          status: "published",
-          order: 2,
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: "3",
-          name: "Emily Rodriguez",
-          role: "Marketing Director",
-          company: "GrowthLab",
-          content: "Our landing page conversion rate doubled after working with Ebenezer. They understood our goals immediately.",
-          rating: 5,
-          status: "hidden",
-          order: 3,
-          createdAt: new Date().toISOString(),
-        },
-      ];
-      setTestimonials(mockTestimonials.sort((a, b) => a.order - b.order));
-      setIsLoading(false);
+      const res = await fetch("/api/admin/testimonials");
+      if (!res.ok) throw new Error("Failed to load");
+      const data = await res.json();
+      const list = (data.testimonials || []).map((t: Testimonial & { createdAt: string | Date }) => ({
+        ...t,
+        createdAt: typeof t.createdAt === "string" ? t.createdAt : new Date(t.createdAt).toISOString(),
+      }));
+      setTestimonials(list.sort((a: Testimonial, b: Testimonial) => a.order - b.order));
     } catch (error) {
       console.error("Failed to fetch testimonials:", error);
+    } finally {
       setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (editingTestimonial) {
-      setTestimonials((prev) =>
-        prev.map((t) =>
-          t.id === editingTestimonial.id
-            ? { ...t, ...formData, updatedAt: new Date().toISOString() }
-            : t
-        )
-      );
-    } else {
-      const newTestimonial: Testimonial = {
-        id: Date.now().toString(),
-        ...formData,
-        avatar: formData.name.split(" ").map((n) => n[0]).join("").toUpperCase(),
-        order: testimonials.length + 1,
-        createdAt: new Date().toISOString(),
-      };
-      setTestimonials((prev) => [...prev, newTestimonial]);
+    const payload = {
+      ...formData,
+      avatar: formData.name.split(" ").map((n) => n[0]).join("").toUpperCase(),
+    };
+    try {
+      if (editingTestimonial) {
+        await fetch("/api/admin/testimonials", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingTestimonial.id, ...payload }),
+        });
+      } else {
+        await fetch("/api/admin/testimonials", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+      await fetchTestimonials();
+      closeModal();
+    } catch (error) {
+      console.error("Save testimonial failed:", error);
+      alert("Failed to save testimonial");
     }
-
-    closeModal();
   };
 
   const deleteTestimonial = async (id: string) => {
     if (!confirm("Are you sure you want to delete this testimonial?")) return;
-    setTestimonials((prev) => prev.filter((t) => t.id !== id));
+    await fetch(`/api/admin/testimonials?id=${id}`, { method: "DELETE" });
+    await fetchTestimonials();
   };
 
-  const toggleStatus = (id: string) => {
-    setTestimonials((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? { ...t, status: t.status === "published" ? "hidden" : "published" }
-          : t
-      )
-    );
+  const toggleStatus = async (id: string) => {
+    const current = testimonials.find((t) => t.id === id);
+    if (!current) return;
+    const next = current.status === "published" ? "hidden" : "published";
+    await fetch("/api/admin/testimonials", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status: next }),
+    });
+    await fetchTestimonials();
   };
 
   const openEditModal = (testimonial: Testimonial) => {

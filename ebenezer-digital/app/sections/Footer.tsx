@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Mail, ArrowRight } from "lucide-react";
@@ -57,6 +57,28 @@ const socialLinks = [
 export default function Footer() {
   const [email, setEmail] = useState("");
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [siteName, setSiteName] = useState("Ebenezer");
+  const [siteDescription, setSiteDescription] = useState(
+    "Reliable digital work for businesses everywhere. We deliver excellence in every project."
+  );
+  const [dynamicSocial, setDynamicSocial] = useState(socialLinks);
+
+  useEffect(() => {
+    fetch("/api/content")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.settings?.siteName) setSiteName(data.settings.siteName);
+        if (data.settings?.siteDescription) setSiteDescription(data.settings.siteDescription);
+        const s = data.settings?.socialLinks || {};
+        setDynamicSocial([
+          { icon: TwitterXIcon, href: s.twitter || "#", label: "Twitter" },
+          { icon: LinkedinIcon, href: s.linkedin || "#", label: "LinkedIn" },
+          { icon: GithubIcon, href: s.github || "#", label: "GitHub" },
+          { icon: InstagramIcon, href: s.instagram || "#", label: "Instagram" },
+        ]);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,18 +141,19 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-4 lg:col-span-1">
             <Link href="/" className="inline-block">
               <span className="text-2xl font-bold text-white">
-                Ebenezer<span className="text-brand-500">.</span>
+                {siteName.replace(/\s*Digital.*$/i, "") || "Ebenezer"}
+                <span className="text-brand-500">.</span>
               </span>
             </Link>
             <p className="mt-4 text-sm text-slate-400 leading-relaxed">
-              Reliable digital work for businesses everywhere. We deliver excellence in every project.
+              {siteDescription}
             </p>
             {/* Social Links */}
             <div className="flex gap-3 mt-6">
-              {socialLinks.map((social) => (
+              {dynamicSocial.map((social) => (
                 <a
                   key={social.label}
-                  href={social.href}
+                  href={social.href || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-brand-500 hover:bg-slate-800 transition-all duration-300"

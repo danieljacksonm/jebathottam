@@ -70,38 +70,17 @@ export default function TeamManagerPage() {
 
   const fetchMembers = async () => {
     try {
-      const mockMembers: TeamMember[] = [
-        {
-          id: "1",
-          name: "John Smith",
-          role: "Founder & CEO",
-          bio: "Leading digital transformation for businesses worldwide.",
-          email: "john@ebenezar.com",
-          socialLinks: {
-            linkedin: "https://linkedin.com/in/johnsmith",
-            twitter: "https://twitter.com/johnsmith",
-          },
-          order: 1,
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: "2",
-          name: "Sarah Johnson",
-          role: "Lead Developer",
-          bio: "Full-stack developer with 8+ years of experience.",
-          email: "sarah@ebenezar.com",
-          socialLinks: {
-            linkedin: "https://linkedin.com/in/sarahjohnson",
-            github: "https://github.com/sarahj",
-          },
-          order: 2,
-          createdAt: new Date().toISOString(),
-        },
-      ];
-      setMembers(mockMembers.sort((a, b) => a.order - b.order));
-      setIsLoading(false);
+      const res = await fetch("/api/admin/team");
+      if (!res.ok) throw new Error("Failed to load");
+      const data = await res.json();
+      const list = (data.team || []).map((m: TeamMember & { createdAt: string | Date }) => ({
+        ...m,
+        createdAt: typeof m.createdAt === "string" ? m.createdAt : new Date(m.createdAt).toISOString(),
+      }));
+      setMembers(list.sort((a: TeamMember, b: TeamMember) => a.order - b.order));
     } catch (error) {
       console.error("Failed to fetch members:", error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -110,7 +89,11 @@ export default function TeamManagerPage() {
     e.preventDefault();
 
     const memberData = {
-      ...formData,
+      name: formData.name,
+      role: formData.role,
+      bio: formData.bio,
+      photo: formData.photo,
+      email: formData.email,
       socialLinks: {
         twitter: formData.twitter,
         linkedin: formData.linkedin,
@@ -118,30 +101,32 @@ export default function TeamManagerPage() {
       },
     };
 
-    if (editingMember) {
-      setMembers((prev) =>
-        prev.map((m) =>
-          m.id === editingMember.id
-            ? { ...m, ...memberData, updatedAt: new Date().toISOString() }
-            : m
-        )
-      );
-    } else {
-      const newMember: TeamMember = {
-        id: Date.now().toString(),
-        ...memberData,
-        order: members.length + 1,
-        createdAt: new Date().toISOString(),
-      };
-      setMembers((prev) => [...prev, newMember]);
+    try {
+      if (editingMember) {
+        await fetch("/api/admin/team", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingMember.id, ...memberData }),
+        });
+      } else {
+        await fetch("/api/admin/team", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(memberData),
+        });
+      }
+      await fetchMembers();
+      closeModal();
+    } catch (error) {
+      console.error("Save team failed:", error);
+      alert("Failed to save team member");
     }
-
-    closeModal();
   };
 
   const deleteMember = async (id: string) => {
     if (!confirm("Are you sure you want to remove this team member?")) return;
-    setMembers((prev) => prev.filter((m) => m.id !== id));
+    await fetch(`/api/admin/team?id=${id}`, { method: "DELETE" });
+    await fetchMembers();
   };
 
   const openEditModal = (member: TeamMember) => {

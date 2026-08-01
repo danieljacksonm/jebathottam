@@ -95,41 +95,23 @@ export default function BlogManagerPage() {
 
   const fetchPosts = async () => {
     try {
-      const mockPosts: BlogPost[] = [
-        {
-          id: "1",
-          title: "How to Choose the Right Web Development Partner",
-          slug: "choose-web-development-partner",
-          excerpt: "Key factors to consider when selecting a web development agency for your business.",
-          content: "Full article content here...",
-          category: "Web Development",
-          tags: ["Web Dev", "Business", "Tips"],
-          author: "Admin",
-          status: "published",
-          publishedAt: new Date().toISOString(),
-          seoTitle: "Choose the Right Web Development Partner | Ebenezar Digital",
-          seoDescription: "Learn how to select the best web development agency for your business needs.",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: "2",
-          title: "5 Benefits of Outsourcing Data Entry",
-          slug: "benefits-outsourcing-data-entry",
-          excerpt: "Discover how outsourcing data entry can save time and improve accuracy.",
-          content: "Full article content here...",
-          category: "Digital Services",
-          tags: ["Data Entry", "Outsourcing"],
-          author: "Admin",
-          status: "draft",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-      ];
-      setPosts(mockPosts);
-      setIsLoading(false);
+      const res = await fetch("/api/admin/blog");
+      if (!res.ok) throw new Error("Failed to load");
+      const data = await res.json();
+      const list = (data.posts || []).map((p: BlogPost & { createdAt: string | Date; updatedAt: string | Date; publishedAt?: string | Date }) => ({
+        ...p,
+        createdAt: typeof p.createdAt === "string" ? p.createdAt : new Date(p.createdAt).toISOString(),
+        updatedAt: typeof p.updatedAt === "string" ? p.updatedAt : new Date(p.updatedAt).toISOString(),
+        publishedAt: p.publishedAt
+          ? typeof p.publishedAt === "string"
+            ? p.publishedAt
+            : new Date(p.publishedAt).toISOString()
+          : undefined,
+      }));
+      setPosts(list);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -151,54 +133,44 @@ export default function BlogManagerPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (editingPost) {
-      setPosts((prev) =>
-        prev.map((p) =>
-          p.id === editingPost.id
-            ? {
-                ...p,
-                ...formData,
-                updatedAt: new Date().toISOString(),
-                publishedAt:
-                  formData.status === "published" && !p.publishedAt
-                    ? new Date().toISOString()
-                    : p.publishedAt,
-              }
-            : p
-        )
-      );
-    } else {
-      const newPost: BlogPost = {
-        id: Date.now().toString(),
-        ...formData,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        publishedAt: formData.status === "published" ? new Date().toISOString() : undefined,
-      };
-      setPosts((prev) => [newPost, ...prev]);
+    try {
+      if (editingPost) {
+        await fetch("/api/admin/blog", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: editingPost.id, ...formData }),
+        });
+      } else {
+        await fetch("/api/admin/blog", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+      }
+      await fetchPosts();
+      closeModal();
+    } catch (error) {
+      console.error("Save blog failed:", error);
+      alert("Failed to save post");
     }
-
-    closeModal();
   };
 
   const deletePost = async (id: string) => {
     if (!confirm("Are you sure you want to delete this post?")) return;
-    setPosts((prev) => prev.filter((p) => p.id !== id));
+    await fetch(`/api/admin/blog?id=${id}`, { method: "DELETE" });
+    await fetchPosts();
   };
 
-  const toggleStatus = (id: string) => {
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id !== id) return p;
-        const newStatus = p.status === "published" ? "draft" : "published";
-        return {
-          ...p,
-          status: newStatus,
-          publishedAt: newStatus === "published" && !p.publishedAt ? new Date().toISOString() : p.publishedAt,
-        };
-      })
-    );
+  const toggleStatus = async (id: string) => {
+    const current = posts.find((p) => p.id === id);
+    if (!current) return;
+    const newStatus = current.status === "published" ? "draft" : "published";
+    await fetch("/api/admin/blog", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status: newStatus }),
+    });
+    await fetchPosts();
   };
 
   const openEditModal = (post: BlogPost) => {
