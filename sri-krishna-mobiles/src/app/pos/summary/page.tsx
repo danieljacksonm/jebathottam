@@ -48,45 +48,42 @@ interface Bill {
   customer?: string;
 }
 
-// Mock data
-const mockSummary: SalesSummary = {
-  date: "2024-06-06",
-  totalSales: 45680,
-  totalTransactions: 24,
-  totalItems: 67,
-  averageOrderValue: 1903,
-  payments: {
-    cash: 25680,
-    upi: 12000,
-    card: 5000,
-    credit: 3000,
-  },
-  refunds: 1500,
-  expenses: 2000,
-  netCash: 22180,
+const emptySummary: SalesSummary = {
+  date: new Date().toISOString().split("T")[0],
+  totalSales: 0,
+  totalTransactions: 0,
+  totalItems: 0,
+  averageOrderValue: 0,
+  payments: { cash: 0, upi: 0, card: 0, credit: 0 },
+  refunds: 0,
+  expenses: 0,
+  netCash: 0,
 };
 
-const mockBills: Bill[] = [
-  { id: "BILL-001", date: "2024-06-06T09:30:00", total: 2499, paymentMethod: "cash", items: 2, customer: "Rahul" },
-  { id: "BILL-002", date: "2024-06-06T10:15:00", total: 8999, paymentMethod: "upi", items: 3 },
-  { id: "BILL-003", date: "2024-06-06T11:00:00", total: 3499, paymentMethod: "cash", items: 1, customer: "Priya" },
-  { id: "BILL-004", date: "2024-06-06T11:45:00", total: 12499, paymentMethod: "card", items: 4 },
-  { id: "BILL-005", date: "2024-06-06T14:20:00", total: 5999, paymentMethod: "upi", items: 2 },
-];
-
-const mockExpenses = [
-  { id: 1, category: "Transport", amount: 500, note: "Courier charges" },
-  { id: 2, category: "Stationery", amount: 300, note: "Bill books" },
-  { id: 3, category: "Maintenance", amount: 1200, note: "AC repair" },
-];
-
 export default function DayEndSummaryPage() {
-  const [summary] = useState<SalesSummary>(mockSummary);
-  const [bills] = useState<Bill[]>(mockBills);
-  const [expenses] = useState(mockExpenses);
+  const [summary, setSummary] = useState<SalesSummary | null>(null);
+  const [bills, setBills] = useState<Bill[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/pos/summary?date=${selectedDate}`)
+      .then((r) => r.json())
+      .then((payload) => {
+        setSummary(payload.summary || null);
+        setBills(payload.bills || []);
+      })
+      .catch(() => {
+        setSummary(null);
+        setBills([]);
+      })
+      .finally(() => setLoading(false));
+  }, [selectedDate]);
+
+  const data = summary || emptySummary;
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
@@ -124,6 +121,10 @@ export default function DayEndSummaryPage() {
       </header>
 
       <main className="mx-auto max-w-6xl p-4">
+        {loading ? (
+          <p className="text-center text-[var(--foreground-muted)] py-12">Loading day summary...</p>
+        ) : (
+        <>
         {/* Overview Cards */}
         <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card className="border-[var(--border)] bg-[var(--card)] p-4">
@@ -134,7 +135,7 @@ export default function DayEndSummaryPage() {
               <div>
                 <p className="text-sm text-[var(--foreground-muted)]">Total Sales</p>
                 <p className="text-xl font-bold text-[var(--foreground)]">
-                  {formatCurrency(summary.totalSales)}
+                  {formatCurrency(data.totalSales)}
                 </p>
               </div>
             </div>
@@ -147,7 +148,7 @@ export default function DayEndSummaryPage() {
               <div>
                 <p className="text-sm text-[var(--foreground-muted)]">Transactions</p>
                 <p className="text-xl font-bold text-[var(--foreground)]">
-                  {summary.totalTransactions}
+                  {data.totalTransactions}
                 </p>
               </div>
             </div>
@@ -160,7 +161,7 @@ export default function DayEndSummaryPage() {
               <div>
                 <p className="text-sm text-[var(--foreground-muted)]">Avg Order</p>
                 <p className="text-xl font-bold text-[var(--foreground)]">
-                  {formatCurrency(summary.averageOrderValue)}
+                  {formatCurrency(data.averageOrderValue)}
                 </p>
               </div>
             </div>
@@ -173,7 +174,7 @@ export default function DayEndSummaryPage() {
               <div>
                 <p className="text-sm text-[var(--foreground-muted)]">Net Cash</p>
                 <p className="text-xl font-bold text-[var(--foreground)]">
-                  {formatCurrency(summary.netCash)}
+                  {formatCurrency(data.netCash)}
                 </p>
               </div>
             </div>
@@ -192,34 +193,34 @@ export default function DayEndSummaryPage() {
                   <Banknote className="h-4 w-4 text-[var(--success)]" />
                   <span className="text-[var(--foreground)]">Cash</span>
                 </div>
-                <span className="font-medium">{formatCurrency(summary.payments.cash)}</span>
+                <span className="font-medium">{formatCurrency(data.payments.cash)}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Smartphone className="h-4 w-4 text-[var(--primary)]" />
                   <span className="text-[var(--foreground)]">UPI</span>
                 </div>
-                <span className="font-medium">{formatCurrency(summary.payments.upi)}</span>
+                <span className="font-medium">{formatCurrency(data.payments.upi)}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <CreditCard className="h-4 w-4 text-[var(--accent)]" />
                   <span className="text-[var(--foreground)]">Card</span>
                 </div>
-                <span className="font-medium">{formatCurrency(summary.payments.card)}</span>
+                <span className="font-medium">{formatCurrency(data.payments.card)}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Receipt className="h-4 w-4 text-[var(--warning)]" />
                   <span className="text-[var(--foreground)]">Credit</span>
                 </div>
-                <span className="font-medium">{formatCurrency(summary.payments.credit)}</span>
+                <span className="font-medium">{formatCurrency(data.payments.credit)}</span>
               </div>
               <div className="border-t border-[var(--border)] pt-3">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-[var(--foreground)]">Total</span>
                   <span className="font-bold text-[var(--primary)]">
-                    {formatCurrency(summary.totalSales)}
+                    {formatCurrency(data.totalSales)}
                   </span>
                 </div>
               </div>
@@ -238,21 +239,21 @@ export default function DayEndSummaryPage() {
               </div>
               <div className="flex items-center justify-between text-[var(--success)]">
                 <span>+ Cash Sales</span>
-                <span>+ {formatCurrency(summary.payments.cash)}</span>
+                <span>+ {formatCurrency(data.payments.cash)}</span>
               </div>
               <div className="flex items-center justify-between text-[var(--error)]">
                 <span>- Refunds</span>
-                <span>- {formatCurrency(summary.refunds)}</span>
+                <span>- {formatCurrency(data.refunds)}</span>
               </div>
               <div className="flex items-center justify-between text-[var(--error)]">
                 <span>- Expenses</span>
-                <span>- {formatCurrency(summary.expenses)}</span>
+                <span>- {formatCurrency(data.expenses)}</span>
               </div>
               <div className="border-t border-[var(--border)] pt-3">
                 <div className="flex items-center justify-between text-lg font-bold text-[var(--foreground)]">
                   <span>Closing Cash</span>
                   <span className="text-[var(--primary)]">
-                    {formatCurrency(5000 + summary.payments.cash - summary.refunds - summary.expenses)}
+                    {formatCurrency(5000 + data.payments.cash - data.refunds - data.expenses)}
                   </span>
                 </div>
               </div>
@@ -284,21 +285,9 @@ export default function DayEndSummaryPage() {
                 </tr>
               </thead>
               <tbody>
-                {expenses.map((expense) => (
-                  <tr key={expense.id} className="border-b border-[var(--border)]">
-                    <td className="py-3 text-[var(--foreground)]">{expense.category}</td>
-                    <td className="py-3 text-[var(--foreground-muted)]">{expense.note}</td>
-                    <td className="py-3 text-right font-medium text-[var(--error)]">
-                      {formatCurrency(expense.amount)}
-                    </td>
-                  </tr>
-                ))}
                 <tr>
-                  <td colSpan={2} className="py-3 text-right font-semibold text-[var(--foreground)]">
-                    Total Expenses
-                  </td>
-                  <td className="py-3 text-right font-bold text-[var(--error)]">
-                    {formatCurrency(expenses.reduce((sum, e) => sum + e.amount, 0))}
+                  <td colSpan={3} className="py-6 text-center text-[var(--foreground-muted)]">
+                    No expenses recorded for this day. Add expense tracking in a future update.
                   </td>
                 </tr>
               </tbody>
@@ -368,6 +357,8 @@ export default function DayEndSummaryPage() {
             </table>
           </div>
         </Card>
+        </>
+        )}
       </main>
     </div>
   );

@@ -89,6 +89,16 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  if (pathname.startsWith("/api/pos")) {
+    if (!isAuthenticated) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const posRoles = ["admin", "superadmin", "staff", "cashier"];
+    if (!posRoles.includes(userRole)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+  }
+
   // Add security headers
   const response = NextResponse.next();
   
@@ -122,5 +132,6 @@ export const config = {
     "/auth/:path*",
     // API routes that need protection
     "/api/admin/:path*",
+    "/api/pos/:path*",
   ],
 };

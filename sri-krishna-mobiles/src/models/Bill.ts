@@ -6,17 +6,17 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IBillItem {
-  product: mongoose.Types.ObjectId;
+  productId: string; // Prisma product id
   name: string;
   sku: string;
   barcode?: string;
   quantity: number;
   unitPrice: number;
-  discountAmount: number; // Per item discount
+  discountAmount: number;
   discountPercent: number;
-  taxRate: number; // GST %
+  taxRate: number;
   taxAmount: number;
-  total: number; // Final total for this line
+  total: number;
 }
 
 export interface IBillPayment {
@@ -90,7 +90,7 @@ export interface IBill extends Document {
 }
 
 const BillItemSchema = new Schema<IBillItem>({
-  product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+  productId: { type: String, required: true },
   name: { type: String, required: true },
   sku: { type: String, required: true },
   barcode: String,

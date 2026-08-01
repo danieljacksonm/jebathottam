@@ -28,19 +28,24 @@ export async function POST(request: Request) {
   }
   try {
     const body = await request.json();
-    const { name, slug, description, price, categoryId, imageUrl, inStock } = body;
+    const { name, slug, description, price, categoryId, imageUrl, inStock, stockQty, wholesalePrice, sku, barcode } = body;
     if (!name || !slug || !description || price == null || !categoryId) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
+    const qty = Number(stockQty ?? 0);
     const product = await prisma.product.create({
       data: {
         name,
         slug,
         description,
         price: Number(price),
+        wholesalePrice: wholesalePrice != null ? Number(wholesalePrice) : null,
+        sku: sku || null,
+        barcode: barcode || null,
+        stockQty: qty,
         categoryId: Number(categoryId),
         imageUrl: imageUrl ?? null,
-        inStock: inStock !== false,
+        inStock: inStock !== false && qty > 0,
       },
       include: { category: true },
     });

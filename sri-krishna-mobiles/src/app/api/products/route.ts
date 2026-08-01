@@ -6,8 +6,8 @@ export async function GET(request: Request) {
   const categorySlug = searchParams.get("category");
   try {
     const where = categorySlug
-      ? { category: { slug: categorySlug }, inStock: true }
-      : { inStock: true };
+      ? { category: { slug: categorySlug }, stockQty: { gt: 0 } }
+      : { stockQty: { gt: 0 } };
     const products = await prisma.product.findMany({
       where,
       include: { category: true },

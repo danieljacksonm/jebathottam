@@ -12,6 +12,9 @@ export default function NewProductPage() {
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [wholesalePrice, setWholesalePrice] = useState("");
+  const [stockQty, setStockQty] = useState("50");
+  const [sku, setSku] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [inStock, setInStock] = useState(true);
@@ -43,6 +46,9 @@ export default function NewProductPage() {
         slug: slug || name.toLowerCase().replace(/\s+/g, "-"),
         description,
         price: parseFloat(price) || 0,
+        wholesalePrice: wholesalePrice ? parseFloat(wholesalePrice) : null,
+        stockQty: parseInt(stockQty, 10) || 0,
+        sku: sku || null,
         categoryId: parseInt(categoryId, 10) || categories[0]?.id,
         imageUrl: imageUrl || null,
         inStock,
@@ -77,6 +83,18 @@ export default function NewProductPage() {
         <div>
           <label className="block text-sm font-medium text-[var(--foreground)] mb-1">Price (₹)</label>
           <input type="number" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} required className="w-full rounded-lg border border-[var(--border)] px-4 py-2 bg-[var(--card)]" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[var(--foreground)] mb-1">Wholesale price (₹)</label>
+          <input type="number" step="0.01" value={wholesalePrice} onChange={(e) => setWholesalePrice(e.target.value)} className="w-full rounded-lg border border-[var(--border)] px-4 py-2 bg-[var(--card)]" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[var(--foreground)] mb-1">Stock quantity</label>
+          <input type="number" value={stockQty} onChange={(e) => setStockQty(e.target.value)} required className="w-full rounded-lg border border-[var(--border)] px-4 py-2 bg-[var(--card)]" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-[var(--foreground)] mb-1">SKU / Code</label>
+          <input type="text" value={sku} onChange={(e) => setSku(e.target.value)} className="w-full rounded-lg border border-[var(--border)] px-4 py-2 bg-[var(--card)]" />
         </div>
         <div>
           <label className="block text-sm font-medium text-[var(--foreground)] mb-1">Category</label>

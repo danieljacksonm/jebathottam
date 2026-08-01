@@ -33,19 +33,16 @@ import {
 import Link from "next/link";
 import { shareBillOnWhatsApp } from "@/lib/whatsapp";
 
-// Mock products
-const mockProducts = [
-  { id: "1", name: "iPhone 14 Pro Display", price: 12499, stock: 15, category: "Screens" },
-  { id: "2", name: "iPhone 14 Battery", price: 3499, stock: 25, category: "Batteries" },
-  { id: "3", name: "Samsung S23 Screen", price: 8999, stock: 8, category: "Screens" },
-  { id: "4", name: "OnePlus 11 Display", price: 8999, stock: 12, category: "Screens" },
-  { id: "5", name: "USB-C Cable", price: 299, stock: 100, category: "Cables" },
-  { id: "6", name: "Lightning Cable", price: 399, stock: 80, category: "Cables" },
-  { id: "7", name: "20W Fast Charger", price: 599, stock: 45, category: "Chargers" },
-  { id: "8", name: "Wireless Charger", price: 1299, stock: 20, category: "Chargers" },
-  { id: "9", name: "Screen Protector", price: 199, stock: 200, category: "Accessories" },
-  { id: "10", name: "Phone Case", price: 499, stock: 150, category: "Accessories" },
-];
+interface PosProduct {
+  id: string;
+  name: string;
+  price: number;
+  wholesalePrice?: number | null;
+  stock: number;
+  category: string;
+  sku: string;
+  barcode?: string;
+}
 
 interface CartItem {
   id: string;
@@ -79,7 +76,19 @@ const generateBillId = () => {
   return `SKM-${dateStr}-${random}`;
 };
 
+function getUnitPrice(product: PosProduct, saleType: "retail" | "wholesale") {
+  if (saleType === "wholesale" && product.wholesalePrice != null) {
+    return product.wholesalePrice;
+  }
+  return product.price;
+}
+
 export default function POSPage() {
+  const [products, setProducts] = useState<PosProduct[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [saleType, setSaleType] = useState<"retail" | "wholesale">("retail");
+  const [saveError, setSaveError] = useState("");
+  const [saving, setSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -91,15 +100,46 @@ export default function POSPage() {
 
   const searchRef = useRef<HTMLInputElement>(null);
 
+  const loadProducts = useCallback(async () => {
+    setLoadingProducts(true);
+    try {
+      const res = await fetch("/api/pos/products");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to load products");
+      setProducts(data.products || []);
+    } catch (error) {
+      console.error(error);
+      setProducts([]);
+    } finally {
+      setLoadingProducts(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
+
+  useEffect(() => {
+    setCart((prev) =>
+      prev.map((item) => {
+        const product = products.find((p) => p.id === item.id);
+        if (!product) return item;
+        return { ...item, price: getUnitPrice(product, saleType) };
+      })
+    );
+  }, [saleType, products]);
+
   // Categories
-  const categories = [...new Set(mockProducts.map((p) => p.category))];
+  const categories = [...new Set(products.map((p) => p.category))];
 
   // Filter products
-  const filteredProducts = mockProducts.filter(
+  const filteredProducts = products.filter(
     (p) =>
       (activeCategory ? p.category === activeCategory : true) &&
       (p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.id.includes(searchQuery))
+        p.id.includes(searchQuery) ||
+        p.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (p.barcode || "").includes(searchQuery))
   );
 
   // Cart calculations
@@ -163,20 +203,26 @@ export default function POSPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [balance, cart.length]);
 
-  const addToCart = (product: (typeof mockProducts)[0]) => {
+  const addToCart = (product: PosProduct) => {
+    const price = getUnitPrice(product, saleType);
     const existing = cart.find((item) => item.id === product.id);
+    const currentQty = existing?.quantity || 0;
+    if (currentQty + 1 > product.stock) {
+      alert(`Only ${product.stock} in stock for ${product.name}`);
+      return;
+    }
     if (existing) {
       setCart(
         cart.map((item) =>
           item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + 1, price }
             : item
         )
       );
     } else {
       setCart([
         ...cart,
-        { id: product.id, name: product.name, price: product.price, quantity: 1, discount: 0 },
+        { id: product.id, name: product.name, price, quantity: 1, discount: 0 },
       ]);
     }
   };
@@ -184,9 +230,15 @@ export default function POSPage() {
   const updateQuantity = (id: string, delta: number) => {
     setCart(
       cart.map((item) => {
+        const product = products.find((p) => p.id === id);
         const newQty = item.quantity + delta;
-        return newQty > 0 ? { ...item, quantity: newQty } : item;
-      })
+        if (newQty <= 0) return item;
+        if (product && newQty > product.stock) {
+          alert(`Only ${product.stock} in stock`);
+          return item;
+        }
+        return { ...item, quantity: newQty };
+      }).filter((item) => item.quantity > 0)
     );
   };
 
@@ -217,25 +269,55 @@ export default function POSPage() {
     setPayments(payments.filter((_, i) => i !== index));
   };
 
-  const saveBill = () => {
-    const bill: Bill = {
-      id: generateBillId(),
-      date: new Date().toISOString().split("T")[0],
-      time: new Date().toLocaleTimeString(),
-      customer,
-      items: cart,
-      subtotal,
-      gstAmount,
-      total,
-      payments,
-    };
+  const saveBill = async () => {
+    if (!customer.phone.trim()) {
+      setSaveError("Customer phone is required (for bill record and WhatsApp).");
+      return;
+    }
+    setSaveError("");
+    setSaving(true);
+    try {
+      const hasCredit = payments.some((p) => p.method === "credit");
+      const res = await fetch("/api/pos/bills", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: saleType,
+          customer,
+          items: cart.map((item) => ({
+            productId: Number(item.id),
+            quantity: item.quantity,
+            discount: item.discount,
+            unitPrice: item.price,
+          })),
+          payments,
+          isCreditSale: hasCredit,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save bill");
 
-    // Save to localStorage
-    const existingBills = JSON.parse(localStorage.getItem("pos_bills") || "[]");
-    localStorage.setItem("pos_bills", JSON.stringify([bill, ...existingBills]));
+      const bill: Bill = {
+        id: data.bill.id,
+        date: data.bill.date,
+        time: data.bill.time,
+        customer: data.bill.customer,
+        items: data.bill.items,
+        subtotal: data.bill.subtotal,
+        gstAmount: data.bill.gstAmount,
+        total: data.bill.total,
+        payments: data.bill.payments,
+      };
 
-    setCurrentBill(bill);
-    setShowBillPreview(true);
+      setCurrentBill(bill);
+      setShowBillPreview(true);
+      clearCart();
+      await loadProducts();
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : "Failed to save bill");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const printBill = () => {
@@ -263,6 +345,26 @@ export default function POSPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <div className="hidden sm:flex rounded-lg border border-[var(--border)] p-1">
+              <button
+                onClick={() => setSaleType("retail")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-sm font-medium",
+                  saleType === "retail" ? "bg-[var(--primary)] text-white" : "text-[var(--foreground)]"
+                )}
+              >
+                Retail
+              </button>
+              <button
+                onClick={() => setSaleType("wholesale")}
+                className={cn(
+                  "rounded-md px-3 py-1.5 text-sm font-medium",
+                  saleType === "wholesale" ? "bg-[var(--primary)] text-white" : "text-[var(--foreground)]"
+                )}
+              >
+                Wholesale
+              </button>
+            </div>
             <button
               onClick={() => setShowHelp(true)}
               className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--background-secondary)] hover:bg-[var(--border)]"
@@ -337,24 +439,34 @@ export default function POSPage() {
 
             {/* Products Grid */}
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredProducts.map((product) => (
-                <button
-                  key={product.id}
-                  onClick={() => addToCart(product)}
-                  className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-4 text-left transition-all hover:border-[var(--primary)] hover:shadow-md"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="font-medium text-[var(--foreground)]">{product.name}</p>
-                      <p className="text-sm text-[var(--foreground-muted)]">{product.category}</p>
+              {loadingProducts ? (
+                <p className="col-span-full text-center text-[var(--foreground-muted)] py-8">
+                  Loading products...
+                </p>
+              ) : filteredProducts.length === 0 ? (
+                <p className="col-span-full text-center text-[var(--foreground-muted)] py-8">
+                  No products in stock. Add products in Admin Dashboard with stock quantity.
+                </p>
+              ) : (
+                filteredProducts.map((product) => (
+                  <button
+                    key={product.id}
+                    onClick={() => addToCart(product)}
+                    className="rounded-lg border border-[var(--border)] bg-[var(--card)] p-4 text-left transition-all hover:border-[var(--primary)] hover:shadow-md"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-medium text-[var(--foreground)]">{product.name}</p>
+                        <p className="text-sm text-[var(--foreground-muted)]">{product.category}</p>
+                      </div>
+                      <span className="rounded-full bg-[var(--primary)]/10 px-2 py-1 text-sm font-medium text-[var(--primary)]">
+                        {formatCurrency(getUnitPrice(product, saleType))}
+                      </span>
                     </div>
-                    <span className="rounded-full bg-[var(--primary)]/10 px-2 py-1 text-sm font-medium text-[var(--primary)]">
-                      {formatCurrency(product.price)}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-xs text-[var(--foreground-muted)]">Stock: {product.stock}</p>
-                </button>
-              ))}
+                    <p className="mt-2 text-xs text-[var(--foreground-muted)]">Stock: {product.stock}</p>
+                  </button>
+                ))
+              )}
             </div>
           </div>
 
@@ -458,12 +570,12 @@ export default function POSPage() {
             {cart.length > 0 && (
               <Card className="border-[var(--border)] bg-[var(--card)] p-4">
                 <h3 className="mb-3 font-semibold text-[var(--foreground)]">Payments (F4 for cash)</h3>
-                <div className="mb-3 flex gap-2">
+                <div className="mb-3 flex flex-wrap gap-2">
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => addPayment("cash", balance > 0 ? balance : 0)}
-                    className="flex-1 gap-1"
+                    className="flex-1 gap-1 min-w-[80px]"
                   >
                     <Banknote className="h-4 w-4" />
                     Cash
@@ -472,7 +584,7 @@ export default function POSPage() {
                     size="sm"
                     variant="outline"
                     onClick={() => addPayment("upi", balance > 0 ? balance : 0)}
-                    className="flex-1 gap-1"
+                    className="flex-1 gap-1 min-w-[80px]"
                   >
                     <Smartphone className="h-4 w-4" />
                     UPI
@@ -481,10 +593,19 @@ export default function POSPage() {
                     size="sm"
                     variant="outline"
                     onClick={() => addPayment("card", balance > 0 ? balance : 0)}
-                    className="flex-1 gap-1"
+                    className="flex-1 gap-1 min-w-[80px]"
                   >
                     <CreditCard className="h-4 w-4" />
                     Card
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => addPayment("credit", balance > 0 ? balance : 0)}
+                    className="flex-1 gap-1 min-w-[80px]"
+                  >
+                    <ArrowRightLeft className="h-4 w-4" />
+                    Credit
                   </Button>
                 </div>
 
@@ -541,13 +662,23 @@ export default function POSPage() {
                   </div>
                 </div>
 
+                {saveError && (
+                  <p className="mb-3 rounded-lg bg-red-500/10 px-3 py-2 text-sm text-red-500">{saveError}</p>
+                )}
+
                 <Button
                   onClick={saveBill}
-                  disabled={balance > 0}
+                  disabled={balance > 0 || saving || !customer.phone.trim()}
                   className="mt-4 w-full gap-2"
                 >
                   <Receipt className="h-4 w-4" />
-                  {balance > 0 ? `Add ₹${balance} more` : "Complete Sale (F5)"}
+                  {saving
+                    ? "Saving..."
+                    : balance > 0
+                      ? `Add ₹${balance} more`
+                      : !customer.phone.trim()
+                        ? "Enter customer phone"
+                        : "Complete Sale (F5)"}
                 </Button>
               </Card>
             )}

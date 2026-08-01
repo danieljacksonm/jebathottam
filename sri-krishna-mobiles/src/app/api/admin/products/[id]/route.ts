@@ -28,7 +28,8 @@ export async function PUT(
   const id = Number((await params).id);
   if (Number.isNaN(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   const body = await request.json();
-  const { name, slug, description, price, categoryId, imageUrl, inStock } = body;
+  const { name, slug, description, price, categoryId, imageUrl, inStock, stockQty, wholesalePrice, sku, barcode } = body;
+  const qty = stockQty != null ? Number(stockQty) : undefined;
   const product = await prisma.product.update({
     where: { id },
     data: {
@@ -36,9 +37,14 @@ export async function PUT(
       ...(slug != null && { slug }),
       ...(description != null && { description }),
       ...(price != null && { price: Number(price) }),
+      ...(wholesalePrice !== undefined && { wholesalePrice: wholesalePrice != null ? Number(wholesalePrice) : null }),
+      ...(sku !== undefined && { sku: sku || null }),
+      ...(barcode !== undefined && { barcode: barcode || null }),
+      ...(qty !== undefined && { stockQty: qty }),
       ...(categoryId != null && { categoryId: Number(categoryId) }),
       ...(imageUrl !== undefined && { imageUrl: imageUrl || null }),
       ...(inStock !== undefined && { inStock: !!inStock }),
+      ...(qty !== undefined && { inStock: qty > 0 }),
     },
     include: { category: true },
   });
