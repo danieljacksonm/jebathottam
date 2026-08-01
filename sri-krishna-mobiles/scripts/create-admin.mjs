@@ -8,8 +8,10 @@
  * Optional 4th arg for role: admin | superadmin (default: admin)
  */
 
-const path = require("path");
-const fs = require("fs");
+import path from "path";
+import fs from "fs";
+import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 // Load .env / .env.local if present (no dotenv dependency required)
 function loadEnvFile(file) {
@@ -65,9 +67,6 @@ Examples:
     console.error("MONGODB_URI is missing. Set it in .env on the VPS.");
     process.exit(1);
   }
-
-  const mongoose = require("mongoose");
-  const bcrypt = require("bcryptjs");
 
   await mongoose.connect(uri);
 
