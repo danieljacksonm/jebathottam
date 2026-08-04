@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-
-function isAdmin(request: Request): boolean {
-  return request.headers.get("x-admin-key") === process.env.ADMIN_SECRET;
-}
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function GET(request: Request) {
-  if (!isAdmin(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.error;
+
   try {
     const orders = await prisma.order.findMany({
       include: { items: { include: { product: true } } },

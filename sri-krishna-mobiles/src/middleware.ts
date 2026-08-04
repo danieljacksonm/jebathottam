@@ -19,14 +19,15 @@ const roleHierarchy: Record<string, number> = {
 // Route definitions with required roles
 const PROTECTED_ROUTES = {
   // Admin routes - require admin or higher
-  "/admin": ["admin", "superadmin"],
+  "/admin": ["admin", "superadmin", "staff", "cashier"],
   "/admin/dashboard": ["admin", "superadmin", "staff", "cashier"],
-  "/admin/products": ["admin", "superadmin", "staff"],
+  "/admin/products": ["admin", "superadmin", "staff", "cashier"],
   "/admin/orders": ["admin", "superadmin", "staff", "cashier"],
   "/admin/customers": ["admin", "superadmin", "staff"],
   "/admin/coupons": ["admin", "superadmin"],
   "/admin/reports": ["admin", "superadmin"],
   "/admin/settings": ["admin", "superadmin"],
+  "/admin/inventory": ["admin", "superadmin", "staff"],
   
   // POS routes - require cashier or higher
   "/pos": ["admin", "superadmin", "staff", "cashier"],

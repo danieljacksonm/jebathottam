@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-
-function isAdmin(request: Request): boolean {
-  const key = request.headers.get("x-admin-key");
-  return key === process.env.ADMIN_SECRET;
-}
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function GET(request: Request) {
-  if (!isAdmin(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.error;
+
   try {
     const products = await prisma.product.findMany({
       include: { category: true },
@@ -23,12 +19,24 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  if (!isAdmin(request)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.error;
+
   try {
     const body = await request.json();
-    const { name, slug, description, price, categoryId, imageUrl, inStock, stockQty, wholesalePrice, sku, barcode } = body;
+    const {
+      name,
+      slug,
+      description,
+      price,
+      categoryId,
+      imageUrl,
+      inStock,
+      stockQty,
+      wholesalePrice,
+      sku,
+      barcode,
+    } = body;
     if (!name || !slug || !description || price == null || !categoryId) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }

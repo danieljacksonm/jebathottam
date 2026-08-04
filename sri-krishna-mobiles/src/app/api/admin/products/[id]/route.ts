@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-
-function isAdmin(request: Request): boolean {
-  return request.headers.get("x-admin-key") === process.env.ADMIN_SECRET;
-}
+import { requireAdmin } from "@/lib/admin-auth";
 
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAdmin(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.error;
+
   const id = Number((await params).id);
   if (Number.isNaN(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   const product = await prisma.product.findUnique({
@@ -24,11 +23,25 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAdmin(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.error;
+
   const id = Number((await params).id);
   if (Number.isNaN(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   const body = await request.json();
-  const { name, slug, description, price, categoryId, imageUrl, inStock, stockQty, wholesalePrice, sku, barcode } = body;
+  const {
+    name,
+    slug,
+    description,
+    price,
+    categoryId,
+    imageUrl,
+    inStock,
+    stockQty,
+    wholesalePrice,
+    sku,
+    barcode,
+  } = body;
   const qty = stockQty != null ? Number(stockQty) : undefined;
   const product = await prisma.product.update({
     where: { id },
@@ -37,7 +50,9 @@ export async function PUT(
       ...(slug != null && { slug }),
       ...(description != null && { description }),
       ...(price != null && { price: Number(price) }),
-      ...(wholesalePrice !== undefined && { wholesalePrice: wholesalePrice != null ? Number(wholesalePrice) : null }),
+      ...(wholesalePrice !== undefined && {
+        wholesalePrice: wholesalePrice != null ? Number(wholesalePrice) : null,
+      }),
       ...(sku !== undefined && { sku: sku || null }),
       ...(barcode !== undefined && { barcode: barcode || null }),
       ...(qty !== undefined && { stockQty: qty }),
@@ -55,7 +70,9 @@ export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!isAdmin(request)) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await requireAdmin(request);
+  if (!auth.ok) return auth.error;
+
   const id = Number((await params).id);
   if (Number.isNaN(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   await prisma.product.delete({ where: { id } });

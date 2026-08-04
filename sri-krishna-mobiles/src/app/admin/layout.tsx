@@ -1,116 +1,157 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   Package,
   ShoppingCart,
-  Users,
   BarChart3,
-  Settings,
-  Bell,
   LogOut,
   Store,
-  Tag,
-  AlertTriangle,
+  Menu,
+  X,
+  Receipt,
+  PlusCircle,
+  ExternalLink,
 } from "lucide-react";
 
 const adminLinks = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin", label: "Home", icon: LayoutDashboard, exact: true },
   { href: "/admin/products", label: "Products", icon: Package },
-  { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/admin/customers", label: "Customers", icon: Users },
-  { href: "/admin/coupons", label: "Coupons", icon: Tag },
-  { href: "/admin/inventory", label: "Inventory", icon: AlertTriangle },
-  { href: "/admin/reports", label: "Reports", icon: BarChart3 },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin/dashboard/new", label: "Add Product", icon: PlusCircle },
+  { href: "/admin/dashboard/orders", label: "Online Orders", icon: ShoppingCart },
+  { href: "/pos", label: "Shop POS", icon: Receipt },
+  { href: "/pos/summary", label: "Day Summary", icon: BarChart3 },
 ];
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function isActive(pathname: string, href: string, exact?: boolean) {
+  if (exact) return pathname === href;
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const title =
+    adminLinks.find((l) => isActive(pathname, l.href, l.exact))?.label || "Admin";
+
+  const nav = (
+    <>
+      <div className="flex h-14 items-center gap-3 border-b border-[var(--border)] px-4">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--primary)]">
+          <Store className="h-4 w-4 text-white" />
+        </div>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-bold text-[var(--foreground)]">Sri Krishna</p>
+          <p className="truncate text-xs text-[var(--foreground-muted)]">Shop Admin</p>
+        </div>
+        <button
+          type="button"
+          className="ml-auto rounded-lg p-2 text-[var(--foreground-muted)] hover:bg-[var(--background-secondary)] lg:hidden"
+          onClick={() => setMenuOpen(false)}
+          aria-label="Close menu"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      <nav className="flex-1 space-y-1 overflow-y-auto p-3">
+        {adminLinks.map((link) => {
+          const Icon = link.icon;
+          const active = isActive(pathname, link.href, link.exact);
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setMenuOpen(false)}
+              className={cn(
+                "flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                active
+                  ? "bg-[var(--primary)] text-white"
+                  : "text-[var(--foreground-secondary)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground)]"
+              )}
+            >
+              <Icon className="h-5 w-5 shrink-0" />
+              {link.label}
+            </Link>
+          );
+        })}
+        <Link
+          href="/shop"
+          onClick={() => setMenuOpen(false)}
+          className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[var(--foreground-muted)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground)]"
+        >
+          <ExternalLink className="h-5 w-5 shrink-0" />
+          View Online Shop
+        </Link>
+      </nav>
+
+      <div className="border-t border-[var(--border)] p-3">
+        <div className="mb-2 truncate px-3 text-xs text-[var(--foreground-muted)]">
+          {session?.user?.email || "Staff account"}
+        </div>
+        <button
+          type="button"
+          onClick={() => signOut({ callbackUrl: "/auth/login" })}
+          className="flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-[var(--error)] hover:bg-[var(--error)]/10"
+        >
+          <LogOut className="h-5 w-5" />
+          Sign Out
+        </button>
+      </div>
+    </>
+  );
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      {/* Sidebar */}
-      <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-[var(--border)] bg-[var(--card)]">
-        {/* Logo */}
-        <div className="flex h-16 items-center gap-3 border-b border-[var(--border)] px-6">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--primary)]">
-            <Store className="h-5 w-5 text-white" />
-          </div>
-          <div>
-            <h1 className="font-bold text-[var(--foreground)]">Admin Panel</h1>
-            <p className="text-xs text-[var(--foreground-muted)]">Sri Krishna Mobiles</p>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="space-y-1 p-4">
-          {adminLinks.map((link) => {
-            const Icon = link.icon;
-            const isActive = pathname === link.href || pathname.startsWith(`${link.href}/`);
-
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors",
-                  isActive
-                    ? "bg-[var(--primary)]/10 text-[var(--primary)]"
-                    : "text-[var(--foreground-secondary)] hover:bg-[var(--background-secondary)] hover:text-[var(--foreground)]"
-                )}
-              >
-                <Icon className="h-5 w-5" />
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Bottom Actions */}
-        <div className="absolute bottom-0 left-0 right-0 border-t border-[var(--border)] p-4">
-          <button className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[var(--error)] transition-colors hover:bg-[var(--error)]/10">
-            <LogOut className="h-5 w-5" />
-            Sign Out
-          </button>
-        </div>
+      {/* Desktop sidebar */}
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col border-r border-[var(--border)] bg-[var(--card)] lg:flex">
+        {nav}
       </aside>
 
-      {/* Main Content */}
-      <div className="ml-64">
-        {/* Top Header */}
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[var(--border)] bg-[var(--card)] px-8">
-          <div>
-            <h2 className="text-lg font-semibold text-[var(--foreground)]">
-              {adminLinks.find((l) => pathname === l.href || pathname.startsWith(`${l.href}/`))?.label || "Admin"}
-            </h2>
-          </div>
-          <div className="flex items-center gap-4">
-            <button className="relative rounded-full p-2 text-[var(--foreground-muted)] hover:bg-[var(--background-secondary)]">
-              <Bell className="h-5 w-5" />
-              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[var(--error)]" />
-            </button>
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] font-medium">
-                AD
-              </div>
-              <div className="hidden md:block">
-                <p className="text-sm font-medium text-[var(--foreground)]">Admin User</p>
-                <p className="text-xs text-[var(--foreground-muted)]">admin@skmobiles.com</p>
-              </div>
-            </div>
-          </div>
+      {/* Mobile drawer */}
+      {menuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close menu overlay"
+            onClick={() => setMenuOpen(false)}
+          />
+          <aside className="absolute left-0 top-0 flex h-full w-[min(18rem,88vw)] flex-col bg-[var(--card)] shadow-xl">
+            {nav}
+          </aside>
+        </div>
+      )}
+
+      <div className="lg:ml-64">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-[var(--border)] bg-[var(--card)] px-3 sm:px-5">
+          <button
+            type="button"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg hover:bg-[var(--background-secondary)] lg:hidden"
+            onClick={() => setMenuOpen(true)}
+            aria-label="Open menu"
+          >
+            <Menu className="h-5 w-5 text-[var(--foreground)]" />
+          </button>
+          <h1 className="truncate text-base font-semibold text-[var(--foreground)] sm:text-lg">
+            {title}
+          </h1>
+          <Link
+            href="/pos"
+            className="ml-auto inline-flex min-h-[40px] items-center rounded-lg bg-[var(--primary)] px-3 text-sm font-medium text-white hover:opacity-90"
+          >
+            Open POS
+          </Link>
         </header>
 
-        {/* Page Content */}
-        <main className="p-8">{children}</main>
+        <main className="p-3 sm:p-5 lg:p-6">{children}</main>
       </div>
     </div>
   );
