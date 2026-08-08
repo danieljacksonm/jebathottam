@@ -1,0 +1,208 @@
+{
+  "meta": {
+    "title": "Canaan Travel Hub | Kodaikanal Packages & Digital Tourism",
+    "description": "Premium Kodaikanal-only tour packages from Canaan Travel Hub, plus digital tourism services — flights, hotels, and visas."
+  },
+  "nav": {
+    "home": "Home",
+    "kodaikanal": "Kodaikanal",
+    "packages": "Packages",
+    "destinations": "Destinations",
+    "tours": "Tours",
+    "services": "Digital Services",
+    "flights": "Flights",
+    "hotels": "Hotels",
+    "visa": "Visa",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "enquire": "Enquire",
+    "bookNow": "Book Now",
+    "brand": "Canaan",
+    "brandSub": "Travel Hub"
+  },
+  "hero": {
+    "place": "Kodaikanal · Princess of the Hills",
+    "headlineBefore": "Arrive in the",
+    "headlineAccent": "mist.",
+    "sub": "Canaan offers complete Kodaikanal tour packages — our only destination for now. Flights, hotels, and visas are available as digital support services.",
+    "cta": "View Kodai packages",
+    "ctaSecondary": "Feel Kodaikanal",
+    "ctaVideo": "Watch Video",
+    "slogan": "Cross Borders. Discover Blessings."
+  },
+  "booking": {
+    "packages": "Kodai Packages",
+    "flights": "Flights",
+    "hotels": "Hotels",
+    "visa": "Visa Services",
+    "destination": "Destination",
+    "destinationPlaceholder": "Kodaikanal",
+    "dates": "Travel dates",
+    "guests": "Guests",
+    "from": "From",
+    "to": "To",
+    "search": "Search Now"
+  },
+  "experiences": {
+    "eyebrow": "Inside Kodaikanal",
+    "title": "Moments in the hills",
+    "subtitle": "Lake light, pine air, and quiet ridges — the feel of Kodai, woven into every package we craft.",
+    "cta": "Explore Kodaikanal"
+  },
+  "digital": {
+    "eyebrow": "Also available",
+    "title": "Digital tourism services",
+    "subtitle": "After packages, use Canaan for flights, hotels, visas, and travel support around your Kodaikanal journey.",
+    "support": "Digital service",
+    "insurance": "Travel insurance",
+    "cta": "View digital services"
+  },
+  "trust": {
+    "handpicked": "Handpicked Experiences",
+    "price": "Best Price Guidance",
+    "support": "24/7 Customer Support",
+    "secure": "Safe & Secure Booking",
+    "trusted": "Trusted by Thousands"
+  },
+  "why": {
+    "eyebrow": "Why Canaan",
+    "title": "Travel arranged with quiet precision",
+    "vehicles": "Luxury Vehicles",
+    "guides": "Expert Guides",
+    "stays": "Premium Stays",
+    "custom": "Custom Packages",
+    "insurance": "Travel Insurance"
+  },
+  "packages": {
+    "eyebrow": "Our main offering",
+    "title": "Kodaikanal packages",
+    "subtitle": "Full hill-station packages only for Kodaikanal — Escape, Family, Honeymoon, Luxury, Adventure, and Complete.",
+    "from": "From",
+    "perPerson": "per person",
+    "days": "{count} Days",
+    "nights": "{count} Nights",
+    "enquire": "Enquire now",
+    "viewAll": "View all packages",
+    "reviews": "{count} reviews",
+    "detailCta": "Request this package"
+  },
+  "testimonials": {
+    "eyebrow": "Happy travellers",
+    "title": "Stories from the hills"
+  },
+  "stats": {
+    "travelers": "Happy Travellers",
+    "destinations": "Kodaikanal focus",
+    "years": "Years Experience"
+  },
+  "newsletter": {
+    "title": "Let’s plan your Kodaikanal journey",
+    "subtitle": "Package ideas, hill tips, and digital service updates.",
+    "placeholder": "Your email",
+    "cta": "Subscribe Now",
+    "success": "Thank you — you’re on the list."
+  },
+  "servicesPage": {
+    "eyebrow": "Digital services",
+    "title": "Support around your journey",
+    "subtitle": "Tourism packages are Kodaikanal-only. Digital services help with flights, hotels, visas, and related travel needs.",
+    "cta": "Start an enquiry"
+  },
+  "flightsPage": {
+    "eyebrow": "Flights",
+    "title": "Flight booking assistance",
+    "subtitle": "Share routes and dates — useful when travelling to Madurai, Coimbatore, or beyond for your Kodai trip.",
+    "cta": "Enquire about flights"
+  },
+  "hotelsPage": {
+    "eyebrow": "Hotels",
+    "title": "Stay booking assistance",
+    "subtitle": "Need a stay outside a full package? We help with lodges and hotels — especially around Kodaikanal.",
+    "cta": "Enquire about hotels"
+  },
+  "visaPage": {
+    "eyebrow": "Visa",
+    "title": "Foreign visa assistance",
+    "subtitle": "Document guidance and application support as a digital tourism service.",
+    "cta": "Enquire about visa"
+  },
+  "toursPage": {
+    "eyebrow": "Tours",
+    "title": "Tour planning support",
+    "subtitle": "Our packaged tours are Kodaikanal-focused. Ask us if you need custom day plans in the hills.",
+    "cta": "Enquire about tours"
+  },
+  "blog": {
+    "eyebrow": "Journal",
+    "title": "Kodaikanal notes & guides",
+    "subtitle": "Practical writing on Kodai, packing, and digital travel services.",
+    "read": "{count} min read",
+    "back": "Back to blog"
+  },
+  "about": {
+    "eyebrow": "Our house",
+    "title": "Canaan Travel Hub",
+    "subtitle": "Cross Borders. Discover Blessings.",
+    "body": "Right now Canaan focuses on complete Kodaikanal tour packages — that is our main product. Alongside this, we offer digital tourism services such as flights, hotels, and visa assistance.",
+    "valuesTitle": "What we hold",
+    "values": {
+      "care": { "title": "Quiet care", "body": "Details arranged before you ask." },
+      "place": { "title": "Kodaikanal first", "body": "One destination, done properly — for now." },
+      "trust": { "title": "Trusted path", "body": "Own packages, clear guidance, honest pacing." }
+    }
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Speak with Canaan",
+    "subtitle": "Share your Kodaikanal package plans or a digital service need. We’ll respond with a clear next step.",
+    "note": "Phone, WhatsApp, and address will be published here soon. For now, use the enquiry form.",
+    "cta": "Go to enquiry form"
+  },
+  "enquirePage": {
+    "eyebrow": "Private enquiry",
+    "title": "Tell us how you wish to travel.",
+    "subtitle": "Kodaikanal packages (main) or digital services — share a few details and our team will reply.",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone / WhatsApp",
+    "travelers": "Travellers",
+    "dates": "Preferred dates",
+    "package": "Interest",
+    "packagePlaceholder": "Select a Kodai package or digital service",
+    "message": "Tell us more",
+    "messagePlaceholder": "Pace, stays, special occasions…",
+    "submit": "Send enquiry",
+    "sending": "Sending…",
+    "success": "Thank you. Your enquiry is with us — we will respond shortly.",
+    "error": "Something went wrong. Please try again in a moment.",
+    "required": "Please fill the required fields."
+  },
+  "kodaikanalPage": {
+    "eyebrow": "Our only tour destination — for now",
+    "title": "Kodaikanal",
+    "subtitle": "Mist, pine, and unhurried highland days.",
+    "intro": "Canaan’s tour packages are for Kodaikanal only. Choose Escape, Family, Honeymoon, Luxury, Adventure, or our Complete circuit.",
+    "cta": "Browse packages"
+  },
+  "footer": {
+    "tagline": "Cross Borders. Discover Blessings.",
+    "about": "Kodaikanal tour packages first. Digital tourism services when you need flights, hotels, or visas.",
+    "rights": "© {year} Canaan Travel Hub. All rights reserved.",
+    "contactSoon": "Contact details coming soon.",
+    "explore": "Explore",
+    "services": "Digital services",
+    "support": "Support",
+    "note": "Kodaikanal packages · Digital services"
+  },
+  "common": {
+    "learnMore": "Learn more",
+    "backHome": "Back home",
+    "perPerson": "per person"
+  },
+  "video": {
+    "title": "Kodaikanal journey film",
+    "close": "Close",
+    "note": "Video placeholder — your Kodaikanal brand film can be embedded here."
+  }
+}
