@@ -28,7 +28,7 @@ const sourceSerif = Source_Serif_4({
   weight: ["400", "600"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.ebenezerdigitalservices.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
