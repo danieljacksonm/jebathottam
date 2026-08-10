@@ -47,6 +47,8 @@ export interface PortfolioItem {
   galleryImages: string[];
   techStack: string[];
   liveUrl?: string;
+  /** ongoing = current client work, completed = delivered */
+  projectPhase?: "ongoing" | "completed";
   status: "published" | "draft";
   order: number;
   createdAt: Date;

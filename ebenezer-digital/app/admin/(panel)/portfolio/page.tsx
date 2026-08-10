@@ -31,6 +31,7 @@ interface PortfolioItem {
   galleryImages: string[];
   techStack: string[];
   liveUrl?: string;
+  projectPhase?: "ongoing" | "completed";
   status: "published" | "draft";
   order: number;
   createdAt: string;
@@ -66,6 +67,7 @@ export default function PortfolioManagerPage() {
     galleryImages: [] as string[],
     techStack: [] as string[],
     liveUrl: "",
+    projectPhase: "completed" as "ongoing" | "completed",
     status: "draft" as "draft" | "published",
   });
 
@@ -156,6 +158,7 @@ export default function PortfolioManagerPage() {
       galleryImages: item.galleryImages,
       techStack: item.techStack,
       liveUrl: item.liveUrl || "",
+      projectPhase: item.projectPhase || "completed",
       status: item.status,
     });
     setIsModalOpen(true);
@@ -175,6 +178,7 @@ export default function PortfolioManagerPage() {
       galleryImages: [],
       techStack: [],
       liveUrl: "",
+      projectPhase: "completed",
       status: "draft",
     });
     setIsModalOpen(true);
@@ -622,6 +626,34 @@ export default function PortfolioManagerPage() {
                       className="w-full pl-11 pr-4 py-2.5 bg-slate-950 border border-slate-800 rounded-lg text-white focus:outline-none focus:border-brand-500"
                       placeholder="https://example.com"
                     />
+                  </div>
+                </div>
+
+                {/* Project phase */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-300 mb-2">
+                    Project phase
+                  </label>
+                  <div className="flex gap-3">
+                    {(["ongoing", "completed"] as const).map((phase) => (
+                      <button
+                        key={phase}
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            projectPhase: phase,
+                          }))
+                        }
+                        className={`px-4 py-2 rounded-lg text-sm font-medium capitalize transition-colors ${
+                          formData.projectPhase === phase
+                            ? "bg-brand-500 text-slate-950"
+                            : "bg-slate-950 text-slate-400 border border-slate-800"
+                        }`}
+                      >
+                        {phase}
+                      </button>
+                    ))}
                   </div>
                 </div>
 

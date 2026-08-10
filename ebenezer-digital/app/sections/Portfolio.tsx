@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 
 const categories = [
   { id: "all", label: "All Projects" },
+  { id: "ongoing", label: "Ongoing" },
+  { id: "completed", label: "Completed" },
   { id: "web", label: "Web Development" },
-  { id: "data", label: "Data & Admin" },
   { id: "travel", label: "Travel & Booking" },
 ];
 
@@ -18,6 +20,10 @@ type Project = {
   description: string;
   category: string;
   tags: string[];
+  coverImage: string;
+  liveUrl?: string;
+  projectPhase?: "ongoing" | "completed";
+  clientName?: string;
 };
 
 export default function Portfolio() {
@@ -34,12 +40,20 @@ export default function Portfolio() {
           description: string;
           category: string[];
           techStack: string[];
+          coverImage?: string;
+          liveUrl?: string;
+          projectPhase?: "ongoing" | "completed";
+          clientName?: string;
         }) => ({
           id: p.id,
           title: p.title,
           description: p.description,
           category: (p.category && p.category[0]) || "web",
           tags: p.techStack || [],
+          coverImage: p.coverImage || "/images/portfolio/canaan-cover.png",
+          liveUrl: p.liveUrl,
+          projectPhase: p.projectPhase || "completed",
+          clientName: p.clientName,
         }));
         setProjects(list);
       })
@@ -49,7 +63,9 @@ export default function Portfolio() {
   const filteredProjects =
     activeCategory === "all"
       ? projects
-      : projects.filter((p) => p.category === activeCategory);
+      : activeCategory === "ongoing" || activeCategory === "completed"
+        ? projects.filter((p) => p.projectPhase === activeCategory)
+        : projects.filter((p) => p.category === activeCategory);
 
   return (
     <section id="work" className="py-24 sm:py-32 bg-slate-950 relative overflow-hidden">
@@ -72,7 +88,7 @@ export default function Portfolio() {
             Our Recent Work
           </h2>
           <p className="text-lg text-slate-400">
-            A selection of projects we have delivered. Each built or completed to the client&apos;s requirements and timeline.
+            Real client projects — ongoing builds and completed deliveries across web, travel, and business systems.
           </p>
         </motion.div>
 
@@ -111,27 +127,59 @@ export default function Portfolio() {
                 className="group relative"
               >
                 <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 hover:border-brand-500/30 transition-all duration-500">
-                  <div className="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-300" />
+                  <Image
+                    src={project.coverImage}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/10" />
+                  <div className="absolute top-4 left-4">
+                    <span
+                      className={`rounded-full px-2.5 py-1 text-xs font-semibold uppercase tracking-wide ${
+                        project.projectPhase === "ongoing"
+                          ? "bg-amber-400 text-slate-950"
+                          : "bg-emerald-400/90 text-slate-950"
+                      }`}
+                    >
+                      {project.projectPhase === "ongoing" ? "Ongoing" : "Completed"}
+                    </span>
+                  </div>
                   <div className="absolute inset-0 p-6 flex flex-col justify-end">
                     <div className="flex flex-wrap gap-2 mb-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
-                      {project.tags.map((tag) => (
+                      {project.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-1 text-xs font-medium text-brand-400 bg-brand-500/10 rounded-md border border-brand-500/20"
+                          className="px-2 py-1 text-xs font-medium text-brand-400 bg-brand-500/10 rounded-md border border-brand-500/20 backdrop-blur-sm"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
+                    {project.clientName && (
+                      <p className="text-xs text-brand-300/90 mb-1">{project.clientName}</p>
+                    )}
                     <h3 className="text-xl font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">
                       {project.title}
                     </h3>
-                    <p className="text-sm text-slate-400 mb-4 line-clamp-2">{project.description}</p>
+                    <p className="text-sm text-slate-300 mb-4 line-clamp-2">{project.description}</p>
                   </div>
-                  <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300">
-                    <ArrowUpRight className="w-5 h-5 text-slate-950" />
-                  </div>
+                  {project.liveUrl ? (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute top-4 right-4 w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300"
+                      aria-label={`Open ${project.title}`}
+                    >
+                      <ArrowUpRight className="w-5 h-5 text-slate-950" />
+                    </a>
+                  ) : (
+                    <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center opacity-0 group-hover:opacity-100 scale-50 group-hover:scale-100 transition-all duration-300">
+                      <ArrowUpRight className="w-5 h-5 text-slate-950" />
+                    </div>
+                  )}
                 </div>
               </motion.div>
             ))}

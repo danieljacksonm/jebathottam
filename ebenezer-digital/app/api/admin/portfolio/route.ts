@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
       galleryImages: body.galleryImages || [],
       techStack: Array.isArray(body.techStack) ? body.techStack : [],
       liveUrl: body.liveUrl,
+      projectPhase: body.projectPhase === "ongoing" ? "ongoing" : "completed",
       status: body.status || "draft",
     });
     return NextResponse.json({ item }, { status: 201 });
