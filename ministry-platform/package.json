@@ -12,7 +12,8 @@
     "lint": "eslint",
     "deploy": "npm run build",
     "full-deploy": "npm ci && npm run build",
-    "migrate:php": "node scripts/migrate-from-php.js"
+    "migrate:php": "node scripts/migrate-from-php.js",
+    "setup:db": "node scripts/setup-database.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

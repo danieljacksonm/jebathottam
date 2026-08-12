@@ -41,6 +41,8 @@ function toIso(value?: string): string {
   const d = new Date(value);
   return Number.isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
 }
+
+function slugify(value: string): string {
   return value
     .toLowerCase()
     .replace(/https?:\/\//g, "")

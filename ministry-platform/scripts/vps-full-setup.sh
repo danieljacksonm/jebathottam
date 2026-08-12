@@ -42,41 +42,14 @@ echo "Installing dependencies..."
 npm ci
 npx prisma generate
 
-echo "Running SQL migration files..."
-: "${DB_HOST:?Missing DB_HOST}"
-: "${DB_PORT:?Missing DB_PORT}"
-: "${DB_USER:?Missing DB_USER}"
-: "${DB_PASSWORD:?Missing DB_PASSWORD}"
-: "${DB_NAME:?Missing DB_NAME}"
-
-MYSQL_CMD=(mysql -h "$DB_HOST" -P "$DB_PORT" -u "$DB_USER" "-p$DB_PASSWORD" "$DB_NAME")
-
-for sql in \
-  prisma/migrations/add_blog_seo.sql \
-  prisma/migrations/add_attendance.sql \
-  prisma/migrations/add_carmel.sql \
-  prisma/migrations/add_prayer_collector.sql \
-  prisma/migrations/add_youtube_videos.sql
-do
-  if [ -f "$sql" ]; then
-    echo "Applying $sql"
-    "${MYSQL_CMD[@]}" < "$sql"
-  else
-    echo "WARNING: $sql not found (skip)"
-  fi
-done
-
-if [ -f "scripts/seed-carmel-slots.sql" ]; then
-  echo "Applying scripts/seed-carmel-slots.sql"
-  "${MYSQL_CMD[@]}" < scripts/seed-carmel-slots.sql
-fi
-
-if [ -n "${PHP_DATABASE_URL:-}" ]; then
-  echo "Running PHP -> Node data migration script..."
-  node scripts/migrate-from-php.js
-else
-  echo "PHP_DATABASE_URL not set. Skipping DB content migration."
-fi
+echo "Setting up database tables and copying PHP content..."
+: "${DB_HOST:?Missing DB_HOST in .env}"
+: "${DB_USER:?Missing DB_USER in .env}"
+: "${DB_PASSWORD:?Missing DB_PASSWORD in .env}"
+: "${DB_NAME:?Missing DB_NAME in .env}"
+export DB_PORT="${DB_PORT:-3306}"
+export DB_SSL="${DB_SSL:-true}"
+node scripts/setup-database.js
 
 if [ -n "${PHP_SITE_PATH:-}" ] && [ -d "${PHP_SITE_PATH}" ]; then
   echo "Copying image assets from PHP site path..."
