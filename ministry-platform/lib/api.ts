@@ -9,49 +9,30 @@ interface RequestOptions extends RequestInit {
   params?: Record<string, string>;
 }
 
-// Helper to get auth token
-function getAuthToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('auth_token') || document.cookie
-    .split('; ')
-    .find(row => row.startsWith('auth_token='))
-    ?.split('=')[1] || null;
-}
-
-// Make API request
+// Cookie-first auth (httpOnly auth_token). No localStorage JWT.
 async function apiRequest<T>(
   endpoint: string,
   options: RequestOptions = {}
 ): Promise<T> {
   const { params, ...fetchOptions } = options;
 
-  // Build URL with query parameters
   let url = `${API_BASE_URL}${endpoint}`;
   if (params) {
     const searchParams = new URLSearchParams(params);
     url += `?${searchParams.toString()}`;
   }
 
-  // Get auth token
-  const token = getAuthToken();
-
-  // Set default headers
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     ...(fetchOptions.headers as Record<string, string> || {}),
   };
 
-  // Add authorization header if token exists
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
   try {
     const response = await fetch(url, {
       ...fetchOptions,
       headers,
-      credentials: 'include', // Include cookies
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -171,6 +152,15 @@ export const blogsApi = {
     category?: string;
     featured?: boolean;
     published?: boolean;
+    slug?: string;
+    title_ta?: string;
+    excerpt_ta?: string;
+    content_ta?: string;
+    meta_title?: string;
+    meta_desc?: string;
+    og_image?: string;
+    featured_image?: string;
+    tags?: string;
   }) => apiPost<{ data: any }>('/blogs', data),
 
   update: (id: number, data: Partial<any>) =>

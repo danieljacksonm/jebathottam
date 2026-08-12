@@ -1,5 +1,6 @@
 import { loadStore, saveStore } from './persist';
 import bcrypt from 'bcryptjs';
+import { STORE_PRODUCTS } from '../app/products/data';
 
 export type UserRole = "admin" | "editor";
 
@@ -70,6 +71,64 @@ export interface BlogPost {
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/** CMS news stories for E> World News (.info) */
+export interface NewsArticleRecord {
+  id: string;
+  slug: string;
+  title: string;
+  dek: string;
+  body: string[];
+  region: string;
+  topic: string;
+  location: string;
+  sourceLabel: string;
+  coverImage: string;
+  breaking?: boolean;
+  featured?: boolean;
+  status: "draft" | "published" | "archived";
+  publishedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface DigitalProduct {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  description: string;
+  story: string;
+  category: string;
+  price: number;
+  compareAt?: number;
+  badge?: "BEST SELLER" | "NEW" | "FREE" | "BUNDLE";
+  image: string;
+  gallery: string[];
+  features: string[];
+  includes: string[];
+  compatibility: string[];
+  license: string[];
+  whoItIsFor?: string;
+  downloadContentsPlan?: string[];
+  isSoftware?: boolean;
+  externalUrl?: string;
+  externalCta?: string;
+  rating?: number;
+  reviews?: number;
+  isFree?: boolean;
+  isBundle?: boolean;
+  bundleItems?: string[];
+  publishedAt?: Date;
+  status: "draft" | "published";
+  downloadFile?: string;
+  fileName?: string;
+  fileSize?: string;
+  seoTitle?: string;
+  seoDescription?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -252,6 +311,8 @@ type StoreData = {
   inquiries: Inquiry[];
   testimonials: Testimonial[];
   blogPosts: BlogPost[];
+  newsArticles?: NewsArticleRecord[];
+  digitalProducts?: DigitalProduct[];
   team: TeamMember[];
   settings: SiteSettings;
 };
@@ -263,6 +324,8 @@ class Database {
   inquiries: Inquiry[];
   testimonials: Testimonial[];
   blogPosts: BlogPost[];
+  newsArticles: NewsArticleRecord[];
+  digitalProducts: DigitalProduct[];
   team: TeamMember[];
   settings: SiteSettings;
   private adminHashReady = false;
@@ -276,8 +339,22 @@ class Database {
       this.inquiries = stored.inquiries.map((i) => ({ ...i, createdAt: new Date(i.createdAt), repliedAt: i.repliedAt ? new Date(i.repliedAt) : undefined }));
       this.testimonials = stored.testimonials.map((t) => ({ ...t, createdAt: new Date(t.createdAt) }));
       this.blogPosts = (stored.blogPosts || []).map((b) => ({ ...b, createdAt: new Date(b.createdAt), updatedAt: new Date(b.updatedAt), publishedAt: b.publishedAt ? new Date(b.publishedAt) : undefined }));
+      this.newsArticles = (stored.newsArticles || []).map((n) => ({
+        ...n,
+        body: Array.isArray(n.body) ? n.body : String(n.body || "").split(/\n\n+/).filter(Boolean),
+        createdAt: new Date(n.createdAt),
+        updatedAt: new Date(n.updatedAt),
+        publishedAt: n.publishedAt ? new Date(n.publishedAt) : undefined,
+      }));
+      this.digitalProducts = (stored.digitalProducts || []).map((p) => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        updatedAt: new Date(p.updatedAt),
+        publishedAt: p.publishedAt ? new Date(p.publishedAt) : undefined,
+      }));
       this.team = (stored.team || []).map((t) => ({ ...t, createdAt: new Date(t.createdAt) }));
       this.settings = stored.settings;
+      this.syncDigitalProductsFromCatalog();
     } else {
       this.users = [...mockUsers];
       this.services = [...mockServices];
@@ -285,6 +362,8 @@ class Database {
       this.inquiries = [...mockInquiries];
       this.testimonials = [...mockTestimonials];
       this.blogPosts = [];
+      this.newsArticles = [];
+      this.digitalProducts = [];
       this.team = [];
       this.settings = {
         siteName: "Ebenezar Digital Services",
@@ -292,8 +371,27 @@ class Database {
         contactEmail: "contact@ebenezar.com",
         socialLinks: {},
       };
+      this.syncDigitalProductsFromCatalog();
       this.persist();
     }
+  }
+
+  /** Keep CMS catalog aligned with app/products/data.ts seed */
+  private syncDigitalProductsFromCatalog() {
+    const now = new Date();
+    const bySlug = new Map(this.digitalProducts.map((p) => [p.slug, p]));
+    this.digitalProducts = STORE_PRODUCTS.map((p) => {
+      const existing = bySlug.get(p.slug);
+      return {
+        ...p,
+        id: existing?.id || p.id,
+        publishedAt: p.publishedAt ? new Date(p.publishedAt) : now,
+        createdAt: existing?.createdAt || now,
+        updatedAt: now,
+        status: p.status || "published",
+      };
+    });
+    this.persist();
   }
 
   private persist() {
@@ -304,6 +402,8 @@ class Database {
       inquiries: this.inquiries,
       testimonials: this.testimonials,
       blogPosts: this.blogPosts,
+      newsArticles: this.newsArticles,
+      digitalProducts: this.digitalProducts,
       team: this.team,
       settings: this.settings,
     });
@@ -527,6 +627,109 @@ class Database {
     return true;
   }
 
+  // ---- World News (CMS) ----
+  async getNewsArticles(publishedOnly = false): Promise<NewsArticleRecord[]> {
+    let list = [...this.newsArticles];
+    if (publishedOnly) list = list.filter((n) => n.status === "published");
+    return list.sort((a, b) => {
+      const at = a.publishedAt?.getTime() || a.createdAt.getTime();
+      const bt = b.publishedAt?.getTime() || b.createdAt.getTime();
+      return bt - at;
+    });
+  }
+
+  async getNewsArticleBySlug(slug: string): Promise<NewsArticleRecord | undefined> {
+    return this.newsArticles.find((n) => n.slug === slug && n.status === "published");
+  }
+
+  async createNewsArticle(
+    data: Omit<NewsArticleRecord, "id" | "createdAt" | "updatedAt">
+  ): Promise<NewsArticleRecord> {
+    const item: NewsArticleRecord = {
+      ...data,
+      id: `news-${Date.now()}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.newsArticles.unshift(item);
+    this.persist();
+    return item;
+  }
+
+  async updateNewsArticle(
+    id: string,
+    data: Partial<NewsArticleRecord>
+  ): Promise<NewsArticleRecord | undefined> {
+    const index = this.newsArticles.findIndex((n) => n.id === id);
+    if (index === -1) return undefined;
+    this.newsArticles[index] = {
+      ...this.newsArticles[index],
+      ...data,
+      id,
+      updatedAt: new Date(),
+    };
+    this.persist();
+    return this.newsArticles[index];
+  }
+
+  async deleteNewsArticle(id: string): Promise<boolean> {
+    const index = this.newsArticles.findIndex((n) => n.id === id);
+    if (index === -1) return false;
+    this.newsArticles.splice(index, 1);
+    this.persist();
+    return true;
+  }
+
+  // ---- Digital Store Products ----
+  async getDigitalProducts(publishedOnly = false): Promise<DigitalProduct[]> {
+    let list = [...this.digitalProducts];
+    if (publishedOnly) list = list.filter((p) => p.status === "published");
+    return list.sort((a, b) => {
+      const at = a.publishedAt?.getTime() || a.createdAt.getTime();
+      const bt = b.publishedAt?.getTime() || b.createdAt.getTime();
+      return bt - at;
+    });
+  }
+
+  async getDigitalProductBySlug(slug: string): Promise<DigitalProduct | undefined> {
+    return this.digitalProducts.find((p) => p.slug === slug && p.status === "published");
+  }
+
+  async createDigitalProduct(
+    data: Omit<DigitalProduct, "id" | "createdAt" | "updatedAt">
+  ): Promise<DigitalProduct> {
+    const item: DigitalProduct = {
+      ...data,
+      id: `dp${Date.now()}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    this.digitalProducts.unshift(item);
+    this.persist();
+    return item;
+  }
+
+  async updateDigitalProduct(id: string, data: Partial<DigitalProduct>): Promise<DigitalProduct | undefined> {
+    const index = this.digitalProducts.findIndex((p) => p.id === id);
+    if (index === -1) return undefined;
+    this.digitalProducts[index] = {
+      ...this.digitalProducts[index],
+      ...data,
+      id,
+      updatedAt: new Date(),
+    };
+    this.persist();
+    return this.digitalProducts[index];
+  }
+
+  async deleteDigitalProduct(id: string): Promise<boolean> {
+    const index = this.digitalProducts.findIndex((p) => p.id === id);
+    if (index === -1) return false;
+    this.digitalProducts.splice(index, 1);
+    this.persist();
+    return true;
+  }
+
   // ---- Team ----
   async getTeam(): Promise<TeamMember[]> {
     return [...this.team].sort((a, b) => a.order - b.order);
@@ -589,6 +792,7 @@ class Database {
       publishedServices: this.services.filter((s) => s.status === "published").length,
       publishedPortfolio: this.portfolio.filter((p) => p.status === "published").length,
       publishedTestimonials: this.testimonials.filter((t) => t.status === "published").length,
+      publishedStoreProducts: this.digitalProducts.filter((p) => p.status === "published").length,
     };
   }
 }

@@ -2,7 +2,6 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -98,18 +97,11 @@ function LoginForm() {
             </form>
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Don&apos;t have an account?{' '}
-                <Link href="/signup" className="text-primary-600 dark:text-primary-400 hover:underline font-medium">
-                  Sign up
-                </Link>
+                Admin access only. Contact the ministry if you need an account.
               </p>
             </div>
           </CardContent>
         </Card>
-
-        <p className="mt-6 text-center text-xs text-gray-500 dark:text-gray-500">
-          Default: admin@ministry.com / admin123
-        </p>
       </div>
     </div>
   );

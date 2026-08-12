@@ -34,6 +34,8 @@ import {
   Plane,
   Smartphone,
   Video,
+  ClipboardCheck,
+  Flame,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -46,6 +48,8 @@ export const adminNavIcons = {
   events: Calendar,
   team: Users,
   followers: Heart,
+  attendance: ClipboardCheck,
+  carmel: Flame,
   notes: BookOpen,
   prophecy: Sparkles,
   media: FolderOpen,

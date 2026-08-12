@@ -1,13 +1,17 @@
 // Content from Jesus is the Way Jebathottam (jesusisthewayjebathottam.com)
 
 export const ministryInfo = {
-  name: 'Jesus Is The Way',
+  name: 'Jesus is the Way Jebathottam',
   subtitle: 'Jebathottam',
   tagline: 'The place where God dwells',
   scripture: 'We aim to express our love of Jesus Christ by living the will of the Father.',
-  email: 'info@jebathottam.org',
-  phone: '9380662377',
-  address: 'Jesus is the Way Jebathottam, Keelamudiman',
+  email: 'anselmajohn2020@gmail.com',
+  phone: '+91 9380662377 / +91 9884239002',
+  phonePrimary: '+919380662377',
+  address: 'Keelamudiman, Ottapidaram, Tuticorin – 628401, Tamil Nadu, India',
+  website: 'https://jesusisthewayjebathottam.com',
+  whatsapp: 'https://wa.me/919380662377',
+  youtube: 'https://www.youtube.com/@jesusisthewayjebathottam',
 };
 
 export const sliderImages = [
@@ -127,20 +131,20 @@ export const teamMembers = [
   {
     id: 1,
     name: 'Bro. John Barnabas',
-    role: 'Pastor',
-    bio: 'Brother John Barnabas leads this mission, doing business as well as ministry.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-    email: 'contact@jebathottam.org',
-    phone: '9380662377',
+    role: 'Pastor & Founder',
+    bio: 'Brother John Barnabas is the primary guide of Jesus is the Way Jebathottam, leading outreach ministries and overseeing spiritual developments in Keelamudiman, Tuticorin. Balancing corporate assignments with dynamic service commitments, he leads with a heart for community restoration and youth development. He coordinates local fasting prayers and weekly services.',
+    image: 'https://jesusisthewayjebathottam.com/images/team-1-170x172.png',
+    email: 'anselmajohn2020@gmail.com',
+    phone: '+91 9380662377',
   },
   {
     id: 2,
     name: 'Sis. Anselma John',
-    role: 'Pastor',
-    bio: 'Sister Anselma John takes care of all prayers, a full-time ministry member.',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
-    email: 'contact@jebathottam.org',
-    phone: '9884239002',
+    role: 'Pastor & Prayer Leader',
+    bio: 'Sister Anselma John directs the virtual prayer chambers of the ministry, shepherding hundreds of daily prayer line attendees in Tamil Nadu. Devoted fully to continuous intercessions, she supports families and youth through direct counseling and daily scriptures. She leads morning, noon, and night prayer calls on conference lines.',
+    image: 'https://jesusisthewayjebathottam.com/images/team-2-170x172.png',
+    email: 'anselmajohn2020@gmail.com',
+    phone: '+91 9884239002',
   },
 ];
 

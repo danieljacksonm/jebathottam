@@ -34,6 +34,10 @@
   --font-sans: var(--font-manrope);
   --font-display: var(--font-cormorant);
   --font-script: var(--font-great-vibes);
+  --font-tamil-sans: var(--font-tamil);
+  --font-tamil-display: var(--font-tamil-display);
+  --font-hindi-sans: var(--font-hindi);
+  --font-hindi-display: var(--font-hindi-display);
   --radius-card: var(--radius);
 }
 
@@ -55,10 +59,14 @@ body {
 
 body.locale-ta {
   font-family: var(--font-tamil), var(--font-manrope), system-ui, sans-serif;
+  letter-spacing: 0.01em;
+  line-height: 1.65;
 }
 
 body.locale-hi {
   font-family: var(--font-hindi), var(--font-manrope), system-ui, sans-serif;
+  letter-spacing: 0.01em;
+  line-height: 1.65;
 }
 
 ::selection {
@@ -72,8 +80,34 @@ body.locale-hi {
   letter-spacing: -0.02em;
 }
 
+body.locale-ta .font-display,
+body.locale-ta h1,
+body.locale-ta h2,
+body.locale-ta h3 {
+  font-family: var(--font-tamil-display), var(--font-cormorant), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+body.locale-hi .font-display,
+body.locale-hi h1,
+body.locale-hi h2,
+body.locale-hi h3 {
+  font-family: var(--font-hindi-display), var(--font-cormorant), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
 .font-script {
   font-family: var(--font-great-vibes), cursive;
+}
+
+body.locale-ta .font-script,
+body.locale-hi .font-script {
+  font-family: inherit;
+  letter-spacing: 0.02em;
 }
 
 .site-header {

@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
       name: user.name || '',
     });
 
+    // Cookie-only auth — do not return JWT in JSON body
     const response = NextResponse.json({
       user: {
         id: user.id,
@@ -83,7 +84,6 @@ export async function POST(request: NextRequest) {
         role: user.role,
         name: user.name || '',
       },
-      token,
     });
 
     // Set Secure only when the request is over HTTPS. On HTTP (e.g. http://YOUR_IP) the browser would otherwise ignore the cookie and you could not stay logged in.

@@ -51,12 +51,12 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 
     // Check if user owns this note (unless admin)
-    const canManageAny = ['super_admin', 'master_admin', 'pastor'].includes(user.role);
+    const canManageAny = ['super_admin', 'media_team'].includes(user.role);
     if (!canManageAny) {
       const notes = await query<any[]>(
         'SELECT user_id FROM notes WHERE id = ?',
@@ -99,12 +99,12 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 
     // Check if user owns this note (unless admin)
-    const canManageAny = ['super_admin', 'master_admin', 'pastor'].includes(user.role);
+    const canManageAny = ['super_admin', 'media_team'].includes(user.role);
     if (!canManageAny) {
       const notes = await query<any[]>(
         'SELECT user_id FROM notes WHERE id = ?',

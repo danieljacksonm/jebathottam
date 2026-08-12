@@ -1,15 +1,16 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { isAuthTokenValid } from '@/lib/jwt-edge';
+import { verifyAuthToken } from '@/lib/jwt-edge';
 
-export function middleware(request: NextRequest) {
+const ADMIN_ROLES = new Set(['super_admin', 'media_team', 'ministry_member']);
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get('auth_token')?.value;
-  const isLoggedIn = isAuthTokenValid(token);
+  const auth = await verifyAuthToken(token);
 
-  // Protect admin: redirect to login if no valid auth token
   if (pathname.startsWith('/admin')) {
-    if (!isLoggedIn) {
+    if (!auth.valid || !auth.role || !ADMIN_ROLES.has(auth.role)) {
       const loginUrl = new URL('/login', request.url);
       loginUrl.searchParams.set('from', pathname);
       return NextResponse.redirect(loginUrl);
@@ -17,8 +18,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // If already logged in and visiting login page, redirect to admin
-  if (pathname === '/login' && isLoggedIn) {
+  if (pathname === '/login' && auth.valid && auth.role && ADMIN_ROLES.has(auth.role)) {
     return NextResponse.redirect(new URL('/admin', request.url));
   }
 

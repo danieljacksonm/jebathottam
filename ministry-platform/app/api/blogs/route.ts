@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { requireRole, getUserFromRequest } from '@/lib/auth';
+import { ensureUniqueSlug, slugify } from '@/lib/slug';
 
 // GET all blogs
 export async function GET(request: NextRequest) {
@@ -45,6 +46,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
+async function slugTaken(slug: string): Promise<boolean> {
+  const rows = await query<any[]>('SELECT id FROM blogs WHERE slug = ? LIMIT 1', [slug]);
+  return rows.length > 0;
+}
+
 // POST create blog
 export async function POST(request: NextRequest) {
   try {
@@ -52,7 +58,25 @@ export async function POST(request: NextRequest) {
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 
-    const { title, content, excerpt, author, category, featured, published } = await request.json();
+    const body = await request.json();
+    const {
+      title,
+      content,
+      excerpt,
+      author,
+      category,
+      featured,
+      published,
+      slug: slugInput,
+      title_ta,
+      excerpt_ta,
+      content_ta,
+      meta_title,
+      meta_desc,
+      og_image,
+      featured_image,
+      tags,
+    } = body;
 
     if (!title || !content) {
       return NextResponse.json(
@@ -61,13 +85,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const slug = await ensureUniqueSlug(slugTaken, title, slugInput || slugify(title));
+
     const result = await query<any>(
-      `INSERT INTO blogs (title, content, excerpt, author, category, featured, published, created_by, published_at) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO blogs (
+         slug, title, title_ta, content, content_ta, excerpt, excerpt_ta,
+         meta_title, meta_desc, og_image, featured_image, tags,
+         author, category, featured, published, created_by, published_at
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
+        slug,
         title,
+        title_ta || null,
         content,
+        content_ta || null,
         excerpt || null,
+        excerpt_ta || null,
+        meta_title || null,
+        meta_desc || null,
+        og_image || null,
+        featured_image || null,
+        tags || null,
         author || user.name,
         category || null,
         featured ? 1 : 0,

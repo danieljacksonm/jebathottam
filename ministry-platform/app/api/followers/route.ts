@@ -5,7 +5,7 @@ import { requireRole } from '@/lib/auth';
 // GET all followers
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { searchParams } = new URL(request.url);
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
 // POST create follower
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { name, email, phone, family_id, family_name, status = 'active', notes, join_date } = await request.json();

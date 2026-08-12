@@ -85,7 +85,10 @@
     "enquire": "Enquire now",
     "viewAll": "View all packages",
     "reviews": "{count} reviews",
-    "detailCta": "Request this package"
+    "detailCta": "Request this package",
+    "luxuryEyebrow": "When you are ready",
+    "luxuryTitle": "Stay in the story.",
+    "luxuryBody": "Luxury Kodaikanal packages — offered only after the journey has touched you."
   },
   "testimonials": {
     "eyebrow": "Happy travellers",
@@ -136,9 +139,20 @@
   "blog": {
     "eyebrow": "Journal",
     "title": "Kodaikanal notes & guides",
-    "subtitle": "Practical writing on Kodai, packing, and digital travel services.",
+    "subtitle": "Fifty-plus stories from the Princess of the Hills — places, seasons, packing, and calm travel plans.",
     "read": "{count} min read",
     "back": "Back to blog"
+  },
+  "film": {
+    "frameEyebrow": "In the film of your day",
+    "frameBody": "Stay with this frame. Let the air settle before you move on.",
+    "finaleEyebrow": "The day returns to gold",
+    "finaleTitle": "You have walked through the mist.",
+    "finaleBody": "Now, if your heart is still on the ridge — Canaan will take you there.",
+    "openLine1": "Escape Into The Mist.",
+    "openLine2": "Kodaikanal Awaits.",
+    "openHint": "Begin the day",
+    "brandSub": "Travel Hub"
   },
   "about": {
     "eyebrow": "Our house",
@@ -147,9 +161,18 @@
     "body": "Right now Canaan focuses on complete Kodaikanal tour packages — that is our main product. Alongside this, we offer digital tourism services such as flights, hotels, and visa assistance.",
     "valuesTitle": "What we hold",
     "values": {
-      "care": { "title": "Quiet care", "body": "Details arranged before you ask." },
-      "place": { "title": "Kodaikanal first", "body": "One destination, done properly — for now." },
-      "trust": { "title": "Trusted path", "body": "Own packages, clear guidance, honest pacing." }
+      "care": {
+        "title": "Quiet care",
+        "body": "Details arranged before you ask."
+      },
+      "place": {
+        "title": "Kodaikanal first",
+        "body": "One destination, done properly — for now."
+      },
+      "trust": {
+        "title": "Trusted path",
+        "body": "Own packages, clear guidance, honest pacing."
+      }
     }
   },
   "contact": {
@@ -204,5 +227,65 @@
     "title": "Kodaikanal journey film",
     "close": "Close",
     "note": "Video placeholder — your Kodaikanal brand film can be embedded here."
+  },
+  "destinationsSection": {
+    "eyebrow": "Destination",
+    "title": "Kodaikanal",
+    "subtitle": "Our only tour destination for now — complete packages in the Princess of the Hills.",
+    "featured": "Featured",
+    "from": "From",
+    "viewAll": "View Kodaikanal"
+  },
+  "homeCinematic": {
+    "whyKodaiEyebrow": "Why Kodaikanal",
+    "whyKodaiTitle": "A place that asks you to slow down.",
+    "whyKodaiBody": "Mist over pine. Quiet lakes. Roads that open only when you are ready. Canaan presents Kodaikanal as an experience — not a checklist.",
+    "immersiveEyebrow": "Immersive experiences",
+    "immersiveTitle": "Drift through the hills.",
+    "whyCanaanEyebrow": "Why Canaan",
+    "whyCanaanTitle": "Premium feels effortless.",
+    "whyCanaan": {
+      "quiet": {
+        "title": "Quiet luxury",
+        "body": "Every detail arranged before you ask — stays, transfers, pacing."
+      },
+      "specialists": {
+        "title": "Kodai specialists",
+        "body": "One destination, deeply known. Roads, seasons, hidden quiet."
+      },
+      "trusted": {
+        "title": "Trusted care",
+        "body": "Clear guidance, private hosts, and calm communication."
+      },
+      "human": {
+        "title": "Human hospitality",
+        "body": "Not a template tour — a journey shaped around you."
+      }
+    },
+    "storiesEyebrow": "Customer stories",
+    "mapEyebrow": "Interactive map",
+    "mapTitle": "Trace the hills.",
+    "mapSelected": "Selected",
+    "mapNote": "Included across curated Canaan packages.",
+    "galleryEyebrow": "Gallery",
+    "galleryTitle": "Frames of Kodai.",
+    "timelineEyebrow": "Travel story",
+    "timelineTitle": "A day written in mist.",
+    "digitalEyebrow": "Also available",
+    "digitalTitle": "Digital tourism services",
+    "digitalBody": "Packages are Kodaikanal-only. Flights, hotels, and visas support your journey.",
+    "digitalCta": "View services",
+    "digitalSoft": "Stay close to the mist.",
+    "digitalDone": "You are on the list.",
+    "digitalEmail": "Email",
+    "digitalJoin": "Join",
+    "heroEyebrow": "Canaan Travel Hub · Kodaikanal",
+    "heroTitle": "Every Journey Begins With Wonder.",
+    "heroSub": "Discover Kodaikanal Like Never Before.",
+    "heroExplore": "Explore Experiences",
+    "heroWatch": "Watch Story",
+    "heroScroll": "Scroll",
+    "heroStoryTitle": "Kodaikanal story",
+    "heroStoryNote": "Embed your cinematic Kodaikanal film here."
   }
 }

@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
 
     const followers = await query<any[]>(
@@ -55,7 +55,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { name, email, phone, family_id, status, notes } = await request.json();
@@ -92,7 +92,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     await query('DELETE FROM followers WHERE id = ?', [id]);

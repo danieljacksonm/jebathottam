@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
+import { sendContactEmail } from '@/lib/mail';
 
 let tableCreated = false;
 
@@ -25,9 +26,15 @@ async function ensureTable() {
 
 export async function POST(request: NextRequest) {
   try {
-    await ensureTable();
+    const body = await request.json();
+    const { firstName, lastName, email, phone, subject, message, website } = body;
 
-    const { firstName, lastName, email, phone, subject, message } = await request.json();
+    // Honeypot: bots fill "website"; humans leave it empty → fake success
+    if (typeof website === 'string' && website.trim() !== '') {
+      return NextResponse.json({ success: true }, { status: 201 });
+    }
+
+    await ensureTable();
 
     if (!firstName || !lastName || !email || !message) {
       return NextResponse.json(
@@ -46,6 +53,20 @@ export async function POST(request: NextRequest) {
        VALUES (?, ?, ?, ?, ?, ?)`,
       [firstName, lastName, email, phone || null, subject || 'General Inquiry', message]
     );
+
+    try {
+      await sendContactEmail({
+        firstName,
+        lastName,
+        email,
+        phone,
+        subject,
+        message,
+      });
+    } catch (mailErr) {
+      console.error('Contact email send failed:', mailErr);
+      // Message is saved; still return success so user is not blocked
+    }
 
     return NextResponse.json(
       { success: true, id: (result as { insertId: number }).insertId },

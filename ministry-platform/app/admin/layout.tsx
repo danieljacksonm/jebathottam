@@ -30,6 +30,8 @@ const navSections = [
     items: [
       { name: 'Team', href: '/admin/team', iconKey: 'team' as const },
       { name: 'Followers & Members', href: '/admin/followers', iconKey: 'followers' as const },
+      { name: 'Attendance', href: '/admin/attendance', iconKey: 'attendance' as const },
+      { name: 'Carmel Watch', href: '/admin/carmel', iconKey: 'carmel' as const },
     ],
   },
   {

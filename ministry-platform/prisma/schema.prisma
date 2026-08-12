@@ -133,18 +133,28 @@ enum PrayerStatus {
 // ---------------------------------------------------------------------------
 
 model Blog {
-  id           Int       @id @default(autoincrement())
-  title        String    @db.VarChar(500)
-  content      String    @db.Text
-  excerpt      String?   @db.Text
-  author       String?   @db.VarChar(255)
-  category     String?   @db.VarChar(100)
-  featured     Boolean   @default(false)
-  published    Boolean   @default(false)
-  published_at DateTime? @db.Timestamp(0)
-  created_by   Int?
-  created_at   DateTime  @default(now()) @db.Timestamp(0)
-  updated_at   DateTime  @updatedAt @db.Timestamp(0)
+  id             Int       @id @default(autoincrement())
+  slug           String    @unique @db.VarChar(255)
+  title          String    @db.VarChar(500)
+  title_ta       String?   @db.VarChar(500)
+  content        String    @db.LongText
+  content_ta     String?   @db.LongText
+  excerpt        String?   @db.Text
+  excerpt_ta     String?   @db.Text
+  meta_title     String?   @db.VarChar(255)
+  meta_desc      String?   @db.VarChar(500)
+  og_image       String?   @db.VarChar(500)
+  featured_image String?   @db.VarChar(500)
+  tags           String?   @db.VarChar(500)
+  views          Int       @default(0)
+  author         String?   @db.VarChar(255)
+  category       String?   @db.VarChar(100)
+  featured       Boolean   @default(false)
+  published      Boolean   @default(false)
+  published_at   DateTime? @db.Timestamp(0)
+  created_by     Int?
+  created_at     DateTime  @default(now()) @db.Timestamp(0)
+  updated_at     DateTime  @updatedAt @db.Timestamp(0)
 
   created_by_user User? @relation(fields: [created_by], references: [id], onDelete: SetNull)
 
@@ -661,4 +671,168 @@ model SipConfig {
 
   @@index([is_active])
   @@map("sip_config")
+}
+
+// ---------------------------------------------------------------------------
+// Youth attendance (parity with PHP youth_attendance / youth_members)
+// ---------------------------------------------------------------------------
+
+model YouthAttendance {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(100)
+  date      DateTime @db.Date
+  time      String?  @db.VarChar(20)
+  streak    Int      @default(1)
+  ip_hash   String?  @db.VarChar(64)
+  device    String?  @db.VarChar(20)
+  marked_at DateTime @default(now()) @db.DateTime(0)
+  added_by  String   @default("self") @db.VarChar(20)
+
+  @@unique([name, date], map: "unique_name_date")
+  @@index([date])
+  @@index([ip_hash])
+  @@index([marked_at])
+  @@map("youth_attendance")
+}
+
+model YouthMember {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(100)
+  joined_date DateTime? @db.Date
+  is_active   Boolean   @default(true)
+
+  @@map("youth_members")
+}
+
+// ---------------------------------------------------------------------------
+// Carmel 24x7 prayer watch (parity with PHP carmel_slots / carmel_attendance)
+// ---------------------------------------------------------------------------
+
+model CarmelSlot {
+  id              Int     @id @default(autoincrement())
+  slot_time       String  @db.VarChar(20)
+  session_name    String  @db.VarChar(50)
+  assigned_member String? @db.VarChar(100)
+  is_empty        Boolean @default(false)
+  sort_order      Int     @default(0)
+
+  @@index([sort_order])
+  @@index([session_name])
+  @@map("carmel_slots")
+}
+
+model CarmelAttendance {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(100)
+  date          DateTime @db.Date
+  slot_time     String   @db.VarChar(20)
+  session_name  String?  @db.VarChar(50)
+  marked_at     DateTime @default(now()) @db.DateTime(0)
+  ip_hash       String?  @db.VarChar(64)
+  device_type   String?  @db.VarChar(20)
+  duration_mins Int      @default(30)
+  added_by      String   @default("self") @db.VarChar(20)
+
+  @@unique([name, date, slot_time], map: "unique_name_date_slot")
+  @@index([date])
+  @@index([ip_hash])
+  @@index([marked_at])
+  @@index([slot_time])
+  @@map("carmel_attendance")
+}
+
+// ---------------------------------------------------------------------------
+// YouTube channel cache (synced via cron / admin — not on public page load)
+// ---------------------------------------------------------------------------
+
+model YoutubeVideo {
+  video_id          String   @id @db.VarChar(50)
+  title             String   @db.VarChar(255)
+  description       String?  @db.Text
+  published_at      DateTime @db.DateTime(0)
+  thumbnail_url     String?  @db.VarChar(500)
+  blog_post_created Boolean  @default(false)
+  published         Boolean  @default(true)
+  created_at        DateTime @default(now()) @db.Timestamp(0)
+  updated_at        DateTime @updatedAt @db.Timestamp(0)
+
+  @@index([published_at])
+  @@index([published])
+  @@map("youtube_videos")
+}
+
+// ---------------------------------------------------------------------------
+// Prayer Collector Android API (parity with PHP api/prayer)
+// ---------------------------------------------------------------------------
+
+model PrayerSession {
+  id                 Int                 @id @default(autoincrement())
+  session_id         String              @unique(map: "unique_session_id") @db.VarChar(64)
+  prayer_name        String              @db.VarChar(100)
+  device_id          String              @db.VarChar(100)
+  call_type          String?             @db.VarChar(30)
+  started_at         DateTime            @db.DateTime(0)
+  ended_at           DateTime?           @db.DateTime(0)
+  date               DateTime            @db.Date
+  duration_seconds   Int                 @default(0)
+  total_participants Int                 @default(0)
+  status             PrayerSessionStatus @default(active)
+  created_at         DateTime            @default(now()) @db.DateTime(0)
+  updated_at         DateTime            @default(now()) @updatedAt @db.DateTime(0)
+
+  @@index([date], map: "idx_date")
+  @@index([device_id], map: "idx_device")
+  @@map("prayer_sessions")
+}
+
+enum PrayerSessionStatus {
+  active
+  ended
+}
+
+model PrayerSessionUpdate {
+  id                  Int      @id @default(autoincrement())
+  session_id          String   @db.VarChar(64)
+  prayer_name         String   @db.VarChar(100)
+  device_id           String   @db.VarChar(100)
+  participant_count   Int      @default(0)
+  active_participants String?  @db.Text
+  detection_method    String?  @db.VarChar(20)
+  updated_at          DateTime @db.DateTime(0)
+  created_at          DateTime @default(now()) @db.DateTime(0)
+
+  @@index([session_id], map: "idx_session")
+  @@map("prayer_session_updates")
+}
+
+model PrayerAutoAttendance {
+  id                  Int       @id @default(autoincrement())
+  session_id          String    @db.VarChar(64)
+  name                String    @db.VarChar(100)
+  join_time           DateTime  @db.DateTime(0)
+  leave_time          DateTime? @db.DateTime(0)
+  duration_seconds    Int       @default(0)
+  attendance_status   String    @db.VarChar(20)
+  detection_method    String    @db.VarChar(20)
+  date                DateTime  @db.Date
+  prayer_session_name String    @db.VarChar(100)
+  device_id           String    @db.VarChar(100)
+  event_type          String    @db.VarChar(20)
+  is_duplicate        Boolean   @default(false)
+  created_at          DateTime  @default(now()) @db.DateTime(0)
+
+  @@unique([session_id, name, event_type, join_time], map: "unique_event")
+  @@index([session_id], map: "idx_session")
+  @@index([name, date], map: "idx_name_date")
+  @@index([event_type], map: "idx_event")
+  @@map("prayer_auto_attendance")
+}
+
+model PrayerAppSetting {
+  id            Int      @id @default(autoincrement())
+  setting_key   String   @unique(map: "unique_setting_key") @db.VarChar(100)
+  setting_value String?  @db.Text
+  updated_at    DateTime @default(now()) @updatedAt @db.DateTime(0)
+
+  @@map("prayer_app_settings")
 }

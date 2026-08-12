@@ -1,11 +1,13 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useReveal } from "./motion";
 
 export function DigitalStrip() {
   const ref = useReveal([]);
+  const t = useTranslations("homeCinematic");
   const [done, setDone] = useState(false);
 
   function onSubmit(e: FormEvent) {
@@ -24,32 +26,30 @@ export function DigitalStrip() {
       >
         <div className="max-w-xl">
           <p className="text-[0.7rem] uppercase tracking-[0.28em] text-gold">
-            Also available
+            {t("digitalEyebrow")}
           </p>
           <h2 className="mt-3 font-display text-4xl text-white md:text-5xl">
-            Digital tourism services
+            {t("digitalTitle")}
           </h2>
-          <p className="mt-4 text-soft-gray">
-            Packages are Kodaikanal-only. Flights, hotels, and visas support your journey.
-          </p>
+          <p className="mt-4 text-soft-gray">{t("digitalBody")}</p>
           <Link href="/services" className="btn-ghost mt-6 inline-flex">
-            View services
+            {t("digitalCta")}
           </Link>
         </div>
         <div className="w-full max-w-md">
-          <p className="mb-3 text-sm text-mist">Stay close to the mist.</p>
+          <p className="mb-3 text-sm text-mist">{t("digitalSoft")}</p>
           {done ? (
-            <p className="text-gold-bright">You are on the list.</p>
+            <p className="text-gold-bright">{t("digitalDone")}</p>
           ) : (
             <form onSubmit={onSubmit} className="flex gap-2">
               <input
                 required
                 type="email"
-                placeholder="Email"
+                placeholder={t("digitalEmail")}
                 className="input-field"
               />
-              <button type="submit" className="btn-gold shrink-0 !px-4">
-                Join
+              <button type="submit" className="btn-gold shrink-0">
+                {t("digitalJoin")}
               </button>
             </form>
           )}

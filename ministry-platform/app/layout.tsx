@@ -16,9 +16,32 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+const SITE_URL = "https://jesusisthewayjebathottam.com";
+const SITE_NAME = "Jesus is the Way Jebathottam";
+
 export const metadata: Metadata = {
-  title: "Jebathottam Ministry - Preserving God's Word for Generations",
-  description: "A trusted platform for preserving prophecies, revelations, and teachings for future generations",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — Preserving God's Word for Generations`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description:
+    "Jesus is the Way Jebathottam — a trusted ministry platform for teachings, prophecies, prayer, and community.",
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description:
+      "Teachings, prayer, and community from Jesus is the Way Jebathottam ministry.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description:
+      "Teachings, prayer, and community from Jesus is the Way Jebathottam ministry.",
+  },
 };
 
 const themeScript = `

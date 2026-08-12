@@ -5,7 +5,7 @@ import { requireRole } from '@/lib/auth';
 // GET prayer reports and statistics
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
 
     // Get all prayer statistics

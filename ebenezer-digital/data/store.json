@@ -17,7 +17,12 @@
       "description": "Accurate, timely data entry from forms, spreadsheets, or documents into your preferred format.",
       "icon": "FileText",
       "category": "digital",
-      "features": ["Fast turnaround", "99% accuracy", "Multiple formats", "Confidential"],
+      "features": [
+        "Fast turnaround",
+        "99% accuracy",
+        "Multiple formats",
+        "Confidential"
+      ],
       "status": "published",
       "order": 1,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -29,7 +34,11 @@
       "description": "Convert between PDF, Word, Excel, images—with care for layout and content integrity.",
       "icon": "FileText",
       "category": "digital",
-      "features": ["PDF to Word", "OCR", "Batch conversion"],
+      "features": [
+        "PDF to Word",
+        "OCR",
+        "Batch conversion"
+      ],
       "status": "published",
       "order": 2,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -41,7 +50,11 @@
       "description": "Fill forms, submit applications, and manage form-based workflows on your behalf.",
       "icon": "Globe",
       "category": "digital",
-      "features": ["Applications", "Registrations", "Follow-ups"],
+      "features": [
+        "Applications",
+        "Registrations",
+        "Follow-ups"
+      ],
       "status": "published",
       "order": 3,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -53,7 +66,11 @@
       "description": "Email management, scheduling, research, and other administrative tasks handled remotely.",
       "icon": "Users",
       "category": "digital",
-      "features": ["Email", "Scheduling", "Research"],
+      "features": [
+        "Email",
+        "Scheduling",
+        "Research"
+      ],
       "status": "published",
       "order": 4,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -65,7 +82,11 @@
       "description": "Assistance searching and booking flights, buses, and trains to your preferences.",
       "icon": "Plane",
       "category": "travel",
-      "features": ["Flights", "Buses", "Trains"],
+      "features": [
+        "Flights",
+        "Buses",
+        "Trains"
+      ],
       "status": "published",
       "order": 5,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -77,7 +98,11 @@
       "description": "Help with itinerary ideas, tour options, and activity bookings for your trips.",
       "icon": "Globe",
       "category": "travel",
-      "features": ["Itineraries", "Activities", "Custom tours"],
+      "features": [
+        "Itineraries",
+        "Activities",
+        "Custom tours"
+      ],
       "status": "published",
       "order": 6,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -89,7 +114,11 @@
       "description": "Hotel and reservation support, changes, and follow-up to keep plans organized.",
       "icon": "Database",
       "category": "travel",
-      "features": ["Hotels", "Changes", "Confirmations"],
+      "features": [
+        "Hotels",
+        "Changes",
+        "Confirmations"
+      ],
       "status": "published",
       "order": 7,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -101,7 +130,12 @@
       "description": "Custom websites from simple business sites to complex solutions using modern technologies.",
       "icon": "Globe",
       "category": "web",
-      "features": ["Responsive", "SEO", "Fast", "Secure"],
+      "features": [
+        "Responsive",
+        "SEO",
+        "Fast",
+        "Secure"
+      ],
       "status": "published",
       "order": 8,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -113,7 +147,11 @@
       "description": "Conversion-focused landing pages for campaigns, products, or lead generation.",
       "icon": "Code",
       "category": "web",
-      "features": ["High conversion", "Fast load", "Mobile-first"],
+      "features": [
+        "High conversion",
+        "Fast load",
+        "Mobile-first"
+      ],
       "status": "published",
       "order": 9,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -125,7 +163,11 @@
       "description": "Backend applications, APIs, and web apps built with PHP and Laravel framework.",
       "icon": "Code",
       "category": "web",
-      "features": ["APIs", "Dashboards", "Custom apps"],
+      "features": [
+        "APIs",
+        "Dashboards",
+        "Custom apps"
+      ],
       "status": "published",
       "order": 10,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -137,7 +179,11 @@
       "description": "Bug fixes, speed improvements, and updates to keep your site running smoothly.",
       "icon": "Code",
       "category": "web",
-      "features": ["Bug fixes", "Speed", "Updates"],
+      "features": [
+        "Bug fixes",
+        "Speed",
+        "Updates"
+      ],
       "status": "published",
       "order": 11,
       "createdAt": "2026-07-03T19:51:00.915Z",
@@ -149,17 +195,25 @@
       "id": "p-ongoing-jebathottam",
       "title": "Jebathottam Ministry Platform",
       "clientName": "Jesus Is The Way Jebathottam",
-      "category": ["web"],
+      "category": [
+        "web"
+      ],
       "description": "Full digital ministry platform with blogs, events, gallery, media, prayer requests, team pages, admin CMS, and live chat support for the congregation.",
       "challenge": "Ministry needed one trusted place for content, events, and visitor engagement.",
       "solution": "Built a Next.js platform with admin tools, multilingual-ready structure, and chat.",
       "result": "Live demo deployed; content and engagement managed from one dashboard.",
-      "coverImage": "/images/portfolio/jebathottam-platform-cover.png",
+      "coverImage": "/images/portfolio/screenshot-ministry.png",
       "galleryImages": [
+        "/images/portfolio/jebathottam-platform-cover.png",
         "/images/portfolio/jebathottam-prayer.jpeg",
         "/images/portfolio/jebathottam-logo.jpeg"
       ],
-      "techStack": ["Next.js", "Admin CMS", "Chat", "Media"],
+      "techStack": [
+        "Next.js",
+        "Admin CMS",
+        "Chat",
+        "Media"
+      ],
       "liveUrl": "https://demo.jesusisthewayjebathottam.com",
       "projectPhase": "ongoing",
       "status": "published",
@@ -171,14 +225,23 @@
       "id": "p-ongoing-krishna",
       "title": "Sri Krishna Mobiles Shop + POS",
       "clientName": "Sri Krishna Mobiles",
-      "category": ["web"],
+      "category": [
+        "web"
+      ],
       "description": "Online spare-parts store with admin stock control and counter POS billing (cash, UPI, card, credit) for retail and wholesale.",
       "challenge": "Shop needed online sales and notebook-free counter billing with stock tracking.",
       "solution": "Built ecommerce storefront, admin product/stock panel, and real POS billing APIs.",
       "result": "Shop live on subdomain; POS ready for daily counter use.",
-      "coverImage": "/images/portfolio/krishna-cover.png",
-      "galleryImages": [],
-      "techStack": ["Next.js", "POS", "Prisma", "Stock"],
+      "coverImage": "/images/portfolio/screenshot-shop.png",
+      "galleryImages": [
+        "/images/portfolio/krishna-cover.png"
+      ],
+      "techStack": [
+        "Next.js",
+        "POS",
+        "Prisma",
+        "Stock"
+      ],
       "liveUrl": "https://krishna.yegova.store",
       "projectPhase": "ongoing",
       "status": "published",
@@ -190,14 +253,25 @@
       "id": "p-ongoing-canaan",
       "title": "Canaan Travel Hub",
       "clientName": "Canaan Travel Hub",
-      "category": ["travel", "web"],
+      "category": [
+        "travel",
+        "web"
+      ],
       "description": "Premium travel website focused on Kodaikanal packages, multilingual pages (EN/TA/HI), enquiry booking, and cinematic brand storytelling.",
       "challenge": "Travel brand needed a premium online presence and enquiry flow.",
       "solution": "Designed and developed a Next.js travel hub with packages, enquire API, and brand motion.",
       "result": "Site prepared for canaan.yegova.store deployment.",
-      "coverImage": "/images/portfolio/canaan-cover.png",
-      "galleryImages": ["/images/portfolio/canaan-logo.jpeg"],
-      "techStack": ["Next.js", "next-intl", "Travel", "Enquiry"],
+      "coverImage": "/images/portfolio/portfolio-screenshot-agency.png",
+      "galleryImages": [
+        "/images/portfolio/canaan-cover.png",
+        "/images/portfolio/canaan-logo.jpeg"
+      ],
+      "techStack": [
+        "Next.js",
+        "next-intl",
+        "Travel",
+        "Enquiry"
+      ],
       "liveUrl": "http://canaan.yegova.store",
       "projectPhase": "ongoing",
       "status": "published",
@@ -209,14 +283,22 @@
       "id": "p-done-traders",
       "title": "Yegova Traders GST Billing System",
       "clientName": "Yegova Traders",
-      "category": ["web"],
+      "category": [
+        "web"
+      ],
       "description": "GST billing and wholesale traders system with product categories, invoices, customer balances, dashboards, and Android WebView apps for shop use.",
       "challenge": "Wholesale billing and GST invoices needed a practical shop-ready system.",
       "solution": "PHP GST billing suite with helpers, product tools, and companion mobile WebView apps.",
       "result": "Billing workflows and mobile apps delivered for daily trader use.",
       "coverImage": "/images/portfolio/traders-cover.png",
-      "galleryImages": ["/images/portfolio/traders-billing-qr.jpeg"],
-      "techStack": ["PHP", "GST Billing", "Android WebView"],
+      "galleryImages": [
+        "/images/portfolio/traders-billing-qr.jpeg"
+      ],
+      "techStack": [
+        "PHP",
+        "GST Billing",
+        "Android WebView"
+      ],
       "projectPhase": "completed",
       "status": "published",
       "order": 4,
@@ -227,7 +309,9 @@
       "id": "p-done-jebathottam-site",
       "title": "Jebathottam Ministry Website & Carmel Tools",
       "clientName": "Jebathottam Keelamudiman",
-      "category": ["web"],
+      "category": [
+        "web"
+      ],
       "description": "Ministry website for Jesus Is The Way Jebathottam with history, gallery, events content, plus Carmel attendance and member admin tools.",
       "challenge": "Church needed a public ministry site and internal attendance/member tracking.",
       "solution": "PHP website with SEO pages, gallery, and Carmel attendance/admin modules.",
@@ -237,7 +321,12 @@
         "/images/portfolio/jebathottam-gallery.jpg",
         "/images/portfolio/jebathottam-logo.jpeg"
       ],
-      "techStack": ["PHP", "SEO", "Attendance", "Admin"],
+      "techStack": [
+        "PHP",
+        "SEO",
+        "Attendance",
+        "Admin"
+      ],
       "projectPhase": "completed",
       "status": "published",
       "order": 5,
@@ -248,7 +337,9 @@
       "id": "p-done-manavarkal",
       "title": "Manavarkal Education Counselling Website",
       "clientName": "Manavarkal",
-      "category": ["web"],
+      "category": [
+        "web"
+      ],
       "description": "SEO-focused education counselling website for engineering/medical admissions guidance, lead capture API, blogs, and district-wise college discovery.",
       "challenge": "Old site needed a fast modern redesign with SEO and lead capture.",
       "solution": "Rebuilt with semantic HTML, local image assets, Express lead API, and content parity from archive.",
@@ -258,7 +349,12 @@
         "/images/portfolio/manavarkal-counselling.jpg",
         "/images/portfolio/manavarkal-college.jpg"
       ],
-      "techStack": ["HTML", "Node.js", "SEO", "Lead API"],
+      "techStack": [
+        "HTML",
+        "Node.js",
+        "SEO",
+        "Lead API"
+      ],
       "projectPhase": "completed",
       "status": "published",
       "order": 6,
@@ -348,7 +444,518 @@
       "createdAt": "2026-07-03T19:51:00.915Z"
     }
   ],
-  "blogPosts": [],
+  "blogPosts": [
+    {
+      "id": "b1",
+      "title": "Why every small business needs a simple website",
+      "slug": "why-small-business-needs-website",
+      "excerpt": "A clear website builds trust, saves phone time, and helps customers find your services faster — even before you spend on ads.",
+      "content": "Many shops still depend only on WhatsApp. That works, but customers often search Google first.\n\nA simple website helps you:\n• Show services and prices clearly\n• Collect enquiries 24/7\n• Look more professional than competitors\n• Share one link on visiting cards and Instagram\n\nYou do not need a huge site. Start with Home, Services, Work, and Contact. Then grow.\n\nIf you want help, Ebenezer Digital can build a clean business site and connect your own domain.",
+      "coverImage": "/images/portfolio/portfolio-screenshot-agency.png",
+      "category": "Websites",
+      "tags": [
+        "website",
+        "small business",
+        "tips"
+      ],
+      "author": "Ebenezer Digital",
+      "status": "published",
+      "publishedAt": "2026-08-10T10:00:00.000Z",
+      "createdAt": "2026-08-10T10:00:00.000Z",
+      "updatedAt": "2026-08-10T10:00:00.000Z"
+    },
+    {
+      "id": "b2",
+      "title": "Online shop + counter billing: one system is better",
+      "slug": "online-shop-and-pos-together",
+      "excerpt": "If you sell online and also in a physical shop, keep stock and billing in one place so numbers stay correct.",
+      "content": "Many traders use one notebook for shop bills and a separate website for online orders. That creates stock mistakes.\n\nA better way:\n• One product list\n• Online shop for customers\n• POS billing for counter sales\n• Stock reduces automatically\n\nThis is what we built for Sri Krishna Mobiles — shop website + POS together.\n\nIf your business has both online and offline sales, ask us for a similar setup.",
+      "coverImage": "/images/portfolio/krishna-cover.png",
+      "category": "Shop Systems",
+      "tags": [
+        "POS",
+        "ecommerce",
+        "stock"
+      ],
+      "author": "Ebenezer Digital",
+      "status": "published",
+      "publishedAt": "2026-08-09T10:00:00.000Z",
+      "createdAt": "2026-08-09T10:00:00.000Z",
+      "updatedAt": "2026-08-09T10:00:00.000Z"
+    },
+    {
+      "id": "b3",
+      "title": "Travel websites that get more enquiries",
+      "slug": "travel-website-enquiries",
+      "excerpt": "Package pages, clear photos, and a simple enquire form convert better than only Instagram posts.",
+      "content": "Travel businesses get many WhatsApp questions: price, dates, hotel, inclusions.\n\nA good travel website should:\n• Show packages clearly\n• Use strong destination photos\n• Offer a short enquire form\n• Work well on mobile\n\nFor Canaan Travel Hub we focused on premium look + easy enquiry.\n\nIf you run tours or travel support, a focused travel site can bring warmer leads every week.",
+      "coverImage": "/images/portfolio/canaan-cover.png",
+      "category": "Travel",
+      "tags": [
+        "travel",
+        "enquiry",
+        "packages"
+      ],
+      "author": "Ebenezer Digital",
+      "status": "published",
+      "publishedAt": "2026-08-08T10:00:00.000Z",
+      "createdAt": "2026-08-08T10:00:00.000Z",
+      "updatedAt": "2026-08-08T10:00:00.000Z"
+    },
+    {
+      "id": "b4",
+      "title": "How to choose a domain for your business",
+      "slug": "how-to-choose-business-domain",
+      "excerpt": "Use .com for your main brand. Extra domains like .info, .store, and .net can support blog, products, and client tools.",
+      "content": "Your main domain should be easy to say and remember. For most businesses, .com is best.\n\nExtra domains can help:\n• .info → blog and tips\n• .store → digital products\n• .net → client portal / tools later\n\nDo not build four different companies. Keep one brand and connect the extra domains with a clear purpose.\n\nEbenezer Digital uses ebenezerdigital.com as the main site and .info for the blog.",
+      "coverImage": "/images/portfolio/manavarkal-hero.jpg",
+      "category": "Digital Tips",
+      "tags": [
+        "domain",
+        "branding",
+        "seo"
+      ],
+      "author": "Ebenezer Digital",
+      "status": "published",
+      "publishedAt": "2026-08-07T10:00:00.000Z",
+      "createdAt": "2026-08-07T10:00:00.000Z",
+      "updatedAt": "2026-08-07T10:00:00.000Z"
+    }
+  ],
+  "digitalProducts": [
+    {
+      "id": "dp-yegova",
+      "slug": "ebenezer-saas",
+      "name": "Ebenezer SaaS — Billing Software for Global Shops",
+      "tagline": "Cloud billing, stock, and GST reports built for Indian shop owners.",
+      "description": "Ebenezer SaaS is a cloud billing app for small and medium shops worldwide. Create invoices, quotations, and credit notes, track stock and customers, and print on A4, A5, or thermal printers. No installation needed — works from any browser.",
+      "story": "Built after seeing how many small shop owners still manage billing on paper or spreadsheets. Ebenezer SaaS is being built and tested with real traders, starting free so owners can try it with zero risk while the product grows.",
+      "category": "Software",
+      "price": 0,
+      "badge": "FREE",
+      "isFree": true,
+      "isSoftware": true,
+      "externalUrl": "http://localhost:3000/register",
+      "externalCta": "Get started free",
+      "image": "/images/portfolio/krishna-cover.png",
+      "gallery": [
+        "/images/portfolio/krishna-cover.png",
+        "/images/portfolio/portfolio-screenshot-agency.png"
+      ],
+      "features": [
+        "GST-ready invoices, quotations, and credit notes",
+        "Stock and inventory tracking",
+        "Customer database with purchase history",
+        "Expense tracking",
+        "Print support for A4, A5, and thermal printers",
+        "Built on modern tech (Next.js + NestJS) for speed and reliability"
+      ],
+      "includes": [
+        "Full access to the current free plan",
+        "Invoicing, stock, customers, GST reports",
+        "Quotations, credit notes, expenses, printing",
+        "Setup guide + feature sheet (PDFs coming)"
+      ],
+      "compatibility": [
+        "Any modern browser",
+        "Desktop",
+        "Laptop",
+        "Tablet",
+        "Next.js",
+        "NestJS"
+      ],
+      "license": [
+        "Free Plan (current)",
+        "Paid Starter Plan (coming later)"
+      ],
+      "whoItIsFor": "Retail stores, traders, wholesalers, and shop owners worldwide who currently bill on paper, Excel, or basic apps and want a simple modern billing system.",
+      "downloadContentsPlan": [
+        "Cloud web app (not a ZIP)",
+        "Setup / getting-started PDF guide",
+        "Direct signup / login link",
+        "One-page feature sheet PDF",
+        "Sample GST invoice PDF"
+      ],
+      "publishedAt": "2026-08-12T00:00:00.000Z",
+      "status": "published",
+      "seoTitle": "Ebenezer SaaS – Free Cloud Billing Software for Shops",
+      "seoDescription": "Ebenezer SaaS is free cloud billing software for shops — invoices, stock, customers, quotations, credit notes, and A4/A5/thermal printing. Start free today.",
+      "createdAt": "2026-08-12T07:52:29.909Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    },
+    {
+      "id": "dp1",
+      "slug": "creator-landing-kit",
+      "name": "Creator Landing Kit",
+      "tagline": "Ready-made landing page UI kit for creators, coaches, and freelancers.",
+      "description": "A clean, modern landing page kit designed for solo creators, coaches, and freelancers who need a professional online presence fast. Includes hero sections, pricing blocks, testimonial layouts, and call-to-action sections you can adapt to any tool.",
+      "story": "Made because most creators waste days on design decisions instead of launching. This kit gives a solid, good-looking starting point so you can focus on your offer, not pixel-pushing.",
+      "category": "UI Kits",
+      "price": 599,
+      "compareAt": 899,
+      "badge": "NEW",
+      "image": "/images/portfolio/portfolio-screenshot-agency.png",
+      "gallery": [
+        "/images/portfolio/portfolio-screenshot-agency.png",
+        "/images/portfolio/manavarkal-hero.jpg",
+        "/images/journal/hero.jpg"
+      ],
+      "features": [
+        "Hero, about, offer, and pricing sections",
+        "Testimonial and social proof layouts",
+        "Call-to-action and email capture sections",
+        "Mobile-responsive layout structure",
+        "Simple, editable design (no complex components)"
+      ],
+      "includes": [
+        "Full landing page UI kit files",
+        "Layout guide",
+        "Color/typography reference sheet"
+      ],
+      "compatibility": [
+        "Figma",
+        "HTML/CSS",
+        "Webflow",
+        "Framer"
+      ],
+      "license": [
+        "Personal License",
+        "Commercial License"
+      ],
+      "whoItIsFor": "Coaches, consultants, freelancers, and creators who need a landing page but don't want to hire a designer.",
+      "downloadContentsPlan": [
+        "Figma file",
+        "Exported section previews (PNG/JPG)",
+        "Short PDF layout guide",
+        "Colors/fonts reference sheet"
+      ],
+      "publishedAt": "2026-08-11T00:00:00.000Z",
+      "status": "published",
+      "downloadFile": "/downloads/creator-landing-kit.txt",
+      "fileName": "creator-landing-kit.txt",
+      "seoTitle": "Creator Landing Kit – Landing Page UI Kit for Coaches & Freelancers",
+      "seoDescription": "Ready-made landing page UI kit with hero, pricing, and testimonial sections. Built for creators, coaches, and freelancers who want to launch fast.",
+      "createdAt": "2026-08-11T14:47:30.441Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    },
+    {
+      "id": "dp-pos",
+      "slug": "shop-pos-starter-pack",
+      "name": "Shop + POS Starter Pack",
+      "tagline": "A ready-to-use blueprint for setting up a shop billing/POS system.",
+      "description": "A documentation and UI blueprint pack for anyone planning, designing, or building a shop billing/POS setup. Covers screen layouts, invoice formats, stock flow, and staff process. This is a planning/design pack, not working software.",
+      "story": "Made for shop owners and small developers who need a clear structure before building or buying a POS system, instead of guessing what screens and flows they need.",
+      "category": "Business Tools",
+      "price": 699,
+      "compareAt": 999,
+      "image": "/images/portfolio/krishna-cover.png",
+      "gallery": [
+        "/images/portfolio/krishna-cover.png",
+        "/images/portfolio/portfolio-screenshot-agency.png"
+      ],
+      "features": [
+        "Screen-by-screen UI blueprint (billing, stock, customer, reports)",
+        "Sample invoice and receipt formats (A4/thermal)",
+        "Suggested stock-in/stock-out process flow",
+        "Staff role and permission structure guide",
+        "Checklist for choosing or building a POS system"
+      ],
+      "includes": [
+        "UI blueprint document",
+        "Sample invoice/receipt formats",
+        "Process flow PDF"
+      ],
+      "compatibility": [
+        "Any POS/billing project",
+        "No-code tools",
+        "Custom software reference"
+      ],
+      "license": [
+        "Personal License",
+        "Commercial License"
+      ],
+      "whoItIsFor": "Shop owners planning to digitize billing, and developers/students building a POS project.",
+      "downloadContentsPlan": [
+        "UI blueprint PDF",
+        "Invoice/receipt format samples",
+        "Process flow diagram",
+        "POS-selection checklist PDF"
+      ],
+      "publishedAt": "2026-08-10T00:00:00.000Z",
+      "status": "published",
+      "downloadFile": "/downloads/shop-pos-starter-pack.txt",
+      "fileName": "shop-pos-starter-pack.txt",
+      "seoTitle": "Shop + POS Starter Pack – Billing System Blueprint for Small Shops",
+      "seoDescription": "A ready-made UI and process blueprint for shop billing and POS setup. Screen layouts, invoice formats, and stock flow — perfect for planning your system.",
+      "createdAt": "2026-08-12T07:06:00.102Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    },
+    {
+      "id": "dp3",
+      "slug": "travel-enquiry-pack",
+      "name": "Travel Enquiry Pack",
+      "tagline": "Ready enquiry forms and follow-up templates for travel agents.",
+      "description": "A set of enquiry forms, WhatsApp follow-up message templates, and quotation formats built for travel agents and tour operators in India. Helps you capture leads properly and follow up without losing enquiries.",
+      "story": "Many small travel agents lose customers because enquiries come in through calls or WhatsApp and get forgotten. This pack gives a simple system to capture and follow up on every lead.",
+      "category": "Templates",
+      "price": 499,
+      "compareAt": 699,
+      "image": "/images/portfolio/canaan-cover.png",
+      "gallery": [
+        "/images/portfolio/canaan-cover.png",
+        "/images/journal/hero.jpg"
+      ],
+      "features": [
+        "Travel enquiry form template (print + digital)",
+        "WhatsApp follow-up message templates",
+        "Tour quotation format (editable)",
+        "Lead tracking sheet template",
+        "Customer information checklist"
+      ],
+      "includes": [
+        "Enquiry form templates",
+        "WhatsApp scripts",
+        "Quotation format",
+        "Lead tracker sheet"
+      ],
+      "compatibility": [
+        "Google Forms",
+        "Google Sheets",
+        "Excel",
+        "WhatsApp Business",
+        "PDF"
+      ],
+      "license": [
+        "Personal License",
+        "Commercial License"
+      ],
+      "whoItIsFor": "Travel agents, tour operators, and small travel agencies handling enquiries manually.",
+      "downloadContentsPlan": [
+        "Enquiry form (PDF + editable doc)",
+        "WhatsApp message templates",
+        "Quotation template",
+        "Lead tracker sheet"
+      ],
+      "publishedAt": "2026-08-09T00:00:00.000Z",
+      "status": "published",
+      "downloadFile": "/downloads/travel-enquiry-pack.txt",
+      "fileName": "travel-enquiry-pack.txt",
+      "seoTitle": "Travel Enquiry Pack – Forms & Follow-Up Templates for Travel Agents",
+      "seoDescription": "Ready-made enquiry forms, WhatsApp follow-up templates, and quotation formats for travel agents. Stop losing leads — start tracking every enquiry.",
+      "createdAt": "2026-08-11T14:47:30.441Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    },
+    {
+      "id": "dp4",
+      "slug": "digital-business-playbook",
+      "name": "Digital Business Playbook",
+      "tagline": "A simple guide to taking your small business online in India.",
+      "description": "A practical ebook for small business owners who want to start selling or promoting online but don't know where to begin. Covers choosing platforms, pricing, WhatsApp Business setup, basic marketing, and common mistakes to avoid.",
+      "story": "Written for shop owners and small business owners who keep hearing 'go digital' but never get simple, honest, step-by-step guidance without jargon or expensive courses.",
+      "category": "Ebooks",
+      "price": 299,
+      "compareAt": 499,
+      "image": "/images/portfolio/manavarkal-hero.jpg",
+      "gallery": [
+        "/images/portfolio/manavarkal-hero.jpg"
+      ],
+      "features": [
+        "Step-by-step plan to start selling online",
+        "WhatsApp Business setup guide",
+        "Simple pricing and offer-building tips",
+        "Basic social media posting plan",
+        "Common mistakes small businesses make online"
+      ],
+      "includes": [
+        "Full ebook (PDF)",
+        "One-page action checklist"
+      ],
+      "compatibility": [
+        "PDF on phone",
+        "Tablet",
+        "Computer",
+        "Print"
+      ],
+      "license": [
+        "Personal License",
+        "Team/Business License"
+      ],
+      "whoItIsFor": "Small shop owners, service providers, and first-time entrepreneurs starting their online journey.",
+      "downloadContentsPlan": [
+        "Ebook PDF",
+        "Printable one-page action checklist PDF"
+      ],
+      "publishedAt": "2026-08-08T00:00:00.000Z",
+      "status": "published",
+      "downloadFile": "/downloads/digital-business-playbook.txt",
+      "fileName": "digital-business-playbook.txt",
+      "seoTitle": "Digital Business Playbook – Ebook for Small Businesses Going Online",
+      "seoDescription": "A simple, practical ebook for Indian small business owners on going digital — online selling, WhatsApp Business, pricing, and basic marketing.",
+      "createdAt": "2026-08-11T14:47:30.441Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    },
+    {
+      "id": "dp5",
+      "slug": "brand-kit-essentials",
+      "name": "Brand Kit Essentials",
+      "tagline": "A simple starter brand kit — logo placement, colors, and social templates.",
+      "description": "A starter brand kit for small businesses and creators who need a consistent look without hiring a designer. Includes logo usage guide, color palette suggestions, and ready social media post templates.",
+      "story": "Many small businesses use random fonts and colors on every post, which looks unprofessional. This kit gives a simple, consistent starting point anyone can use.",
+      "category": "Graphics",
+      "price": 399,
+      "compareAt": 599,
+      "image": "/images/journal/hero.jpg",
+      "gallery": [
+        "/images/journal/hero.jpg",
+        "/images/portfolio/portfolio-screenshot-agency.png"
+      ],
+      "features": [
+        "Color palette guide with suggested combinations",
+        "Font pairing suggestions",
+        "Logo usage/placement guide",
+        "Editable social media post templates",
+        "Simple brand consistency checklist"
+      ],
+      "includes": [
+        "Brand guide PDF",
+        "Social post templates",
+        "Color/font reference sheet"
+      ],
+      "compatibility": [
+        "Canva",
+        "Figma",
+        "Basic design tools"
+      ],
+      "license": [
+        "Personal License",
+        "Commercial License"
+      ],
+      "whoItIsFor": "Small business owners, shop owners, and creators without a dedicated designer.",
+      "downloadContentsPlan": [
+        "Brand guide PDF",
+        "Editable social post templates",
+        "Color/font reference sheet"
+      ],
+      "publishedAt": "2026-08-07T00:00:00.000Z",
+      "status": "published",
+      "downloadFile": "/downloads/brand-kit-essentials.txt",
+      "fileName": "brand-kit-essentials.txt",
+      "seoTitle": "Brand Kit Essentials – Simple Starter Brand Kit for Small Businesses",
+      "seoDescription": "A starter brand kit with colors, fonts, logo guide, and social templates. Look consistent and professional without hiring a designer.",
+      "createdAt": "2026-08-11T14:47:30.441Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    },
+    {
+      "id": "dp6",
+      "slug": "free-enquiry-form-kit",
+      "name": "Free Enquiry Form Kit",
+      "tagline": "A free, ready-to-use enquiry form for any small business.",
+      "description": "A simple, free enquiry form template any small business can use to collect customer details and requirements — on paper, WhatsApp, or Google Forms. A good starting point before buying anything else in the store.",
+      "story": "Made as a genuinely useful free tool, not a watered-down teaser. Every business needs a basic enquiry form; this gives everyone a solid, free starting point.",
+      "category": "Freebies",
+      "price": 0,
+      "badge": "FREE",
+      "isFree": true,
+      "image": "/images/portfolio/portfolio-screenshot-agency.png",
+      "gallery": [
+        "/images/portfolio/portfolio-screenshot-agency.png"
+      ],
+      "features": [
+        "Printable enquiry form (PDF)",
+        "Editable digital version",
+        "Fields for name, contact, requirement, and follow-up date",
+        "Works for any business type"
+      ],
+      "includes": [
+        "Printable PDF form",
+        "Editable digital version"
+      ],
+      "compatibility": [
+        "PDF",
+        "Google Forms",
+        "Google Docs",
+        "Excel",
+        "Word"
+      ],
+      "license": [
+        "Personal License (free use)",
+        "Commercial License (optional)"
+      ],
+      "whoItIsFor": "Any small business or freelancer who needs a basic way to capture customer enquiries.",
+      "downloadContentsPlan": [
+        "Enquiry form PDF (printable)",
+        "Editable version (Word/Docs)"
+      ],
+      "publishedAt": "2026-08-01T00:00:00.000Z",
+      "status": "published",
+      "downloadFile": "/downloads/free-enquiry-form-kit.txt",
+      "fileName": "free-enquiry-form-kit.txt",
+      "seoTitle": "Free Enquiry Form Kit – Simple Customer Enquiry Template",
+      "seoDescription": "Free, ready-to-use enquiry form template for small businesses. Printable and editable — collect customer details easily, no cost.",
+      "createdAt": "2026-08-11T14:47:30.441Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    },
+    {
+      "id": "dp8",
+      "slug": "creator-bundle",
+      "name": "Creator Bundle",
+      "tagline": "Landing page kit + brand kit + business ebook — everything to launch, in one pack.",
+      "description": "A bundle combining the Creator Landing Kit, Brand Kit Essentials, and Digital Business Playbook at a lower combined price. Built for creators and small business owners who want a landing page, a consistent brand look, and a simple digital growth plan — together.",
+      "story": "Created for buyers who want more than one product but don't want to pay full price three times. Bundling rewards people who want to get set up properly in one go.",
+      "category": "Bundles",
+      "price": 899,
+      "compareAt": 1297,
+      "badge": "BUNDLE",
+      "isBundle": true,
+      "bundleItems": [
+        "dp-landing",
+        "dp-brand",
+        "dp-playbook"
+      ],
+      "image": "/images/portfolio/canaan-cover.png",
+      "gallery": [
+        "/images/portfolio/portfolio-screenshot-agency.png",
+        "/images/journal/hero.jpg",
+        "/images/portfolio/manavarkal-hero.jpg"
+      ],
+      "features": [
+        "Full Creator Landing Kit (UI kit)",
+        "Full Brand Kit Essentials (colors, fonts, social templates)",
+        "Full Digital Business Playbook (ebook)",
+        "Saves compared to buying separately",
+        "One download, everything needed to launch"
+      ],
+      "includes": [
+        "Creator Landing Kit files",
+        "Brand Kit Essentials files",
+        "Digital Business Playbook files"
+      ],
+      "compatibility": [
+        "Figma",
+        "HTML",
+        "Canva",
+        "PDF"
+      ],
+      "license": [
+        "Personal License",
+        "Commercial License"
+      ],
+      "whoItIsFor": "Creators, coaches, and small business owners who want to launch their online presence properly, in one purchase.",
+      "downloadContentsPlan": [
+        "landing-kit/ folder",
+        "brand-kit/ folder",
+        "business-playbook/ folder"
+      ],
+      "publishedAt": "2026-08-12T00:00:00.000Z",
+      "status": "published",
+      "downloadFile": "/downloads/creator-bundle.txt",
+      "fileName": "creator-bundle.txt",
+      "seoTitle": "Creator Bundle – Landing Page Kit + Brand Kit + Business Ebook",
+      "seoDescription": "Get the Creator Landing Kit, Brand Kit Essentials, and Digital Business Playbook together at a lower price. Everything you need to launch your brand online.",
+      "createdAt": "2026-08-11T14:47:30.441Z",
+      "updatedAt": "2026-08-12T07:52:29.978Z"
+    }
+  ],
   "team": [
     {
       "id": "tm1",

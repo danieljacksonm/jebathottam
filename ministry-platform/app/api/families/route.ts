@@ -5,7 +5,7 @@ import { requireRole } from '@/lib/auth';
 // GET all families with members
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
 
     const families = await query<any[]>(
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 // POST create family
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { name } = await request.json();

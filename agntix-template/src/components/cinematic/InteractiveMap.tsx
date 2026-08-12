@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { mapPoints } from "@/data/cinematic";
+import { useLocale, useTranslations } from "next-intl";
+import { localizeMapPoints } from "@/data/cinematic";
 import { useReveal } from "./motion";
 
 export function InteractiveMap() {
-  const [active, setActive] = useState(mapPoints[0].id);
+  const locale = useLocale();
+  const t = useTranslations("homeCinematic");
+  const points = localizeMapPoints(locale);
+  const [active, setActive] = useState(points[0].id);
   const ref = useReveal([]);
-  const point = mapPoints.find((p) => p.id === active) ?? mapPoints[0];
+  const point = points.find((p) => p.id === active) ?? points[0];
 
   return (
     <section
@@ -17,10 +21,10 @@ export function InteractiveMap() {
       <div className="mx-auto max-w-7xl">
         <div data-reveal className="max-w-2xl">
           <p className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
-            Interactive map
+            {t("mapEyebrow")}
           </p>
           <h2 className="mt-4 font-display text-5xl text-white md:text-6xl">
-            Trace the hills.
+            {t("mapTitle")}
           </h2>
         </div>
 
@@ -44,7 +48,7 @@ export function InteractiveMap() {
             />
           </svg>
 
-          {mapPoints.map((p) => (
+          {points.map((p) => (
             <button
               key={p.id}
               type="button"
@@ -69,12 +73,10 @@ export function InteractiveMap() {
 
           <div className="absolute bottom-6 left-6 right-6 rounded-2xl border border-[var(--line)] bg-navy/70 px-5 py-4 backdrop-blur-md md:left-auto md:w-80">
             <p className="text-[0.65rem] uppercase tracking-[0.2em] text-gold">
-              Selected
+              {t("mapSelected")}
             </p>
             <p className="mt-2 font-display text-2xl text-white">{point.name}</p>
-            <p className="mt-1 text-sm text-mist">
-              Included across curated Canaan packages.
-            </p>
+            <p className="mt-1 text-sm text-mist">{t("mapNote")}</p>
           </div>
         </div>
       </div>

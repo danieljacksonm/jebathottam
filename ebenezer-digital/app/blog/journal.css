@@ -1,0 +1,119 @@
+/* Ebenezer Journal — one brand color: Emerald #10B981 */
+.journal-root {
+  --j-ink: #070b10;
+  --j-paper: #f3efe6;
+  --j-muted: #9aa3ad;
+  --j-line: rgba(243, 239, 230, 0.12);
+  --j-brand: #10b981;
+  --j-brand-soft: rgba(16, 185, 129, 0.16);
+  color: var(--j-paper);
+  background: var(--j-ink);
+  font-feature-settings: "ss01" on, "kern" on;
+}
+
+.journal-root ::selection {
+  background: var(--j-brand);
+  color: #04110c;
+}
+
+.journal-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.journal-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--j-brand);
+  z-index: 80;
+  transform-origin: left center;
+}
+
+.journal-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  transition: background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease;
+}
+
+.journal-nav.is-solid {
+  background: rgba(7, 11, 16, 0.72);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--j-line);
+}
+
+.journal-marquee {
+  overflow: hidden;
+  border-block: 1px solid var(--j-line);
+  background: #0a1018;
+}
+
+.journal-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 2.5rem;
+  animation: journal-marquee 42s linear infinite;
+  padding: 0.85rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  font-size: 0.72rem;
+  color: var(--j-muted);
+}
+
+.journal-marquee-track span {
+  color: var(--j-brand);
+}
+
+@keyframes journal-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.journal-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--j-brand);
+  border-radius: 999px;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease, background 0.25s ease;
+  display: none;
+}
+
+.journal-cursor.has-label {
+  width: 72px;
+  height: 72px;
+  background: var(--j-brand);
+  mix-blend-mode: normal;
+  display: grid;
+  place-items: center;
+  color: #04110c;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .journal-cursor { display: block; }
+  .journal-root, .journal-root a, .journal-root button { cursor: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-marquee-track { animation: none; }
+  .journal-cursor { display: none !important; }
+  .journal-root, .journal-root a, .journal-root button { cursor: auto; }
+}

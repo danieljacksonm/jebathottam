@@ -6,17 +6,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Logo } from '@/components/ui/logo';
 
 const navLinks = [
-  { href: '/#about', label: 'About' },
-  { href: '/#mission', label: 'Mission' },
-  { href: '/#team', label: 'Team' },
-  { href: '/#blog', label: 'Blog', highlight: true },
-  { href: '/#testimony', label: 'Testimonies' },
-  { href: '/#events', label: 'Events' },
+  { href: '/about', label: 'About' },
+  { href: '/services', label: 'Services' },
   { href: '/gallery', label: 'Gallery' },
-  { href: '/#media', label: 'Media' },
-  { href: '/social-feed', label: 'Social Feed' },
-  { href: '/notes', label: 'Notes' },
-  { href: '/audio-conference', label: 'Audio Conference' },
+  { href: '/team', label: 'Team' },
+  { href: '/videos', label: 'Videos' },
+  { href: '/blog', label: 'Blog', highlight: true },
+  { href: '/attendance', label: 'Attendance' },
+  { href: '/carmel-attendance', label: 'Carmel' },
   { href: '/contact', label: 'Contact' },
 ];
 

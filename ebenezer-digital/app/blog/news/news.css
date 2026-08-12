@@ -1,0 +1,276 @@
+/* Ebenezer News — paper editorial. One accent: ink-red for live. */
+.news-root {
+  --n-paper: #f4f0e8;
+  --n-ink: #0c0c0c;
+  --n-muted: #5a574f;
+  --n-line: rgba(12, 12, 12, 0.12);
+  --n-line-strong: rgba(12, 12, 12, 0.28);
+  --n-live: #b42318;
+  --n-live-soft: rgba(180, 35, 24, 0.12);
+  --n-glass: rgba(244, 240, 232, 0.72);
+  --n-serif: var(--font-serif), "Source Serif 4", "Times New Roman", serif;
+  --n-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
+  color: var(--n-ink);
+  background: var(--n-paper);
+  font-family: var(--n-sans);
+  font-feature-settings: "ss01" on, "kern" on;
+}
+
+.news-root ::selection {
+  background: var(--n-ink);
+  color: var(--n-paper);
+}
+
+.news-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.news-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--n-ink);
+  z-index: 90;
+  transform-origin: left center;
+}
+
+.news-ticker {
+  position: relative;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  border-bottom: 1px solid var(--n-line);
+  background: var(--n-ink);
+  color: var(--n-paper);
+  overflow: hidden;
+}
+
+.news-ticker-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+  padding: 0 0.9rem;
+  height: 100%;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--n-live);
+}
+
+.news-ticker-track {
+  display: flex;
+  width: max-content;
+  gap: 2.4rem;
+  animation: news-ticker 48s linear infinite;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  padding-left: 1rem;
+}
+
+.news-ticker-track a:hover {
+  color: #fff;
+}
+
+@keyframes news-ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.news-nav {
+  position: sticky;
+  top: 0;
+  z-index: 70;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+.news-nav.is-solid {
+  background: var(--n-glass);
+  backdrop-filter: blur(18px);
+  border-bottom-color: var(--n-line);
+}
+
+.news-nav-rail {
+  display: flex;
+  gap: 1.35rem;
+  overflow-x: auto;
+  border-top: 1px solid var(--n-line);
+  padding: 0.55rem 0 0.7rem;
+  scrollbar-width: none;
+}
+
+.news-nav-rail::-webkit-scrollbar { display: none; }
+
+.news-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--n-ink);
+  border-radius: 999px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: width 0.22s ease, height 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+  display: none;
+}
+
+.news-cursor.has-label {
+  width: 68px;
+  height: 68px;
+  background: var(--n-ink);
+  color: var(--n-paper);
+  display: grid;
+  place-items: center;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .news-cursor { display: block; }
+  .news-root, .news-root a, .news-root button { cursor: none; }
+}
+
+.news-search {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: rgba(12, 12, 12, 0.78);
+  backdrop-filter: blur(18px);
+}
+
+.news-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.news-display {
+  font-family: var(--n-serif);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+
+.news-rule {
+  height: 1px;
+  background: var(--n-line);
+}
+
+.news-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: var(--n-live);
+  box-shadow: 0 0 0 0 var(--n-live);
+  animation: news-pulse 1.8s ease-out infinite;
+}
+
+@keyframes news-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(180, 35, 24, 0.55); }
+  70% { box-shadow: 0 0 0 8px rgba(180, 35, 24, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(180, 35, 24, 0); }
+}
+
+.news-map-dot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 99px;
+  background: var(--n-paper);
+  box-shadow: 0 0 0 6px rgba(244, 240, 232, 0.18);
+  transition: transform 0.25s ease;
+}
+
+.news-map-dot.is-hot {
+  background: var(--n-live);
+  box-shadow: 0 0 0 8px rgba(180, 35, 24, 0.22);
+}
+
+.news-map-dot:hover {
+  transform: scale(1.35);
+}
+
+.news-wave {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 28px;
+}
+
+.news-wave span {
+  width: 3px;
+  background: var(--n-ink);
+  animation: news-wave 1s ease-in-out infinite;
+}
+
+.news-wave.is-playing span:nth-child(1) { animation-delay: 0s; height: 40%; }
+.news-wave.is-playing span:nth-child(2) { animation-delay: 0.12s; height: 80%; }
+.news-wave.is-playing span:nth-child(3) { animation-delay: 0.24s; height: 55%; }
+.news-wave.is-playing span:nth-child(4) { animation-delay: 0.08s; height: 95%; }
+.news-wave.is-playing span:nth-child(5) { animation-delay: 0.2s; height: 35%; }
+.news-wave.is-playing span:nth-child(6) { animation-delay: 0.16s; height: 70%; }
+.news-wave.is-playing span:nth-child(7) { animation-delay: 0.28s; height: 50%; }
+
+@keyframes news-wave {
+  0%, 100% { transform: scaleY(0.45); }
+  50% { transform: scaleY(1); }
+}
+
+.news-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 65;
+  display: none;
+  border-top: 1px solid var(--n-line);
+  background: var(--n-glass);
+  backdrop-filter: blur(16px);
+}
+
+@media (max-width: 767px) {
+  .news-bottom {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.news-stat-bar {
+  height: 6px;
+  background: var(--n-line);
+  overflow: hidden;
+}
+
+.news-stat-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--n-ink);
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-ticker-track,
+  .news-pulse,
+  .news-wave span { animation: none; }
+  .news-cursor { display: none !important; }
+  .news-root, .news-root a, .news-root button { cursor: auto; }
+}

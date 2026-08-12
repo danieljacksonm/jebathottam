@@ -5,9 +5,11 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import {
   Cormorant_Garamond,
   Great_Vibes,
+  Hind,
+  Hind_Madurai,
   Manrope,
-  Noto_Sans_Devanagari,
-  Noto_Sans_Tamil,
+  Tiro_Devanagari_Hindi,
+  Tiro_Tamil,
 } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -37,17 +39,31 @@ const greatVibes = Great_Vibes({
   display: "swap",
 });
 
-const notoTamil = Noto_Sans_Tamil({
-  subsets: ["tamil"],
+const tamilSans = Hind_Madurai({
+  subsets: ["tamil", "latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-tamil",
   display: "swap",
 });
 
-const notoHindi = Noto_Sans_Devanagari({
-  subsets: ["devanagari"],
+const tamilDisplay = Tiro_Tamil({
+  subsets: ["tamil", "latin"],
+  weight: "400",
+  variable: "--font-tamil-display",
+  display: "swap",
+});
+
+const hindiSans = Hind({
+  subsets: ["devanagari", "latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-hindi",
+  display: "swap",
+});
+
+const hindiDisplay = Tiro_Devanagari_Hindi({
+  subsets: ["devanagari", "latin"],
+  weight: "400",
+  variable: "--font-hindi-display",
   display: "swap",
 });
 
@@ -92,7 +108,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${manrope.variable} ${cormorant.variable} ${greatVibes.variable} ${notoTamil.variable} ${notoHindi.variable} h-full`}
+      className={`${manrope.variable} ${cormorant.variable} ${greatVibes.variable} ${tamilSans.variable} ${tamilDisplay.variable} ${hindiSans.variable} ${hindiDisplay.variable} h-full`}
     >
       <body
         className={`min-h-full flex flex-col antialiased ${

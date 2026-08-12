@@ -3,9 +3,11 @@
 import Image from "next/image";
 import { galleryImages } from "@/data/cinematic";
 import { useReveal } from "./motion";
+import { useTranslations } from "next-intl";
 
 export function GalleryMasonry() {
   const ref = useReveal([]);
+  const t = useTranslations("homeCinematic");
 
   return (
     <section
@@ -15,10 +17,10 @@ export function GalleryMasonry() {
       <div className="mx-auto max-w-7xl">
         <div data-reveal className="max-w-2xl">
           <p className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
-            Gallery
+            {t("galleryEyebrow")}
           </p>
           <h2 className="mt-4 font-display text-5xl text-white md:text-6xl">
-            Frames of Kodai.
+            {t("galleryTitle")}
           </h2>
         </div>
 

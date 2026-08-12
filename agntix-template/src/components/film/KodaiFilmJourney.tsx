@@ -4,18 +4,23 @@ import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { filmScenes } from "@/data/film";
 import { AtmosphereLayer } from "./AtmosphereLayer";
 import { safeRevert } from "@/lib/gsap-safe";
+import { useLocale, useTranslations } from "next-intl";
+import { getLocalizedFilmScenes } from "@/data/film";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
  * Sticky CSS for linger (no GSAP pin) — avoids removeChild on route change.
  * Light scrub only on backgrounds/copy.
+ * Same page for all locales — copy comes from content DB.
  */
 export function KodaiFilmJourney() {
   const root = useRef<HTMLElement>(null);
+  const locale = useLocale();
+  const t = useTranslations("film");
+  const scenes = getLocalizedFilmScenes(locale);
 
   useLayoutEffect(() => {
     const el = root.current;
@@ -95,7 +100,7 @@ export function KodaiFilmJourney() {
 
   return (
     <section ref={root} className="relative bg-navy">
-      {filmScenes.map((scene, index) => {
+      {scenes.map((scene, index) => {
         const minimal = scene.id === "berijam";
         return (
           <article key={scene.id} data-scene className="relative h-[145vh]">
@@ -168,13 +173,13 @@ export function KodaiFilmJourney() {
                     className="glass-panel max-w-sm rounded-3xl p-6 opacity-0 md:mb-2"
                   >
                     <p className="text-[0.65rem] uppercase tracking-[0.22em] text-gold">
-                      In the film of your day
+                      {t("frameEyebrow")}
                     </p>
                     <p className="mt-3 font-display text-2xl text-white">
                       {scene.place}
                     </p>
                     <p className="mt-2 text-sm leading-relaxed text-soft-gray">
-                      Stay with this frame. Let the air settle before you move on.
+                      {t("frameBody")}
                     </p>
                   </div>
                 )}

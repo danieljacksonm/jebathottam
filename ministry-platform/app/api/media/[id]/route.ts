@@ -38,7 +38,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { title, description, type, image_url, video_id, thumbnail_url, message } = await request.json();
@@ -70,7 +70,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     await query('DELETE FROM media WHERE id = ?', [id]);

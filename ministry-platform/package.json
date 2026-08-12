@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "eslint",
     "deploy": "npm run build",
-    "full-deploy": "npm ci && npm run build"
+    "full-deploy": "npm ci && npm run build",
+    "migrate:php": "node scripts/migrate-from-php.js"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -22,10 +23,12 @@
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "framer-motion": "^12.31.0",
+    "jose": "^6.2.8",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.564.0",
     "mysql2": "^3.16.2",
     "next": "16.1.6",
+    "nodemailer": "^9.0.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "sharp": "^0.34.5",
@@ -37,6 +40,7 @@
     "@types/cors": "^2.8.19",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

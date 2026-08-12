@@ -4,13 +4,17 @@ import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { placeRibbon } from "@/data/film";
+import { getLocalizedPlaceRibbon } from "@/data/film";
 import { safeRevert } from "@/lib/gsap-safe";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function GoldenFinale() {
   const root = useRef<HTMLElement>(null);
+  const locale = useLocale();
+  const t = useTranslations("film");
+  const ribbon = getLocalizedPlaceRibbon(locale);
 
   useLayoutEffect(() => {
     const el = root.current;
@@ -70,25 +74,25 @@ export function GoldenFinale() {
           data-finale-copy
           className="text-[0.7rem] uppercase tracking-[0.34em] text-gold-bright"
         >
-          The day returns to gold
+          {t("finaleEyebrow")}
         </p>
         <h2
           data-finale-copy
           className="mt-6 font-display text-5xl text-white md:text-7xl"
         >
-          You have walked through the mist.
+          {t("finaleTitle")}
         </h2>
         <p
           data-finale-copy
           className="mt-6 max-w-xl text-lg text-soft-gray md:text-xl"
         >
-          Now, if your heart is still on the ridge — Canaan will take you there.
+          {t("finaleBody")}
         </p>
       </div>
 
       <div className="relative z-10 overflow-hidden border-y border-[var(--line)] bg-navy/70 py-4 backdrop-blur-md">
         <div className="flex w-max gap-10 whitespace-nowrap px-4 cloud-drift" style={{ animationDuration: "40s" }}>
-          {[...placeRibbon, ...placeRibbon].map((place, i) => (
+          {[...ribbon, ...ribbon].map((place, i) => (
             <span
               key={`${place}-${i}`}
               className="text-[0.72rem] uppercase tracking-[0.22em] text-gold/80"

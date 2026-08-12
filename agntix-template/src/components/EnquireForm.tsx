@@ -3,7 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { packages, packageCopy, type PackageId } from "@/data/packages";
+import { getLocalizedPackages } from "@/data/packages";
 import type { Locale } from "@/i18n/routing";
 
 const serviceOptions = [
@@ -29,9 +29,9 @@ export function EnquireForm() {
 
   const packageOptions = useMemo(
     () => [
-      ...packages.map((pkg) => ({
+      ...getLocalizedPackages(locale).map((pkg) => ({
         id: pkg.id,
-        label: packageCopy[pkg.id as PackageId].title[locale],
+        label: pkg.title,
       })),
       ...serviceOptions.map((s) => ({
         id: s.id,

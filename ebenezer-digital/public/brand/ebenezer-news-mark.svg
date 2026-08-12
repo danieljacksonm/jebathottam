@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Ebenezer News E>">
+  <rect width="64" height="64" rx="14" fill="#070B10"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" stroke="#10B981" stroke-opacity="0.4"/>
+  <path d="M18 16h24M18 32h18M18 48h24" stroke="#10B981" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M44 24l10 8-10 8" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

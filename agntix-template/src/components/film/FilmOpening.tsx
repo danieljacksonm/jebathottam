@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AtmosphereLayer } from "./AtmosphereLayer";
 import { safeRevert } from "@/lib/gsap-safe";
+import { useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,6 +29,11 @@ function LetterLine({ text }: { text: string }) {
 
 export function FilmOpening() {
   const root = useRef<HTMLElement>(null);
+  const t = useTranslations("film");
+  const line1 = t("openLine1");
+  const line2 = t("openLine2");
+  const hint = t("openHint");
+  const brandSub = t("brandSub");
 
   useLayoutEffect(() => {
     const el = root.current;
@@ -102,7 +108,7 @@ export function FilmOpening() {
       window.cancelAnimationFrame(frame);
       safeRevert(ctx);
     };
-  }, []);
+  }, [line1]);
 
   return (
     <section ref={root} className="relative min-h-[100svh] overflow-hidden">
@@ -151,24 +157,24 @@ export function FilmOpening() {
             Canaan
           </p>
           <p className="mt-1 text-[0.62rem] uppercase tracking-[0.36em] text-white/70">
-            Travel Hub
+            {brandSub}
           </p>
         </div>
 
         <h1 className="font-display text-4xl leading-[1.08] text-white md:text-6xl lg:text-7xl">
-          <LetterLine text="Escape Into The Mist." />
+          <LetterLine text={line1} />
         </h1>
         <p
           data-second-line
           className="mt-6 font-display text-2xl text-gold-bright opacity-0 md:text-4xl"
         >
-          Kodaikanal Awaits.
+          {line2}
         </p>
         <p
           data-open-hint
           className="mt-14 text-[0.65rem] uppercase tracking-[0.35em] text-white/55 opacity-0"
         >
-          Begin the day
+          {hint}
         </p>
         <span
           data-open-hint

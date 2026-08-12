@@ -5,7 +5,7 @@ import { requireRole } from '@/lib/auth';
 // GET all prayer points (with optional filters)
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { searchParams } = new URL(request.url);
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
 // POST create prayer point
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
 
     const { follower_id, text, date, notes } = await request.json();

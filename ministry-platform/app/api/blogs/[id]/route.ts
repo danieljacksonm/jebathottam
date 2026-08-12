@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { query } from '@/lib/db';
 import { requireRole, getUserFromRequest } from '@/lib/auth';
+import { ensureUniqueSlug } from '@/lib/slug';
 
-// GET single blog
+// GET single blog (by numeric id — admin / legacy)
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -43,6 +44,14 @@ export async function GET(
   }
 }
 
+async function slugTakenByOther(slug: string, excludeId: string): Promise<boolean> {
+  const rows = await query<any[]>(
+    'SELECT id FROM blogs WHERE slug = ? AND id != ? LIMIT 1',
+    [slug, excludeId]
+  );
+  return rows.length > 0;
+}
+
 // PUT update blog
 export async function PUT(
   request: NextRequest,
@@ -53,14 +62,77 @@ export async function PUT(
     const authResult = await requireRole(request, ['super_admin']);
     if (authResult instanceof NextResponse) return authResult;
 
-    const { title, content, excerpt, author, category, featured, published } = await request.json();
+    const body = await request.json();
+    const {
+      title,
+      content,
+      excerpt,
+      author,
+      category,
+      featured,
+      published,
+      slug: slugInput,
+      title_ta,
+      excerpt_ta,
+      content_ta,
+      meta_title,
+      meta_desc,
+      og_image,
+      featured_image,
+      tags,
+    } = body;
+
+    if (!title || !content) {
+      return NextResponse.json(
+        { error: 'Title and content are required' },
+        { status: 400 }
+      );
+    }
+
+    const existing = await query<any[]>('SELECT id, slug FROM blogs WHERE id = ? LIMIT 1', [id]);
+    if (existing.length === 0) {
+      return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
+    }
+
+    let slug = existing[0].slug as string;
+    if (slugInput && String(slugInput).trim()) {
+      slug = await ensureUniqueSlug(
+        (s) => slugTakenByOther(s, id),
+        title,
+        slugInput
+      );
+    } else if (!slug) {
+      slug = await ensureUniqueSlug((s) => slugTakenByOther(s, id), title);
+    }
 
     await query(
       `UPDATE blogs 
-       SET title = ?, content = ?, excerpt = ?, author = ?, category = ?, 
-           featured = ?, published = ?, published_at = CASE WHEN ? = 1 AND published_at IS NULL THEN NOW() ELSE published_at END
+       SET slug = ?, title = ?, title_ta = ?, content = ?, content_ta = ?,
+           excerpt = ?, excerpt_ta = ?, meta_title = ?, meta_desc = ?,
+           og_image = ?, featured_image = ?, tags = ?,
+           author = ?, category = ?, featured = ?, published = ?,
+           published_at = CASE WHEN ? = 1 AND published_at IS NULL THEN NOW() ELSE published_at END
        WHERE id = ?`,
-      [title, content, excerpt || null, author || null, category || null, featured ? 1 : 0, published ? 1 : 0, published ? 1 : 0, id]
+      [
+        slug,
+        title,
+        title_ta ?? null,
+        content,
+        content_ta ?? null,
+        excerpt || null,
+        excerpt_ta ?? null,
+        meta_title ?? null,
+        meta_desc ?? null,
+        og_image ?? null,
+        featured_image ?? null,
+        tags ?? null,
+        author || null,
+        category || null,
+        featured ? 1 : 0,
+        published ? 1 : 0,
+        published ? 1 : 0,
+        id,
+      ]
     );
 
     const blogs = await query<any[]>(

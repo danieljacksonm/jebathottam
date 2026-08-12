@@ -64,12 +64,17 @@ export default function GalleryPage() {
         </FadeInUp>
 
         <FadeInUp delay={0.1}>
-          <div className="mb-12 text-center">
+          <div className="mb-12 text-center max-w-3xl mx-auto">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-gray-900 mb-4">
-              Gallery
+              Photo Gallery
             </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Moments from our ministry gatherings, worship services, and community events
+            <p className="text-xl text-gray-600 mb-4">
+              Visions of faith from Jesus is the Way Jebathottam, Keelamudiman, Tuticorin
+            </p>
+            <p className="text-gray-600 leading-relaxed text-left sm:text-center">
+              Moments from our physical services, gospel outreach, baptisms, youth camps, and
+              celebrations under Bro. John Barnabas and Sis. Anselma John. These photos encourage
+              the body of Christ and show how corporate prayer shapes lives.
             </p>
           </div>
         </FadeInUp>

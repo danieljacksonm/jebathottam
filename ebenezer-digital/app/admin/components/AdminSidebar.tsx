@@ -15,6 +15,8 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  ShoppingBag,
+  Radio,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -30,7 +32,9 @@ const navItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
   { icon: Briefcase, label: "Services", href: "/admin/services" },
   { icon: FolderOpen, label: "Portfolio", href: "/admin/portfolio" },
+  { icon: ShoppingBag, label: "Store Products", href: "/admin/store-products" },
   { icon: FileText, label: "Blog Posts", href: "/admin/blog" },
+  { icon: Radio, label: "World News", href: "/admin/news" },
   { icon: MessageSquare, label: "Inquiries", href: "/admin/inquiries" },
   { icon: Star, label: "Testimonials", href: "/admin/testimonials" },
   { icon: Users, label: "Team", href: "/admin/team" },

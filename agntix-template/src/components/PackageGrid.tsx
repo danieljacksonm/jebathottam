@@ -6,11 +6,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   formatInr,
-  packageCopy,
-  packages,
-  type PackageId,
+  getLocalizedPackages,
 } from "@/data/packages";
-import type { Locale } from "@/i18n/routing";
 import { Reveal } from "./Reveal";
 
 type Props = {
@@ -25,8 +22,9 @@ export function PackageGrid({
   featuredOnly = false,
 }: Props) {
   const t = useTranslations("packages");
-  const locale = useLocale() as Locale;
-  let list = featuredOnly ? packages.filter((p) => p.featured) : packages;
+  const locale = useLocale();
+  let list = getLocalizedPackages(locale);
+  if (featuredOnly) list = list.filter((p) => p.featured);
   if (typeof limit === "number") list = list.slice(0, limit);
 
   return (
@@ -46,14 +44,13 @@ export function PackageGrid({
 
         <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {list.map((pkg, index) => {
-            const copy = packageCopy[pkg.id as PackageId];
             return (
               <Reveal key={pkg.id} delay={index * 0.06}>
                 <article className="card-surface flex h-full flex-col">
                   <Link href={`/packages/${pkg.id}`} className="relative aspect-[16/10] block">
                     <Image
                       src={pkg.image}
-                      alt={copy.title[locale]}
+                      alt={pkg.title}
                       fill
                       className="object-cover transition-transform duration-700 hover:scale-[1.03]"
                       sizes="(max-width: 768px) 100vw, 33vw"
@@ -63,7 +60,7 @@ export function PackageGrid({
                   <div className="flex flex-1 flex-col p-5 md:p-6">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="font-display text-2xl text-cream">
-                        <Link href={`/packages/${pkg.id}`}>{copy.title[locale]}</Link>
+                        <Link href={`/packages/${pkg.id}`}>{pkg.title}</Link>
                       </h3>
                       <div className="flex items-center gap-1 text-gold-bright">
                         <Star size={14} fill="currentColor" />
@@ -74,11 +71,19 @@ export function PackageGrid({
                       {t("days", { count: pkg.days })} / {t("nights", { count: pkg.nights })}
                     </p>
                     <p className="mt-3 flex-1 text-sm leading-relaxed text-mist/85">
-                      {copy.blurb[locale]}
+                      {pkg.blurb}
                     </p>
                     <p className="mt-2 text-xs text-mist/60">
                       {t("reviews", { count: pkg.reviewCount })}
                     </p>
+                    <ul className="mt-4 space-y-1.5 text-xs text-mist/75">
+                      {pkg.highlights.slice(0, 3).map((h) => (
+                        <li key={h} className="flex gap-2">
+                          <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
                     <div className="mt-5 flex items-center justify-between gap-3 border-t border-[var(--line)] pt-5">
                       <div>
                         <p className="text-[0.62rem] uppercase tracking-[0.14em] text-mist/60">

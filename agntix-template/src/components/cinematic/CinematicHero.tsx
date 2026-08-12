@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Play, X } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { MagneticButton } from "./motion";
+import { useTranslations } from "next-intl";
 
 function splitWords(text: string) {
   return text.split(" ").map((word, i) => (
@@ -21,6 +22,8 @@ function splitWords(text: string) {
 export function CinematicHero() {
   const root = useRef<HTMLElement>(null);
   const [videoOpen, setVideoOpen] = useState(false);
+  const t = useTranslations("homeCinematic");
+  const heroTitle = t("heroTitle");
 
   useEffect(() => {
     const el = root.current;
@@ -138,27 +141,27 @@ export function CinematicHero() {
 
         <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-28 pt-32 md:justify-center md:px-8 md:pb-24">
           <p className="mb-5 text-[0.7rem] uppercase tracking-[0.35em] text-gold-bright/90">
-            Canaan Travel Hub · Kodaikanal
+            {t("heroEyebrow")}
           </p>
           <h1 className="max-w-4xl font-display text-4xl leading-[1.05] text-white md:text-6xl lg:text-7xl">
-            {splitWords("Every Journey Begins With Wonder.")}
+            {splitWords(heroTitle)}
           </h1>
           <p
             data-hero-sub
             className="mt-5 max-w-xl font-display text-2xl text-gold-bright/95 opacity-0 md:text-3xl"
           >
-            Discover Kodaikanal Like Never Before.
+            {t("heroSub")}
           </p>
           <div data-hero-cta className="mt-10 flex flex-wrap gap-3 opacity-0">
             <Link href="/packages" className="btn-gold glass">
-              Explore Experiences
+              {t("heroExplore")}
             </Link>
             <MagneticButton
               className="btn-ghost"
               onClick={() => setVideoOpen(true)}
             >
               <Play size={14} />
-              Watch Story
+              {t("heroWatch")}
             </MagneticButton>
           </div>
         </div>
@@ -168,7 +171,7 @@ export function CinematicHero() {
           className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 opacity-0"
         >
           <span className="text-[0.62rem] uppercase tracking-[0.28em] text-white/60">
-            Scroll
+            {t("heroScroll")}
           </span>
           <span className="h-10 w-px bg-gradient-to-b from-gold-bright to-transparent" />
         </div>
@@ -191,7 +194,7 @@ export function CinematicHero() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-4">
-                <p className="text-sm text-white">Kodaikanal story</p>
+                <p className="text-sm text-white">{t("heroStoryTitle")}</p>
                 <button
                   type="button"
                   className="rounded-full border border-[var(--line)] p-2"
@@ -201,7 +204,7 @@ export function CinematicHero() {
                 </button>
               </div>
               <div className="flex aspect-video items-center justify-center bg-black/50 p-8 text-center text-sm text-mist">
-                Embed your cinematic Kodaikanal film here.
+                {t("heroStoryNote")}
               </div>
             </motion.div>
           </motion.div>

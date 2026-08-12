@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { testimonials } from "@/data/testimonials";
 import type { Locale } from "@/i18n/routing";
 import { useReveal } from "./motion";
 
 export function CustomerStories() {
   const locale = useLocale() as Locale;
+  const t = useTranslations("homeCinematic");
   const [index, setIndex] = useState(0);
   const ref = useReveal([]);
 
@@ -28,7 +29,7 @@ export function CustomerStories() {
     >
       <div className="mx-auto max-w-5xl text-center">
         <p data-reveal className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
-          Customer stories
+          {t("storiesEyebrow")}
         </p>
         <div data-reveal className="glass-panel relative mx-auto mt-10 min-h-[280px] rounded-[2rem] px-8 py-14 md:px-16">
           <AnimatePresence mode="wait">

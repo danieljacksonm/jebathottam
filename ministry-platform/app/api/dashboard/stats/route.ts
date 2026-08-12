@@ -5,7 +5,7 @@ import { requireRole } from '@/lib/auth';
 // GET dashboard statistics
 export async function GET(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
 
     // Get all stats in parallel

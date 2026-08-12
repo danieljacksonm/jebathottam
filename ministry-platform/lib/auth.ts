@@ -128,6 +128,10 @@ export async function requirePermission(
 
   const { user } = authResult;
   
+  if (user.role === 'super_admin') {
+    return { user };
+  }
+
   // Import permissions dynamically to avoid circular dependency
   const { hasPermission } = await import('./permissions');
   const allowed = await hasPermission(user, resource as any, permission);

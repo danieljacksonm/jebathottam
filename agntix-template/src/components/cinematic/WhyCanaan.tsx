@@ -1,33 +1,19 @@
 "use client";
 
 import { Compass, HeartHandshake, Shield, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useReveal } from "./motion";
 
-const items = [
-  {
-    icon: Sparkles,
-    title: "Quiet luxury",
-    body: "Every detail arranged before you ask — stays, transfers, pacing.",
-  },
-  {
-    icon: Compass,
-    title: "Kodai specialists",
-    body: "One destination, deeply known. Roads, seasons, hidden quiet.",
-  },
-  {
-    icon: Shield,
-    title: "Trusted care",
-    body: "Clear guidance, private hosts, and calm communication.",
-  },
-  {
-    icon: HeartHandshake,
-    title: "Human hospitality",
-    body: "Not a template tour — a journey shaped around you.",
-  },
+const keys = [
+  { key: "quiet" as const, icon: Sparkles },
+  { key: "specialists" as const, icon: Compass },
+  { key: "trusted" as const, icon: Shield },
+  { key: "human" as const, icon: HeartHandshake },
 ];
 
 export function WhyCanaan() {
   const ref = useReveal([]);
+  const t = useTranslations("homeCinematic");
 
   return (
     <section
@@ -37,18 +23,18 @@ export function WhyCanaan() {
       <div className="mx-auto max-w-7xl">
         <div data-reveal className="max-w-2xl">
           <p className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
-            Why Canaan
+            {t("whyCanaanEyebrow")}
           </p>
           <h2 className="mt-4 font-display text-5xl text-white md:text-6xl">
-            Premium feels effortless.
+            {t("whyCanaanTitle")}
           </h2>
         </div>
         <div className="mt-14 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {items.map((item) => {
+          {keys.map((item) => {
             const Icon = item.icon;
             return (
               <article
-                key={item.title}
+                key={item.key}
                 data-reveal
                 className="lux-card group p-7 transition-shadow duration-500 hover:shadow-[0_0_40px_rgba(214,166,74,0.15)]"
               >
@@ -57,10 +43,10 @@ export function WhyCanaan() {
                   strokeWidth={1.4}
                 />
                 <h3 className="mt-6 font-display text-2xl text-white">
-                  {item.title}
+                  {t(`whyCanaan.${item.key}.title`)}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-soft-gray">
-                  {item.body}
+                  {t(`whyCanaan.${item.key}.body`)}
                 </p>
               </article>
             );

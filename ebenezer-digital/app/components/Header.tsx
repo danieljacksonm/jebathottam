@@ -8,6 +8,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
+  { label: "Blog", href: "/blog" },
   { label: "Process", href: "/process" },
   { label: "About", href: "/why" },
 ];

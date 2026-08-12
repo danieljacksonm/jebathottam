@@ -1,11 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireRole, hashPassword, generateToken } from '@/lib/auth';
 import { query } from '@/lib/db';
-import { hashPassword, generateToken } from '@/lib/auth';
 
+/**
+ * Public self-registration is disabled.
+ * Only super_admin can create visitor accounts (invite-only).
+ */
 export async function POST(request: NextRequest) {
+  const authResult = await requireRole(request, ['super_admin']);
+  if (authResult instanceof NextResponse) {
+    return NextResponse.json(
+      { error: 'Public registration is disabled. Contact the ministry admin.' },
+      { status: 403 }
+    );
+  }
+
   try {
-    const { name, email, password } = await request.json();
-    const role = 'visitor';
+    const body = await request.json();
+    const name = typeof body.name === 'string' ? body.name.trim() : '';
+    const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+    const password = typeof body.password === 'string' ? body.password : '';
+    const role = body.role === 'media_team' || body.role === 'ministry_member' || body.role === 'visitor'
+      ? body.role
+      : 'visitor';
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -21,7 +38,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user exists
     const existing = await query<any[]>(
       'SELECT id FROM users WHERE email = ?',
       [email]
@@ -34,10 +50,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash password
     const hashedPassword = await hashPassword(password);
-
-    // Create user
     const result = await query<any>(
       'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
       [name, email, hashedPassword, role]
@@ -45,34 +58,9 @@ export async function POST(request: NextRequest) {
 
     const userId = (result as any).insertId;
 
-    // Generate token
-    const token = generateToken({
-      id: userId,
-      email,
-      role,
-      name,
+    return NextResponse.json({
+      user: { id: userId, email, role, name },
     });
-
-    const response = NextResponse.json({
-      user: {
-        id: userId,
-        email,
-        role,
-        name,
-      },
-    });
-
-    // Set Secure only when over HTTPS so cookie works on http://YOUR_IP in production
-    const isSecure = request.headers.get('x-forwarded-proto') === 'https';
-    response.cookies.set('auth_token', token, {
-      httpOnly: true,
-      secure: isSecure,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-    });
-
-    return response;
   } catch (error: any) {
     console.error('Registration error:', error);
     return NextResponse.json(

@@ -65,9 +65,19 @@ CREATE TABLE IF NOT EXISTS prayer_points (
 -- Blogs table
 CREATE TABLE IF NOT EXISTS blogs (
   id INT PRIMARY KEY AUTO_INCREMENT,
+  slug VARCHAR(255) NOT NULL,
   title VARCHAR(500) NOT NULL,
-  content TEXT NOT NULL,
+  title_ta VARCHAR(500),
+  content LONGTEXT NOT NULL,
+  content_ta LONGTEXT,
   excerpt TEXT,
+  excerpt_ta TEXT,
+  meta_title VARCHAR(255),
+  meta_desc VARCHAR(500),
+  og_image VARCHAR(500),
+  featured_image VARCHAR(500),
+  tags VARCHAR(500),
+  views INT NOT NULL DEFAULT 0,
   author VARCHAR(255),
   category VARCHAR(100),
   featured BOOLEAN DEFAULT FALSE,
@@ -77,6 +87,7 @@ CREATE TABLE IF NOT EXISTS blogs (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL,
+  UNIQUE KEY uk_blogs_slug (slug),
   INDEX idx_published (published),
   INDEX idx_category (category),
   INDEX idx_created_at (created_at)

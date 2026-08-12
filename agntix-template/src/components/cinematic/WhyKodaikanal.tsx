@@ -4,13 +4,17 @@ import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { whyStats } from "@/data/cinematic";
+import { localizeWhyStats } from "@/data/cinematic";
 import { safeRevert } from "@/lib/gsap-safe";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function WhyKodaikanal() {
   const root = useRef<HTMLElement>(null);
+  const locale = useLocale();
+  const t = useTranslations("homeCinematic");
+  const stats = localizeWhyStats(locale);
 
   useLayoutEffect(() => {
     const el = root.current;
@@ -72,17 +76,16 @@ export function WhyKodaikanal() {
       <div className="mx-auto grid min-h-[90svh] max-w-7xl items-center gap-10 px-5 py-24 md:grid-cols-2 md:px-8 lg:gap-16">
         <div data-why-copy className="relative z-10 max-w-xl">
           <p className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
-            Why Kodaikanal
+            {t("whyKodaiEyebrow")}
           </p>
           <h2 className="mt-5 font-display text-5xl text-white md:text-6xl">
-            A place that asks you to slow down.
+            {t("whyKodaiTitle")}
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-soft-gray">
-            Mist over pine. Quiet lakes. Roads that open only when you are ready.
-            Canaan presents Kodaikanal as an experience — not a checklist.
+            {t("whyKodaiBody")}
           </p>
           <div className="mt-12 grid grid-cols-3 gap-6">
-            {whyStats.map((stat) => (
+            {stats.map((stat) => (
               <div key={stat.label} className="border-t border-[var(--line)] pt-4">
                 <p className="font-display text-3xl text-gold-bright md:text-4xl">
                   <span data-count={stat.value}>0</span>

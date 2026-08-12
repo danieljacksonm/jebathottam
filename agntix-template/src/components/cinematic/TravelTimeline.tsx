@@ -3,12 +3,16 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { timelineBeats } from "@/data/cinematic";
+import { localizeTimeline } from "@/data/cinematic";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function TravelTimeline() {
   const root = useRef<HTMLElement>(null);
+  const locale = useLocale();
+  const t = useTranslations("homeCinematic");
+  const beats = localizeTimeline(locale);
 
   useEffect(() => {
     const el = root.current;
@@ -45,14 +49,14 @@ export function TravelTimeline() {
     <section ref={root} className="bg-navy-mid">
       <div className="mx-auto max-w-4xl px-5 py-20 text-center md:px-8">
         <p className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
-          Travel story
+          {t("timelineEyebrow")}
         </p>
         <h2 className="mt-4 font-display text-5xl text-white md:text-6xl">
-          A day written in mist.
+          {t("timelineTitle")}
         </h2>
       </div>
 
-      {timelineBeats.map((beat, i) => (
+      {beats.map((beat, i) => (
         <div
           key={beat.id}
           data-beat

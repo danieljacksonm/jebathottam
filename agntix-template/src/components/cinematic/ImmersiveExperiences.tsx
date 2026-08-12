@@ -4,8 +4,9 @@ import Image from "next/image";
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { cinematicExperiences } from "@/data/cinematic";
+import { localizeExperiences } from "@/data/cinematic";
 import { safeRevert } from "@/lib/gsap-safe";
+import { useLocale, useTranslations } from "next-intl";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,6 +18,9 @@ type Props = {
 export function ImmersiveExperiences({ pinned = true }: Props) {
   const section = useRef<HTMLElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const t = useTranslations("homeCinematic");
+  const items = localizeExperiences(locale);
 
   useLayoutEffect(() => {
     const sec = section.current;
@@ -63,10 +67,10 @@ export function ImmersiveExperiences({ pinned = true }: Props) {
       <section ref={section} className="relative overflow-hidden bg-navy">
         <div className="px-5 pb-8 pt-24 md:px-8">
           <p className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
-            Immersive experiences
+            {t("immersiveEyebrow")}
           </p>
           <h2 className="mt-4 max-w-3xl font-display text-5xl text-white md:text-6xl">
-            Drift through the hills.
+            {t("immersiveTitle")}
           </h2>
         </div>
 
@@ -85,7 +89,7 @@ export function ImmersiveExperiences({ pinned = true }: Props) {
                 : "flex w-max items-stretch gap-6 px-5 md:px-8"
             }
           >
-            {cinematicExperiences.map((item) => (
+            {items.map((item) => (
               <article
                 key={item.id}
                 className="lux-card group relative h-[min(70vh,560px)] w-[78vw] shrink-0 self-center overflow-hidden sm:w-[52vw] md:h-[min(68vh,520px)] md:w-[38vw] lg:w-[28vw]"

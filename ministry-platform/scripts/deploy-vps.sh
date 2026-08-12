@@ -1,16 +1,14 @@
 #!/bin/bash
-# Run this ON THE VPS (e.g. bash deploy-vps.sh) to force-update the site from GitHub.
-# Usage: cd /path/to/your/app && bash deploy-vps.sh
-# Or: bash /path/to/deploy-vps.sh  (script will try to find app dir from PM2)
+# Run ON THE VPS from the app directory.
+# Usage: cd /var/www/ministry-platform && bash scripts/deploy-vps.sh
 
-set -e
+set -euo pipefail
 APP_NAME="ministry-app"
 
-# If not already in app dir, try to get it from PM2
-if [ ! -f "package.json" ] || [ ! -f "next.config.ts" ] && [ ! -f "next.config.js" ]; then
+if [ ! -f "package.json" ]; then
   if command -v pm2 &>/dev/null; then
-    PM2_CWD=$(pm2 show "$APP_NAME" 2>/dev/null | grep "exec cwd" | awk '{print $NF}')
-    if [ -n "$PM2_CWD" ] && [ -d "$PM2_CWD" ]; then
+    PM2_CWD=$(pm2 show "$APP_NAME" 2>/dev/null | grep "exec cwd" | awk '{print $NF}' || true)
+    if [ -n "${PM2_CWD:-}" ] && [ -d "$PM2_CWD" ]; then
       echo "Using app path from PM2: $PM2_CWD"
       cd "$PM2_CWD"
     fi
@@ -18,24 +16,48 @@ if [ ! -f "package.json" ] || [ ! -f "next.config.ts" ] && [ ! -f "next.config.j
 fi
 
 if [ ! -f "package.json" ]; then
-  echo "ERROR: Run this script from your Next.js app directory (where package.json is), or set correct VPS_DEPLOY_PATH."
-  echo "Example: cd /home/dani/jebathottam && bash scripts/deploy-vps.sh"
+  echo "ERROR: Run from Next.js app directory (package.json missing)."
   exit 1
 fi
 
+if [ ! -f ".env.production" ] && [ ! -f ".env.local" ] && [ ! -f ".env" ]; then
+  echo "ERROR: No .env / .env.local / .env.production found. Aborting."
+  exit 1
+fi
+
+if [ -z "${JWT_SECRET:-}" ]; then
+  # shellcheck disable=SC1091
+  set -a
+  [ -f .env.production ] && . ./.env.production
+  [ -f .env.local ] && . ./.env.local
+  [ -f .env ] && . ./.env
+  set +a
+fi
+
+if [ -z "${JWT_SECRET:-}" ]; then
+  echo "WARNING: JWT_SECRET not set in environment. Production auth will fail."
+fi
+
 echo "=== Deploy path: $(pwd) ==="
+BACKUP_SHA=$(git rev-parse HEAD)
 git fetch origin main
 git reset --hard origin/main
 COMMIT=$(git rev-parse --short HEAD)
-echo "=== Commit now on server: $COMMIT ==="
+echo "=== Commit: $COMMIT (previous $BACKUP_SHA) ==="
 
 rm -rf .next
 npm ci
-export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
+export NEXT_PUBLIC_BUILD_TIME
+NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
 npm run build
 
 pm2 restart "$APP_NAME" || pm2 start npm --name "$APP_NAME" -- start
 pm2 save
 
-echo "=== Deploy done. Site should be running commit: $COMMIT ==="
-echo "Do a hard refresh in the browser (Ctrl+Shift+R) to see the update."
+sleep 2
+if curl -fsS -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/ | grep -Eq '200|301|302|308'; then
+  echo "=== Health OK. Deployed $COMMIT ==="
+else
+  echo "=== Health check failed. Consider: git reset --hard $BACKUP_SHA && npm ci && npm run build && pm2 restart $APP_NAME ==="
+  exit 1
+fi

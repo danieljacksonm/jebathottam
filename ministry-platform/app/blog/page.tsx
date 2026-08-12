@@ -9,6 +9,7 @@ import { FadeInUp, StaggerContainer, StaggerItem } from '@/components/animations
 
 type BlogPost = {
   id: number;
+  slug?: string | null;
   title: string;
   content: string;
   excerpt: string | null;
@@ -17,6 +18,7 @@ type BlogPost = {
   featured: boolean | number;
   published: boolean | number;
   created_at: string;
+  featured_image?: string | null;
 };
 
 function calculateReadingTime(content: string): number {
@@ -107,7 +109,7 @@ export default function BlogPage() {
                       <p className="text-gray-600 mb-4 leading-relaxed flex-1">
                         {excerptText(post.excerpt, post.content.replace(/<[^>]+>/g, ' ').trim(), 160)}
                       </p>
-                      <Link href={`/blog/${post.id}`}>
+                      <Link href={`/blog/${post.slug || post.id}`}>
                         <span className="w-full inline-block px-4 py-2 text-primary-600 hover:text-primary-700 font-medium rounded-lg hover:bg-primary-50 transition-colors text-left">
                           Read More →
                         </span>

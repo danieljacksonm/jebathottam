@@ -6,8 +6,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { TeamContent } from './team-content';
 
 export const metadata: Metadata = {
-  title: 'Our Team - Jebathottam Ministry',
-  description: 'Meet the dedicated leaders and members who serve our ministry community. Pastors, worship leaders, and volunteers serving with passion.',
+  title: 'Ministry Pastors & Leadership - Jesus is the Way Jebathottam',
+  description:
+    'Meet Bro. John Barnabas and Sis. Anselma John, pastors of Jesus is the Way Jebathottam in Keelamudiman, Tuticorin.',
 };
 
 export default function TeamPage() {
@@ -21,15 +22,20 @@ export default function TeamPage() {
             Home
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-gray-900">Our Team</span>
+          <Link href="/about" className="hover:text-primary-600">
+            About
+          </Link>
+          <span className="mx-2">/</span>
+          <span className="text-gray-900">Leadership Team</span>
         </nav>
 
         <div className="max-w-4xl mx-auto mb-12 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Our Team
+            Ministry Pastors & Leadership
           </h1>
           <p className="text-xl text-gray-600 leading-relaxed">
-            Meet the dedicated leaders and members who serve our ministry community
+            Jebathottam Keelamudiman leadership — shepherds who labor in word and prayer to care
+            for the congregation and guide youth cells.
           </p>
         </div>
 
@@ -37,12 +43,10 @@ export default function TeamPage() {
 
         <div className="max-w-4xl mx-auto mt-16 text-center">
           <div className="bg-primary-50 rounded-lg p-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              Join Our Team
-            </h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Join Us in Prayer</h2>
             <p className="text-gray-700 mb-6 max-w-2xl mx-auto">
-              If you feel called to serve in ministry, we would love to hear from you.
-              Contact us to learn more about opportunities to serve.
+              If you feel called to serve or join our daily prayer lines, we would love to hear
+              from you.
             </p>
             <Link
               href="/contact"

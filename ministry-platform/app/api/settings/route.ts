@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ data: obj });
     }
 
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     const settings = await prisma.setting.findMany({ orderBy: { key_name: 'asc' } });
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 // POST update settings
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['master_admin', 'pastor']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team']);
     if (authResult instanceof NextResponse) return authResult;
 
     const settings = await request.json();

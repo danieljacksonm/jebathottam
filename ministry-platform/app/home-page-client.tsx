@@ -179,7 +179,7 @@ type HeroVariant = 'slider' | 'blog' | 'team' | 'about';
 const HERO_VARIANTS: HeroVariant[] = ['slider', 'blog', 'team', 'about'];
 
 type TeamMember = { id: number; name: string; role: string; bio?: string; image_url?: string | null };
-type BlogPost = { id: number; title: string; excerpt?: string; content?: string; image?: string; image_url?: string; category?: string; featured?: boolean };
+type BlogPost = { id: number; slug?: string | null; title: string; excerpt?: string; content?: string; image?: string; image_url?: string; category?: string; featured?: boolean };
 function getBlogImage(post: BlogPost | { image?: string; image_url?: string }): string {
   return getImageSrc(post) || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop';
 }
@@ -284,7 +284,13 @@ export default function Home() {
 
   const heroVariant = HERO_VARIANTS[currentHour % HERO_VARIANTS.length];
 
-  const allBlogs: BlogPost[] = apiBlogs.length > 0 ? apiBlogs : (blogPosts || []);
+  // Production never falls back to demo blog posts
+  const allBlogs: BlogPost[] =
+    apiBlogs.length > 0
+      ? apiBlogs
+      : process.env.NODE_ENV === 'production'
+        ? []
+        : (blogPosts || []);
   const featuredBlog: BlogPost | undefined = allBlogs.find((p) => p.featured) || allBlogs[0];
   const regularBlogs: BlogPost[] = allBlogs.filter((p) => p !== featuredBlog).slice(0, 3);
 
@@ -342,7 +348,7 @@ export default function Home() {
           </ScrollReveal>
 
           <ScrollReveal delay={0.1}>
-            <Link href={`/blog/${featuredBlog.id}`} className="block group mb-16">
+            <Link href={`/blog/${featuredBlog.slug || featuredBlog.id}`} className="block group mb-16">
               <motion.article
                 whileHover={{ boxShadow: `0 25px 50px -12px ${accent.glow}` }}
                 className="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 dark:border-gray-800"
@@ -379,7 +385,7 @@ export default function Home() {
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-14">
               {regularBlogs.map((post) => (
                 <InViewStaggerItem key={post.id}>
-                  <Link href={`/blog/${post.id}`} className="block group h-full">
+                  <Link href={`/blog/${post.slug || post.id}`} className="block group h-full">
                     <motion.article
                       whileHover={{ y: -6, boxShadow: `0 25px 50px -12px ${accent.glow}` }}
                       transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -883,7 +889,7 @@ export default function Home() {
                 {featuredBlog.excerpt || (featuredBlog as { content?: string }).content?.replace(/<[^>]*>/g, '').slice(0, 200) || ''}
               </motion.p>
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.4 }}>
-                <Link href={`/blog/${featuredBlog.id}`}>
+                <Link href={`/blog/${featuredBlog.slug || featuredBlog.id}`}>
                   <Button size="lg" className="bg-primary-600 hover:bg-primary-700 text-white rounded-full px-8">
                     Read article
                   </Button>

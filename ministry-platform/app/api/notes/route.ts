@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
 // POST create note/sermon
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireRole(request, ['super_admin', 'master_admin', 'pastor', 'member']);
+    const authResult = await requireRole(request, ['super_admin', 'media_team', 'ministry_member']);
     if (authResult instanceof NextResponse) return authResult;
     const { user } = authResult;
 

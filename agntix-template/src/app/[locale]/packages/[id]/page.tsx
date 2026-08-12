@@ -1,21 +1,18 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { Star } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import {
   formatInr,
-  getPackage,
-  packageCopy,
-  packages,
-  type PackageId,
+  getLocalizedPackage,
+  packageRows,
 } from "@/data/packages";
-import type { Locale } from "@/i18n/routing";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 
 export function generateStaticParams() {
-  return packages.map((pkg) => ({ id: pkg.id }));
+  return packageRows.map((pkg) => ({ id: pkg.id }));
 }
 
 export default async function PackageDetailPage({
@@ -25,19 +22,18 @@ export default async function PackageDetailPage({
 }) {
   const { locale, id } = await params;
   setRequestLocale(locale);
-  const pkg = getPackage(id);
+  const loc = await getLocale();
+  const pkg = getLocalizedPackage(id, loc);
   if (!pkg) notFound();
 
   const t = await getTranslations("packages");
-  const copy = packageCopy[pkg.id as PackageId];
-  const loc = locale as Locale;
 
   return (
     <PageAtmosphere>
       <CinematicPageHero
         eyebrow={`${pkg.days} Days · ${pkg.nights} Nights`}
-        title={copy.title[loc]}
-        subtitle={copy.blurb[loc]}
+        title={pkg.title}
+        subtitle={pkg.blurb}
         image={pkg.image}
         tone="forest"
       />
@@ -45,7 +41,7 @@ export default async function PackageDetailPage({
       <section className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[1.35fr_0.75fr] md:px-8 md:py-24">
         <div>
           <p className="text-lg leading-relaxed text-soft-gray md:text-xl">
-            {copy.body[loc]}
+            {pkg.body}
           </p>
           <ul className="mt-10 space-y-4">
             {pkg.highlights.map((item) => (

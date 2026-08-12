@@ -26,9 +26,9 @@ export async function POST(request: NextRequest) {
     if (providedSecret !== secret) {
       return NextResponse.json({ error: 'Invalid secret' }, { status: 401 });
     }
-    if (!newPassword || newPassword.length < 6) {
+    if (!newPassword || newPassword.length < 12) {
       return NextResponse.json(
-        { error: 'newPassword required (min 6 characters)' },
+        { error: 'newPassword required (min 12 characters)' },
         { status: 400 }
       );
     }

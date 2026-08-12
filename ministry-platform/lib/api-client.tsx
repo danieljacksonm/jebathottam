@@ -29,11 +29,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const response = await authApi.me();
       setUser(response.user);
-    } catch (error) {
+    } catch {
       setUser(null);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('auth_token');
-      }
     } finally {
       setLoading(false);
     }
@@ -45,26 +42,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const response = await authApi.login(email, password);
-    if (response.token && typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', response.token);
-    }
     setUser(response.user);
   };
 
   const register = async (data: { name: string; email: string; password: string }) => {
     const response = await authApi.register(data);
-    if (response.token && typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', response.token);
-    }
     setUser(response.user);
   };
 
   const logout = async () => {
     await authApi.logout();
     setUser(null);
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token');
-    }
   };
 
   return (
