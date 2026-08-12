@@ -1,0 +1,8 @@
+﻿SUGGESTED STARTER PALETTE (edit to your brand)
+Ink / text: #111111
+Paper / bg: #F7F5F2
+Accent: #10B981
+Muted: #6B7280
+Line: #E5E7EB
+
+Rule: one accent only. Do not add random bright colors every post.

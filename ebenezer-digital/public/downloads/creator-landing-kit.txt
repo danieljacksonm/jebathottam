@@ -1,0 +1,48 @@
+﻿CREATOR LANDING KIT
+===================
+
+Use this guide to launch a clean, high-converting landing page in one day.
+
+SECTION ORDER
+-------------
+1) Hero: One clear promise + one CTA
+2) Problem: What pain you solve
+3) Solution: Your process/service
+4) Proof: Testimonials or results
+5) Pricing: 2-3 plans max
+6) FAQ: Remove buying doubts
+7) CTA: Repeat offer with urgency
+
+HERO TEMPLATE
+-------------
+Headline: "Get [result] without [pain]."
+Subtext: "We help [audience] achieve [result] through [method]."
+Primary CTA: "Book a free call"
+Secondary CTA: "See case studies"
+
+PRICING BLOCK TEMPLATE
+----------------------
+Plan Name:
+Best For:
+What's Included:
+Price:
+CTA:
+
+MOBILE CHECKLIST
+----------------
+- Headline readable in 2 lines
+- CTA button visible without zoom
+- Form has max 5 fields
+- Contact links tappable
+
+COPY QUICK RULES
+----------------
+- Use short sentences
+- Show benefit before features
+- One message per section
+- Repeat CTA every 2 sections
+
+DELIVERABLE NOTE
+----------------
+This starter file gives structure + copy prompts.
+Use it with your design file (Figma/Webflow/Framer).

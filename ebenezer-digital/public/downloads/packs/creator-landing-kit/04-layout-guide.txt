@@ -1,0 +1,6 @@
+﻿LAYOUT / TYPE NOTES
+- Max content width ~720–880px for reading sections
+- Hero: edge-to-edge media or full-bleed atmosphere
+- Spacing: larger gaps between sections than inside cards
+- Prefer 1 serif display + 1 clean sans for UI
+- Accent color: keep one brand accent only

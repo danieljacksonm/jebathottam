@@ -1,0 +1,46 @@
+﻿SHOP + POS STARTER PACK
+=======================
+
+Use this blueprint before building or buying billing software.
+
+CORE SCREENS
+------------
+1) Product List
+   - SKU, name, MRP, selling price, stock
+2) Billing Screen
+   - Scan/search, qty, discount, tax, round-off
+3) Customer Screen
+   - Name, phone, GSTIN (optional), balance
+4) Stock Inward
+   - Supplier, cost, quantity, date
+5) Reports
+   - Sales by day, payment mode split, low stock
+
+RECEIPT FIELDS (A4/A5/THERMAL)
+------------------------------
+- Shop name + GSTIN
+- Bill no + date/time
+- Item rows (name, qty, rate, amount)
+- Tax summary (if GST)
+- Payment mode
+- Thank-you/footer message
+
+STAFF ROLES
+-----------
+- Owner: full control
+- Cashier: bill create + print
+- Inventory staff: stock update only
+
+PROCESS FLOW
+------------
+Stock In -> Product update -> Billing -> Stock reduce -> Report close
+
+BUY/BUILD CHECKLIST
+-------------------
+- Works offline fallback?
+- GST format correct?
+- Thermal print aligned?
+- Barcode support?
+- Daily backup/export?
+
+This is a planning and structure pack (not executable software).

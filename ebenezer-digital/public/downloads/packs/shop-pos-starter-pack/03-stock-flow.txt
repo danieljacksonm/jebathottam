@@ -1,0 +1,6 @@
+﻿STOCK FLOW
+Purchase / opening → Stock-in
+Sale / damage / return-out → Stock-out
+Low-stock alert threshold per item
+Daily: reconcile cash + stock variance
+Weekly: top movers + dead stock review

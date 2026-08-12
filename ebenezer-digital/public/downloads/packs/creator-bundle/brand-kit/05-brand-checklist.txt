@@ -1,0 +1,5 @@
+﻿[ ] Same logo file everywhere
+[ ] Same 1–2 fonts
+[ ] Same accent color
+[ ] Bio / about text matches tone
+[ ] Templates reused (not reinvented daily)

@@ -1,0 +1,5 @@
+﻿LOGO RULES
+- Clear space around mark = height of the mark
+- Prefer dark logo on light bg, light logo on photos
+- Do not stretch, rotate, or add drop shadows
+- Keep one primary lockup for web header

@@ -1,0 +1,16 @@
+﻿HERO
+Headline: Get [result] without [pain].
+Subtext: We help [audience] achieve [result] through [method].
+Primary CTA: Book a free call
+Secondary CTA: See work / case studies
+
+PRICING BLOCK
+Plan name:
+Best for:
+Includes:
+Price:
+CTA:
+
+TESTIMONIAL
+"[Quote]"
+— Name, Role / City

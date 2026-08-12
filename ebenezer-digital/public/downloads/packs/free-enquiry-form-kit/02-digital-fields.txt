@@ -1,0 +1,7 @@
+﻿GOOGLE FORMS / DIGITAL FIELDS
+- Full name (required)
+- Phone / WhatsApp (required)
+- Email (optional)
+- Requirement (paragraph)
+- Preferred date / deadline
+- How did you find us?

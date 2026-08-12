@@ -1,0 +1,5 @@
+﻿DISPLAY (headlines): a distinctive serif or strong display face
+UI / body: a clean sans (not Inter/Roboto if you want uniqueness)
+
+Sizes:
+H1 large / H2 medium / body 16–18px reading size

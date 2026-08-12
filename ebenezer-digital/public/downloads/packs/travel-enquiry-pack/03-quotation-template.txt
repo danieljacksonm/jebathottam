@@ -1,0 +1,12 @@
+﻿TOUR QUOTATION
+Client:
+Tour / destination:
+Dates:
+Pax:
+Inclusions:
+Exclusions:
+Hotel options:
+Transport:
+Price per person / total:
+Validity:
+Payment terms:

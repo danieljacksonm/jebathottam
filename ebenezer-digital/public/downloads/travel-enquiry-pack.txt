@@ -1,0 +1,43 @@
+﻿TRAVEL ENQUIRY PACK
+===================
+
+FORM TEMPLATE (COPY)
+--------------------
+Customer Name:
+Phone / WhatsApp:
+Travel Dates:
+Destination:
+No. of Adults:
+No. of Children:
+Budget Range:
+Hotel Preference:
+Special Requests:
+Follow-up Date:
+
+WHATSAPP FOLLOW-UP SCRIPTS
+--------------------------
+Message 1 (same day):
+"Hi [Name], thank you for your enquiry for [Destination]. I will share options shortly."
+
+Message 2 (after quote):
+"Hi [Name], I shared your package options. Which one should I hold for you?"
+
+Message 3 (gentle reminder):
+"Hi [Name], just checking if you need any changes in dates/hotel before booking."
+
+QUOTE TEMPLATE BLOCKS
+---------------------
+- Package name
+- Inclusions
+- Exclusions
+- Total price
+- Advance to confirm
+- Cancellation terms
+
+LEAD TRACKER COLUMNS
+--------------------
+Date | Name | Destination | Budget | Stage | Next Action | Owner
+
+TIP
+---
+Reply within 15 minutes for warm leads.

@@ -1,0 +1,34 @@
+﻿FREE ENQUIRY FORM KIT
+=====================
+
+Use this form for any business.
+
+ENQUIRY FORM
+------------
+Date:
+Customer Name:
+Phone/WhatsApp:
+Email (optional):
+Service/Product Needed:
+Budget:
+Expected Delivery Date:
+Notes:
+Next Follow-up Date:
+
+FOLLOW-UP SCRIPT
+----------------
+"Hi [Name], thank you for your enquiry about [Service]. We can help you with this. Would you like a quick call or message quote?"
+
+STATUS TAGS
+-----------
+- NEW
+- CONTACTED
+- QUOTE SENT
+- WON
+- LOST
+
+TRACKER COLUMNS
+---------------
+Date | Name | Need | Budget | Status | Next Follow-up | Owner
+
+Tip: Follow up within 24 hours.

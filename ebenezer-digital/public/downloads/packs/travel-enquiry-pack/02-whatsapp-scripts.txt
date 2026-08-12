@@ -1,0 +1,9 @@
+﻿SCRIPT A — First reply
+Hi {name}, thanks for your enquiry about {destination}.
+I can share 2–3 options today. Preferred dates and budget?
+
+SCRIPT B — Quote sent
+Hi {name}, quotation for {dates} is ready. Shall I hold rooms for 24 hours?
+
+SCRIPT C — Soft follow-up
+Hi {name}, checking in on the {destination} trip. Want me to adjust hotels or budget?

@@ -1,0 +1,10 @@
+﻿CORE SCREENS
+1) Login / PIN
+2) Billing / cart
+3) Product search & quick-add
+4) Customer select / create
+5) Payment (cash / UPI / card / credit)
+6) Receipt print / share
+7) Stock list + stock-in / stock-out
+8) Day close / sales reports
+9) Settings (tax, printers, users)

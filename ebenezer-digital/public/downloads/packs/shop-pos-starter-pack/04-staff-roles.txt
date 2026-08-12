@@ -1,0 +1,5 @@
+﻿SUGGESTED ROLES
+Owner: all permissions
+Cashier: billing + customers (no delete products)
+Store manager: stock + reports + staff PIN reset
+Accountant: reports export only

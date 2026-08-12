@@ -1,0 +1,13 @@
+﻿TRAVEL ENQUIRY FORM
+Date:
+Guest name:
+Phone / WhatsApp:
+Email:
+Destination:
+Travel dates:
+Adults / Kids:
+Budget range:
+Hotel preference:
+Special requests:
+Follow-up date:
+Status: New / Quoted / Booked / Lost

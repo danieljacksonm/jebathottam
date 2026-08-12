@@ -1,0 +1,10 @@
+﻿SECTION ORDER (recommended)
+1) Hero — one promise + one CTA
+2) Problem — the pain you solve
+3) Solution — your method / process
+4) Proof — testimonials or results
+5) Pricing — 2–3 plans max
+6) FAQ — remove buying doubts
+7) Final CTA — repeat offer
+
+Keep first viewport clean: brand/name, headline, one sentence, one CTA group.

@@ -1,0 +1,7 @@
+﻿MOBILE CHECKLIST
+[ ] Headline readable in ~2 lines
+[ ] Primary CTA visible without zoom
+[ ] Form has max 5 fields
+[ ] Phone / WhatsApp links are tappable
+[ ] Images compressed (fast load)
+[ ] No overlapping text on small screens

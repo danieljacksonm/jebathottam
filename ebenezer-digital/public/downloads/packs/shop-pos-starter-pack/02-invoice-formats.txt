@@ -1,0 +1,13 @@
+﻿A4 INVOICE FIELDS
+Business name, address, tax ID
+Invoice no, date
+Customer name + phone
+Item table: name, qty, rate, tax, amount
+Subtotal, tax total, grand total
+Payment mode + notes
+
+THERMAL RECEIPT (58/80mm)
+Header (shop name)
+Items (qty x rate)
+Totals
+Footer (thanks + return policy short line)

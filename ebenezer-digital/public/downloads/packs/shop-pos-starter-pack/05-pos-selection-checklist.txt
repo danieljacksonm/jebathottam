@@ -1,0 +1,9 @@
+﻿BEFORE YOU BUY / BUILD
+[ ] Offline mode needed?
+[ ] Thermal printer support?
+[ ] Multi-store?
+[ ] Tax rules for your country
+[ ] Barcode scanner support
+[ ] Backup / export
+[ ] Mobile / tablet usable
+[ ] Training time for staff

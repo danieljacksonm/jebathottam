@@ -1,0 +1,38 @@
+﻿BRAND KIT ESSENTIALS
+====================
+
+BRAND RULE 01: CONSISTENT LOGO
+------------------------------
+- Keep clear space around logo
+- Do not stretch logo
+- Use one dark and one light version
+
+BRAND RULE 02: COLOR SYSTEM
+---------------------------
+Primary:
+- #10B981 (Emerald)
+- #070B10 (Ink black)
+Neutrals:
+- #F3EFE6 (Warm paper)
+- #9AA3AD (Muted text)
+
+BRAND RULE 03: TYPOGRAPHY
+-------------------------
+- Heading: Serif style
+- Body: Clean sans-serif
+- Max 2 font families only
+
+SOCIAL POST FRAMEWORK
+---------------------
+Post 1: Tip
+Post 2: Before/After
+Post 3: Customer proof
+Post 4: Offer / CTA
+
+BRAND CHECKLIST
+---------------
+[ ] Same logo placement
+[ ] Same primary color
+[ ] Same font pair
+[ ] Clear CTA on every post
+[ ] Contact info visible

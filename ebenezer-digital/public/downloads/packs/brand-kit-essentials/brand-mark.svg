@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Ebenezer Store">
+  <rect width="64" height="64" rx="14" fill="#070B10"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" stroke="#10B981" stroke-opacity="0.4"/>
+  <rect x="18" y="16" width="28" height="32" rx="3" stroke="#10B981" stroke-width="2.5"/>
+  <path d="M26 16v-2a6 6 0 0 1 12 0v2" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="M26 30h12M26 38h8" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
