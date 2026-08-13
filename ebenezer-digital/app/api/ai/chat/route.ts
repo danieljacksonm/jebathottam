@@ -7,6 +7,7 @@ import {
   validateInternalApiKey,
   type AiMode,
 } from "@/lib/ai";
+import { loadEbenKnowledge } from "@/lib/ai-knowledge";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -64,7 +65,9 @@ export async function POST(request: Request) {
   }
 
   const mode = resolveAiMode(body.mode);
-  const messages = normalizeMessages(body.messages, mode, body.context);
+  const knowledge = loadEbenKnowledge();
+  const mergedContext = [knowledge, body.context || ""].filter(Boolean).join("\n\n");
+  const messages = normalizeMessages(body.messages, mode, mergedContext);
   const userTurns = messages.filter((m) => m.role === "user");
   if (userTurns.length === 0) {
     return new Response(JSON.stringify({ error: "Add at least one user message" }), {
@@ -84,9 +87,9 @@ export async function POST(request: Request) {
         messages,
         stream: wantStream,
         options: {
-          temperature: mode === "news" ? 0.4 : 0.7,
-          num_predict: mode === "news" ? 420 : 512,
-          num_ctx: 2048,
+          temperature: 0.55,
+          num_predict: 1200,
+          num_ctx: 3072,
         },
       }),
       signal: AbortSignal.timeout(110000),

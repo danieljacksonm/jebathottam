@@ -7,7 +7,7 @@ export default function AiPage() {
       <Suspense
         fallback={
           <div className="ai-os is-land grid min-h-screen place-items-center">
-            Opening Ebenezer AI…
+            Opening Eben AI…
           </div>
         }
       >
@@ -15,7 +15,7 @@ export default function AiPage() {
       </Suspense>
 
       <section className="sr-only">
-        <h1>Ask anything with Ebenezer AI</h1>
+        <h1>Ask anything with Eben AI</h1>
         <p>
           An intelligent space for thinking, creating and discovering. Hosted by
           Ebenezer Digital on our own open-source model.

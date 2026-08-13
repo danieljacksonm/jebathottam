@@ -78,7 +78,7 @@ async function streamAsk(
 export function AskAiPanel({
   mode,
   context,
-  title = "Ask Ebenezer AI",
+  title = "Ask Eben AI",
   placeholder = "Ask anything…",
   starters = [],
   tone = "studio",
@@ -156,7 +156,7 @@ export function AskAiPanel({
           <div className="mb-3 flex items-start justify-between gap-3">
             <div>
               <p className={`text-[10px] uppercase tracking-[0.2em] ${accent}`}>
-                Ebenezer AI · {mode}
+                Eben AI · {mode}
               </p>
               <h3 className="mt-1 font-serif text-xl sm:text-2xl">{title}</h3>
             </div>

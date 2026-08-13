@@ -479,7 +479,7 @@ export function AiStudio() {
           <div className="ai-head-meta">
             <span className={`ai-live ${health.status}`} />
             <button type="button" className="ai-model" onClick={() => setModelOpen((v) => !v)}>
-              {health.model || "Ebenezer AI"}
+              {health.model || "Eben AI"}
             </button>
             {health.status === "ready" ? <small>Online</small> : <small>Limited</small>}
           </div>
@@ -510,7 +510,7 @@ export function AiStudio() {
               transition={{ duration: reduce ? 0.15 : 0.45 }}
             >
               <AiCore state={focused || input ? "typing" : core} size="lg" />
-              <p className="ai-kicker">Ebenezer AI</p>
+              <p className="ai-kicker">Eben AI</p>
               <h1>
                 ASK
                 <br />

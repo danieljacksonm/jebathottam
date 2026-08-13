@@ -109,6 +109,13 @@ export function JournalNav({
               <span className="text-xs tracking-widest">MENU</span>
             </button>
             <Link
+              href="/ai?mode=blog"
+              className="hidden text-[11px] uppercase tracking-[0.2em] text-[var(--j-muted)] hover:text-[var(--j-brand)] md:inline"
+              data-cursor="AI"
+            >
+              Eben AI
+            </Link>
+            <Link
               href="https://ebenezerdigital.com"
               className="hidden rounded-full border border-[var(--j-brand)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--j-brand)] transition hover:bg-[var(--j-brand)] hover:text-[#04110c] md:inline-flex"
               data-cursor="→"

@@ -20,12 +20,12 @@ const ui = Outfit({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
 
 export const metadata: Metadata = {
-  title: "Ebenezer AI | Ask anything",
+  title: "Eben AI | Ask anything",
   description:
-    "An intelligent space for thinking, creating and discovering. Private, calm AI by Ebenezer Digital.",
+    "Eben AI — an intelligent space for thinking, creating and discovering. Private, calm AI by Ebenezer Digital.",
   alternates: { canonical: `${siteUrl}/ai` },
   openGraph: {
-    title: "Ebenezer AI",
+    title: "Eben AI",
     description: "An intelligent space for thinking, creating and discovering.",
     url: `${siteUrl}/ai`,
     type: "website",

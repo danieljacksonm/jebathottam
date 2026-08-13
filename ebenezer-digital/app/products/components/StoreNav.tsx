@@ -120,7 +120,7 @@ export function StoreNav() {
               href="/ai?mode=product"
               className="hidden text-[11px] uppercase tracking-[0.2em] text-[var(--s-muted)] hover:text-[var(--s-brand)] md:inline"
             >
-              Ask AI
+              Eben AI
             </Link>
             <label className="hidden items-center gap-2 rounded-full border border-[var(--s-line)] px-2 py-1 text-[10px] uppercase tracking-[0.16em] text-[var(--s-muted)] md:flex">
               <span>Lang</span>
@@ -196,7 +196,7 @@ export function StoreNav() {
               onClick={() => setMenuOpen(false)}
               className="block font-serif text-3xl text-[var(--s-brand)]"
             >
-              Ask Store AI
+              Eben AI
             </Link>
           </div>
         </div>

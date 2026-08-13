@@ -63,7 +63,7 @@ export async function GET(request: Request) {
       ? `Give a short world news brief focused on "${region}" for a busy reader.`
       : q
         ? `Give a short news brief about "${q}" using these headlines.`
-        : "Give a short world news brief: 6–8 bullet points covering different regions. End with one 'Watch next' line.";
+        : "Write a clear world news briefing a busy reader can understand. Use simple English. Cover several regions. For each point say what happened and why it matters. End with 'Watch next' and a 3-line summary.";
 
     const ollamaRes = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {
       method: "POST",
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
           { role: "system", content: buildSystemPrompt("news", context) },
           { role: "user", content: userAsk },
         ],
-        options: { temperature: 0.35, num_predict: 450, num_ctx: 2048 },
+        options: { temperature: 0.4, num_predict: 900, num_ctx: 3072 },
       }),
       signal: AbortSignal.timeout(110000),
     });

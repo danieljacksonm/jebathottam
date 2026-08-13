@@ -96,7 +96,7 @@ export function AiComposer({
         onFocus={onFocus}
         onBlur={onBlur}
         placeholder={placeholder}
-        aria-label="Message Ebenezer AI"
+        aria-label="Message Eben AI"
         className="ai-composer-input"
       />
 

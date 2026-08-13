@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Share2, Sparkles } from "lucide-react";
+import { ArrowUpRight, Share2 } from "lucide-react";
 import { JournalNav } from "../components/JournalNav";
 import { JournalCursor } from "../components/JournalCursor";
 import { JournalProgress } from "../components/JournalProgress";
@@ -12,6 +12,7 @@ import { JournalMarquee } from "../components/JournalMarquee";
 import { GoogleTranslateBar } from "../components/GoogleTranslateBar";
 import { formatDate, readingTime, type JournalPost } from "../lib";
 import { STORE_PRODUCTS } from "@/app/products/data";
+import { AskAiPanel } from "@/components/AskAiPanel";
 import "../journal.css";
 
 type RelatedLite = Pick<JournalPost, "id" | "title" | "slug" | "excerpt" | "coverImage" | "category" | "author" | "publishedAt">;
@@ -241,15 +242,22 @@ export function ArticleView({ slug }: { slug: string }) {
             <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--j-brand)]">Know more with AI</p>
             <h2 className="mt-3 font-serif text-3xl text-[var(--j-paper)]">Still curious?</h2>
             <p className="mt-3 text-[var(--j-muted)]">
-              This lesson is written for clear understanding. For more examples, local Indian life stories, or harder words explained gently, open Ebenezer AI.
+              This lesson is written for clear understanding. Ask Eben AI for more examples, Indian life stories, or harder words explained gently.
             </p>
-            <Link
-              href={aiHref}
-              data-cursor="AI"
-              className="mt-6 inline-flex items-center gap-2 bg-[var(--j-brand)] px-5 py-3 text-[11px] uppercase tracking-[0.22em] text-black"
-            >
-              <Sparkles className="h-4 w-4" /> Ask Ebenezer AI
-            </Link>
+            <div className="mt-6">
+              <AskAiPanel
+                mode="blog"
+                title="Ask Eben AI about this lesson"
+                placeholder="Explain this more simply…"
+                context={`Title: ${post.title}\nExcerpt: ${post.excerpt}\n${(post.content || "").slice(0, 2500)}`}
+                starters={[
+                  "Explain this lesson in simpler English",
+                  "Give 3 examples from Indian daily life",
+                  "What should I learn next?",
+                ]}
+                fullPageHref={aiHref}
+              />
+            </div>
           </aside>
 
           {products.length > 0 && (
@@ -339,7 +347,7 @@ export function ArticleView({ slug }: { slug: string }) {
             All stories
           </Link>
           <Link href="/ai" className="hover:text-[var(--j-brand)]">
-            Ebenezer AI
+            Eben AI
           </Link>
           <Link href="/products" className="hover:text-[var(--j-brand)]">
             Store
