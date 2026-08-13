@@ -25,15 +25,23 @@ export async function GET(request: NextRequest) {
       offset: Number.isFinite(offset) ? offset : 0,
     });
 
-    return NextResponse.json({
-      ok: true,
-      ...result,
-      feeds: {
-        rss: "/api/news/rss",
-        ical: "/api/news/ical",
-        search: "/api/news?q=",
+    return NextResponse.json(
+      {
+        ok: true,
+        generatedAt: new Date().toISOString(),
+        ...result,
+        feeds: {
+          rss: "/api/news/rss",
+          ical: "/api/news/ical",
+          search: "/api/news?q=",
+        },
       },
-    });
+      {
+        headers: {
+          "Cache-Control": "no-store, max-age=0",
+        },
+      }
+    );
   } catch (error) {
     console.error("News search error:", error);
     return NextResponse.json({ ok: false, error: "Failed to load news" }, { status: 500 });

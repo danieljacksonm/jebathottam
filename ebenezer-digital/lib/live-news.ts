@@ -1,4 +1,5 @@
 import type { NewsArticle, NewsRegion } from "@/app/blog/news/data";
+import { photoForStory, sanitizeImageUrl, storyFingerprint } from "@/lib/news-photos";
 
 export type LiveNewsItem = NewsArticle & {
   origin: "live";
@@ -9,9 +10,7 @@ export type LiveNewsItem = NewsArticle & {
 type Cache = { at: number; items: LiveNewsItem[] };
 
 let cache: Cache | null = null;
-const CACHE_MS = 5 * 60 * 1000;
-
-const FALLBACK_IMAGE = "/images/journal/hero.jpg";
+const CACHE_MS = 45 * 1000;
 
 const RSS_FEEDS: { url: string; region: NewsRegion; source: string; location: string }[] = [
   { url: "https://www.theguardian.com/world/rss", region: "World", source: "The Guardian", location: "World" },
@@ -129,14 +128,13 @@ function attr(xml: string, pattern: RegExp): string {
   return (m?.[1] || "").trim();
 }
 
-function pickImage(block: string): string {
-  return (
+function pickImage(block: string, region: string, title: string): string {
+  const raw =
     attr(block, /<media:content[^>]+url=["']([^"']+)["']/i) ||
     attr(block, /<media:thumbnail[^>]+url=["']([^"']+)["']/i) ||
     attr(block, /<enclosure[^>]+url=["']([^"']+\.(?:jpg|jpeg|png|webp)[^"']*)["']/i) ||
-    attr(block, /<img[^>]+src=["']([^"']+)["']/i) ||
-    FALLBACK_IMAGE
-  );
+    attr(block, /<img[^>]+src=["']([^"']+)["']/i);
+  return sanitizeImageUrl(raw, photoForStory(region, title));
 }
 
 async function fetchText(url: string): Promise<string> {
@@ -224,7 +222,7 @@ async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
         location: r.sectionName || "World",
         sourceLabel: fields.publication || "The Guardian",
         publishedAt: toIso(r.webPublicationDate),
-        coverImage: fields.thumbnail || FALLBACK_IMAGE,
+        coverImage: sanitizeImageUrl(fields.thumbnail, photoForStory(mapGuardianSection(r.sectionId || r.sectionName || "world"), fields.headline || r.webTitle)),
         featured: items.length < 3,
         origin: "live",
         originalUrl: r.webUrl,
@@ -259,7 +257,7 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
       location: feed.location,
       sourceLabel: feed.source,
       publishedAt: toIso(pub),
-      coverImage: pickImage(description + encoded + block),
+      coverImage: pickImage(description + encoded + block, feed.region, title),
       origin: "live" as const,
       originalUrl: link.startsWith("http") ? link : undefined,
       byline: creator || undefined,
@@ -275,11 +273,17 @@ export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
     ...RSS_FEEDS.map((feed) => fetchRssFeed(feed)),
   ]);
 
-  const bySlug = new Map<string, LiveNewsItem>();
+  const byKey = new Map<string, LiveNewsItem>();
+  const score = (item: LiveNewsItem) => {
+    const photo = item.coverImage.startsWith("http") && !item.coverImage.includes("unsplash.com") ? 4 : 0;
+    return photo + Math.min(item.body.join(" ").length / 80, 8) + (item.originalUrl ? 1 : 0);
+  };
   const push = (item: LiveNewsItem) => {
-    const existing = bySlug.get(item.slug);
-    if (!existing || item.body.join(" ").length > existing.body.join(" ").length) {
-      bySlug.set(item.slug, item);
+    if (!item.title || item.title.length < 12) return;
+    const key = storyFingerprint(item.title) || item.slug;
+    const existing = byKey.get(key);
+    if (!existing || score(item) > score(existing)) {
+      byKey.set(key, item);
     }
   };
 
@@ -288,13 +292,15 @@ export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
     if (result.status === "fulfilled") result.value.forEach(push);
   }
 
-  const items = Array.from(bySlug.values()).sort(
+  const items = Array.from(byKey.values()).sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
+  const now = Date.now();
   if (items[0]) items[0].featured = true;
-  items.slice(0, 6).forEach((n, i) => {
-    if (i < 3) n.breaking = true;
+  items.forEach((n) => {
+    const age = now - new Date(n.publishedAt).getTime();
+    n.breaking = age >= 0 && age < 90 * 60 * 1000;
   });
 
   cache = { at: Date.now(), items };

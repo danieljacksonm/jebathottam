@@ -1,3 +1,5 @@
+import { photoForStory } from "@/lib/news-photos";
+
 export type NewsRegion =
   | "World"
   | "Asia"
@@ -47,7 +49,7 @@ export const NEWS_REGIONS: NewsRegion[] = [
 ];
 
 /** Editorial world desk — original summaries for Ebenezer News (.info) */
-export const WORLD_NEWS: NewsArticle[] = [
+const WORLD_NEWS_SEED: NewsArticle[] = [
   {
     id: "n1",
     slug: "global-leaders-push-new-climate-funding-deal",
@@ -466,6 +468,14 @@ export const WORLD_NEWS: NewsArticle[] = [
   },
 ];
 
+export const WORLD_NEWS: NewsArticle[] = WORLD_NEWS_SEED.map((n) => ({
+  ...n,
+  coverImage: photoForStory(n.region, n.title, n.topic),
+  breaking: false,
+  featured: false,
+  origin: "seed" as const,
+}));
+
 export function getNewsBySlug(slug: string): NewsArticle | undefined {
   return WORLD_NEWS.find((n) => n.slug === slug);
 }
@@ -494,8 +504,11 @@ export function formatNewsClock(value: string): string {
 }
 
 export function relativeNewsTime(value: string): string {
-  const mins = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 60000));
-  if (mins < 1) return "Updated just now";
+  const ms = Math.max(0, Date.now() - new Date(value).getTime());
+  const secs = Math.floor(ms / 1000);
+  if (secs < 8) return "Updated just now";
+  if (secs < 60) return `Updated ${secs}s ago`;
+  const mins = Math.floor(secs / 60);
   if (mins < 60) return `Updated ${mins} min ago`;
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `Updated ${hours}h ago`;
@@ -538,14 +551,17 @@ export function storiesForNav(all: NewsArticle[], nav: string): NewsArticle[] {
     World: (n) =>
       ["World", "Asia", "Europe", "Americas", "Africa", "Middle East"].includes(n.region),
     India: (n) => n.region === "India",
-    Politics: (n) => /policy|housing|leaders|regulation|funding/i.test(`${n.topic} ${n.title}`),
-    Business: (n) => n.region === "Business" || /trade|funding|capital|markets/i.test(n.topic),
-    Technology: (n) => n.region === "Tech",
-    Science: (n) => n.region === "Science",
-    Sports: (n) => n.region === "Sports",
-    Culture: (n) => n.region === "Climate" || /tourism|cities|travel/i.test(n.topic),
-    Entertainment: (n) => n.region === "Sports" || /broadcast|football/i.test(n.topic),
-    Opinion: (n) => n.region === "Science" || n.region === "Climate" || /policy|ethics/i.test(n.topic),
+    Politics: (n) =>
+      /politic|election|minister|parliament|president|modi|congress|bjp|white house|policy|regulation/i.test(
+        `${n.topic} ${n.title}`
+      ),
+    Business: (n) => n.region === "Business" || /trade|funding|capital|markets|bank|economy/i.test(`${n.topic} ${n.title}`),
+    Technology: (n) => n.region === "Tech" || /tech|ai |chip|software|app /i.test(`${n.topic} ${n.title}`),
+    Science: (n) => n.region === "Science" || /science|space|nasa|research/i.test(`${n.topic} ${n.title}`),
+    Sports: (n) => n.region === "Sports" || /cricket|football|tennis|olymp|ipl/i.test(`${n.topic} ${n.title}`),
+    Culture: (n) => /culture|art|heritage|tourism|cities|travel|book/i.test(`${n.topic} ${n.title}`),
+    Entertainment: (n) => /film|movie|music|celebrity|entertainment|hollywood|bollywood/i.test(`${n.topic} ${n.title}`),
+    Opinion: (n) => /opinion|editorial|analysis|comment|ethics/i.test(`${n.topic} ${n.title} ${n.dek}`),
   };
   const test = tests[nav];
   return test ? all.filter(test) : all;

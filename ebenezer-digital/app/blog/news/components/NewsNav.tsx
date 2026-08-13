@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Menu, Search, Radio, X } from "lucide-react";
 import { NEWS_NAV } from "../data";
@@ -27,7 +26,7 @@ export function NewsNav() {
   return (
     <>
       <header className={`news-nav ${solid ? "is-solid" : ""}`}>
-        <div className="mx-auto flex h-14 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-10">
+        <div className="news-masthead mx-auto flex h-[4.4rem] max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-10">
           <button
             type="button"
             className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em]"
@@ -39,10 +38,10 @@ export function NewsNav() {
             <span className="hidden sm:inline">Menu</span>
           </button>
 
-          <Link href="/blog/news" className="flex items-center gap-2" data-cursor="HOME" aria-label="Ebenezer News home">
-            <Image src="/brand/ebenezer-news-mark.svg" alt="" width={28} height={28} className="rounded-md" />
-            <span className="news-display text-[15px] tracking-[0.08em] sm:text-lg">
-              E&gt; NEWS
+          <Link href="/blog/news" className="flex flex-col items-center" data-cursor="HOME" aria-label="Ebenezer News home">
+            <span className="text-[9px] font-semibold uppercase tracking-[0.42em] text-[var(--n-gold)]">The</span>
+            <span className="news-display text-[17px] tracking-[0.12em] sm:text-[22px]">
+              Ebenezer News
             </span>
           </Link>
 

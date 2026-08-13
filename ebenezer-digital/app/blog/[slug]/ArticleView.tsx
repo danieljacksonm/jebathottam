@@ -197,13 +197,13 @@ export function ArticleView({ slug }: { slug: string }) {
           </div>
         </header>
 
-        <motion.div style={{ scale: heroScale }} className="relative mx-4 aspect-[21/10] overflow-hidden sm:mx-8 lg:mx-12">
+        <motion.div style={{ scale: heroScale }} className="relative mx-4 aspect-[21/10] overflow-hidden bg-[#111] sm:mx-8 lg:mx-12">
           <Image
             src={post.coverImage || "/images/journal/hero.jpg"}
             alt={post.title}
             fill
             priority
-            className="object-cover"
+            className="object-cover object-center"
             sizes="100vw"
           />
         </motion.div>
@@ -228,7 +228,7 @@ export function ArticleView({ slug }: { slug: string }) {
                       src={src}
                       alt={`${post.title} — visual ${i + 1}`}
                       fill
-                      className="object-cover"
+                      className="object-cover object-center"
                       sizes={i === 0 ? "100vw" : "50vw"}
                     />
                   </div>

@@ -5,6 +5,7 @@ import {
   type NewsRegion,
 } from "@/app/blog/news/data";
 import { fetchLiveNews, getLiveNewsBySlug } from "@/lib/live-news";
+import { storyFingerprint } from "@/lib/news-photos";
 
 export type PublicNewsItem = NewsArticle & {
   origin: "seed" | "cms" | "live";
@@ -35,22 +36,26 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
   return { ...n, origin: "seed" };
 }
 
-/** Live world wire + CMS + seed. CMS wins on same slug. Live fills the desk. */
+/** Live world wire + CMS. Seed only if the wire is thin. Dedupes same headline from many agencies. */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
   const [cms, live] = await Promise.all([db.getNewsArticles(true), fetchLiveNews().catch(() => [])]);
-  const bySlug = new Map<string, PublicNewsItem>();
+  const byKey = new Map<string, PublicNewsItem>();
 
-  for (const s of WORLD_NEWS) {
-    bySlug.set(s.slug, seedToPublic(s));
-  }
-  for (const l of live) {
-    bySlug.set(l.slug, l);
-  }
-  for (const c of cms) {
-    bySlug.set(c.slug, recordToPublic(c));
-  }
+  const put = (item: PublicNewsItem, force = false) => {
+    const key = storyFingerprint(item.title) || item.slug;
+    const existing = byKey.get(key);
+    if (!existing || force || (item.origin === "live" && existing.origin !== "live")) {
+      byKey.set(key, item);
+    }
+  };
 
-  return Array.from(bySlug.values()).sort(
+  if (live.length < 18) {
+    for (const s of WORLD_NEWS) put(seedToPublic(s));
+  }
+  for (const l of live) put(l);
+  for (const c of cms) put(recordToPublic(c), true);
+
+  return Array.from(byKey.values()).sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 }

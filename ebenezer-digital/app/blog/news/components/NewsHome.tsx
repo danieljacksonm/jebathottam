@@ -54,35 +54,85 @@ export function NewsHome() {
   const titleY = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const metaOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
 
-  // Prefer live wire stories so visitors see the world first
+  // Prefer live wire. Each section gets unique stories so the desk does not feel copy-pasted.
   const liveFirst = useMemo(() => {
     const live = articles.filter((a) => a.origin === "live");
     const other = articles.filter((a) => a.origin !== "live");
     return live.length ? [...live, ...other] : articles;
   }, [articles]);
 
-  const lead = liveFirst.find((a) => a.featured) || liveFirst[0];
-  const rest = liveFirst.filter((a) => a.id !== lead?.id);
-  const secondary = rest.slice(0, 4);
-  const compact = rest.slice(4, 12);
-  const live = [...liveFirst].filter((a) => a.breaking).concat(rest).slice(0, 14);
-  const trending = liveFirst.slice(0, 12);
-  const mostRead = liveFirst.slice(0, 12);
-  const india = storiesForNav(liveFirst, "India");
-  const tech = storiesForNav(liveFirst, "Technology");
-  const sports = storiesForNav(liveFirst, "Sports");
-  const opinion = storiesForNav(liveFirst, "Opinion");
-  const visual = liveFirst.slice(0, 5);
-  const audio = liveFirst.slice(3, 7);
-  const wireMore = rest.slice(12, 40);
+  const desk = useMemo(() => {
+    const used = new Set<string>();
+    const take = (count: number, list = liveFirst, pred?: (a: NewsArticle) => boolean) => {
+      const out: NewsArticle[] = [];
+      for (const a of list) {
+        if (used.has(a.id)) continue;
+        if (pred && !pred(a)) continue;
+        used.add(a.id);
+        out.push(a);
+        if (out.length >= count) break;
+      }
+      return out;
+    };
+    const lead = take(1, liveFirst, (a) => Boolean(a.featured))[0] || take(1)[0];
+    const secondary = take(4);
+    const compact = take(8);
+    const wireMore = take(20);
+    let live = take(12, liveFirst, (a) => Boolean(a.breaking));
+    if (live.length < 8) live = live.concat(take(8 - live.length));
+    const topBig = take(1);
+    const topPair = take(2);
+    const trending = take(8);
+    const mostRead = take(8);
+    const visual = take(5);
+    const audio = take(4);
+    const leftover = liveFirst.filter((a) => !used.has(a.id));
+    return {
+      lead,
+      secondary,
+      compact,
+      wireMore,
+      live,
+      topBig: topBig[0],
+      topPair,
+      trending,
+      mostRead,
+      visual,
+      audio,
+      india: storiesForNav(leftover, "India"),
+      tech: storiesForNav(leftover, "Technology"),
+      sports: storiesForNav(leftover, "Sports"),
+      opinion: storiesForNav(leftover, "Opinion"),
+      leftover,
+    };
+  }, [liveFirst]);
+
+  const {
+    lead,
+    secondary,
+    compact,
+    wireMore,
+    live,
+    topBig,
+    topPair,
+    trending,
+    mostRead,
+    visual,
+    audio,
+    india,
+    tech,
+    sports,
+    opinion,
+    leftover,
+  } = desk;
 
   const desks = useMemo(
     () =>
       NEWS_NAV.filter((n) => !["World", "India"].includes(n)).map((name) => ({
         name,
-        items: storiesForNav(liveFirst, name).slice(0, 4),
+        items: storiesForNav(leftover, name).slice(0, 4),
       })),
-    [liveFirst]
+    [leftover]
   );
 
   if (loading) {
@@ -109,7 +159,7 @@ export function NewsHome() {
           <div>
             <p className="news-kicker text-[var(--n-muted)]">What is happening now</p>
             <p className="mt-2 max-w-xl text-sm text-[var(--n-muted)]">
-              One desk for the world: BBC, Reuters, The Hindu, NDTV, NYT, Al Jazeera and more. Scan the wire, then open the original site.
+              One desk for the world: BBC, Reuters, The Hindu, NDTV, NYT, Al Jazeera and more. The wire checks every 25 seconds. New stories appear when agencies publish.
             </p>
           </div>
           {updatedAt && (
@@ -128,7 +178,7 @@ export function NewsHome() {
                 </span>
               ))}
             </h1>
-            <motion.div layoutId={`news-img-${lead.slug}`} className="relative mt-6 aspect-[16/9] overflow-hidden bg-[#111]">
+            <motion.div layoutId={`news-img-${lead.slug}`} className="news-frame relative mt-6 aspect-[16/9] overflow-hidden">
               <NewsImage
                 src={lead.coverImage}
                 alt={lead.title}
@@ -206,19 +256,19 @@ export function NewsHome() {
         <p className="news-kicker text-[var(--n-muted)]">What should I read</p>
         <h2 className="news-display mt-3 text-5xl sm:text-7xl">Top stories</h2>
         <div className="mt-12 grid gap-6 md:grid-cols-6">
-          {rest[0] && (
-            <StoryLink story={rest[0]} className="group md:col-span-4 md:row-span-2">
-              <div className="relative aspect-[16/11] overflow-hidden bg-[#111] md:aspect-auto md:h-full md:min-h-[420px]">
-                <NewsImage src={rest[0].coverImage} alt={rest[0].title} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="70vw" />
+          {topBig && (
+            <StoryLink story={topBig} className="group md:col-span-4 md:row-span-2">
+              <div className="news-frame relative aspect-[16/11] overflow-hidden md:aspect-auto md:h-full md:min-h-[420px]">
+                <NewsImage src={topBig.coverImage} alt={topBig.title} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="70vw" />
               </div>
-              <p className="mt-4 text-[10px] uppercase tracking-[0.24em] text-[var(--n-live)]">{rest[0].region}</p>
-              <h3 className="mt-2 font-serif text-3xl leading-tight sm:text-5xl">{rest[0].title}</h3>
-              <p className="mt-3 max-w-xl text-sm text-[var(--n-muted)]">{rest[0].dek}</p>
+              <p className="mt-4 text-[10px] uppercase tracking-[0.24em] text-[var(--n-live)]">{topBig.region}</p>
+              <h3 className="mt-2 font-serif text-3xl leading-tight sm:text-5xl">{topBig.title}</h3>
+              <p className="mt-3 max-w-xl text-sm text-[var(--n-muted)]">{topBig.dek}</p>
             </StoryLink>
           )}
-          {rest.slice(1, 3).map((s) => (
+          {topPair.map((s) => (
             <StoryLink key={s.id} story={s} className="group md:col-span-2">
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#111]">
+              <div className="news-frame relative aspect-[4/3]">
                 <NewsImage src={s.coverImage} alt={s.title} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="33vw" />
               </div>
               <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-[var(--n-muted)]">{s.region}</p>
@@ -276,7 +326,7 @@ export function NewsHome() {
           {trending.map((s, i) => (
             <StoryLink key={s.id} story={s} className="w-[78vw] shrink-0 sm:w-[340px]">
               <p className="news-display text-6xl text-[var(--n-ink)]/15">{String(i + 1).padStart(2, "0")}</p>
-              <div className="relative mt-2 aspect-[4/5] overflow-hidden bg-[#111]">
+              <div className="news-frame relative mt-2 aspect-[4/5]">
                 <NewsImage src={s.coverImage} alt={s.title} fill className="object-cover" sizes="340px" />
               </div>
               <p className="mt-3 text-[10px] uppercase tracking-[0.22em] text-[var(--n-muted)]">{s.region}</p>
@@ -331,7 +381,7 @@ export function NewsHome() {
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {sports.slice(0, 3).map((s) => (
               <StoryLink key={s.id} story={s} className="group">
-                <div className="relative aspect-[3/4] overflow-hidden bg-[#111]">
+                <div className="news-frame relative aspect-[3/4]">
                   <NewsImage src={s.coverImage} alt={s.title} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="33vw" />
                   <span className="absolute left-3 top-3 bg-[var(--n-live)] px-2 py-1 text-[9px] font-bold uppercase tracking-[0.16em] text-white">
                     Live desk

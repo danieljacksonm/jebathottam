@@ -1,18 +1,42 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Cormorant_Garamond, Outfit } from "next/font/google";
 import "./ai.css";
 
+const display = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-ai-display",
+  display: "swap",
+});
+
+const ui = Outfit({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-ai-ui",
+  display: "swap",
+});
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
+
 export const metadata: Metadata = {
-  title: "Ebenezer AI | Chat",
+  title: "Ebenezer AI | Ask anything",
   description:
-    "Talk with Ebenezer AI — open-source assistant hosted by Ebenezer Digital. Writing help, ideas, and digital work support.",
+    "An intelligent space for thinking, creating and discovering. Private, calm AI by Ebenezer Digital.",
+  alternates: { canonical: `${siteUrl}/ai` },
   openGraph: {
     title: "Ebenezer AI",
-    description: "Open-source AI chat by Ebenezer Digital.",
+    description: "An intelligent space for thinking, creating and discovering.",
+    url: `${siteUrl}/ai`,
     type: "website",
   },
+  robots: { index: true, follow: true },
 };
 
 export default function AiLayout({ children }: { children: ReactNode }) {
-  return <div className="ai-shell">{children}</div>;
+  return (
+    <div className={`${display.variable} ${ui.variable}`} data-ai-root>
+      {children}
+    </div>
+  );
 }

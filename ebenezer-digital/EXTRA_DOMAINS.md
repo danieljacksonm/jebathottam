@@ -20,16 +20,23 @@
 | ebenezerdigital.store | Redirect → /products (digital products later) |
 | ebenezerdigital.net | Redirect → main site (client portal later) |
 
-## VPS Nginx
+## VPS Nginx + SSL
 
-Copy updated `nginx-all-sites.conf` blocks for `.info`, `.store`, `.net`, then:
+Copy updated `nginx-all-sites.conf`, then issue HTTPS for `.info` and `.store`:
 
 ```bash
+sudo cp /home/dani/test/nginx-all-sites.conf /etc/nginx/sites-available/all-sites
 sudo nginx -t && sudo systemctl reload nginx
-sudo certbot --nginx -d ebenezerdigital.info -d www.ebenezerdigital.info
-sudo certbot --nginx -d ebenezerdigital.store -d www.ebenezerdigital.store
-sudo certbot --nginx -d ebenezerdigital.net -d www.ebenezerdigital.net
+
+# Or one script:
+bash /home/dani/test/scripts/enable-ssl-info-store.sh
+
+# Manual certbot (same result):
+sudo certbot --nginx -d ebenezerdigital.info -d www.ebenezerdigital.info --redirect
+sudo certbot --nginx -d ebenezerdigital.store -d www.ebenezerdigital.store --redirect
 ```
+
+`.store` must proxy to the app (not 301 to `.com`) or Let's Encrypt will fail.
 
 ## Deploy app updates (blog + portfolio images)
 

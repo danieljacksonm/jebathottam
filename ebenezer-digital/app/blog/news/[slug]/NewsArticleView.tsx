@@ -106,13 +106,13 @@ export function NewsArticleView({
           </div>
         </div>
 
-        <motion.div layoutId={`news-img-${article.slug}`} className="relative mt-10 aspect-[16/9] overflow-hidden bg-[#111]">
+        <motion.div layoutId={`news-img-${article.slug}`} className="news-frame relative mt-10 aspect-[16/9]">
           <NewsImage
             src={article.coverImage}
             alt={article.title}
             fill
             priority
-            className="object-cover"
+            className="object-cover object-center"
             sizes="100vw"
           />
         </motion.div>

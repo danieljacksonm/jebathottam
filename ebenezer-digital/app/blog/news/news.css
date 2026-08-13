@@ -1,19 +1,23 @@
-/* Ebenezer News — paper editorial. One accent: ink-red for live. */
+/* Ebenezer News — royal paper desk. Gold rules + ink-red for live. */
 .news-root {
-  --n-paper: #f4f0e8;
-  --n-ink: #0c0c0c;
-  --n-muted: #5a574f;
-  --n-line: rgba(12, 12, 12, 0.12);
-  --n-line-strong: rgba(12, 12, 12, 0.28);
-  --n-live: #b42318;
-  --n-live-soft: rgba(180, 35, 24, 0.12);
-  --n-glass: rgba(244, 240, 232, 0.72);
+  --n-paper: #f3ead8;
+  --n-ink: #12100c;
+  --n-muted: #5c564b;
+  --n-line: rgba(18, 16, 12, 0.12);
+  --n-line-strong: rgba(18, 16, 12, 0.28);
+  --n-live: #9e1b12;
+  --n-live-soft: rgba(158, 27, 18, 0.12);
+  --n-gold: #9a7b4f;
+  --n-glass: rgba(243, 234, 216, 0.78);
   --n-serif: var(--font-serif), "Source Serif 4", "Times New Roman", serif;
   --n-sans: var(--font-dm-sans), "DM Sans", system-ui, sans-serif;
   color: var(--n-ink);
-  background: var(--n-paper);
+  background:
+    radial-gradient(1200px 500px at 50% -10%, rgba(154, 123, 79, 0.12), transparent 60%),
+    var(--n-paper);
   font-family: var(--n-sans);
   font-feature-settings: "ss01" on, "kern" on;
+  scroll-behavior: smooth;
 }
 
 .news-root ::selection {
@@ -46,11 +50,21 @@
   z-index: 80;
   display: flex;
   align-items: center;
-  height: 28px;
-  border-bottom: 1px solid var(--n-line);
+  height: 30px;
+  border-bottom: 1px solid var(--n-gold);
   background: var(--n-ink);
   color: var(--n-paper);
   overflow: hidden;
+}
+
+.news-ticker-age {
+  flex-shrink: 0;
+  padding: 0 0.8rem;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--n-gold);
+  border-left: 1px solid rgba(243, 234, 216, 0.2);
 }
 
 .news-ticker-live {
@@ -95,7 +109,20 @@
   z-index: 70;
   border-bottom: 1px solid transparent;
   background: transparent;
-  transition: background 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+  transition: background 0.45s ease, border-color 0.45s ease, backdrop-filter 0.45s ease;
+}
+
+.news-masthead {
+  border-bottom: 1px solid rgba(154, 123, 79, 0.35);
+}
+
+.news-frame {
+  background: #0d0c0a;
+  overflow: hidden;
+}
+
+.news-frame img {
+  transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
 }
 
 .news-nav.is-solid {

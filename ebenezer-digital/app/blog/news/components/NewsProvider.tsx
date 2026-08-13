@@ -46,7 +46,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
     };
 
     load(true);
-    const timer = window.setInterval(() => load(false), 3 * 60 * 1000);
+    const timer = window.setInterval(() => load(false), 25 * 1000);
     return () => {
       alive = false;
       window.clearInterval(timer);

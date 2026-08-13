@@ -6,9 +6,18 @@
   --j-line: rgba(243, 239, 230, 0.12);
   --j-brand: #10b981;
   --j-brand-soft: rgba(16, 185, 129, 0.16);
+  --j-gold: #c4a574;
   color: var(--j-paper);
-  background: var(--j-ink);
+  background:
+    radial-gradient(900px 420px at 80% -10%, rgba(16, 185, 129, 0.08), transparent 55%),
+    var(--j-ink);
   font-feature-settings: "ss01" on, "kern" on;
+  scroll-behavior: smooth;
+}
+
+.journal-root img {
+  object-position: center;
+  transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .journal-root ::selection {
