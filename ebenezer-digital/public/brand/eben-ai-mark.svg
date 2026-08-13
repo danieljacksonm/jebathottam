@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Eben AI">
+  <rect width="64" height="64" rx="16" fill="#0A0A0B"/>
+  <rect x="1.25" y="1.25" width="61.5" height="61.5" rx="14.75" stroke="#C4A574" stroke-opacity="0.45"/>
+  <path d="M18 18h22M18 32h15M18 46h22" stroke="#F3EFE6" stroke-width="3.2" stroke-linecap="round"/>
+  <circle cx="47" cy="22" r="6" fill="url(#eben-ai-core)"/>
+  <circle cx="47" cy="22" r="2" fill="#F3EFE6" opacity="0.9"/>
+  <defs>
+    <radialGradient id="eben-ai-core" cx="40%" cy="35%" r="70%">
+      <stop offset="0%" stop-color="#F3EFE6"/>
+      <stop offset="55%" stop-color="#C4A574"/>
+      <stop offset="100%" stop-color="#6B5340"/>
+    </radialGradient>
+  </defs>
+</svg>

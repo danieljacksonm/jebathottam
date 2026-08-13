@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   Bookmark,
   FolderKanban,
@@ -45,8 +46,8 @@ export function AiSidebar({
       {mobile && open && <button className="ai-backdrop" aria-label="Close sidebar" onClick={onClose} />}
       <aside className={`ai-side ${open ? "is-open" : ""} ${mobile ? "is-mobile" : ""}`}>
         <div className="ai-side-top">
-          <Link href="/" className="ai-mark" data-cursor="HOME">
-            E<span />
+          <Link href="/ai" className="ai-mark" data-cursor="HOME" aria-label="Eben AI">
+            <Image src="/brand/eben-ai-mark.svg" alt="Eben AI" width={36} height={36} />
           </Link>
           {mobile && (
             <button type="button" className="ai-icon" onClick={onClose} aria-label="Close">

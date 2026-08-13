@@ -17,6 +17,7 @@ import {
   formatINR,
   type StoreProduct,
 } from "./data";
+import { markForCategory } from "@/lib/brand-marks";
 
 function ProductCard({
   product,
@@ -48,9 +49,9 @@ function ProductCard({
           </span>
         )}
         <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full border border-[var(--s-line)] bg-black/45 px-2 py-1 backdrop-blur">
-          <Image src="/brand/ebenezer-store-mark.svg" alt="" width={14} height={14} />
+          <Image src={markForCategory(p.category)} alt="" width={18} height={18} className="rounded-sm" />
           <span className="text-[10px] uppercase tracking-[0.16em] text-[var(--s-paper)]/85">
-            {p.category.slice(0, 2)}
+            E · {p.category}
           </span>
         </div>
         <div className="absolute inset-x-0 bottom-0 p-5">

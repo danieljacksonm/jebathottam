@@ -18,6 +18,7 @@ type Body = {
   stream?: boolean;
   mode?: AiMode | string;
   context?: string;
+  fast?: boolean;
 };
 
 function normalizeMessages(
@@ -86,10 +87,12 @@ export async function POST(request: Request) {
         model: OLLAMA_MODEL,
         messages,
         stream: wantStream,
+        keep_alive: "1h",
         options: {
-          temperature: 0.55,
-          num_predict: 1200,
-          num_ctx: 3072,
+          temperature: 0.5,
+          num_predict: body.fast ? 480 : 900,
+          num_ctx: body.fast ? 2048 : 3072,
+          num_thread: 4,
         },
       }),
       signal: AbortSignal.timeout(110000),

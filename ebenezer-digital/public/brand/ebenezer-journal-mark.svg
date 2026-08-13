@@ -1,10 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Ebenezer Journal">
-  <rect width="64" height="64" rx="14" fill="#070B10"/>
-  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" stroke="#10B981" stroke-opacity="0.35"/>
-  <!-- Spine -->
-  <path d="M22 14v36" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
-  <!-- E bars -->
-  <path d="M22 14h22M22 32h16M22 50h22" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
-  <!-- Journal page fold accent -->
-  <path d="M44 18l6 14-6 14" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+  <rect width="64" height="64" rx="16" fill="#070B10"/>
+  <rect x="1.25" y="1.25" width="61.5" height="61.5" rx="14.75" stroke="#10B981" stroke-opacity="0.35"/>
+  <path d="M18 16v32a2 2 0 0 0 2 2h22" stroke="#10B981" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M20 18h20M20 32h14M20 46h20" stroke="#F3EFE6" stroke-width="3" stroke-linecap="round"/>
+  <path d="M42 20c4 6 4 18 0 24" stroke="#10B981" stroke-width="2.2" stroke-linecap="round"/>
 </svg>

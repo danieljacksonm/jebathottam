@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, Share2 } from "lucide-react";
 import { resolveAiMode, type AiMode } from "@/lib/ai";
@@ -477,6 +478,7 @@ export function AiStudio() {
             </button>
           )}
           <div className="ai-head-meta">
+            <Image src="/brand/eben-ai-mark.svg" alt="" width={22} height={22} className="rounded-md" />
             <span className={`ai-live ${health.status}`} />
             <button type="button" className="ai-model" onClick={() => setModelOpen((v) => !v)}>
               {health.model || "Eben AI"}
@@ -510,7 +512,10 @@ export function AiStudio() {
               transition={{ duration: reduce ? 0.15 : 0.45 }}
             >
               <AiCore state={focused || input ? "typing" : core} size="lg" />
-              <p className="ai-kicker">Eben AI</p>
+              <div className="flex items-center gap-2">
+                <Image src="/brand/eben-ai-mark.svg" alt="" width={28} height={28} className="rounded-md" />
+                <p className="ai-kicker">Eben AI</p>
+              </div>
               <h1>
                 ASK
                 <br />

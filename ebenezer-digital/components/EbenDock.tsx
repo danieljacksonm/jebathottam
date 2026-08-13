@@ -29,6 +29,7 @@ async function streamAsk(
       context,
       stream: true,
       messages: [{ role: "user", content: question }],
+      fast: true,
     }),
   });
   if (!res.ok || !res.body) {
