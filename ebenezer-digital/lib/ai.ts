@@ -39,11 +39,33 @@ export function resolveAiMode(value: unknown): AiMode {
   return "general";
 }
 
+function nowInIndia(): string {
+  try {
+    return new Intl.DateTimeFormat("en-IN", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+      timeZone: "Asia/Kolkata",
+    }).format(new Date());
+  } catch {
+    return new Date().toISOString();
+  }
+}
+
 export function buildSystemPrompt(mode: AiMode, context?: string): string {
   const base = MODE_PROMPTS[mode] || MODE_PROMPTS.general;
+  const today = nowInIndia();
+  const withDate = `${base}
+
+Today's real date and time is ${today} (India Standard Time).
+When asked the date, day, or time, use this value. Never write placeholders like [insert current date].`;
   const trimmed = (context || "").trim().slice(0, 6000);
-  if (!trimmed) return base;
-  return `${base}
+  if (!trimmed) return withDate;
+  return `${withDate}
 
 --- CONTEXT (use this; do not invent beyond it) ---
 ${trimmed}

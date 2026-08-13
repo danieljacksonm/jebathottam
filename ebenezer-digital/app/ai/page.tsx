@@ -287,7 +287,9 @@ function AiChatInner() {
 
       if (!res.ok || !res.body) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || err.hint || `Request failed (${res.status})`);
+        throw new Error(
+          err.error || err.hint || err.detail || `Request failed (${res.status})`
+        );
       }
 
       const reader = res.body.getReader();

@@ -94,10 +94,15 @@ export async function POST(request: Request) {
 
     if (!ollamaRes.ok) {
       const text = await ollamaRes.text().catch(() => "");
+      const missingModel =
+        ollamaRes.status === 404 || /not found|pull/i.test(text);
       return new Response(
         JSON.stringify({
-          error: "Model server error",
+          error: missingModel
+            ? "No AI model installed. On VPS run: ollama pull qwen2.5:1.5b"
+            : "Model server error",
           detail: text.slice(0, 500) || `Ollama status ${ollamaRes.status}`,
+          hint: "ollama pull qwen2.5:1.5b",
         }),
         { status: 502, headers: { "Content-Type": "application/json" } }
       );
