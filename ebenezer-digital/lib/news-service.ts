@@ -81,7 +81,7 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
     topic,
     breaking,
     featured,
-    limit = 80,
+    limit = 160,
     offset = 0,
   } = params;
 
@@ -99,16 +99,25 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
 
   if (query) {
     list = list.filter((n) => {
-      const hay = `${n.title} ${n.dek} ${n.topic} ${n.location} ${n.region} ${n.body.join(" ")}`.toLowerCase();
+      const hay = `${n.title} ${n.dek} ${n.topic} ${n.location} ${n.region} ${n.body.join(" ")} ${n.sourceLabel}`.toLowerCase();
       return hay.includes(query);
     });
   }
 
-  const total = list.length;
-  const items = list.slice(Math.max(0, offset), Math.max(0, offset) + Math.min(limit, 100));
-  const regions = Array.from(new Set((await listPublicNews()).map((n) => n.region))).sort();
+  // Prefer live world stories so visitors see current events first
+  list = [...list].sort((a, b) => {
+    const ao = a.origin === "live" ? 0 : 1;
+    const bo = b.origin === "live" ? 0 : 1;
+    if (ao !== bo) return ao - bo;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
 
-  return { total, items, regions, query: q, region: region || "ALL" };
+  const total = list.length;
+  const items = list.slice(Math.max(0, offset), Math.max(0, offset) + Math.min(limit, 200));
+  const regions = Array.from(new Set((await listPublicNews()).map((n) => n.region))).sort();
+  const sources = Array.from(new Set(list.map((n) => n.sourceLabel))).sort();
+
+  return { total, items, regions, sources, query: q, region: region || "ALL" };
 }
 
 export function escapeXml(value: string): string {

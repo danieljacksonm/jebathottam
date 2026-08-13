@@ -84,6 +84,18 @@ export function WorldDeskMap({ stories }: { stories: NewsArticle[] }) {
                 <Link href={`/blog/news/${top.slug}`} className="mt-2 block font-serif text-2xl leading-snug" data-cursor="READ">
                   {top.title}
                 </Link>
+                <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-white/45">{top.sourceLabel}</p>
+                {top.originalUrl && (
+                  <a
+                    href={top.originalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block text-[10px] font-semibold uppercase tracking-[0.18em] text-white"
+                    data-cursor="OPEN"
+                  >
+                    Read on {top.sourceLabel} →
+                  </a>
+                )}
               </>
             ) : (
               <p className="mt-6 text-sm text-white/50">No stories on this desk yet.</p>

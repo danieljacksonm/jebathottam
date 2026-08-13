@@ -206,7 +206,7 @@ export default function ProductsPage() {
               {t("viewBundles")}
             </a>
           </div>
-        </div>
+                </div>
       </section>
 
       <StoreMarquee

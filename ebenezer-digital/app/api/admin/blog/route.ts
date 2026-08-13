@@ -5,7 +5,7 @@ import { requireAdmin } from "@/lib/require-admin";
 export async function GET(request: NextRequest) {
   const auth = requireAdmin(request);
   if (auth.error) return auth.error;
-  const posts = await db.getBlogPosts();
+  const posts = await db.getBlogPosts(false, { includeEdu: false });
   return NextResponse.json({ posts });
 }
 

@@ -5,10 +5,16 @@ export type JournalPost = {
   excerpt: string;
   content?: string;
   coverImage?: string;
+  gallery?: string[];
   category: string;
   publishedAt?: string;
   author: string;
   tags?: string[];
+  relatedSlugs?: string[];
+  aiPrompt?: string;
+  promoteProducts?: string[];
+  seoTitle?: string;
+  seoDescription?: string;
 };
 
 export function readingTime(text: string): number {
@@ -40,4 +46,8 @@ export function isNewsCategory(category?: string): boolean {
     value.includes("announcement") ||
     value.includes("press")
   );
+}
+
+export function isLearnCategory(category?: string): boolean {
+  return (category || "").toLowerCase().includes("learn");
 }

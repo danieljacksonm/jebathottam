@@ -116,6 +116,9 @@ export function NewsNav() {
             ))}
           </div>
           <div className="mt-12 space-y-3 text-sm text-[var(--n-muted)]">
+            <Link href="/ai?mode=news" onClick={() => setMenuOpen(false)} className="block text-[var(--n-live)]">
+              Ask News AI
+            </Link>
             <Link href="/blog" onClick={() => setMenuOpen(false)}>
               Journal
             </Link>

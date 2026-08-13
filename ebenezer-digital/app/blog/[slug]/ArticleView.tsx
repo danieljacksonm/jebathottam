@@ -4,28 +4,105 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, Share2 } from "lucide-react";
+import { ArrowUpRight, Share2, Sparkles } from "lucide-react";
 import { JournalNav } from "../components/JournalNav";
 import { JournalCursor } from "../components/JournalCursor";
 import { JournalProgress } from "../components/JournalProgress";
 import { JournalMarquee } from "../components/JournalMarquee";
+import { GoogleTranslateBar } from "../components/GoogleTranslateBar";
 import { formatDate, readingTime, type JournalPost } from "../lib";
+import { STORE_PRODUCTS } from "@/app/products/data";
 import "../journal.css";
 
+type RelatedLite = Pick<JournalPost, "id" | "title" | "slug" | "excerpt" | "coverImage" | "category" | "author" | "publishedAt">;
+
+function renderBlocks(content: string) {
+  const blocks = content.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+  return blocks.map((para, i) => {
+    if (para.startsWith("## ")) {
+      return (
+        <h2 key={i} className="mt-14 font-serif text-3xl text-[var(--j-paper)] sm:text-4xl">
+          {para.replace(/^##\s+/, "")}
+        </h2>
+      );
+    }
+    if (para.startsWith("### ")) {
+      return (
+        <h3 key={i} className="mt-10 font-serif text-2xl text-[var(--j-paper)]">
+          {para.replace(/^###\s+/, "")}
+        </h3>
+      );
+    }
+    if (para.startsWith("**Myth:") || para.startsWith("**Truth:")) {
+      return (
+        <p key={i} className="whitespace-pre-line text-[var(--j-paper)]/90">
+          {para.replace(/\*\*/g, "")}
+        </p>
+      );
+    }
+    return (
+      <motion.p
+        key={i}
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-8%" }}
+        transition={{ duration: 0.45 }}
+        className="whitespace-pre-line"
+      >
+        {para}
+      </motion.p>
+    );
+  });
+}
+
 export function ArticleView({ slug }: { slug: string }) {
-  const [posts, setPosts] = useState<JournalPost[]>([]);
+  const [post, setPost] = useState<JournalPost | null>(null);
+  const [related, setRelated] = useState<RelatedLite[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [stickyTitle, setStickyTitle] = useState(false);
   const { scrollYProgress } = useScroll();
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 1.08]);
 
   useEffect(() => {
-    fetch("/api/content")
-      .then((r) => r.json())
-      .then((data) => setPosts(Array.isArray(data.blogPosts) ? data.blogPosts : []))
-      .catch(() => setPosts([]))
-      .finally(() => setLoading(false));
-  }, []);
+    let alive = true;
+    Promise.all([
+      fetch(`/api/blog/${encodeURIComponent(slug)}`).then((r) => (r.ok ? r.json() : null)),
+      fetch("/api/content").then((r) => r.json()).catch(() => ({ blogPosts: [] })),
+    ])
+      .then(([detail, content]) => {
+        if (!alive) return;
+        if (detail?.post) {
+          const p = detail.post as JournalPost & { publishedAt?: string | Date };
+          setPost({
+            ...p,
+            publishedAt:
+              typeof p.publishedAt === "string"
+                ? p.publishedAt
+                : p.publishedAt
+                  ? new Date(p.publishedAt).toISOString()
+                  : undefined,
+          });
+          setRelated(Array.isArray(detail.related) ? detail.related : []);
+        } else {
+          setPost(null);
+        }
+        const list = (Array.isArray(content?.blogPosts) ? content.blogPosts : []) as JournalPost[];
+        const cats: string[] = Array.from(
+          new Set(list.map((x) => x.category).filter((c): c is string => Boolean(c)))
+        );
+        setCategories(cats);
+      })
+      .catch(() => {
+        if (alive) setPost(null);
+      })
+      .finally(() => {
+        if (alive) setLoading(false);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [slug]);
 
   useEffect(() => {
     const onScroll = () => setStickyTitle(window.scrollY > 420);
@@ -33,22 +110,27 @@ export function ArticleView({ slug }: { slug: string }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const post = useMemo(() => posts.find((p) => p.slug === slug) || null, [posts, slug]);
-  const related = useMemo(
-    () => posts.filter((p) => p.slug !== slug).slice(0, 3),
-    [posts, slug]
-  );
-  const categories = useMemo(
-    () => Array.from(new Set(posts.map((p) => p.category).filter(Boolean))),
-    [posts]
-  );
+  const gallery = useMemo(() => {
+    const imgs = post?.gallery?.filter(Boolean) || [];
+    if (imgs.length >= 5) return imgs.slice(0, 6);
+    if (post?.coverImage) return [post.coverImage, ...imgs].slice(0, 6);
+    return imgs;
+  }, [post]);
 
-  const paragraphs = useMemo(() => {
-    if (!post?.content) return [];
-    return post.content.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+  const products = useMemo(() => {
+    const slugs = post?.promoteProducts || [];
+    return slugs
+      .map((s) => STORE_PRODUCTS.find((p) => p.slug === s))
+      .filter(Boolean)
+      .slice(0, 3);
   }, [post]);
 
   const minutes = readingTime(`${post?.title || ""} ${post?.excerpt || ""} ${post?.content || ""}`);
+
+  const aiHref = useMemo(() => {
+    const q = post?.aiPrompt || `Explain "${post?.title || ""}" simply for a Class 5 student in India.`;
+    return `/ai?prefill=${encodeURIComponent(q)}`;
+  }, [post]);
 
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
@@ -80,6 +162,7 @@ export function ArticleView({ slug }: { slug: string }) {
 
   return (
     <div className="journal-root relative min-h-screen">
+      <GoogleTranslateBar />
       <div className="journal-grain" />
       <JournalProgress />
       <JournalCursor />
@@ -129,40 +212,73 @@ export function ArticleView({ slug }: { slug: string }) {
           <p className="font-serif text-2xl leading-relaxed text-[var(--j-paper)]/90">{post.excerpt}</p>
 
           <div className="mt-12 space-y-7 text-[1.05rem] leading-8 text-[var(--j-muted)]">
-            {paragraphs.map((para, i) => {
-              const isQuote =
-                ((para.startsWith('"') && para.endsWith('"')) ||
-                  (para.startsWith("“") && para.endsWith("”")) ||
-                  (para.length < 90 && i > 0 && i % 3 === 0));
-
-              if (isQuote) {
-                return (
-                  <motion.blockquote
-                    key={i}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-10%" }}
-                    className="my-14 border-l-2 border-[var(--j-brand)] pl-6 font-serif text-3xl leading-tight text-[var(--j-paper)] sm:text-4xl"
-                  >
-                    {para.replace(/^["“]|["”]$/g, "")}
-                  </motion.blockquote>
-                );
-              }
-
-              return (
-                <motion.p
-                  key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-8%" }}
-                  transition={{ duration: 0.5 }}
-                  className="whitespace-pre-line"
-                >
-                  {para}
-                </motion.p>
-              );
-            })}
+            {post.content ? renderBlocks(post.content) : null}
           </div>
+
+          {gallery.length >= 5 && (
+            <section className="mt-16">
+              <h2 className="font-serif text-3xl text-[var(--j-paper)]">Picture gallery</h2>
+              <p className="mt-2 text-sm text-[var(--j-muted)]">
+                Related stock photos so you can see the idea, not only read it.
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                {gallery.map((src, i) => (
+                  <div key={src + i} className={`relative overflow-hidden ${i === 0 ? "sm:col-span-2 aspect-[21/9]" : "aspect-[4/3]"}`}>
+                    <Image
+                      src={src}
+                      alt={`${post.title} — visual ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes={i === 0 ? "100vw" : "50vw"}
+                    />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <aside className="mt-16 border border-[var(--j-line)] bg-[rgba(16,185,129,0.06)] p-6 sm:p-8">
+            <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--j-brand)]">Know more with AI</p>
+            <h2 className="mt-3 font-serif text-3xl text-[var(--j-paper)]">Still curious?</h2>
+            <p className="mt-3 text-[var(--j-muted)]">
+              This lesson is written for clear understanding. For more examples, local Indian life stories, or harder words explained gently, open Ebenezer AI.
+            </p>
+            <Link
+              href={aiHref}
+              data-cursor="AI"
+              className="mt-6 inline-flex items-center gap-2 bg-[var(--j-brand)] px-5 py-3 text-[11px] uppercase tracking-[0.22em] text-black"
+            >
+              <Sparkles className="h-4 w-4" /> Ask Ebenezer AI
+            </Link>
+          </aside>
+
+          {products.length > 0 && (
+            <aside className="mt-10 border border-[var(--j-line)] p-6 sm:p-8">
+              <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--j-brand)]">Build next</p>
+              <h2 className="mt-3 font-serif text-3xl text-[var(--j-paper)]">Tools that grow with learning</h2>
+              <p className="mt-3 text-sm text-[var(--j-muted)]">
+                Every lesson points you toward useful Ebenezer products — kits, playbooks, and SaaS.
+              </p>
+              <ul className="mt-6 space-y-4">
+                {products.map((p) =>
+                  p ? (
+                    <li key={p.slug}>
+                      <Link href={`/products/${p.slug}`} className="group flex items-start justify-between gap-4" data-cursor="SHOP">
+                        <div>
+                          <p className="font-serif text-xl text-[var(--j-paper)] group-hover:text-[var(--j-brand)]">{p.name}</p>
+                          <p className="mt-1 text-sm text-[var(--j-muted)]">{p.tagline}</p>
+                        </div>
+                        <ArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-[var(--j-brand)]" />
+                      </Link>
+                    </li>
+                  ) : null
+                )}
+              </ul>
+              <Link href="/products" className="mt-6 inline-block text-[11px] uppercase tracking-[0.22em] text-[var(--j-brand)]">
+                Browse all products →
+              </Link>
+            </aside>
+          )}
 
           <div className="mt-16 flex flex-wrap gap-3">
             {(post.tags || []).map((tag) => (
@@ -177,10 +293,13 @@ export function ArticleView({ slug }: { slug: string }) {
         </div>
       </article>
 
-      <JournalMarquee items={["Continue reading", "More ideas", "Next story", "Ebenezer Journal"]} />
+      <JournalMarquee items={["Continue the chain", "Next lesson", "Ask AI", "Ebenezer Journal"]} />
 
       <section className="px-4 py-20 sm:px-8 lg:px-12">
-        <h2 className="font-serif text-4xl sm:text-5xl">Continue reading</h2>
+        <h2 className="font-serif text-4xl sm:text-5xl">Continue the chain</h2>
+        <p className="mt-3 max-w-2xl text-[var(--j-muted)]">
+          Linked lessons help you go deeper—one simple idea at a time.
+        </p>
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           {related.map((item) => (
             <Link
@@ -219,9 +338,15 @@ export function ArticleView({ slug }: { slug: string }) {
           <Link href="/blog" className="hover:text-[var(--j-brand)]">
             All stories
           </Link>
-          <Link href="https://ebenezerdigital.com/contact" className="hover:text-[var(--j-brand)]">
-            Work with Ebenezer
+          <Link href="/ai" className="hover:text-[var(--j-brand)]">
+            Ebenezer AI
           </Link>
+          <Link href="/products" className="hover:text-[var(--j-brand)]">
+            Store
+          </Link>
+          <a href="/api/blog/rss" className="hover:text-[var(--j-brand)]">
+            RSS feed
+          </a>
         </div>
       </footer>
     </div>

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     const topic = searchParams.get("topic") || undefined;
     const breaking = searchParams.get("breaking") === "1" || searchParams.get("breaking") === "true";
     const featured = searchParams.get("featured") === "1" || searchParams.get("featured") === "true";
-    const limit = Number(searchParams.get("limit") || 80);
+    const limit = Number(searchParams.get("limit") || 160);
     const offset = Number(searchParams.get("offset") || 0);
 
     const result = await searchPublicNews({

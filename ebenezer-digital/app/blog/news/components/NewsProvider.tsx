@@ -12,6 +12,7 @@ type NewsContextValue = {
   setMenuOpen: (v: boolean) => void;
   activeNav: NewsNavId | "ALL";
   setActiveNav: (v: NewsNavId | "ALL") => void;
+  updatedAt: string;
 };
 
 const NewsContext = createContext<NewsContextValue | null>(null);
@@ -22,13 +23,34 @@ export function NewsProvider({ children }: { children: ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState<NewsNavId | "ALL">("ALL");
+  const [updatedAt, setUpdatedAt] = useState<string>("");
 
   useEffect(() => {
-    fetch("/api/news?limit=80")
-      .then((r) => r.json())
-      .then((data) => setArticles(Array.isArray(data.items) ? data.items : []))
-      .catch(() => setArticles([]))
-      .finally(() => setLoading(false));
+    let alive = true;
+
+    const load = (first = false) => {
+      if (first) setLoading(true);
+      fetch("/api/news?limit=160")
+        .then((r) => r.json())
+        .then((data) => {
+          if (!alive) return;
+          setArticles(Array.isArray(data.items) ? data.items : []);
+          setUpdatedAt(new Date().toISOString());
+        })
+        .catch(() => {
+          if (alive && first) setArticles([]);
+        })
+        .finally(() => {
+          if (alive) setLoading(false);
+        });
+    };
+
+    load(true);
+    const timer = window.setInterval(() => load(false), 3 * 60 * 1000);
+    return () => {
+      alive = false;
+      window.clearInterval(timer);
+    };
   }, []);
 
   const value = useMemo(
@@ -41,8 +63,9 @@ export function NewsProvider({ children }: { children: ReactNode }) {
       setMenuOpen,
       activeNav,
       setActiveNav,
+      updatedAt,
     }),
-    [articles, loading, searchOpen, menuOpen, activeNav]
+    [articles, loading, searchOpen, menuOpen, activeNav, updatedAt]
   );
 
   return <NewsContext.Provider value={value}>{children}</NewsContext.Provider>;

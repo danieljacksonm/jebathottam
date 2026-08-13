@@ -9,14 +9,18 @@ import { JournalNav } from "./components/JournalNav";
 import { JournalCursor } from "./components/JournalCursor";
 import { JournalProgress } from "./components/JournalProgress";
 import { JournalMarquee } from "./components/JournalMarquee";
+import { GoogleTranslateBar } from "./components/GoogleTranslateBar";
 import { formatDate, readingTime, splitHeadline, type JournalPost } from "./lib";
 import "./journal.css";
+
+const PAGE_SIZE = 24;
 
 export default function BlogIndexPage() {
   const [posts, setPosts] = useState<JournalPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("ALL");
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 120]);
   const heroScale = useTransform(scrollY, [0, 600], [1, 1.12]);
@@ -30,9 +34,13 @@ export default function BlogIndexPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  useEffect(() => {
+    setVisible(PAGE_SIZE);
+  }, [query, activeCategory]);
+
   const categories = useMemo(() => {
     const set = new Set(posts.map((p) => p.category).filter(Boolean));
-    return Array.from(set);
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [posts]);
 
   const filtered = useMemo(() => {
@@ -42,18 +50,26 @@ export default function BlogIndexPage() {
         !q ||
         p.title.toLowerCase().includes(q) ||
         p.excerpt.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q);
+        p.category.toLowerCase().includes(q) ||
+        (p.tags || []).some((t) => t.toLowerCase().includes(q));
       const matchesCat = activeCategory === "ALL" || p.category === activeCategory;
       return matchesQuery && matchesCat;
     });
   }, [posts, query, activeCategory]);
 
+  const learnCount = useMemo(
+    () => posts.filter((p) => (p.category || "").toLowerCase().includes("learn")).length,
+    [posts]
+  );
+
   const featured = filtered[0];
-  const stream = filtered.slice(1);
+  const stream = filtered.slice(1, visible);
   const trending = filtered.slice(0, 6);
+  const hasMore = filtered.length > visible;
 
   return (
     <div className="journal-root relative min-h-screen">
+      <GoogleTranslateBar />
       <div className="journal-grain" />
       <JournalProgress />
       <JournalCursor />
@@ -82,7 +98,7 @@ export default function BlogIndexPage() {
           className="relative z-10 flex h-full flex-col justify-end px-4 pb-16 sm:px-8 lg:px-12"
         >
           <p className="mb-6 text-[11px] uppercase tracking-[0.45em] text-[var(--j-brand)]">
-            Ebenezer Digital / Journal
+            Ebenezer Journal / {learnCount > 0 ? `${learnCount}+ learn stories` : "Learn Desk"}
           </p>
           <motion.h1
             initial="hidden"
@@ -93,7 +109,7 @@ export default function BlogIndexPage() {
             }}
             className="max-w-5xl font-serif text-[14vw] leading-[0.9] tracking-tight sm:text-[9vw] lg:text-[7.5vw]"
           >
-            {["IDEAS", "WORTH", "READING."].map((line) => (
+            {["LEARN", "DIGITAL", "SIMPLY."].map((line) => (
               <motion.span
                 key={line}
                 variants={{
@@ -108,7 +124,11 @@ export default function BlogIndexPage() {
           </motion.h1>
           <div className="mt-10 flex items-end justify-between gap-6">
             <p className="max-w-md text-sm text-[var(--j-muted)]">
-              A cinematic editorial for websites, digital systems, travel, and business growth.
+              How electricity, Wi‑Fi, AI, and the internet work—written so a Class 5 student can follow. Then explore more with{" "}
+              <Link href="/ai" className="text-[var(--j-brand)]">
+                Ebenezer AI
+              </Link>
+              .
             </p>
             <a
               href="#featured"
@@ -246,6 +266,37 @@ export default function BlogIndexPage() {
       <section className="border-y border-[var(--j-line)] px-4 py-20 sm:px-8 lg:px-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
+            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">Learn desk</p>
+            <h3 className="mt-4 max-w-2xl font-serif text-4xl leading-[1.05] sm:text-6xl">
+              1000+ simple digital lessons.
+            </h3>
+            <p className="mt-5 max-w-lg text-[var(--j-muted)]">
+              From electricity and Wi‑Fi to AI and cloud—each story chains to the next, links to /ai for deeper questions, and points you to store tools when you are ready to build.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href="/ai"
+              className="inline-flex min-h-[48px] items-center gap-2 bg-[var(--j-brand)] px-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
+              data-cursor="AI"
+            >
+              Ask AI <ArrowUpRight className="h-4 w-4" />
+            </Link>
+            <a
+              href="/api/blog/rss"
+              className="inline-flex min-h-[48px] items-center gap-2 border border-[var(--j-brand)] px-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--j-brand)]"
+              data-cursor="RSS"
+            >
+              Blog RSS <ArrowUpRight className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* WORLD NEWS TEASER */}
+      <section className="border-y border-[var(--j-line)] px-4 py-20 sm:px-8 lg:px-12">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
             <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">E&gt; News</p>
             <h3 className="mt-4 max-w-2xl font-serif text-4xl leading-[1.05] sm:text-6xl">
               What is happening.
@@ -327,13 +378,30 @@ export default function BlogIndexPage() {
             );
           })}
         </div>
+        {hasMore && (
+          <div className="mt-14 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setVisible((v) => v + PAGE_SIZE)}
+              className="border border-[var(--j-brand)] px-6 py-3 text-[11px] uppercase tracking-[0.22em] text-[var(--j-brand)]"
+              data-cursor="MORE"
+            >
+              Load more lessons ({filtered.length - visible} left)
+            </button>
+          </div>
+        )}
       </section>
 
       {/* LATEST NUMBERED */}
       <section className="border-t border-[var(--j-line)] px-4 py-20 sm:px-8 lg:px-12">
-        <h3 className="mb-10 font-serif text-3xl sm:text-5xl">Latest stories</h3>
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+          <h3 className="font-serif text-3xl sm:text-5xl">Latest stories</h3>
+          <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--j-muted)]">
+            Showing {Math.min(visible, filtered.length)} of {filtered.length}
+          </p>
+        </div>
         <div className="divide-y divide-[var(--j-line)]">
-          {filtered.map((post, i) => (
+          {filtered.slice(0, visible).map((post, i) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}
@@ -361,6 +429,15 @@ export default function BlogIndexPage() {
             </Link>
           ))}
         </div>
+        {hasMore && (
+          <button
+            type="button"
+            onClick={() => setVisible((v) => v + PAGE_SIZE)}
+            className="mt-10 text-[11px] uppercase tracking-[0.22em] text-[var(--j-brand)]"
+          >
+            Show more →
+          </button>
+        )}
       </section>
 
       {/* WHY WE EXIST */}

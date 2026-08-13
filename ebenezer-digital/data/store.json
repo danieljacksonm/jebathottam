@@ -522,12 +522,13 @@
       "updatedAt": "2026-08-07T10:00:00.000Z"
     }
   ],
+  "newsArticles": [],
   "digitalProducts": [
     {
       "id": "dp-yegova",
       "slug": "ebenezer-saas",
       "name": "Ebenezer SaaS — Billing Software for Global Shops",
-      "tagline": "Cloud billing, stock, and GST reports built for Indian shop owners.",
+      "tagline": "Cloud billing, stock, and reports built for shop owners worldwide.",
       "description": "Ebenezer SaaS is a cloud billing app for small and medium shops worldwide. Create invoices, quotations, and credit notes, track stock and customers, and print on A4, A5, or thermal printers. No installation needed — works from any browser.",
       "story": "Built after seeing how many small shop owners still manage billing on paper or spreadsheets. Ebenezer SaaS is being built and tested with real traders, starting free so owners can try it with zero risk while the product grows.",
       "category": "Software",
@@ -543,7 +544,7 @@
         "/images/portfolio/portfolio-screenshot-agency.png"
       ],
       "features": [
-        "GST-ready invoices, quotations, and credit notes",
+        "Invoices, quotations, and credit notes",
         "Stock and inventory tracking",
         "Customer database with purchase history",
         "Expense tracking",
@@ -552,7 +553,7 @@
       ],
       "includes": [
         "Full access to the current free plan",
-        "Invoicing, stock, customers, GST reports",
+        "Invoicing, stock, customers, sales reports",
         "Quotations, credit notes, expenses, printing",
         "Setup guide + feature sheet (PDFs coming)"
       ],
@@ -574,14 +575,14 @@
         "Setup / getting-started PDF guide",
         "Direct signup / login link",
         "One-page feature sheet PDF",
-        "Sample GST invoice PDF"
+        "Sample invoice PDF"
       ],
       "publishedAt": "2026-08-12T00:00:00.000Z",
       "status": "published",
       "seoTitle": "Ebenezer SaaS – Free Cloud Billing Software for Shops",
       "seoDescription": "Ebenezer SaaS is free cloud billing software for shops — invoices, stock, customers, quotations, credit notes, and A4/A5/thermal printing. Start free today.",
       "createdAt": "2026-08-12T07:52:29.909Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     },
     {
       "id": "dp1",
@@ -631,12 +632,13 @@
       ],
       "publishedAt": "2026-08-11T00:00:00.000Z",
       "status": "published",
-      "downloadFile": "/downloads/creator-landing-kit.txt",
-      "fileName": "creator-landing-kit.txt",
+      "downloadFile": "/downloads/creator-landing-kit.zip",
+      "fileName": "creator-landing-kit.zip",
+      "fileSize": "3 KB",
       "seoTitle": "Creator Landing Kit – Landing Page UI Kit for Coaches & Freelancers",
       "seoDescription": "Ready-made landing page UI kit with hero, pricing, and testimonial sections. Built for creators, coaches, and freelancers who want to launch fast.",
       "createdAt": "2026-08-11T14:47:30.441Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     },
     {
       "id": "dp-pos",
@@ -683,19 +685,20 @@
       ],
       "publishedAt": "2026-08-10T00:00:00.000Z",
       "status": "published",
-      "downloadFile": "/downloads/shop-pos-starter-pack.txt",
-      "fileName": "shop-pos-starter-pack.txt",
+      "downloadFile": "/downloads/shop-pos-starter-pack.zip",
+      "fileName": "shop-pos-starter-pack.zip",
+      "fileSize": "3 KB",
       "seoTitle": "Shop + POS Starter Pack – Billing System Blueprint for Small Shops",
       "seoDescription": "A ready-made UI and process blueprint for shop billing and POS setup. Screen layouts, invoice formats, and stock flow — perfect for planning your system.",
       "createdAt": "2026-08-12T07:06:00.102Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     },
     {
       "id": "dp3",
       "slug": "travel-enquiry-pack",
       "name": "Travel Enquiry Pack",
       "tagline": "Ready enquiry forms and follow-up templates for travel agents.",
-      "description": "A set of enquiry forms, WhatsApp follow-up message templates, and quotation formats built for travel agents and tour operators in India. Helps you capture leads properly and follow up without losing enquiries.",
+      "description": "A set of enquiry forms, WhatsApp follow-up message templates, and quotation formats built for travel agents and tour operators worldwide. Helps you capture leads properly and follow up without losing enquiries.",
       "story": "Many small travel agents lose customers because enquiries come in through calls or WhatsApp and get forgotten. This pack gives a simple system to capture and follow up on every lead.",
       "category": "Templates",
       "price": 499,
@@ -738,18 +741,19 @@
       ],
       "publishedAt": "2026-08-09T00:00:00.000Z",
       "status": "published",
-      "downloadFile": "/downloads/travel-enquiry-pack.txt",
-      "fileName": "travel-enquiry-pack.txt",
+      "downloadFile": "/downloads/travel-enquiry-pack.zip",
+      "fileName": "travel-enquiry-pack.zip",
+      "fileSize": "2 KB",
       "seoTitle": "Travel Enquiry Pack – Forms & Follow-Up Templates for Travel Agents",
       "seoDescription": "Ready-made enquiry forms, WhatsApp follow-up templates, and quotation formats for travel agents. Stop losing leads — start tracking every enquiry.",
       "createdAt": "2026-08-11T14:47:30.441Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     },
     {
       "id": "dp4",
       "slug": "digital-business-playbook",
       "name": "Digital Business Playbook",
-      "tagline": "A simple guide to taking your small business online in India.",
+      "tagline": "A simple guide to taking your small business online.",
       "description": "A practical ebook for small business owners who want to start selling or promoting online but don't know where to begin. Covers choosing platforms, pricing, WhatsApp Business setup, basic marketing, and common mistakes to avoid.",
       "story": "Written for shop owners and small business owners who keep hearing 'go digital' but never get simple, honest, step-by-step guidance without jargon or expensive courses.",
       "category": "Ebooks",
@@ -787,12 +791,13 @@
       ],
       "publishedAt": "2026-08-08T00:00:00.000Z",
       "status": "published",
-      "downloadFile": "/downloads/digital-business-playbook.txt",
-      "fileName": "digital-business-playbook.txt",
+      "downloadFile": "/downloads/digital-business-playbook.zip",
+      "fileName": "digital-business-playbook.zip",
+      "fileSize": "2 KB",
       "seoTitle": "Digital Business Playbook – Ebook for Small Businesses Going Online",
-      "seoDescription": "A simple, practical ebook for Indian small business owners on going digital — online selling, WhatsApp Business, pricing, and basic marketing.",
+      "seoDescription": "A simple, practical ebook for small business owners on going digital — online selling, WhatsApp Business, pricing, and basic marketing.",
       "createdAt": "2026-08-11T14:47:30.441Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     },
     {
       "id": "dp5",
@@ -838,12 +843,13 @@
       ],
       "publishedAt": "2026-08-07T00:00:00.000Z",
       "status": "published",
-      "downloadFile": "/downloads/brand-kit-essentials.txt",
-      "fileName": "brand-kit-essentials.txt",
+      "downloadFile": "/downloads/brand-kit-essentials.zip",
+      "fileName": "brand-kit-essentials.zip",
+      "fileSize": "3 KB",
       "seoTitle": "Brand Kit Essentials – Simple Starter Brand Kit for Small Businesses",
       "seoDescription": "A starter brand kit with colors, fonts, logo guide, and social templates. Look consistent and professional without hiring a designer.",
       "createdAt": "2026-08-11T14:47:30.441Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     },
     {
       "id": "dp6",
@@ -888,12 +894,13 @@
       ],
       "publishedAt": "2026-08-01T00:00:00.000Z",
       "status": "published",
-      "downloadFile": "/downloads/free-enquiry-form-kit.txt",
-      "fileName": "free-enquiry-form-kit.txt",
+      "downloadFile": "/downloads/free-enquiry-form-kit.zip",
+      "fileName": "free-enquiry-form-kit.zip",
+      "fileSize": "2 KB",
       "seoTitle": "Free Enquiry Form Kit – Simple Customer Enquiry Template",
       "seoDescription": "Free, ready-to-use enquiry form template for small businesses. Printable and editable — collect customer details easily, no cost.",
       "createdAt": "2026-08-11T14:47:30.441Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     },
     {
       "id": "dp8",
@@ -948,12 +955,13 @@
       ],
       "publishedAt": "2026-08-12T00:00:00.000Z",
       "status": "published",
-      "downloadFile": "/downloads/creator-bundle.txt",
-      "fileName": "creator-bundle.txt",
+      "downloadFile": "/downloads/creator-bundle.zip",
+      "fileName": "creator-bundle.zip",
+      "fileSize": "8 KB",
       "seoTitle": "Creator Bundle – Landing Page Kit + Brand Kit + Business Ebook",
       "seoDescription": "Get the Creator Landing Kit, Brand Kit Essentials, and Digital Business Playbook together at a lower price. Everything you need to launch your brand online.",
       "createdAt": "2026-08-11T14:47:30.441Z",
-      "updatedAt": "2026-08-12T07:52:29.978Z"
+      "updatedAt": "2026-08-12T13:19:20.936Z"
     }
   ],
   "team": [

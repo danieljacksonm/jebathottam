@@ -1,6 +1,33 @@
 import { loadStore, saveStore } from './persist';
 import bcrypt from 'bcryptjs';
 import { STORE_PRODUCTS } from '../app/products/data';
+import { getEduPostBySlug, getEduPosts, type EduPost } from './edu-blog';
+
+function eduToBlogPost(p: EduPost): BlogPost {
+  const when = new Date(p.publishedAt);
+  return {
+    id: p.id,
+    title: p.title,
+    slug: p.slug,
+    excerpt: p.excerpt,
+    content: p.content,
+    coverImage: p.coverImage,
+    gallery: p.gallery,
+    category: p.category,
+    tags: p.tags,
+    author: p.author,
+    status: "published",
+    publishedAt: when,
+    seoTitle: p.seoTitle,
+    seoDescription: p.seoDescription,
+    ogImage: p.coverImage,
+    relatedSlugs: p.relatedSlugs,
+    aiPrompt: p.aiPrompt,
+    promoteProducts: p.promoteProducts,
+    createdAt: when,
+    updatedAt: when,
+  };
+}
 
 export type UserRole = "admin" | "editor";
 
@@ -63,6 +90,7 @@ export interface BlogPost {
   excerpt: string;
   content: string;
   coverImage?: string;
+  gallery?: string[];
   category: string;
   tags: string[];
   author: string;
@@ -71,6 +99,9 @@ export interface BlogPost {
   seoTitle?: string;
   seoDescription?: string;
   ogImage?: string;
+  relatedSlugs?: string[];
+  aiPrompt?: string;
+  promoteProducts?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -589,14 +620,36 @@ class Database {
   }
 
   // ---- Blog ----
-  async getBlogPosts(publishedOnly = false): Promise<BlogPost[]> {
+  async getBlogPosts(
+    publishedOnly = false,
+    options?: { includeEdu?: boolean }
+  ): Promise<BlogPost[]> {
     let list = [...this.blogPosts];
     if (publishedOnly) list = list.filter((b) => b.status === "published");
-    return list.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    const includeEdu = options?.includeEdu !== false;
+    if (!includeEdu) {
+      return list.sort(
+        (a, b) =>
+          (b.publishedAt?.getTime() || b.createdAt.getTime()) -
+          (a.publishedAt?.getTime() || a.createdAt.getTime())
+      );
+    }
+    const cmsSlugs = new Set(list.map((b) => b.slug));
+    const edu = getEduPosts()
+      .filter((p) => !cmsSlugs.has(p.slug))
+      .map(eduToBlogPost);
+    return [...list, ...edu].sort(
+      (a, b) =>
+        (b.publishedAt?.getTime() || b.createdAt.getTime()) -
+        (a.publishedAt?.getTime() || a.createdAt.getTime())
+    );
   }
 
   async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
-    return this.blogPosts.find((b) => b.slug === slug && b.status === "published");
+    const cms = this.blogPosts.find((b) => b.slug === slug && b.status === "published");
+    if (cms) return cms;
+    const edu = getEduPostBySlug(slug);
+    return edu ? eduToBlogPost(edu) : undefined;
   }
 
   async createBlogPost(data: Omit<BlogPost, "id" | "createdAt" | "updatedAt">): Promise<BlogPost> {

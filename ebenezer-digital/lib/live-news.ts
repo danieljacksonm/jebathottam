@@ -9,7 +9,7 @@ export type LiveNewsItem = NewsArticle & {
 type Cache = { at: number; items: LiveNewsItem[] };
 
 let cache: Cache | null = null;
-const CACHE_MS = 10 * 60 * 1000;
+const CACHE_MS = 5 * 60 * 1000;
 
 const FALLBACK_IMAGE = "/images/journal/hero.jpg";
 
@@ -24,16 +24,49 @@ const RSS_FEEDS: { url: string; region: NewsRegion; source: string; location: st
   { url: "https://www.theguardian.com/science/rss", region: "Science", source: "The Guardian", location: "Global" },
   { url: "https://www.theguardian.com/environment/rss", region: "Climate", source: "The Guardian", location: "Global" },
   { url: "https://www.theguardian.com/sport/rss", region: "Sports", source: "The Guardian", location: "Global" },
-  { url: "https://www.theguardian.com/culture/rss", region: "World", source: "The Guardian", location: "Culture" },
   { url: "https://feeds.bbci.co.uk/news/world/rss.xml", region: "World", source: "BBC News", location: "World" },
   { url: "https://feeds.bbci.co.uk/news/world/asia/rss.xml", region: "Asia", source: "BBC News", location: "Asia" },
   { url: "https://feeds.bbci.co.uk/news/world/africa/rss.xml", region: "Africa", source: "BBC News", location: "Africa" },
   { url: "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml", region: "Middle East", source: "BBC News", location: "Middle East" },
+  { url: "https://feeds.bbci.co.uk/news/world/europe/rss.xml", region: "Europe", source: "BBC News", location: "Europe" },
+  { url: "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml", region: "Americas", source: "BBC News", location: "Americas" },
   { url: "https://feeds.bbci.co.uk/news/technology/rss.xml", region: "Tech", source: "BBC News", location: "Global" },
   { url: "https://feeds.bbci.co.uk/news/business/rss.xml", region: "Business", source: "BBC News", location: "Global" },
+  { url: "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", region: "Science", source: "BBC News", location: "Global" },
   { url: "https://www.thehindu.com/news/national/feeder/default.rss", region: "India", source: "The Hindu", location: "India" },
   { url: "https://www.thehindu.com/news/international/feeder/default.rss", region: "World", source: "The Hindu", location: "World" },
+  { url: "https://www.thehindu.com/business/feeder/default.rss", region: "Business", source: "The Hindu", location: "India" },
+  { url: "https://www.thehindu.com/sport/feeder/default.rss", region: "Sports", source: "The Hindu", location: "India" },
+  { url: "https://indianexpress.com/section/india/feed/", region: "India", source: "Indian Express", location: "India" },
+  { url: "https://indianexpress.com/section/world/feed/", region: "World", source: "Indian Express", location: "World" },
+  { url: "https://indianexpress.com/section/business/feed/", region: "Business", source: "Indian Express", location: "India" },
+  { url: "https://timesofindia.indiatimes.com/rssfeedstopstories.cms", region: "India", source: "Times of India", location: "India" },
+  { url: "https://timesofindia.indiatimes.com/rssfeeds/296589292.cms", region: "World", source: "Times of India", location: "World" },
+  { url: "https://economictimes.indiatimes.com/rssfeedstopstories.cms", region: "Business", source: "Economic Times", location: "India" },
+  { url: "https://feeds.feedburner.com/ndtvnews-top-stories", region: "India", source: "NDTV", location: "India" },
+  { url: "https://feeds.feedburner.com/ndtvnews-world-news", region: "World", source: "NDTV", location: "World" },
+  { url: "https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml", region: "India", source: "Hindustan Times", location: "India" },
+  { url: "https://www.hindustantimes.com/feeds/rss/world-news/rssfeed.xml", region: "World", source: "Hindustan Times", location: "World" },
   { url: "https://www.aljazeera.com/xml/rss/all.xml", region: "World", source: "Al Jazeera", location: "World" },
+  { url: "https://feeds.reuters.com/Reuters/worldNews", region: "World", source: "Reuters", location: "World" },
+  { url: "https://feeds.reuters.com/reuters/INtopNews", region: "India", source: "Reuters", location: "India" },
+  { url: "https://feeds.reuters.com/reuters/businessNews", region: "Business", source: "Reuters", location: "Global" },
+  { url: "https://feeds.reuters.com/reuters/technologyNews", region: "Tech", source: "Reuters", location: "Global" },
+  { url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", region: "World", source: "The New York Times", location: "World" },
+  { url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", region: "Business", source: "The New York Times", location: "Global" },
+  { url: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", region: "Tech", source: "The New York Times", location: "Global" },
+  { url: "https://rss.cnn.com/rss/edition_world.rss", region: "World", source: "CNN", location: "World" },
+  { url: "https://feeds.npr.org/1004/rss.xml", region: "World", source: "NPR", location: "World" },
+  { url: "https://feeds.bbci.co.uk/news/world/latin_america/rss.xml", region: "Americas", source: "BBC News", location: "Latin America" },
+  { url: "https://www.abc.net.au/news/feed/51120/rss.xml", region: "Asia", source: "ABC News Australia", location: "Australia" },
+  { url: "https://www.cbc.ca/webfeed/rss/rss-world", region: "Americas", source: "CBC", location: "World" },
+  { url: "https://feeds.skynews.com/feeds/rss/world.xml", region: "World", source: "Sky News", location: "World" },
+  { url: "https://rss.dw.com/rdf/rss-en-world", region: "Europe", source: "Deutsche Welle", location: "World" },
+  { url: "https://www.france24.com/en/rss", region: "Europe", source: "France 24", location: "World" },
+  { url: "https://www3.nhk.or.jp/nhkworld/en/news/feeds/rss.xml", region: "Asia", source: "NHK World", location: "Asia" },
+  { url: "https://techcrunch.com/feed/", region: "Tech", source: "TechCrunch", location: "Global" },
+  { url: "https://www.espn.com/espn/rss/news", region: "Sports", source: "ESPN", location: "Global" },
+  { url: "https://news.un.org/feed/subscribe/en/news/all/rss.xml", region: "World", source: "UN News", location: "World" },
 ];
 
 function toIso(value?: string): string {

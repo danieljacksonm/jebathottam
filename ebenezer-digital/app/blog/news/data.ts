@@ -28,6 +28,7 @@ export type NewsArticle = {
   featured?: boolean;
   originalUrl?: string;
   byline?: string;
+  origin?: "seed" | "cms" | "live";
 };
 
 export const NEWS_REGIONS: NewsRegion[] = [

@@ -17,6 +17,8 @@ import {
   formatINR,
   type StoreProduct,
 } from "../data";
+import { AskAiPanel } from "@/components/AskAiPanel";
+import { formatProductsForAi } from "@/lib/ai";
 
 export function ProductView({ product: raw }: { product: StoreProduct }) {
   const { addToCart } = useStore();
@@ -188,6 +190,20 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
           <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--s-brand)]">Why this product?</p>
           <h2 className="mt-4 font-serif text-4xl sm:text-5xl">{product.story}</h2>
           <p className="mt-6 text-lg leading-relaxed text-[var(--s-muted)]">{product.description}</p>
+          <div className="mt-8">
+            <AskAiPanel
+              mode="product"
+              tone="store"
+              title="Not sure if this fits?"
+              placeholder="Ask: Is this good for my shop / church / startup?"
+              context={`Current product:\nName: ${product.name}\nSlug: ${product.slug}\nPrice: ${product.isFree ? "FREE" : `₹${product.price}`}\nCategory: ${product.category}\nTagline: ${product.tagline}\nDescription: ${product.description}\nFeatures: ${product.features.join("; ")}\nIncludes: ${product.includes.join("; ")}\nWho: ${product.whoItIsFor || "general"}\n\nCatalog:\n${formatProductsForAi(STORE_PRODUCTS)}`}
+              starters={[
+                "Is this product right for me?",
+                "Compare with similar products",
+                "What do I get after purchase?",
+              ]}
+            />
+          </div>
         </section>
 
         {/* FEATURES */}

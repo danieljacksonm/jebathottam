@@ -17,6 +17,8 @@ import { useNews } from "./NewsProvider";
 import { LiveTimeline } from "./LiveTimeline";
 import { WorldDeskMap } from "./WorldDeskMap";
 import { IndiaDesk } from "./IndiaDesk";
+import { WorldBriefing } from "./WorldBriefing";
+import { OriginalLink } from "./OriginalLink";
 
 function StoryLink({
   story,
@@ -28,14 +30,20 @@ function StoryLink({
   children: ReactNode;
 }) {
   return (
-    <Link href={`/blog/news/${story.slug}`} className={className} data-cursor="READ">
-      {children}
-    </Link>
+    <div className={className}>
+      <Link href={`/blog/news/${story.slug}`} className="group contents" data-cursor="READ">
+        {children}
+      </Link>
+      <div className="col-span-full mt-2 flex flex-wrap items-center gap-3">
+        <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--n-muted)]">{story.sourceLabel}</span>
+        <OriginalLink story={story} />
+      </div>
+    </div>
   );
 }
 
 export function NewsHome() {
-  const { articles, loading } = useNews();
+  const { articles, loading, updatedAt } = useNews();
   const [playing, setPlaying] = useState<string | null>(null);
   const featureRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -46,27 +54,35 @@ export function NewsHome() {
   const titleY = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const metaOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
 
-  const lead = articles.find((a) => a.featured) || articles[0];
-  const rest = articles.filter((a) => a.id !== lead?.id);
-  const secondary = rest.slice(0, 2);
-  const compact = rest.slice(2, 7);
-  const live = [...articles].filter((a) => a.breaking).concat(rest).slice(0, 8);
-  const trending = articles.slice(0, 8);
-  const mostRead = articles.slice(0, 6);
-  const india = storiesForNav(articles, "India");
-  const tech = storiesForNav(articles, "Technology");
-  const sports = storiesForNav(articles, "Sports");
-  const opinion = storiesForNav(articles, "Opinion");
-  const visual = articles.slice(0, 5);
-  const audio = articles.slice(3, 7);
+  // Prefer live wire stories so visitors see the world first
+  const liveFirst = useMemo(() => {
+    const live = articles.filter((a) => a.origin === "live");
+    const other = articles.filter((a) => a.origin !== "live");
+    return live.length ? [...live, ...other] : articles;
+  }, [articles]);
+
+  const lead = liveFirst.find((a) => a.featured) || liveFirst[0];
+  const rest = liveFirst.filter((a) => a.id !== lead?.id);
+  const secondary = rest.slice(0, 4);
+  const compact = rest.slice(4, 12);
+  const live = [...liveFirst].filter((a) => a.breaking).concat(rest).slice(0, 14);
+  const trending = liveFirst.slice(0, 12);
+  const mostRead = liveFirst.slice(0, 12);
+  const india = storiesForNav(liveFirst, "India");
+  const tech = storiesForNav(liveFirst, "Technology");
+  const sports = storiesForNav(liveFirst, "Sports");
+  const opinion = storiesForNav(liveFirst, "Opinion");
+  const visual = liveFirst.slice(0, 5);
+  const audio = liveFirst.slice(3, 7);
+  const wireMore = rest.slice(12, 40);
 
   const desks = useMemo(
     () =>
       NEWS_NAV.filter((n) => !["World", "India"].includes(n)).map((name) => ({
         name,
-        items: storiesForNav(articles, name).slice(0, 3),
+        items: storiesForNav(liveFirst, name).slice(0, 4),
       })),
-    [articles]
+    [liveFirst]
   );
 
   if (loading) {
@@ -85,10 +101,24 @@ export function NewsHome() {
 
   return (
     <>
+      <WorldBriefing stories={liveFirst} />
+
       {/* FRONT PAGE */}
       <section className="px-4 pb-10 pt-6 sm:px-8 lg:px-12">
-        <p className="news-kicker text-[var(--n-muted)]">What is happening now</p>
-        <div className="mt-6 grid gap-8 lg:grid-cols-[1.45fr_0.55fr]">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="news-kicker text-[var(--n-muted)]">What is happening now</p>
+            <p className="mt-2 max-w-xl text-sm text-[var(--n-muted)]">
+              One desk for the world: BBC, Reuters, The Hindu, NDTV, NYT, Al Jazeera and more. Scan the wire, then open the original site.
+            </p>
+          </div>
+          {updatedAt && (
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--n-muted)]">
+              Desk refreshed {relativeNewsTime(updatedAt).replace("Updated ", "")}
+            </p>
+          )}
+        </div>
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1.35fr_0.65fr]">
           <StoryLink story={lead} className="group block">
             <p className="news-kicker text-[var(--n-live)]">{lead.breaking ? "Breaking" : lead.region}</p>
             <h1 className="news-display mt-4 text-[12vw] sm:text-[7.5vw] lg:text-[5.6vw]">
@@ -125,23 +155,49 @@ export function NewsHome() {
               <StoryLink
                 key={s.id}
                 story={s}
-                className="group border-t border-[var(--n-line)] py-5"
+                className="group border-t border-[var(--n-line)] py-4"
               >
                 <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--n-live)]">{s.region}</p>
-                <h2 className="mt-2 font-serif text-2xl leading-snug transition group-hover:translate-x-0.5">{s.title}</h2>
+                <h2 className="mt-2 font-serif text-xl leading-snug transition group-hover:translate-x-0.5 sm:text-2xl">{s.title}</h2>
                 <p className="mt-2 line-clamp-2 text-sm text-[var(--n-muted)]">{s.dek}</p>
-                <p className="mt-3 text-[11px] text-[var(--n-muted)]">{relativeNewsTime(s.publishedAt)}</p>
+                <p className="mt-2 text-[11px] text-[var(--n-muted)]">{relativeNewsTime(s.publishedAt)}</p>
               </StoryLink>
             ))}
-            {compact.slice(0, 3).map((s) => (
-              <StoryLink key={s.id} story={s} className="border-t border-[var(--n-line)] py-4">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--n-muted)]">{s.topic}</p>
+            {compact.slice(0, 5).map((s) => (
+              <StoryLink key={s.id} story={s} className="border-t border-[var(--n-line)] py-3">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--n-muted)]">
+                  {s.region} · {s.sourceLabel}
+                </p>
                 <h3 className="mt-1 font-serif text-lg leading-snug">{s.title}</h3>
               </StoryLink>
             ))}
           </aside>
         </div>
       </section>
+
+      {wireMore.length > 0 && (
+        <section className="border-y border-[var(--n-line)] px-4 py-12 sm:px-8 lg:px-12">
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
+            <h2 className="news-display text-4xl sm:text-5xl">More of the wire</h2>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--n-muted)]">{wireMore.length} more stories</p>
+          </div>
+          <div className="grid gap-x-8 gap-y-1 md:grid-cols-2">
+            {wireMore.map((s) => (
+              <div key={s.id} className="border-t border-[var(--n-line)] py-3">
+                <Link href={`/blog/news/${s.slug}`} className="block" data-cursor="READ">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--n-muted)]">
+                    {s.region} · {s.sourceLabel} · {relativeNewsTime(s.publishedAt)}
+                  </p>
+                  <h3 className="mt-1 font-serif text-xl leading-snug">{s.title}</h3>
+                </Link>
+                <div className="mt-2">
+                  <OriginalLink story={s} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <LiveTimeline stories={live} />
 

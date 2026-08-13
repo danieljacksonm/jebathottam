@@ -11,6 +11,8 @@ import { useStore } from "../components/StoreProvider";
 import { STORE_PRODUCTS, formatINR } from "../data";
 import { useStoreI18n } from "../i18n";
 import { localizeProduct } from "../product-i18n";
+import { AskAiPanel } from "@/components/AskAiPanel";
+import { formatProductsForAi } from "@/lib/ai";
 
 /**
  * Checkout UI ready for billing APIs.
@@ -69,9 +71,11 @@ function CheckoutInner() {
         }),
       });
 
-      if (res.status === 404) {
+      if (res.status === 404 || res.status === 503) {
+        const data = await res.json().catch(() => ({}));
         setError(
-          "Billing API is not connected yet. Finish billing in the other chat, then Buy will open payment automatically."
+          data.message ||
+            "Billing is not connected yet. Use Billing AI below for help, or contact support."
         );
         setLoading(false);
         return;
@@ -132,6 +136,22 @@ function CheckoutInner() {
             <p className="text-xs text-[var(--s-muted)]">
               Secure payment · Instant digital access after confirmation
             </p>
+            <div className="pt-4">
+              <AskAiPanel
+                mode="billing"
+                tone="store"
+                title="Billing help"
+                placeholder="Ask about payment, license, download…"
+                context={`Checkout status: payment gateway not connected yet.\nBuyer email draft: ${email || "(not entered)"}\nCart total: ₹${total}\nItems:\n${lines
+                  .map((l) => `- ${l.product.name} ×${l.qty} @ ₹${l.product.price} (${l.license})`)
+                  .join("\n")}\n\nCatalog:\n${formatProductsForAi(STORE_PRODUCTS)}`}
+                starters={[
+                  "Why can’t I pay yet?",
+                  "What happens after payment is connected?",
+                  "Explain license options simply",
+                ]}
+              />
+            </div>
           </form>
         </div>
 

@@ -36,6 +36,76 @@
   transform-origin: left center;
 }
 
+/* Google Translate–style bar (journal / learn pages) */
+.gtranslate-bar {
+  position: relative;
+  z-index: 85;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  min-height: 40px;
+  padding: 6px 12px;
+  background: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+  border-bottom: 1px solid #bbb;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #222;
+  box-shadow: inset 0 1px 0 #fff;
+}
+.gtranslate-brand {
+  font-weight: 700;
+  color: #1a73e8;
+  letter-spacing: 0.2px;
+}
+.gtranslate-dot {
+  color: #5f6368;
+}
+.gtranslate-bar label {
+  color: #3c4043;
+}
+.gtranslate-select {
+  min-width: 160px;
+  height: 26px;
+  padding: 2px 8px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  background: #fff;
+  color: #222;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.gtranslate-reset {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  background: linear-gradient(to bottom, #fff, #eee);
+  color: #222;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+}
+.gtranslate-status {
+  margin-left: auto;
+  color: #80868b;
+  font-size: 11px;
+}
+.gtranslate-mount {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+body {
+  top: 0 !important;
+}
+.goog-te-banner-frame {
+  display: none !important;
+}
+
 .journal-nav {
   position: fixed;
   top: 0;

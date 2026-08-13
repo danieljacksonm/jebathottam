@@ -3,9 +3,10 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { formatNewsClock, relativeNewsTime, type NewsArticle } from "../data";
+import { OriginalLink } from "./OriginalLink";
 
 export function LiveTimeline({ stories }: { stories: NewsArticle[] }) {
-  const items = stories.slice(0, 8);
+  const items = stories.slice(0, 14);
 
   return (
     <section id="live" className="border-y border-[var(--n-line)] px-4 py-16 sm:px-8 lg:px-12">
@@ -37,7 +38,12 @@ export function LiveTimeline({ stories }: { stories: NewsArticle[] }) {
               {story.title}
             </Link>
             <p className="mt-2 text-sm text-[var(--n-muted)]">{story.dek}</p>
-            <p className="mt-2 text-[11px] text-[var(--n-muted)]">{relativeNewsTime(story.publishedAt)}</p>
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <span className="text-[11px] text-[var(--n-muted)]">
+                {story.sourceLabel} · {relativeNewsTime(story.publishedAt)}
+              </span>
+              <OriginalLink story={story} />
+            </div>
           </motion.li>
         ))}
       </ol>

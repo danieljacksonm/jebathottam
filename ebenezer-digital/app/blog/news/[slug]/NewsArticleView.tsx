@@ -12,6 +12,7 @@ import {
   splitNewsHeadline,
   type NewsArticle,
 } from "../data";
+import { AskAiPanel } from "@/components/AskAiPanel";
 
 export function NewsArticleView({
   article,
@@ -57,6 +58,18 @@ export function NewsArticleView({
           ))}
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--n-muted)]">{article.dek}</p>
+
+        {article.originalUrl && (
+          <a
+            href={article.originalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-6 inline-flex min-h-[48px] items-center bg-[var(--n-ink)] px-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--n-paper)]"
+            data-cursor="OPEN"
+          >
+            Read full story on {article.sourceLabel} →
+          </a>
+        )}
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-y border-[var(--n-line)] py-4 text-[11px] uppercase tracking-[0.16em] text-[var(--n-muted)]">
           <div className="flex flex-wrap gap-x-4 gap-y-1">
@@ -141,6 +154,21 @@ export function NewsArticleView({
           Source: {article.sourceLabel}
           {article.byline ? ` · ${article.byline}` : ""}. Published {formatNewsTime(article.publishedAt)}.
         </p>
+
+        <div className="mt-10">
+          <AskAiPanel
+            mode="news"
+            tone="news"
+            title="Ask about this story"
+            placeholder="Explain simply / what happens next?"
+            context={`Title: ${article.title}\nDek: ${article.dek}\nRegion: ${article.region}\nTopic: ${article.topic}\nSource: ${article.sourceLabel}\nBody:\n${article.body.slice(0, 6).join("\n")}`}
+            starters={[
+              "Explain this story in simple English",
+              "Why does this matter?",
+              "Give 3 key takeaways",
+            ]}
+          />
+        </div>
       </div>
 
       {keep.length > 0 && (
@@ -148,22 +176,35 @@ export function NewsArticleView({
           <h2 className="news-display text-5xl sm:text-7xl">Keep reading</h2>
           <div className="mt-12 grid gap-8 lg:grid-cols-3">
             {keep.map((n, i) => (
-              <Link key={n.id} href={`/blog/news/${n.slug}`} className="group block" data-cursor="READ">
-                <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--n-muted)]">
-                  {i === 0 ? "Most relevant" : i === 1 ? "Editor’s choice" : "Also developing"}
-                </p>
-                <div className="relative mt-3 aspect-[16/10] overflow-hidden bg-[#111]">
-                  <NewsImage
-                    src={n.coverImage}
-                    alt={n.title}
-                    fill
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                    sizes="33vw"
-                  />
-                </div>
-                <h3 className="mt-4 font-serif text-2xl leading-snug sm:text-3xl">{n.title}</h3>
-                <p className="mt-2 text-sm text-[var(--n-muted)]">{n.dek}</p>
-              </Link>
+              <div key={n.id}>
+                <Link href={`/blog/news/${n.slug}`} className="group block" data-cursor="READ">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--n-muted)]">
+                    {i === 0 ? "Most relevant" : i === 1 ? "Editor’s choice" : "Also developing"}
+                  </p>
+                  <div className="relative mt-3 aspect-[16/10] overflow-hidden bg-[#111]">
+                    <NewsImage
+                      src={n.coverImage}
+                      alt={n.title}
+                      fill
+                      className="object-cover transition duration-700 group-hover:scale-105"
+                      sizes="33vw"
+                    />
+                  </div>
+                  <h3 className="mt-4 font-serif text-2xl leading-snug sm:text-3xl">{n.title}</h3>
+                  <p className="mt-2 text-sm text-[var(--n-muted)]">{n.dek}</p>
+                </Link>
+                {n.originalUrl && (
+                  <a
+                    href={n.originalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-block text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--n-live)]"
+                    data-cursor="OPEN"
+                  >
+                    Read on {n.sourceLabel} →
+                  </a>
+                )}
+              </div>
             ))}
           </div>
           <Link href="/blog/news" className="mt-12 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em]" data-cursor="OPEN">
