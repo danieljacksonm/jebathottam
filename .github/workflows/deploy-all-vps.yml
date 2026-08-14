@@ -58,6 +58,39 @@ jobs:
             npm run build
             pm2 restart sri-krishna-mobiles || pm2 start /home/dani/ecosystem.config.js --only sri-krishna-mobiles
             echo "✅ Sri Krishna Mobiles deployed at: $(date)" > .deploy-timestamp
+
+            # Deploy Canaan Travel Hub (lives as agntix-template inside the jebathottam repo)
+            echo "=== Deploying Canaan Travel Hub ==="
+            MONOREPO=""
+            if [ -d /home/dani/test/.git ]; then MONOREPO=/home/dani/test
+            elif [ -d /home/dani/newjebathottam/.git ]; then MONOREPO=/home/dani/newjebathottam
+            elif [ -d /home/dani/jebathottam/.git ]; then MONOREPO=/home/dani/jebathottam
+            fi
+
+            if [ -n "$MONOREPO" ]; then
+              cd "$MONOREPO"
+              git fetch origin main
+              git reset --hard origin/main
+              mkdir -p /home/dani/agntix-template
+              rsync -a --delete \
+                --exclude node_modules --exclude .next --exclude data/enquiries.jsonl \
+                "$MONOREPO/agntix-template/" /home/dani/agntix-template/
+              cp "$MONOREPO/ecosystem.config.js" /home/dani/ecosystem.config.js
+            elif [ -d /home/dani/agntix-template/.git ]; then
+              cd /home/dani/agntix-template
+              git fetch origin main
+              git reset --hard origin/main
+            else
+              echo "ERROR: Canaan source not found (no monorepo and no /home/dani/agntix-template/.git)"
+              exit 1
+            fi
+
+            cd /home/dani/agntix-template || { echo "ERROR: agntix-template directory not found"; exit 1; }
+            npm install --legacy-peer-deps
+            export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
+            npm run build
+            pm2 restart canaan-travel || pm2 start /home/dani/ecosystem.config.js --only canaan-travel
+            echo "✅ Canaan Travel Hub deployed at: $(date)" > .deploy-timestamp
             
             # Save PM2 configuration
             cd /home/dani
@@ -68,3 +101,4 @@ jobs:
             echo "  - Ebenezer Digital: http://localhost:3000"
             echo "  - Ministry Platform: http://localhost:3001"
             echo "  - Sri Krishna Mobiles: http://localhost:3002"
+            echo "  - Canaan Travel Hub: http://localhost:3003"
