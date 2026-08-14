@@ -6,7 +6,7 @@ import Footer from "../sections/Footer";
 import ScrollProgressBar from "../components/ScrollProgressBar";
 import { StudioCursor } from "./StudioCursor";
 
-const HIDDEN = ["/ai", "/blog", "/products", "/admin"];
+const HIDDEN = ["/ai", "/blog", "/products", "/admin", "/saas"];
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/";

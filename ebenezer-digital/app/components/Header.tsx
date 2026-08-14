@@ -13,6 +13,7 @@ const navLinks = [
   { label: "News", href: "/blog/news" },
   { label: "Journal", href: "/blog" },
   { label: "Store", href: "/products" },
+  { label: "SaaS billing", href: "/saas" },
   { label: "Eben AI", href: "/ai" },
 ];
 
@@ -20,6 +21,7 @@ const productLinks = [
   { label: "News", href: "/blog/news", hint: "World news desk" },
   { label: "Journal", href: "/blog", hint: "Learning blog" },
   { label: "Store", href: "/products", hint: "Digital products" },
+  { label: "SaaS billing", href: "/saas", hint: "Shop invoices & stock" },
   { label: "Eben AI", href: "/ai", hint: "Chat on our server" },
 ];
 

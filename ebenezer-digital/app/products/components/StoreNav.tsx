@@ -117,6 +117,12 @@ export function StoreNav() {
               {t("account")}
             </Link>
             <Link
+              href="/saas"
+              className="hidden text-[11px] uppercase tracking-[0.2em] text-[var(--s-muted)] hover:text-[var(--s-brand)] md:inline"
+            >
+              SaaS
+            </Link>
+            <Link
               href="/ai?mode=product"
               className="hidden text-[11px] uppercase tracking-[0.2em] text-[var(--s-muted)] hover:text-[var(--s-brand)] md:inline"
             >
@@ -218,6 +224,13 @@ export function StoreNav() {
                 {cat}
               </a>
             ))}
+            <Link
+              href="/saas"
+              onClick={() => setMenuOpen(false)}
+              className="block font-serif text-3xl text-[var(--s-brand)]"
+            >
+              SaaS billing
+            </Link>
             <Link
               href="/ai?mode=product"
               onClick={() => setMenuOpen(false)}

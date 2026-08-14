@@ -536,7 +536,7 @@
       "badge": "FREE",
       "isFree": true,
       "isSoftware": true,
-      "externalUrl": "http://localhost:3000/register",
+      "externalUrl": "/saas",
       "externalCta": "Get started free",
       "image": "/images/portfolio/krishna-cover.png",
       "gallery": [

@@ -138,15 +138,13 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
 
             <div className="mt-8 hidden flex-wrap gap-3 md:flex">
               {product.isSoftware && product.externalUrl ? (
-                <a
+                <Link
                   href={product.externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="inline-flex min-h-[52px] flex-1 items-center justify-center bg-[var(--s-brand)] px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c] sm:flex-none"
                   data-cursor="CLICK"
                 >
                   {product.externalCta || t("getStartedFree")}
-                </a>
+                </Link>
               ) : product.isFree || product.price === 0 ? (
                 <Link
                   href={`/products/success?product=${product.slug}&license=${encodeURIComponent(license)}`}
@@ -380,14 +378,12 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
             </button>
           )}
           {product.isSoftware && product.externalUrl ? (
-            <a
+            <Link
               href={product.externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
               className="min-h-[44px] bg-[var(--s-brand)] px-4 text-[10px] font-semibold uppercase tracking-wider text-[#04110c] leading-[44px]"
             >
               {t("getStartedFree")}
-            </a>
+            </Link>
           ) : (
             <Link
               href={

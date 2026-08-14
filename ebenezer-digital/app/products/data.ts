@@ -78,7 +78,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     badge: "FREE",
     isFree: true,
     isSoftware: true,
-    externalUrl: "/ai?mode=product&prefill=I%20want%20to%20start%20Ebenezer%20SaaS",
+    externalUrl: "/saas",
     externalCta: "Get started free",
     image: U("photo-1556742049-0cfed4f6a45d"),
     gallery: [
@@ -132,9 +132,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     story:
       "Made because most creators waste days on design decisions instead of launching. This kit gives a solid, good-looking starting point so you can focus on your offer, not pixel-pushing.",
     category: "UI Kits",
-    price: 19,
-    compareAt: 29,
-    badge: "NEW",
+    price: 0,
+    badge: "FREE",
+    isFree: true,
     image: U("photo-1507238691740-187a5b1d37b8"),
     gallery: [
       U("photo-1507238691740-187a5b1d37b8"),
@@ -151,12 +151,10 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Simple, editable design (no complex components)",
     ],
     includes: [
-      "Figma file — 24 ready landing sections",
-      "Hero, pricing, testimonials, FAQ, CTA blocks",
-      "Mobile + desktop frames",
-      "PDF layout guide (how to assemble a page)",
-      "Color and type reference sheet",
-      "PNG section previews for clients",
+      "Layout guide PDF — how to assemble a landing page",
+      "Copy templates PDF for hero, offer, and CTA",
+      "Mobile checklist PDF",
+      "ZIP with the same PDFs",
     ],
     compatibility: ["Figma", "HTML/CSS", "Webflow", "Framer"],
     license: ["Personal License", "Commercial License"],
@@ -192,8 +190,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     story:
       "Made for shop owners and small developers who need a clear structure before building or buying a POS system, instead of guessing what screens and flows they need.",
     category: "Business Tools",
-    price: 24,
-    compareAt: 39,
+    price: 0,
+    badge: "FREE",
+    isFree: true,
     image: U("photo-1556740738-b6a63e62c1d5"),
     gallery: [
       U("photo-1556740738-b6a63e62c1d5"),
@@ -248,8 +247,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     story:
       "Many small travel agents lose customers because enquiries come in through calls or WhatsApp and get forgotten. This pack gives a simple system to capture and follow up on every lead.",
     category: "Templates",
-    price: 17,
-    compareAt: 27,
+    price: 0,
+    badge: "FREE",
+    isFree: true,
     image: U("photo-1488646953014-85cb44e25828"),
     gallery: [
       U("photo-1488646953014-85cb44e25828"),
@@ -304,8 +304,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     story:
       "Written for shop owners and small business owners who keep hearing 'go digital' but never get simple, honest, step-by-step guidance without jargon or expensive courses.",
     category: "Ebooks",
-    price: 12,
-    compareAt: 19,
+    price: 0,
+    badge: "FREE",
+    isFree: true,
     image: U("photo-1454165804606-c3d57bc86b40"),
     gallery: [
       U("photo-1454165804606-c3d57bc86b40"),
@@ -352,8 +353,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     story:
       "Many small businesses use random fonts and colors on every post, which looks unprofessional. This kit gives a simple, consistent starting point anyone can use.",
     category: "Graphics",
-    price: 15,
-    compareAt: 25,
+    price: 0,
+    badge: "FREE",
+    isFree: true,
     image: U("photo-1561070791-2526d30994b5"),
     gallery: [
       U("photo-1561070791-2526d30994b5"),
@@ -442,15 +444,15 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     id: "dp-bundle",
     slug: "creator-bundle",
     name: "Creator Bundle",
-    tagline: "Landing page kit + brand kit + business ebook — everything to launch, in one pack.",
+    tagline: "Landing guides + brand guide + business ebook in one free pack.",
     description:
-      "A bundle combining the Creator Landing Kit, Brand Kit Essentials, and Digital Business Playbook at a lower combined price. Built for creators and small business owners who want a landing page, a consistent brand look, and a simple digital growth plan — together.",
+      "A free pack of the real PDFs from the landing kit, brand kit, and business playbook. Open each file on the product page — no fake Figma download, no invented discount.",
     story:
-      "Created for buyers who want more than one product but don't want to pay full price three times. Bundling rewards people who want to get set up properly in one go.",
+      "Made so you can try the full set without paying. When the files grow, pricing can come back. For now the pack is free.",
     category: "Bundles",
-    price: 39,
-    compareAt: 46,
-    badge: "BUNDLE",
+    price: 0,
+    badge: "FREE",
+    isFree: true,
     isBundle: true,
     bundleItems: ["dp-landing", "dp-brand", "dp-playbook"],
     image: U("photo-1522202176988-66273c2fd55f"),
@@ -468,10 +470,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "One download, everything needed to launch",
     ],
     includes: [
-      "Creator Landing Kit — full Figma + guides",
-      "Brand Kit Essentials — guide + 8 social templates",
-      "Digital Business Playbook — ebook + checklist",
-      "One ZIP, three product folders",
+      "Bundle contents PDF",
+      "Landing layout guide PDF",
+      "Brand guide PDF",
+      "Digital business playbook PDF",
+      "ZIP with the same files",
     ],
     compatibility: ["Figma", "HTML", "Canva", "PDF"],
     license: ["Personal License", "Commercial License"],
@@ -496,7 +499,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     fileSize: "8 PDFs in ZIP",
     seoTitle: "Creator Bundle – Landing Page Kit + Brand Kit + Business Ebook",
     seoDescription:
-      "Get the Creator Landing Kit, Brand Kit Essentials, and Digital Business Playbook together at a lower price. Everything you need to launch your brand online.",
+      "Free pack: landing layout guide, brand guide, and digital business playbook PDFs. Download now — no payment.",
   },
 ];
 

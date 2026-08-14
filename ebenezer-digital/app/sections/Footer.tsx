@@ -37,11 +37,16 @@ const footerLinks = {
     { label: "Our Work", href: "/work" },
     { label: "Process", href: "/process" },
     { label: "Testimonials", href: "/testimonials" },
+    { label: "Website showcase", href: "/website-showcase" },
+    { label: "Completed projects", href: "/completed-projects" },
+    { label: "By the numbers", href: "/stats" },
+    { label: "Trust", href: "/trust" },
   ],
   products: [
     { label: "News", href: "/blog/news" },
     { label: "Journal", href: "/blog" },
     { label: "Store", href: "/products" },
+    { label: "SaaS billing", href: "/saas" },
     { label: "Eben AI", href: "/ai" },
   ],
   support: [

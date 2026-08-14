@@ -24,10 +24,10 @@ export default function ContactPage() {
               </a>
             </p>
             <p>
-              <span className="block text-[10px] uppercase tracking-[0.2em] text-white/40">WhatsApp</span>
-              <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="text-white">
-                +1 (234) 567-890
-              </a>
+              <span className="block text-[10px] uppercase tracking-[0.2em] text-white/40">PayPal (custom work)</span>
+              <span className="text-white/70">
+                For paid client projects we can invoice through PayPal — cards and PayPal worldwide, in USD.
+              </span>
             </p>
           </div>
         </div>

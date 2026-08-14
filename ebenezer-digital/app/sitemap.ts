@@ -13,10 +13,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog/news",
     "/contact",
     "/products",
+    "/products/ebenezer-saas",
+    "/saas",
     "/testimonials",
     "/privacy",
     "/terms",
-    "/completed-projects",
+    "/process",
+    "/why",
+    "/careers",
+    "/website-showcase",
+    "/stats",
+    "/trust",
     "/ai",
   ];
   const staticPages: MetadataRoute.Sitemap = routes.map((route) => ({

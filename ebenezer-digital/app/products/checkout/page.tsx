@@ -52,6 +52,16 @@ function CheckoutInner() {
     setError("");
     setLoading(true);
     try {
+      if (total <= 0) {
+        const first = lines[0]?.product.slug || "";
+        clearCart();
+        router.push(
+          `/products/success?product=${first}&license=${encodeURIComponent(license)}&order=free-${Date.now()}`
+        );
+        setLoading(false);
+        return;
+      }
+
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -134,7 +144,7 @@ function CheckoutInner() {
               {loading ? "Starting payment…" : `${t("buyNow")} ${formatINR(total)}`}
             </button>
             <p className="text-xs text-[var(--s-muted)]">
-              Secure payment · Instant digital access worldwide after confirmation · USD
+              Kits are free for now. When a paid order is needed, PayPal takes cards and PayPal balance worldwide (USD).
             </p>
             <div className="pt-4">
               <AskAiPanel
@@ -142,7 +152,7 @@ function CheckoutInner() {
                 tone="store"
                 title="Billing help"
                 placeholder="Ask about payment, license, download…"
-                context={`Checkout status: payment gateway not connected yet.\nBuyer email draft: ${email || "(not entered)"}\nCart total: ${formatINR(total)} USD\nItems:\n${lines
+                context={`Checkout: store kits are free. Paid custom projects use PayPal when PAYPAL_BUSINESS_EMAIL is set.\nBuyer email draft: ${email || "(not entered)"}\nCart total: ${formatINR(total)} USD\nItems:\n${lines
                   .map((l) => `- ${l.product.name} ×${l.qty} @ ${formatINR(l.product.price)} (${l.license})`)
                   .join("\n")}\n\nCatalog:\n${formatProductsForAi(STORE_PRODUCTS)}`}
                 starters={[

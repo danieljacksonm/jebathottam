@@ -114,6 +114,7 @@ export default function StudioWorld() {
             { href: "/blog/news", title: "NEWS", body: "World news desk — ebenezerdigital.info" },
             { href: "/blog", title: "JOURNAL", body: "Learning blog and articles" },
             { href: "/products", title: "STORE", body: "Digital products — ebenezerdigital.store" },
+            { href: "/saas", title: "SAAS", body: "Shop billing — invoices, stock, print" },
             { href: "/ai", title: "EBEN AI", body: "Chat on our own server" },
           ].map((item) => (
             <Link

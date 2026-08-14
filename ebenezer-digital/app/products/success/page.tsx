@@ -91,6 +91,14 @@ function SuccessInner() {
                   <Download className="h-4 w-4" /> Download ZIP
                 </a>
               )}
+              {product.isSoftware && (
+                <Link
+                  href={product.externalUrl || "/saas"}
+                  className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center bg-[var(--s-brand)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
+                >
+                  Open billing app
+                </Link>
+              )}
               {product.pdfs && product.pdfs.length > 0 && (
                 <div className="mt-6 space-y-2">
                   <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--s-muted)]">Open PDFs</p>
