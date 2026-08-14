@@ -4,6 +4,23 @@ import { Link } from "@/i18n/navigation";
 import { services } from "@/data/services";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return pageMetadata({
+    locale,
+    path: "/services",
+    title: t("servicesTitle"),
+    description: t("servicesDescription"),
+  });
+}
 
 export default async function ServicesPage({
   params,
@@ -29,8 +46,16 @@ export default async function ServicesPage({
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=2400&q=80"
+        image="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=70"
+        imageAlt="Travel support services around a Kodaikanal journey"
         tone="mist"
+      />
+      <Breadcrumbs
+        locale={locale}
+        items={[
+          { name: nav("home"), href: "/" },
+          { name: nav("services") },
+        ]}
       />
 
       <section className="mx-auto grid max-w-7xl gap-5 px-5 py-16 sm:grid-cols-2 lg:grid-cols-3 md:px-8 md:py-24">

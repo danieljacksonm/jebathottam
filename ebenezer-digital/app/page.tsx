@@ -1,19 +1,19 @@
 import Hero from "./sections/Hero";
 import Services from "./sections/Services";
+import StudioWorld from "./studio/StudioWorld";
 import Portfolio from "./sections/Portfolio";
 import Testimonials from "./sections/Testimonials";
 import Contact from "./sections/Contact";
-import Footer from "./sections/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-[#070708]">
       <Hero />
       <Services />
+      <StudioWorld />
       <Portfolio />
       <Testimonials />
       <Contact />
-      <Footer />
     </main>
   );
 }

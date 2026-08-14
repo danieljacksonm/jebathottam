@@ -87,6 +87,7 @@ export async function SiteFooter() {
                 ["/about", "about"],
                 ["/contact", "contact"],
                 ["/enquire", "enquire"],
+                ["/faq", "faq"],
               ] as const
             ).map(([href, key]) => (
               <li key={href}>

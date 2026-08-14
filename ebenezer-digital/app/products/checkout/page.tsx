@@ -57,7 +57,7 @@ function CheckoutInner() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
-          currency: "INR",
+          currency: "USD",
           items: lines.map((l) => ({
             productId: l.product.id,
             slug: l.product.slug,
@@ -134,7 +134,7 @@ function CheckoutInner() {
               {loading ? "Starting payment…" : `${t("buyNow")} ${formatINR(total)}`}
             </button>
             <p className="text-xs text-[var(--s-muted)]">
-              Secure payment · Instant digital access after confirmation
+              Secure payment · Instant digital access worldwide after confirmation · USD
             </p>
             <div className="pt-4">
               <AskAiPanel
@@ -142,8 +142,8 @@ function CheckoutInner() {
                 tone="store"
                 title="Billing help"
                 placeholder="Ask about payment, license, download…"
-                context={`Checkout status: payment gateway not connected yet.\nBuyer email draft: ${email || "(not entered)"}\nCart total: ₹${total}\nItems:\n${lines
-                  .map((l) => `- ${l.product.name} ×${l.qty} @ ₹${l.product.price} (${l.license})`)
+                context={`Checkout status: payment gateway not connected yet.\nBuyer email draft: ${email || "(not entered)"}\nCart total: ${formatINR(total)} USD\nItems:\n${lines
+                  .map((l) => `- ${l.product.name} ×${l.qty} @ ${formatINR(l.product.price)} (${l.license})`)
                   .join("\n")}\n\nCatalog:\n${formatProductsForAi(STORE_PRODUCTS)}`}
                 starters={[
                   "Why can’t I pay yet?",

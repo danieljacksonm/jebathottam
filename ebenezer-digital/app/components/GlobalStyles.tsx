@@ -29,23 +29,23 @@ export default function GlobalStyles() {
       }
       
       ::-webkit-scrollbar-thumb {
-        background: rgba(59, 130, 246, 0.5);
+        background: rgba(16, 185, 129, 0.45);
         border-radius: 4px;
       }
       
       ::-webkit-scrollbar-thumb:hover {
-        background: rgba(59, 130, 246, 0.7);
+        background: rgba(16, 185, 129, 0.7);
       }
       
       /* Selection styles */
       ::selection {
-        background: rgba(59, 130, 246, 0.3);
+        background: rgba(16, 185, 129, 0.28);
         color: white;
       }
       
       /* Focus styles */
       :focus-visible {
-        outline: 2px solid rgba(59, 130, 246, 0.5);
+        outline: 2px solid rgba(16, 185, 129, 0.7);
         outline-offset: 2px;
       }
     `}</style>

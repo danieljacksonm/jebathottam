@@ -5,8 +5,14 @@ import { relativeNewsTime, type NewsArticle } from "../data";
 import { OriginalLink } from "./OriginalLink";
 import { AskAiPanel, NewsBriefButton } from "@/components/AskAiPanel";
 
-export function WorldBriefing({ stories }: { stories: NewsArticle[] }) {
-  const wire = stories.slice(0, 24);
+export function WorldBriefing({
+  stories,
+  totalOnDesk,
+}: {
+  stories: NewsArticle[];
+  totalOnDesk?: number;
+}) {
+  const wire = stories;
   if (!wire.length) return null;
 
   const sources = Array.from(new Set(stories.map((s) => s.sourceLabel))).slice(0, 12);
@@ -24,7 +30,7 @@ export function WorldBriefing({ stories }: { stories: NewsArticle[] }) {
           <h2 className="news-display mt-2 text-4xl sm:text-6xl">Know the world in one scan.</h2>
         </div>
         <div className="text-right text-[11px] uppercase tracking-[0.2em] text-white/50">
-          <p>{stories.length} stories on desk</p>
+          <p>{totalOnDesk || stories.length} stories on desk</p>
           <p className="mt-1">{regions.length} regions · {sources.length}+ sources</p>
         </div>
       </div>

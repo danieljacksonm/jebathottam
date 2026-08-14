@@ -2,6 +2,23 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return pageMetadata({
+    locale,
+    path: "/contact",
+    title: t("contactTitle"),
+    description: t("contactDescription"),
+  });
+}
 
 export default async function ContactPage({
   params,
@@ -12,15 +29,25 @@ export default async function ContactPage({
   setRequestLocale(locale);
   const t = await getTranslations("contact");
 
+  const nav = await getTranslations("nav");
+
   return (
     <PageAtmosphere>
       <CinematicPageHero
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2400&q=80"
+        image="/images/kodai/pine-forest.webp"
+        imageAlt="Pine forest light in Kodaikanal"
         tone="forest"
         compact
+      />
+      <Breadcrumbs
+        locale={locale}
+        items={[
+          { name: nav("home"), href: "/" },
+          { name: nav("contact") },
+        ]}
       />
       <section className="mx-auto max-w-2xl px-5 py-20 text-center md:px-8">
         <div className="glass-panel rounded-3xl px-8 py-12">

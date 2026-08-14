@@ -33,6 +33,9 @@ export function ImmersiveExperiences({ pinned = true }: Props) {
       return;
     }
 
+    // Pinning is expensive on phones — keep swipe carousel instead.
+    if (window.matchMedia("(max-width: 768px)").matches) return;
+
     let ctx: gsap.Context | null = null;
     const id = window.requestAnimationFrame(() => {
       ctx = gsap.context(() => {
@@ -77,7 +80,7 @@ export function ImmersiveExperiences({ pinned = true }: Props) {
         <div
           className={`relative ${
             pinned
-              ? "h-[70vh] md:h-[78vh]"
+              ? "overflow-x-auto pb-10 [-ms-overflow-style:none] [scrollbar-width:none] md:h-[78vh] md:overflow-hidden md:pb-0 [&::-webkit-scrollbar]:hidden"
               : "overflow-x-auto pb-10 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           }`}
         >
@@ -85,13 +88,14 @@ export function ImmersiveExperiences({ pinned = true }: Props) {
             ref={track}
             className={
               pinned
-                ? "absolute left-0 top-0 flex h-full items-stretch gap-6 px-5 will-change-transform md:px-8"
+                ? "flex w-max items-stretch gap-6 px-5 md:absolute md:left-0 md:top-0 md:h-full md:w-auto md:will-change-transform md:px-8"
                 : "flex w-max items-stretch gap-6 px-5 md:px-8"
             }
           >
             {items.map((item) => (
               <article
                 key={item.id}
+                data-cursor="discover"
                 className="lux-card group relative h-[min(70vh,560px)] w-[78vw] shrink-0 self-center overflow-hidden sm:w-[52vw] md:h-[min(68vh,520px)] md:w-[38vw] lg:w-[28vw]"
               >
                 <Image

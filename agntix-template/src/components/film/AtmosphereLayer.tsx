@@ -1,11 +1,9 @@
-"use client";
-
 /** Continuous atmosphere: fog, drifting leaves, soft light. */
 export function AtmosphereLayer({ tone = "mist" }: { tone?: string }) {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
-        className="absolute -left-[10%] top-[10%] h-40 w-[55%] rounded-full blur-3xl opacity-30 cloud-drift"
+          className="absolute -left-[10%] top-[10%] h-40 w-[55%] rounded-full blur-3xl opacity-30 cloud-drift"
         style={{
           background:
             tone === "night"
@@ -14,7 +12,7 @@ export function AtmosphereLayer({ tone = "mist" }: { tone?: string }) {
         }}
       />
       <div
-        className="absolute top-[35%] h-48 w-[60%] rounded-full blur-3xl opacity-20 cloud-drift"
+        className="absolute top-[35%] hidden h-48 w-[60%] rounded-full blur-3xl opacity-20 cloud-drift md:block"
         style={{
           animationDelay: "22s",
           animationDuration: "75s",
@@ -24,12 +22,12 @@ export function AtmosphereLayer({ tone = "mist" }: { tone?: string }) {
               : "rgba(220,230,240,0.2)",
         }}
       />
-      {[0, 1, 2, 3, 4, 5].map((i) => (
+      {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className="absolute block h-1.5 w-1.5 rounded-full bg-white/30"
+          className="absolute hidden h-1.5 w-1.5 rounded-full bg-white/30 md:block"
           style={{
-            left: `${12 + i * 14}%`,
+            left: `${12 + i * 22}%`,
             top: `${20 + (i % 3) * 18}%`,
             animation: `leaf-drift ${14 + i * 2}s linear infinite`,
             animationDelay: `${i * 1.4}s`,
@@ -41,7 +39,7 @@ export function AtmosphereLayer({ tone = "mist" }: { tone?: string }) {
       )}
       {tone === "night" && (
         <div className="absolute inset-0">
-          {Array.from({ length: 28 }).map((_, i) => (
+          {Array.from({ length: 12 }).map((_, i) => (
             <span
               key={i}
               className="absolute h-0.5 w-0.5 rounded-full bg-white"

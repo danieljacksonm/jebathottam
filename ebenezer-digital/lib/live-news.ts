@@ -10,7 +10,7 @@ export type LiveNewsItem = NewsArticle & {
 type Cache = { at: number; items: LiveNewsItem[] };
 
 let cache: Cache | null = null;
-const CACHE_MS = 45 * 1000;
+const CACHE_MS = 10 * 1000;
 
 const RSS_FEEDS: { url: string; region: NewsRegion; source: string; location: string }[] = [
   { url: "https://www.theguardian.com/world/rss", region: "World", source: "The Guardian", location: "World" },
@@ -172,9 +172,9 @@ function mapGuardianSection(section: string): NewsRegion {
 async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
   const key = process.env.GUARDIAN_API_KEY || "test";
   const endpoints = [
-    `https://content.guardianapis.com/search?order-by=newest&page-size=40&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
-    `https://content.guardianapis.com/search?q=india&order-by=newest&page-size=15&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
-    `https://content.guardianapis.com/search?section=technology|business|science|environment|sport&order-by=newest&page-size=20&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
+    `https://content.guardianapis.com/search?order-by=newest&page-size=50&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
+    `https://content.guardianapis.com/search?q=india&order-by=newest&page-size=30&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
+    `https://content.guardianapis.com/search?section=technology|business|science|environment|sport&order-by=newest&page-size=40&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
   ];
 
   const bundles = await Promise.allSettled(
@@ -236,7 +236,7 @@ async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
 async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsItem[]> {
   const xml = await fetchText(feed.url);
   const blocks = xml.split(/<item[\s>]/i).slice(1);
-  return blocks.slice(0, 12).map((raw) => {
+  return blocks.slice(0, 20).map((raw) => {
     const block = raw.split(/<\/item>/i)[0] || raw;
     const title = decodeEntities(tag(block, "title")).replace(/<[^>]+>/g, "");
     const link = decodeEntities(tag(block, "link") || tag(block, "guid"));

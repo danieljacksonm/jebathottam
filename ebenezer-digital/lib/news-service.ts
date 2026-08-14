@@ -118,7 +118,7 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
   });
 
   const total = list.length;
-  const items = list.slice(Math.max(0, offset), Math.max(0, offset) + Math.min(limit, 200));
+  const items = list.slice(Math.max(0, offset), Math.max(0, offset) + Math.min(limit, 240));
   const regions = Array.from(new Set((await listPublicNews()).map((n) => n.region))).sort();
   const sources = Array.from(new Set(list.map((n) => n.sourceLabel))).sort();
 

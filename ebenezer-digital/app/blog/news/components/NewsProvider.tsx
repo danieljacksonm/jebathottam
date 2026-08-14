@@ -30,7 +30,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
 
     const load = (first = false) => {
       if (first) setLoading(true);
-      fetch("/api/news?limit=160")
+      fetch("/api/news?limit=200")
         .then((r) => r.json())
         .then((data) => {
           if (!alive) return;
@@ -46,7 +46,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
     };
 
     load(true);
-    const timer = window.setInterval(() => load(false), 25 * 1000);
+    const timer = window.setInterval(() => load(false), 10 * 1000);
     return () => {
       alive = false;
       window.clearInterval(timer);

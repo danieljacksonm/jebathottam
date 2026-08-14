@@ -22,11 +22,11 @@ export default function ScrollProgressBar() {
 
   return (
     <div
-      className="fixed top-16 left-0 right-0 z-40 h-0.5 bg-[var(--border)]"
+      className="fixed top-0 left-0 right-0 z-[80] h-px bg-transparent"
       aria-hidden
     >
       <div
-        className="scroll-progress-fill h-full bg-gradient-to-r from-[var(--accent)] to-[var(--accent-hover)] transition-transform duration-150 ease-out origin-left"
+        className="h-full origin-left bg-emerald-400 transition-transform duration-150 ease-out"
         style={{ transform: `scaleX(${progress})` }}
       />
     </div>

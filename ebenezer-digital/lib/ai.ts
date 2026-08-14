@@ -47,7 +47,7 @@ ${ANSWER_STYLE}`,
   product: `You are ${AI_BRAND} on Ebenezer Store.
 Help the buyer choose using ONLY the product catalog context.
 Explain who it is for, what they get, and how it compares.
-Currency is INR. Do not invent prices.
+Currency is USD. The store ships digital products worldwide. Do not invent prices.
 ${ANSWER_STYLE}`,
   billing: `You are ${AI_BRAND} billing helper.
 Explain checkout, licenses, downloads, and receipts in simple English.
@@ -184,7 +184,7 @@ export function formatProductsForAi(
     .slice(0, 20)
     .map(
       (p) =>
-        `- ${p.name} (/${p.slug}) | ${p.category} | ${p.isFree ? "FREE" : `₹${p.price}`} | ${p.tagline}`
+        `- ${p.name} (/${p.slug}) | ${p.category} | ${p.isFree ? "FREE" : `$${p.price}`} | ${p.tagline}`
     )
     .join("\n");
 }

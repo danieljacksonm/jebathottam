@@ -87,7 +87,7 @@ export async function POST(request: Request) {
         model: OLLAMA_MODEL,
         messages,
         stream: wantStream,
-        keep_alive: "1h",
+        keep_alive: "2m",
         options: {
           temperature: 0.5,
           num_predict: body.fast ? 480 : 900,

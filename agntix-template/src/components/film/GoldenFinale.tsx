@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { getLocalizedPlaceRibbon } from "@/data/film";
 import { safeRevert } from "@/lib/gsap-safe";
 import { useLocale, useTranslations } from "next-intl";
+import { MagneticCta } from "@/components/cinematic/MagneticCta";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +15,7 @@ export function GoldenFinale() {
   const root = useRef<HTMLElement>(null);
   const locale = useLocale();
   const t = useTranslations("film");
+  const j = useTranslations("journey");
   const ribbon = getLocalizedPlaceRibbon(locale);
 
   useLayoutEffect(() => {
@@ -37,15 +39,25 @@ export function GoldenFinale() {
           },
         );
         gsap.to("[data-finale-bg]", {
-          scale: 1.08,
+          scale: 1.1,
           ease: "none",
           scrollTrigger: {
             trigger: el,
             start: "top bottom",
             end: "bottom top",
-            scrub: true,
+            scrub: 1.1,
           },
         });
+        gsap.fromTo(
+          "[data-farewell]",
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.4,
+            scrollTrigger: { trigger: "[data-farewell]", start: "top 85%" },
+          },
+        );
       }, el);
     });
 
@@ -59,11 +71,12 @@ export function GoldenFinale() {
     <section ref={root} className="relative min-h-[100svh] overflow-hidden">
       <div data-finale-bg className="absolute inset-0">
         <Image
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80"
+          src="/images/kodai/hero.webp"
           alt="Golden sunrise over Kodaikanal"
           fill
           className="object-cover"
           sizes="100vw"
+          data-cursor="explore"
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-navy/30 via-navy/55 to-navy" />
@@ -80,7 +93,7 @@ export function GoldenFinale() {
           data-finale-copy
           className="mt-6 font-display text-5xl text-white md:text-7xl"
         >
-          {t("finaleTitle")}
+          {j("ctaTitle")}
         </h2>
         <p
           data-finale-copy
@@ -88,10 +101,16 @@ export function GoldenFinale() {
         >
           {t("finaleBody")}
         </p>
+        <div data-finale-copy className="mt-10">
+          <MagneticCta href="/enquire" className="btn-gold gold-path-cta">
+            {j("ctaButton")}
+            <span data-mag-arrow>→</span>
+          </MagneticCta>
+        </div>
       </div>
 
       <div className="relative z-10 overflow-hidden border-y border-[var(--line)] bg-navy/70 py-4 backdrop-blur-md">
-        <div className="flex w-max gap-10 whitespace-nowrap px-4 cloud-drift" style={{ animationDuration: "40s" }}>
+        <div className="cloud-drift flex w-max gap-10 whitespace-nowrap px-4" style={{ animationDuration: "40s" }}>
           {[...ribbon, ...ribbon].map((place, i) => (
             <span
               key={`${place}-${i}`}
@@ -101,6 +120,21 @@ export function GoldenFinale() {
             </span>
           ))}
         </div>
+      </div>
+
+      <div
+        data-farewell
+        className="relative z-10 flex flex-col items-center gap-4 bg-navy px-5 py-20 text-center"
+      >
+        <Image
+          src="/brand/canaan-logo.jpeg"
+          alt="Canaan Travel Hub"
+          width={64}
+          height={64}
+          className="h-16 w-16 rounded-full object-cover ring-1 ring-gold/40"
+        />
+        <p className="font-script text-4xl text-gold-bright">Canaan</p>
+        <p className="font-display text-2xl text-white/80">{j("farewell")}</p>
       </div>
     </section>
   );

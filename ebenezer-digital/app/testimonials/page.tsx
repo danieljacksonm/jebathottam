@@ -1,35 +1,54 @@
-import { AnimateSection, AnimateOne } from "../components/AnimateOnScroll";
-import ScrollParallax from "../components/ScrollParallax";
+"use client";
+
+import { useEffect, useState } from "react";
+
+type Testimonial = {
+  id: string;
+  name: string;
+  role: string;
+  company: string;
+  content: string;
+};
 
 export default function TestimonialsPage() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/content")
+      .then((r) => r.json())
+      .then((data) => setTestimonials(data.testimonials || []))
+      .catch(() => setTestimonials([]))
+      .finally(() => setLoaded(true));
+  }, []);
+
   return (
-    <ScrollParallax>
-      <section className="section-padding pt-[5.25rem] bg-[var(--bg-soft)] border-t border-[var(--border)]">
-        <div className="section-reveal container-wide">
-          <AnimateOne variant="from-left">
-            <p className="section-intro-p text-[var(--accent)] font-display font-semibold text-sm uppercase tracking-widest mb-3">Testimonials</p>
-            <h1 className="section-h2-reveal font-display text-3xl sm:text-4xl font-bold text-[var(--text)] mb-4">
-              What our clients say
-            </h1>
-            <p className="section-sub-p text-[var(--text-muted)] max-w-xl mb-16">
-              Hear from businesses and individuals who have worked with us.
+    <main className="bg-[#070708] px-4 pb-24 pt-28 sm:px-8 lg:px-10">
+      <p className="studio-kicker">Testimonials</p>
+      <h1 className="studio-display mt-4 text-5xl sm:text-7xl">
+        WHAT OUR
+        <br />
+        CLIENTS SAY.
+      </h1>
+      <p className="mt-6 max-w-xl text-[var(--st-muted)]">
+        Hear from businesses and individuals who have worked with us.
+      </p>
+      <div className="mt-16 space-y-16">
+        {testimonials.map((t) => (
+          <blockquote key={t.id} className="border-t border-[var(--st-line)] pt-10">
+            <p className="max-w-4xl font-serif text-2xl leading-snug text-white sm:text-4xl">
+              “{t.content}”
             </p>
-          </AnimateOne>
-          <AnimateSection variant="stagger-slow" className="grid md:grid-cols-3 gap-8">
-            {[
-              { quote: "Professional, on time, and great communication. They handled our data migration and it was seamless.", name: "Sarah M.", role: "Operations Director", company: "Retail Co." },
-              { quote: "We needed a booking system fast. Ebenezer delivered exactly what we asked for, within budget and ahead of schedule.", name: "James K.", role: "Owner", company: "Travel Agency" },
-              { quote: "Ongoing support has been reliable. We keep coming back for more projects—they feel like an extension of our team.", name: "Lisa T.", role: "Founder", company: "Consulting Firm" },
-            ].map((t) => (
-              <div key={t.name} className="aos-item card-dark rounded-2xl p-8 card-shine-bottom border border-[var(--border)]">
-                <p className="text-[var(--text)] text-lg leading-relaxed mb-6 font-serif">&ldquo;{t.quote}&rdquo;</p>
-                <p className="font-display font-semibold text-[var(--text)]">{t.name}</p>
-                <p className="text-[var(--text-muted)] text-sm">{t.role}, {t.company}</p>
-              </div>
-            ))}
-          </AnimateSection>
-        </div>
-      </section>
-    </ScrollParallax>
+            <footer className="mt-6 text-sm text-[var(--st-muted)]">
+              {t.name}
+              {t.role || t.company ? ` · ${[t.role, t.company].filter(Boolean).join(", ")}` : ""}
+            </footer>
+          </blockquote>
+        ))}
+        {loaded && testimonials.length === 0 && (
+          <p className="text-[var(--st-muted)]">Client notes will appear here as they come in.</p>
+        )}
+      </div>
+    </main>
   );
 }

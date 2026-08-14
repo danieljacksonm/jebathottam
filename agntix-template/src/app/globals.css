@@ -8,8 +8,8 @@
   --gold-bright: #f4d27a;
   --gold-mute: #b8893a;
   --cream: #ffffff;
-  --mist: #a8b4c4;
-  --soft-gray: #c5ced8;
+  --mist: #c9d3de;
+  --soft-gray: #d7dee6;
   --line: rgba(214, 166, 74, 0.28);
   --glass: rgba(8, 26, 48, 0.55);
   --glass-strong: rgba(4, 22, 43, 0.72);
@@ -47,6 +47,34 @@
 
 html {
   scroll-behavior: auto;
+  scroll-padding-top: 5.5rem;
+}
+
+.lazy-section-placeholder {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  border-radius: 999px;
+  background: #f4d27a;
+  color: #04162b;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 3px;
 }
 
 body {
@@ -55,6 +83,14 @@ body {
   font-family: var(--font-manrope), system-ui, sans-serif;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* Keep the film mist off mobile first paint so the hero title can be LCP. */
+@media (max-width: 768px) {
+  [data-open-mist] {
+    opacity: 0 !important;
+    transition: none !important;
+  }
 }
 
 body.locale-ta {
@@ -400,17 +436,196 @@ body.locale-hi .font-script {
   animation: bird-fly 9s ease-in-out infinite alternate;
 }
 
+.water-shimmer {
+  background:
+    linear-gradient(
+      180deg,
+      transparent 38%,
+      rgba(255, 255, 255, 0.07) 50%,
+      transparent 62%
+    );
+  background-size: 100% 220%;
+  mix-blend-mode: overlay;
+  animation: water-flow 9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes water-flow {
+  0% {
+    background-position: 0 -20%;
+    opacity: 0.35;
+  }
+  50% {
+    background-position: 0 40%;
+    opacity: 0.7;
+  }
+  100% {
+    background-position: 0 120%;
+    opacity: 0.35;
+  }
+}
+
+html.has-cinematic-cursor,
+html.has-cinematic-cursor * {
+  cursor: none;
+}
+
+.cinematic-cursor-dot,
+.cinematic-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+}
+
+html.has-cinematic-cursor .cinematic-cursor-dot,
+html.has-cinematic-cursor .cinematic-cursor-ring {
+  opacity: 1;
+}
+
+.cinematic-cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 999px;
+  background: #f4d27a;
+  box-shadow: 0 0 12px rgba(244, 210, 122, 0.7);
+}
+
+.cinematic-cursor-ring {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border: 1px solid rgba(244, 210, 122, 0.55);
+  border-radius: 999px;
+  transition: width 0.35s ease, height 0.35s ease, margin 0.35s ease, background 0.35s ease;
+}
+
+.cinematic-cursor-ring.is-label,
+.cinematic-cursor-ring:has(span) {
+  width: 88px;
+  height: 88px;
+  margin: -44px 0 0 -44px;
+  background: rgba(4, 22, 43, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.cinematic-cursor-ring span {
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f4d27a;
+}
+
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.magnetic-cta {
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.gold-path-cta {
+  position: relative;
+}
+
+.gold-path-cta::after {
+  content: "";
+  position: absolute;
+  left: -40%;
+  top: 50%;
+  width: 38%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #f4d27a);
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: left 0.55s ease, opacity 0.4s ease;
+}
+
+.gold-path-cta:hover::after {
+  left: -8%;
+  opacity: 1;
+}
+
+.kodai-hour-veil {
+  transition: background 1.2s ease, opacity 1.2s ease;
+  opacity: 0.22;
+  mix-blend-mode: soft-light;
+}
+
+html[data-kodai-hour="dawn"] .kodai-hour-veil {
+  background: linear-gradient(180deg, rgba(180, 210, 230, 0.18), rgba(244, 210, 122, 0.08));
+}
+
+html[data-kodai-hour="day"] .kodai-hour-veil {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent);
+  opacity: 0.12;
+}
+
+html[data-kodai-hour="gold"] .kodai-hour-veil {
+  background: linear-gradient(180deg, rgba(244, 210, 122, 0.16), rgba(184, 137, 58, 0.12));
+  opacity: 0.28;
+}
+
+html[data-kodai-hour="sunset"] .kodai-hour-veil {
+  background: linear-gradient(180deg, rgba(214, 120, 64, 0.22), rgba(4, 22, 43, 0.28));
+  opacity: 0.38;
+}
+
+html[data-kodai-hour="night"] .kodai-hour-veil {
+  background: linear-gradient(180deg, rgba(4, 10, 24, 0.35), rgba(4, 22, 43, 0.45));
+  opacity: 0.5;
+}
+
+html[data-kodai-hour="night"] .site-header.is-scrolled {
+  background: rgba(3, 10, 22, 0.82);
+}
+
+html[data-kodai-hour="night"] .btn-gold {
+  box-shadow: 0 0 28px rgba(244, 210, 122, 0.28);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .plane-fly,
   .cloud-drift,
   .bird,
-  .text-shimmer {
+  .text-shimmer,
+  .water-shimmer {
     animation: none;
   }
 
   .lux-card:hover,
   .btn-gold:hover,
-  .btn-ghost:hover {
+  .btn-ghost:hover,
+  .tilt-card {
     transform: none;
+  }
+
+  html.has-cinematic-cursor,
+  html.has-cinematic-cursor * {
+    cursor: auto;
+  }
+
+  .cinematic-cursor-dot,
+  .cinematic-cursor-ring {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  html.has-cinematic-cursor,
+  html.has-cinematic-cursor * {
+    cursor: auto;
+  }
+
+  .cinematic-cursor-dot,
+  .cinematic-cursor-ring {
+    display: none;
   }
 }

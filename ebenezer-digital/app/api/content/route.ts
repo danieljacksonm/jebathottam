@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { getCachedPublicContent, setCachedPublicContent } from "@/lib/public-content-cache";
 
 export const dynamic = "force-dynamic";
 
 /** Public site content. Blog list omits full body to keep payload light (1000+ edu posts). */
 export async function GET() {
   try {
+    const cached = getCachedPublicContent();
+    if (cached) return NextResponse.json(cached);
+
     const [services, portfolio, testimonials, blogPosts, team, settings, digitalProducts] =
       await Promise.all([
         db.getServices(true),
@@ -35,7 +39,7 @@ export async function GET() {
       seoDescription: p.seoDescription,
     }));
 
-    return NextResponse.json({
+    const payload = {
       services,
       portfolio,
       testimonials,
@@ -43,7 +47,9 @@ export async function GET() {
       team,
       settings,
       digitalProducts,
-    });
+    };
+    setCachedPublicContent(payload);
+    return NextResponse.json(payload);
   } catch (error) {
     console.error("Public content error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

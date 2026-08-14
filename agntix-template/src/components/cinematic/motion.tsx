@@ -67,9 +67,21 @@ export function MagneticButton({
   function onMove(e: React.MouseEvent<HTMLButtonElement>) {
     const btn = ref.current;
     if (!btn) return;
+    if (window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
     const rect = btn.getBoundingClientRect();
+    const dx = e.clientX - (rect.left + rect.width / 2);
+    const dy = e.clientY - (rect.top + rect.height / 2);
     btn.style.setProperty("--x", `${e.clientX - rect.left}px`);
     btn.style.setProperty("--y", `${e.clientY - rect.top}px`);
+    btn.style.transform = `translate3d(${dx * 0.1}px, ${dy * 0.14}px, 0) scale(1.03)`;
+  }
+
+  function onLeave() {
+    const btn = ref.current;
+    if (!btn) return;
+    btn.style.transform = "";
   }
 
   return (
@@ -78,6 +90,10 @@ export function MagneticButton({
       type={type}
       className={className}
       onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      onMouseDown={() => {
+        if (ref.current) ref.current.style.transform = "scale(0.97)";
+      }}
       onClick={onClick}
     >
       {children}

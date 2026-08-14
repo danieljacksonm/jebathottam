@@ -11,6 +11,7 @@ import { JournalProgress } from "./components/JournalProgress";
 import { JournalMarquee } from "./components/JournalMarquee";
 import { GoogleTranslateBar } from "./components/GoogleTranslateBar";
 import { formatDate, readingTime, splitHeadline, type JournalPost } from "./lib";
+import { rotateList, useRotate } from "./useRotate";
 import "./journal.css";
 
 const PAGE_SIZE = 24;
@@ -62,10 +63,13 @@ export default function BlogIndexPage() {
     [posts]
   );
 
-  const featured = filtered[0];
-  const stream = filtered.slice(1, visible);
-  const trending = filtered.slice(0, 6);
-  const hasMore = filtered.length > visible;
+  const rotate = useRotate(filtered.length, 10000);
+  const rotated = useMemo(() => rotateList(filtered, rotate), [filtered, rotate]);
+  const featured = rotated[0];
+  const trending = rotated.slice(1, 7);
+  const stream = rotated.slice(7, 7 + visible);
+  const latest = rotated.slice(7 + visible, 7 + visible + visible);
+  const hasMore = 7 + visible + visible < rotated.length;
 
   return (
     <div className="journal-root relative min-h-screen">
@@ -386,7 +390,7 @@ export default function BlogIndexPage() {
               className="border border-[var(--j-brand)] px-6 py-3 text-[11px] uppercase tracking-[0.22em] text-[var(--j-brand)]"
               data-cursor="MORE"
             >
-              Load more lessons ({filtered.length - visible} left)
+              Load more lessons ({Math.max(0, rotated.length - 7 - visible)} left)
             </button>
           </div>
         )}
@@ -397,11 +401,11 @@ export default function BlogIndexPage() {
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
           <h3 className="font-serif text-3xl sm:text-5xl">Latest stories</h3>
           <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--j-muted)]">
-            Showing {Math.min(visible, filtered.length)} of {filtered.length}
+            {latest.length} more · rotates every 10s
           </p>
         </div>
         <div className="divide-y divide-[var(--j-line)]">
-          {filtered.slice(0, visible).map((post, i) => (
+          {latest.map((post, i) => (
             <Link
               key={post.id}
               href={`/blog/${post.slug}`}

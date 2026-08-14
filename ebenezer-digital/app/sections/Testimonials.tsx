@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 type Testimonial = {
   id: string;
@@ -16,43 +16,16 @@ type Testimonial = {
   avatar?: string;
 };
 
-function initials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
-
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex gap-1">
-      {[...Array(5)].map((_, i) => (
-        <Star
-          key={i}
-          className={`w-4 h-4 ${
-            i < rating ? "text-accent-400 fill-accent-400" : "text-slate-700"
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
-
 export default function Testimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, align: "start", skipSnaps: false },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+    [Autoplay({ delay: 6000, stopOnInteraction: false })]
   );
-
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
-
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
-
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setCanScrollPrev(emblaApi.canScrollPrev());
@@ -75,121 +48,54 @@ export default function Testimonials() {
     };
   }, [emblaApi, onSelect]);
 
+  if (!testimonials.length) return null;
+
   return (
-    <section id="testimonials" className="py-24 sm:py-32 bg-slate-900 relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-500/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[120px]" />
-      </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-accent-500/10 text-accent-400 text-sm font-medium mb-4">
-            Testimonials
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            What Our Clients Say
-          </h2>
-          <p className="text-lg text-slate-400">
-            Don&apos;t just take our word for it—hear from the businesses we&apos;ve helped succeed.
-          </p>
-        </motion.div>
-
-        <div className="relative">
+    <section id="testimonials" className="relative overflow-hidden border-t border-[var(--st-line)] py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
+        <p className="studio-kicker">Voices</p>
+        <h2 className="studio-display mt-4 max-w-4xl text-5xl sm:text-7xl">IN THEIR WORDS.</h2>
+        <div className="relative mt-12">
           <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-6">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] min-w-0"
+            <div className="flex">
+              {testimonials.map((t) => (
+                <motion.blockquote
+                  key={t.id}
+                  className="min-w-0 flex-[0_0_100%] pr-8 sm:flex-[0_0_80%]"
                 >
-                  <div className="h-full p-6 rounded-2xl bg-slate-950 border border-slate-800 hover:border-brand-500/30 transition-all duration-300 group">
-                    <div className="w-10 h-10 rounded-lg bg-brand-500/10 flex items-center justify-center mb-4">
-                      <Quote className="w-5 h-5 text-brand-400" />
-                    </div>
-                    <div className="mb-4">
-                      <StarRating rating={testimonial.rating} />
-                    </div>
-                    <p className="text-slate-300 leading-relaxed mb-6 text-sm">
-                      &ldquo;{testimonial.content}&rdquo;
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white font-semibold text-sm">
-                        {testimonial.avatar || initials(testimonial.name)}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-white text-sm">{testimonial.name}</p>
-                        <p className="text-xs text-slate-500">
-                          {[testimonial.role, testimonial.company].filter(Boolean).join(", ")}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+                  <p className="font-serif text-2xl leading-snug text-white sm:text-4xl">
+                    “{t.content}”
+                  </p>
+                  <footer className="mt-8 text-sm text-[var(--st-muted)]">
+                    {t.name}
+                    {t.role || t.company ? ` · ${[t.role, t.company].filter(Boolean).join(", ")}` : ""}
+                  </footer>
+                </motion.blockquote>
               ))}
             </div>
           </div>
-
-          <div className="flex justify-center gap-4 mt-8">
-            <button
-              onClick={scrollPrev}
-              className={`p-3 rounded-full border transition-all duration-300 ${
-                canScrollPrev
-                  ? "border-slate-700 text-white hover:border-brand-500 hover:bg-slate-800"
-                  : "border-slate-800 text-slate-600 cursor-not-allowed"
-              }`}
-              disabled={!canScrollPrev}
-              aria-label="Previous testimonial"
-            >
-              <ChevronLeft className="w-5 h-5" />
+          <div className="mt-8 flex gap-3">
+            <button type="button" onClick={scrollPrev} disabled={!canScrollPrev} aria-label="Previous" className="border border-[var(--st-line)] p-3 disabled:opacity-30">
+              <ChevronLeft className="h-4 w-4" />
             </button>
-            <button
-              onClick={scrollNext}
-              className={`p-3 rounded-full border transition-all duration-300 ${
-                canScrollNext
-                  ? "border-slate-700 text-white hover:border-brand-500 hover:bg-slate-800"
-                  : "border-slate-800 text-slate-600 cursor-not-allowed"
-              }`}
-              disabled={!canScrollNext}
-              aria-label="Next testimonial"
-            >
-              <ChevronRight className="w-5 h-5" />
+            <button type="button" onClick={scrollNext} disabled={!canScrollNext} aria-label="Next" className="border border-[var(--st-line)] p-3 disabled:opacity-30">
+              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6"
-        >
+        <div className="mt-16 grid grid-cols-2 gap-6 border-t border-[var(--st-line)] pt-10 md:grid-cols-4">
           {[
-            { value: "98%", label: "Client Satisfaction" },
-            { value: "150+", label: "Projects Delivered" },
-            { value: "50+", label: "Active Clients" },
-            { value: "5+", label: "Years Experience" },
+            { value: "98%", label: "Client satisfaction" },
+            { value: "150+", label: "Projects delivered" },
+            { value: "50+", label: "Active clients" },
+            { value: "5+", label: "Years experience" },
           ].map((stat) => (
-            <div
-              key={stat.label}
-              className="text-center p-6 rounded-2xl bg-slate-950/50 border border-slate-800"
-            >
-              <div className="text-2xl sm:text-3xl font-bold text-brand-400 mb-1">{stat.value}</div>
-              <div className="text-sm text-slate-400">{stat.label}</div>
+            <div key={stat.label}>
+              <p className="studio-display text-3xl">{stat.value}</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[var(--st-muted)]">{stat.label}</p>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

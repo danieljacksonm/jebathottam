@@ -8,7 +8,8 @@ module.exports = {
       exec_mode: "fork",
       env: {
         NODE_ENV: "production",
-        PORT: 3000
+        PORT: 3000,
+        NODE_OPTIONS: "--max-old-space-size=384"
       },
       instances: 1,
       autorestart: true,
@@ -26,7 +27,8 @@ module.exports = {
       exec_mode: "fork",
       env: {
         NODE_ENV: "production",
-        PORT: 3001
+        PORT: 3001,
+        NODE_OPTIONS: "--max-old-space-size=384"
       },
       instances: 1,
       autorestart: true,
@@ -44,7 +46,8 @@ module.exports = {
       exec_mode: "fork",
       env: {
         NODE_ENV: "production",
-        PORT: 3002
+        PORT: 3002,
+        NODE_OPTIONS: "--max-old-space-size=384"
       },
       instances: 1,
       autorestart: true,
@@ -62,7 +65,8 @@ module.exports = {
       exec_mode: "fork",
       env: {
         NODE_ENV: "production",
-        PORT: 3003
+        PORT: 3003,
+        NODE_OPTIONS: "--max-old-space-size=384"
       },
       instances: 1,
       autorestart: true,

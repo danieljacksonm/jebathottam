@@ -93,7 +93,7 @@ export function StoreCart() {
               <span className="font-semibold text-[var(--s-paper)]">{formatINR(cartTotal)}</span>
             </div>
             <p className="mb-3 text-xs leading-relaxed text-[var(--s-muted)]">
-              Secure payment &amp; instant digital access will connect here. For now, checkout opens a purchase request.
+              Instant digital delivery worldwide. Checkout in USD. Payment gateway connects here.
             </p>
             <Link
               href="/products/checkout"

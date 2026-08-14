@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Download, Package } from "lucide-react";
+import { Download, FileText, Package } from "lucide-react";
 import { StoreNav } from "../components/StoreNav";
 import { StoreCursor } from "../components/StoreCursor";
 import { StoreCart } from "../components/StoreCart";
@@ -74,19 +74,33 @@ export default function StoreAccountPage() {
                   <p className="text-[10px] uppercase tracking-[0.25em] text-[var(--s-muted)]">{live.category}</p>
                   <h2 className="font-serif text-2xl">{live.name}</h2>
                   <p className="mt-1 text-sm text-[var(--s-muted)]">
-                    {formatINR(live.price)} · {new Date(item.purchasedAt).toLocaleDateString("en-IN")}
+                    {formatINR(live.price)} · {new Date(item.purchasedAt).toLocaleDateString("en-US")}
                     {item.license ? ` · ${item.license}` : ""}
                   </p>
                 </div>
-                {live.downloadFile && (
-                  <a
-                    href={live.downloadFile}
-                    download={live.fileName}
-                    className="inline-flex min-h-[44px] items-center justify-center gap-2 bg-[var(--s-brand)] px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#04110c]"
-                  >
-                    <Download className="h-4 w-4" /> Download
-                  </a>
-                )}
+                <div className="flex flex-col gap-2 sm:items-end">
+                  {live.downloadFile && (
+                    <a
+                      href={live.downloadFile}
+                      download={live.fileName}
+                      className="inline-flex min-h-[44px] items-center justify-center gap-2 bg-[var(--s-brand)] px-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#04110c]"
+                    >
+                      <Download className="h-4 w-4" /> Download ZIP
+                    </a>
+                  )}
+                  {live.pdfs?.map((pdf) => (
+                    <a
+                      key={pdf.file}
+                      href={pdf.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex min-h-[36px] items-center gap-2 text-xs text-[var(--s-brand)]"
+                    >
+                      <FileText className="h-3.5 w-3.5" />
+                      {pdf.label}
+                    </a>
+                  ))}
+                </div>
               </div>
             );
           })}

@@ -8,10 +8,10 @@ import "./store.css";
 export const metadata: Metadata = {
   title: "Ebenezer Store | Premium Digital Products",
   description:
-    "Digital products designed to move ideas forward — templates, UI kits, ebooks, and creator tools from Ebenezer Digital.",
+    "Worldwide digital kits and software — templates, UI kits, ebooks, and creator tools. Instant download. Prices in USD.",
   openGraph: {
     title: "Ebenezer Store",
-    description: "A premium digital product marketplace by Ebenezer Digital.",
+    description: "Premium digital kits for creators and businesses worldwide. Instant download. USD.",
     type: "website",
   },
 };

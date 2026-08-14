@@ -92,19 +92,19 @@ export function EnquireForm() {
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
             {t("name")} *
           </span>
-          <input name="name" className="input-field" required />
+          <input name="name" className="input-field" required autoComplete="name" />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
             {t("email")} *
           </span>
-          <input name="email" type="email" className="input-field" required />
+          <input name="email" type="email" className="input-field" required autoComplete="email" />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
             {t("phone")} *
           </span>
-          <input name="phone" className="input-field" required />
+          <input name="phone" className="input-field" required autoComplete="tel" inputMode="tel" />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
@@ -159,8 +159,16 @@ export function EnquireForm() {
         />
       </label>
 
-      {formError && <p className="text-sm text-gold-bright">{formError}</p>}
-      {status === "error" && <p className="text-sm text-red-300">{t("error")}</p>}
+      {formError && (
+        <p className="text-sm text-gold-bright" role="alert">
+          {formError}
+        </p>
+      )}
+      {status === "error" && (
+        <p className="text-sm text-red-300" role="alert">
+          {t("error")}
+        </p>
+      )}
 
       <button
         type="submit"

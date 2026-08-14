@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Mail, ArrowRight } from "lucide-react";
+import { Mail } from "lucide-react";
 
 const TwitterXIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
@@ -22,7 +21,7 @@ const GithubIcon = () => (
 );
 const InstagramIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
-    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
   </svg>
 );
 
@@ -38,6 +37,12 @@ const footerLinks = {
     { label: "Our Work", href: "/work" },
     { label: "Process", href: "/process" },
     { label: "Testimonials", href: "/testimonials" },
+  ],
+  products: [
+    { label: "News", href: "/blog/news" },
+    { label: "Journal", href: "/blog" },
+    { label: "Store", href: "/products" },
+    { label: "Eben AI", href: "/ai" },
   ],
   support: [
     { label: "Contact", href: "/contact" },
@@ -88,75 +93,49 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-slate-950 border-t border-slate-800">
-      {/* Newsletter Section */}
-      <div className="border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-col lg:flex-row items-center justify-between gap-8"
-          >
-            <div className="text-center lg:text-left">
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                Stay in the loop
-              </h3>
-              <p className="text-slate-400">
-                Get the latest updates on our services and digital tips.
-              </p>
-            </div>
-            <form
-              onSubmit={handleSubscribe}
-              className="w-full lg:w-auto flex flex-col sm:flex-row gap-3"
-            >
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  className="w-full sm:w-80 px-12 py-4 rounded-full bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 transition-colors"
-                />
-              </div>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-500 text-slate-950 font-semibold rounded-full hover:bg-brand-400 transition-all duration-300"
-              >
-                {isSubscribed ? "Subscribed!" : "Subscribe"}
-                <ArrowRight className="w-5 h-5" />
-              </button>
-            </form>
-          </motion.div>
-        </div>
-      </div>
+    <footer className="relative overflow-hidden border-t border-[var(--st-line,#1f1f20)] bg-[#050505]">
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-8 lg:px-10">
+        <p className="studio-display text-[16vw] leading-[0.86] sm:text-[9rem]">
+          LET’S
+          <br />
+          MAKE
+          <br />
+          DIGITAL
+          <br />
+          <span className="text-emerald-400">MATTER.</span>
+        </p>
 
-      {/* Main Footer */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1">
-            <Link href="/" className="inline-block">
-              <span className="text-2xl font-bold text-white">
-                {siteName.replace(/\s*Digital.*$/i, "") || "Ebenezer"}
-                <span className="text-brand-500">.</span>
-              </span>
+        <form onSubmit={handleSubscribe} className="mt-12 flex max-w-xl flex-col gap-3 sm:flex-row">
+          <div className="relative flex-1">
+            <Mail className="absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+              className="w-full border-b border-[var(--st-line,#1f1f20)] bg-transparent py-3 pl-7 text-white outline-none"
+            />
+          </div>
+          <button type="submit" className="studio-btn">
+            {isSubscribed ? "Subscribed!" : "Subscribe"}
+          </button>
+        </form>
+
+        <div className="mt-16 grid grid-cols-2 gap-10 md:grid-cols-5">
+          <div>
+            <Link href="/" className="font-display text-lg text-white">
+              {siteName.replace(/\s*Digital.*$/i, "") || "Ebenezer"}
             </Link>
-            <p className="mt-4 text-sm text-slate-400 leading-relaxed">
-              {siteDescription}
-            </p>
-            {/* Social Links */}
-            <div className="flex gap-3 mt-6">
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--st-muted,#8d887e)]">{siteDescription}</p>
+            <div className="mt-5 flex gap-3">
               {dynamicSocial.map((social) => (
                 <a
                   key={social.label}
                   href={social.href || "#"}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-brand-500 hover:bg-slate-800 transition-all duration-300"
+                  className="text-white/40 hover:text-white"
                   aria-label={social.label}
                 >
                   <social.icon />
@@ -164,81 +143,73 @@ export default function Footer() {
               ))}
             </div>
           </div>
-
-          {/* Services */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Services</h4>
-            <ul className="space-y-3">
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Services</h4>
+            <ul className="mt-4 space-y-2">
               {footerLinks.services.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-brand-400 transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-white/60 hover:text-white">
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-
-          {/* Company */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Company</h4>
-            <ul className="space-y-3">
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Products</h4>
+            <ul className="mt-4 space-y-2">
+              {footerLinks.products.map((link) => (
+                <li key={link.label}>
+                  <Link href={link.href} className="text-sm text-white/60 hover:text-white">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Company</h4>
+            <ul className="mt-4 space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-brand-400 transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-white/60 hover:text-white">
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-
-          {/* Support */}
           <div>
-            <h4 className="font-semibold text-white mb-4">Support</h4>
-            <ul className="space-y-3">
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Support</h4>
+            <ul className="mt-4 space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-slate-400 hover:text-brand-400 transition-colors"
-                  >
+                  <Link href={link.href} className="text-sm text-white/60 hover:text-white">
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
+            <p className="mt-6 text-sm text-white/50">
+              <a href="mailto:contact@ebenezerdigitalservices.com">contact@ebenezerdigitalservices.com</a>
+            </p>
+            <p className="mt-1 text-sm text-white/40">Remote / Worldwide</p>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-slate-500">
-              &copy; {new Date().getFullYear()} Ebenezer Digital Services. All rights reserved.
-            </p>
-            <div className="flex items-center gap-6">
-              <Link
-                href="/privacy"
-                className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
-              >
-                Privacy
-              </Link>
-              <Link
-                href="/terms"
-                className="text-sm text-slate-500 hover:text-slate-300 transition-colors"
-              >
-                Terms
-              </Link>
-            </div>
+      <div className="border-t border-[var(--st-line,#1f1f20)]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
+          <p className="text-sm text-white/35">
+            © {new Date().getFullYear()} Ebenezer Digital Services. All rights reserved.
+          </p>
+          <div className="flex gap-6">
+            <Link href="/privacy" className="text-sm text-white/35 hover:text-white">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-sm text-white/35 hover:text-white">
+              Terms
+            </Link>
           </div>
         </div>
       </div>

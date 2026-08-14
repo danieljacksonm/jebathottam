@@ -1,7 +1,65 @@
 {
   "meta": {
-    "title": "Canaan Travel Hub | Kodaikanal Packages & Digital Tourism",
-    "description": "Premium Kodaikanal-only tour packages from Canaan Travel Hub, plus digital tourism services — flights, hotels, and visas."
+    "title": "Canaan Travel Hub | Premium Travel Experiences in Kodaikanal",
+    "description": "Discover premium Kodaikanal travel experiences, curated tours, holiday packages, stays and personalized journeys with Canaan Travel Hub."
+  },
+  "seo": {
+    "homeTitle": "Canaan Travel Hub | Premium Travel Experiences in Kodaikanal",
+    "homeDescription": "Discover premium Kodaikanal travel experiences, curated tours, holiday packages, stays and personalized journeys with Canaan Travel Hub.",
+    "kodaiTitle": "Kodaikanal Tour Packages & Travel Guide",
+    "kodaiDescription": "Plan a calm Kodaikanal journey — sightseeing, honeymoon and family packages, lake and pine-forest days, and a clear itinerary with Canaan Travel Hub.",
+    "destinationsTitle": "Destinations | Kodaikanal",
+    "destinationsDescription": "Canaan’s tour destination for now is Kodaikanal — mist, pine, and complete hill-station packages.",
+    "packagesTitle": "Kodaikanal Travel Packages",
+    "packagesDescription": "Browse Canaan’s Kodaikanal tour packages for couples, families, luxury stays, adventure days, and complete circuits.",
+    "toursTitle": "Kodaikanal Sightseeing Tours",
+    "toursDescription": "Kodaikanal sightseeing and tour packages — lake, pine forest, villages, waterfalls, and unhurried highland days.",
+    "servicesTitle": "Digital Tourism Services",
+    "servicesDescription": "Flights, hotels, and visa support around your Kodaikanal package — digital services from Canaan Travel Hub.",
+    "hotelsTitle": "Kodaikanal Stays & Hotel Help",
+    "hotelsDescription": "Need a hillside stay around your Kodai package? Canaan helps with hotel guidance as a digital support service.",
+    "flightsTitle": "Flights for Your Kodaikanal Journey",
+    "flightsDescription": "Flight assistance to Madurai or Coimbatore as you plan a Kodaikanal tour with Canaan Travel Hub.",
+    "visaTitle": "Visa Assistance",
+    "visaDescription": "Visa support as a digital service alongside Canaan’s Kodaikanal tour packages.",
+    "blogTitle": "Kodaikanal Travel Guide & Stories",
+    "blogDescription": "Practical Kodaikanal travel guides — itineraries, packing, seasons, sightseeing, and slow-hill advice.",
+    "aboutTitle": "About Canaan Travel Hub",
+    "aboutDescription": "Canaan Travel Hub offers complete Kodaikanal tour packages first, with digital tourism services when you need flights, hotels, or visas.",
+    "contactTitle": "Contact Canaan Travel Hub",
+    "contactDescription": "Speak with Canaan about Kodaikanal packages or digital travel services. Share your dates and we will reply with a clear next step.",
+    "enquireTitle": "Book Your Kodaikanal Journey",
+    "enquireDescription": "Enquire for Kodaikanal tour packages, honeymoon or family trips, and digital services. Canaan will respond with a calm plan.",
+    "faqTitle": "Kodaikanal Travel FAQ",
+    "faqDescription": "Answers on best time to visit Kodaikanal, how many days to stay, how to reach, and how Canaan packages work."
+  },
+  "kodaikanalGuide": {
+    "whyTitle": "Why visit Kodaikanal",
+    "whyBody": "Kodaikanal is a Tamil Nadu hill station for mist, pine, and still water — not a rushed checklist. Canaan builds Kodaikanal tour packages around slow mornings, lake walks, and viewpoints that open when the fog lifts.",
+    "whenTitle": "Best time to visit",
+    "whenBody": "March to June is pleasant for families. The monsoon months are green and quiet, with extra care on hill roads. October to February is cool and well suited to couples. Carry a light rain layer in every season.",
+    "doTitle": "Things to do",
+    "doBody": "Walk Kodai Lake, follow Coaker’s Walk through mist, stand at Dolphin’s Nose, pass through pine forest, and keep time for Poombarai, Mannavanur, and Silver Cascade. Sightseeing works best as two loops a day, not ten stops.",
+    "reachTitle": "How to reach",
+    "reachBody": "Most guests fly into Madurai or Coimbatore, then take a private transfer into the hills. Canaan can arrange the climb so you arrive without changing cars at every junction.",
+    "stayTitle": "Where to stay",
+    "stayBody": "Choose a quiet hillside stay slightly away from the busiest market lanes if you want still mornings. Hotel help is available as a digital service around your package.",
+    "daysTitle": "How many days",
+    "daysBody": "A weekend covers the lake and one ridge. Three to five days lets you add forest, village, and a waterfall without hurry. The Complete circuit is for guests who want the full Kodai story.",
+    "tipsTitle": "Travel tips",
+    "tipsBody": "Start viewpoints early. Keep one trusted cab for the day. Pack walking shoes, a rain layer, and cash for small shops. If you want a premium pace, pre-book timings and private transfers.",
+    "linksLabel": "Continue your Kodai plan",
+    "faqTitle": "Kodaikanal questions",
+    "faq1q": "When is the best time to visit Kodaikanal?",
+    "faq1a": "Summer (March–June) is the most comfortable for families. Winter is cooler and popular with couples. Monsoon is beautiful but needs slower driving.",
+    "faq2q": "How many days do I need in Kodaikanal?",
+    "faq2a": "Two nights works for a first look. Three to five days is better for lake, forest, villages, and rest. Canaan packages are built around that pacing.",
+    "faq3q": "Are Canaan tours only for Kodaikanal?",
+    "faq3a": "Yes. Tour packages are Kodaikanal-only for now. Flights, hotels, and visas are offered as digital support services.",
+    "faq4q": "How do I reach Kodaikanal?",
+    "faq4a": "Fly to Madurai or Coimbatore, then continue by road. Private transfers make the hill climb easier, especially with children or elders.",
+    "faq5q": "Do you offer honeymoon and family packages?",
+    "faq5a": "Yes. Canaan has dedicated honeymoon, family, luxury, adventure, and complete Kodaikanal circuits. Enquire with your dates and we will shape the stay."
   },
   "nav": {
     "home": "Home",
@@ -17,6 +75,7 @@
     "about": "About",
     "contact": "Contact",
     "enquire": "Enquire",
+    "faq": "FAQ",
     "bookNow": "Book Now",
     "brand": "Canaan",
     "brandSub": "Travel Hub"
@@ -287,5 +346,25 @@
     "heroScroll": "Scroll",
     "heroStoryTitle": "Kodaikanal story",
     "heroStoryNote": "Embed your cinematic Kodaikanal film here."
+  },
+  "journey": {
+    "stages": {
+      "arrival": "Arrival",
+      "explore": "Explore",
+      "discover": "Discover",
+      "sunset": "Sunset",
+      "night": "Night"
+    },
+    "weatherTemp": "18°C",
+    "weatherLabel": "Misty morning",
+    "weatherNote": "Cool air, moving fog, and clear ridges after sunrise.",
+    "lakeLine": "Where the mountains meet the sky.",
+    "dolphinHeadline": "Look how far the world goes.",
+    "nightHeadline": "Stay until the stars arrive.",
+    "packagesLead": "You've seen Kodaikanal.",
+    "packagesLead2": "Now experience it.",
+    "ctaTitle": "Your Kodaikanal story starts here.",
+    "ctaButton": "Plan my journey",
+    "farewell": "See you in the mountains."
   }
 }

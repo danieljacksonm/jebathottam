@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local enquiry store (VPS runtime)
 /data/enquiries.jsonl
+
+# local audits
+lighthouse-*.json

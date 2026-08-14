@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Syne, DM_Sans, Source_Serif_4 } from "next/font/google";
 import type { ReactNode } from "react";
 import "./globals.css";
-import Header from "./components/Header";
-import ScrollProgressBar from "./components/ScrollProgressBar";
-import Footer from "./components/Footer";
+import "./studio/studio.css";
+import SiteChrome from "./studio/SiteChrome";
 import GlobalStyles from "./components/GlobalStyles";
 
 const syne = Syne({
@@ -97,13 +96,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="font-sans min-h-screen bg-gray-900 text-white antialiased overflow-x-hidden">
+      <body className="font-sans min-h-screen bg-[#070708] text-white antialiased overflow-x-hidden">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <div className="fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-900/20 to-purple-900/20 pointer-events-none" />
-        <main className="relative z-10">{children}</main>
+        <SiteChrome>{children}</SiteChrome>
         <GlobalStyles />
       </body>
     </html>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Check, Star } from "lucide-react";
+import { ArrowUpRight, Check, FileText, Star } from "lucide-react";
 import { StoreNav } from "../components/StoreNav";
 import { StoreCursor } from "../components/StoreCursor";
 import { StoreCart } from "../components/StoreCart";
@@ -129,6 +129,13 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
               </div>
             )}
 
+            <a
+              href="#kit"
+              className="mt-5 inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-[var(--s-brand)]"
+            >
+              See every file in this kit <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+
             <div className="mt-8 hidden flex-wrap gap-3 md:flex">
               {product.isSoftware && product.externalUrl ? (
                 <a
@@ -172,7 +179,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
             <ul className="mt-8 space-y-2 text-sm text-[var(--s-muted)]">
               <li className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-[var(--s-brand)]" />
-                {product.isSoftware ? "Cloud access — no ZIP download" : "Digital delivery"}
+                {product.isSoftware ? "Cloud access worldwide — no ZIP" : "Instant digital download worldwide"}
               </li>
               <li className="flex items-center gap-2"><Check className="h-4 w-4 text-[var(--s-brand)]" /> License: {license}</li>
               {product.whoItIsFor && (
@@ -196,7 +203,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
               tone="store"
               title="Not sure if this fits?"
               placeholder="Ask: Is this good for my shop / church / startup?"
-              context={`Current product:\nName: ${product.name}\nSlug: ${product.slug}\nPrice: ${product.isFree ? "FREE" : `₹${product.price}`}\nCategory: ${product.category}\nTagline: ${product.tagline}\nDescription: ${product.description}\nFeatures: ${product.features.join("; ")}\nIncludes: ${product.includes.join("; ")}\nWho: ${product.whoItIsFor || "general"}\n\nCatalog:\n${formatProductsForAi(STORE_PRODUCTS)}`}
+              context={`Current product:\nName: ${product.name}\nSlug: ${product.slug}\nPrice: ${product.isFree ? "FREE" : formatINR(product.price)}\nCategory: ${product.category}\nTagline: ${product.tagline}\nDescription: ${product.description}\nFeatures: ${product.features.join("; ")}\nIncludes: ${product.includes.join("; ")}\nWho: ${product.whoItIsFor || "worldwide"}\n\nCatalog:\n${formatProductsForAi(STORE_PRODUCTS)}`}
               starters={[
                 "Is this product right for me?",
                 "Compare with similar products",
@@ -223,16 +230,65 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
         </section>
 
         {/* INCLUDED */}
-        <section className="mt-20">
-          <h3 className="font-serif text-3xl sm:text-4xl">What&apos;s included</h3>
+        <section id="kit" className="mt-20 scroll-mt-24">
+          <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--s-brand)]">Open the kit</p>
+          <h3 className="mt-3 font-serif text-3xl sm:text-5xl">What you actually get</h3>
+          <p className="mt-3 max-w-2xl text-sm text-[var(--s-muted)]">
+            Instant digital delivery worldwide. No shipping. You see every file before you buy.
+          </p>
           <div className="mt-8 grid gap-3 sm:grid-cols-2">
             {product.includes.map((item) => (
-              <div key={item} className="flex items-center gap-3 border border-[var(--s-line)] px-4 py-4 text-sm">
-                <Check className="h-4 w-4 text-[var(--s-brand)]" />
+              <div key={item} className="flex items-start gap-3 border border-[var(--s-line)] px-4 py-4 text-sm">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[var(--s-brand)]" />
                 {item}
               </div>
             ))}
           </div>
+          {product.pdfs && product.pdfs.length > 0 && (
+            <div className="mt-10">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--s-muted)]">Open the PDFs now</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {product.pdfs.map((pdf) => (
+                  <a
+                    key={pdf.file}
+                    href={pdf.file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 border border-[var(--s-line)] px-4 py-4 text-sm transition hover:border-[var(--s-brand)]"
+                    data-cursor="VIEW"
+                  >
+                    <FileText className="h-5 w-5 shrink-0 text-[var(--s-brand)]" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-medium">{pdf.label}</span>
+                      <span className="block truncate text-[11px] text-[var(--s-muted)]">
+                        {pdf.file.split("/").pop()}
+                      </span>
+                    </span>
+                    <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--s-brand)]">Open</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+          {product.downloadContentsPlan && product.downloadContentsPlan.length > 0 && (
+            <div className="mt-10 border border-[var(--s-line)] p-6">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--s-muted)]">Also in the ZIP pack</p>
+              <ol className="mt-4 space-y-2">
+                {product.downloadContentsPlan.map((file, i) => (
+                  <li key={file} className="flex gap-3 font-mono text-sm text-[var(--s-paper)]">
+                    <span className="text-[var(--s-brand)]">{String(i + 1).padStart(2, "0")}</span>
+                    {file}
+                  </li>
+                ))}
+              </ol>
+              {product.fileName && (
+                <p className="mt-4 text-xs text-[var(--s-muted)]">
+                  Pack: {product.fileName}
+                  {product.fileSize ? ` · ${product.fileSize}` : ""}
+                </p>
+              )}
+            </div>
+          )}
         </section>
 
         {/* COMPAT */}
@@ -282,6 +338,11 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
                   <p className="font-serif text-2xl">{rp.name}</p>
+                  <ul className="mt-2 space-y-1 text-[11px] text-[var(--s-paper)]/80">
+                    {(rp.includes || []).slice(0, 2).map((item) => (
+                      <li key={item} className="line-clamp-1">· {item}</li>
+                    ))}
+                  </ul>
                   <p className="mt-2 text-[var(--s-brand)]">{formatINR(rp.price)}</p>
                 </div>
               </div>

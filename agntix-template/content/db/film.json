@@ -5,7 +5,7 @@
     {
       "id": "dolphins-nose",
       "tone": "gold",
-      "image": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/dolphins-nose.webp",
       "place": {
         "en": "Dolphin’s Nose",
         "ta": "டால்பின் நோஸ்",
@@ -25,7 +25,7 @@
     {
       "id": "coakers-walk",
       "tone": "mist",
-      "image": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/coakers-walk.webp",
       "place": {
         "en": "Coaker’s Walk",
         "ta": "கோக்கர்ஸ் வாக்",
@@ -43,9 +43,29 @@
       }
     },
     {
+      "id": "pillar-rocks",
+      "tone": "mist",
+      "image": "/images/kodai/pillar-rocks.webp",
+      "place": {
+        "en": "Pillar Rocks",
+        "ta": "பில்லர் ராக்ஸ்",
+        "hi": "पिलर रॉक्स"
+      },
+      "quote": {
+        "en": "Stone columns holding up the sky.",
+        "ta": "வானத்தைத் தாங்கும் கல் தூண்கள்.",
+        "hi": "आसमान थामे पत्थर के स्तंभ।"
+      },
+      "note": {
+        "en": "Clouds pass behind the rocks",
+        "ta": "பாறைகளுக்குப் பின்னால் மேகங்கள்",
+        "hi": "चट्टानों के पीछे बादल"
+      }
+    },
+    {
       "id": "kodai-lake",
       "tone": "lake",
-      "image": "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/kodai-lake.webp",
       "place": {
         "en": "Kodai Lake",
         "ta": "கொடை ஏரி",
@@ -65,7 +85,7 @@
     {
       "id": "pine-forest",
       "tone": "forest",
-      "image": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/pine-forest.webp",
       "place": {
         "en": "Pine Forest",
         "ta": "பைன் காடு",
@@ -85,7 +105,7 @@
     {
       "id": "poombarai",
       "tone": "mist",
-      "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/poombarai.webp",
       "place": {
         "en": "Poombarai Village",
         "ta": "பூம்பராய் கிராமம்",
@@ -105,7 +125,7 @@
     {
       "id": "mannavanur",
       "tone": "forest",
-      "image": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/mannavanur.webp",
       "place": {
         "en": "Mannavanur",
         "ta": "மன்னவனூர்",
@@ -125,7 +145,7 @@
     {
       "id": "berijam",
       "tone": "lake",
-      "image": "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93bd?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/berijam.webp",
       "place": {
         "en": "Berijam Lake",
         "ta": "பெரியம் ஏரி",
@@ -145,7 +165,7 @@
     {
       "id": "silver-cascade",
       "tone": "falls",
-      "image": "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/silver-cascade.webp",
       "place": {
         "en": "Silver Cascade Falls",
         "ta": "சில்வர் கேஸ்கேட் அருவி",
@@ -165,7 +185,7 @@
     {
       "id": "camping",
       "tone": "night",
-      "image": "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=2400&q=80",
+      "image": "/images/kodai/camping.webp",
       "place": {
         "en": "Night Camping",
         "ta": "இரவு முகாம்",

@@ -1,232 +1,151 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Play, Sparkles, Zap, Users, Clock, Award } from "lucide-react";
+import Image from "next/image";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { MagneticLink } from "../studio/MagneticLink";
 
 const stats = [
-  { icon: Zap, value: 150, suffix: "+", label: "Projects Completed" },
-  { icon: Users, value: 98, suffix: "%", label: "Client Satisfaction" },
-  { icon: Clock, value: 24, suffix: "/7", label: "Support Available" },
-  { icon: Award, value: 5, suffix: "+", label: "Years Experience" },
+  { value: "150+", label: "Projects completed" },
+  { value: "98%", label: "Client satisfaction" },
+  { value: "24/7", label: "Support available" },
+  { value: "5+", label: "Years experience" },
 ];
 
-function AnimatedCounter({ value, suffix }: { value: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const countRef = useRef<HTMLSpanElement>(null);
-  const [isInView, setIsInView] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !isInView) {
-          setIsInView(true);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    if (countRef.current) {
-      observer.observe(countRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [isInView]);
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    const duration = 2000;
-    const steps = 60;
-    const increment = value / steps;
-    let current = 0;
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= value) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, duration / steps);
-
-    return () => clearInterval(timer);
-  }, [isInView, value]);
-
-  return (
-    <span ref={countRef}>
-      {count}
-      {suffix}
-    </span>
-  );
-}
+const scenes: Record<string, string> = {
+  build: "Systems, websites, and desks that actually ship.",
+  digital: "Code, grids, and product surfaces in motion.",
+  experiences: "Interfaces people can trust and use.",
+};
 
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
+  const reduceRef = useRef(false);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const sx = useSpring(mx, { stiffness: 40, damping: 18 });
+  const sy = useSpring(my, { stiffness: 40, damping: 18 });
+  const gridX = useTransform(sx, [-0.5, 0.5], [18, -18]);
+  const gridY = useTransform(sy, [-0.5, 0.5], [12, -12]);
+  const layerA = useTransform(sx, [-0.5, 0.5], [28, -28]);
+  const layerB = useTransform(sy, [-0.5, 0.5], [-16, 16]);
+  const [intro, setIntro] = useState(true);
+  const [scene, setScene] = useState<keyof typeof scenes>("experiences");
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  useEffect(() => {
+    reduceRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceRef.current) {
+      setIntro(false);
+      return;
+    }
+    const t = window.setTimeout(() => setIntro(false), 1500);
+    return () => window.clearTimeout(t);
+  }, []);
 
   return (
     <section
-      ref={containerRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950"
+      className="relative min-h-[100dvh] overflow-hidden"
+      onMouseMove={(e) => {
+        if (reduceRef.current) return;
+        mx.set(e.clientX / window.innerWidth - 0.5);
+        my.set(e.clientY / window.innerHeight - 0.5);
+      }}
     >
-      {/* Animated Background */}
-      <motion.div style={{ y }} className="absolute inset-0">
-        {/* Gradient Orbs */}
-        <div className="absolute top-20 left-10 w-[500px] h-[500px] bg-brand-500/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute top-40 right-20 w-[400px] h-[400px] bg-accent-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute bottom-20 left-1/3 w-[350px] h-[350px] bg-blue-500/10 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: "2s" }} />
+      <motion.div className="studio-grid" style={{ x: gridX, y: gridY }} />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_10%,rgba(16,185,129,0.12),transparent_45%)]" />
 
-        {/* Grid Pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-            backgroundSize: "60px 60px",
-          }}
-        />
-
-        {/* Floating Particles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-brand-400/50 rounded-full"
-              initial={{
-                x: Math.random() * 100 + "%",
-                y: "100%",
-                opacity: 0,
-              }}
-              animate={{
-                y: "-10%",
-                opacity: [0, 1, 0],
-              }}
-              transition={{
-                duration: Math.random() * 10 + 10,
-                repeat: Infinity,
-                delay: Math.random() * 5,
-                ease: "linear",
-              }}
-            />
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Content */}
-      <motion.div style={{ opacity }} className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20">
-        <div className="text-center">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-500/10 border border-brand-500/20 mb-8"
-          >
-            <Sparkles className="w-4 h-4 text-brand-400" />
-            <span className="text-sm font-medium text-brand-400">
-              Trusted by 150+ businesses worldwide
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6"
-          >
-            <span className="block">Transform Your</span>
-            <span className="block bg-gradient-to-r from-brand-400 via-brand-500 to-accent-400 bg-clip-text text-transparent">
-              Digital Presence
-            </span>
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed"
-          >
-            We craft exceptional digital experiences that drive growth, engage audiences, and deliver measurable results for your business.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16"
-          >
-            <Link
-              href="/contact"
-              className="group inline-flex items-center gap-2 px-8 py-4 bg-brand-500 text-slate-950 font-semibold rounded-full hover:bg-brand-400 transition-all duration-300 shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-1"
-            >
-              Get Free Quote
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <Link
-              href="/work"
-              className="group inline-flex items-center gap-2 px-8 py-4 border-2 border-slate-700 text-white font-semibold rounded-full hover:border-brand-500 hover:text-brand-400 transition-all duration-300"
-            >
-              <Play className="w-5 h-5" />
-              View Our Work
-            </Link>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8"
-          >
-            {stats.map((stat, index) => (
-              <div
-                key={stat.label}
-                className="relative p-6 rounded-2xl bg-slate-900/50 border border-slate-800 backdrop-blur-sm hover:border-brand-500/30 transition-colors"
-              >
-                <stat.icon className="w-6 h-6 text-brand-400 mx-auto mb-3" />
-                <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
-                  <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="text-sm text-slate-400">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Scroll Indicator */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="pointer-events-none absolute right-[8%] top-[22%] hidden w-56 border border-white/10 bg-black/40 p-3 backdrop-blur-md lg:block"
+        style={{ x: layerA, y: layerB }}
+        aria-hidden
       >
+        <div className="mb-2 flex gap-1">
+          <span className="h-1.5 w-1.5 rounded-full bg-white/25" />
+          <span className="h-1.5 w-1.5 rounded-full bg-white/25" />
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400/80" />
+        </div>
+        <p className="font-mono text-[10px] leading-5 text-emerald-300/80">
+          {`eben.build({
+  web: true,
+  travel: true,
+  ai: "Eben AI"
+})`}
+        </p>
+      </motion.div>
+
+      {intro && (
         <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2 text-slate-500"
+          className="absolute inset-0 z-20 grid place-items-center bg-[#070708]"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ delay: 1.1, duration: 0.4 }}
+          aria-hidden
         >
-          <span className="text-xs uppercase tracking-widest">Scroll</span>
-          <div className="w-6 h-10 rounded-full border-2 border-slate-700 flex items-start justify-center p-2">
-            <motion.div
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-1.5 h-1.5 bg-brand-400 rounded-full"
-            />
+          <div className="flex flex-col items-center gap-6">
+            <Image src="/brand/eben-mark.svg" alt="" width={48} height={48} className="rounded-xl" />
+            <span className="h-px w-24 bg-emerald-400/70" />
           </div>
         </motion.div>
-      </motion.div>
+      )}
+
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-7xl flex-col justify-end px-4 pb-16 pt-28 sm:px-8 lg:px-10">
+        <p className="studio-kicker">Ebenezer Digital Services</p>
+        <motion.h1
+          className="studio-display mt-6 max-w-5xl text-[16vw] sm:text-[11vw] lg:text-[7.2rem]"
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+        >
+          WE{" "}
+          <button
+            type="button"
+            className="underline decoration-emerald-400/40 underline-offset-8"
+            onMouseEnter={() => setScene("build")}
+          >
+            BUILD
+          </button>
+          <br />
+          <button
+            type="button"
+            className="underline decoration-emerald-400/40 underline-offset-8"
+            onMouseEnter={() => setScene("digital")}
+          >
+            DIGITAL
+          </button>
+          <br />
+          <button
+            type="button"
+            className="text-emerald-400 underline decoration-white/20 underline-offset-8"
+            onMouseEnter={() => setScene("experiences")}
+          >
+            EXPERIENCES.
+          </button>
+        </motion.h1>
+        <motion.p
+          className="mt-8 max-w-xl text-lg leading-relaxed text-[var(--st-muted,#8d887e)]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          {scenes[scene]} Websites, systems, travel support, and AI — with the same care as this page.
+        </motion.p>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <MagneticLink href="/contact" className="studio-btn" cursor="START">
+            Start a project →
+          </MagneticLink>
+          <Link href="/work" className="studio-btn studio-btn-ghost" data-cursor="VIEW">
+            Explore our work
+          </Link>
+        </div>
+        <div className="mt-16 grid grid-cols-2 gap-6 border-t border-[var(--st-line)] pt-8 md:grid-cols-4">
+          {stats.map((s) => (
+            <div key={s.label}>
+              <p className="studio-display text-3xl sm:text-4xl">{s.value}</p>
+              <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[var(--st-muted)]">{s.label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

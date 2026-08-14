@@ -1,21 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useNews } from "./NewsProvider";
 import { relativeNewsTime } from "../data";
+import { rotateList, useRotate } from "../../useRotate";
 
 export function NewsTicker() {
   const { articles, updatedAt } = useNews();
-  const [, setTick] = useState(0);
-  const breaking = articles.filter((a) => a.breaking);
-  const base = breaking.length ? breaking.slice(0, 10) : articles.slice(0, 10);
-  const items = [...base, ...base];
-
-  useEffect(() => {
-    const t = window.setInterval(() => setTick((n) => n + 1), 1000);
-    return () => window.clearInterval(t);
-  }, []);
+  const rotate = useRotate(articles.length, 10000);
+  const pool = rotateList(articles, rotate).slice(0, 14);
+  const items = pool.length ? [...pool, ...pool] : [];
 
   if (!items.length) return null;
 

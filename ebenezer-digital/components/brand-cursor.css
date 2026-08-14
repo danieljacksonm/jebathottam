@@ -1,0 +1,90 @@
+/* Ebenezer brand cursor — emerald #10B981, always visible on dark and light */
+html.brand-cursor-on body {
+  cursor: none;
+}
+html.brand-cursor-on a,
+html.brand-cursor-on button,
+html.brand-cursor-on [data-cursor] {
+  cursor: none;
+}
+html.brand-cursor-on input,
+html.brand-cursor-on textarea,
+html.brand-cursor-on select,
+html.brand-cursor-on [contenteditable="true"] {
+  cursor: text;
+}
+
+.brand-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  pointer-events: none;
+  border: 2px solid #10b981;
+  background: rgba(16, 185, 129, 0.22);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.92),
+    0 0 14px rgba(16, 185, 129, 0.55);
+  will-change: transform;
+  display: none;
+}
+
+.brand-cursor-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 999px;
+  background: #10b981;
+  box-shadow: 0 0 0 1px #fff;
+}
+
+.brand-cursor-label {
+  display: none;
+}
+
+.brand-cursor.has-label {
+  width: 72px;
+  height: 72px;
+  border-color: #fff;
+  background: #10b981;
+  box-shadow:
+    0 0 0 1px rgba(4, 17, 12, 0.25),
+    0 0 22px rgba(16, 185, 129, 0.45);
+  display: grid;
+  place-items: center;
+}
+
+.brand-cursor.has-label .brand-cursor-dot {
+  display: none;
+}
+
+.brand-cursor.has-label .brand-cursor-label {
+  display: block;
+  color: #04110c;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0 6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .brand-cursor { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-cursor { display: none !important; }
+  html.brand-cursor-on,
+  html.brand-cursor-on body,
+  html.brand-cursor-on a,
+  html.brand-cursor-on button {
+    cursor: auto;
+  }
+}

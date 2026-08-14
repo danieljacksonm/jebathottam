@@ -14,36 +14,43 @@ import {
 import { routing } from "@/i18n/routing";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { ScrollProgress } from "@/components/ScrollProgress";
-import { AmbientToggle } from "@/components/film/AmbientToggle";
 import { GsapNavCleanup } from "@/components/film/GsapNavCleanup";
+import { SmoothScroll } from "@/components/cinematic/SmoothScroll";
+import { SkipLink } from "@/components/SkipLink";
+import { MobileBookBar } from "@/components/MobileBookBar";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { DeferredChrome } from "@/components/cinematic/DeferredChrome";
+import { organizationJsonLd, SITE_NAME, SITE_URL } from "@/lib/seo";
 import "../globals.css";
 
 const manrope = Manrope({
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
   variable: "--font-manrope",
   display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   variable: "--font-cormorant",
-  display: "swap",
+  display: "optional",
 });
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
   weight: "400",
   variable: "--font-great-vibes",
-  display: "swap",
+  display: "optional",
+  preload: false,
 });
 
 const tamilSans = Hind_Madurai({
   subsets: ["tamil", "latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   variable: "--font-tamil",
   display: "swap",
+  preload: false,
 });
 
 const tamilDisplay = Tiro_Tamil({
@@ -51,13 +58,15 @@ const tamilDisplay = Tiro_Tamil({
   weight: "400",
   variable: "--font-tamil-display",
   display: "swap",
+  preload: false,
 });
 
 const hindiSans = Hind({
   subsets: ["devanagari", "latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   variable: "--font-hindi",
   display: "swap",
+  preload: false,
 });
 
 const hindiDisplay = Tiro_Devanagari_Hindi({
@@ -65,6 +74,7 @@ const hindiDisplay = Tiro_Devanagari_Hindi({
   weight: "400",
   variable: "--font-hindi-display",
   display: "swap",
+  preload: false,
 });
 
 export function generateStaticParams() {
@@ -77,16 +87,23 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "meta" });
+  const t = await getTranslations({ locale, namespace: "seo" });
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
-    title: t("title"),
-    description: t("description"),
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: t("homeTitle"),
+      template: `%s | ${SITE_NAME}`,
+    },
+    description: t("homeDescription"),
     openGraph: {
-      title: t("title"),
-      description: t("description"),
+      type: "website",
+      siteName: SITE_NAME,
       images: ["/brand/canaan-logo.jpeg"],
     },
+    twitter: {
+      card: "summary_large_image",
+    },
+    robots: { index: true, follow: true },
   };
 }
 
@@ -108,20 +125,34 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${manrope.variable} ${cormorant.variable} ${greatVibes.variable} ${tamilSans.variable} ${tamilDisplay.variable} ${hindiSans.variable} ${hindiDisplay.variable} h-full`}
+      className={[
+        manrope.variable,
+        cormorant.variable,
+        greatVibes.variable,
+        locale === "ta" ? `${tamilSans.variable} ${tamilDisplay.variable}` : "",
+        locale === "hi" ? `${hindiSans.variable} ${hindiDisplay.variable}` : "",
+        "h-full",
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
       <body
-        className={`min-h-full flex flex-col antialiased ${
+        className={`min-h-full flex flex-col antialiased pb-16 md:pb-0 ${
           locale === "ta" ? "locale-ta" : locale === "hi" ? "locale-hi" : ""
         }`}
       >
         <NextIntlClientProvider messages={messages}>
+          <SkipLink />
+          <JsonLd data={organizationJsonLd()} />
           <GsapNavCleanup />
-          <ScrollProgress />
-          <AmbientToggle />
+          <SmoothScroll />
+          <DeferredChrome />
           <SiteHeader />
-          <main className="flex-1">{children}</main>
+          <main id="main" className="relative z-[5] flex-1">
+            {children}
+          </main>
           <SiteFooter />
+          <MobileBookBar />
         </NextIntlClientProvider>
       </body>
     </html>

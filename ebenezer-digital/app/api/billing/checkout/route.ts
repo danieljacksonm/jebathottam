@@ -23,8 +23,8 @@ export async function POST(request: Request) {
         "Payment gateway is not wired yet. Ask Ebenezer Billing AI on this page for help, or contact support.",
       email: email || null,
       nextSteps: [
-        "Connect Razorpay or Stripe keys",
-        "Create payment session in this route",
+        "Connect Stripe (worldwide) or Razorpay keys",
+        "Create payment session in this route (USD)",
         "Return checkoutUrl to redirect the buyer",
       ],
       help: "/ai?mode=billing",

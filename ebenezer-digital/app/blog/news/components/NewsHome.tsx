@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, type ReactNode } from "react";
+import { rotateList, useRotate } from "../../useRotate";
 import { NewsImage } from "./NewsImage";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -54,16 +55,19 @@ export function NewsHome() {
   const titleY = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const metaOpacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
 
-  // Prefer live wire. Each section gets unique stories so the desk does not feel copy-pasted.
+  // Prefer live wire. Rotate every 10s. Each story appears in only one section.
   const liveFirst = useMemo(() => {
     const live = articles.filter((a) => a.origin === "live");
     const other = articles.filter((a) => a.origin !== "live");
     return live.length ? [...live, ...other] : articles;
   }, [articles]);
 
+  const rotate = useRotate(liveFirst.length, 10000);
+  const rotated = useMemo(() => rotateList(liveFirst, rotate), [liveFirst, rotate]);
+
   const desk = useMemo(() => {
     const used = new Set<string>();
-    const take = (count: number, list = liveFirst, pred?: (a: NewsArticle) => boolean) => {
+    const take = (count: number, list = rotated, pred?: (a: NewsArticle) => boolean) => {
       const out: NewsArticle[] = [];
       for (const a of list) {
         if (used.has(a.id)) continue;
@@ -74,20 +78,23 @@ export function NewsHome() {
       }
       return out;
     };
-    const lead = take(1, liveFirst, (a) => Boolean(a.featured))[0] || take(1)[0];
+    const briefing = take(12);
+    const lead = take(1)[0];
     const secondary = take(4);
     const compact = take(8);
-    const wireMore = take(20);
-    let live = take(12, liveFirst, (a) => Boolean(a.breaking));
-    if (live.length < 8) live = live.concat(take(8 - live.length));
+    const wireMore = take(24);
+    let live = take(12, rotated, (a) => Boolean(a.breaking));
+    if (live.length < 10) live = live.concat(take(10 - live.length));
     const topBig = take(1);
     const topPair = take(2);
-    const trending = take(8);
-    const mostRead = take(8);
+    const trending = take(10);
+    const mostRead = take(10);
     const visual = take(5);
     const audio = take(4);
-    const leftover = liveFirst.filter((a) => !used.has(a.id));
+    const cinematic = take(1)[0];
+    const leftover = rotated.filter((a) => !used.has(a.id));
     return {
+      briefing,
       lead,
       secondary,
       compact,
@@ -99,15 +106,17 @@ export function NewsHome() {
       mostRead,
       visual,
       audio,
+      cinematic,
       india: storiesForNav(leftover, "India"),
       tech: storiesForNav(leftover, "Technology"),
       sports: storiesForNav(leftover, "Sports"),
       opinion: storiesForNav(leftover, "Opinion"),
       leftover,
     };
-  }, [liveFirst]);
+  }, [rotated]);
 
   const {
+    briefing,
     lead,
     secondary,
     compact,
@@ -119,6 +128,7 @@ export function NewsHome() {
     mostRead,
     visual,
     audio,
+    cinematic,
     india,
     tech,
     sports,
@@ -126,14 +136,16 @@ export function NewsHome() {
     leftover,
   } = desk;
 
-  const desks = useMemo(
-    () =>
-      NEWS_NAV.filter((n) => !["World", "India"].includes(n)).map((name) => ({
-        name,
-        items: storiesForNav(leftover, name).slice(0, 4),
-      })),
-    [leftover]
-  );
+  const desks = useMemo(() => {
+    const taken = new Set<string>();
+    return NEWS_NAV.filter((n) => !["World", "India"].includes(n)).map((name) => {
+      const items = storiesForNav(leftover, name)
+        .filter((s) => !taken.has(s.id))
+        .slice(0, 4);
+      items.forEach((s) => taken.add(s.id));
+      return { name, items };
+    });
+  }, [leftover]);
 
   if (loading) {
     return (
@@ -151,7 +163,7 @@ export function NewsHome() {
 
   return (
     <>
-      <WorldBriefing stories={liveFirst} />
+      <WorldBriefing stories={briefing} totalOnDesk={liveFirst.length} />
 
       {/* FRONT PAGE */}
       <section className="px-4 pb-10 pt-6 sm:px-8 lg:px-12">
@@ -159,7 +171,7 @@ export function NewsHome() {
           <div>
             <p className="news-kicker text-[var(--n-muted)]">What is happening now</p>
             <p className="mt-2 max-w-xl text-sm text-[var(--n-muted)]">
-              One desk for the world: BBC, Reuters, The Hindu, NDTV, NYT, Al Jazeera and more. The wire checks every 25 seconds. New stories appear when agencies publish.
+              One desk for the world: BBC, Reuters, The Hindu, NDTV, NYT, Al Jazeera and more. Headlines rotate every 10 seconds. No story is repeated on this page.
             </p>
           </div>
           {updatedAt && (
@@ -290,22 +302,22 @@ export function NewsHome() {
       </section>
 
       {/* CINEMATIC FEATURE */}
-      {lead && (
+      {cinematic && (
         <section ref={featureRef} className="relative h-[160vh]">
           <div className="sticky top-0 h-[100svh] overflow-hidden bg-[#0a0a0a] text-[var(--n-paper)]">
             <motion.div style={{ scale: imgScale }} className="absolute inset-0">
-              <NewsImage src={lead.coverImage} alt="" fill className="object-cover opacity-70" sizes="100vw" />
+              <NewsImage src={cinematic.coverImage} alt="" fill className="object-cover opacity-70" sizes="100vw" />
             </motion.div>
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/20" />
             <motion.div style={{ y: titleY }} className="relative z-10 flex h-full flex-col justify-end px-4 pb-16 sm:px-10">
               <motion.p style={{ opacity: metaOpacity }} className="news-kicker text-white/70">
                 Feature
               </motion.p>
-              <h2 className="news-display mt-4 max-w-5xl text-5xl sm:text-7xl lg:text-8xl">{lead.title}</h2>
+              <h2 className="news-display mt-4 max-w-5xl text-5xl sm:text-7xl lg:text-8xl">{cinematic.title}</h2>
               <motion.p style={{ opacity: metaOpacity }} className="mt-6 max-w-lg text-sm text-white/70">
-                {lead.dek}
+                {cinematic.dek}
               </motion.p>
-              <Link href={`/blog/news/${lead.slug}`} className="mt-8 inline-flex w-fit items-center gap-2 text-[11px] uppercase tracking-[0.22em]" data-cursor="READ">
+              <Link href={`/blog/news/${cinematic.slug}`} className="mt-8 inline-flex w-fit items-center gap-2 text-[11px] uppercase tracking-[0.22em]" data-cursor="READ">
                 Enter the story <ArrowUpRight className="h-4 w-4" />
               </Link>
             </motion.div>
@@ -313,7 +325,7 @@ export function NewsHome() {
         </section>
       )}
 
-      <WorldDeskMap stories={articles} />
+      <WorldDeskMap stories={leftover} />
       <IndiaDesk stories={india} />
 
       {/* TRENDING */}

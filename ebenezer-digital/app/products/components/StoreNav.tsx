@@ -72,22 +72,13 @@ export function StoreNav() {
 
           <nav className="hidden items-center gap-7 lg:flex">
             {[
-              { href: "#featured", label: t("products") },
-              { href: "#categories", label: t("categories") },
-              { href: "#bundles", label: t("bundles") },
+              { href: "/products#featured", label: t("products") },
+              { href: "/products#categories", label: t("categories") },
+              { href: "/products#bundles", label: t("bundles") },
               { href: "/products/free-enquiry-form-kit", label: t("freeTool") },
-              { href: "#freebies", label: t("freebies") },
+              { href: "/products#freebies", label: t("freebies") },
             ].map((item) =>
-              item.href.startsWith("/") ? (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-[11px] uppercase tracking-[0.22em] text-[var(--s-muted)] transition hover:text-[var(--s-brand)]"
-                  data-cursor="VIEW"
-                >
-                  {item.label}
-                </Link>
-              ) : (
+              item.href.includes("#") ? (
                 <a
                   key={item.href}
                   href={item.href}
@@ -96,6 +87,15 @@ export function StoreNav() {
                 >
                   {item.label}
                 </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-[11px] uppercase tracking-[0.22em] text-[var(--s-muted)] transition hover:text-[var(--s-brand)]"
+                  data-cursor="VIEW"
+                >
+                  {item.label}
+                </Link>
               )
             )}
           </nav>
@@ -173,7 +173,7 @@ export function StoreNav() {
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-[75] bg-[var(--s-ink)] px-6 py-8 lg:hidden">
+        <div className="fixed inset-0 z-[75] overflow-y-auto bg-[var(--s-ink)] px-6 py-8 lg:hidden">
           <div className="mb-10 flex justify-between">
             <p className="text-xs tracking-[0.3em] text-[var(--s-brand)]">MENU</p>
             <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close">
@@ -181,12 +181,39 @@ export function StoreNav() {
             </button>
           </div>
           <div className="space-y-5">
+            {[
+              { href: "/products#featured", label: t("products") },
+              { href: "/products#categories", label: t("categories") },
+              { href: "/products#bundles", label: t("bundles") },
+              { href: "/products#freebies", label: t("freebies") },
+              { href: "/products/account", label: t("account") },
+            ].map((item) =>
+              item.href.includes("#") ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block font-serif text-3xl"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block font-serif text-3xl"
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
             {STORE_CATEGORIES.map((cat) => (
               <a
                 key={cat}
-                href="#categories"
+                href={`/products?cat=${encodeURIComponent(cat)}#categories`}
                 onClick={() => setMenuOpen(false)}
-                className="block font-serif text-3xl"
+                className="block text-xl text-[var(--s-muted)]"
               >
                 {cat}
               </a>

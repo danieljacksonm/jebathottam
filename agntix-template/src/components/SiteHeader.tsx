@@ -15,6 +15,7 @@ const links = [
   { href: "/services", key: "services" as const },
   { href: "/blog", key: "blog" as const },
   { href: "/about", key: "about" as const },
+  { href: "/contact", key: "contact" as const },
 ];
 
 export function SiteHeader() {
@@ -30,10 +31,17 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <header
       className={`site-header fixed inset-x-0 top-0 z-50 ${
-        scrolled ? "is-scrolled" : ""
+        scrolled || open ? "is-scrolled" : ""
       }`}
     >
       <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between gap-4 px-5 md:h-20 md:px-8">
@@ -56,7 +64,7 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 xl:flex">
+        <nav className="hidden items-center gap-7 xl:flex" aria-label="Primary">
           {links.map((link) => {
             const active = pathname === link.href;
             return (
@@ -75,15 +83,17 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-3 md:flex">
           <LanguageSwitcher />
-          <Link href="/enquire" className="btn-gold !px-5 !py-2.5 text-[0.66rem]">
+          <Link href="/enquire" className="btn-gold !px-5 !py-2.5 text-[0.66rem]" data-cursor="book">
             {t("bookNow")}
           </Link>
         </div>
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-full border border-[var(--line)] p-2 text-white xl:hidden"
-          aria-label="Menu"
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[var(--line)] p-2 text-white xl:hidden"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
           onClick={() => setOpen((v) => !v)}
         >
           {open ? <X size={18} /> : <Menu size={18} />}
@@ -93,23 +103,24 @@ export function SiteHeader() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-t border-[var(--line)] bg-navy-mid/95 backdrop-blur-xl xl:hidden"
+            id="mobile-menu"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 top-[4.5rem] z-40 overflow-y-auto bg-navy/96 px-6 py-8 backdrop-blur-xl xl:hidden"
           >
-            <nav className="flex flex-col gap-4 px-5 py-5">
+            <nav className="mx-auto flex max-w-md flex-col gap-5" aria-label="Mobile">
               {links.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm uppercase tracking-[0.14em] text-white/85"
+                  className="border-b border-[var(--line)] pb-4 text-lg uppercase tracking-[0.16em] text-white/90"
                   onClick={() => setOpen(false)}
                 >
                   {t(link.key)}
                 </Link>
               ))}
-              <Link href="/enquire" className="btn-gold w-full" onClick={() => setOpen(false)}>
+              <Link href="/enquire" className="btn-gold mt-4 w-full" onClick={() => setOpen(false)}>
                 {t("bookNow")}
               </Link>
               <LanguageSwitcher />

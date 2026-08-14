@@ -78,7 +78,10 @@ export function WhyKodaikanal() {
           <p className="text-[0.7rem] uppercase tracking-[0.32em] text-gold">
             {t("whyKodaiEyebrow")}
           </p>
-          <h2 className="mt-5 font-display text-5xl text-white md:text-6xl">
+          <h2
+            className="mt-5 font-display text-5xl text-white md:text-6xl"
+            data-cursor="explore"
+          >
             {t("whyKodaiTitle")}
           </h2>
           <p className="mt-6 text-lg leading-relaxed text-soft-gray">
@@ -104,11 +107,12 @@ export function WhyKodaikanal() {
           className="relative aspect-[4/5] overflow-hidden rounded-[2rem] opacity-0"
         >
           <Image
-            src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80"
+            src="/images/kodai/mannavanur.webp"
             alt="Kodaikanal editorial landscape"
             fill
             className="object-cover transition-transform duration-[1.4s] ease-out hover:scale-105"
             sizes="(max-width: 768px) 100vw, 50vw"
+            data-cursor="explore"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent" />
         </div>

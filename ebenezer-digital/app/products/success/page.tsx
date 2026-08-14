@@ -4,7 +4,7 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Download, CheckCircle2 } from "lucide-react";
+import { Download, CheckCircle2, FileText } from "lucide-react";
 import { StoreNav } from "../components/StoreNav";
 import { StoreCursor } from "../components/StoreCursor";
 import { StoreCart } from "../components/StoreCart";
@@ -88,8 +88,25 @@ function SuccessInner() {
                   download={product.fileName}
                   className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center gap-2 bg-[var(--s-brand)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
                 >
-                  <Download className="h-4 w-4" /> Download now
+                  <Download className="h-4 w-4" /> Download ZIP
                 </a>
+              )}
+              {product.pdfs && product.pdfs.length > 0 && (
+                <div className="mt-6 space-y-2">
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--s-muted)]">Open PDFs</p>
+                  {product.pdfs.map((pdf) => (
+                    <a
+                      key={pdf.file}
+                      href={pdf.file}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex min-h-[44px] items-center gap-2 border border-[var(--s-line)] px-3 text-sm hover:border-[var(--s-brand)]"
+                    >
+                      <FileText className="h-4 w-4 text-[var(--s-brand)]" />
+                      {pdf.label}
+                    </a>
+                  ))}
+                </div>
               )}
             </div>
           </div>

@@ -74,7 +74,7 @@ const STARTERS: Record<AiMode, string[]> = {
   general: ["Explain this simply", "Give me a full plan", "Write a clear example"],
   news: ["Explain today’s top stories", "Why does this matter?", "Simple brief for India readers"],
   blog: ["Explain this lesson more simply", "Give Indian life examples", "What should I learn next?"],
-  product: ["Which product fits a small shop?", "What do I get after buying?", "Compare the free and paid tools"],
+  product: ["Which kit fits my business?", "What files are inside this kit?", "Compare free and paid tools"],
   billing: ["Why can’t I pay yet?", "Explain licenses simply", "What happens after payment?"],
 };
 

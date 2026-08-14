@@ -42,6 +42,7 @@ export function GalleryMasonry() {
                   fill
                   className="object-cover transition-transform duration-700 hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"
+                  data-cursor="explore"
                 />
               </div>
             </div>

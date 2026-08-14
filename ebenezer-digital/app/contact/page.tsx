@@ -1,48 +1,43 @@
-import { AnimateSection, AnimateOne } from "../components/AnimateOnScroll";
-import ScrollParallax from "../components/ScrollParallax";
-import ClipReveal from "../components/ClipReveal";
 import ContactForm from "../components/ContactForm";
 
 export default function ContactPage() {
   return (
-    <ScrollParallax>
-      <section className="section-padding pt-[5.25rem] border-t border-[var(--border)]">
-        <div className="section-reveal container-wide max-w-4xl">
-          <AnimateOne variant="from-left">
-            <ClipReveal direction="left" delay={80}>
-              <h1 className="section-h2-reveal font-display text-3xl sm:text-4xl font-bold text-[var(--text)] mb-4">
-                Contact us
-              </h1>
-            </ClipReveal>
-            <p className="section-intro-p text-[var(--text-muted)] max-w-xl mb-14">
-              Send a message with your requirements and we will get back to you as soon as possible.
+    <main className="bg-[#070708] px-4 pb-24 pt-28 sm:px-8 lg:px-10">
+      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.05fr]">
+        <div>
+          <p className="studio-kicker">Contact</p>
+          <h1 className="studio-display mt-4 text-5xl sm:text-7xl">
+            LET’S BUILD
+            <br />
+            SOMETHING
+            <br />
+            EXCEPTIONAL.
+          </h1>
+          <p className="mt-6 max-w-xl text-[var(--st-muted)]">
+            Send a message with your requirements and we will get back to you as soon as possible.
+          </p>
+          <div className="mt-10 space-y-5 text-sm">
+            <p>
+              <span className="block text-[10px] uppercase tracking-[0.2em] text-white/40">Email</span>
+              <a href="mailto:contact@ebenezerdigitalservices.com" className="text-white">
+                contact@ebenezerdigitalservices.com
+              </a>
             </p>
-          </AnimateOne>
-          <div className="grid lg:grid-cols-5 gap-10 lg:gap-12">
-            <AnimateSection variant="fade-up" className="list-slide-in lg:col-span-2 space-y-6">
-              <div className="aos-item">
-                <h2 className="contact-block-label font-display font-semibold text-[var(--text)] mb-2">Email</h2>
-                <a href="mailto:contact@ebenezerdigitalservices.com" className="contact-link-lift link-hover-underline text-[var(--accent)] hover:text-[var(--accent-hover)]">
-                  contact@ebenezerdigitalservices.com
-                </a>
-              </div>
-              <div className="aos-item">
-                <h2 className="contact-block-label font-display font-semibold text-[var(--text)] mb-2">WhatsApp</h2>
-                <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="contact-link-lift link-hover-underline text-[var(--accent)] hover:text-[var(--accent-hover)]">
-                  +1 (234) 567-890
-                </a>
-                <p className="text-[var(--text-muted)] text-sm mt-1">Replace with your real number</p>
-              </div>
-            </AnimateSection>
-            <AnimateOne variant="from-right" className="lg:col-span-3">
-              <div className="card-dark contact-card-reveal card-shine-bottom rounded-2xl p-8">
-                <h2 className="contact-form-heading font-display font-semibold text-[var(--text)] mb-6">Send a message</h2>
-                <ContactForm />
-              </div>
-            </AnimateOne>
+            <p>
+              <span className="block text-[10px] uppercase tracking-[0.2em] text-white/40">WhatsApp</span>
+              <a href="https://wa.me/1234567890" target="_blank" rel="noopener noreferrer" className="text-white">
+                +1 (234) 567-890
+              </a>
+            </p>
           </div>
         </div>
-      </section>
-    </ScrollParallax>
+        <div className="border border-[var(--st-line)] bg-black/30 p-6 sm:p-8">
+          <h2 className="font-serif text-3xl">Tell us about it.</h2>
+          <div className="mt-8">
+            <ContactForm />
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }

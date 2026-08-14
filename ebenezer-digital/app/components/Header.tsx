@@ -3,16 +3,24 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { MagneticLink } from "../studio/MagneticLink";
 
 const navLinks = [
   { label: "Services", href: "/services" },
   { label: "Work", href: "/work" },
-  { label: "Blog", href: "/blog" },
+  { label: "News", href: "/blog/news" },
+  { label: "Journal", href: "/blog" },
+  { label: "Store", href: "/products" },
   { label: "Eben AI", href: "/ai" },
-  { label: "Process", href: "/process" },
-  { label: "About", href: "/why" },
+];
+
+const productLinks = [
+  { label: "News", href: "/blog/news", hint: "World news desk" },
+  { label: "Journal", href: "/blog", hint: "Learning blog" },
+  { label: "Store", href: "/products", hint: "Digital products" },
+  { label: "Eben AI", href: "/ai", hint: "Chat on our server" },
 ];
 
 const serviceLinks = [
@@ -23,226 +31,188 @@ const serviceLinks = [
 ];
 
 export default function Header() {
+  const pathname = usePathname() || "/";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 24);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "unset";
   }, [isMobileMenuOpen]);
+
+  const active = (href: string) =>
+    pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
     <>
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 shadow-lg"
-            : "bg-transparent"
-        }`}
-      >
-        <nav className="container-wide mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 group">
-              <Image src="/brand/eben-mark.svg" alt="Ebenezer" width={32} height={32} className="rounded-lg" />
-              <span className="font-display text-xl lg:text-2xl font-bold text-white group-hover:text-brand-400 transition-colors">
-                Ebenezer<span className="text-brand-500">.</span>
-              </span>
+      <header className={`studio-nav ${isScrolled ? "is-solid" : ""}`}>
+        <Link href="/" className="flex items-center gap-2" data-cursor="OPEN">
+          <Image src="/brand/eben-mark.svg" alt="Ebenezer" width={28} height={28} className="rounded-md" />
+          <span className="hidden font-display text-sm tracking-[0.12em] text-white sm:inline">
+            EBENEZER
+          </span>
+        </Link>
+
+        <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
+          <div
+            className="relative"
+            onMouseEnter={() => setIsServicesOpen(true)}
+            onMouseLeave={() => setIsServicesOpen(false)}
+          >
+            <Link
+              href="/services"
+              className={`text-[11px] uppercase tracking-[0.18em] ${
+                active("/services") ? "text-emerald-400" : "text-white/60 hover:text-white"
+              }`}
+            >
+              Services
             </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
-              {/* Services Dropdown */}
-              <div
-                className="relative"
-                onMouseEnter={() => setIsServicesOpen(true)}
-                onMouseLeave={() => setIsServicesOpen(false)}
-              >
-                <button
-                  className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white transition-colors"
-                  onClick={() => setIsServicesOpen(!isServicesOpen)}
+            <AnimatePresence>
+              {isServicesOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  className="absolute left-0 top-full mt-3 w-56 border border-[var(--st-line)] bg-[#070708]/90 p-2 backdrop-blur-xl"
                 >
-                  Services
-                  <ChevronDown
-                    className={`w-4 h-4 transition-transform duration-200 ${
-                      isServicesOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-
-                <AnimatePresence>
-                  {isServicesOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-0 mt-2 w-56 bg-slate-800 rounded-xl border border-slate-700 shadow-xl overflow-hidden"
+                  {serviceLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="block px-3 py-2 text-sm text-white/70 hover:text-white"
+                      onClick={() => setIsServicesOpen(false)}
                     >
-                      <div className="py-2">
-                        {serviceLinks.map((link) => (
-                          <Link
-                            key={link.href}
-                            href={link.href}
-                            className="block px-4 py-2 text-sm text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
-                            onClick={() => setIsServicesOpen(false)}
-                          >
-                            {link.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                      {link.label}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          {navLinks.slice(1, 2).map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`text-[11px] uppercase tracking-[0.18em] ${
+                active(link.href) ? "text-emerald-400" : "text-white/60 hover:text-white"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div
+            className="relative"
+            onMouseEnter={() => setIsProductsOpen(true)}
+            onMouseLeave={() => setIsProductsOpen(false)}
+          >
+            <button
+              type="button"
+              className={`text-[11px] uppercase tracking-[0.18em] ${
+                productLinks.some((p) => active(p.href)) ? "text-emerald-400" : "text-white/60 hover:text-white"
+              }`}
+            >
+              Products
+            </button>
+            <AnimatePresence>
+              {isProductsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  className="absolute left-0 top-full mt-3 w-64 border border-[var(--st-line)] bg-[#070708]/90 p-2 backdrop-blur-xl"
+                >
+                  {productLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="block px-3 py-2"
+                      onClick={() => setIsProductsOpen(false)}
+                    >
+                      <span className="block text-sm text-white">{link.label}</span>
+                      <span className="text-[11px] text-white/40">{link.hint}</span>
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </nav>
 
-              {navLinks.slice(1).map((link) => (
+        <div className="flex items-center gap-2">
+          <MagneticLink href="/contact" className="studio-btn hidden sm:inline-flex" cursor="START">
+            Let’s talk
+          </MagneticLink>
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+            className="px-3 py-2 text-[11px] uppercase tracking-[0.18em] text-white lg:hidden"
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+          >
+            {isMobileMenuOpen ? "Close" : "Menu"}
+          </button>
+        </div>
+      </header>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[70] bg-[#070708] px-6 pt-28"
+          >
+            <nav className="space-y-2">
+              {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm font-medium text-slate-300 hover:text-white transition-colors relative group"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="studio-display block py-2 text-4xl text-white sm:text-5xl"
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-500 group-hover:w-full transition-all duration-300" />
                 </Link>
               ))}
-            </div>
-
-            {/* CTA Button */}
-            <div className="hidden lg:block">
               <Link
-                href="/contact"
-                className="inline-flex items-center justify-center px-6 py-2.5 text-sm font-semibold text-slate-900 bg-brand-500 rounded-full hover:bg-brand-400 transition-all duration-300 shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 hover:-translate-y-0.5"
+                href="/process"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-1 text-sm text-white/50"
               >
-                Get free quote
+                Process
               </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-white hover:bg-slate-800 rounded-lg transition-colors"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-        </nav>
-      </header>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden"
+              <Link
+                href="/why"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block py-1 text-sm text-white/50"
+              >
+                About
+              </Link>
+              {serviceLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block py-1 text-sm text-white/50"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <Link
+              href="/contact"
               onClick={() => setIsMobileMenuOpen(false)}
-            />
-
-            {/* Drawer */}
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-slate-900 z-50 lg:hidden shadow-2xl"
+              className="studio-btn mt-10 inline-flex"
             >
-              <div className="flex flex-col h-full">
-                {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-slate-800">
-                  <span className="font-display text-xl font-bold text-white">
-                    Menu
-                  </span>
-                  <button
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="p-2 text-white hover:bg-slate-800 rounded-lg transition-colors"
-                    aria-label="Close menu"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                </div>
-
-                {/* Navigation Links */}
-                <div className="flex-1 overflow-y-auto py-6 px-4">
-                  <div className="space-y-1">
-                    {navLinks.map((link, index) => (
-                      <motion.div
-                        key={link.href}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                      >
-                        <Link
-                          href={link.href}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                          className="block py-3 text-lg font-medium text-slate-300 hover:text-white transition-colors"
-                        >
-                          {link.label}
-                        </Link>
-                      </motion.div>
-                    ))}
-
-                    {/* Services Submenu in Mobile */}
-                    <div className="pt-4 pb-2">
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
-                        Services
-                      </p>
-                      <div className="space-y-1 pl-4 border-l-2 border-slate-800">
-                        {serviceLinks.map((link, index) => (
-                          <motion.div
-                            key={link.href}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.4 + index * 0.05 }}
-                          >
-                            <Link
-                              href={link.href}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="block py-2 text-sm text-slate-400 hover:text-brand-400 transition-colors"
-                            >
-                              {link.label}
-                            </Link>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* CTA */}
-                <div className="p-4 border-t border-slate-800">
-                  <Link
-                    href="/contact"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex items-center justify-center w-full py-3 text-sm font-semibold text-slate-900 bg-brand-500 rounded-xl hover:bg-brand-400 transition-colors"
-                  >
-                    Get free quote
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          </>
+              Let’s talk
+            </Link>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

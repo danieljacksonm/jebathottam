@@ -157,42 +157,6 @@ body {
   to { transform: translateX(-50%); }
 }
 
-.journal-cursor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  width: 14px;
-  height: 14px;
-  border: 1px solid var(--j-brand);
-  border-radius: 999px;
-  pointer-events: none;
-  mix-blend-mode: difference;
-  transform: translate(-50%, -50%);
-  transition: width 0.25s ease, height 0.25s ease, background 0.25s ease;
-  display: none;
-}
-
-.journal-cursor.has-label {
-  width: 72px;
-  height: 72px;
-  background: var(--j-brand);
-  mix-blend-mode: normal;
-  display: grid;
-  place-items: center;
-  color: #04110c;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .journal-cursor { display: block; }
-  .journal-root, .journal-root a, .journal-root button { cursor: none; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .journal-marquee-track { animation: none; }
-  .journal-cursor { display: none !important; }
-  .journal-root, .journal-root a, .journal-root button { cursor: auto; }
 }

@@ -1002,10 +1002,6 @@ const extras = [
 
 const all = [...posts, ...extras];
 
-function esc(s) {
-  return s.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
-}
-
 const lines = [];
 lines.push(`export const KODAI_BLOG_IMAGE =`);
 lines.push(`  "${IMAGE}";`);

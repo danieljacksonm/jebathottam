@@ -2,6 +2,7 @@ import {
   pickLocalized,
   type LocalizedString,
 } from "@/lib/content/types";
+import { LOCAL_SCENES } from "@/lib/media";
 
 export type CinematicExperience = {
   id: string;
@@ -20,6 +21,9 @@ export type MapPoint = {
   name: LocalizedString;
   x: number;
   y: number;
+  image: string;
+  blurb: LocalizedString;
+  sceneId?: string;
 };
 
 export type WhyStat = {
@@ -36,8 +40,7 @@ export const cinematicExperiences: CinematicExperience[] = [
       ta: "சூரிய உதய காட்சிகள்",
       hi: "सूर्योदय व्यूपॉइंट",
     },
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES["dolphins-nose"],
   },
   {
     id: "pine",
@@ -46,14 +49,12 @@ export const cinematicExperiences: CinematicExperience[] = [
       ta: "பைன் காடு நடை",
       hi: "पाइन जंगल सैर",
     },
-    image:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES["pine-forest"],
   },
   {
     id: "mannavanur",
     title: { en: "Mannavanur", ta: "மன்னவனூர்", hi: "मन्नवनूर" },
-    image:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES.mannavanur,
   },
   {
     id: "poombarai",
@@ -62,26 +63,22 @@ export const cinematicExperiences: CinematicExperience[] = [
       ta: "பூம்பராய் கிராமம்",
       hi: "पूमबराई गाँव",
     },
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES.poombarai,
   },
   {
     id: "boating",
     title: { en: "Boating", ta: "படகு சவாரி", hi: "बोटिंग" },
-    image:
-      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES["kodai-lake"],
   },
   {
     id: "falls",
     title: { en: "Waterfalls", ta: "அருவிகள்", hi: "जलप्रपात" },
-    image:
-      "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES["silver-cascade"],
   },
   {
     id: "camping",
     title: { en: "Camping", ta: "முகாம்", hi: "कैंपिंग" },
-    image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES.camping,
   },
   {
     id: "resorts",
@@ -90,8 +87,7 @@ export const cinematicExperiences: CinematicExperience[] = [
       ta: "அமைதியான மலை தங்கல்",
       hi: "शांत पहाड़ी ठहराव",
     },
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES["dolphins-nose"],
   },
   {
     id: "horse",
@@ -178,46 +174,169 @@ export const timelineBeats: TimelineBeat[] = [
 
 export const mapPoints: MapPoint[] = [
   {
-    id: "lake",
+    id: "kodai-lake",
+    sceneId: "kodai-lake",
     name: { en: "Kodai Lake", ta: "கொடை ஏரி", hi: "कोडई झील" },
     x: 48,
-    y: 52,
+    y: 50,
+    image: LOCAL_SCENES["kodai-lake"],
+    blurb: {
+      en: "Still water where the hills meet the sky.",
+      ta: "மலைகள் வானத்தைச் சந்திக்கும் அமைதியான நீர்.",
+      hi: "शांत पानी जहाँ पहाड़ आसमान से मिलते हैं।",
+    },
   },
   {
-    id: "coaker",
+    id: "coakers-walk",
+    sceneId: "coakers-walk",
     name: { en: "Coaker’s Walk", ta: "கோக்கர்ஸ் வாக்", hi: "कोकर्स वॉक" },
     x: 62,
-    y: 40,
+    y: 38,
+    image: LOCAL_SCENES["coakers-walk"],
+    blurb: {
+      en: "A misted ridge walk at first light.",
+      ta: "முதல் ஒளியில் மூடுபனி முகட்டு நடை.",
+      hi: "पहली रोशनी में कोहरे वाली पहाड़ी सैर।",
+    },
   },
   {
-    id: "pillar",
+    id: "pillar-rocks",
+    sceneId: "pillar-rocks",
     name: { en: "Pillar Rocks", ta: "பில்லர் ராக்ஸ்", hi: "पिलर रॉक्स" },
     x: 34,
+    y: 56,
+    image: LOCAL_SCENES["pillar-rocks"],
+    blurb: {
+      en: "Three stone columns in the clouds.",
+      ta: "மேகங்களில் மூன்று கல் தூண்கள்.",
+      hi: "बादलों में तीन पत्थर के स्तंभ।",
+    },
+  },
+  {
+    id: "pine-forest",
+    sceneId: "pine-forest",
+    name: { en: "Pine Forest", ta: "பைன் காடு", hi: "पाइन जंगल" },
+    x: 22,
+    y: 44,
+    image: LOCAL_SCENES["pine-forest"],
+    blurb: {
+      en: "Tall silence and moving light.",
+      ta: "உயர் அமைதியும் நகரும் ஒளியும்.",
+      hi: "ऊँची खामोशी और चलती रोशनी।",
+    },
+  },
+  {
+    id: "guna-caves",
+    name: { en: "Guna Caves", ta: "குணா குகைகள்", hi: "गुना केव्स" },
+    x: 30,
+    y: 64,
+    image: LOCAL_SCENES.mannavanur,
+    blurb: {
+      en: "Deep rock chambers above the valley.",
+      ta: "பள்ளத்தாக்குக்கு மேல் ஆழமான பாறை அறைகள்.",
+      hi: "घाटी के ऊपर गहरी चट्टानी गुफाएँ।",
+    },
+  },
+  {
+    id: "dolphins-nose",
+    sceneId: "dolphins-nose",
+    name: { en: "Dolphin’s Nose", ta: "டால்பின் நோஸ்", hi: "डॉल्फिन नोज़" },
+    x: 18,
+    y: 70,
+    image: LOCAL_SCENES["dolphins-nose"],
+    blurb: {
+      en: "A cliff that looks out forever.",
+      ta: "என்றும் பார்க்கும் ஒரு முனை.",
+      hi: "एक चट्टान जो बहुत दूर तक देखती है।",
+    },
+  },
+  {
+    id: "poombarai",
+    sceneId: "poombarai",
+    name: { en: "Poombarai", ta: "பூம்பராய்", hi: "पूमबराई" },
+    x: 72,
     y: 58,
+    image: LOCAL_SCENES.poombarai,
+    blurb: {
+      en: "Village terraces in the folds of cloud.",
+      ta: "மேக மடிப்புகளில் கிராமப் படிகள்.",
+      hi: "बादलों की सिलवटों में गाँव की सीढ़ियाँ।",
+    },
+  },
+  {
+    id: "mannavanur",
+    sceneId: "mannavanur",
+    name: { en: "Mannavanur", ta: "மன்னவனூர்", hi: "मन्नवनूर" },
+    x: 80,
+    y: 42,
+    image: LOCAL_SCENES.mannavanur,
+    blurb: {
+      en: "Open meadows and slow wind.",
+      ta: "திறந்த புல்வெளிகளும் மெதுவான காற்றும்.",
+      hi: "खुले मैदान और धीमी हवा।",
+    },
+  },
+  {
+    id: "berijam",
+    sceneId: "berijam",
+    name: { en: "Berijam Lake", ta: "பெரியம் ஏரி", hi: "बेरिजाम झील" },
+    x: 14,
+    y: 32,
+    image: LOCAL_SCENES.berijam,
+    blurb: {
+      en: "Almost no words. Only atmosphere.",
+      ta: "சொற்கள் இல்லை. சூழல் மட்டும்.",
+      hi: "शब्द लगभग नहीं। सिर्फ़ माहौल।",
+    },
   },
   {
     id: "bryant",
     name: { en: "Bryant Park", ta: "பிரையண்ட் பார்க்", hi: "ब्रायंट पार्क" },
-    x: 55,
-    y: 48,
+    x: 54,
+    y: 46,
+    image: LOCAL_SCENES.bryant,
+    blurb: {
+      en: "Garden quiet beside the lake.",
+      ta: "ஏரி அருகே தோட்ட அமைதி.",
+      hi: "झील के पास बगीचे की शांति।",
+    },
   },
   {
-    id: "dolphin",
-    name: { en: "Dolphin’s Nose", ta: "டால்பின் நோஸ்", hi: "डॉल्फिन नोज़" },
-    x: 28,
-    y: 68,
+    id: "silver-cascade",
+    sceneId: "silver-cascade",
+    name: { en: "Silver Cascade", ta: "சில்வர் கேஸ்கேட்", hi: "सिल्वर कैस्केड" },
+    x: 40,
+    y: 74,
+    image: LOCAL_SCENES["silver-cascade"],
+    blurb: {
+      en: "The mountain speaking in water.",
+      ta: "மலை நீரில் பேசுகிறது.",
+      hi: "पहाड़ पानी की भाषा में बोलता है।",
+    },
+  },
+  {
+    id: "vattakanal",
+    name: { en: "Vattakanal", ta: "வட்டக்கனல்", hi: "वट्टकनाल" },
+    x: 66,
+    y: 72,
+    image: LOCAL_SCENES.camping,
+    blurb: {
+      en: "Cliff hamlet above the valley floor.",
+      ta: "பள்ளத்தாக்குக்கு மேல் முனை கிராமம்.",
+      hi: "घाटी के ऊपर चट्टानी बस्ती।",
+    },
   },
 ];
 
 export const galleryImages = [
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93bd?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=900&q=80",
-  "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?auto=format&fit=crop&w=1200&q=80",
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=900&q=80",
+  LOCAL_SCENES["dolphins-nose"],
+  LOCAL_SCENES.mannavanur,
+  LOCAL_SCENES["pine-forest"],
+  LOCAL_SCENES.berijam,
+  LOCAL_SCENES.poombarai,
+  LOCAL_SCENES["kodai-lake"],
+  LOCAL_SCENES.camping,
+  LOCAL_SCENES.bryant,
 ];
 
 export const whyStats: WhyStat[] = [
@@ -261,6 +380,7 @@ export function localizeMapPoints(locale: string) {
   return mapPoints.map((point) => ({
     ...point,
     name: pickLocalized(point.name, locale),
+    blurb: pickLocalized(point.blurb, locale),
   }));
 }
 

@@ -1,18 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import Link from "next/link";
-import {
-  Database,
-  FileText,
-  Globe,
-  Plane,
-  Code,
-  Users,
-  ArrowRight,
-  type LucideIcon,
-} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type ServiceItem = {
   id: string;
@@ -23,44 +13,64 @@ type ServiceItem = {
   features: string[];
 };
 
-const iconMap: Record<string, LucideIcon> = {
-  FileText,
-  Globe,
-  Database,
-  Plane,
-  Users,
-  Code,
+const categoryMeta: Record<string, { title: string; scene: string }> = {
+  digital: { title: "Digital & Admin", scene: "sheets" },
+  travel: { title: "Travel & Booking", scene: "ticket" },
+  web: { title: "Web & Technical", scene: "browser" },
+  other: { title: "Other Services", scene: "nodes" },
 };
 
-const categoryMeta: Record<
-  string,
-  { title: string; description: string; icon: LucideIcon }
-> = {
-  digital: {
-    title: "Digital & Admin",
-    description: "Streamline your operations with our comprehensive digital and administrative services.",
-    icon: Database,
-  },
-  travel: {
-    title: "Travel & Booking",
-    description: "End-to-end travel assistance for business and personal trips worldwide.",
-    icon: Plane,
-  },
-  web: {
-    title: "Web & Technical",
-    description: "Custom web solutions and technical support to power your digital presence.",
-    icon: Code,
-  },
-  other: {
-    title: "Other Services",
-    description: "Additional digital support tailored to your needs.",
-    icon: Globe,
-  },
-};
+function Scene({ type }: { type: string }) {
+  return (
+    <div className="relative h-64 overflow-hidden border border-[var(--st-line)] bg-black/40 p-5">
+      {type === "browser" && (
+        <div className="h-full rounded-lg border border-white/10 bg-[#111]">
+          <div className="flex gap-1.5 border-b border-white/10 px-3 py-2">
+            <span className="h-2 w-2 rounded-full bg-white/20" />
+            <span className="h-2 w-2 rounded-full bg-white/20" />
+            <span className="h-2 w-2 rounded-full bg-emerald-400/70" />
+          </div>
+          <p className="p-4 font-mono text-xs leading-6 text-emerald-300/80">
+            {`const site = await build({
+  stack: "Next.js",
+  care: "on-time",
+})`}
+          </p>
+        </div>
+      )}
+      {type === "ticket" && (
+        <div className="flex h-full items-center justify-center">
+          <div className="w-full max-w-xs border border-dashed border-emerald-400/40 p-5 text-sm">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-emerald-400">Itinerary</p>
+            <p className="mt-3 font-serif text-2xl">MAA → DXB</p>
+            <p className="mt-2 text-white/50">Booking support · documents · changes</p>
+          </div>
+        </div>
+      )}
+      {type === "sheets" && (
+        <div className="grid h-full grid-cols-3 gap-2">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <div key={i} className="border border-white/10 bg-white/[0.03]" />
+          ))}
+        </div>
+      )}
+      {type === "nodes" && (
+        <div className="flex h-full items-center justify-center gap-6">
+          <span className="h-3 w-3 rounded-full bg-emerald-400" />
+          <span className="h-px w-16 bg-white/20" />
+          <span className="h-3 w-3 rounded-full bg-white/40" />
+          <span className="h-px w-16 bg-white/20" />
+          <span className="h-3 w-3 rounded-full bg-emerald-400/50" />
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Services() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [active, setActive] = useState<string>("web");
 
   useEffect(() => {
     fetch("/api/content")
@@ -76,99 +86,84 @@ export default function Services() {
       .map((id) => {
         const items = services.filter((s) => s.category === id);
         if (!items.length) return null;
-        const meta = categoryMeta[id] || categoryMeta.other;
-        return {
-          id,
-          title: meta.title,
-          description: meta.description,
-          icon: meta.icon,
-          services: items,
-        };
+        return { id, ...categoryMeta[id], services: items };
       })
       .filter(Boolean) as Array<{
       id: string;
       title: string;
-      description: string;
-      icon: LucideIcon;
+      scene: string;
       services: ServiceItem[];
     }>;
   }, [services]);
 
-  return (
-    <section id="services" className="py-24 sm:py-32 bg-slate-950 relative overflow-hidden">
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-brand-500/5 rounded-full blur-[150px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent-500/5 rounded-full blur-[120px]" />
-      </div>
+  const current = categories.find((c) => c.id === active) || categories[0];
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-3xl mx-auto mb-16"
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-brand-500/10 text-brand-400 text-sm font-medium mb-4">
-            What We Do
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-            Comprehensive Digital Solutions
-          </h2>
-          <p className="text-lg text-slate-400">
-            From admin tasks to web development and travel support—a range of digital services tailored to your needs.
-          </p>
-        </motion.div>
+  return (
+    <section id="services" className="relative overflow-hidden px-4 py-24 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <p className="studio-kicker">What we build</p>
+        <h2 className="studio-display mt-4 text-6xl sm:text-8xl">
+          WHAT
+          <br />
+          WE
+          <br />
+          BUILD.
+        </h2>
+        <p className="mt-6 max-w-xl text-[var(--st-muted)]">
+          From admin work to websites, travel desks, and AI — services stay the same. The way you meet them is new.
+        </p>
 
         {loading ? (
-          <p className="text-center text-slate-500">Loading services...</p>
+          <p className="mt-12 text-[var(--st-muted)]">Loading services…</p>
         ) : (
-          <div className="space-y-16">
-            {categories.map((cat, idx) => (
-              <motion.div
-                key={cat.id}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.05 }}
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 rounded-lg bg-brand-500/10 text-brand-400">
-                    <cat.icon className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">{cat.title}</h3>
-                    <p className="text-sm text-slate-400">{cat.description}</p>
-                  </div>
-                </div>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {cat.services.map((service) => {
-                    const Icon = iconMap[service.icon] || FileText;
-                    return (
-                      <div
-                        key={service.id}
-                        className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 hover:border-brand-500/40 transition-colors"
-                      >
-                        <Icon className="w-5 h-5 text-brand-400 mb-3" />
-                        <h4 className="font-medium text-white mb-2">{service.title}</h4>
-                        <p className="text-sm text-slate-400 leading-relaxed">{service.description}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            ))}
+          <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+            <div className="space-y-2">
+              {categories.map((cat, i) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onMouseEnter={() => setActive(cat.id)}
+                  onFocus={() => setActive(cat.id)}
+                  onClick={() => setActive(cat.id)}
+                  className={`block w-full border-t border-[var(--st-line)] py-5 text-left ${
+                    current?.id === cat.id ? "text-white" : "text-white/40"
+                  }`}
+                  data-cursor="EXPLORE"
+                >
+                  <span className="text-[10px] tracking-[0.2em] text-emerald-400">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="studio-display mt-1 block text-3xl sm:text-5xl">{cat.title}</span>
+                </button>
+              ))}
+            </div>
+            <AnimatePresence mode="wait">
+              {current && (
+                <motion.div
+                  key={current.id}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Scene type={current.scene} />
+                  <ul className="mt-6 space-y-4">
+                    {current.services.map((s) => (
+                      <li key={s.id} className="border-b border-[var(--st-line)] pb-4">
+                        <h3 className="text-lg text-white">{s.title}</h3>
+                        <p className="mt-1 text-sm leading-relaxed text-[var(--st-muted)]">{s.description}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
 
-        <div className="text-center mt-12">
-          <Link
-            href="/services"
-            className="inline-flex items-center gap-2 text-brand-400 hover:text-brand-300 font-medium"
-          >
-            View all services <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+        <Link href="/services" className="mt-12 inline-block text-sm tracking-[0.16em] uppercase text-emerald-400" data-cursor="OPEN">
+          Discover our services →
+        </Link>
       </div>
     </section>
   );

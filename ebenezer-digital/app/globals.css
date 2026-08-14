@@ -39,10 +39,10 @@
     --surface-elevated: 217 33% 17%;
     --surface-overlay: 222 47% 8%;
     
-    --bg: #0c1222;
-    --bg-soft: #111827;
-    --text: #f1f5f9;
-    --text-muted: #94a3b8;
+    --bg: #070708;
+    --bg-soft: #0d0d0f;
+    --text: #f4f1ea;
+    --text-muted: #8d887e;
   }
 
   .dark {

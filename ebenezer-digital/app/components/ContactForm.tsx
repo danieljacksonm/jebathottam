@@ -51,7 +51,7 @@ export default function ContactForm() {
           required
           placeholder="John Smith"
           disabled={status === "submitting"}
-          className="contact-input w-full rounded-xl border border-[var(--border)] bg-[var(--bg-soft)] px-4 py-3 text-[var(--text)] placeholder:text-[var(--text-muted)]/60 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition"
+          className="contact-input w-full border-b border-[var(--st-line,#1f1f20)] bg-transparent px-0 py-3 text-white placeholder:text-white/30 outline-none"
         />
       </div>
       <div>
@@ -65,7 +65,7 @@ export default function ContactForm() {
           required
           disabled={status === "submitting"}
           placeholder="john@example.com"
-          className="contact-input w-full rounded-xl border border-[var(--border)] bg-[var(--bg-soft)] px-4 py-3 text-[var(--text)] placeholder:text-[var(--text-muted)]/60 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition"
+          className="contact-input w-full border-b border-[var(--st-line,#1f1f20)] bg-transparent px-0 py-3 text-white placeholder:text-white/30 outline-none"
         />
       </div>
       <div>
@@ -79,13 +79,13 @@ export default function ContactForm() {
           required
           disabled={status === "submitting"}
           placeholder="Describe your project or request..."
-          className="contact-input w-full rounded-xl border border-[var(--border)] bg-[var(--bg-soft)] px-4 py-3 text-[var(--text)] placeholder:text-[var(--text-muted)]/60 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 outline-none transition resize-none"
+          className="contact-input w-full resize-none border-b border-[var(--st-line,#1f1f20)] bg-transparent px-0 py-3 text-white placeholder:text-white/30 outline-none"
         />
       </div>
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="btn-submit-hover w-full sm:w-auto inline-flex items-center justify-center rounded-full bg-[var(--accent)] text-[var(--bg)] px-6 py-3 font-semibold hover:bg-[var(--accent-hover)] transition-colors btn-hover disabled:opacity-50"
+        className="studio-btn disabled:opacity-50"
       >
         {status === "submitting" ? "Sending..." : "Send message"}
       </button>

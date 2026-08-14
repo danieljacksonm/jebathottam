@@ -1,8 +1,25 @@
-import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import Image from "next/image";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { WhyCanaan } from "@/components/cinematic/WhyCanaan";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { pageMetadata } from "@/lib/seo";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "seo" });
+  return pageMetadata({
+    locale,
+    path: "/about",
+    title: t("aboutTitle"),
+    description: t("aboutDescription"),
+  });
+}
 
 export default async function AboutPage({
   params,
@@ -14,14 +31,24 @@ export default async function AboutPage({
   const t = await getTranslations("about");
   const values = ["care", "place", "trust"] as const;
 
+  const nav = await getTranslations("nav");
+
   return (
     <PageAtmosphere>
       <CinematicPageHero
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93bd?auto=format&fit=crop&w=2400&q=80"
+        image="/images/kodai/berijam.webp"
+        imageAlt="Quiet Kodaikanal lake at dusk"
         tone="gold"
+      />
+      <Breadcrumbs
+        locale={locale}
+        items={[
+          { name: nav("home"), href: "/" },
+          { name: nav("about") },
+        ]}
       />
 
       <section className="mx-auto grid max-w-7xl gap-12 px-5 py-20 md:grid-cols-[1.2fr_0.8fr] md:px-8">

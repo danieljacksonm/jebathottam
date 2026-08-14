@@ -10,9 +10,30 @@ import {
 } from "@/data/packages";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { absoluteUrl, packageJsonLd, pageMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return packageRows.map((pkg) => ({ id: pkg.id }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  const { locale, id } = await params;
+  const pkg = getLocalizedPackage(id, locale);
+  if (!pkg) return {};
+  return pageMetadata({
+    locale,
+    path: `/packages/${pkg.id}`,
+    title: pkg.title,
+    description: pkg.blurb,
+    image: pkg.image,
+    imageAlt: pkg.title,
+  });
 }
 
 export default async function PackageDetailPage({
@@ -27,15 +48,34 @@ export default async function PackageDetailPage({
   if (!pkg) notFound();
 
   const t = await getTranslations("packages");
+  const nav = await getTranslations("nav");
 
   return (
     <PageAtmosphere>
+      <JsonLd
+        data={packageJsonLd({
+          name: pkg.title,
+          description: pkg.blurb,
+          image: pkg.image,
+          priceFrom: pkg.priceFrom,
+          url: absoluteUrl(locale, `/packages/${pkg.id}`),
+        })}
+      />
       <CinematicPageHero
         eyebrow={`${pkg.days} Days · ${pkg.nights} Nights`}
         title={pkg.title}
         subtitle={pkg.blurb}
         image={pkg.image}
+        imageAlt={pkg.title}
         tone="forest"
+      />
+      <Breadcrumbs
+        locale={locale}
+        items={[
+          { name: nav("home"), href: "/" },
+          { name: nav("packages"), href: "/packages" },
+          { name: pkg.title },
+        ]}
       />
 
       <section className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[1.35fr_0.75fr] md:px-8 md:py-24">

@@ -1,0 +1,94 @@
+{
+  "ebenezer-saas": [
+    {
+      "label": "getting started",
+      "file": "/downloads/pdfs/ebenezer-saas/getting-started.pdf"
+    },
+    {
+      "label": "feature sheet",
+      "file": "/downloads/pdfs/ebenezer-saas/feature-sheet.pdf"
+    },
+    {
+      "label": "sample invoice",
+      "file": "/downloads/pdfs/ebenezer-saas/sample-invoice.pdf"
+    }
+  ],
+  "creator-landing-kit": [
+    {
+      "label": "layout guide",
+      "file": "/downloads/pdfs/creator-landing-kit/layout-guide.pdf"
+    },
+    {
+      "label": "copy templates",
+      "file": "/downloads/pdfs/creator-landing-kit/copy-templates.pdf"
+    },
+    {
+      "label": "mobile checklist",
+      "file": "/downloads/pdfs/creator-landing-kit/mobile-checklist.pdf"
+    }
+  ],
+  "shop-pos-starter-pack": [
+    {
+      "label": "ui blueprint",
+      "file": "/downloads/pdfs/shop-pos-starter-pack/ui-blueprint.pdf"
+    },
+    {
+      "label": "invoice samples",
+      "file": "/downloads/pdfs/shop-pos-starter-pack/invoice-samples.pdf"
+    },
+    {
+      "label": "pos selection checklist",
+      "file": "/downloads/pdfs/shop-pos-starter-pack/pos-selection-checklist.pdf"
+    }
+  ],
+  "travel-enquiry-pack": [
+    {
+      "label": "enquiry form",
+      "file": "/downloads/pdfs/travel-enquiry-pack/enquiry-form.pdf"
+    },
+    {
+      "label": "whatsapp scripts",
+      "file": "/downloads/pdfs/travel-enquiry-pack/whatsapp-scripts.pdf"
+    },
+    {
+      "label": "quotation template",
+      "file": "/downloads/pdfs/travel-enquiry-pack/quotation-template.pdf"
+    }
+  ],
+  "digital-business-playbook": [
+    {
+      "label": "digital business playbook",
+      "file": "/downloads/pdfs/digital-business-playbook/digital-business-playbook.pdf"
+    },
+    {
+      "label": "7 day checklist",
+      "file": "/downloads/pdfs/digital-business-playbook/7-day-checklist.pdf"
+    }
+  ],
+  "brand-kit-essentials": [
+    {
+      "label": "brand guide",
+      "file": "/downloads/pdfs/brand-kit-essentials/brand-guide.pdf"
+    },
+    {
+      "label": "social templates",
+      "file": "/downloads/pdfs/brand-kit-essentials/social-templates.pdf"
+    }
+  ],
+  "free-enquiry-form-kit": [
+    {
+      "label": "enquiry form",
+      "file": "/downloads/pdfs/free-enquiry-form-kit/enquiry-form.pdf"
+    },
+    {
+      "label": "digital fields",
+      "file": "/downloads/pdfs/free-enquiry-form-kit/digital-fields.pdf"
+    }
+  ],
+  "creator-bundle": [
+    {
+      "label": "bundle contents",
+      "file": "/downloads/pdfs/creator-bundle/bundle-contents.pdf"
+    }
+  ]
+}

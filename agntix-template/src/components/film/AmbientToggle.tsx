@@ -90,7 +90,7 @@ export function AmbientToggle() {
     <button
       type="button"
       onClick={toggle}
-      className="fixed bottom-5 right-5 z-[70] flex items-center gap-2 rounded-full border border-[rgba(244,210,122,0.35)] bg-[rgba(4,22,43,0.65)] px-4 py-2.5 text-[0.65rem] uppercase tracking-[0.18em] text-gold-bright backdrop-blur-xl transition hover:border-gold-bright"
+      className="fixed bottom-20 right-5 z-[70] flex items-center gap-2 rounded-full border border-[rgba(244,210,122,0.35)] bg-[rgba(4,22,43,0.65)] px-4 py-2.5 text-[0.65rem] uppercase tracking-[0.18em] text-gold-bright backdrop-blur-xl transition hover:border-gold-bright md:bottom-5"
       aria-pressed={on}
     >
       {on ? <Volume2 size={14} /> : <VolumeX size={14} />}

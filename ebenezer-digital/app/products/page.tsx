@@ -56,12 +56,22 @@ function ProductCard({
         </div>
         <div className="absolute inset-x-0 bottom-0 p-5">
           <p className="text-[10px] uppercase tracking-[0.25em] text-[var(--s-muted)]">{p.category}</p>
-          <h3 className="mt-2 translate-y-0 font-serif text-2xl transition group-hover:translate-y-[-2px]">{p.name}</h3>
+          <h3 className="mt-2 font-serif text-2xl leading-tight">{p.name}</h3>
           <p className="mt-2 line-clamp-2 text-sm text-[var(--s-muted)]">{p.tagline}</p>
+          <ul className="mt-3 space-y-1 text-[11px] text-[var(--s-paper)]/80">
+            {(p.pdfs && p.pdfs.length
+              ? p.pdfs.map((pdf) => `${pdf.label}.pdf`)
+              : (p.includes || []).slice(0, 3)
+            ).slice(0, 3).map((item) => (
+              <li key={item} className="line-clamp-1">
+                · {item}
+              </li>
+            ))}
+          </ul>
           <div className="mt-4 flex items-center justify-between">
             <span className="text-[var(--s-brand)]">{formatINR(p.price)}</span>
-            <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.2em] text-[var(--s-paper)] opacity-0 transition group-hover:opacity-100">
-              View <ArrowUpRight className="h-3.5 w-3.5" />
+            <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.2em] text-[var(--s-paper)]">
+              See kit <ArrowUpRight className="h-3.5 w-3.5" />
             </span>
           </div>
         </div>
@@ -73,25 +83,39 @@ function ProductCard({
 export default function ProductsPage() {
   const { t, rtl, locale } = useStoreI18n();
   const [activeCat, setActiveCat] = useState<string>("ALL");
-  const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 60, damping: 20 });
   const sy = useSpring(my, { stiffness: 60, damping: 20 });
-  const floatX = useTransform(sx, [-0.5, 0.5], [-18, 18]);
   const floatY = useTransform(sy, [-0.5, 0.5], [-12, 12]);
-  const floatX2 = useTransform(sx, [-0.5, 0.5], [14, -14]);
   const shelfRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const applyFromUrl = () => {
+      const cat = new URLSearchParams(window.location.search).get("cat");
+      if (cat && (STORE_CATEGORIES as readonly string[]).includes(cat)) setActiveCat(cat);
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+      requestAnimationFrame(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    };
+    applyFromUrl();
+    window.addEventListener("hashchange", applyFromUrl);
+    window.addEventListener("popstate", applyFromUrl);
+    return () => {
+      window.removeEventListener("hashchange", applyFromUrl);
+      window.removeEventListener("popstate", applyFromUrl);
+    };
+  }, []);
 
   useEffect(() => {
     const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     if (!fine) return;
     const onMove = (e: MouseEvent) => {
-      mx.set(e.clientX / window.innerWidth - 0.5);
       my.set(e.clientY / window.innerHeight - 0.5);
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, [mx, my]);
+  }, [my]);
 
   useEffect(() => {
     const el = shelfRef.current;
@@ -126,8 +150,6 @@ export default function ProductsPage() {
   );
   const catPreview = filtered[0]?.image;
 
-  const floating = catalog.slice(0, 4);
-
   return (
     <div className="store-root relative min-h-screen" dir={rtl ? "rtl" : "ltr"}>
       <div className="store-grain" />
@@ -136,82 +158,53 @@ export default function ProductsPage() {
       <StoreCart />
 
       {/* HERO */}
-      <section className="relative flex min-h-[100svh] items-end overflow-hidden px-4 pb-16 pt-28 sm:px-8 lg:px-12">
-        <motion.div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(900px 500px at 20% 20%, rgba(16,185,129,0.18), transparent 55%), radial-gradient(700px 400px at 80% 10%, rgba(196,163,106,0.12), transparent 50%)",
-            x: floatX2,
-            y: floatY,
-          }}
-        />
-
-        {floating.map((p, i) => (
-          <motion.div
-            key={p.id}
-            style={{ x: i % 2 === 0 ? floatX : floatX2, y: floatY }}
-            className={`pointer-events-none absolute hidden overflow-hidden rounded-xl border border-white/10 shadow-2xl md:block ${
-              i === 0
-                ? "right-[8%] top-[22%] h-52 w-40"
-                : i === 1
-                  ? "right-[28%] top-[38%] h-44 w-36"
-                  : i === 2
-                    ? "left-[6%] top-[30%] h-40 w-32"
-                    : "left-[18%] bottom-[18%] h-36 w-28"
-            }`}
-          >
-            <Image src={p.image} alt="" fill className="object-cover opacity-80" sizes="160px" />
-          </motion.div>
-        ))}
-
-        <div className="relative z-10 w-full">
-          <p className="mb-6 text-[11px] uppercase tracking-[0.45em] text-[var(--s-brand)]">
-            {t("heroKicker")}
-          </p>
-          <motion.h1
-            initial="hidden"
-            animate="show"
-            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
-            className="max-w-4xl font-serif text-[14vw] leading-[0.9] tracking-tight sm:text-[9vw] lg:text-[7vw]"
-          >
-            {["TOOLS", "FOR", "CREATORS."].map((line) => (
-              <motion.span
-                key={line}
-                variants={{
-                  hidden: { y: "110%", opacity: 0 },
-                  show: { y: 0, opacity: 1, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
-                }}
-                className="block overflow-hidden"
+      <section className="relative min-h-[100svh] overflow-hidden">
+        <motion.div style={{ y: floatY }} className="absolute inset-0">
+          <Image
+            src={featured.image}
+            alt=""
+            fill
+            priority
+            className="object-cover object-center"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--s-ink)] via-black/55 to-black/25" />
+        </motion.div>
+        <div className="relative z-10 flex min-h-[100svh] items-end px-4 pb-16 pt-28 sm:px-8 lg:px-12">
+          <div className="w-full max-w-4xl">
+            <p className="mb-6 text-[11px] uppercase tracking-[0.45em] text-[var(--s-brand)]">
+              {t("heroKicker")}
+            </p>
+            <h1 className="font-serif text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
+              Digital kits.
+              <br />
+              Built to use.
+            </h1>
+            <p className="mt-6 max-w-xl text-sm text-[var(--s-muted)] sm:text-base">
+              {t("heroTag")} Prices in USD. Instant download worldwide.
+            </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <a
+                href="#featured"
+                className="inline-flex min-h-[48px] items-center gap-2 bg-[var(--s-brand)] px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
+                data-cursor="CLICK"
               >
-                <span className="block">{line}</span>
-              </motion.span>
-            ))}
-          </motion.h1>
-          <p className="mt-6 max-w-md text-sm text-[var(--s-muted)] sm:text-base">
-            {t("heroTag")}
-          </p>
-          <div className="mt-10 flex flex-wrap gap-4">
-            <a
-              href="#featured"
-              className="inline-flex min-h-[48px] items-center gap-2 bg-[var(--s-brand)] px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
-              data-cursor="CLICK"
-            >
-              {t("exploreProducts")} <ArrowUpRight className="h-4 w-4" />
-            </a>
-            <a
-              href="#bundles"
-              className="inline-flex min-h-[48px] items-center border border-[var(--s-line)] px-6 text-[11px] uppercase tracking-[0.22em]"
-              data-cursor="VIEW"
-            >
-              {t("viewBundles")}
-            </a>
+                {t("exploreProducts")} <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <a
+                href="#bundles"
+                className="inline-flex min-h-[48px] items-center border border-[var(--s-line)] px-6 text-[11px] uppercase tracking-[0.22em]"
+                data-cursor="VIEW"
+              >
+                {t("viewBundles")}
+              </a>
+            </div>
           </div>
-                </div>
+        </div>
       </section>
 
       <StoreMarquee
-        items={["Digital products", "Creative tools", "Designed for you", "Ebenezer Store"]}
+        items={["Worldwide store", "USD pricing", "Instant download", "See what’s in the kit", "Ebenezer Store"]}
       />
 
       {/* FEATURED */}
@@ -235,6 +228,11 @@ export default function ProductsPage() {
                 )}
                 <h2 className="mt-3 font-serif text-4xl sm:text-5xl lg:text-6xl">{featured.name}</h2>
                 <p className="mt-3 max-w-lg text-sm text-[var(--s-muted)]">{featured.tagline}</p>
+                <ul className="mt-4 space-y-1 text-sm text-[var(--s-paper)]/85">
+                  {(featured.includes || []).slice(0, 4).map((item) => (
+                    <li key={item}>· {item}</li>
+                  ))}
+                </ul>
                 <div className="mt-6 flex items-center gap-4 text-[var(--s-brand)]">
                   <span className="text-lg">{formatINR(featured.price)}</span>
                   <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.2em]">
@@ -268,7 +266,11 @@ export default function ProductsPage() {
               <button
                 key={cat}
                 type="button"
-                onClick={() => setActiveCat(cat)}
+                onClick={() => {
+                  setActiveCat(cat);
+                  const url = cat === "ALL" ? "/products#categories" : `/products?cat=${encodeURIComponent(cat)}#categories`;
+                  window.history.replaceState(null, "", url);
+                }}
                 data-cursor="VIEW"
                 className={`font-serif text-4xl transition sm:text-5xl lg:text-6xl ${
                   activeCat === cat ? "text-[var(--s-brand)]" : "text-[var(--s-paper)]/35 hover:text-[var(--s-paper)]"
@@ -324,6 +326,11 @@ export default function ProductsPage() {
               <p className="text-[11px] uppercase tracking-[0.25em] text-[var(--s-muted)]">{newest.category}</p>
               <h3 className="mt-3 font-serif text-4xl sm:text-6xl">{newest.name}</h3>
               <p className="mt-4 text-[var(--s-muted)]">{newest.tagline}</p>
+              <ul className="mt-5 space-y-1 text-sm text-[var(--s-muted)]">
+                {(newest.includes || []).slice(0, 4).map((item) => (
+                  <li key={item}>· {item}</li>
+                ))}
+              </ul>
               <p className="mt-6 text-[var(--s-brand)]">{formatINR(newest.price)}</p>
             </div>
           </Link>
@@ -361,8 +368,13 @@ export default function ProductsPage() {
                 <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--s-brand)]">Bundle</p>
                 <h4 className="mt-2 font-serif text-3xl">{bundle.name}</h4>
                 <p className="mt-2 text-sm text-[var(--s-muted)]">
-                  {items.length} products · Save vs buying separate
+                  {items.length} kits inside · Save vs buying separate
                 </p>
+                <ul className="mt-3 space-y-1 text-sm text-[var(--s-paper)]/80">
+                  {items.map((item) => (
+                    <li key={item.id}>· {item.name}</li>
+                  ))}
+                </ul>
                 <div className="mt-4 flex items-center gap-3">
                   <span className="text-lg text-[var(--s-brand)]">{formatINR(bundle.price)}</span>
                   {bundle.compareAt && (
@@ -394,9 +406,9 @@ export default function ProductsPage() {
       <section className="border-y border-[var(--s-line)] px-4 py-16 sm:px-8 lg:px-12">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            ["Instant access", "Digital delivery after purchase confirmation"],
-            ["Clear licensing", "Personal and commercial options shown per product"],
-            ["Secure checkout", "Payment connects through a trusted flow"],
+            ["Worldwide", "Instant digital delivery to any country"],
+            ["What’s inside", "Every kit lists real files before you buy"],
+            ["USD pricing", "Clear global prices. Free tools stay free."],
             ["Human support", "Help from Ebenezer Digital when you need it"],
           ].map(([t, d]) => (
             <div key={t} className="border-t border-[var(--s-line)] pt-5">
@@ -436,10 +448,10 @@ export default function ProductsPage() {
           </h3>
           <div className="mt-12 grid gap-10 md:grid-cols-3">
             <div className="space-y-2 text-sm text-[var(--s-muted)]">
-              <a href="#featured" className="block hover:text-[var(--s-brand)]">Explore products</a>
-              <a href="#categories" className="block hover:text-[var(--s-brand)]">Categories</a>
-              <a href="#bundles" className="block hover:text-[var(--s-brand)]">Bundles</a>
-              <a href="#freebies" className="block hover:text-[var(--s-brand)]">Freebies</a>
+              <a href="/products#featured" className="block hover:text-[var(--s-brand)]">Explore products</a>
+              <a href="/products#categories" className="block hover:text-[var(--s-brand)]">Categories</a>
+              <a href="/products#bundles" className="block hover:text-[var(--s-brand)]">Bundles</a>
+              <a href="/products#freebies" className="block hover:text-[var(--s-brand)]">Freebies</a>
               <Link href="/products/free-enquiry-form-kit" className="block text-[var(--s-brand)]">
                 Free Tool → Enquiry Form Kit
               </Link>
@@ -474,7 +486,7 @@ export default function ProductsPage() {
             </form>
           </div>
           <p className="mt-16 text-xs text-[var(--s-muted)]">
-            © {new Date().getFullYear()} Ebenezer Store · Digital products by Ebenezer Digital
+            © {new Date().getFullYear()} Ebenezer Store · Worldwide digital products
           </p>
         </div>
       </footer>

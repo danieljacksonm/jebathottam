@@ -49,7 +49,7 @@ export default function ProductPage({ params }: Props) {
     brand: { "@type": "Brand", name: "Ebenezer Store" },
     offers: {
       "@type": "Offer",
-      priceCurrency: "INR",
+      priceCurrency: "USD",
       price: product.price,
       availability: "https://schema.org/InStock",
       url: `https://ebenezerdigital.com/products/${product.slug}`,
