@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { JournalLanguage } from "./JournalLanguage";
 
 export function JournalNav({
   categories,
@@ -91,6 +92,7 @@ export function JournalNav({
           </nav>
 
           <div className="flex items-center gap-2">
+            <JournalLanguage />
             <button
               type="button"
               aria-label="Search"
@@ -151,7 +153,10 @@ export function JournalNav({
                 {cat}
               </a>
             ))}
-            <Link href="https://ebenezerdigital.com" className="block pt-6 text-[var(--j-brand)]">
+            <Link href="/ai?mode=blog" className="block pt-6 text-[var(--j-brand)]">
+              Eben AI
+            </Link>
+            <Link href="https://ebenezerdigital.com" className="block pt-2 text-[var(--j-brand)]">
               Ebenezer Digital Studio →
             </Link>
           </div>

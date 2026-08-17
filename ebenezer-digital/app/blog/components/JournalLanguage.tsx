@@ -21,7 +21,7 @@ declare global {
 }
 
 const LANGS = [
-  { code: "", label: "Select Language" },
+  { code: "", label: "English" },
   { code: "hi", label: "Hindi" },
   { code: "ta", label: "Tamil" },
   { code: "te", label: "Telugu" },
@@ -34,15 +34,7 @@ const LANGS = [
   { code: "ur", label: "Urdu" },
   { code: "es", label: "Spanish" },
   { code: "fr", label: "French" },
-  { code: "de", label: "German" },
   { code: "ar", label: "Arabic" },
-  { code: "zh-CN", label: "Chinese" },
-  { code: "ja", label: "Japanese" },
-  { code: "ko", label: "Korean" },
-  { code: "pt", label: "Portuguese" },
-  { code: "ru", label: "Russian" },
-  { code: "id", label: "Indonesian" },
-  { code: "tr", label: "Turkish" },
 ];
 
 function readCookie(name: string): string | null {
@@ -58,11 +50,10 @@ function setGoogTrans(lang: string) {
   document.cookie = `googtrans=${value};path=/;domain=${window.location.hostname};${expires}`;
 }
 
-/** Google Website Translator chrome — same look as Google Translate. */
-export function GoogleTranslateBar() {
+/** Quiet language picker. Google Translate runs hidden so it does not restyle the page. */
+export function JournalLanguage() {
   const mountId = useId().replace(/:/g, "");
   const elementId = `google_translate_element_${mountId}`;
-  const [ready, setReady] = useState(false);
   const [lang, setLang] = useState("");
 
   useEffect(() => {
@@ -87,7 +78,6 @@ export function GoogleTranslateBar() {
         },
         elementId
       );
-      setReady(true);
     };
 
     if (!document.getElementById("google-translate-script")) {
@@ -108,33 +98,24 @@ export function GoogleTranslateBar() {
   };
 
   return (
-    <div className="gtranslate-bar" role="region" aria-label="Google Translate">
-      <img
-        src="https://www.gstatic.com/images/branding/product/1x/translate_24dp.png"
-        alt=""
-        width={20}
-        height={20}
-      />
-      <span className="gtranslate-brand">Translated by Google</span>
-      <span className="gtranslate-dot">·</span>
-      <label htmlFor={`gt-select-${mountId}`}>Select Language</label>
+    <div className="journal-lang">
+      <label htmlFor={`journal-lang-${mountId}`} className="sr-only">
+        Language
+      </label>
       <select
-        id={`gt-select-${mountId}`}
+        id={`journal-lang-${mountId}`}
         value={lang}
         onChange={(e) => onPick(e.target.value)}
-        className="gtranslate-select"
+        className="journal-lang-select"
+        aria-label="Translate page"
       >
         {LANGS.map((l) => (
-          <option key={l.code || "default"} value={l.code}>
+          <option key={l.code || "en"} value={l.code}>
             {l.label}
           </option>
         ))}
       </select>
-      <button type="button" className="gtranslate-reset" onClick={() => onPick("")}>
-        Show original
-      </button>
-      <span className="gtranslate-status">{ready ? "Google Translate ready" : "Loading translator…"}</span>
-      <div id={elementId} className="gtranslate-mount" aria-hidden />
+      <div id={elementId} className="journal-lang-mount" aria-hidden />
     </div>
   );
 }

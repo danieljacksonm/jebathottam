@@ -9,7 +9,6 @@ import { JournalNav } from "../components/JournalNav";
 import { JournalCursor } from "../components/JournalCursor";
 import { JournalProgress } from "../components/JournalProgress";
 import { JournalMarquee } from "../components/JournalMarquee";
-import { GoogleTranslateBar } from "../components/GoogleTranslateBar";
 import { formatDate, readingTime, type JournalPost } from "../lib";
 import { STORE_PRODUCTS } from "@/app/products/data";
 import { AskAiPanel } from "@/components/AskAiPanel";
@@ -164,7 +163,6 @@ export function ArticleView({ slug }: { slug: string }) {
 
   return (
     <div className="journal-root relative min-h-screen">
-      <GoogleTranslateBar />
       <div className="journal-grain" />
       <JournalProgress />
       <JournalCursor />

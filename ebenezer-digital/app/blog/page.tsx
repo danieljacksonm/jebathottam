@@ -9,7 +9,6 @@ import { JournalNav } from "./components/JournalNav";
 import { JournalCursor } from "./components/JournalCursor";
 import { JournalProgress } from "./components/JournalProgress";
 import { JournalMarquee } from "./components/JournalMarquee";
-import { GoogleTranslateBar } from "./components/GoogleTranslateBar";
 import { formatDate, readingTime, splitHeadline, type JournalPost } from "./lib";
 import { rotateList, useRotate } from "./useRotate";
 import {
@@ -79,7 +78,6 @@ export default function BlogIndexPage() {
 
   return (
     <div className="journal-root relative min-h-screen">
-      <GoogleTranslateBar />
       <div className="journal-grain" />
       <JournalProgress />
       <JournalCursor />
