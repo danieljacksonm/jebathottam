@@ -36,7 +36,46 @@ const steps = [
   { key: "details", label: "How do we reach you?" },
 ] as const;
 
-export default function Contact() {
+const serviceOptions = [
+  { value: "web", label: "Web Development" },
+  { value: "data", label: "Data Entry & Admin" },
+  { value: "travel", label: "Travel & Booking" },
+  { value: "other", label: "Other Services" },
+];
+
+const budgetOptions = [
+  { value: "500-1000", label: "$500 – $1,000" },
+  { value: "1000-5000", label: "$1,000 – $5,000" },
+  { value: "5000-10000", label: "$5,000 – $10,000" },
+  { value: "10000+", label: "$10,000+" },
+];
+
+function StudioChoices({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <div className="studio-choices" role="listbox">
+      {options.map((opt) => (
+        <button
+          key={opt.value}
+          type="button"
+          role="option"
+          aria-selected={value === opt.value}
+          className={`studio-choice ${value === opt.value ? "is-on" : ""}`}
+          onClick={() => onChange(opt.value)}
+        >
+          {opt.label}
+        </button>
+      ))}
+    </div>
+  );
+}
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -116,32 +155,18 @@ export default function Contact() {
                   className="mt-8 space-y-4"
                 >
                   {step === 0 && (
-                    <select
-                      name="service"
+                    <StudioChoices
                       value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="w-full border-b border-[var(--st-line)] bg-transparent py-3 text-white outline-none"
-                    >
-                      <option value="">Select a service</option>
-                      <option value="web">Web Development</option>
-                      <option value="data">Data Entry & Admin</option>
-                      <option value="travel">Travel & Booking</option>
-                      <option value="other">Other Services</option>
-                    </select>
+                      onChange={(service) => setFormData({ ...formData, service })}
+                      options={serviceOptions}
+                    />
                   )}
                   {step === 1 && (
-                    <select
-                      name="budget"
+                    <StudioChoices
                       value={formData.budget}
-                      onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                      className="w-full border-b border-[var(--st-line)] bg-transparent py-3 text-white outline-none"
-                    >
-                      <option value="">Select budget</option>
-                      <option value="500-1000">$500 - $1,000</option>
-                      <option value="1000-5000">$1,000 - $5,000</option>
-                      <option value="5000-10000">$5,000 - $10,000</option>
-                      <option value="10000+">$10,000+</option>
-                    </select>
+                      onChange={(budget) => setFormData({ ...formData, budget })}
+                      options={budgetOptions}
+                    />
                   )}
                   {step === 2 && (
                     <textarea
@@ -184,7 +209,13 @@ export default function Contact() {
                   </button>
                 )}
                 {step < steps.length - 1 ? (
-                  <button type="button" onClick={next} className="studio-btn" data-cursor="START">
+                  <button
+                    type="button"
+                    onClick={next}
+                    disabled={(step === 0 && !formData.service) || (step === 1 && !formData.budget)}
+                    className="studio-btn disabled:opacity-40"
+                    data-cursor="START"
+                  >
                     Continue
                   </button>
                 ) : (

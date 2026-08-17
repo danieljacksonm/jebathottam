@@ -89,7 +89,38 @@
 
 .studio-root select,
 .studio-root option {
-  color: #111;
+  color: var(--st-fg, #f4f1ea);
+  background: #0c0c0d;
+}
+
+.studio-choices {
+  display: grid;
+  gap: 8px;
+}
+
+.studio-choice {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid var(--st-line, #1f1f20);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--st-muted, rgba(255, 255, 255, 0.55));
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+
+.studio-choice:hover {
+  border-color: rgba(16, 185, 129, 0.55);
+  color: #fff;
+}
+
+.studio-choice.is-on {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  color: #fff;
 }
 
 .studio-marquee {
