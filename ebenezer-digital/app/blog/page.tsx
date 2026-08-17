@@ -12,6 +12,12 @@ import { JournalMarquee } from "./components/JournalMarquee";
 import { GoogleTranslateBar } from "./components/GoogleTranslateBar";
 import { formatDate, readingTime, splitHeadline, type JournalPost } from "./lib";
 import { rotateList, useRotate } from "./useRotate";
+import {
+  SITE_EMAIL,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_TEL,
+  SITE_WHATSAPP_URL,
+} from "@/lib/site-contact";
 import "./journal.css";
 
 const PAGE_SIZE = 24;
@@ -507,6 +513,20 @@ export default function BlogIndexPage() {
               <Link href="https://ebenezerdigital.com/contact" className="mt-2 block hover:text-[var(--j-brand)]">
                 Contact
               </Link>
+              <a href={`mailto:${SITE_EMAIL}`} className="mt-2 block hover:text-[var(--j-brand)]">
+                {SITE_EMAIL}
+              </a>
+              <a href={SITE_PHONE_TEL} className="mt-1 block hover:text-[var(--j-brand)]">
+                {SITE_PHONE_DISPLAY}
+              </a>
+              <a
+                href={SITE_WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 block hover:text-[var(--j-brand)]"
+              >
+                WhatsApp
+              </a>
               <p className="mt-8 text-xs">© {new Date().getFullYear()} Ebenezer Digital Journal</p>
             </div>
           </div>

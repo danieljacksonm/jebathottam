@@ -10,6 +10,7 @@ import { StoreCart } from "../components/StoreCart";
 import { STORE_PRODUCTS, formatINR, type StoreProduct } from "../data";
 import { useStoreI18n } from "../i18n";
 import { localizeProduct } from "../product-i18n";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
 
 type OwnedItem = {
   productId: string;
@@ -105,6 +106,10 @@ export default function StoreAccountPage() {
             );
           })}
         </div>
+        <SiteContactLinks
+          className="mt-16 text-sm text-[var(--s-muted)]"
+          linkClassName="hover:text-[var(--s-brand)]"
+        />
       </main>
     </div>
   );

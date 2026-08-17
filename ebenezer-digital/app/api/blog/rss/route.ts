@@ -18,7 +18,7 @@ function resolveOrigin(url: string, host: string | null): string {
     if (host) return `${u.protocol}//${host}`;
     return u.origin;
   } catch {
-    return process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.info";
+    return process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
   }
 }
 

@@ -1,5 +1,5 @@
 import type { NewsArticle, NewsRegion } from "@/app/blog/news/data";
-import { photoForStory, sanitizeImageUrl, storyFingerprint } from "@/lib/news-photos";
+import { photoForStory, safeNewsCover, storyFingerprint } from "@/lib/news-photos";
 
 export type LiveNewsItem = NewsArticle & {
   origin: "live";
@@ -134,7 +134,7 @@ function pickImage(block: string, region: string, title: string): string {
     attr(block, /<media:thumbnail[^>]+url=["']([^"']+)["']/i) ||
     attr(block, /<enclosure[^>]+url=["']([^"']+\.(?:jpg|jpeg|png|webp)[^"']*)["']/i) ||
     attr(block, /<img[^>]+src=["']([^"']+)["']/i);
-  return sanitizeImageUrl(raw, photoForStory(region, title));
+  return safeNewsCover(raw, photoForStory(region, title), title, region);
 }
 
 async function fetchText(url: string): Promise<string> {
@@ -222,7 +222,12 @@ async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
         location: r.sectionName || "World",
         sourceLabel: fields.publication || "The Guardian",
         publishedAt: toIso(r.webPublicationDate),
-        coverImage: sanitizeImageUrl(fields.thumbnail, photoForStory(mapGuardianSection(r.sectionId || r.sectionName || "world"), fields.headline || r.webTitle)),
+        coverImage: safeNewsCover(
+          fields.thumbnail,
+          photoForStory(mapGuardianSection(r.sectionId || r.sectionName || "world"), fields.headline || r.webTitle),
+          fields.headline || r.webTitle,
+          fields.trailText || ""
+        ),
         featured: items.length < 3,
         origin: "live",
         originalUrl: r.webUrl,

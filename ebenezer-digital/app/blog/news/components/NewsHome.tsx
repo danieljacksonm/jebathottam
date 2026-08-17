@@ -20,6 +20,12 @@ import { WorldDeskMap } from "./WorldDeskMap";
 import { IndiaDesk } from "./IndiaDesk";
 import { WorldBriefing } from "./WorldBriefing";
 import { OriginalLink } from "./OriginalLink";
+import {
+  SITE_EMAIL,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_TEL,
+  SITE_WHATSAPP_URL,
+} from "@/lib/site-contact";
 
 function StoryLink({
   story,
@@ -585,6 +591,20 @@ export function NewsHome() {
             <a href="/api/news/ical" className="block hover:text-white">iCal</a>
             <a href="/api/news?q=" className="block hover:text-white">Search API</a>
             <Link href="https://ebenezerdigital.com/contact" className="block hover:text-white">Contact</Link>
+            <a href={`mailto:${SITE_EMAIL}`} className="block hover:text-white">
+              {SITE_EMAIL}
+            </a>
+            <a href={SITE_PHONE_TEL} className="block hover:text-white">
+              {SITE_PHONE_DISPLAY}
+            </a>
+            <a
+              href={SITE_WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block hover:text-white"
+            >
+              WhatsApp
+            </a>
           </div>
           <div className="space-y-2 text-sm text-white/70">
             <p className="text-[10px] uppercase tracking-[0.22em] text-white/40">Standards</p>

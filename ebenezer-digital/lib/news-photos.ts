@@ -56,6 +56,19 @@ export function sanitizeImageUrl(raw: string | undefined, fallback: string): str
   return upgradeImageUrl(url);
 }
 
+const UNSAFE_TERMS =
+  /\b(kiss|kissing|nude|nudity|lingerie|bikini|erotic|porn|xxx|adult|nsfw|sensual|cleavage|sex tape|bedroom)\b/i;
+
+export function hasUnsafeVisualSignals(input: string): boolean {
+  return UNSAFE_TERMS.test(input.toLowerCase());
+}
+
+export function safeNewsCover(raw: string | undefined, fallback: string, ...signals: string[]): string {
+  const joined = [raw || "", ...signals].join(" ");
+  if (hasUnsafeVisualSignals(joined)) return fallback;
+  return sanitizeImageUrl(raw, fallback);
+}
+
 export function upgradeImageUrl(url: string): string {
   if (url.startsWith("/")) return url;
   let out = url;

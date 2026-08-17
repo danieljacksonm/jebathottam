@@ -5,6 +5,8 @@ import "./globals.css";
 import "./studio/studio.css";
 import SiteChrome from "./studio/SiteChrome";
 import GlobalStyles from "./components/GlobalStyles";
+import { SITE_EMAIL, SITE_PHONE_DISPLAY } from "@/lib/site-contact";
+import { OG_IMAGE, SITE_URL } from "@/lib/site-url";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -27,10 +29,8 @@ const sourceSerif = Source_Serif_4({
   weight: ["400", "600"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: "Ebenezer Digital Services | Reliable Digital & Web Services for Your Business",
   description:
     "Professional data entry, virtual assistance, travel booking support, and web development. Trusted by clients worldwide. Clear communication, on-time delivery, affordable rates.",
@@ -51,22 +51,22 @@ export const metadata: Metadata = {
     description:
       "Professional data entry, virtual assistance, travel booking support, and web development. Trusted by clients worldwide.",
     type: "website",
-    url: siteUrl,
+    url: SITE_URL,
     siteName: "Ebenezer Digital Services",
     locale: "en_US",
-    // Add when you have an image: images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Ebenezer Digital Services" }],
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "Ebenezer Digital Services | Reliable Digital & Web Services",
     description: "Professional data entry, virtual assistance, travel booking, web development. Trusted worldwide.",
+    images: [OG_IMAGE.url],
   },
   robots: {
     index: true,
     follow: true,
     googleBot: { index: true, follow: true },
   },
-  alternates: { canonical: siteUrl },
 };
 
 export default function RootLayout({
@@ -78,12 +78,13 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Ebenezer Digital Services",
-    url: siteUrl,
+    url: SITE_URL,
     description: "Professional data entry, virtual assistance, travel booking support, and web development. Trusted by clients worldwide.",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
-      email: "contact@ebenezerdigitalservices.com",
+      email: SITE_EMAIL,
+      telephone: SITE_PHONE_DISPLAY,
       availableLanguage: "English",
     },
   };

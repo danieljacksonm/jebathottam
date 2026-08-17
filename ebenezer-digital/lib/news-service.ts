@@ -5,7 +5,8 @@ import {
   type NewsRegion,
 } from "@/app/blog/news/data";
 import { fetchLiveNews, getLiveNewsBySlug } from "@/lib/live-news";
-import { storyFingerprint } from "@/lib/news-photos";
+import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
+import { originForKind, siteKindFromHost, JOURNAL_URL } from "@/lib/site-url";
 
 export type PublicNewsItem = NewsArticle & {
   origin: "seed" | "cms" | "live";
@@ -14,6 +15,7 @@ export type PublicNewsItem = NewsArticle & {
 };
 
 function recordToPublic(n: NewsArticleRecord): PublicNewsItem {
+  const fallback = photoForStory(n.region || "World", n.title, n.topic || "General");
   return {
     id: n.id,
     slug: n.slug,
@@ -25,7 +27,7 @@ function recordToPublic(n: NewsArticleRecord): PublicNewsItem {
     location: n.location || "Global",
     sourceLabel: n.sourceLabel || "Ebenezer News Desk",
     publishedAt: (n.publishedAt || n.createdAt).toISOString(),
-    coverImage: n.coverImage || "/images/journal/hero.jpg",
+    coverImage: safeNewsCover(n.coverImage, fallback, n.title, n.dek, n.topic || ""),
     breaking: Boolean(n.breaking),
     featured: Boolean(n.featured),
     origin: "cms",
@@ -38,7 +40,12 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
 
 /** Live world wire + CMS. Seed only if the wire is thin. Dedupes same headline from many agencies. */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
-  const [cms, live] = await Promise.all([db.getNewsArticles(true), fetchLiveNews().catch(() => [])]);
+  const liveBudgetMs = 2200;
+  const liveQuick = Promise.race<PublicNewsItem[] | []>([
+    fetchLiveNews().catch(() => []),
+    new Promise<[]>(resolve => setTimeout(() => resolve([]), liveBudgetMs)),
+  ]);
+  const [cms, live] = await Promise.all([db.getNewsArticles(true), liveQuick]);
   const byKey = new Map<string, PublicNewsItem>();
 
   const put = (item: PublicNewsItem, force = false) => {
@@ -119,7 +126,7 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
 
   const total = list.length;
   const items = list.slice(Math.max(0, offset), Math.max(0, offset) + Math.min(limit, 240));
-  const regions = Array.from(new Set((await listPublicNews()).map((n) => n.region))).sort();
+  const regions = Array.from(new Set(list.map((n) => n.region))).sort();
   const sources = Array.from(new Set(list.map((n) => n.sourceLabel))).sort();
 
   return { total, items, regions, sources, query: q, region: region || "ALL" };
@@ -208,15 +215,10 @@ export function buildIcal(items: PublicNewsItem[], siteOrigin: string): string {
 
 export function resolveSiteOrigin(requestUrl: string, hostHeader?: string | null): string {
   try {
+    if (hostHeader) return originForKind(siteKindFromHost(hostHeader));
     const u = new URL(requestUrl);
-    if (hostHeader) {
-      const host = hostHeader.split(":")[0].toLowerCase();
-      if (host.includes("ebenezerdigital.info")) {
-        return `https://${host}`;
-      }
-    }
-    return `${u.protocol}//${u.host}`;
+    return originForKind(siteKindFromHost(u.host));
   } catch {
-    return "https://ebenezerdigital.info";
+    return JOURNAL_URL;
   }
 }

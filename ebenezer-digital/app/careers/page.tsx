@@ -1,5 +1,15 @@
 import { AnimateOne } from "../components/AnimateOnScroll";
 import ScrollParallax from "../components/ScrollParallax";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
+import { SITE_EMAIL } from "@/lib/site-contact";
+import { pageMetadata } from "@/lib/site-url";
+
+export const metadata = pageMetadata({
+  title: "Careers | Ebenezer Digital Services",
+  description:
+    "Join Ebenezer Digital. We look for people who care about quality, clear communication, data work, web development, and travel support.",
+  path: "/careers",
+});
 
 export default function CareersPage() {
   return (
@@ -15,11 +25,15 @@ export default function CareersPage() {
               We are always looking for talented people who care about quality and clear communication. If you excel at data work, web development, or travel support, we would like to hear from you.
             </p>
             <a
-              href="mailto:careers@ebenezerdigitalservices.com"
+              href={`mailto:${SITE_EMAIL}?subject=Careers%20at%20Ebenezer%20Digital`}
               className="btn-outline-hover btn-ripple inline-flex items-center justify-center rounded-full border-2 border-[var(--accent)]/50 text-[var(--accent)] px-8 py-4 text-base font-semibold hover:border-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors"
             >
               View open roles
             </a>
+            <SiteContactLinks
+              className="mt-8 justify-center text-sm text-[var(--text-muted)]"
+              linkClassName="hover:text-[var(--accent)]"
+            />
           </AnimateOne>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { AiStudio } from "./studio/AiStudio";
+import { SITE_EMAIL, SITE_PHONE_DISPLAY } from "@/lib/site-contact";
 
 export default function AiPage() {
   return (
@@ -15,10 +16,13 @@ export default function AiPage() {
       </Suspense>
 
       <section className="sr-only">
-        <h1>Ask anything with Eben AI</h1>
+        <p>Ask anything with Eben AI</p>
         <p>
           An intelligent space for thinking, creating and discovering. Hosted by
           Ebenezer Digital on our own open-source model.
+        </p>
+        <p>
+          Contact Ebenezer Digital at {SITE_EMAIL} or {SITE_PHONE_DISPLAY}.
         </p>
         <h2>Ask</h2>
         <p>Write a question. Plan a trip. Draft a message. Think out loud.</p>

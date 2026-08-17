@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail } from "lucide-react";
+import { SITE_EMAIL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL, SITE_WHATSAPP_URL } from "@/lib/site-contact";
 
 const TwitterXIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
@@ -196,9 +197,16 @@ export default function Footer() {
               ))}
             </ul>
             <p className="mt-6 text-sm text-white/50">
-              <a href="mailto:contact@ebenezerdigitalservices.com">contact@ebenezerdigitalservices.com</a>
+              <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a>
             </p>
-            <p className="mt-1 text-sm text-white/40">Remote / Worldwide</p>
+            <p className="mt-1 text-sm text-white/40">
+              <a href={SITE_PHONE_TEL}>{SITE_PHONE_DISPLAY}</a>
+              {" · "}
+              <a href={SITE_WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>
+              {" · "}Remote / Worldwide
+            </p>
           </div>
         </div>
       </div>

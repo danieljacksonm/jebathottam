@@ -278,6 +278,21 @@ html[data-ai-accent="pearl"] .ai-os {
   white-space: nowrap;
 }
 
+.ai-side-contact {
+  margin-top: 8px;
+  padding: 8px 10px 0;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 8%, transparent);
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--muted);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ai-side-contact a:hover {
+  color: var(--fg);
+}
+
 .ai-side-nav span,
 .ai-side-foot span,
 .ai-side-item span,
@@ -288,10 +303,13 @@ html[data-ai-accent="pearl"] .ai-os {
 
 .ai-side:hover span,
 .ai-side:hover .ai-side-item button:last-child,
+.ai-side:hover .ai-side-contact,
 .ai-side.is-open span,
 .ai-side.is-open .ai-side-item button:last-child,
+.ai-side.is-open .ai-side-contact,
 .ai-side.is-mobile span,
-.ai-side.is-mobile .ai-side-item button:last-child {
+.ai-side.is-mobile .ai-side-item button:last-child,
+.ai-side.is-mobile .ai-side-contact {
   opacity: 1;
 }
 

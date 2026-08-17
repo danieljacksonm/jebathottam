@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { NewsArticle, NewsNavId } from "../data";
 
+const CACHE_KEY = "eben-news-cache-v1";
+
 type NewsContextValue = {
   articles: NewsArticle[];
   loading: boolean;
@@ -27,6 +29,22 @@ export function NewsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let alive = true;
+    let hasWarmCache = false;
+    // Quick paint from last successful fetch so first open is not blank.
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { items?: NewsArticle[]; updatedAt?: string };
+        if (Array.isArray(parsed.items) && parsed.items.length) {
+          hasWarmCache = true;
+          setArticles(parsed.items);
+          setUpdatedAt(parsed.updatedAt || "");
+          setLoading(false);
+        }
+      }
+    } catch {
+      // ignore local cache parse errors
+    }
 
     const load = (first = false) => {
       if (first) setLoading(true);
@@ -34,8 +52,19 @@ export function NewsProvider({ children }: { children: ReactNode }) {
         .then((r) => r.json())
         .then((data) => {
           if (!alive) return;
-          setArticles(Array.isArray(data.items) ? data.items : []);
-          setUpdatedAt(new Date().toISOString());
+          const items = Array.isArray(data.items) ? data.items : [];
+          if (items.length) {
+            setArticles(items);
+            const stamp = new Date().toISOString();
+            setUpdatedAt(stamp);
+            try {
+              localStorage.setItem(CACHE_KEY, JSON.stringify({ items, updatedAt: stamp }));
+            } catch {
+              // ignore storage full errors
+            }
+          } else if (first) {
+            setArticles([]);
+          }
         })
         .catch(() => {
           if (alive && first) setArticles([]);
@@ -45,7 +74,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
         });
     };
 
-    load(true);
+    load(!hasWarmCache);
     const timer = window.setInterval(() => load(false), 10 * 1000);
     return () => {
       alive = false;

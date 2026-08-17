@@ -18,6 +18,7 @@ import {
   type StoreProduct,
 } from "../data";
 import { AskAiPanel } from "@/components/AskAiPanel";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { formatProductsForAi } from "@/lib/ai";
 
 export function ProductView({ product: raw }: { product: StoreProduct }) {
@@ -85,6 +86,21 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
             <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--s-brand)]">{product.category}</p>
             <h1 className="mt-4 font-serif text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">{product.name}</h1>
             <p className="mt-4 text-[var(--s-muted)]">{product.tagline}</p>
+            {product.pdfs?.length ? (
+              <div className="mt-5 grid gap-2 sm:grid-cols-2">
+                {product.pdfs.slice(0, 4).map((pdf) => (
+                  <a
+                    key={pdf.file}
+                    href={pdf.file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border border-[var(--s-line)] bg-black/25 px-3 py-2 text-[11px] uppercase tracking-[0.12em] text-[var(--s-paper)]/85 hover:border-[var(--s-brand)]"
+                  >
+                    {pdf.label}
+                  </a>
+                ))}
+              </div>
+            ) : null}
 
             {(product.rating || product.reviews) && (
               <div className="mt-5 flex items-center gap-2 text-sm text-[var(--s-muted)]">
@@ -359,6 +375,10 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
         <Link href="/products" className="mt-8 inline-flex items-center gap-2 text-[var(--s-brand)]">
           Back to store <ArrowUpRight className="h-4 w-4" />
         </Link>
+        <SiteContactLinks
+          className="mt-8 text-sm text-[var(--s-muted)]"
+          linkClassName="hover:text-[var(--s-brand)]"
+        />
       </footer>
 
       {/* Mobile sticky buy bar */}

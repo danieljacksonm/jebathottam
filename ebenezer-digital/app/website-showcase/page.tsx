@@ -2,6 +2,13 @@ import Image from "next/image";
 import { AnimateSection, AnimateOne } from "../components/AnimateOnScroll";
 import ScrollParallax from "../components/ScrollParallax";
 import { IMG } from "@/lib/images";
+import { pageMetadata } from "@/lib/site-url";
+
+export const metadata = pageMetadata({
+  title: "Website Showcase | Ebenezer Digital Services",
+  description: "Example website layouts and page types we build for consulting, services, and small businesses.",
+  path: "/website-showcase",
+});
 
 const sites = [
   {

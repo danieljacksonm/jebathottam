@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { EbenDock } from "@/components/EbenDock";
+import { pageMetadata } from "@/lib/site-url";
 
-export const metadata: Metadata = {
+const base = pageMetadata({
   title: "Ebenezer Journal | Learn Digital Simply + World News",
   description:
-    "1000+ simple digital lessons (electricity, Wi‑Fi, AI, internet) written for Class‑5 clarity, plus E> World News. Explore more with Eben AI. RSS ready for Google News and Microsoft feeds.",
+    "Simple digital lessons and the Ebenezer Journal — written clearly, plus world news. RSS ready for Google News and Microsoft feeds.",
+  path: "/blog",
+});
+
+export const metadata: Metadata = {
+  ...base,
   openGraph: {
+    ...base.openGraph,
     title: "Ebenezer Journal & Learn Desk",
     description: "Simple detailed digital explainers and a world newsroom from Ebenezer Digital.",
-    type: "website",
   },
   alternates: {
+    ...base.alternates,
     types: {
       "application/rss+xml": [{ url: "/api/blog/rss", title: "Ebenezer Journal RSS" }],
     },

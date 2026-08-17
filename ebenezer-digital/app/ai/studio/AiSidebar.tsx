@@ -12,6 +12,7 @@ import {
   User,
   X,
 } from "lucide-react";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
 import type { Project, Thread } from "./types";
 
 export function AiSidebar({
@@ -112,6 +113,7 @@ export function AiSidebar({
             <User className="h-4 w-4" />
             <span>You</span>
           </span>
+          <SiteContactLinks stacked className="ai-side-contact" />
         </div>
       </aside>
     </>

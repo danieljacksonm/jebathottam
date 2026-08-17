@@ -13,6 +13,7 @@ import {
   type NewsArticle,
 } from "../data";
 import { AskAiPanel } from "@/components/AskAiPanel";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
 
 export function NewsArticleView({
   article,
@@ -212,6 +213,10 @@ export function NewsArticleView({
           </Link>
         </section>
       )}
+      <SiteContactLinks
+        className="px-4 pb-16 text-sm text-[var(--n-muted)] sm:px-8 lg:px-12"
+        linkClassName="hover:text-[var(--n-live)]"
+      />
     </>
   );
 }

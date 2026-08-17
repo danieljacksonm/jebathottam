@@ -11,6 +11,7 @@ import {
   type SaasState,
   type DocType,
 } from "@/lib/saas-local";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
 
 type Tab = "home" | "invoices" | "customers" | "stock" | "expenses" | "settings";
 
@@ -327,6 +328,11 @@ export default function SaasApp() {
           </section>
         )}
       </main>
+
+      <footer className="saas-no-print mx-auto max-w-5xl px-4 pb-10 sm:px-8">
+        <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--s-muted)]">Need help?</p>
+        <SiteContactLinks className="mt-2 text-sm text-[var(--s-muted)]" linkClassName="hover:text-[var(--s-brand)]" />
+      </footer>
 
       {printDoc && (
         <section className="mx-auto hidden max-w-xl p-8 saas-print">

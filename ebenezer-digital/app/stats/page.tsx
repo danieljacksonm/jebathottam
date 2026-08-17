@@ -1,5 +1,12 @@
 import { AnimateSection, AnimateOne } from "../components/AnimateOnScroll";
 import ScrollParallax from "../components/ScrollParallax";
+import { pageMetadata } from "@/lib/site-url";
+
+export const metadata = pageMetadata({
+  title: "Results & Stats | Ebenezer Digital Services",
+  description: "Delivery focus, client communication, and the kind of work Ebenezer Digital is built for.",
+  path: "/stats",
+});
 
 export default function StatsPage() {
   return (

@@ -12,6 +12,7 @@ import { STORE_PRODUCTS, formatINR } from "../data";
 import { useStoreI18n } from "../i18n";
 import { localizeProduct } from "../product-i18n";
 import { AskAiPanel } from "@/components/AskAiPanel";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { formatProductsForAi } from "@/lib/ai";
 
 /**
@@ -146,6 +147,10 @@ function CheckoutInner() {
             <p className="text-xs text-[var(--s-muted)]">
               Kits are free for now. When a paid order is needed, PayPal takes cards and PayPal balance worldwide (USD).
             </p>
+            <SiteContactLinks
+              className="text-sm text-[var(--s-muted)]"
+              linkClassName="hover:text-[var(--s-brand)]"
+            />
             <div className="pt-4">
               <AskAiPanel
                 mode="billing"

@@ -399,7 +399,8 @@ class Database {
       this.settings = {
         siteName: "Ebenezar Digital Services",
         siteDescription: "Reliable digital work for businesses everywhere.",
-        contactEmail: "contact@ebenezar.com",
+        contactEmail: "info@ebenezerdigital.com",
+        contactPhone: "+91 98944 96560",
         socialLinks: {},
       };
       this.syncDigitalProductsFromCatalog();

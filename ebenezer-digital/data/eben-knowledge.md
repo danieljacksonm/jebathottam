@@ -5,8 +5,8 @@ Website: https://ebenezerdigital.com
 News: https://ebenezerdigital.info (also /blog/news)
 Store: https://ebenezerdigital.store (also /products)
 Chat: https://ebenezerdigital.com/ai
-
-## What Ebenezer Digital does
+Email: info@ebenezerdigital.com
+Phone / WhatsApp: +91 98944 96560
 - Websites and digital services for small businesses
 - Virtual assistance, data entry, travel booking support
 - Digital products: UI kits, templates, ebooks, software, free tools

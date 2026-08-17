@@ -7,8 +7,8 @@ Use this list before moving the site to production.
 ## 1. Content & copy
 
 - [ ] **Replace placeholder contact details**
-  - Update WhatsApp number in Contact section (currently `+1 (234) 567-890` and "Replace with your real number")
-  - Confirm email: `contact@ebenezerdigitalservices.com` (or replace)
+  - Contact email: `info@ebenezerdigital.com`
+  - Phone / WhatsApp: `+91 98944 96560`
 - [ ] **Review all copy** for accuracy (services, process, work samples)
 - [ ] **Work / portfolio** – Replace example projects with real projects and real images (or keep as placeholders and label as examples)
 - [ ] **Legal pages** – Add links in footer to Privacy Policy and Terms of Service (create those pages if required in your region)

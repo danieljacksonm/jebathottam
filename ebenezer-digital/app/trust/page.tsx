@@ -2,6 +2,13 @@ import Image from "next/image";
 import { AnimateSection, AnimateOne } from "../components/AnimateOnScroll";
 import ScrollParallax from "../components/ScrollParallax";
 import { IMG } from "@/lib/images";
+import { pageMetadata } from "@/lib/site-url";
+
+export const metadata = pageMetadata({
+  title: "Trust & Reliability | Ebenezer Digital Services",
+  description: "How Ebenezer Digital keeps projects on time, clear, and easy to work with.",
+  path: "/trust",
+});
 
 export default function TrustPage() {
   return (

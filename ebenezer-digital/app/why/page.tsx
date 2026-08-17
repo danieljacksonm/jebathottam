@@ -1,3 +1,12 @@
+import { pageMetadata } from "@/lib/site-url";
+
+export const metadata = pageMetadata({
+  title: "Why Ebenezer Digital | About our studio",
+  description:
+    "We focus on clear communication, on-time delivery, and practical digital work for businesses in India and worldwide.",
+  path: "/why",
+});
+
 export default function WhyPage() {
   return (
     <main className="bg-[#070708] px-4 pb-24 pt-28 sm:px-8 lg:px-10">

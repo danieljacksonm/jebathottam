@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
 import ContactForm from "../components/ContactForm";
+import { SITE_EMAIL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL, SITE_WHATSAPP_URL } from "@/lib/site-contact";
+import { pageMetadata } from "@/lib/site-url";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Contact | Ebenezer Digital Services",
+  description:
+    "Email, WhatsApp, or send a project brief. Ebenezer Digital replies quickly with a clear quote and timeline.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (
@@ -19,15 +29,19 @@ export default function ContactPage() {
           <div className="mt-10 space-y-5 text-sm">
             <p>
               <span className="block text-[10px] uppercase tracking-[0.2em] text-white/40">Email</span>
-              <a href="mailto:contact@ebenezerdigitalservices.com" className="text-white">
-                contact@ebenezerdigitalservices.com
+              <a href={`mailto:${SITE_EMAIL}`} className="text-white">
+                {SITE_EMAIL}
               </a>
             </p>
             <p>
-              <span className="block text-[10px] uppercase tracking-[0.2em] text-white/40">PayPal (custom work)</span>
-              <span className="text-white/70">
-                For paid client projects we can invoice through PayPal — cards and PayPal worldwide, in USD.
-              </span>
+              <span className="block text-[10px] uppercase tracking-[0.2em] text-white/40">Phone / WhatsApp</span>
+              <a href={SITE_PHONE_TEL} className="text-white">
+                {SITE_PHONE_DISPLAY}
+              </a>
+              {" · "}
+              <a href={SITE_WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-emerald-400">
+                WhatsApp
+              </a>
             </p>
           </div>
         </div>

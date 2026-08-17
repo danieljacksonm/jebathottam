@@ -155,19 +155,6 @@ export default function AdminLoginPage() {
               )}
             </button>
           </form>
-
-          {/* Demo Credentials */}
-          <div className="mt-6 p-4 rounded-lg bg-slate-950/50 border border-slate-800">
-            <p className="text-xs text-slate-500 uppercase tracking-wider mb-2">
-              Demo Credentials
-            </p>
-            <p className="text-sm text-slate-400">
-              Email: <span className="text-slate-300">admin@ebenezar.com</span>
-            </p>
-            <p className="text-sm text-slate-400">
-              Password: <span className="text-slate-300">admin123</span>
-            </p>
-          </div>
         </div>
 
         {/* Back to Site */}

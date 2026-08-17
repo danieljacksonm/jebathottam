@@ -12,6 +12,7 @@ import { useStore } from "../components/StoreProvider";
 import { STORE_PRODUCTS, formatINR, type StoreProduct } from "../data";
 import { useStoreI18n } from "../i18n";
 import { localizeProduct } from "../product-i18n";
+import { SiteContactLinks } from "@/components/SiteContactLinks";
 
 const OWNED_KEY = "ebenezer-store-owned";
 
@@ -130,6 +131,10 @@ function SuccessInner() {
             Continue shopping
           </Link>
         </div>
+        <SiteContactLinks
+          className="mt-8 justify-center text-sm text-[var(--s-muted)]"
+          linkClassName="hover:text-[var(--s-brand)]"
+        />
       </main>
     </div>
   );

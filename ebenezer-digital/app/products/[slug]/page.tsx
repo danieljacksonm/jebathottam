@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { redirect } from "next/navigation";
 import { getProduct, STORE_PRODUCTS, formatINR } from "../data";
 import { ProductView } from "./ProductView";
+import { canonicalFor } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -21,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: product.name,
       description: product.tagline,
       type: "website",
+      url: canonicalFor(`/products/${product.slug}`),
       images: [{ url: product.image }],
     },
     twitter: {
@@ -29,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: product.tagline,
       images: [product.image],
     },
-    alternates: { canonical: `/products/${product.slug}` },
+    alternates: { canonical: canonicalFor(`/products/${product.slug}`) },
   };
 }
 
@@ -52,7 +54,7 @@ export default function ProductPage({ params }: Props) {
       priceCurrency: "USD",
       price: product.price,
       availability: "https://schema.org/InStock",
-      url: `https://ebenezerdigital.com/products/${product.slug}`,
+      url: canonicalFor(`/products/${product.slug}`),
     },
     ...(product.rating
       ? {

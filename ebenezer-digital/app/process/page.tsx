@@ -1,3 +1,12 @@
+import { pageMetadata } from "@/lib/site-url";
+
+export const metadata = pageMetadata({
+  title: "Our Process | Ebenezer Digital Services",
+  description:
+    "How we work: contact, discuss requirements, share a clear quote, execute, and deliver with support.",
+  path: "/process",
+});
+
 const steps = [
   { step: 1, title: "You contact us", body: "Reach out by email or WhatsApp with a short description of what you need. No commitment yet—just tell us about your project." },
   { step: 2, title: "Requirement discussion", body: "We ask a few questions to understand your goals, format, and preferences. This helps us give you an accurate quote and timeline." },

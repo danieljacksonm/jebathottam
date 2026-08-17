@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Cormorant_Garamond, Outfit } from "next/font/google";
+import { pageMetadata } from "@/lib/site-url";
 import "./ai.css";
 
 const display = Cormorant_Garamond({
@@ -17,21 +18,12 @@ const ui = Outfit({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
-
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Eben AI | Ask anything",
   description:
     "Eben AI — an intelligent space for thinking, creating and discovering. Private, calm AI by Ebenezer Digital.",
-  alternates: { canonical: `${siteUrl}/ai` },
-  openGraph: {
-    title: "Eben AI",
-    description: "An intelligent space for thinking, creating and discovering.",
-    url: `${siteUrl}/ai`,
-    type: "website",
-  },
-  robots: { index: true, follow: true },
-};
+  path: "/ai",
+});
 
 export default function AiLayout({ children }: { children: ReactNode }) {
   return (

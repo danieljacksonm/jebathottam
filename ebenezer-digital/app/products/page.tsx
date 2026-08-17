@@ -18,6 +18,12 @@ import {
   type StoreProduct,
 } from "./data";
 import { markForCategory } from "@/lib/brand-marks";
+import {
+  SITE_EMAIL,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_TEL,
+  SITE_WHATSAPP_URL,
+} from "@/lib/site-contact";
 
 function ProductCard({
   product,
@@ -228,6 +234,18 @@ export default function ProductsPage() {
                 )}
                 <h2 className="mt-3 font-serif text-4xl sm:text-5xl lg:text-6xl">{featured.name}</h2>
                 <p className="mt-3 max-w-lg text-sm text-[var(--s-muted)]">{featured.tagline}</p>
+                {featured.pdfs?.length ? (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {featured.pdfs.slice(0, 3).map((pdf) => (
+                      <span
+                        key={pdf.file}
+                        className="border border-white/20 bg-black/35 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-white/85"
+                      >
+                        {pdf.label}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
                 <ul className="mt-4 space-y-1 text-sm text-[var(--s-paper)]/85">
                   {(featured.includes || []).slice(0, 4).map((item) => (
                     <li key={item}>· {item}</li>
@@ -368,7 +386,7 @@ export default function ProductsPage() {
                 <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--s-brand)]">Bundle</p>
                 <h4 className="mt-2 font-serif text-3xl">{bundle.name}</h4>
                 <p className="mt-2 text-sm text-[var(--s-muted)]">
-                  {items.length} kits inside · Save vs buying separate
+                  {items.length} kits inside · Real files included
                 </p>
                 <ul className="mt-3 space-y-1 text-sm text-[var(--s-paper)]/80">
                   {items.map((item) => (
@@ -461,6 +479,20 @@ export default function ProductsPage() {
             </div>
             <div className="space-y-2 text-sm text-[var(--s-muted)]">
               <Link href="https://ebenezerdigital.com/contact" className="block hover:text-[var(--s-brand)]">Support</Link>
+              <a href={`mailto:${SITE_EMAIL}`} className="block hover:text-[var(--s-brand)]">
+                {SITE_EMAIL}
+              </a>
+              <a href={SITE_PHONE_TEL} className="block hover:text-[var(--s-brand)]">
+                {SITE_PHONE_DISPLAY}
+              </a>
+              <a
+                href={SITE_WHATSAPP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block hover:text-[var(--s-brand)]"
+              >
+                WhatsApp
+              </a>
               <Link href="https://ebenezerdigital.com/terms" className="block hover:text-[var(--s-brand)]">License</Link>
               <Link href="https://ebenezerdigital.com/privacy" className="block hover:text-[var(--s-brand)]">Privacy</Link>
               <Link href="https://ebenezerdigital.com" className="block hover:text-[var(--s-brand)]">Studio</Link>

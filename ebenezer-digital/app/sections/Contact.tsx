@@ -2,17 +2,28 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  SITE_EMAIL,
+  SITE_PHONE_DISPLAY,
+  SITE_PHONE_TEL,
+  SITE_WHATSAPP_URL,
+} from "@/lib/site-contact";
 
 const contactInfo = [
   {
     label: "Email",
-    value: "contact@ebenezerdigitalservices.com",
-    href: "mailto:contact@ebenezerdigitalservices.com",
+    value: SITE_EMAIL,
+    href: `mailto:${SITE_EMAIL}`,
   },
   {
     label: "Phone",
-    value: "+1 (555) 123-4567",
-    href: "tel:+15551234567",
+    value: SITE_PHONE_DISPLAY,
+    href: SITE_PHONE_TEL,
+  },
+  {
+    label: "WhatsApp",
+    value: SITE_PHONE_DISPLAY,
+    href: SITE_WHATSAPP_URL,
   },
   { label: "Location", value: "Remote / Worldwide", href: "#" },
   { label: "Working Hours", value: "24/7 Support Available", href: "#" },

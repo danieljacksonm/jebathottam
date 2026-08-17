@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllNews, readingMinutes } from "../data";
 import { getPublicNewsBySlug, listPublicNews } from "@/lib/news-service";
 import { NewsArticleView } from "./NewsArticleView";
+import { canonicalFor } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -22,6 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: article.title,
       description: article.dek,
+      url: canonicalFor(`/blog/news/${article.slug}`),
       images: article.coverImage ? [article.coverImage] : undefined,
       type: "article",
       publishedTime: article.publishedAt,
@@ -34,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: article.coverImage ? [article.coverImage] : undefined,
     },
     alternates: {
-      canonical: `/blog/news/${article.slug}`,
+      canonical: canonicalFor(`/blog/news/${article.slug}`),
     },
   };
 }
@@ -57,7 +59,7 @@ export default async function NewsArticlePage({ params }: Props) {
     dateModified: article.publishedAt,
     author: { "@type": "Organization", name: article.sourceLabel },
     publisher: { "@type": "Organization", name: "Ebenezer News" },
-    mainEntityOfPage: `/blog/news/${article.slug}`,
+    mainEntityOfPage: canonicalFor(`/blog/news/${article.slug}`),
     timeRequired: `PT${readingMinutes(article)}M`,
   };
 

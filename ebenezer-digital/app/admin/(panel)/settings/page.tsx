@@ -44,8 +44,8 @@ interface Settings {
 const initialSettings: Settings = {
   siteName: "Ebenezer Digital Services",
   siteDescription: "Reliable digital work for businesses everywhere.",
-  contactEmail: "contact@ebenezar.com",
-  contactPhone: "+1 (555) 123-4567",
+  contactEmail: "info@ebenezerdigital.com",
+  contactPhone: "+91 98944 96560",
   address: "Remote / Worldwide",
   socialLinks: {
     twitter: "https://twitter.com/ebenezar",

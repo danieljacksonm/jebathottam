@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { ArticleView } from "./ArticleView";
+import { canonicalFor } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -24,6 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description,
       type: "article",
+      url: canonicalFor(`/blog/${post.slug}`),
       publishedTime: post.publishedAt?.toISOString?.() || undefined,
       authors: [post.author],
       images,
@@ -35,7 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: post.coverImage ? [post.coverImage] : undefined,
     },
     alternates: {
-      canonical: `/blog/${post.slug}`,
+      canonical: canonicalFor(`/blog/${post.slug}`),
       types: {
         "application/rss+xml": [{ url: "/api/blog/rss", title: "Ebenezer Journal RSS" }],
       },
@@ -58,7 +60,7 @@ export default async function BlogPostPage({ params }: Props) {
         keywords: (post.tags || []).join(", "),
         mainEntityOfPage: {
           "@type": "WebPage",
-          "@id": `/blog/${post.slug}`,
+          "@id": canonicalFor(`/blog/${post.slug}`),
         },
         publisher: {
           "@type": "Organization",
