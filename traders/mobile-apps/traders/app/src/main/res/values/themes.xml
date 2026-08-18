@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.YegovaTraders" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/traders_primary</item>
+        <item name="colorPrimaryVariant">@color/traders_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/traders_dark</item>
+        <item name="android:navigationBarColor">@color/traders_dark</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+</resources>

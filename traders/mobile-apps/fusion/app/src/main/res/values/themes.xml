@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.YegovaFusion" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/fusion_primary</item>
+        <item name="colorPrimaryVariant">@color/fusion_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/fusion_dark</item>
+        <item name="android:navigationBarColor">@color/fusion_dark</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+</resources>

@@ -1,0 +1,67 @@
+/* YEGOVA TRADERS — deep navy / gold professional theme */
+:root {
+  --yt-bg: #f4f6fb;
+  --yt-primary: #1e3a5f;
+  --yt-primary-2: #254e7a;
+  --yt-accent: #c9a227;
+  --yt-card: #ffffff;
+  --yt-text: #152238;
+  --yt-muted: #5d6b82;
+  --yt-border: #d7deea;
+  --yt-thead: linear-gradient(135deg, #1e3a5f, #2f5d8c);
+  --yt-stat1: linear-gradient(135deg, #1e3a5f, #3b6ea5);
+  --yt-stat2: linear-gradient(135deg, #8a6d1d, #c9a227);
+  --yt-stat3: linear-gradient(135deg, #0f766e, #14b8a6);
+  --yt-stat4: linear-gradient(135deg, #7f1d1d, #dc2626);
+}
+
+body.theme-traders {
+  background: radial-gradient(1000px 420px at 0% 0%, #dbe7f6 0%, transparent 55%),
+              radial-gradient(800px 360px at 100% 0%, #f8efd2 0%, transparent 50%),
+              var(--yt-bg);
+  color: var(--yt-text);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  padding-bottom: 80px;
+}
+
+.theme-traders .card,
+.theme-traders .form-section {
+  background: var(--yt-card);
+  border: 1px solid var(--yt-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(30, 58, 95, 0.08);
+}
+
+.theme-traders h2, .theme-traders .section-title { color: var(--yt-primary); font-weight: 750; }
+.theme-traders .table thead { background: var(--yt-thead); color: #fff; }
+.theme-traders .btn-primary { background: var(--yt-primary); border-color: var(--yt-primary); }
+.theme-traders .btn-success { background: #1e3a5f; border-color: #1e3a5f; }
+.theme-traders .btn-warning { background: var(--yt-accent); border-color: var(--yt-accent); color: #1a1405; font-weight: 700; }
+.theme-traders .top-nav .btn, .theme-traders .cat-btn { min-height: 42px; border-radius: 12px; }
+.theme-traders .stat-card {
+  border-radius: 16px; color: #fff; padding: 1rem 1.1rem; min-height: 96px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+.theme-traders .stat-card .label { opacity: 0.92; font-size: 0.85rem; }
+.theme-traders .stat-card .value { font-size: 1.55rem; font-weight: 800; }
+.theme-traders .brand-pill {
+  background: var(--yt-primary); color: #fff; border-radius: 999px;
+  padding: 0.35rem 0.9rem; font-weight: 700; font-size: 0.85rem;
+}
+.theme-traders .brand-pill span { color: var(--yt-accent); }
+.theme-traders .search-bar {
+  border: 2px solid var(--yt-border); border-radius: 14px; font-size: 16px; padding: 0.7rem 1rem;
+}
+.theme-traders .search-bar:focus { border-color: var(--yt-primary); box-shadow: 0 0 0 3px rgba(30,58,95,0.18); }
+
+@media (max-width: 767px) {
+  .theme-traders .desktop-only { display: none !important; }
+  .theme-traders .bill-mobile-card {
+    display: block; background: #fff; border: 1px solid var(--yt-border);
+    border-radius: 14px; padding: 12px; margin-bottom: 10px;
+  }
+  .theme-traders .bill-mobile-card .actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+}
+@media (min-width: 768px) {
+  .theme-traders .mobile-only { display: none !important; }
+}

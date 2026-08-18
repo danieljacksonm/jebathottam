@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yegova Fusion</string>
+    <!-- Change this to your live Fusion site URL (https preferred) -->
+    <string name="site_url">http://cococola.yegova.store/</string>
+</resources>

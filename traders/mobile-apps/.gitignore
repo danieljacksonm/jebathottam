@@ -1,0 +1,11 @@
+# Android/Java SDK copies — too large for GitHub (100 MB limit)
+.build-tools/
+**/*.zip
+**/*.jar
+**/jdk-*/
+**/gradle-*/
+.gradle/
+**/build/
+*.apk
+*.aab
+local.properties

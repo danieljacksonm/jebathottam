@@ -1,0 +1,10 @@
+# Huge local toolchains (GitHub max file is 100 MB)
+traders/mobile-apps/.build-tools/
+
+# JS / Android build junk
+**/node_modules/
+**/.next/
+**/.gradle/
+**/build/
+*.apk
+*.aab

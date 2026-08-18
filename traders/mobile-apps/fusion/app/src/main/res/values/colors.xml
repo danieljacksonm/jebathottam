@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="fusion_primary">#0F766E</color>
+    <color name="fusion_dark">#115E59</color>
+    <color name="fusion_light">#CCFBF1</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>
