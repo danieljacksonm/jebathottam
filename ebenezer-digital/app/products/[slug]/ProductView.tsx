@@ -250,7 +250,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
       {/* ── Kit contents ────────────────────────────── */}
       <section id="kit" className="scroll-mt-20 border-t border-[var(--s-line)] bg-[var(--s-surface)]">
         <div className="s-page py-12">
-          <span className="s-section-label">What's inside</span>
+          <span className="s-section-label">What&apos;s inside</span>
           <h2 className="mb-2 text-2xl font-bold text-[var(--s-ink)]">Every file you get</h2>
           <p className="mb-8 max-w-xl text-sm text-[var(--s-muted)]">
             Instant digital delivery worldwide. No shipping. Files shown here are exactly what you receive.

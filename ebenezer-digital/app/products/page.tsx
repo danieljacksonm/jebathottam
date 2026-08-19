@@ -391,7 +391,7 @@ export default function ProductsPage() {
               ))}
             </div>
             <blockquote className="font-display text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">
-              "Clean products. Clear value. Easy to use for real client work."
+              &ldquo;Clean products. Clear value. Easy to use for real client work.&rdquo;
             </blockquote>
             <p className="mt-4 text-sm text-[var(--s-muted)]">
               Early store buyers · Ebenezer Digital clients
