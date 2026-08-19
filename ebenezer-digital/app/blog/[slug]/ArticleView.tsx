@@ -19,6 +19,7 @@ type RelatedLite = Pick<JournalPost, "id" | "title" | "slug" | "excerpt" | "cove
 
 function renderBlocks(content: string, images: string[], title: string) {
   const blocks = content.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
+  // Use images starting from index 1 so index 0 is already used as hero cover
   const extras = images.slice(1);
   let img = 0;
   const nodes: ReactNode[] = [];
@@ -36,10 +37,49 @@ function renderBlocks(content: string, images: string[], title: string) {
           {para.replace(/^###\s+/, "")}
         </h3>
       );
+    } else if (para.startsWith("> ")) {
+      // Blockquote — key insight callout
+      nodes.push(
+        <blockquote
+          key={`bq-${i}`}
+          className="my-6 border-l-4 border-[var(--j-brand)] bg-[rgba(16,185,129,0.07)] px-5 py-4 text-[var(--j-paper)]/90 italic"
+        >
+          {para.replace(/^>\s+/, "").replace(/\*\*/g, "")}
+        </blockquote>
+      );
+    } else if (para.includes("✓ ")) {
+      // Key takeaways checklist
+      const lines = para.split("\n").filter(Boolean);
+      nodes.push(
+        <ul key={`kta-${i}`} className="my-4 space-y-2">
+          {lines.map((line, li) => (
+            <li key={li} className="flex items-start gap-2 text-[var(--j-paper)]/90">
+              <span className="mt-1 shrink-0 text-[var(--j-brand)]">✓</span>
+              <span>{line.replace(/^✓\s*/, "")}</span>
+            </li>
+          ))}
+        </ul>
+      );
     } else if (para.startsWith("**Myth:") || para.startsWith("**Truth:")) {
       nodes.push(
         <p key={`m-${i}`} className="whitespace-pre-line text-[var(--j-paper)]/90">
           {para.replace(/\*\*/g, "")}
+        </p>
+      );
+    } else if (/^\d+\.\s/.test(para) && para.includes("\n")) {
+      // Numbered list
+      const lines = para.split("\n").filter(Boolean);
+      nodes.push(
+        <ol key={`ol-${i}`} className="my-4 list-decimal space-y-2 pl-5 text-[var(--j-muted)]">
+          {lines.map((line, li) => (
+            <li key={li}>{line.replace(/^\d+\.\s*/, "")}</li>
+          ))}
+        </ol>
+      );
+    } else if (para.startsWith("•") || para.startsWith("1.") && !para.includes("\n")) {
+      nodes.push(
+        <p key={`b-${i}`} className="whitespace-pre-line text-[var(--j-muted)]">
+          {para}
         </p>
       );
     } else {
@@ -57,23 +97,25 @@ function renderBlocks(content: string, images: string[], title: string) {
       );
     }
 
-    const shouldInsert = extras[img] && !para.startsWith("#") && (i + 1) % 3 === 0;
+    // Insert a related image every 4 non-heading blocks
+    const shouldInsert = extras[img] && !para.startsWith("#") && !para.startsWith(">") && (i + 1) % 4 === 0;
     if (shouldInsert) {
       const src = extras[img];
       img += 1;
       nodes.push(
-        <figure key={`img-${src}-${i}`} className="my-10 overflow-hidden">
-          <div className="relative aspect-[16/9]">
+        <figure key={`img-${img}-${i}`} className="my-12 overflow-hidden rounded-sm">
+          <div className="relative aspect-[16/9] w-full bg-[#111]">
             <Image
               src={src}
-              alt={`${title} — related visual`}
+              alt={`${title} — illustration ${img}`}
               fill
               className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 768px"
+              sizes="(max-width: 768px) 100vw, 800px"
+              quality={90}
             />
           </div>
           <figcaption className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[var(--j-muted)]">
-            Related visual for this lesson
+            Visual illustration for this section
           </figcaption>
         </figure>
       );
@@ -224,7 +266,7 @@ export function ArticleView({ slug }: { slug: string }) {
           </div>
         </header>
 
-        <motion.div style={{ scale: heroScale }} className="relative mx-4 aspect-[21/10] overflow-hidden bg-[#111] sm:mx-8 lg:mx-12">
+        <motion.div style={{ scale: heroScale }} className="relative mx-4 aspect-[21/9] overflow-hidden bg-[#111] sm:mx-8 lg:mx-12">
           <Image
             src={post.coverImage || "/images/journal/hero.jpg"}
             alt={post.title}
@@ -232,6 +274,7 @@ export function ArticleView({ slug }: { slug: string }) {
             priority
             className="object-cover object-center"
             sizes="100vw"
+            quality={92}
           />
         </motion.div>
 
