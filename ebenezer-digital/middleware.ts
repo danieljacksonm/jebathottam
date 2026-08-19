@@ -30,6 +30,11 @@ function isStoreHost(host: string): boolean {
   );
 }
 
+function isToolsHost(host: string): boolean {
+  const h = host.toLowerCase().split(':')[0];
+  return h === 'tools.ebenezerdigital.com' || h === 'deals.ebenezerdigital.com';
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get('host') || '';
@@ -56,6 +61,15 @@ export function middleware(request: NextRequest) {
     if (pathname === '/' || pathname === '') {
       const url = request.nextUrl.clone();
       url.pathname = '/products';
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // tools.ebenezerdigital.com → /tools comparison page
+  if (isToolsHost(host)) {
+    if (pathname === '/' || pathname === '') {
+      const url = request.nextUrl.clone();
+      url.pathname = '/tools';
       return NextResponse.redirect(url);
     }
   }
@@ -103,5 +117,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/news', '/news/:path*', '/admin', '/admin/:path*', '/blog', '/blog/:path*', '/products', '/products/:path*', '/saas', '/saas/:path*'],
+  matcher: ['/', '/news', '/news/:path*', '/admin', '/admin/:path*', '/blog', '/blog/:path*', '/products', '/products/:path*', '/saas', '/saas/:path*', '/tools', '/tools/:path*'],
 };
