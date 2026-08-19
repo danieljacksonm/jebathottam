@@ -55,7 +55,8 @@ export type Tool = {
   tagline: string;
   description: string;
   category: ToolCategory;
-  logo: string; // emoji fallback — replace with real logo path when available
+  logo: string; // emoji fallback
+  logoImg?: string; // real logo URL from official CDN
   url: string; // your affiliate link
   affiliateNote?: string; // shown only in code, not on page
   pricing: {
@@ -93,6 +94,7 @@ export const TOOLS: Tool[] = [
       "Built specifically for small shop owners worldwide. Create invoices, track stock, manage customers, and print on any printer. No installation. Starts completely free.",
     category: "Billing & Invoicing",
     logo: "🟢",
+    logoImg: "/brand/ebenezer-store-mark.svg",
     url: "/saas",
     pricing: { free: true, freeLabel: "Free forever (current plan)", paid: "Coming soon", paidLabel: "Paid starter plan launching soon" },
     rating: 5,
@@ -116,6 +118,7 @@ export const TOOLS: Tool[] = [
       "Zoho Invoice is a popular free invoicing tool with templates, automated reminders, and client portals. Part of the Zoho suite — integrates with Zoho CRM and Books.",
     category: "Billing & Invoicing",
     logo: "🔵",
+    logoImg: "https://www.zohowebstatic.com/sites/zweb/images/zoho_general_pages/zoho-logo-web.svg",
     url: "https://www.zoho.com/invoice/",
     affiliateNote: "APPLY NOW — https://www.zoho.com/affiliate/signup.html — 15% for 12 months, 90-day cookie, instant approval",
     pricing: { free: true, freeLabel: "Free for up to 1,000 invoices/year", paid: "$15/mo", paidLabel: "Zoho One suite" },
@@ -133,6 +136,7 @@ export const TOOLS: Tool[] = [
       "The world's most used small business accounting software. Powerful features including GST reports, payroll, and multi-currency. Better for businesses that need full accounting.",
     category: "Billing & Invoicing",
     logo: "🟩",
+    logoImg: "https://quickbooks.intuit.com/content/dam/intuit/quickbooks/logos/qb-logo-2022.svg",
     url: "https://quickbooks.intuit.com/",
     affiliateNote: "APPLY — https://quickbooks.intuit.com/partners/affiliates/ — up to $50 per referral",
     pricing: { free: false, paid: "$15–$100/mo", paidLabel: "30-day free trial available" },
@@ -149,6 +153,7 @@ export const TOOLS: Tool[] = [
       "Wave is a free accounting, invoicing, and receipt scanning tool. Genuinely free with no hidden limits — makes money through payment processing fees.",
     category: "Billing & Invoicing",
     logo: "🌊",
+    logoImg: "https://www.waveapps.com/wp-content/themes/waveapps/dist/images/wave-logo.svg",
     url: "https://www.waveapps.com/",
     affiliateNote: "Wave affiliate: https://www.waveapps.com/partners",
     pricing: { free: true, freeLabel: "Accounting and invoicing free forever", paid: "2.9% + 30¢", paidLabel: "Payment processing fee only" },
@@ -168,6 +173,7 @@ export const TOOLS: Tool[] = [
       "WhatsApp Business is the free app version for small businesses. Set up a professional profile, add a catalogue, and use auto-replies. Used by 200M+ businesses worldwide.",
     category: "WhatsApp & Messaging",
     logo: "💬",
+    logoImg: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
     url: "https://business.whatsapp.com/",
     pricing: { free: true, freeLabel: "Completely free app" },
     rating: 5,
@@ -185,6 +191,7 @@ export const TOOLS: Tool[] = [
       "WATI gives you access to the official WhatsApp Business API — bulk messages, chatbots, shared team inbox, and CRM integration. Good for businesses that outgrow the free app.",
     category: "WhatsApp & Messaging",
     logo: "📲",
+    logoImg: "https://www.wati.io/wp-content/uploads/2021/09/wati-logo.svg",
     url: "https://www.wati.io/",
     affiliateNote: "WATI affiliate: https://www.wati.io/partners/",
     pricing: { free: false, paid: "$49/mo", paidLabel: "14-day free trial" },
@@ -204,6 +211,7 @@ export const TOOLS: Tool[] = [
       "The world's most popular design tool for non-designers. Thousands of templates for social media, presentations, flyers, and more. The free plan is very generous.",
     category: "Design & Branding",
     logo: "🎨",
+    logoImg: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Canva_Logo.svg",
     url: "https://www.canva.com/",
     affiliateNote: "APPLY via Canvassador program — https://public.canva.site/canvassadors — takes 1-2 weeks, then get Impact tracking link",
     pricing: { free: true, freeLabel: "Free with thousands of templates", paid: "$13/mo", paidLabel: "Canva Pro — unlimited assets" },
@@ -222,6 +230,7 @@ export const TOOLS: Tool[] = [
       "Buffer lets you schedule posts to Instagram, Facebook, LinkedIn, and Twitter/X in advance. Saves time and keeps your social media consistent without being online all day.",
     category: "Social Media",
     logo: "📅",
+    logoImg: "https://buffer.com/static/icons/buffer-icon.svg",
     url: "https://buffer.com/",
     affiliateNote: "Buffer affiliate: https://buffer.com/affiliate-program",
     pricing: { free: true, freeLabel: "3 channels free", paid: "$6/mo per channel", paidLabel: "Buffer Essentials" },
@@ -238,6 +247,7 @@ export const TOOLS: Tool[] = [
       "Later is the best tool for visually planning your Instagram grid. See exactly how posts will look before they go live. Also supports Facebook, TikTok, and Pinterest.",
     category: "Social Media",
     logo: "🗓️",
+    logoImg: "https://later.com/wp-content/uploads/2023/01/later-logo.svg",
     url: "https://later.com/",
     affiliateNote: "Later affiliate: https://later.com/affiliate-program/",
     pricing: { free: true, freeLabel: "1 social set, 30 posts/month free", paid: "$18/mo", paidLabel: "Later Starter" },
@@ -256,6 +266,7 @@ export const TOOLS: Tool[] = [
       "Adobe Express (formerly Adobe Spark) is Adobe's beginner-friendly design tool. Less powerful than Canva Pro but integrates with Adobe Creative Cloud. Good if you already use Adobe tools.",
     category: "Design & Branding",
     logo: "🅰️",
+    logoImg: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Adobe_Express_logo.svg",
     url: "https://www.adobe.com/express/",
     affiliateNote: "Adobe affiliate: https://www.adobe.com/affiliates.html — up to 85% first month commission",
     pricing: { free: true, freeLabel: "Free with limited templates", paid: "$9.99/mo", paidLabel: "Adobe Express Premium" },
@@ -272,6 +283,7 @@ export const TOOLS: Tool[] = [
       "Looka uses AI to generate logo options based on your industry, colors, and style preferences. Get a full brand kit including logo, business card, and social media templates.",
     category: "Design & Branding",
     logo: "✨",
+    logoImg: "https://looka.com/wp-content/themes/looka/images/logos/looka_logo_black.svg",
     url: "https://looka.com/",
     affiliateNote: "Looka affiliate: https://looka.com/affiliates/ — 15–30% commission",
     pricing: { free: false, paid: "$20 one-time or $96/yr", paidLabel: "Logo package or Brand kit subscription" },
@@ -291,6 +303,7 @@ export const TOOLS: Tool[] = [
       "Notion replaces your notes, to-do lists, spreadsheets, and team wikis in one tool. Very popular with freelancers, startups, and small teams. Free plan is very capable.",
     category: "Productivity",
     logo: "📝",
+    logoImg: "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png",
     url: "https://www.notion.so/",
     affiliateNote: "MONITOR — https://www.notion.com/affiliates — currently paused for new applicants (mid-2026). Check back monthly. Pays $50 per signup + 20% year-1 revenue via PartnerStack.",
     pricing: { free: true, freeLabel: "Free for individuals — unlimited pages", paid: "$10/mo per member", paidLabel: "Notion Plus" },
@@ -309,6 +322,7 @@ export const TOOLS: Tool[] = [
       "Google Workspace gives your business professional email (yourname@yourbusiness.com), 30GB storage, Google Meet video calls, and all Google apps with your brand domain.",
     category: "Productivity",
     logo: "🔵",
+    logoImg: "https://lh3.googleusercontent.com/oWxaRbF8Yyv0BNQaeMp1jZKC8U9CfIfkmU2J8Vk9ZhgJUXmxvT2zSmz1V4LU2f0IQXqpg=w16383",
     url: "https://workspace.google.com/",
     affiliateNote: "Google Workspace affiliate: https://workspace.google.com/partners/",
     pricing: { free: false, paid: "$6/mo per user", paidLabel: "Business Starter — 14-day free trial" },

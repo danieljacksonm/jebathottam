@@ -53,6 +53,29 @@ function Badge({ label }: { label: string }) {
 }
 
 /* ── Tool card ───────────────────────────────────────── */
+function ToolLogo({ tool }: { tool: Tool }) {
+  const domain = (() => {
+    try { return new URL(tool.url.startsWith("http") ? tool.url : "https://ebenezerdigital.com").hostname.replace("www.", ""); }
+    catch { return ""; }
+  })();
+  const src = tool.logoImg || (domain ? `https://logo.clearbit.com/${domain}?size=96` : "");
+  const [failed, setFailed] = useState(false);
+
+  if (src && !failed) {
+    return (
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white border border-gray-100 overflow-hidden p-1">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={tool.name} width={40} height={40} className="h-10 w-10 object-contain" onError={() => setFailed(true)} />
+      </div>
+    );
+  }
+  return (
+    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-2xl border border-gray-100">
+      {tool.logo}
+    </div>
+  );
+}
+
 function ToolCard({ tool }: { tool: Tool }) {
   const [expanded, setExpanded] = useState(false);
 
@@ -63,10 +86,7 @@ function ToolCard({ tool }: { tool: Tool }) {
       {/* Header */}
       <div className="p-5">
         <div className="flex items-start gap-4">
-          {/* Logo placeholder */}
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-2xl border border-gray-100">
-            {tool.logo}
-          </div>
+          <ToolLogo tool={tool} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="font-semibold text-gray-900">{tool.name}</h3>
@@ -264,7 +284,7 @@ export default function ToolsPage() {
                 href={`#${tool.category.toLowerCase().replace(/[^a-z]+/g, "-")}`}
                 className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition hover:border-emerald-300 hover:bg-emerald-50"
               >
-                <span className="text-xl">{tool.logo}</span>
+                <ToolLogo tool={tool} />
                 <div className="min-w-0 flex-1">
                   <p className="font-semibold text-sm text-gray-900">{tool.name}</p>
                   <p className="text-xs text-gray-500 truncate">{tool.category}</p>
