@@ -1,7 +1,42 @@
 /**
  * Ebenezer Tools — Affiliate comparison data
- * Every tool link should be replaced with your actual affiliate URL once you
- * sign up for each programme. Placeholder links are used here.
+ *
+ * HOW TO EARN:
+ * ─────────────────────────────────────────────────────────────
+ * 1. ZOHO (EASIEST — apply first):
+ *    Sign up: https://www.zoho.com/affiliate/signup.html
+ *    Earn: 15% of revenue for 12 months. 90-day cookie.
+ *    Replace: url for "zoho-invoice" with your Impact/Zoho tracking link.
+ *
+ * 2. RAZORPAY (India — no approval wait):
+ *    Sign up: https://razorpay.com/partners/
+ *    Earn: 0.1% of every transaction + Rs.500 per referral.
+ *    Instant approval — just log in to dashboard and get your link.
+ *    Replace: url for "razorpay" with your partner dashboard referral link.
+ *
+ * 3. CANVA (apply via Canvassador):
+ *    Sign up: https://public.canva.site/canvassadors
+ *    Earn: Commission on Canva Pro via Impact platform.
+ *    Requires approval (1-2 weeks). Apply now so it is ready.
+ *    Replace: url for "canva" with your Impact tracking link.
+ *
+ * 4. NOTION (currently paused — monitor and apply when open):
+ *    Page: https://www.notion.com/affiliates
+ *    Earn: $50 per signup + 20% of year-1 revenue. 180-day cookie.
+ *    Replace: url for "notion" with your PartnerStack link when approved.
+ *
+ * 5. BREVO (Email marketing — open signup):
+ *    Sign up: https://www.brevo.com/partners/affiliates/
+ *    Earn: €5 per free signup + €100 per paid conversion.
+ *    Replace: url for "brevo" with your affiliate link.
+ *
+ * 6. FRAMER (apply when ready):
+ *    Sign up: https://www.framer.com/affiliates/
+ *    Earn: Commission on paid plans.
+ *    Replace: url for "framer" with your tracking link.
+ *
+ * Until you have your real links, all urls below go to the tool's homepage.
+ * ─────────────────────────────────────────────────────────────
  */
 
 export type ToolCategory =
@@ -82,7 +117,7 @@ export const TOOLS: Tool[] = [
     category: "Billing & Invoicing",
     logo: "🔵",
     url: "https://www.zoho.com/invoice/",
-    affiliateNote: "Sign up for Zoho partner program: https://www.zoho.com/partners/",
+    affiliateNote: "APPLY NOW — https://www.zoho.com/affiliate/signup.html — 15% for 12 months, 90-day cookie, instant approval",
     pricing: { free: true, freeLabel: "Free for up to 1,000 invoices/year", paid: "$15/mo", paidLabel: "Zoho One suite" },
     rating: 4,
     bestFor: "Freelancers, consultants, service businesses",
@@ -99,7 +134,7 @@ export const TOOLS: Tool[] = [
     category: "Billing & Invoicing",
     logo: "🟩",
     url: "https://quickbooks.intuit.com/",
-    affiliateNote: "Affiliate: https://quickbooks.intuit.com/partners/affiliates/ — up to $50 per referral",
+    affiliateNote: "APPLY — https://quickbooks.intuit.com/partners/affiliates/ — up to $50 per referral",
     pricing: { free: false, paid: "$15–$100/mo", paidLabel: "30-day free trial available" },
     rating: 4,
     bestFor: "Established businesses needing full accounting and payroll",
@@ -170,7 +205,7 @@ export const TOOLS: Tool[] = [
     category: "Design & Branding",
     logo: "🎨",
     url: "https://www.canva.com/",
-    affiliateNote: "Canva affiliate: https://www.canva.com/affiliates/ — 25–80% commission on Pro",
+    affiliateNote: "APPLY via Canvassador program — https://public.canva.site/canvassadors — takes 1-2 weeks, then get Impact tracking link",
     pricing: { free: true, freeLabel: "Free with thousands of templates", paid: "$13/mo", paidLabel: "Canva Pro — unlimited assets" },
     rating: 5,
     bestFor: "Small businesses, social media managers, anyone creating visual content",
@@ -257,7 +292,7 @@ export const TOOLS: Tool[] = [
     category: "Productivity",
     logo: "📝",
     url: "https://www.notion.so/",
-    affiliateNote: "Notion affiliate: https://www.notion.so/affiliates — 50% first-year commission",
+    affiliateNote: "MONITOR — https://www.notion.com/affiliates — currently paused for new applicants (mid-2026). Check back monthly. Pays $50 per signup + 20% year-1 revenue via PartnerStack.",
     pricing: { free: true, freeLabel: "Free for individuals — unlimited pages", paid: "$10/mo per member", paidLabel: "Notion Plus" },
     rating: 5,
     bestFor: "Solo founders, freelancers, small teams managing projects and knowledge",
@@ -327,7 +362,7 @@ export const TOOLS: Tool[] = [
     category: "Email Marketing",
     logo: "📧",
     url: "https://www.brevo.com/",
-    affiliateNote: "Brevo affiliate: https://www.brevo.com/partners/affiliates/",
+    affiliateNote: "APPLY NOW — https://www.brevo.com/partners/affiliates/ — €5 per free signup + €100 per paid conversion. Open program.",
     pricing: { free: true, freeLabel: "300 emails/day, unlimited contacts free", paid: "$9/mo", paidLabel: "Brevo Starter" },
     rating: 5,
     bestFor: "Growing businesses with large contact lists who want better pricing than Mailchimp",
@@ -347,7 +382,7 @@ export const TOOLS: Tool[] = [
     category: "Website Builders",
     logo: "🖥️",
     url: "https://www.framer.com/",
-    affiliateNote: "Framer affiliate: https://www.framer.com/affiliates/",
+    affiliateNote: "APPLY — https://www.framer.com/affiliates/ — commission on paid plans. Open program.",
     pricing: { free: true, freeLabel: "Publish on framer.site free", paid: "$14/mo", paidLabel: "Framer Mini — custom domain" },
     rating: 5,
     bestFor: "Creators, freelancers, and startups who want a stunning website fast",
@@ -383,7 +418,7 @@ export const TOOLS: Tool[] = [
     category: "Payments",
     logo: "💳",
     url: "https://razorpay.com/",
-    affiliateNote: "Razorpay affiliate: https://razorpay.com/partners/",
+    affiliateNote: "APPLY NOW — https://razorpay.com/partners/ — INSTANT approval, no waiting. Earn 0.1% of all transactions + Rs.500 per referral. Best India affiliate.",
     pricing: { free: true, freeLabel: "No monthly fee — 2% per transaction", paid: "Custom", paidLabel: "Volume pricing available" },
     rating: 5,
     bestFor: "India-based businesses accepting digital payments from customers",

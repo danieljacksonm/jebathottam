@@ -341,6 +341,121 @@ export default function ToolsPage() {
         )}
       </main>
 
+      {/* ── How you earn — affiliate guide ───────────── */}
+      <section className="border-t border-gray-200 bg-gray-900 text-white">
+        <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
+          <div className="mb-8">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-xs font-semibold text-white">
+              For Ebenezer Digital team
+            </span>
+            <h2 className="mt-3 text-2xl font-bold text-white sm:text-3xl">
+              How you earn from this page
+            </h2>
+            <p className="mt-2 text-gray-400 max-w-2xl">
+              Apply to these affiliate programmes, get your tracking links, and replace the plain URLs in{" "}
+              <code className="rounded bg-gray-800 px-1.5 py-0.5 text-emerald-400 text-xs">app/tools/data.ts</code>{" "}
+              with your affiliate links. Every click that converts earns you commission automatically.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                name: "Razorpay Partner",
+                tag: "APPLY NOW — Instant",
+                commission: "0.1% per transaction + ₹500 per referral",
+                cookie: "Recurring",
+                url: "https://razorpay.com/partners/",
+                highlight: true,
+                note: "Best for India. No approval wait. Just sign up and get your link from the dashboard.",
+              },
+              {
+                name: "Zoho Affiliate",
+                tag: "APPLY NOW — 5 days approval",
+                commission: "15–20% of revenue for 12 months",
+                cookie: "90-day cookie",
+                url: "https://www.zoho.com/affiliate/signup.html",
+                highlight: true,
+                note: "One of the best affiliate programmes for business tools. Apply first — easiest approval.",
+              },
+              {
+                name: "Brevo (Email)",
+                tag: "APPLY NOW — Open",
+                commission: "€5 per free signup + €100 per paid",
+                cookie: "Open programme",
+                url: "https://www.brevo.com/partners/affiliates/",
+                highlight: true,
+                note: "Email marketing tool. Easy to promote alongside the WhatsApp kit.",
+              },
+              {
+                name: "Canva Canvassador",
+                tag: "Apply — 1-2 weeks",
+                commission: "Commission on Canva Pro via Impact",
+                cookie: "30-day cookie",
+                url: "https://public.canva.site/canvassadors",
+                highlight: false,
+                note: "Apply now so approval is ready. Most popular design tool — easy to convert.",
+              },
+              {
+                name: "Framer Affiliate",
+                tag: "Apply — Open",
+                commission: "Commission on paid plans",
+                cookie: "Open programme",
+                url: "https://www.framer.com/affiliates/",
+                highlight: false,
+                note: "Good fit with the landing page kit audience.",
+              },
+              {
+                name: "Notion Affiliate",
+                tag: "Monitor — Currently paused",
+                commission: "$50 per signup + 20% year-1 revenue",
+                cookie: "180-day cookie",
+                url: "https://www.notion.com/affiliates",
+                highlight: false,
+                note: "Programme is paused mid-2026. Check back monthly — very high commission when open.",
+              },
+            ].map((prog) => (
+              <div
+                key={prog.name}
+                className={`rounded-xl border p-5 ${
+                  prog.highlight
+                    ? "border-emerald-600 bg-emerald-950"
+                    : "border-gray-700 bg-gray-800"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-semibold text-white">{prog.name}</p>
+                  <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                    prog.highlight ? "bg-emerald-600 text-white" : "bg-gray-700 text-gray-300"
+                  }`}>
+                    {prog.tag}
+                  </span>
+                </div>
+                <p className="mt-2 text-sm font-semibold text-emerald-400">{prog.commission}</p>
+                <p className="text-xs text-gray-500">{prog.cookie}</p>
+                <p className="mt-2 text-xs text-gray-400">{prog.note}</p>
+                <a
+                  href={prog.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`mt-4 inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition ${
+                    prog.highlight
+                      ? "bg-emerald-600 text-white hover:bg-emerald-500"
+                      : "bg-gray-700 text-white hover:bg-gray-600"
+                  }`}
+                >
+                  Open signup page <ExternalLink className="h-3 w-3" />
+                </a>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-xs text-gray-600">
+            After you get approved and receive your tracking links, open{" "}
+            <code className="text-emerald-500">app/tools/data.ts</code> and replace each tool&apos;s{" "}
+            <code className="text-emerald-500">url</code> field with your affiliate link. Every visitor who clicks and buys earns you commission — automatically, with no extra work.
+          </p>
+        </div>
+      </section>
+
       {/* ── Ebenezer Store CTA ───────────────────────── */}
       <section className="border-t border-gray-200 bg-emerald-600">
         <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
