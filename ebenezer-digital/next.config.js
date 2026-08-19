@@ -5,7 +5,7 @@ const nextConfig = {
   webpack(config) {
     config.watchOptions = {
       ...config.watchOptions,
-      ignored: [...(config.watchOptions?.ignored || []), "**/yegova-saas/**"],
+      ignored: ["**/node_modules/**", "**/yegova-saas/**"],
     };
     return config;
   },
