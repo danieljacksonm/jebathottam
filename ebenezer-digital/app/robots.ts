@@ -9,10 +9,12 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/api/blog/rss", "/api/news/rss", "/api/news/ical"],
-        disallow: ["/admin/", "/api/admin/", "/api/auth/", "/products/checkout", "/products/account", "/products/success"],
+        allow: ["/", "/api/blog/rss", "/api/news/rss", "/api/news/ical", "/api/news/sitemap"],
+        disallow: ["/admin/", "/api/admin/", "/api/auth/", "/saas/login", "/products/checkout", "/products/account", "/products/success"],
       },
     ],
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: kind === "journal"
+      ? [`${base}/sitemap.xml`, `${base}/api/news/sitemap`]
+      : `${base}/sitemap.xml`,
   };
 }

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { pageMetadata } from "@/lib/site-url";
-import "./saas.css";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Ebenezer SaaS | Shop billing",
+  title: "Yegova Billing | Free Cloud Billing for Traders & Shops",
   description:
-    "Free cloud-style billing for shops — invoices, quotations, stock, customers, and print. Runs in your browser.",
+    "Yegova is a free cloud billing app for Indian traders — GST invoices, stock management, party ledger, thermal print, and reports. No credit card needed.",
   path: "/saas",
 });
 

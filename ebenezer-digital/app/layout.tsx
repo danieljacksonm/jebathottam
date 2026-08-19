@@ -84,8 +84,8 @@ export default function RootLayout({
       "@type": "ContactPoint",
       contactType: "customer service",
       email: SITE_EMAIL,
-      telephone: SITE_PHONE_DISPLAY,
-      availableLanguage: "English",
+    telephone: SITE_PHONE_DISPLAY,
+      availableLanguage: ["English", "Hindi", "Tamil", "Telugu", "Malayalam", "Kannada", "Bengali", "Marathi", "Gujarati", "Punjabi", "Urdu", "Spanish", "French", "Arabic"],
     },
   };
 

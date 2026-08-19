@@ -149,6 +149,11 @@ export function buildRssXml(items: PublicNewsItem[], siteOrigin: string): string
     .slice(0, 40)
     .map((n) => {
       const link = `${siteOrigin}/blog/news/${n.slug}`;
+      const image = n.coverImage
+        ? n.coverImage.startsWith("http")
+          ? n.coverImage
+          : `${siteOrigin}${n.coverImage}`
+        : "";
       return `<item>
   <title>${escapeXml(n.title)}</title>
   <link>${link}</link>
@@ -156,21 +161,50 @@ export function buildRssXml(items: PublicNewsItem[], siteOrigin: string): string
   <pubDate>${new Date(n.publishedAt).toUTCString()}</pubDate>
   <category>${escapeXml(n.region)}</category>
   <description>${escapeXml(n.dek)}</description>
+  ${image ? `<media:content url="${escapeXml(image)}" medium="image"/>` : ""}
 </item>`;
     })
     .join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
   <title>E&gt; Ebenezer World News</title>
   <link>${channelLink}</link>
+  <atom:link href="${siteOrigin}/api/news/rss" rel="self" type="application/rss+xml"/>
   <description>Global news desks from Ebenezer Digital .info — world, Asia, Europe, Americas, Africa, India, tech, climate.</description>
   <language>en</language>
   <lastBuildDate>${new Date(lastBuild).toUTCString()}</lastBuildDate>
 ${entries}
 </channel>
 </rss>`;
+}
+
+export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string): string {
+  const urls = items.slice(0, 1000).map((n) => {
+    const loc = `${siteOrigin}/blog/news/${n.slug}`;
+    const publicationDate = new Date(n.publishedAt).toISOString();
+    return `<url>
+  <loc>${escapeXml(loc)}</loc>
+  <news:news>
+    <news:publication>
+      <news:name>Ebenezer World News</news:name>
+      <news:language>en</news:language>
+    </news:publication>
+    <news:publication_date>${publicationDate}</news:publication_date>
+    <news:title>${escapeXml(n.title)}</news:title>
+  </news:news>
+  <lastmod>${publicationDate}</lastmod>
+</url>`;
+  });
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"
+>
+${urls.join("\n")}
+</urlset>`;
 }
 
 function icsDate(iso: string): string {

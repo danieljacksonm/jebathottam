@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Menu, Search, Radio, X } from "lucide-react";
 import { NEWS_NAV } from "../data";
 import { useNews } from "./NewsProvider";
+import { QuietTranslate } from "@/components/QuietTranslate";
 
 export function NewsNav() {
   const { setSearchOpen, menuOpen, setMenuOpen, setActiveNav, activeNav } = useNews();
@@ -46,6 +47,7 @@ export function NewsNav() {
           </Link>
 
           <div className="flex items-center gap-1 sm:gap-2">
+            <QuietTranslate variant="news" />
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
@@ -124,6 +126,21 @@ export function NewsNav() {
             <a href="/api/news/rss" className="block">
               RSS
             </a>
+            <a href="/api/news/sitemap" className="block">
+              News sitemap
+            </a>
+            <Link href="/blog/newsroom/about" onClick={() => setMenuOpen(false)} className="block">
+              About the desk
+            </Link>
+            <Link href="/blog/newsroom/editorial-policy" onClick={() => setMenuOpen(false)} className="block">
+              Editorial policy
+            </Link>
+            <Link href="/blog/newsroom/feeds" onClick={() => setMenuOpen(false)} className="block">
+              Public feeds
+            </Link>
+            <Link href="/blog/newsroom/contact" onClick={() => setMenuOpen(false)} className="block">
+              Contact
+            </Link>
             <a href="/api/news/ical" className="block">
               iCal
             </a>

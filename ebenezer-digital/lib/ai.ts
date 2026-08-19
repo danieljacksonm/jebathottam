@@ -5,6 +5,9 @@ export const OLLAMA_BASE_URL =
 
 export const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "qwen2.5:1.5b";
 
+/** Public-facing model brand name shown to users */
+export const MODEL_BRAND = "Nzer 1.0";
+
 export type AiMode = "general" | "news" | "product" | "billing" | "blog";
 
 export const AI_BRAND = "Eben AI";
@@ -145,7 +148,7 @@ export async function checkOllamaHealth(): Promise<{
         ? undefined
         : models.length === 0
           ? "No models installed. Run: ollama pull qwen2.5:1.5b"
-          : `Model ${OLLAMA_MODEL} not found. Installed: ${models.join(", ")}`,
+          : `Nzer 1.0 (${OLLAMA_MODEL}) not found. Installed: ${models.join(", ")}`,
     };
   } catch (err) {
     return {

@@ -65,6 +65,10 @@ export default async function BlogPostPage({ params }: Props) {
         publisher: {
           "@type": "Organization",
           name: "Ebenezer Digital",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://ebenezerdigital.info/og-journal.png",
+          },
         },
       }
     : null;

@@ -48,6 +48,34 @@ export default function GlobalStyles() {
         outline: 2px solid rgba(16, 185, 129, 0.7);
         outline-offset: 2px;
       }
+
+      /* Hide Google Translate chrome everywhere — we use our own language picker */
+      body {
+        top: 0 !important;
+      }
+      .skiptranslate,
+      iframe.goog-te-banner-frame,
+      .goog-te-banner-frame,
+      #goog-gt-tt,
+      .goog-te-balloon-frame,
+      .goog-tooltip,
+      .goog-text-highlight,
+      .goog-te-gadget,
+      .VIpgJd-ZVi9od-ORHb-OEVmcd,
+      .VIpgJd-ZVi9od-aZ2wEe-wOHMyf {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+      }
+      .quiet-translate-mount {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+      }
     `}</style>
   );
 }

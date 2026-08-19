@@ -263,6 +263,35 @@
   transform-origin: left;
 }
 
+.news-lang {
+  position: relative;
+}
+
+.news-lang-select {
+  max-width: 7.5rem;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--n-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--n-ink);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  outline: none;
+  cursor: pointer;
+}
+
+.news-lang-select:hover,
+.news-lang-select:focus {
+  border-color: var(--n-ink);
+}
+
+.news-lang-select option {
+  color: #111;
+  background: #fff;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .news-ticker-track,
   .news-pulse,

@@ -12,6 +12,9 @@ const base = pageMetadata({
 
 export const metadata: Metadata = {
   ...base,
+  other: {
+    google: "notranslate",
+  },
   openGraph: {
     ...base.openGraph,
     title: "Ebenezer Journal & Learn Desk",

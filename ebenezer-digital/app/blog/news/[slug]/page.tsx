@@ -58,7 +58,14 @@ export default async function NewsArticlePage({ params }: Props) {
     datePublished: article.publishedAt,
     dateModified: article.publishedAt,
     author: { "@type": "Organization", name: article.sourceLabel },
-    publisher: { "@type": "Organization", name: "Ebenezer News" },
+        publisher: {
+          "@type": "NewsMediaOrganization",
+          name: "Ebenezer News",
+          logo: {
+            "@type": "ImageObject",
+            url: "https://ebenezerdigital.info/og-news.png",
+          },
+        },
     mainEntityOfPage: canonicalFor(`/blog/news/${article.slug}`),
     timeRequired: `PT${readingMinutes(article)}M`,
   };

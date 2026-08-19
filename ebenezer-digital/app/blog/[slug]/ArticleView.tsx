@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -17,43 +17,70 @@ import "../journal.css";
 
 type RelatedLite = Pick<JournalPost, "id" | "title" | "slug" | "excerpt" | "coverImage" | "category" | "author" | "publishedAt">;
 
-function renderBlocks(content: string) {
+function renderBlocks(content: string, images: string[], title: string) {
   const blocks = content.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
-  return blocks.map((para, i) => {
+  const extras = images.slice(1);
+  let img = 0;
+  const nodes: ReactNode[] = [];
+
+  blocks.forEach((para, i) => {
     if (para.startsWith("## ")) {
-      return (
-        <h2 key={i} className="mt-14 font-serif text-3xl text-[var(--j-paper)] sm:text-4xl">
+      nodes.push(
+        <h2 key={`h2-${i}`} className="mt-14 font-serif text-3xl text-[var(--j-paper)] sm:text-4xl">
           {para.replace(/^##\s+/, "")}
         </h2>
       );
-    }
-    if (para.startsWith("### ")) {
-      return (
-        <h3 key={i} className="mt-10 font-serif text-2xl text-[var(--j-paper)]">
+    } else if (para.startsWith("### ")) {
+      nodes.push(
+        <h3 key={`h3-${i}`} className="mt-10 font-serif text-2xl text-[var(--j-paper)]">
           {para.replace(/^###\s+/, "")}
         </h3>
       );
-    }
-    if (para.startsWith("**Myth:") || para.startsWith("**Truth:")) {
-      return (
-        <p key={i} className="whitespace-pre-line text-[var(--j-paper)]/90">
+    } else if (para.startsWith("**Myth:") || para.startsWith("**Truth:")) {
+      nodes.push(
+        <p key={`m-${i}`} className="whitespace-pre-line text-[var(--j-paper)]/90">
           {para.replace(/\*\*/g, "")}
         </p>
       );
+    } else {
+      nodes.push(
+        <motion.p
+          key={`p-${i}`}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-8%" }}
+          transition={{ duration: 0.45 }}
+          className="whitespace-pre-line"
+        >
+          {para}
+        </motion.p>
+      );
     }
-    return (
-      <motion.p
-        key={i}
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-8%" }}
-        transition={{ duration: 0.45 }}
-        className="whitespace-pre-line"
-      >
-        {para}
-      </motion.p>
-    );
+
+    const shouldInsert = extras[img] && !para.startsWith("#") && (i + 1) % 3 === 0;
+    if (shouldInsert) {
+      const src = extras[img];
+      img += 1;
+      nodes.push(
+        <figure key={`img-${src}-${i}`} className="my-10 overflow-hidden">
+          <div className="relative aspect-[16/9]">
+            <Image
+              src={src}
+              alt={`${title} — related visual`}
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 768px) 100vw, 768px"
+            />
+          </div>
+          <figcaption className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[var(--j-muted)]">
+            Related visual for this lesson
+          </figcaption>
+        </figure>
+      );
+    }
   });
+
+  return nodes;
 }
 
 export function ArticleView({ slug }: { slug: string }) {
@@ -212,12 +239,12 @@ export function ArticleView({ slug }: { slug: string }) {
           <p className="font-serif text-2xl leading-relaxed text-[var(--j-paper)]/90">{post.excerpt}</p>
 
           <div className="mt-12 space-y-7 text-[1.05rem] leading-8 text-[var(--j-muted)]">
-            {post.content ? renderBlocks(post.content) : null}
+            {post.content ? renderBlocks(post.content, gallery, post.title) : null}
           </div>
 
-          {gallery.length >= 5 && (
+          {gallery.length > 4 && (
             <section className="mt-16">
-              <h2 className="font-serif text-3xl text-[var(--j-paper)]">Picture gallery</h2>
+              <h2 className="font-serif text-3xl text-[var(--j-paper)]">More related pictures</h2>
               <p className="mt-2 text-sm text-[var(--j-muted)]">
                 Related stock photos so you can see the idea, not only read it.
               </p>

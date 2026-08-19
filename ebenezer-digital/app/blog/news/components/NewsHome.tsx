@@ -588,9 +588,13 @@ export function NewsHome() {
             <p className="text-[10px] uppercase tracking-[0.22em] text-white/40">The desk</p>
             <Link href="/blog" className="block hover:text-white">Journal</Link>
             <a href="/api/news/rss" className="block hover:text-white">RSS</a>
+            <a href="/api/news/sitemap" className="block hover:text-white">News sitemap</a>
             <a href="/api/news/ical" className="block hover:text-white">iCal</a>
-            <a href="/api/news?q=" className="block hover:text-white">Search API</a>
-            <Link href="https://ebenezerdigital.com/contact" className="block hover:text-white">Contact</Link>
+            <Link href="/blog/newsroom/feeds" className="block hover:text-white">Submit to Google &amp; Microsoft</Link>
+            <Link href="/blog/newsroom/about" className="block hover:text-white">About</Link>
+            <Link href="/blog/newsroom/editorial-policy" className="block hover:text-white">Editorial policy</Link>
+            <Link href="/blog/newsroom/contact" className="block hover:text-white">Newsroom contact</Link>
+            <Link href="https://ebenezerdigital.com/contact" className="block hover:text-white">Studio contact</Link>
             <a href={`mailto:${SITE_EMAIL}`} className="block hover:text-white">
               {SITE_EMAIL}
             </a>

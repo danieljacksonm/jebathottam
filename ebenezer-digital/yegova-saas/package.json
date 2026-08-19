@@ -1,0 +1,20 @@
+{
+  "name": "yegova-saas",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run start:dev -w @yegova/api\" \"npm run dev -w @yegova/web\"",
+    "dev:api": "npm run start:dev -w @yegova/api",
+    "dev:web": "npm run dev -w @yegova/web",
+    "dev:mobile": "npm run start -w @ebenezer/mobile",
+    "android": "npm run android -w @ebenezer/mobile",
+    "ios": "npm run ios -w @ebenezer/mobile",
+    "db:push": "npm run prisma:push -w @yegova/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -6,6 +6,11 @@ function isLoginPath(pathname: string): boolean {
   return path === '/admin/login';
 }
 
+function isSaasLoginPath(pathname: string): boolean {
+  const path = pathname.replace(/\/$/, '') || '/';
+  return path === '/saas/login';
+}
+
 function isTokenPresent(token: string | undefined): boolean {
   return Boolean(token && token.length > 10);
 }
@@ -29,6 +34,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get('host') || '';
   const token = request.cookies.get('auth-token')?.value;
+  const saasToken = request.cookies.get('saas-auth-token')?.value;
 
   // .info domain → blog-first experience
   if (isInfoBlogHost(host)) {
@@ -59,6 +65,24 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // SaaS login page should be public, but skip when already logged in.
+  if (isSaasLoginPath(pathname)) {
+    if (isTokenPresent(saasToken)) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/saas';
+      return NextResponse.redirect(url);
+    }
+    return NextResponse.next();
+  }
+
+  // Protect /saas routes with separate SaaS auth cookie.
+  if (pathname.startsWith('/saas') && !isTokenPresent(saasToken)) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = '/saas/login';
+    loginUrl.search = `?next=${encodeURIComponent(pathname)}`;
+    return NextResponse.redirect(loginUrl);
+  }
+
   // Protect other /admin routes
   if (pathname.startsWith('/admin') && !isTokenPresent(token)) {
     const loginUrl = request.nextUrl.clone();
@@ -79,5 +103,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/news', '/news/:path*', '/admin', '/admin/:path*', '/blog', '/blog/:path*', '/products', '/products/:path*'],
+  matcher: ['/', '/news', '/news/:path*', '/admin', '/admin/:path*', '/blog', '/blog/:path*', '/products', '/products/:path*', '/saas', '/saas/:path*'],
 };

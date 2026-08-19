@@ -14,7 +14,7 @@ export async function GET() {
       models: health.models,
       error: health.error || null,
       ramNote:
-        "This VPS is CPU-only (~8GB RAM). Use a small model like qwen2.5:1.5b or qwen2.5:0.5b.",
+        "This VPS is CPU-only (~8GB RAM). Nzer 1.0 (qwen2.5:1.5b) is optimised for this setup.",
     },
     { status: health.ok ? 200 : 503 }
   );

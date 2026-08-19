@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       return new Response(
         JSON.stringify({
           error: missingModel
-            ? "No AI model installed. On VPS run: ollama pull qwen2.5:1.5b"
+            ? "Nzer 1.0 is not installed. On VPS run: ollama pull qwen2.5:1.5b"
             : "Model server error",
           detail: text.slice(0, 500) || `Ollama status ${ollamaRes.status}`,
           hint: "ollama pull qwen2.5:1.5b",
@@ -214,7 +214,7 @@ export async function POST(request: Request) {
           err instanceof Error
             ? err.message
             : "Cannot reach AI model server (Ollama)",
-        hint: "On the VPS: install Ollama, then run ollama pull qwen2.5:1.5b",
+        hint: "On the VPS: install Ollama, then run ollama pull qwen2.5:1.5b (Nzer 1.0)",
       }),
       { status: 503, headers: { "Content-Type": "application/json" } }
     );

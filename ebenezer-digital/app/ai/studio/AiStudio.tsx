@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, Share2 } from "lucide-react";
-import { resolveAiMode, type AiMode } from "@/lib/ai";
+import { resolveAiMode, MODEL_BRAND, type AiMode } from "@/lib/ai";
 import { AiCore } from "./AiCore";
 import { AiComposer } from "./AiComposer";
 import { AiCursor } from "./AiCursor";
@@ -481,7 +481,7 @@ export function AiStudio() {
             <Image src="/brand/eben-ai-mark.svg" alt="" width={22} height={22} className="rounded-md" />
             <span className={`ai-live ${health.status}`} />
             <button type="button" className="ai-model" onClick={() => setModelOpen((v) => !v)}>
-              {health.model || "Eben AI"}
+              {MODEL_BRAND}
             </button>
             {health.status === "ready" ? <small>Online</small> : <small>Limited</small>}
           </div>
@@ -495,7 +495,7 @@ export function AiStudio() {
             <p>Available on this server</p>
             {(health.models.length ? health.models : [health.model || "qwen2.5:1.5b"]).map((m) => (
               <button key={m} type="button" onClick={() => setModelOpen(false)}>
-                {m}
+                Nzer 1.0
               </button>
             ))}
           </div>

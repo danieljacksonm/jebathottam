@@ -76,6 +76,8 @@ function StudioChoices({
     </div>
   );
 }
+
+export default function Contact() {
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     name: "",

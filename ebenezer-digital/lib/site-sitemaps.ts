@@ -47,6 +47,10 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
     page(JOURNAL_URL, "/blog", "hourly", 1),
     page(JOURNAL_URL, "/blog/news", "hourly", 0.95),
+    page(JOURNAL_URL, "/blog/newsroom/about", "monthly", 0.5),
+    page(JOURNAL_URL, "/blog/newsroom/editorial-policy", "monthly", 0.5),
+    page(JOURNAL_URL, "/blog/newsroom/contact", "monthly", 0.5),
+    page(JOURNAL_URL, "/blog/newsroom/feeds", "weekly", 0.6),
   ];
 
   const seen = new Set<string>();

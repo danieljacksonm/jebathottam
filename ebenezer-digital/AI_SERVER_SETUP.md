@@ -3,8 +3,8 @@
 Your server has **no GPU** and about **8GB RAM**, with other Next.js apps already running.
 Use a **small** open-source model only.
 
-Recommended first model: **`qwen2.5:1.5b`**  
-If RAM is tight, use **`qwen2.5:0.5b`**.
+The AI runs as **Nzer 1.0** (powered by `qwen2.5:1.5b` under the hood).  
+If RAM is tight, use **`qwen2.5:0.5b`** — still branded as Nzer 1.0.
 
 ---
 
