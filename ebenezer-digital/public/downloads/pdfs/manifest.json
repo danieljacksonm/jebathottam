@@ -90,5 +90,97 @@
       "label": "bundle contents",
       "file": "/downloads/pdfs/creator-bundle/bundle-contents.pdf"
     }
+  ],
+  "whatsapp-business-kit": [
+    {
+      "label": "setup guide",
+      "file": "/downloads/pdfs/whatsapp-business-kit/setup-guide.pdf"
+    },
+    {
+      "label": "message templates",
+      "file": "/downloads/pdfs/whatsapp-business-kit/message-templates.pdf"
+    },
+    {
+      "label": "broadcast pack",
+      "file": "/downloads/pdfs/whatsapp-business-kit/broadcast-pack.pdf"
+    },
+    {
+      "label": "status ideas",
+      "file": "/downloads/pdfs/whatsapp-business-kit/status-ideas.pdf"
+    },
+    {
+      "label": "dos and donts",
+      "file": "/downloads/pdfs/whatsapp-business-kit/dos-and-donts.pdf"
+    }
+  ],
+  "invoice-receipt-templates": [
+    {
+      "label": "service invoice",
+      "file": "/downloads/pdfs/invoice-receipt-templates/service-invoice.pdf"
+    },
+    {
+      "label": "product invoice",
+      "file": "/downloads/pdfs/invoice-receipt-templates/product-invoice.pdf"
+    },
+    {
+      "label": "thermal receipts",
+      "file": "/downloads/pdfs/invoice-receipt-templates/thermal-receipts.pdf"
+    },
+    {
+      "label": "gst invoice",
+      "file": "/downloads/pdfs/invoice-receipt-templates/gst-invoice.pdf"
+    },
+    {
+      "label": "quotation template",
+      "file": "/downloads/pdfs/invoice-receipt-templates/quotation-template.pdf"
+    },
+    {
+      "label": "payment receipt",
+      "file": "/downloads/pdfs/invoice-receipt-templates/payment-receipt.pdf"
+    }
+  ],
+  "social-media-caption-pack": [
+    {
+      "label": "365 captions",
+      "file": "/downloads/pdfs/social-media-caption-pack/365-captions.pdf"
+    },
+    {
+      "label": "hashtag master list",
+      "file": "/downloads/pdfs/social-media-caption-pack/hashtag-master-list.pdf"
+    },
+    {
+      "label": "instagram bio formulas",
+      "file": "/downloads/pdfs/social-media-caption-pack/instagram-bio-formulas.pdf"
+    },
+    {
+      "label": "30 day posting plan",
+      "file": "/downloads/pdfs/social-media-caption-pack/30-day-posting-plan.pdf"
+    },
+    {
+      "label": "festive caption pack",
+      "file": "/downloads/pdfs/social-media-caption-pack/festive-caption-pack.pdf"
+    }
+  ],
+  "church-admin-kit": [
+    {
+      "label": "announcement sheet",
+      "file": "/downloads/pdfs/church-admin-kit/announcement-sheet.pdf"
+    },
+    {
+      "label": "church letters",
+      "file": "/downloads/pdfs/church-admin-kit/church-letters.pdf"
+    },
+    {
+      "label": "attendance tithe forms",
+      "file": "/downloads/pdfs/church-admin-kit/attendance-tithe-forms.pdf"
+    },
+    {
+      "label": "whatsapp broadcasts",
+      "file": "/downloads/pdfs/church-admin-kit/whatsapp-broadcasts.pdf"
+    },
+    {
+      "label": "event checklist",
+      "file": "/downloads/pdfs/church-admin-kit/event-checklist.pdf"
+    }
   ]
 }

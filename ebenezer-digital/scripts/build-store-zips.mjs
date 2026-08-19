@@ -19,6 +19,10 @@ const names = [
   "brand-kit-essentials",
   "free-enquiry-form-kit",
   "creator-bundle",
+  "whatsapp-business-kit",
+  "invoice-receipt-templates",
+  "social-media-caption-pack",
+  "church-admin-kit",
 ];
 
 for (const name of names) {
