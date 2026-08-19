@@ -3,8 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowUpRight, Star } from "lucide-react";
+import { ArrowRight, CheckCircle, FileText, ShieldCheck, Star, Truck, Zap } from "lucide-react";
 import { StoreNav } from "./components/StoreNav";
 import { StoreCursor } from "./components/StoreCursor";
 import { StoreCart } from "./components/StoreCart";
@@ -17,7 +16,6 @@ import {
   formatINR,
   type StoreProduct,
 } from "./data";
-import { markForCategory } from "@/lib/brand-marks";
 import {
   SITE_EMAIL,
   SITE_PHONE_DISPLAY,
@@ -25,6 +23,7 @@ import {
   SITE_WHATSAPP_URL,
 } from "@/lib/site-contact";
 
+/* ── Product card — light, clean ─────────────────────────── */
 function ProductCard({
   product,
   className = "",
@@ -34,66 +33,81 @@ function ProductCard({
 }) {
   const { locale } = useStoreI18n();
   const p = localizeProduct(product, locale);
+
+  const badgeClass = p.badge === "FREE"
+    ? "s-badge s-badge-free"
+    : p.badge === "NEW"
+    ? "s-badge s-badge-new"
+    : p.badge === "BUNDLE"
+    ? "s-badge s-badge-bundle"
+    : "s-badge s-badge-hot";
+
+  const fileLines = (p.pdfs && p.pdfs.length)
+    ? p.pdfs.map((pdf) => pdf.label)
+    : (p.includes || []).slice(0, 3);
+
   return (
     <Link
       href={`/products/${p.slug}`}
-      data-cursor="VIEW"
-      className={`group relative block overflow-hidden ${className}`}
+      className={`s-card group flex flex-col ${className}`}
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-[#111]">
+      {/* Image */}
+      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--s-line-soft)]">
         <Image
           src={p.image}
           alt={p.name}
           fill
-          className="object-cover transition duration-700 group-hover:scale-105"
-          sizes="(max-width: 768px) 80vw, 33vw"
+          className="object-cover transition duration-500 group-hover:scale-103"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
         {p.badge && (
-          <span className="absolute left-4 top-4 text-[10px] font-semibold uppercase tracking-[0.25em] text-[var(--s-brand)]">
-            {p.badge}
-          </span>
+          <span className={`${badgeClass} absolute left-3 top-3 shadow-sm`}>{p.badge}</span>
         )}
-        <div className="absolute right-4 top-4 flex items-center gap-2 rounded-full border border-[var(--s-line)] bg-black/45 px-2 py-1 backdrop-blur">
-          <Image src={markForCategory(p.category)} alt="" width={18} height={18} className="rounded-sm" />
-          <span className="text-[10px] uppercase tracking-[0.16em] text-[var(--s-paper)]/85">
-            E · {p.category}
-          </span>
-        </div>
-        <div className="absolute inset-x-0 bottom-0 p-5">
-          <p className="text-[10px] uppercase tracking-[0.25em] text-[var(--s-muted)]">{p.category}</p>
-          <h3 className="mt-2 font-serif text-2xl leading-tight">{p.name}</h3>
-          <p className="mt-2 line-clamp-2 text-sm text-[var(--s-muted)]">{p.tagline}</p>
-          <ul className="mt-3 space-y-1 text-[11px] text-[var(--s-paper)]/80">
-            {(p.pdfs && p.pdfs.length
-              ? p.pdfs.map((pdf) => `${pdf.label}.pdf`)
-              : (p.includes || []).slice(0, 3)
-            ).slice(0, 3).map((item) => (
-              <li key={item} className="line-clamp-1">
-                · {item}
+      </div>
+
+      {/* Body */}
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[var(--s-muted)]">
+          {p.category}
+        </p>
+        <h3 className="mt-1.5 font-semibold leading-snug text-[var(--s-ink)] group-hover:text-[var(--s-brand)] transition-colors duration-200">
+          {p.name}
+        </h3>
+        <p className="mt-1.5 line-clamp-2 text-sm text-[var(--s-muted)]">{p.tagline}</p>
+
+        {/* File list */}
+        {fileLines.length > 0 && (
+          <ul className="mt-3 space-y-1">
+            {fileLines.slice(0, 3).map((item) => (
+              <li key={item} className="flex items-center gap-1.5 text-[12px] text-[var(--s-muted)]">
+                <FileText className="h-3 w-3 shrink-0 text-[var(--s-brand)]" />
+                <span className="line-clamp-1">{item}</span>
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex items-center justify-between">
-            <span className="text-[var(--s-brand)]">{formatINR(p.price)}</span>
-            <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.2em] text-[var(--s-paper)]">
-              See kit <ArrowUpRight className="h-3.5 w-3.5" />
-            </span>
-          </div>
+        )}
+
+        {/* Price row */}
+        <div className="mt-auto flex items-center justify-between pt-4">
+          <span className={`font-bold text-lg ${p.isFree ? "text-[var(--s-brand)]" : "text-[var(--s-ink)]"}`}>
+            {formatINR(p.price)}
+          </span>
+          <span className="flex items-center gap-1 text-[12px] font-semibold text-[var(--s-brand)]">
+            View kit <ArrowRight className="h-3.5 w-3.5" />
+          </span>
         </div>
       </div>
     </Link>
   );
 }
 
+/* ── Main page ────────────────────────────────────────────── */
 export default function ProductsPage() {
   const { t, rtl, locale } = useStoreI18n();
   const [activeCat, setActiveCat] = useState<string>("ALL");
-  const my = useMotionValue(0);
-  const sy = useSpring(my, { stiffness: 60, damping: 20 });
-  const floatY = useTransform(sy, [-0.5, 0.5], [-12, 12]);
   const shelfRef = useRef<HTMLDivElement>(null);
 
+  /* Sync cat + hash from URL */
   useEffect(() => {
     const applyFromUrl = () => {
       const cat = new URLSearchParams(window.location.search).get("cat");
@@ -113,16 +127,7 @@ export default function ProductsPage() {
     };
   }, []);
 
-  useEffect(() => {
-    const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!fine) return;
-    const onMove = (e: MouseEvent) => {
-      my.set(e.clientY / window.innerHeight - 0.5);
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
-  }, [my]);
-
+  /* Horizontal scroll with mousewheel on shelf */
   useEffect(() => {
     const el = shelfRef.current;
     if (!el) return;
@@ -137,187 +142,169 @@ export default function ProductsPage() {
   }, []);
 
   const catalog = orderedProducts();
-  const featuredRaw = catalog.find((p) => p.slug === "ebenezer-saas") || catalog[0];
-  const featured = localizeProduct(featuredRaw, locale);
-  const sideFeatured = catalog.filter((p) => p.id !== featuredRaw.id).slice(0, 2);
+  const featured = catalog.filter((p) =>
+    ["ebenezer-saas", "creator-landing-kit", "creator-bundle"].includes(p.slug)
+  ).map((p) => localizeProduct(p, locale));
   const bestsellers = catalog.filter((p) =>
-    ["creator-landing-kit", "creator-bundle", "shop-pos-starter-pack", "brand-kit-essentials"].includes(p.slug)
+    ["creator-landing-kit", "shop-pos-starter-pack", "brand-kit-essentials", "digital-business-playbook"].includes(p.slug)
   );
   const freebies = catalog.filter((p) => p.isFree && !p.isSoftware);
   const bundles = catalog.filter((p) => p.isBundle);
-  const newestRaw = catalog.find((p) => p.slug === "creator-landing-kit") || catalog[1];
-  const newest = localizeProduct(newestRaw, locale);
   const filtered = useMemo(
-    () =>
-      activeCat === "ALL"
-        ? catalog
-        : catalog.filter((p) => p.category === activeCat),
-    [activeCat, catalog]
+    () => activeCat === "ALL" ? catalog : catalog.filter((p) => p.category === activeCat),
+    [activeCat, catalog],
   );
-  const catPreview = filtered[0]?.image;
+
+  const trustItems = [
+    { icon: <Truck className="h-5 w-5 text-[var(--s-brand)]" />, title: "Instant worldwide delivery", desc: "Download immediately after getting access. No waiting." },
+    { icon: <FileText className="h-5 w-5 text-[var(--s-brand)]" />, title: "See every file first", desc: "Full file list shown before you buy anything." },
+    { icon: <ShieldCheck className="h-5 w-5 text-[var(--s-brand)]" />, title: "USD pricing, global", desc: "Clear prices in USD. Free tools always stay free." },
+    { icon: <Zap className="h-5 w-5 text-[var(--s-brand)]" />, title: "Human support", desc: "Real help from Ebenezer Digital when you need it." },
+  ];
 
   return (
-    <div className="store-root relative min-h-screen" dir={rtl ? "rtl" : "ltr"}>
-      <div className="store-grain" />
+    <div className="store-root" dir={rtl ? "rtl" : "ltr"}>
       <StoreCursor />
       <StoreNav />
       <StoreCart />
 
-      {/* HERO */}
-      <section className="relative min-h-[100svh] overflow-hidden">
-        <motion.div style={{ y: floatY }} className="absolute inset-0">
-          <Image
-            src={featured.image}
-            alt=""
-            fill
-            priority
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--s-ink)] via-black/55 to-black/25" />
-        </motion.div>
-        <div className="relative z-10 flex min-h-[100svh] items-end px-4 pb-16 pt-28 sm:px-8 lg:px-12">
-          <div className="w-full max-w-4xl">
-            <p className="mb-6 text-[11px] uppercase tracking-[0.45em] text-[var(--s-brand)]">
-              {t("heroKicker")}
-            </p>
-            <h1 className="font-serif text-5xl leading-[0.95] sm:text-7xl lg:text-8xl">
-              Digital kits.
-              <br />
-              Built to use.
-            </h1>
-            <p className="mt-6 max-w-xl text-sm text-[var(--s-muted)] sm:text-base">
-              {t("heroTag")} Prices in USD. Instant download worldwide.
-            </p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <a
-                href="#featured"
-                className="inline-flex min-h-[48px] items-center gap-2 bg-[var(--s-brand)] px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
-                data-cursor="CLICK"
-              >
-                {t("exploreProducts")} <ArrowUpRight className="h-4 w-4" />
-              </a>
-              <a
-                href="#bundles"
-                className="inline-flex min-h-[48px] items-center border border-[var(--s-line)] px-6 text-[11px] uppercase tracking-[0.22em]"
-                data-cursor="VIEW"
-              >
-                {t("viewBundles")}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <StoreMarquee
-        items={["Worldwide store", "USD pricing", "Instant download", "See what’s in the kit", "Ebenezer Store"]}
-      />
-
-      {/* FEATURED */}
-      <section id="featured" className="px-4 py-20 sm:px-8 lg:px-12">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--s-muted)]">{t("featured")}</p>
-        <div className="mt-8 grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
-          <Link href={`/products/${featured.slug}`} className="group relative block overflow-hidden" data-cursor="VIEW">
-            <div className="relative aspect-[16/11] overflow-hidden">
-              <Image
-                src={featured.image}
-                alt={featured.name}
-                fill
-                className="object-cover transition duration-700 group-hover:scale-105"
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
-                {featured.badge && (
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--s-brand)]">{featured.badge}</p>
-                )}
-                <h2 className="mt-3 font-serif text-4xl sm:text-5xl lg:text-6xl">{featured.name}</h2>
-                <p className="mt-3 max-w-lg text-sm text-[var(--s-muted)]">{featured.tagline}</p>
-                {featured.pdfs?.length ? (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {featured.pdfs.slice(0, 3).map((pdf) => (
-                      <span
-                        key={pdf.file}
-                        className="border border-white/20 bg-black/35 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-white/85"
-                      >
-                        {pdf.label}
-                      </span>
-                    ))}
-                  </div>
-                ) : null}
-                <ul className="mt-4 space-y-1 text-sm text-[var(--s-paper)]/85">
-                  {(featured.includes || []).slice(0, 4).map((item) => (
-                    <li key={item}>· {item}</li>
-                  ))}
-                </ul>
-                <div className="mt-6 flex items-center gap-4 text-[var(--s-brand)]">
-                  <span className="text-lg">{formatINR(featured.price)}</span>
-                  <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.2em]">
-                    {featured.isSoftware ? t("getStartedFree") : "View product"}{" "}
-                    <ArrowUpRight className="h-4 w-4" />
-                  </span>
-                </div>
+      {/* ── HERO ─────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-[var(--s-surface)] pt-16">
+        <div className="s-page py-16 lg:py-24">
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <span className="s-badge s-badge-free mb-5 inline-flex">Worldwide store · USD pricing</span>
+              <h1 className="font-display text-4xl font-extrabold leading-tight text-[var(--s-ink)] sm:text-5xl lg:text-6xl">
+                Professional digital kits.<br />
+                <span className="text-[var(--s-brand)]">Ready to use.</span>
+              </h1>
+              <p className="mt-5 max-w-lg text-lg text-[var(--s-muted)]">
+                Templates, guides, and software for creators and small businesses — instant download, anywhere in the world.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a href="#all-products" className="s-btn-primary">
+                  Browse all products <ArrowRight className="h-4 w-4" />
+                </a>
+                <a href="#freebies" className="s-btn-outline">
+                  Free tools
+                </a>
+              </div>
+              <div className="mt-8 flex items-center gap-5 text-sm text-[var(--s-muted)]">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="h-4 w-4 text-[var(--s-brand)]" /> Instant download
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="h-4 w-4 text-[var(--s-brand)]" /> Files shown upfront
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle className="h-4 w-4 text-[var(--s-brand)]" /> Free tools available
+                </span>
               </div>
             </div>
-          </Link>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-1">
-            {sideFeatured.map((p) => (
-              <ProductCard key={p.id} product={p} />
+
+            {/* Hero product previews */}
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
+              {featured.slice(0, 4).map((p, i) => (
+                <Link
+                  key={p.id}
+                  href={`/products/${p.slug}`}
+                  className={`s-card group overflow-hidden ${i === 0 ? "col-span-2 sm:col-span-1 lg:col-span-2" : ""}`}
+                >
+                  <div className={`relative overflow-hidden bg-[var(--s-line-soft)] ${i === 0 ? "aspect-[16/9]" : "aspect-square"}`}>
+                    <Image
+                      src={p.image}
+                      alt={p.name}
+                      fill
+                      priority={i === 0}
+                      className="object-cover transition duration-500 group-hover:scale-105"
+                      sizes="(max-width: 640px) 100vw, 50vw"
+                    />
+                    {p.badge && <span className="s-badge s-badge-free absolute left-2 top-2">{p.badge}</span>}
+                  </div>
+                  <div className="p-3">
+                    <p className="text-[11px] font-semibold text-[var(--s-muted)]">{p.category}</p>
+                    <p className="mt-0.5 font-semibold text-sm text-[var(--s-ink)] line-clamp-1">{p.name}</p>
+                    <p className="mt-0.5 text-[13px] font-bold text-[var(--s-brand)]">{formatINR(p.price)}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <StoreMarquee items={["Worldwide store", "USD pricing", "Instant download", "Files shown upfront", "Free tools available", "Ebenezer Store"]} />
+
+      {/* ── TRUST ────────────────────────────────────────── */}
+      <section className="bg-[var(--s-surface)]">
+        <div className="s-page py-12">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            {trustItems.map((item) => (
+              <div key={item.title} className="s-trust-item">
+                {item.icon}
+                <div>
+                  <p className="font-semibold text-sm text-[var(--s-ink)]">{item.title}</p>
+                  <p className="mt-0.5 text-xs text-[var(--s-muted)]">{item.desc}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CATEGORIES */}
-      <section id="categories" className="relative overflow-hidden border-y border-[var(--s-line)] px-4 py-20 sm:px-8 lg:px-12">
-        {catPreview && activeCat !== "ALL" && (
-          <div className="pointer-events-none absolute inset-0 opacity-20">
-            <Image src={catPreview} alt="" fill className="object-cover" sizes="100vw" />
-            <div className="absolute inset-0 bg-[var(--s-ink)]/75" />
-          </div>
-        )}
-        <div className="relative">
-          <p className="mb-8 text-[11px] uppercase tracking-[0.35em] text-[var(--s-muted)]">{t("categories")}</p>
-          <div className="flex flex-wrap gap-x-8 gap-y-4">
-            {["ALL", ...STORE_CATEGORIES].map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => {
-                  setActiveCat(cat);
-                  const url = cat === "ALL" ? "/products#categories" : `/products?cat=${encodeURIComponent(cat)}#categories`;
-                  window.history.replaceState(null, "", url);
-                }}
-                data-cursor="VIEW"
-                className={`font-serif text-4xl transition sm:text-5xl lg:text-6xl ${
-                  activeCat === cat ? "text-[var(--s-brand)]" : "text-[var(--s-paper)]/35 hover:text-[var(--s-paper)]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.slice(0, 6).map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+      {/* ── ALL PRODUCTS ─────────────────────────────────── */}
+      <section id="all-products" className="s-page py-16">
+        <div className="mb-8">
+          <span className="s-section-label">{t("featured")}</span>
+          <h2 className="text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">All products</h2>
         </div>
-      </section>
 
-      {/* BEST SELLERS SHELF */}
-      <section className="py-20">
-        <div className="mb-8 flex items-end justify-between px-4 sm:px-8 lg:px-12">
-          <h3 className="font-serif text-3xl sm:text-5xl">{t("bestSellers")}</h3>
-          <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--s-muted)]">{t("dragSwipe")}</p>
-        </div>
-        <div ref={shelfRef} className="flex gap-4 overflow-x-auto px-4 pb-4 sm:px-8 lg:px-12">
-          {bestsellers.map((p, i) => (
-            <div
-              key={p.id}
-              className={`shrink-0 ${i % 3 === 0 ? "w-[78vw] sm:w-[380px]" : "w-[70vw] sm:w-[300px]"}`}
+        {/* Category filter pills */}
+        <div id="categories" className="mb-8 flex flex-wrap gap-2">
+          {["ALL", ...STORE_CATEGORIES].map((cat) => (
+            <button
+              key={cat}
+              type="button"
+              onClick={() => {
+                setActiveCat(cat);
+                const url = cat === "ALL"
+                  ? "/products#all-products"
+                  : `/products?cat=${encodeURIComponent(cat)}#all-products`;
+                window.history.replaceState(null, "", url);
+              }}
+              className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150 ${
+                activeCat === cat
+                  ? "border-[var(--s-brand)] bg-[var(--s-brand)] text-white shadow-sm"
+                  : "border-[var(--s-line)] bg-[var(--s-surface)] text-[var(--s-ink)] hover:border-[var(--s-brand)] hover:text-[var(--s-brand)]"
+              }`}
             >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Grid */}
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {filtered.map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── BEST SELLERS ─────────────────────────────────── */}
+      <section className="bg-[var(--s-surface)] py-16">
+        <div className="s-page">
+          <div className="mb-8 flex items-end justify-between">
+            <div>
+              <span className="s-section-label">{t("bestSellers")}</span>
+              <h2 className="text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">Top picks</h2>
+            </div>
+            <p className="text-sm text-[var(--s-muted)] hidden sm:block">{t("dragSwipe")} →</p>
+          </div>
+        </div>
+        <div ref={shelfRef} className="flex gap-5 overflow-x-auto pb-4 pl-[var(--s-page-x)] pr-[var(--s-page-x)]">
+          {bestsellers.map((p) => (
+            <div key={p.id} className="w-72 shrink-0">
               <ProductCard product={p} />
             </div>
           ))}
@@ -326,78 +313,51 @@ export default function ProductsPage() {
 
       <StoreMarquee items={["Templates", "UI kits", "Ebooks", "Business tools", "Freebies"]} />
 
-      {/* JUST DROPPED */}
-      {newest && (
-        <section className="px-4 py-20 sm:px-8 lg:px-12">
-          <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--s-brand)]">{t("justDropped")}</p>
-          <Link href={`/products/${newest.slug}`} className="group mt-8 grid items-center gap-8 lg:grid-cols-2" data-cursor="VIEW">
-            <div className="relative aspect-[16/11] overflow-hidden">
-              <Image
-                src={newest.image}
-                alt={newest.name}
-                fill
-                className="object-cover transition duration-700 group-hover:scale-105"
-                sizes="50vw"
-              />
-            </div>
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.25em] text-[var(--s-muted)]">{newest.category}</p>
-              <h3 className="mt-3 font-serif text-4xl sm:text-6xl">{newest.name}</h3>
-              <p className="mt-4 text-[var(--s-muted)]">{newest.tagline}</p>
-              <ul className="mt-5 space-y-1 text-sm text-[var(--s-muted)]">
-                {(newest.includes || []).slice(0, 4).map((item) => (
-                  <li key={item}>· {item}</li>
-                ))}
-              </ul>
-              <p className="mt-6 text-[var(--s-brand)]">{formatINR(newest.price)}</p>
-            </div>
-          </Link>
-        </section>
-      )}
-
-      {/* BUNDLES */}
-      <section id="bundles" className="border-t border-[var(--s-line)] px-4 py-20 sm:px-8 lg:px-12">
-        <h3 className="font-serif text-3xl sm:text-5xl">{t("bundles")}</h3>
-        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+      {/* ── BUNDLES ──────────────────────────────────────── */}
+      <section id="bundles" className="s-page py-16">
+        <span className="s-section-label">{t("bundles")}</span>
+        <h2 className="mb-8 text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">
+          More value, bundled
+        </h2>
+        <div className="grid gap-6 lg:grid-cols-2">
           {bundles.map((bundle) => {
             const items = catalog.filter((p) => bundle.bundleItems?.includes(p.id));
+            const loc = localizeProduct(bundle, locale);
             return (
               <Link
                 key={bundle.id}
                 href={`/products/${bundle.slug}`}
-                data-cursor="VIEW"
-                className="group relative overflow-hidden border border-[var(--s-line)] p-6 sm:p-8"
+                className="s-card group flex gap-5 p-6 hover:shadow-lg transition-all"
               >
-                <div className="mb-6 flex h-40 items-end justify-center">
-                  {items.map((item, i) => (
+                {/* Stacked thumbnails */}
+                <div className="relative h-24 w-20 shrink-0">
+                  {items.slice(0, 3).map((item, i) => (
                     <div
                       key={item.id}
-                      className="relative h-36 w-28 overflow-hidden border border-white/10 transition duration-500 group-hover:translate-y-[-8px]"
-                      style={{
-                        marginLeft: i === 0 ? 0 : -28,
-                        zIndex: items.length - i,
-                        transform: `rotate(${(i - 1) * 4}deg)`,
-                      }}
+                      className="absolute h-20 w-16 overflow-hidden rounded-md border border-[var(--s-line)] shadow-sm"
+                      style={{ left: i * 6, top: i * 4, zIndex: items.length - i }}
                     >
-                      <Image src={item.image} alt={item.name} fill className="object-cover" sizes="112px" />
+                      <Image src={item.image} alt={item.name} fill className="object-cover" sizes="64px" />
                     </div>
                   ))}
                 </div>
-                <p className="text-[10px] uppercase tracking-[0.3em] text-[var(--s-brand)]">Bundle</p>
-                <h4 className="mt-2 font-serif text-3xl">{bundle.name}</h4>
-                <p className="mt-2 text-sm text-[var(--s-muted)]">
-                  {items.length} kits inside · Real files included
-                </p>
-                <ul className="mt-3 space-y-1 text-sm text-[var(--s-paper)]/80">
-                  {items.map((item) => (
-                    <li key={item.id}>· {item.name}</li>
-                  ))}
-                </ul>
-                <div className="mt-4 flex items-center gap-3">
-                  <span className="text-lg text-[var(--s-brand)]">{formatINR(bundle.price)}</span>
-                  {bundle.compareAt && (
-                    <span className="text-sm text-[var(--s-muted)] line-through">{formatINR(bundle.compareAt)}</span>
-                  )}
+                <div className="min-w-0 flex-1">
+                  <span className="s-badge s-badge-bundle">Bundle</span>
+                  <h4 className="mt-2 font-bold text-lg text-[var(--s-ink)] group-hover:text-[var(--s-brand)] transition-colors">
+                    {loc.name}
+                  </h4>
+                  <p className="mt-1 text-sm text-[var(--s-muted)]">
+                    {items.length} kits included — everything in one download
+                  </p>
+                  <div className="mt-3 flex items-center gap-3">
+                    <span className="font-bold text-lg text-[var(--s-brand)]">{formatINR(bundle.price)}</span>
+                    {bundle.compareAt && (
+                      <span className="text-sm text-[var(--s-muted)] line-through">{formatINR(bundle.compareAt)}</span>
+                    )}
+                    <span className="ml-auto flex items-center gap-1 text-sm font-medium text-[var(--s-brand)]">
+                      View bundle <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
+                  </div>
                 </div>
               </Link>
             );
@@ -405,121 +365,93 @@ export default function ProductsPage() {
         </div>
       </section>
 
-      {/* FREEBIES */}
-      <section id="freebies" className="px-4 py-20 sm:px-8 lg:px-12">
-        <h3 className="font-serif text-4xl sm:text-6xl">
-          {t("startFree")}
-        </h3>
-        <p className="mt-4 max-w-md text-[var(--s-muted)]">
-          Useful free digital tools to try before you buy.
-        </p>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {freebies.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
-      </section>
-
-      {/* TRUST */}
-      <section className="border-y border-[var(--s-line)] px-4 py-16 sm:px-8 lg:px-12">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            ["Worldwide", "Instant digital delivery to any country"],
-            ["What’s inside", "Every kit lists real files before you buy"],
-            ["USD pricing", "Clear global prices. Free tools stay free."],
-            ["Human support", "Help from Ebenezer Digital when you need it"],
-          ].map(([t, d]) => (
-            <div key={t} className="border-t border-[var(--s-line)] pt-5">
-              <p className="font-serif text-xl">{t}</p>
-              <p className="mt-2 text-sm text-[var(--s-muted)]">{d}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* SOCIAL */}
-      <section className="px-4 py-20 sm:px-8 lg:px-12">
-        <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--s-muted)]">From customers</p>
-        <blockquote className="mt-8 max-w-4xl font-serif text-3xl leading-tight sm:text-5xl">
-          “Clean products. Clear value. Easy to use for real client work.”
-        </blockquote>
-        <div className="mt-6 flex items-center gap-2 text-sm text-[var(--s-muted)]">
-          <div className="flex text-[var(--s-brand)]">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="h-4 w-4 fill-current" />
+      {/* ── FREEBIES ─────────────────────────────────────── */}
+      <section id="freebies" className="bg-[var(--s-brand-bg)] py-16">
+        <div className="s-page">
+          <span className="s-section-label">{t("startFree")}</span>
+          <h2 className="mb-2 text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">Free tools — no payment needed</h2>
+          <p className="mb-8 max-w-xl text-[var(--s-muted)]">
+            Genuinely useful free digital tools for any small business. Download now, no account required.
+          </p>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {freebies.map((p) => (
+              <ProductCard key={p.id} product={p} />
             ))}
           </div>
-          <span>Early store buyers · Ebenezer Digital clients</span>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="relative overflow-hidden border-t border-[var(--s-line)] px-4 py-24 sm:px-8 lg:px-12">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.16),transparent_45%)]" />
-        <div className="relative">
-          <h3 className="font-serif text-[12vw] leading-[0.85] sm:text-[7vw]">
-            BUILD
-            <br />
-            SOMETHING
-            <br />
-            BETTER.
-          </h3>
-          <div className="mt-12 grid gap-10 md:grid-cols-3">
-            <div className="space-y-2 text-sm text-[var(--s-muted)]">
-              <a href="/products#featured" className="block hover:text-[var(--s-brand)]">Explore products</a>
-              <a href="/products#categories" className="block hover:text-[var(--s-brand)]">Categories</a>
-              <a href="/products#bundles" className="block hover:text-[var(--s-brand)]">Bundles</a>
-              <a href="/products#freebies" className="block hover:text-[var(--s-brand)]">Freebies</a>
-              <Link href="/products/free-enquiry-form-kit" className="block text-[var(--s-brand)]">
-                Free Tool → Enquiry Form Kit
-              </Link>
-              <Link href="/products/ebenezer-saas" className="block hover:text-[var(--s-brand)]">
-                Ebenezer SaaS (Free)
-              </Link>
+      {/* ── TESTIMONIAL ──────────────────────────────────── */}
+      <section className="bg-[var(--s-surface)] py-16">
+        <div className="s-page text-center">
+          <div className="mx-auto max-w-2xl">
+            <div className="mb-4 flex justify-center gap-0.5 text-[var(--s-brand)]">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="h-5 w-5 fill-current" />
+              ))}
             </div>
-            <div className="space-y-2 text-sm text-[var(--s-muted)]">
-              <Link href="https://ebenezerdigital.com/contact" className="block hover:text-[var(--s-brand)]">Support</Link>
-              <a href={`mailto:${SITE_EMAIL}`} className="block hover:text-[var(--s-brand)]">
-                {SITE_EMAIL}
-              </a>
-              <a href={SITE_PHONE_TEL} className="block hover:text-[var(--s-brand)]">
-                {SITE_PHONE_DISPLAY}
-              </a>
-              <a
-                href={SITE_WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block hover:text-[var(--s-brand)]"
-              >
-                WhatsApp
-              </a>
-              <Link href="https://ebenezerdigital.com/terms" className="block hover:text-[var(--s-brand)]">License</Link>
-              <Link href="https://ebenezerdigital.com/privacy" className="block hover:text-[var(--s-brand)]">Privacy</Link>
-              <Link href="https://ebenezerdigital.com" className="block hover:text-[var(--s-brand)]">Studio</Link>
+            <blockquote className="font-display text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">
+              "Clean products. Clear value. Easy to use for real client work."
+            </blockquote>
+            <p className="mt-4 text-sm text-[var(--s-muted)]">
+              Early store buyers · Ebenezer Digital clients
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── FOOTER ───────────────────────────────────────── */}
+      <footer className="border-t border-[var(--s-line)] bg-[var(--s-ink)] text-[var(--s-muted)]">
+        <div className="s-page py-14">
+          <div className="mb-10 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="font-display text-xl font-bold text-white">Ebenezer Store</p>
+              <p className="mt-1 text-sm">Worldwide digital products · Instant download</p>
             </div>
-            <form
-              className="flex flex-col gap-3"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <p className="text-sm text-[var(--s-muted)]">New drops in your inbox</p>
+            <a href="#all-products" className="s-btn-primary text-sm">
+              Shop now
+            </a>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-3">
+            <div className="space-y-2 text-sm">
+              <p className="font-semibold text-white mb-3">Products</p>
+              <a href="/products#all-products" className="block hover:text-white transition-colors">All products</a>
+              <a href="/products#categories" className="block hover:text-white transition-colors">Categories</a>
+              <a href="/products#bundles" className="block hover:text-white transition-colors">Bundles</a>
+              <a href="/products#freebies" className="block hover:text-white transition-colors">Free tools</a>
+              <Link href="/products/ebenezer-saas" className="block hover:text-white transition-colors">Ebenezer SaaS</Link>
+            </div>
+            <div className="space-y-2 text-sm">
+              <p className="font-semibold text-white mb-3">Help</p>
+              <Link href="https://ebenezerdigital.com/contact" className="block hover:text-white transition-colors">Support</Link>
+              <a href={`mailto:${SITE_EMAIL}`} className="block hover:text-white transition-colors">{SITE_EMAIL}</a>
+              <a href={SITE_PHONE_TEL} className="block hover:text-white transition-colors">{SITE_PHONE_DISPLAY}</a>
+              <a href={SITE_WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors">WhatsApp</a>
+              <Link href="https://ebenezerdigital.com/terms" className="block hover:text-white transition-colors">License terms</Link>
+              <Link href="https://ebenezerdigital.com/privacy" className="block hover:text-white transition-colors">Privacy</Link>
+            </div>
+            <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+              <p className="font-semibold text-white">Get new drops in your inbox</p>
               <input
                 type="email"
                 required
-                placeholder="Email"
-                className="min-h-[48px] border border-[var(--s-line)] bg-transparent px-4 text-sm outline-none focus:border-[var(--s-brand)]"
+                placeholder="Your email address"
+                className="min-h-[44px] rounded-lg border border-white/15 bg-white/5 px-4 text-sm text-white outline-none placeholder:text-[var(--s-muted)] focus:border-[var(--s-brand)]"
               />
               <button
                 type="submit"
-                className="min-h-[48px] bg-[var(--s-brand)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
-                data-cursor="CLICK"
+                className="s-btn-primary rounded-lg text-sm"
               >
                 Subscribe
               </button>
             </form>
           </div>
-          <p className="mt-16 text-xs text-[var(--s-muted)]">
-            © {new Date().getFullYear()} Ebenezer Store · Worldwide digital products
-          </p>
+
+          <div className="mt-10 border-t border-white/10 pt-6 text-xs">
+            © {new Date().getFullYear()} Ebenezer Store · Worldwide digital products ·{" "}
+            <Link href="https://ebenezerdigital.com" className="hover:text-white transition-colors">ebenezerdigital.com</Link>
+          </div>
         </div>
       </footer>
     </div>
