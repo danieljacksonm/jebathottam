@@ -219,7 +219,178 @@ ${nav("Grace Assembly", [{ href: "index.html", label: "Home" }, { href: "about.h
 ${foot("Grace Assembly")}</body></html>`,
 });
 
+/* ── SaaS landing ───────────────────────────────────────── */
+const saasCss = `:root{--bg:#0b1220;--ink:#e8eef7;--muted:#9aa8bc;--accent:#3d8bfd;--card:#121a2b;--line:rgba(232,238,247,.12)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:1080px;margin:0 auto;padding:0 1.25rem}
+.top{border-bottom:1px solid var(--line)}.bar{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-weight:700}.btn{display:inline-block;background:var(--accent);color:#fff;padding:.75rem 1.1rem;border-radius:8px;font-weight:600}
+.hero{padding:5rem 0 3.5rem}.hero h1{font-size:clamp(2.2rem,5vw,3.6rem);max-width:16ch;line-height:1.1}
+.hero p{color:var(--muted);max-width:40rem}.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:2rem}
+.card{background:var(--card);border:1px solid var(--line);padding:1.1rem;border-radius:12px}
+section{padding:3.5rem 0}.foot{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.9rem}
+@media(max-width:700px){nav{display:none}}
+`;
+
+writeDir(path.join(packs, "saas-landing-website-template"), {
+  "styles.css": saasCss,
+  "script.js": sharedJs,
+  "LICENSE.txt": license,
+  "README.md": `# SaaS Landing Website Template
+
+Open index.html. Replace product name, features, and pricing.
+Host on any static host. Connect the CTA buttons to your signup URL.
+`,
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pulse SaaS</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Pulse", [{ href: "index.html", label: "Home" }, { href: "features.html", label: "Features" }, { href: "pricing.html", label: "Pricing" }, { href: "contact.html", label: "Contact" }])}
+<div class="hero wrap"><p>SaaS starter landing</p><h1>Ship your product page in one afternoon.</h1><p>Clean landing layout for startups: hero, features, pricing, and contact. Edit HTML text and ship.</p><a class="btn" href="pricing.html">See pricing</a>
+<div class="grid"><div class="card"><h3>Fast edit</h3><p>Plain HTML. No build step.</p></div><div class="card"><h3>Mobile ready</h3><p>Works on phone and desktop.</p></div><div class="card"><h3>CTA clear</h3><p>One primary action.</p></div></div></div>
+${foot("Pulse SaaS")}</body></html>`,
+  "features.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Features</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Pulse", [{ href: "index.html", label: "Home" }, { href: "features.html", label: "Features" }, { href: "pricing.html", label: "Pricing" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>Features</h2><div class="grid"><div class="card"><h3>Auth ready copy</h3><p>Replace with your modules.</p></div><div class="card"><h3>Billing block</h3><p>Show plan value clearly.</p></div><div class="card"><h3>Support path</h3><p>Contact + WhatsApp.</p></div></div></section>
+${foot("Pulse SaaS")}</body></html>`,
+  "pricing.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pricing</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Pulse", [{ href: "index.html", label: "Home" }, { href: "features.html", label: "Features" }, { href: "pricing.html", label: "Pricing" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>Pricing</h2><div class="grid"><div class="card"><h3>Starter</h3><p>$19 / mo</p><a class="btn" href="contact.html">Start</a></div><div class="card"><h3>Growth</h3><p>$49 / mo</p><a class="btn" href="contact.html">Start</a></div></div></section>
+${foot("Pulse SaaS")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Pulse", [{ href: "index.html", label: "Home" }, { href: "features.html", label: "Features" }, { href: "pricing.html", label: "Pricing" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>Contact</h2><p>Replace with your signup or sales form.</p>
+<button class="btn" type="button" data-wa="Hi, I want a demo of Pulse." data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("Pulse SaaS")}</body></html>`,
+});
+
+/* ── Portfolio ──────────────────────────────────────────── */
+const portCss = `:root{--bg:#f7f5f1;--ink:#171513;--muted:#6a645c;--accent:#b45309;--line:rgba(23,21,19,.12)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:980px;margin:0 auto;padding:0 1.25rem}
+.top{border-bottom:1px solid var(--line)}.bar{display:flex;justify-content:space-between;align-items:center;height:68px}
+.brand{font-weight:700}.hero{padding:4.5rem 0 2rem}.hero h1{font-size:clamp(2.2rem,5vw,3.4rem);max-width:14ch}
+.btn{display:inline-block;background:var(--accent);color:#fff;padding:.7rem 1rem}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:#fff;border:1px solid var(--line);padding:1rem}section{padding:3rem 0}
+.foot{padding:2rem 0;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+@media(max-width:700px){nav{display:none}}
+`;
+
+writeDir(path.join(packs, "portfolio-website-template"), {
+  "styles.css": portCss,
+  "script.js": sharedJs,
+  "LICENSE.txt": license,
+  "README.md": `# Portfolio Website Template
+
+Open index.html. Replace name, projects, and contact.
+Ideal for freelancers and creators.
+`,
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Alex Rivera</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Alex Rivera", [{ href: "index.html", label: "Work" }, { href: "about.html", label: "About" }, { href: "contact.html", label: "Contact" }])}
+<div class="hero wrap"><p>Freelance designer</p><h1>Selected work for calm brands.</h1><p>Replace this with your positioning sentence.</p><a class="btn" href="contact.html">Hire me</a></div>
+<section class="wrap"><h2>Projects</h2><div class="grid"><div class="card"><h3>Brand system</h3><p>Identity for a cafe.</p></div><div class="card"><h3>Landing page</h3><p>SaaS launch site.</p></div><div class="card"><h3>Photo edit pack</h3><p>Product series.</p></div></div></section>
+${foot("Alex Rivera")}</body></html>`,
+  "about.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Alex Rivera", [{ href: "index.html", label: "Work" }, { href: "about.html", label: "About" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>About</h2><p>Short bio, tools you use, and cities you serve.</p></section>
+${foot("Alex Rivera")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Alex Rivera", [{ href: "index.html", label: "Work" }, { href: "about.html", label: "About" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>Contact</h2><p>hello@example.com</p>
+<button class="btn" type="button" data-wa="Hi, I saw your portfolio." data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("Alex Rivera")}</body></html>`,
+});
+
+/* ── Agency ─────────────────────────────────────────────── */
+const agencyCss = `:root{--bg:#101010;--ink:#f4f1ea;--muted:#a7a29a;--accent:#e8c36a;--line:rgba(244,241,234,.12)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",sans-serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:1040px;margin:0 auto;padding:0 1.25rem}
+.top{border-bottom:1px solid var(--line)}.bar{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{letter-spacing:.14em;text-transform:uppercase;font-size:.8rem;font-weight:700}
+.hero{padding:5rem 0}.hero h1{font-size:clamp(2.2rem,5vw,3.5rem);max-width:14ch}
+.btn{display:inline-block;background:var(--accent);color:#1a1408;padding:.75rem 1.1rem;font-weight:700}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{border:1px solid var(--line);padding:1.1rem}section{padding:3rem 0}
+.foot{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted)}
+@media(max-width:700px){nav{display:none}}
+`;
+
+writeDir(path.join(packs, "agency-website-template"), {
+  "styles.css": agencyCss,
+  "script.js": sharedJs,
+  "LICENSE.txt": license,
+  "README.md": `# Agency Website Template
+
+Open index.html. Replace agency name, services, and case studies.
+`,
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Northline Studio</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Northline", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "work.html", label: "Work" }, { href: "contact.html", label: "Contact" }])}
+<div class="hero wrap"><p>Digital studio</p><h1>Websites and systems for growing brands.</h1><p>Agency landing with services and work grid. Edit and host anywhere.</p><a class="btn" href="contact.html">Book a call</a></div>
+<section class="wrap"><div class="grid"><div class="card"><h3>Websites</h3><p>Marketing sites that convert.</p></div><div class="card"><h3>Systems</h3><p>Forms, CRM paths, automations.</p></div><div class="card"><h3>Care</h3><p>Monthly support retainers.</p></div></div></section>
+${foot("Northline Studio")}</body></html>`,
+  "services.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Services</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Northline", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "work.html", label: "Work" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>Services</h2><div class="grid"><div class="card"><h3>Brand site</h3><p>From brief to launch.</p></div><div class="card"><h3>Landing sprint</h3><p>One-week campaign pages.</p></div></div></section>
+${foot("Northline Studio")}</body></html>`,
+  "work.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Work</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Northline", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "work.html", label: "Work" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>Work</h2><div class="grid"><div class="card"><h3>Retail relaunch</h3><p>Sample case study.</p></div><div class="card"><h3>Travel lead system</h3><p>Sample case study.</p></div></div></section>
+${foot("Northline Studio")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Northline", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "work.html", label: "Work" }, { href: "contact.html", label: "Contact" }])}
+<section class="wrap"><h2>Contact</h2>
+<button class="btn" type="button" data-wa="Hi Northline, I need a website quote." data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("Northline Studio")}</body></html>`,
+});
+
+/* ── Consulting ─────────────────────────────────────────── */
+const consultCss = `:root{--bg:#f4f7fb;--ink:#0f172a;--muted:#64748b;--accent:#0f766e;--card:#fff;--line:rgba(15,23,42,.1)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:1000px;margin:0 auto;padding:0 1.25rem}
+.top{background:#fff;border-bottom:1px solid var(--line)}.bar{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-weight:700}.btn{display:inline-block;background:var(--accent);color:#fff;padding:.75rem 1.1rem;border-radius:8px;font-weight:600}
+.hero{padding:4.5rem 0 2.5rem}.hero h1{font-size:clamp(2rem,4.5vw,3.2rem);max-width:16ch;line-height:1.15}
+.hero p{color:var(--muted);max-width:36rem}.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);padding:1.1rem;border-radius:12px}
+section{padding:3rem 0}.foot{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.9rem}
+@media(max-width:700px){nav{display:none}}
+`;
+
+writeDir(path.join(packs, "consulting-website-template"), {
+  "styles.css": consultCss,
+  "script.js": sharedJs,
+  "LICENSE.txt": license,
+  "README.md": `# Consulting Website Template
+
+Open index.html. Replace consultant name, services, and booking CTA.
+`,
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClearPath Consulting</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("ClearPath", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "about.html", label: "About" }, { href: "contact.html", label: "Book" }])}
+<div class="hero wrap"><p>Business consulting</p><h1>Clear advice for growing small businesses.</h1><p>Replace this with your positioning. Ideal for consultants, coaches, and advisors.</p><a class="btn" href="contact.html">Book a call</a>
+<div class="grid" style="margin-top:2rem"><div class="card"><h3>Strategy</h3><p>90-day growth plans.</p></div><div class="card"><h3>Operations</h3><p>Process and team clarity.</p></div><div class="card"><h3>Offers</h3><p>Pricing and packaging.</p></div></div></div>
+${foot("ClearPath Consulting")}</body></html>`,
+  "services.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Services</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("ClearPath", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "about.html", label: "About" }, { href: "contact.html", label: "Book" }])}
+<section class="wrap"><h2>Services</h2><div class="grid"><div class="card"><h3>Audit</h3><p>One-week business review.</p></div><div class="card"><h3>Retainer</h3><p>Monthly advisory calls.</p></div></div></section>
+${foot("ClearPath Consulting")}</body></html>`,
+  "about.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("ClearPath", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "about.html", label: "About" }, { href: "contact.html", label: "Book" }])}
+<section class="wrap"><h2>About</h2><p>Short bio, industries you serve, and proof points.</p></section>
+${foot("ClearPath Consulting")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("ClearPath", [{ href: "index.html", label: "Home" }, { href: "services.html", label: "Services" }, { href: "about.html", label: "About" }, { href: "contact.html", label: "Book" }])}
+<section class="wrap"><h2>Book a call</h2><p>Replace with your calendar link or form.</p>
+<button class="btn" type="button" data-wa="Hi, I want to book a consulting call." data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("ClearPath Consulting")}</body></html>`,
+});
+
 zipPack("restaurant-website-template");
 zipPack("travel-agency-website-template");
 zipPack("church-website-template");
+zipPack("saas-landing-website-template");
+zipPack("portfolio-website-template");
+zipPack("agency-website-template");
+zipPack("consulting-website-template");
 console.log("website templates ready");

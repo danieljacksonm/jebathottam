@@ -14,9 +14,12 @@ import { localizeProduct } from "./product-i18n";
 import {
   STORE_CATEGORIES,
   STORE_CATEGORY_PAGES,
+  PRODUCT_TYPE_OPTIONS,
   orderedProducts,
   formatINR,
-  productMatchesFilter,
+  filterDiscoverProducts,
+  collectTechOptions,
+  type StoreSort,
 } from "./data";
 import {
   SITE_EMAIL,
@@ -28,12 +31,31 @@ import {
 export default function ProductsPage() {
   const { t, rtl, locale, lp } = useStoreI18n();
   const [activeCat, setActiveCat] = useState<string>("ALL");
+  const [query, setQuery] = useState("");
+  const [productType, setProductType] = useState("all");
+  const [technology, setTechnology] = useState("all");
+  const [difficulty, setDifficulty] = useState("all");
+  const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
+  const [sort, setSort] = useState<StoreSort>("featured");
   const shelfRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const applyFromUrl = () => {
-      const cat = new URLSearchParams(window.location.search).get("cat");
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get("cat");
       if (cat) setActiveCat(cat);
+      const q = params.get("q");
+      if (q) setQuery(q);
+      const type = params.get("type");
+      if (type) setProductType(type);
+      const tech = params.get("tech");
+      if (tech) setTechnology(tech);
+      const diff = params.get("difficulty");
+      if (diff) setDifficulty(diff);
+      const price = params.get("price");
+      if (price === "free" || price === "paid" || price === "all") setPriceFilter(price);
+      const s = params.get("sort") as StoreSort | null;
+      if (s) setSort(s);
       const hash = window.location.hash.replace("#", "");
       if (!hash) return;
       requestAnimationFrame(() => {
@@ -63,15 +85,16 @@ export default function ProductsPage() {
   }, []);
 
   const catalog = orderedProducts();
+  const techOptions = useMemo(() => collectTechOptions(catalog), [catalog]);
   const featured = catalog
     .filter((p) =>
-      ["ebenezer-saas", "invoice-generator", "restaurant-website-template", "travel-agency-website-template"].includes(
-        p.slug
-      )
+      ["ebenezer-saas", "invoice-generator", "saas-landing-website-template", "qr-menu-generator"].includes(p.slug)
     )
     .map((p) => localizeProduct(p, locale));
   const bestsellers = catalog.filter((p) =>
-    ["invoice-generator", "restaurant-website-template", "ebenezer-saas", "quotation-generator"].includes(p.slug)
+    ["invoice-generator", "restaurant-website-template", "ebenezer-saas", "quotation-generator", "qr-menu-generator"].includes(
+      p.slug
+    )
   );
   const freebies = catalog.filter(
     (p) =>
@@ -80,9 +103,46 @@ export default function ProductsPage() {
   );
   const bundles = catalog.filter((p) => p.isBundle);
   const filtered = useMemo(
-    () => (activeCat === "ALL" ? catalog : catalog.filter((p) => productMatchesFilter(p, activeCat))),
-    [activeCat, catalog]
+    () =>
+      filterDiscoverProducts(catalog, {
+        query,
+        category: activeCat,
+        productType,
+        technology,
+        difficulty,
+        price: priceFilter,
+        sort,
+      }),
+    [activeCat, catalog, difficulty, priceFilter, productType, query, sort, technology]
   );
+
+  const syncUrl = (next: {
+    cat?: string;
+    q?: string;
+    type?: string;
+    tech?: string;
+    difficulty?: string;
+    price?: string;
+    sort?: string;
+  }) => {
+    const params = new URLSearchParams();
+    const cat = next.cat ?? activeCat;
+    const q = next.q ?? query;
+    const type = next.type ?? productType;
+    const tech = next.tech ?? technology;
+    const diff = next.difficulty ?? difficulty;
+    const price = next.price ?? priceFilter;
+    const s = next.sort ?? sort;
+    if (cat && cat !== "ALL") params.set("cat", cat);
+    if (q.trim()) params.set("q", q.trim());
+    if (type !== "all") params.set("type", type);
+    if (tech !== "all") params.set("tech", tech);
+    if (diff !== "all") params.set("difficulty", diff);
+    if (price !== "all") params.set("price", price);
+    if (s !== "featured") params.set("sort", s);
+    const qs = params.toString();
+    window.history.replaceState(null, "", qs ? `/products?${qs}#all-products` : "/products#all-products");
+  };
 
   const trustItems = [
     { icon: <Truck className="h-5 w-5 text-[var(--s-brand)]" />, title: "Ready to use", desc: "Software, tools, and real source files — not tip PDFs." },
@@ -205,17 +265,29 @@ export default function ProductsPage() {
         <div className="mb-8">
           <span className="s-section-label">{t("featured")}</span>
           <h2 className="text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">All products</h2>
+          <p className="mt-2 text-sm text-[var(--s-muted)]">
+            Filter by type, technology, and price. Search works on name, tags, and use case.
+          </p>
         </div>
-        <div className="mb-8 flex flex-wrap gap-2">
+        <div className="mb-4">
+          <input
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              syncUrl({ q: e.target.value });
+            }}
+            placeholder="Search products, tech, tags…"
+            className="w-full max-w-xl rounded-xl border border-[var(--s-line)] bg-[var(--s-surface)] px-4 py-2.5 text-sm text-[var(--s-ink)] outline-none focus:border-[var(--s-brand)]"
+          />
+        </div>
+        <div className="mb-4 flex flex-wrap gap-2">
           {["ALL", ...STORE_CATEGORIES].map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => {
                 setActiveCat(cat);
-                const url =
-                  cat === "ALL" ? "/products#all-products" : `/products?cat=${encodeURIComponent(cat)}#all-products`;
-                window.history.replaceState(null, "", url);
+                syncUrl({ cat });
               }}
               className={`rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-150 ${
                 activeCat === cat
@@ -227,11 +299,105 @@ export default function ProductsPage() {
             </button>
           ))}
         </div>
+        <div className="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <label className="text-xs font-semibold uppercase tracking-wide text-[var(--s-muted)]">
+            Type
+            <select
+              value={productType}
+              onChange={(e) => {
+                setProductType(e.target.value);
+                syncUrl({ type: e.target.value });
+              }}
+              className="mt-1 w-full rounded-lg border border-[var(--s-line)] bg-[var(--s-surface)] px-3 py-2 text-sm font-medium text-[var(--s-ink)]"
+            >
+              <option value="all">All types</option>
+              {PRODUCT_TYPE_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-[var(--s-muted)]">
+            Technology
+            <select
+              value={technology}
+              onChange={(e) => {
+                setTechnology(e.target.value);
+                syncUrl({ tech: e.target.value });
+              }}
+              className="mt-1 w-full rounded-lg border border-[var(--s-line)] bg-[var(--s-surface)] px-3 py-2 text-sm font-medium text-[var(--s-ink)]"
+            >
+              <option value="all">All tech</option>
+              {techOptions.map((tech) => (
+                <option key={tech} value={tech}>
+                  {tech}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-[var(--s-muted)]">
+            Price
+            <select
+              value={priceFilter}
+              onChange={(e) => {
+                const v = e.target.value as "all" | "free" | "paid";
+                setPriceFilter(v);
+                syncUrl({ price: v });
+              }}
+              className="mt-1 w-full rounded-lg border border-[var(--s-line)] bg-[var(--s-surface)] px-3 py-2 text-sm font-medium text-[var(--s-ink)]"
+            >
+              <option value="all">Any price</option>
+              <option value="free">Free</option>
+              <option value="paid">Paid</option>
+            </select>
+          </label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-[var(--s-muted)]">
+            Difficulty
+            <select
+              value={difficulty}
+              onChange={(e) => {
+                setDifficulty(e.target.value);
+                syncUrl({ difficulty: e.target.value });
+              }}
+              className="mt-1 w-full rounded-lg border border-[var(--s-line)] bg-[var(--s-surface)] px-3 py-2 text-sm font-medium text-[var(--s-ink)]"
+            >
+              <option value="all">Any level</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </label>
+          <label className="text-xs font-semibold uppercase tracking-wide text-[var(--s-muted)]">
+            Sort
+            <select
+              value={sort}
+              onChange={(e) => {
+                const v = e.target.value as StoreSort;
+                setSort(v);
+                syncUrl({ sort: v });
+              }}
+              className="mt-1 w-full rounded-lg border border-[var(--s-line)] bg-[var(--s-surface)] px-3 py-2 text-sm font-medium text-[var(--s-ink)]"
+            >
+              <option value="featured">Featured</option>
+              <option value="newest">Newest</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="name">Name</option>
+            </select>
+          </label>
+        </div>
+        <p className="mb-4 text-sm text-[var(--s-muted)]">{filtered.length} product{filtered.length === 1 ? "" : "s"}</p>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filtered.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
+        {filtered.length === 0 && (
+          <p className="rounded-xl border border-[var(--s-line)] bg-[var(--s-surface)] p-8 text-center text-[var(--s-muted)]">
+            No products match these filters. Try clearing search or choosing All types.
+          </p>
+        )}
       </section>
 
       <section className="bg-[var(--s-surface)] py-16">

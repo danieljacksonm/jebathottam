@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:store-kits": "node scripts/build-store-pdfs.mjs && node scripts/build-store-zips.mjs && node scripts/build-website-templates.mjs"
+    "build:store-kits": "node scripts/build-store-pdfs.mjs && node scripts/build-store-zips.mjs && node scripts/build-website-templates.mjs && npx tsx scripts/sync-store-products.mjs",
+    "sync:store-products": "npx tsx scripts/sync-store-products.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.3.0",

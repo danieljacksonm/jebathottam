@@ -40,6 +40,18 @@ type Product = {
   downloadFile?: string;
   fileName?: string;
   fileSize?: string;
+  previewUrl?: string;
+  demoUrl?: string;
+  canvaLink?: string;
+  figmaLink?: string;
+  tags?: string[];
+  difficulty?: string;
+  nextjsVersion?: string;
+  reactVersion?: string;
+  nodeRequirement?: string;
+  templateCount?: string;
+  dimensions?: string;
+  faq?: { q: string; a: string }[];
 };
 
 const emptyForm = {
@@ -75,6 +87,18 @@ const emptyForm = {
   setupRequirements: "",
   accessMethod: "download",
   supportInfo: "",
+  previewUrl: "",
+  demoUrl: "",
+  canvaLink: "",
+  figmaLink: "",
+  tags: "",
+  difficulty: "",
+  nextjsVersion: "",
+  reactVersion: "",
+  nodeRequirement: "",
+  templateCount: "",
+  dimensions: "",
+  faq: "",
 };
 
 function splitList(value: string): string[] {
@@ -160,6 +184,18 @@ export default function StoreProductsAdminPage() {
       setupRequirements: p.setupRequirements || "",
       accessMethod: p.accessMethod || "download",
       supportInfo: p.supportInfo || "",
+      previewUrl: p.previewUrl || "",
+      demoUrl: p.demoUrl || "",
+      canvaLink: p.canvaLink || "",
+      figmaLink: p.figmaLink || "",
+      tags: (p.tags || []).join(", "),
+      difficulty: p.difficulty || "",
+      nextjsVersion: p.nextjsVersion || "",
+      reactVersion: p.reactVersion || "",
+      nodeRequirement: p.nodeRequirement || "",
+      templateCount: p.templateCount || "",
+      dimensions: p.dimensions || "",
+      faq: (p.faq || []).map((f) => `${f.q} | ${f.a}`).join("\n"),
     });
     setModalOpen(true);
   };
@@ -200,6 +236,26 @@ export default function StoreProductsAdminPage() {
       setupRequirements: form.setupRequirements || undefined,
       accessMethod: form.accessMethod || undefined,
       supportInfo: form.supportInfo || undefined,
+      previewUrl: form.previewUrl || undefined,
+      demoUrl: form.demoUrl || undefined,
+      canvaLink: form.canvaLink || undefined,
+      figmaLink: form.figmaLink || undefined,
+      tags: splitList(form.tags),
+      difficulty: form.difficulty || undefined,
+      nextjsVersion: form.nextjsVersion || undefined,
+      reactVersion: form.reactVersion || undefined,
+      nodeRequirement: form.nodeRequirement || undefined,
+      templateCount: form.templateCount || undefined,
+      dimensions: form.dimensions || undefined,
+      faq: form.faq
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const [q, ...rest] = line.split("|");
+          return { q: (q || "").trim(), a: rest.join("|").trim() };
+        })
+        .filter((f) => f.q && f.a),
     };
 
     if (editing) {
@@ -241,6 +297,12 @@ export default function StoreProductsAdminPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Store Products</h1>
           <p className="mt-1 text-sm text-slate-400">Manage Ebenezer Store digital products</p>
+          <p className="mt-2 max-w-2xl rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-200">
+            Live shop reads from <code className="text-amber-100">app/products/data.ts</code>. Admin saves to{" "}
+            <code className="text-amber-100">data/store.json</code> and is synced from the catalog seed on server start.
+            For permanent catalog changes, update <code className="text-amber-100">data.ts</code> (or expect sync to
+            reset admin-only edits).
+          </p>
         </div>
         <button
           type="button"
@@ -283,7 +345,7 @@ export default function StoreProductsAdminPage() {
                     <p className="text-xs text-slate-500">/{p.slug}</p>
                   </td>
                   <td className="px-4 py-3">{p.category}</td>
-                  <td className="px-4 py-3">₹{p.price}</td>
+                  <td className="px-4 py-3">${p.price}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`rounded-full border px-2 py-0.5 text-xs ${
@@ -375,7 +437,7 @@ export default function StoreProductsAdminPage() {
                 <textarea rows={2} value={form.story} onChange={(e) => setForm({ ...form, story: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
               </label>
               <label className="block text-sm text-slate-300">
-                Price (INR)
+                Price (USD)
                 <input type="number" min={0} value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
               </label>
               <label className="block text-sm text-slate-300">
@@ -479,6 +541,97 @@ export default function StoreProductsAdminPage() {
                 Support info
                 <input value={form.supportInfo} onChange={(e) => setForm({ ...form, supportInfo: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
               </label>
+              <label className="block text-sm text-slate-300">
+                Tags
+                <input value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="restaurant, html, saas" />
+              </label>
+              <label className="block text-sm text-slate-300">
+                Difficulty
+                <select value={form.difficulty} onChange={(e) => setForm({ ...form, difficulty: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white">
+                  <option value="">—</option>
+                  <option value="beginner">beginner</option>
+                  <option value="intermediate">intermediate</option>
+                  <option value="advanced">advanced</option>
+                </select>
+              </label>
+              <label className="block text-sm text-slate-300">
+                Live preview URL
+                <input value={form.previewUrl} onChange={(e) => setForm({ ...form, previewUrl: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="/downloads/packs/.../index.html" />
+              </label>
+              <label className="block text-sm text-slate-300">
+                Demo URL
+                <input value={form.demoUrl} onChange={(e) => setForm({ ...form, demoUrl: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="/tools/..." />
+              </label>
+
+              <label className="block text-sm text-slate-300 sm:col-span-2">
+                FAQ (one per line: Question | Answer)
+                <textarea
+                  rows={3}
+                  value={form.faq}
+                  onChange={(e) => setForm({ ...form, faq: e.target.value })}
+                  className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white"
+                  placeholder="Do I need an account? | No. Open and use in the browser."
+                />
+              </label>
+
+              {(form.productType === "website_template" || form.productType === "code_template") && (
+                <div className="sm:col-span-2 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-amber-300">Code / website template fields</p>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <label className="block text-sm text-slate-300">
+                      Next.js version
+                      <input value={form.nextjsVersion} onChange={(e) => setForm({ ...form, nextjsVersion: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="14 (if Next.js)" />
+                    </label>
+                    <label className="block text-sm text-slate-300">
+                      React version
+                      <input value={form.reactVersion} onChange={(e) => setForm({ ...form, reactVersion: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                    </label>
+                    <label className="block text-sm text-slate-300">
+                      Node requirement
+                      <input value={form.nodeRequirement} onChange={(e) => setForm({ ...form, nodeRequirement: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="18+" />
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              {form.productType === "canva_template" && (
+                <div className="sm:col-span-2 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-amber-300">Canva fields</p>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <label className="block text-sm text-slate-300 sm:col-span-3">
+                      Canva share link
+                      <input value={form.canvaLink} onChange={(e) => setForm({ ...form, canvaLink: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="https://www.canva.com/design/..." />
+                    </label>
+                    <label className="block text-sm text-slate-300">
+                      Template count
+                      <input value={form.templateCount} onChange={(e) => setForm({ ...form, templateCount: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+                    </label>
+                    <label className="block text-sm text-slate-300 sm:col-span-2">
+                      Dimensions
+                      <input value={form.dimensions} onChange={(e) => setForm({ ...form, dimensions: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="1080×1080, Stories 1080×1920" />
+                    </label>
+                  </div>
+                  <p className="mt-2 text-xs text-slate-500">Keep status = draft until a real Canva link exists.</p>
+                </div>
+              )}
+
+              {(form.productType === "figma_kit" || form.productType === "ui_kit") && (
+                <div className="sm:col-span-2 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-amber-300">Figma / UI kit fields</p>
+                  <label className="block text-sm text-slate-300">
+                    Figma file link
+                    <input value={form.figmaLink} onChange={(e) => setForm({ ...form, figmaLink: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="https://www.figma.com/file/..." />
+                  </label>
+                </div>
+              )}
+
+              {(form.productType === "software" || form.productType === "digital_tool" || form.productType === "ai_tool") && (
+                <div className="sm:col-span-2 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-amber-300">Software / tool</p>
+                  <p className="text-xs text-slate-400">Use External URL + Access method = web_app. Mark “Opens as software” so checkout skips ZIP.</p>
+                </div>
+              )}
+
               <label className="flex items-center gap-2 text-sm text-slate-300">
                 <input type="checkbox" checked={form.isSoftware} onChange={(e) => setForm({ ...form, isSoftware: e.target.checked })} />
                 Opens as software / web tool (no ZIP buy flow)

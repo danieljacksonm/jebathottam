@@ -36,10 +36,12 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
   const [activeImage, setActiveImage] = useState(product.gallery[0] || product.image);
   const [imgBroken, setImgBroken] = useState(false);
   const [license, setLicense] = useState(product.license[0] || "Personal");
-  const related = STORE_PRODUCTS.filter((p) => p.id !== raw.id && p.category === raw.category).slice(0, 3);
+  const related = STORE_PRODUCTS.filter(
+    (p) => p.status === "published" && p.id !== raw.id && p.category === raw.category
+  ).slice(0, 3);
   const relatedFallback = related.length
     ? related
-    : STORE_PRODUCTS.filter((p) => p.id !== raw.id).slice(0, 3);
+    : STORE_PRODUCTS.filter((p) => p.status === "published" && p.id !== raw.id).slice(0, 3);
 
   const isInternalApp = Boolean(product.isSoftware && product.externalUrl?.startsWith("/"));
   const buyHref = product.isSoftware && product.externalUrl
@@ -182,6 +184,16 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
                   Live preview →
                 </a>
               )}
+              {!product.previewUrl && product.demoUrl && (
+                <a
+                  href={product.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-[var(--s-brand)] hover:underline"
+                >
+                  Open demo →
+                </a>
+              )}
             </div>
 
             {/* Buy buttons — desktop */}
@@ -221,6 +233,18 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
               <div className="mt-5 rounded-xl border border-[var(--s-line)] bg-[var(--s-brand-bg)] p-4 text-sm">
                 <p className="font-semibold text-[var(--s-brand-dk)]">Best for</p>
                 <p className="mt-1 text-[var(--s-muted)]">{product.whoItIsFor}</p>
+              </div>
+            )}
+            {product.tags && product.tags.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {product.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-[var(--s-line)] px-2.5 py-0.5 text-xs text-[var(--s-muted)]"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             )}
           </div>
@@ -388,8 +412,77 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
               <p className="mt-1 text-sm text-[var(--s-ink)]">{product.supportInfo}</p>
             </div>
           )}
+          {product.difficulty && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Difficulty</p>
+              <p className="mt-1 font-semibold capitalize text-[var(--s-ink)]">{product.difficulty}</p>
+            </div>
+          )}
+          {product.nextjsVersion && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Next.js</p>
+              <p className="mt-1 font-semibold text-[var(--s-ink)]">{product.nextjsVersion}</p>
+            </div>
+          )}
+          {product.nodeRequirement && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Node</p>
+              <p className="mt-1 font-semibold text-[var(--s-ink)]">{product.nodeRequirement}</p>
+            </div>
+          )}
         </div>
       </section>
+
+      {product.isBundle && product.bundleItems && product.bundleItems.length > 0 && (
+        <section className="s-page py-10">
+          <span className="s-section-label">Bundle includes</span>
+          <h2 className="mb-4 text-2xl font-bold text-[var(--s-ink)]">Open each product</h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {product.bundleItems.map((slugOrId) => {
+              const item =
+                STORE_PRODUCTS.find((p) => p.slug === slugOrId || p.id === slugOrId) ||
+                null;
+              if (!item || item.status !== "published") {
+                return (
+                  <div key={slugOrId} className="rounded-lg border border-[var(--s-line)] p-4 text-sm text-[var(--s-muted)]">
+                    {slugOrId}
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={item.id}
+                  href={lp(`/products/${item.slug}`)}
+                  className="rounded-lg border border-[var(--s-line)] p-4 text-sm hover:border-[var(--s-brand)]"
+                >
+                  <p className="font-semibold text-[var(--s-ink)]">{item.name}</p>
+                  <p className="mt-1 text-[var(--s-muted)]">{item.tagline}</p>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {product.faq && product.faq.length > 0 && (
+        <section className="border-t border-[var(--s-line)] bg-[var(--s-surface)]">
+          <div className="s-page py-12">
+            <span className="s-section-label">FAQ</span>
+            <h2 className="mb-6 text-2xl font-bold text-[var(--s-ink)]">Common questions</h2>
+            <div className="mx-auto max-w-3xl space-y-3">
+              {product.faq.map((item) => (
+                <details
+                  key={item.q}
+                  className="rounded-xl border border-[var(--s-line)] bg-[var(--s-surface)] px-4 py-3 open:shadow-sm"
+                >
+                  <summary className="cursor-pointer list-none font-semibold text-[var(--s-ink)]">{item.q}</summary>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--s-muted)]">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ── Compatibility ───────────────────────────── */}
       <section className="s-page py-10">

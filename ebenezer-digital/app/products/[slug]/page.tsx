@@ -8,7 +8,7 @@ import { canonicalFor, pageMetadata } from "@/lib/site-url";
 type Props = { params: { slug: string } };
 
 export function generateStaticParams() {
-  return STORE_PRODUCTS.map((p) => ({ slug: p.slug }));
+  return STORE_PRODUCTS.filter((p) => p.status === "published").map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -54,16 +54,29 @@ export default function ProductPage({ params }: Props) {
       availability: "https://schema.org/InStock",
       url: canonicalFor(`/products/${product.slug}`),
     },
-    ...(product.rating
+    ...(product.rating && (product.reviews || 0) > 0
       ? {
           aggregateRating: {
             "@type": "AggregateRating",
             ratingValue: product.rating,
-            reviewCount: product.reviews || 1,
+            reviewCount: product.reviews,
           },
         }
       : {}),
   };
+
+  const faqLd =
+    product.faq && product.faq.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: product.faq.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        }
+      : null;
 
   return (
     <>
@@ -71,6 +84,9 @@ export default function ProductPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      )}
       <span className="sr-only">{formatINR(product.price)}</span>
       <ProductView product={product} />
     </>

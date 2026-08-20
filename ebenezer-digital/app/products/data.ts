@@ -1,4 +1,5 @@
 import type { StoreProductType } from "./taxonomy";
+import { productMatchesFilter } from "./taxonomy";
 
 export type { StoreProductType } from "./taxonomy";
 export {
@@ -46,6 +47,19 @@ export type StoreProduct = {
   setupRequirements?: string;
   accessMethod?: "download" | "web_app" | "external_link" | "docs";
   supportInfo?: string;
+  tags?: string[];
+  difficulty?: "beginner" | "intermediate" | "advanced";
+  faq?: { q: string; a: string }[];
+  /** Live demo URL (same as preview when HTML template) */
+  demoUrl?: string;
+  /** Type-specific admin/meta fields */
+  canvaLink?: string;
+  figmaLink?: string;
+  nextjsVersion?: string;
+  reactVersion?: string;
+  nodeRequirement?: string;
+  templateCount?: string;
+  dimensions?: string;
   rating?: number;
   reviews?: number;
   isFree?: boolean;
@@ -69,9 +83,21 @@ export const FEATURED_ORDER = [
   "ebenezer-saas",
   "invoice-generator",
   "quotation-generator",
+  "receipt-generator",
+  "proposal-generator",
+  "qr-menu-generator",
+  "expense-tracker",
+  "saas-landing-website-template",
+  "portfolio-website-template",
+  "agency-website-template",
+  "consulting-website-template",
   "restaurant-website-template",
   "travel-agency-website-template",
   "church-website-template",
+  "small-business-starter-bundle",
+  "travel-business-system-bundle",
+  "church-starter-bundle",
+  "freelancer-starter-bundle",
   "whatsapp-business-kit",
   "invoice-receipt-templates",
   "creator-landing-kit",
@@ -1020,6 +1046,16 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     compatibility: ["Chrome", "Edge", "Firefox", "Safari", "Mobile browsers"],
     license: ["Free to use for your business invoices"],
     whoItIsFor: "Shops, freelancers, and service providers who need a clean invoice today.",
+    faq: [
+      {
+        q: "Do I need an account?",
+        a: "No. Open the tool and start typing. Print or save as PDF from your browser.",
+      },
+      {
+        q: "Is my invoice data stored on your server?",
+        a: "No. The form runs in your browser. Clear the page and the data is gone unless you printed it.",
+      },
+    ],
     publishedAt: "2026-08-20",
     status: "published",
     rating: 5,
@@ -1279,6 +1315,779 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     seoDescription:
       "Free church website template with real HTML, CSS, and JavaScript. Service times, ministries, and contact pages.",
   },
+
+  /* ── 18. QR Menu Generator ───────────────────────────── */
+  {
+    id: "dp-qr-menu",
+    slug: "qr-menu-generator",
+    name: "QR Menu Generator",
+    tagline: "Build a digital restaurant menu and put a QR on every table.",
+    description:
+      "A live tool for cafes and restaurants: add categories and dishes, print a clean menu, and generate a QR code guests can scan. This is a working generator — not a PDF of menu tips.",
+    story:
+      "Paper menus go out of date every week. A QR menu lets you update prices once and reprint the code when needed.",
+    category: "Software & Tools",
+    productType: "digital_tool",
+    accessMethod: "web_app",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web", "Windows", "macOS", "Android", "iPhone"],
+    fileFormats: ["Print", "PDF (browser print)", "QR image"],
+    version: "1.0",
+    updatePolicy: "Cloud updates on the same URL.",
+    setupRequirements: "Any modern browser. Optional: print QR on sticker paper.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["restaurant", "cafe", "qr", "menu", "hospitality"],
+    difficulty: "beginner",
+    demoUrl: "/tools/qr-menu-generator",
+    faq: [
+      {
+        q: "Do I need an app on the phone?",
+        a: "No. Guests use the camera QR scanner. You edit the menu in the browser.",
+      },
+      {
+        q: "Where is my menu saved?",
+        a: "The share link encodes the menu in the URL. For a long menu, use our restaurant website template and point the QR to that page.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/tools/qr-menu-generator",
+    externalCta: "Open QR menu tool",
+    image: U("photo-1517248135467-4c7edcad34c4"),
+    gallery: [U("photo-1517248135467-4c7edcad34c4"), U("photo-1559339352-11d035aa65de")],
+    features: [
+      "Categories and line items with prices",
+      "Print / Save as PDF menu",
+      "QR code for table stickers",
+      "Copy shareable menu link",
+    ],
+    includes: ["Browser QR menu generator", "Print-ready menu layout", "QR image for tables"],
+    compatibility: ["Chrome", "Edge", "Firefox", "Safari", "Mobile browsers"],
+    license: ["Free to use for your restaurant or cafe"],
+    whoItIsFor: "Restaurants, cafes, bakeries, and food stalls that want a digital table menu.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Free QR Menu Generator for Restaurants",
+    seoDescription:
+      "Build a digital restaurant menu, print it, and create a QR code for tables. Free browser tool from Ebenezer Store.",
+  },
+
+  /* ── 19. Expense Tracker ─────────────────────────────── */
+  {
+    id: "dp-expense",
+    slug: "expense-tracker",
+    name: "Expense Tracker",
+    tagline: "Log shop expenses, see totals by category, export CSV.",
+    description:
+      "A browser expense tracker for small shops: date, category, note, and amount. Totals update live. Export CSV or print a report. Data stays on your device (localStorage).",
+    story:
+      "Many shop owners track expenses in a notebook and lose the picture at month end. This tool gives a clear total without installing software.",
+    category: "Software & Tools",
+    productType: "digital_tool",
+    accessMethod: "web_app",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web"],
+    fileFormats: ["CSV", "Print / PDF"],
+    version: "1.0",
+    updatePolicy: "Cloud updates on the same URL.",
+    setupRequirements: "Any modern browser. Data is stored locally on the device.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["expenses", "shop", "accounting", "csv"],
+    difficulty: "beginner",
+    demoUrl: "/tools/expense-tracker",
+    faq: [
+      {
+        q: "Is my data uploaded to a server?",
+        a: "No. Expenses are saved in your browser only. Clearing site data will erase them — export CSV for backup.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/tools/expense-tracker",
+    externalCta: "Open expense tracker",
+    image: U("photo-1554224154-26032ffc0d07"),
+    gallery: [U("photo-1554224154-26032ffc0d07"), U("photo-1460925895917-afdab827c52f")],
+    features: [
+      "Categories with live totals",
+      "CSV export",
+      "Printable monthly-style report",
+      "No account required",
+    ],
+    includes: ["Browser expense tracker", "CSV export", "Print report"],
+    compatibility: ["Chrome", "Edge", "Firefox", "Safari"],
+    license: ["Free to use for your business"],
+    whoItIsFor: "Shop owners, freelancers, and small teams tracking daily costs.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Free Expense Tracker – CSV Export in Browser",
+    seoDescription:
+      "Track shop expenses by category, export CSV, and print a report. Free browser tool. Data stays on your device.",
+  },
+
+  /* ── 20. SaaS landing template ───────────────────────── */
+  {
+    id: "dp-saas-land",
+    slug: "saas-landing-website-template",
+    name: "SaaS Landing Website Template",
+    tagline: "HTML landing page for startups: hero, features, pricing, contact.",
+    description:
+      "A dark, clean SaaS marketing site in real HTML/CSS/JS. Edit the product name, features, and pricing, then host on any static host. Source files included — not screenshots only.",
+    story:
+      "Founders waste weeks on a first landing page. This template gives a shippable structure in one afternoon.",
+    category: "Website Templates",
+    productType: "website_template",
+    accessMethod: "download",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Static hosting", "Netlify", "Vercel", "cPanel"],
+    fileFormats: ["HTML", "CSS", "JS", "ZIP"],
+    version: "1.0",
+    updatePolicy: "Download the latest ZIP from this product page when we publish updates.",
+    setupRequirements: "Unzip and open index.html, or upload the folder to any web host.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["saas", "startup", "landing", "html"],
+    difficulty: "beginner",
+    previewUrl: "/downloads/packs/saas-landing-website-template/index.html",
+    demoUrl: "/downloads/packs/saas-landing-website-template/index.html",
+    faq: [
+      {
+        q: "Do I need React or Next.js?",
+        a: "No. This is plain HTML/CSS/JS. Open the files and edit text.",
+      },
+      {
+        q: "Can I use it commercially?",
+        a: "Yes — for your own SaaS or client projects under the included license.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    image: U("photo-1460925895917-afdab827c52f"),
+    gallery: [U("photo-1460925895917-afdab827c52f"), U("photo-1551288049-bebda4e38f71")],
+    features: [
+      "Hero, features, pricing, contact pages",
+      "Mobile-ready layout",
+      "WhatsApp CTA helper in script.js",
+      "No build step",
+    ],
+    includes: [
+      "index.html, features.html, pricing.html, contact.html",
+      "styles.css, script.js",
+      "README.md, LICENSE.txt",
+    ],
+    downloadContentsPlan: [
+      "index.html",
+      "features.html",
+      "pricing.html",
+      "contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    compatibility: ["Any static host", "Local browser preview"],
+    license: ["Personal and commercial use for your projects"],
+    whoItIsFor: "Startup founders and freelancers shipping a SaaS marketing site fast.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    downloadFile: "/downloads/saas-landing-website-template.zip",
+    fileName: "saas-landing-website-template.zip",
+    fileSize: "HTML + CSS + JS source",
+    seoTitle: "Free SaaS Landing Page Template – HTML Download",
+    seoDescription:
+      "Download a free SaaS landing website template with real HTML, CSS, and JavaScript. Features, pricing, and contact pages.",
+  },
+
+  /* ── 21. Portfolio template ──────────────────────────── */
+  {
+    id: "dp-portfolio",
+    slug: "portfolio-website-template",
+    name: "Portfolio Website Template",
+    tagline: "Clean HTML portfolio for freelancers and creators.",
+    description:
+      "A calm portfolio site with work grid, about, and contact. Real HTML/CSS/JS source. Edit your name and projects, then host anywhere.",
+    story:
+      "Creators need a simple site that looks professional without WordPress. This template is that starting point.",
+    category: "Website Templates",
+    productType: "website_template",
+    accessMethod: "download",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Static hosting"],
+    fileFormats: ["HTML", "CSS", "JS", "ZIP"],
+    version: "1.0",
+    updatePolicy: "Latest ZIP on this product page.",
+    setupRequirements: "Unzip and edit HTML text. Upload to any host.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["portfolio", "freelancer", "creator", "html"],
+    difficulty: "beginner",
+    previewUrl: "/downloads/packs/portfolio-website-template/index.html",
+    demoUrl: "/downloads/packs/portfolio-website-template/index.html",
+    faq: [
+      {
+        q: "Can I add my own project images?",
+        a: "Yes. Replace the project cards with your images and links in the HTML.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    image: U("photo-1498050108023-c5249f4df085"),
+    gallery: [U("photo-1498050108023-c5249f4df085"), U("photo-1522542550221-31fd19575c2f")],
+    features: ["Work / about / contact pages", "Print-friendly typography", "WhatsApp contact button"],
+    includes: ["index.html, about.html, contact.html", "styles.css, script.js", "README.md, LICENSE.txt"],
+    downloadContentsPlan: [
+      "index.html",
+      "about.html",
+      "contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    compatibility: ["Any static host"],
+    license: ["Personal and commercial use for your portfolio"],
+    whoItIsFor: "Freelancers, designers, photographers, and creators.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    downloadFile: "/downloads/portfolio-website-template.zip",
+    fileName: "portfolio-website-template.zip",
+    fileSize: "HTML + CSS + JS source",
+    seoTitle: "Free Portfolio Website Template – HTML Source",
+    seoDescription:
+      "Free freelancer portfolio website template with real HTML, CSS, and JavaScript. Work grid, about, and contact.",
+  },
+
+  /* ── 22. Agency template ─────────────────────────────── */
+  {
+    id: "dp-agency",
+    slug: "agency-website-template",
+    name: "Agency Website Template",
+    tagline: "Dark studio site for agencies: services, work, contact.",
+    description:
+      "A bold agency marketing site in HTML/CSS/JS. Services, work grid, and contact with WhatsApp helper. Download real source — not mockups only.",
+    story:
+      "Agencies need a sharp first site before custom builds. This template is ready to rebrand in an evening.",
+    category: "Website Templates",
+    productType: "website_template",
+    accessMethod: "download",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Static hosting"],
+    fileFormats: ["HTML", "CSS", "JS", "ZIP"],
+    version: "1.0",
+    updatePolicy: "Latest ZIP on this product page.",
+    setupRequirements: "Unzip, edit copy, upload folder.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["agency", "studio", "services", "html"],
+    difficulty: "beginner",
+    previewUrl: "/downloads/packs/agency-website-template/index.html",
+    demoUrl: "/downloads/packs/agency-website-template/index.html",
+    faq: [
+      {
+        q: "Is this WordPress?",
+        a: "No. Plain HTML. You can later move content into WordPress if you want.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    image: U("photo-1556761175-5973dc0f32e7"),
+    gallery: [U("photo-1556761175-5973dc0f32e7"), U("photo-1542744173-8e2bd736161e")],
+    features: ["Home, services, work, contact", "Dark studio look", "WhatsApp CTA"],
+    includes: [
+      "index.html, services.html, work.html, contact.html",
+      "styles.css, script.js",
+      "README.md, LICENSE.txt",
+    ],
+    downloadContentsPlan: [
+      "index.html",
+      "services.html",
+      "work.html",
+      "contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    compatibility: ["Any static host"],
+    license: ["Personal and commercial use for agency sites"],
+    whoItIsFor: "Digital agencies, studios, and freelancers selling services.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    downloadFile: "/downloads/agency-website-template.zip",
+    fileName: "agency-website-template.zip",
+    fileSize: "HTML + CSS + JS source",
+    seoTitle: "Free Agency Website Template – HTML Download",
+    seoDescription:
+      "Free agency website template with real HTML source. Services, work, and contact pages for studios.",
+  },
+
+  /* ── 23. Small Business Starter Bundle ───────────────── */
+  {
+    id: "dp-smb-bundle",
+    slug: "small-business-starter-bundle",
+    name: "Small Business Starter Bundle",
+    tagline: "Website template + invoice tool + quotation tool in one pack.",
+    description:
+      "A starter system for small shops: pick a website template (restaurant, travel, or SaaS landing), plus free invoice and quotation generators. Every item is a real tool or real HTML source — not tip PDFs.",
+    story:
+      "New businesses need a site and basic paperwork tools together. This bundle points you to the working pieces we already ship.",
+    category: "Bundles",
+    productType: "bundle",
+    accessMethod: "web_app",
+    isBundle: true,
+    bundleItems: [
+      "restaurant-website-template",
+      "saas-landing-website-template",
+      "invoice-generator",
+      "quotation-generator",
+      "expense-tracker",
+    ],
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web", "Static hosting"],
+    version: "1.0",
+    updatePolicy: "Bundle members update when each product updates.",
+    setupRequirements: "Open each linked tool or download each template ZIP.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["bundle", "small-business", "starter"],
+    difficulty: "beginner",
+    faq: [
+      {
+        q: "Is this one ZIP?",
+        a: "No. You get access to each included product: download templates and open the live tools from their pages.",
+      },
+    ],
+    price: 0,
+    badge: "BUNDLE",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/products?cat=Bundles",
+    externalCta: "See included products",
+    image: U("photo-1556740749-887f6717d7e4"),
+    gallery: [U("photo-1556740749-887f6717d7e4")],
+    features: [
+      "Real HTML website templates",
+      "Live invoice generator",
+      "Live quotation generator",
+      "Expense tracker",
+    ],
+    includes: [
+      "Restaurant or SaaS landing HTML template (choose what fits)",
+      "Invoice Generator (web tool)",
+      "Quotation Generator (web tool)",
+      "Expense Tracker (web tool)",
+    ],
+    compatibility: ["Modern browsers", "Static hosts for HTML"],
+    license: ["Free under each product's license"],
+    whoItIsFor: "New small businesses that need a site plus basic business tools.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Small Business Starter Bundle – Free Tools & Templates",
+    seoDescription:
+      "Free small business bundle: HTML website templates plus invoice, quotation, and expense tools from Ebenezer Store.",
+  },
+
+  /* ── 24. Receipt Generator ───────────────────────────── */
+  {
+    id: "dp-receipt-gen",
+    slug: "receipt-generator",
+    name: "Receipt Generator",
+    tagline: "Print a payment receipt in your browser in minutes.",
+    description:
+      "A live receipt tool for shops: business details, customer, payment mode, line items, and totals. Print or save as PDF. Usable software — not a receipt-writing guide.",
+    story:
+      "Cash and UPI sales still need a simple paper trail. This generator gives a clean receipt without Word templates.",
+    category: "Software & Tools",
+    productType: "digital_tool",
+    accessMethod: "web_app",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web"],
+    fileFormats: ["Print", "PDF (browser print)"],
+    version: "1.0",
+    updatePolicy: "Cloud updates on the same URL.",
+    setupRequirements: "Any modern browser.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["receipt", "shop", "payment", "print"],
+    difficulty: "beginner",
+    demoUrl: "/tools/receipt-generator",
+    faq: [
+      {
+        q: "Can I use this for GST?",
+        a: "You can add tax % on lines and your GSTIN in business details. Confirm local compliance with your accountant.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/tools/receipt-generator",
+    externalCta: "Open receipt generator",
+    image: U("photo-1556742049-0cfed4f6a45d"),
+    gallery: [U("photo-1556742049-0cfed4f6a45d")],
+    features: ["Payment mode field", "Line items + tax", "Print / Save as PDF"],
+    includes: ["Browser receipt generator", "Print-ready layout"],
+    compatibility: ["Chrome", "Edge", "Firefox", "Safari"],
+    license: ["Free to use for your business receipts"],
+    whoItIsFor: "Shops and service businesses that need a quick payment receipt.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Free Receipt Generator – Print Payment Receipts Online",
+    seoDescription: "Free online receipt generator for shops. Add items, payment mode, and print or save as PDF.",
+  },
+
+  /* ── 25. Proposal Generator ──────────────────────────── */
+  {
+    id: "dp-proposal-gen",
+    slug: "proposal-generator",
+    name: "Freelance Proposal Generator",
+    tagline: "Build a client proposal with deliverables, price, and terms.",
+    description:
+      "A live proposal tool for freelancers: project summary, deliverables, timeline, price, and terms. Preview live and print or save as PDF.",
+    story:
+      "Freelancers lose deals waiting to format proposals in Word. This tool produces a clean proposal in one sitting.",
+    category: "Software & Tools",
+    productType: "digital_tool",
+    accessMethod: "web_app",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web"],
+    fileFormats: ["Print", "PDF (browser print)"],
+    version: "1.0",
+    updatePolicy: "Cloud updates on the same URL.",
+    setupRequirements: "Any modern browser.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["freelancer", "proposal", "agency", "client"],
+    difficulty: "beginner",
+    demoUrl: "/tools/proposal-generator",
+    faq: [
+      {
+        q: "Is this a contract?",
+        a: "No. It is a proposal document. Add your own contract separately if needed.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/tools/proposal-generator",
+    externalCta: "Open proposal generator",
+    image: U("photo-1454165804606-c3d57bc86b40"),
+    gallery: [U("photo-1454165804606-c3d57bc86b40"), U("photo-1522202176988-66273c2fd55f")],
+    features: ["Deliverables list", "Live preview", "Print-ready proposal"],
+    includes: ["Browser proposal generator", "Print / Save as PDF"],
+    compatibility: ["Chrome", "Edge", "Firefox", "Safari"],
+    license: ["Free to use for your client proposals"],
+    whoItIsFor: "Freelancers, consultants, and small agencies.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Free Freelance Proposal Generator – Print Client Proposals",
+    seoDescription:
+      "Create a freelance project proposal with deliverables, timeline, and price. Print or save as PDF. Free.",
+  },
+
+  /* ── 26. Consulting website template ─────────────────── */
+  {
+    id: "dp-consult-site",
+    slug: "consulting-website-template",
+    name: "Consulting Website Template",
+    tagline: "HTML site for consultants: services, about, and booking CTA.",
+    description:
+      "A clean consulting marketing site in real HTML/CSS/JS. Edit services and WhatsApp booking. Download source — not screenshots only.",
+    story:
+      "Consultants need a trustworthy site before custom builds. This template is ready to rebrand quickly.",
+    category: "Website Templates",
+    productType: "website_template",
+    accessMethod: "download",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Static hosting"],
+    fileFormats: ["HTML", "CSS", "JS", "ZIP"],
+    version: "1.0",
+    updatePolicy: "Latest ZIP on this product page.",
+    setupRequirements: "Unzip, edit HTML, upload to any host.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    tags: ["consulting", "coach", "services", "html"],
+    difficulty: "beginner",
+    previewUrl: "/downloads/packs/consulting-website-template/index.html",
+    demoUrl: "/downloads/packs/consulting-website-template/index.html",
+    faq: [
+      {
+        q: "Can I connect Calendly?",
+        a: "Yes. Replace the Book button href with your calendar link.",
+      },
+    ],
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    image: U("photo-1552664730-d307ca884978"),
+    gallery: [U("photo-1552664730-d307ca884978")],
+    features: ["Home, services, about, book pages", "WhatsApp CTA", "No build step"],
+    includes: [
+      "index.html, services.html, about.html, contact.html",
+      "styles.css, script.js",
+      "README.md, LICENSE.txt",
+    ],
+    downloadContentsPlan: [
+      "index.html",
+      "services.html",
+      "about.html",
+      "contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    compatibility: ["Any static host"],
+    license: ["Personal and commercial use for consulting sites"],
+    whoItIsFor: "Consultants, coaches, and advisors.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    downloadFile: "/downloads/consulting-website-template.zip",
+    fileName: "consulting-website-template.zip",
+    fileSize: "HTML + CSS + JS source",
+    seoTitle: "Free Consulting Website Template – HTML Download",
+    seoDescription:
+      "Free consulting website template with real HTML source. Services, about, and booking pages.",
+  },
+
+  /* ── 27. Travel Business System Bundle ───────────────── */
+  {
+    id: "dp-travel-bundle",
+    slug: "travel-business-system-bundle",
+    name: "Travel Business System Bundle",
+    tagline: "Travel website + quotation + invoice + enquiry resources.",
+    description:
+      "A starter system for travel agents: travel HTML website template, quotation generator, invoice generator, and the travel enquiry pack. Every included item is a real product we already ship.",
+    story:
+      "Travel agencies need a site and quote workflow together. This bundle links the working pieces.",
+    category: "Bundles",
+    productType: "bundle",
+    accessMethod: "web_app",
+    isBundle: true,
+    bundleItems: [
+      "travel-agency-website-template",
+      "quotation-generator",
+      "invoice-generator",
+      "travel-enquiry-pack",
+    ],
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web", "Static hosting"],
+    version: "1.0",
+    tags: ["travel", "bundle", "agency"],
+    difficulty: "beginner",
+    faq: [
+      {
+        q: "Is booking software included?",
+        a: "No. You get a website template plus quote/invoice tools. Full booking systems come later as separate products.",
+      },
+    ],
+    price: 0,
+    badge: "BUNDLE",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/products/category/travel-templates",
+    externalCta: "Browse travel products",
+    image: U("photo-1488646953014-85cb44e25828"),
+    gallery: [U("photo-1488646953014-85cb44e25828")],
+    features: ["Travel HTML website", "Live quotation tool", "Live invoice tool", "Enquiry pack"],
+    includes: [
+      "Travel Agency Website Template (HTML ZIP)",
+      "Quotation Generator (web tool)",
+      "Invoice Generator (web tool)",
+      "Travel Enquiry Pack (existing kit)",
+    ],
+    compatibility: ["Modern browsers", "Static hosts"],
+    license: ["Free under each product's license"],
+    whoItIsFor: "Travel agents and tour operators starting digitally.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Travel Business System Bundle – Free Starter Pack",
+    seoDescription:
+      "Free travel business bundle: HTML travel website, quotation and invoice tools, and enquiry resources.",
+  },
+
+  /* ── 28. Church Starter Bundle ───────────────────────── */
+  {
+    id: "dp-church-bundle",
+    slug: "church-starter-bundle",
+    name: "Church Starter Bundle",
+    tagline: "Church website template + church admin kit together.",
+    description:
+      "For churches getting online: the free church HTML website template plus the church admin kit. Canva graphics are not included yet (listed separately as draft until files exist).",
+    story:
+      "Ministries often need a simple site before complex church software. This bundle starts there honestly.",
+    category: "Bundles",
+    productType: "bundle",
+    accessMethod: "download",
+    isBundle: true,
+    bundleItems: ["church-website-template", "church-admin-kit"],
+    techStack: ["HTML", "CSS", "JavaScript"],
+    tags: ["church", "ministry", "bundle"],
+    difficulty: "beginner",
+    faq: [
+      {
+        q: "Does this include Canva packs?",
+        a: "Not yet. Church Canva packs stay draft until editable Canva files are ready.",
+      },
+    ],
+    price: 0,
+    badge: "BUNDLE",
+    isFree: true,
+    image: U("photo-1438231916711-13934b91ea88"),
+    gallery: [U("photo-1438231916711-13934b91ea88")],
+    features: ["Church HTML website", "Church admin kit"],
+    includes: ["Church Website Template (HTML ZIP)", "Church Admin Kit"],
+    compatibility: ["Static hosts", "PDF readers for kit docs"],
+    license: ["Free for churches and ministries under each product license"],
+    whoItIsFor: "Churches and ministries starting their digital presence.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Church Starter Bundle – Website Template + Admin Kit",
+    seoDescription:
+      "Free church starter bundle with HTML website template and church admin kit from Ebenezer Store.",
+  },
+
+  /* ── 29. Freelancer Starter Bundle ───────────────────── */
+  {
+    id: "dp-freelancer-bundle",
+    slug: "freelancer-starter-bundle",
+    name: "Freelancer Starter Bundle",
+    tagline: "Portfolio site + proposal + invoice + quotation tools.",
+    description:
+      "A freelancer starter system: portfolio HTML template, proposal generator, invoice generator, and quotation generator. All items are real tools or real source code.",
+    story:
+      "Freelancers need a portfolio and paperwork tools before fancy CRMs. This bundle covers that path.",
+    category: "Bundles",
+    productType: "bundle",
+    accessMethod: "web_app",
+    isBundle: true,
+    bundleItems: [
+      "portfolio-website-template",
+      "proposal-generator",
+      "invoice-generator",
+      "quotation-generator",
+    ],
+    techStack: ["HTML", "CSS", "JavaScript"],
+    tags: ["freelancer", "bundle", "portfolio"],
+    difficulty: "beginner",
+    faq: [
+      {
+        q: "Do I get one download?",
+        a: "Open or download each included product from its own page. The bundle is the recommended set.",
+      },
+    ],
+    price: 0,
+    badge: "BUNDLE",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/products?type=digital_tool",
+    externalCta: "See tools",
+    image: U("photo-1522202176988-66273c2fd55f"),
+    gallery: [U("photo-1522202176988-66273c2fd55f")],
+    features: ["Portfolio HTML site", "Proposal tool", "Invoice + quotation tools"],
+    includes: [
+      "Portfolio Website Template",
+      "Freelance Proposal Generator",
+      "Invoice Generator",
+      "Quotation Generator",
+    ],
+    compatibility: ["Modern browsers", "Static hosts"],
+    license: ["Free under each product's license"],
+    whoItIsFor: "Freelancers and solo consultants.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Freelancer Starter Bundle – Portfolio + Proposal Tools",
+    seoDescription:
+      "Free freelancer bundle: portfolio HTML template plus proposal, invoice, and quotation generators.",
+  },
+
+  /* ── 30. Next.js SaaS Starter (DRAFT — no repo yet) ──── */
+  {
+    id: "dp-next-saas-draft",
+    slug: "nextjs-saas-starter",
+    name: "Next.js SaaS Starter",
+    tagline: "Auth + dashboard boilerplate for SaaS (coming soon).",
+    description:
+      "Planned Next.js starter with auth shell and dashboard layout. Listed as draft until a real GitHub/ZIP source repo is ready. We will not sell screenshots as code.",
+    story:
+      "Demand for Next.js SaaS starters is high. We ship only when real source exists.",
+    category: "Website Templates",
+    productType: "code_template",
+    accessMethod: "download",
+    techStack: ["Next.js", "React", "Tailwind CSS"],
+    tags: ["nextjs", "saas", "draft"],
+    difficulty: "intermediate",
+    nextjsVersion: "14",
+    reactVersion: "18",
+    nodeRequirement: "18+",
+    price: 79,
+    image: U("photo-1555066931-4365d14bab8c"),
+    gallery: [U("photo-1555066931-4365d14bab8c")],
+    features: ["Auth shell (planned)", "Dashboard layout (planned)", "Tailwind UI (planned)"],
+    includes: ["Source ZIP when published", "README setup guide when published"],
+    compatibility: ["Node 18+"],
+    license: ["Commercial license (when published)"],
+    whoItIsFor: "Developers building SaaS products (after launch).",
+    publishedAt: "2026-08-20",
+    status: "draft",
+    seoTitle: "Next.js SaaS Starter (Coming Soon)",
+    seoDescription: "Draft listing for a Next.js SaaS starter. Not available until real source code is ready.",
+  },
+
+  /* ── 31. Church Canva pack (DRAFT — no file yet) ─────── */
+  {
+    id: "dp-church-canva-draft",
+    slug: "church-social-canva-pack",
+    name: "Church Social Media Canva Pack",
+    tagline: "Editable Canva templates for church announcements (coming soon).",
+    description:
+      "Planned editable Canva system for Sunday announcements, youth events, and prayer meetings. Not for sale yet — listed as draft until real Canva templates exist.",
+    story:
+      "Churches ask for ready social graphics. We will publish this only when editable Canva files are ready.",
+    category: "Creator",
+    productType: "canva_template",
+    accessMethod: "external_link",
+    tags: ["church", "canva", "ministry", "draft"],
+    difficulty: "beginner",
+    price: 29,
+    badge: "NEW",
+    image: U("photo-1438231916711-13934b91ea88"),
+    gallery: [U("photo-1438231916711-13934b91ea88")],
+    features: ["Instagram posts", "Stories", "Event posters", "Livestream covers"],
+    includes: ["Editable Canva templates (when published)", "Setup notes"],
+    compatibility: ["Canva Free or Pro"],
+    license: ["Church / ministry use"],
+    whoItIsFor: "Churches and ministries (after launch).",
+    publishedAt: "2026-08-20",
+    status: "draft",
+    seoTitle: "Church Social Media Canva Pack (Coming Soon)",
+    seoDescription:
+      "Draft listing for an editable church Canva pack. Not available until real Canva templates are ready.",
+  },
 ];
 
 export function orderedProducts(): StoreProduct[] {
@@ -1294,6 +2103,79 @@ export function getProduct(slug: string): StoreProduct | undefined {
 
 export function getPublishedProducts(): StoreProduct[] {
   return orderedProducts();
+}
+
+export function searchProducts(query: string, products: StoreProduct[] = orderedProducts()): StoreProduct[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return products;
+  return products.filter((p) => {
+    const hay = [
+      p.name,
+      p.tagline,
+      p.description,
+      p.category,
+      p.productType,
+      ...(p.techStack || []),
+      ...(p.tags || []),
+      ...(p.platforms || []),
+    ]
+      .join(" ")
+      .toLowerCase();
+    return hay.includes(q);
+  });
+}
+
+export type StoreSort = "featured" | "newest" | "price-asc" | "price-desc" | "name";
+
+export function sortProducts(products: StoreProduct[], sort: StoreSort): StoreProduct[] {
+  const list = [...products];
+  if (sort === "newest") {
+    return list.sort((a, b) => +new Date(b.publishedAt) - +new Date(a.publishedAt));
+  }
+  if (sort === "price-asc") return list.sort((a, b) => a.price - b.price);
+  if (sort === "price-desc") return list.sort((a, b) => b.price - a.price);
+  if (sort === "name") return list.sort((a, b) => a.name.localeCompare(b.name));
+  return list;
+}
+
+export type StoreDiscoveryFilters = {
+  query?: string;
+  category?: string;
+  productType?: string;
+  technology?: string;
+  difficulty?: string;
+  price?: "all" | "free" | "paid";
+  sort?: StoreSort;
+};
+
+export function filterDiscoverProducts(
+  products: StoreProduct[],
+  filters: StoreDiscoveryFilters
+): StoreProduct[] {
+  let list = products;
+  if (filters.query) list = searchProducts(filters.query, list);
+  if (filters.category && filters.category !== "ALL") {
+    list = list.filter((p) => productMatchesFilter(p, filters.category!));
+  }
+  if (filters.productType && filters.productType !== "all") {
+    list = list.filter((p) => p.productType === filters.productType);
+  }
+  if (filters.technology && filters.technology !== "all") {
+    const tech = filters.technology.toLowerCase();
+    list = list.filter((p) => (p.techStack || []).some((t) => t.toLowerCase().includes(tech)));
+  }
+  if (filters.difficulty && filters.difficulty !== "all") {
+    list = list.filter((p) => p.difficulty === filters.difficulty);
+  }
+  if (filters.price === "free") list = list.filter((p) => p.isFree || p.price === 0);
+  if (filters.price === "paid") list = list.filter((p) => !p.isFree && p.price > 0);
+  return sortProducts(list, filters.sort || "featured");
+}
+
+export function collectTechOptions(products: StoreProduct[] = orderedProducts()): string[] {
+  const set = new Set<string>();
+  for (const p of products) for (const t of p.techStack || []) set.add(t);
+  return Array.from(set).sort((a, b) => a.localeCompare(b));
 }
 
 export function formatMoney(amount: number): string {

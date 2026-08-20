@@ -150,6 +150,17 @@ export interface DigitalProduct {
   externalUrl?: string;
   externalCta?: string;
   previewUrl?: string;
+  demoUrl?: string;
+  canvaLink?: string;
+  figmaLink?: string;
+  tags?: string[];
+  difficulty?: string;
+  faq?: { q: string; a: string }[];
+  nextjsVersion?: string;
+  reactVersion?: string;
+  nodeRequirement?: string;
+  templateCount?: string;
+  dimensions?: string;
   techStack?: string[];
   platforms?: string[];
   fileFormats?: string[];
@@ -419,7 +430,7 @@ class Database {
     }
   }
 
-  /** Keep CMS catalog aligned with app/products/data.ts seed */
+  /** Keep CMS catalog aligned with app/products/data.ts (public shop source of truth). */
   private syncDigitalProductsFromCatalog() {
     const now = new Date();
     const bySlug = new Map(this.digitalProducts.map((p) => [p.slug, p]));
