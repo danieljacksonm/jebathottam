@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Ebenezer Products — seed catalog (manually curated sample data).
  *
  * IMPORTANT:
@@ -18,20 +18,32 @@ import type {
 export const CATALOG_CATEGORIES: CatalogCategory[] = [
   { id: "laptops", name: "Laptops", slug: "laptops", description: "Notebooks for work, study, and creation", parent: "computers" },
   { id: "desktops", name: "Desktops", slug: "desktops", description: "Tower and AIO PCs", parent: "computers" },
+  { id: "mini-pcs", name: "Mini PCs", slug: "mini-pcs", description: "Compact desktop systems", parent: "computers" },
+  { id: "workstations", name: "Workstations", slug: "workstations", description: "High-spec creator and pro machines", parent: "computers" },
   { id: "cpu", name: "CPUs", slug: "cpu", description: "Processors", parent: "components" },
   { id: "gpu", name: "Graphics Cards", slug: "gpu", description: "Discrete GPUs", parent: "components" },
   { id: "ram", name: "RAM", slug: "ram", description: "Memory modules and kits", parent: "components" },
   { id: "ssd", name: "SSDs", slug: "ssd", description: "Solid-state storage", parent: "components" },
+  { id: "hdd", name: "HDDs", slug: "hdd", description: "Hard disk drives", parent: "components" },
+  { id: "motherboard", name: "Motherboards", slug: "motherboard", description: "PC motherboards", parent: "components" },
+  { id: "psu", name: "Power supplies", slug: "psu", description: "PSU units", parent: "components" },
   { id: "monitors", name: "Monitors", slug: "monitors", description: "Displays for work and play", parent: "displays" },
   { id: "keyboards", name: "Keyboards", slug: "keyboards", description: "Mechanical and office keyboards", parent: "peripherals" },
   { id: "mice", name: "Mice", slug: "mice", description: "Mice and trackpads", parent: "peripherals" },
   { id: "headphones", name: "Headphones", slug: "headphones", description: "Headsets and earphones", parent: "peripherals" },
   { id: "smartphones", name: "Smartphones", slug: "smartphones", description: "Mobile phones", parent: "mobile" },
   { id: "tablets", name: "Tablets", slug: "tablets", description: "Tablets and iPads", parent: "mobile" },
-  { id: "routers", name: "Routers", slug: "routers", description: "Wi-Fi and mesh systems", parent: "networking" },
+  { id: "routers", name: "Routers", slug: "routers", description: "Wi-Fi routers and mesh hubs", parent: "networking" },
+  { id: "wifi", name: "Wi-Fi", slug: "wifi", description: "Mesh nodes, extenders, and Wi-Fi kits", parent: "networking" },
+  { id: "switches", name: "Switches", slug: "switches", description: "Network switches", parent: "networking" },
+  { id: "adapters", name: "Adapters", slug: "adapters", description: "Network and power adapters", parent: "networking" },
   { id: "webcams", name: "Webcams", slug: "webcams", description: "USB cameras", parent: "peripherals" },
   { id: "microphones", name: "Microphones", slug: "microphones", description: "USB and XLR mics", parent: "peripherals" },
-  { id: "motherboard", name: "Motherboards", slug: "motherboard", description: "PC motherboards", parent: "components" },
+  { id: "laptop-bags", name: "Laptop bags", slug: "laptop-bags", description: "Bags and sleeves", parent: "accessories" },
+  { id: "usb-hubs", name: "USB hubs", slug: "usb-hubs", description: "Hubs and docks", parent: "accessories" },
+  { id: "cables", name: "Cables", slug: "cables", description: "USB-C, HDMI, and power cables", parent: "accessories" },
+  { id: "chargers", name: "Chargers", slug: "chargers", description: "Laptop and phone chargers", parent: "accessories" },
+  { id: "cooling", name: "Cooling", slug: "cooling", description: "Pads, fans, and coolers", parent: "accessories" },
 ];
 
 export const MERCHANTS: Merchant[] = [
@@ -66,16 +78,20 @@ export const MERCHANTS: Merchant[] = [
 const CHECKED = "2026-08-18T10:00:00.000Z";
 const UPDATED = "2026-08-18T10:00:00.000Z";
 
-/** Sample Unsplash hardware imagery — replace with merchant CDN images in production */
-const IMG = {
-  laptop1: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80",
-  laptop2: "https://images.unsplash.com/photo-1525547719571-a2d4ac882e75?auto=format&fit=crop&w=1200&q=80",
-  laptop3: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1200&q=80",
-  laptop4: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1200&q=80",
-  ssd: "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=1200&q=80",
-  ram: "https://images.unsplash.com/photo-1562976540-1502c5aa7c8d?auto=format&fit=crop&w=1200&q=80",
-  monitor: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1200&q=80",
-  gpu: "https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=1200&q=80",
+/**
+ * Product visuals: NO Unsplash.
+ * Until affiliate/merchant feeds supply exact model photos, use official brand-mark CDNs
+ * (Clearbit) marked as brand_logo — never presented as a photo of the SKU.
+ */
+const BRAND = {
+  acer: { image: "https://logo.clearbit.com/acer.com?size=256", domain: "acer.com" },
+  lenovo: { image: "https://logo.clearbit.com/lenovo.com?size=256", domain: "lenovo.com" },
+  hp: { image: "https://logo.clearbit.com/hp.com?size=256", domain: "hp.com" },
+  apple: { image: "https://logo.clearbit.com/apple.com?size=256", domain: "apple.com" },
+  wd: { image: "https://logo.clearbit.com/westerndigital.com?size=256", domain: "westerndigital.com" },
+  corsair: { image: "https://logo.clearbit.com/corsair.com?size=256", domain: "corsair.com" },
+  lg: { image: "https://logo.clearbit.com/lg.com?size=256", domain: "lg.com" },
+  nvidia: { image: "https://logo.clearbit.com/nvidia.com?size=256", domain: "nvidia.com" },
 };
 
 export const CATALOG_PRODUCTS: CatalogProduct[] = [
@@ -85,11 +101,15 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "Acer Aspire 5 (Ryzen 5, 16GB)",
     brand: "Acer",
     model: "A515-57",
+    mpn: "A515-57",
     categoryId: "laptops",
     shortDescription: "Balanced everyday laptop for coding and light creative work under ₹60,000.",
     description:
       "A practical 15.6\" Windows laptop aimed at students and freelancers. Strong enough for web development, Office, and light Photoshop. Not a high-refresh gaming machine.",
-    image: IMG.laptop1,
+    image: BRAND.acer.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.acer.domain,
     specs: {
       cpu: "AMD Ryzen 5 7530U",
       cpu_score: 72,
@@ -123,11 +143,15 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "Lenovo IdeaPad Slim 3 (Core i5, 16GB)",
     brand: "Lenovo",
     model: "Slim 3 15IRH8",
+    mpn: "Slim 3 15IRH8",
     categoryId: "laptops",
     shortDescription: "Slim Intel i5 laptop with 16GB RAM — solid for coding and Photoshop.",
     description:
       "A thin-and-light style IdeaPad with Intel Core i5 and 16GB RAM. Better portability than bulkier Aspire-class machines. Integrated Iris Xe helps light creative work.",
-    image: IMG.laptop2,
+    image: BRAND.lenovo.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.lenovo.domain,
     specs: {
       cpu: "Intel Core i5-13420H",
       cpu_score: 78,
@@ -159,11 +183,15 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "Lenovo LOQ 15 (RTX 4050)",
     brand: "Lenovo",
     model: "LOQ 15IRX9",
+    mpn: "LOQ 15IRX9",
     categoryId: "laptops",
     shortDescription: "Gaming + creator laptop with RTX 4050 — better when budget stretches near ₹80–90k.",
     description:
       "Entry gaming notebook with discrete RTX 4050. Suitable when you need occasional gaming plus coding. Heavier and louder than office laptops; battery is weaker.",
-    image: IMG.laptop3,
+    image: BRAND.lenovo.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.lenovo.domain,
     specs: {
       cpu: "Intel Core i5-13450HX",
       cpu_score: 84,
@@ -195,11 +223,15 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "HP Victus 15 (RTX 3050)",
     brand: "HP",
     model: "15-fa1351TX",
+    mpn: "15-fa1351TX",
     categoryId: "laptops",
     shortDescription: "Budget gaming laptop — useful when you need a GPU but stay closer to ₹65–75k.",
     description:
       "Victus brings an RTX 3050 into a more reachable price band. Fine for esports and older titles; not as strong as 4050 class for modern AAA or GPU-heavy creative apps.",
-    image: IMG.laptop4,
+    image: BRAND.hp.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.hp.domain,
     specs: {
       cpu: "Intel Core i5-12500H",
       cpu_score: 76,
@@ -231,11 +263,15 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "Apple MacBook Air M2 (8GB)",
     brand: "Apple",
     model: "MacBook Air 13 M2",
+    mpn: "MacBook Air 13 M2",
     categoryId: "laptops",
     shortDescription: "Premium ultralight — excellent battery and build; 8GB base is tight for heavy multitasking.",
     description:
       "MacBook Air M2 is excellent for writing, coding (web), and media consumption. The 8GB base config can struggle with many Chrome tabs + Docker + design tools at once. Consider 16GB if budget allows.",
-    image: IMG.laptop2,
+    image: BRAND.apple.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.apple.domain,
     specs: {
       cpu: "Apple M2",
       cpu_score: 88,
@@ -267,10 +303,14 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "WD Black SN770 1TB NVMe",
     brand: "WD",
     model: "SN770 1TB",
+    mpn: "SN770 1TB",
     categoryId: "ssd",
     shortDescription: "Fast PCIe Gen4 NVMe SSD — strong upgrade for gaming PCs and laptops with M.2 slots.",
     description: "Dramless Gen4 drive popular for capacity upgrades. Check laptop M.2 length and heatsink clearance before buying.",
-    image: IMG.ssd,
+    image: BRAND.wd.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.wd.domain,
     specs: {
       capacity_gb: 1000,
       interface: "NVMe PCIe Gen4",
@@ -295,10 +335,14 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "Corsair Vengeance 32GB (2×16) DDR4-3200",
     brand: "Corsair",
     model: "CMK32GX4M2E3200C16",
+    mpn: "CMK32GX4M2E3200C16",
     categoryId: "ram",
     shortDescription: "Desktop DDR4 kit for multitasking, video editing, and gaming PCs.",
     description: "Common desktop upgrade kit. Confirm motherboard DDR generation (DDR4 vs DDR5) before purchase.",
-    image: IMG.ram,
+    image: BRAND.corsair.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.corsair.domain,
     specs: {
       capacity_gb: 32,
       ddr_gen: "DDR4",
@@ -323,10 +367,14 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "LG 27\" 4K IPS Monitor",
     brand: "LG",
     model: "27UL650-W",
+    mpn: "27UL650-W",
     categoryId: "monitors",
     shortDescription: "4K IPS monitor for coding real-estate and photo work.",
     description: "Sharp 4K panel useful for programming (more windows) and photo editing. Verify stand height and ports for your desk setup.",
-    image: IMG.monitor,
+    image: BRAND.lg.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.lg.domain,
     specs: {
       size_inches: 27,
       resolution: "3840×2160",
@@ -351,10 +399,14 @@ export const CATALOG_PRODUCTS: CatalogProduct[] = [
     name: "NVIDIA GeForce RTX 4060 8GB",
     brand: "NVIDIA",
     model: "RTX 4060",
+    mpn: "RTX 4060",
     categoryId: "gpu",
     shortDescription: "Efficient 1080p/1440p gaming GPU for mid-range desktops.",
     description: "Popular mid-range card. Partner board prices vary — compare offers carefully and check PSU connectors.",
-    image: IMG.gpu,
+    image: BRAND.nvidia.image,
+    imageSourceType: "brand_logo",
+    imageSourceLabel: "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+    brandDomain: BRAND.nvidia.domain,
     specs: {
       vram_gb: 8,
       gpu_arch: "Ada Lovelace",
@@ -604,3 +656,4 @@ export function isOfferStale(offer: Offer, maxAgeHours = 72) {
   const age = Date.now() - new Date(offer.lastCheckedAt).getTime();
   return age > maxAgeHours * 60 * 60 * 1000;
 }
+

@@ -22,17 +22,17 @@ export function SmartSearch({
   }
 
   return (
-    <form onSubmit={onSubmit} className="c-search" style={large ? undefined : { maxWidth: "100%" }}>
+    <form onSubmit={onSubmit} className="aff-search" style={large ? undefined : { maxWidth: "100%" }}>
       <input
         type="search"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="What are you looking for?"
+        placeholder="Search laptops, phones, RAM, SSDs, GPUs and more…"
         aria-label="Product search"
       />
-      <button type="submit" className="c-btn c-btn-primary shrink-0">
+      <button type="submit" className="aff-btn aff-btn-primary shrink-0">
         <Search className="h-4 w-4" />
-        Find My Product
+        Find product
       </button>
     </form>
   );

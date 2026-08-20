@@ -8,7 +8,7 @@ export const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "qwen2.5:1.5b";
 /** Public-facing model brand name shown to users */
 export const MODEL_BRAND = "Nzer 1.0";
 
-export type AiMode = "general" | "news" | "product" | "billing" | "blog" | "catalog";
+export type AiMode = "general" | "news" | "product" | "billing" | "blog" | "catalog" | "tools";
 
 export const AI_BRAND = "Eben AI";
 
@@ -64,6 +64,13 @@ If a field is missing, say exactly: "Information unavailable."
 Explain pros, cons, who should buy, and who should avoid — grounded in the given data.
 Do not claim live marketplace prices unless the context includes a last-checked timestamp.
 ${ANSWER_STYLE}`,
+  tools: `You are ${AI_BRAND} on Ebenezer Tools (AI / SaaS / software discovery).
+Help the user choose using ONLY the tools catalog context provided.
+Never invent tools, prices, features, limits, or affiliate claims.
+If a price says "Check official site", tell the user to verify on the vendor site.
+Always link recommendations to /tools/{id} pages from the context.
+Ask clarifying questions when budget, use case, or category is unclear.
+${ANSWER_STYLE}`,
 };
 
 export function resolveAiMode(value: unknown): AiMode {
@@ -73,7 +80,8 @@ export function resolveAiMode(value: unknown): AiMode {
     value === "billing" ||
     value === "general" ||
     value === "blog" ||
-    value === "catalog"
+    value === "catalog" ||
+    value === "tools"
   ) {
     return value;
   }

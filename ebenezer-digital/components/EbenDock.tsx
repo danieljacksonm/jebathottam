@@ -13,6 +13,7 @@ function modeFromPath(path: string | null): AiMode {
   if (path.startsWith("/products/checkout")) return "billing";
   if (path.startsWith("/products")) return "product";
   if (path.startsWith("/catalog")) return "catalog";
+  if (path.startsWith("/tools")) return "tools";
   return "general";
 }
 
@@ -81,6 +82,11 @@ const STARTERS: Record<AiMode, string[]> = {
     "Laptop under ₹60,000 for coding",
     "Compare these two for Photoshop",
     "Which SSD is better for gaming?",
+  ],
+  tools: [
+    "AI video tool for YouTube under ₹2,000/month",
+    "Best CRM for a small business",
+    "Compare ChatGPT vs Claude vs Gemini",
   ],
 };
 

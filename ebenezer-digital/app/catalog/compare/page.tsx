@@ -5,6 +5,8 @@ import { TrackView } from "../components/TrackView";
 import { formatINR, getBestOffer, getProductBySlug } from "@/lib/catalog/query";
 import { getCompareRows } from "@/lib/catalog/scoring";
 import { discloseAffiliate } from "@/lib/catalog/affiliate";
+import { resolveProductImage } from "@/lib/affiliate/images";
+import { AffiliateMedia } from "@/components/AffiliateMedia";
 
 type Props = { searchParams: { ids?: string } };
 
@@ -29,25 +31,25 @@ export default function ComparePage({ searchParams }: Props) {
     <>
       {products[0] ? <TrackView productId={products[0].id} type="compare" /> : null}
       <CatalogNav />
-      <div className="c-page py-8">
-        <h1 className="text-3xl font-bold">Compare</h1>
-        <p className="mt-2 text-[var(--c-muted)]">
+      <div className="aff-page py-8">
+        <h1 className="text-3xl font-bold tracking-tight">Compare products</h1>
+        <p className="mt-2 text-[var(--aff-muted)]">
           Side-by-side specs and sample prices. Add products from any product page.
         </p>
 
         {products.length < 2 ? (
-          <div className="mt-8 c-card p-6">
-            <p className="text-[var(--c-ink-2)]">Select at least two products to compare. Try a popular pair:</p>
+          <div className="mt-8 aff-card p-6">
+            <p className="text-[var(--aff-ink-2)]">Select at least two products to compare. Try a popular pair:</p>
             <div className="mt-4 flex flex-wrap gap-3">
               <Link
                 href="/catalog/compare?ids=acer-aspire-5-ryzen-5-16gb,lenovo-ideapad-slim-3-i5-16gb"
-                className="c-btn c-btn-primary"
+                className="aff-btn aff-btn-primary"
               >
                 Aspire 5 vs IdeaPad
               </Link>
               <Link
                 href="/catalog/compare?ids=lenovo-loq-15-rtx-4050,hp-victus-15-rtx-3050"
-                className="c-btn c-btn-ghost"
+                className="aff-btn aff-btn-ghost"
               >
                 LOQ vs Victus
               </Link>
@@ -56,35 +58,47 @@ export default function ComparePage({ searchParams }: Props) {
         ) : (
           <>
             {bestOverall ? (
-              <div className="mt-6 rounded-xl border border-teal-200 bg-[var(--c-brand-bg)] p-5">
-                <p className="text-xs font-bold uppercase tracking-wide text-[var(--c-brand-dk)]">
+              <div className="mt-6 rounded-xl border border-teal-200 bg-[var(--aff-brand-soft)] p-5">
+                <p className="text-xs font-bold uppercase tracking-wide text-[var(--aff-brand-dk)]">
                   Ebenezer note
                 </p>
                 <p className="mt-2 font-semibold text-lg">
                   {bestOverall.p.name} currently shows the lowest sample price in this set
                   {bestOverall.offer ? ` (${formatINR(bestOverall.offer.price)})` : ""}.
                 </p>
-                <p className="mt-2 text-sm text-[var(--c-muted)]">
+                <p className="mt-2 text-sm text-[var(--aff-muted)]">
                   Lowest price is not always the best fit. Check CPU, RAM, GPU and your use case below.
                 </p>
               </div>
             ) : null}
 
-            <div className="mt-6 overflow-x-auto c-card">
-              <table className="c-table min-w-[640px]">
+            <div className="mt-6 overflow-x-auto aff-card">
+              <table className="aff-table min-w-[640px]">
                 <thead>
                   <tr>
                     <th>Spec</th>
-                    {products.map((p) => (
-                      <th key={p.id}>
-                        <Link
-                          href={`/catalog/p/${p.slug}`}
-                          className="hover:text-[var(--c-brand)] !normal-case !tracking-normal text-sm font-semibold text-[var(--c-ink)]"
-                        >
-                          {p.name}
-                        </Link>
-                      </th>
-                    ))}
+                    {products.map((p) => {
+                      const image = resolveProductImage({
+                        name: p.name,
+                        brand: p.brand,
+                        image: p.image,
+                        imageSourceType: p.imageSourceType,
+                        brandDomain: p.brandDomain,
+                      });
+                      return (
+                        <th key={p.id}>
+                          <div className="mb-2 flex justify-center">
+                            <AffiliateMedia image={image} size="thumb" />
+                          </div>
+                          <Link
+                            href={`/catalog/p/${p.slug}`}
+                            className="!normal-case !tracking-normal text-sm font-semibold text-[var(--aff-ink)] hover:text-[var(--aff-brand)]"
+                          >
+                            {p.name}
+                          </Link>
+                        </th>
+                      );
+                    })}
                   </tr>
                 </thead>
                 <tbody>
@@ -92,7 +106,7 @@ export default function ComparePage({ searchParams }: Props) {
                     <th>Price</th>
                     {products.map((p) => {
                       const o = getBestOffer(p.id);
-                      return <td key={p.id}>{o ? formatINR(o.price) : "Information unavailable"}</td>;
+                      return <td key={p.id}>{o ? formatINR(o.price) : "Check latest price"}</td>;
                     })}
                   </tr>
                   {specKeys.map((key) => (
@@ -129,7 +143,7 @@ export default function ComparePage({ searchParams }: Props) {
           </>
         )}
 
-        <p className="c-disclosure mt-8">{discloseAffiliate()}</p>
+        <p className="aff-disclosure mt-8">{discloseAffiliate()}</p>
       </div>
       <CatalogAskAi />
     </>

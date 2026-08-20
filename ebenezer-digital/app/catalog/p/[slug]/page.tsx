@@ -18,6 +18,8 @@ import {
   buildAffiliateRedirectPath,
   discloseAffiliate,
 } from "@/lib/catalog/affiliate";
+import { freshnessLabel, resolveProductImage } from "@/lib/affiliate/images";
+import { AffiliateMedia } from "@/components/AffiliateMedia";
 
 type Props = { params: { slug: string } };
 
@@ -45,6 +47,13 @@ export default function ProductDetailPage({ params }: Props) {
   const alternatives = getProductsByCategory(product.categoryId)
     .filter((p) => p.id !== product.id)
     .slice(0, 3);
+  const resolvedImage = resolveProductImage({
+    name: product.name,
+    brand: product.brand,
+    image: product.image,
+    imageSourceType: product.imageSourceType,
+    brandDomain: product.brandDomain,
+  });
 
   const specEntries = Object.entries(product.specs).filter(([k]) => !k.endsWith("_score"));
 
@@ -54,8 +63,10 @@ export default function ProductDetailPage({ params }: Props) {
     name: product.name,
     brand: product.brand,
     description: product.shortDescription,
-    image: product.image,
-    sku: product.id,
+    image: resolvedImage.sourceType === "branded_placeholder" ? undefined : resolvedImage.url,
+    sku: product.sku || product.id,
+    mpn: product.mpn,
+    gtin: product.gtin,
     ...(best
       ? {
           offers: {
@@ -129,31 +140,28 @@ export default function ProductDetailPage({ params }: Props) {
         </p>
 
         <div className="mt-6 grid gap-8 lg:grid-cols-2">
-          <div className="c-card overflow-hidden">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={product.image} alt={product.name} className="w-full aspect-[16/10] object-cover" loading="lazy" />
+          <div className="aff-card overflow-hidden p-2">
+            <AffiliateMedia image={resolvedImage} size="hero" showSource />
           </div>
 
           <div>
-            <p className="text-sm font-medium text-[var(--c-muted)]">{product.brand}</p>
+            <p className="text-sm font-medium text-[var(--aff-muted)]">{product.brand}</p>
             <h1 className="mt-1 text-3xl font-bold tracking-tight">{product.name}</h1>
-            <p className="mt-3 text-[var(--c-ink-2)]">{product.shortDescription}</p>
+            <p className="mt-3 text-[var(--aff-ink-2)]">{product.shortDescription}</p>
 
-            <div className="mt-5 rounded-xl border border-[var(--c-line)] bg-white p-4">
+            <div className="mt-5 rounded-xl border border-[var(--aff-line)] bg-white p-4">
               {best ? (
                 <>
-                  <p className="text-sm text-[var(--c-muted)]">Best current sample price</p>
+                  <p className="text-sm text-[var(--aff-muted)]">Best listed sample price</p>
                   <p className="text-3xl font-extrabold mt-1">{formatINR(best.price)}</p>
-                  <p className="text-sm text-[var(--c-muted)] mt-1">
+                  <p className="text-sm text-[var(--aff-muted)] mt-1">
                     at {getMerchant(best.merchantId)?.name ?? "merchant"}
-                    {isOfferStale(best) ? <span className="c-stale"> · Price may have changed</span> : null}
+                    {isOfferStale(best) ? <span className="aff-stale"> · Check latest price</span> : null}
                   </p>
-                  <p className="text-xs text-[var(--c-muted)] mt-2">
-                    Price last checked: {new Date(best.lastCheckedAt).toLocaleString("en-IN")}
-                  </p>
+                  <p className="aff-fresh mt-2">{freshnessLabel(best.lastCheckedAt)}</p>
                 </>
               ) : (
-                <p className="text-[var(--c-muted)]">Information unavailable</p>
+                <p className="text-[var(--aff-muted)]">Check latest price</p>
               )}
             </div>
 
@@ -161,26 +169,26 @@ export default function ProductDetailPage({ params }: Props) {
               {best ? (
                 <a
                   href={buildAffiliateRedirectPath(best.id)}
-                  className="c-btn c-btn-primary"
+                  className="aff-btn aff-btn-primary"
                   rel="sponsored noopener noreferrer"
                 >
                   Check best price
                 </a>
               ) : null}
-              <Link href={`/catalog/compare?ids=${product.slug}`} className="c-btn c-btn-ghost">
+              <Link href={`/catalog/compare?ids=${product.slug}`} className="aff-btn aff-btn-ghost">
                 Compare
               </Link>
               <Link
                 href={`/catalog/recommend?q=${encodeURIComponent(
                   `${product.categoryId} like ${product.name}`
                 )}`}
-                className="c-btn c-btn-ghost"
+                className="aff-btn aff-btn-ghost"
               >
                 AI recommendation
               </Link>
             </div>
 
-            <p className="c-disclosure mt-4">{discloseAffiliate()}</p>
+            <p className="aff-disclosure mt-4">{discloseAffiliate()}</p>
           </div>
         </div>
 
@@ -285,9 +293,34 @@ export default function ProductDetailPage({ params }: Props) {
 
         <section className="mt-12">
           <h2 className="text-xl font-bold">Expert analysis</h2>
-          <p className="mt-3 text-[var(--c-ink-2)] leading-relaxed max-w-3xl">{product.description}</p>
-          <p className="text-xs text-[var(--c-muted)] mt-3">
+          <p className="mt-3 text-[var(--aff-ink-2)] leading-relaxed max-w-3xl">{product.description}</p>
+          <p className="text-xs text-[var(--aff-muted)] mt-3">
             Last updated: {new Date(product.updatedAt).toLocaleDateString("en-IN")}
+          </p>
+          {(product.mpn || product.sku || product.gtin) && (
+            <p className="text-xs text-[var(--aff-muted)] mt-2">
+              Identifiers:{" "}
+              {[
+                product.brand ? `Brand ${product.brand}` : null,
+                product.model ? `Model ${product.model}` : null,
+                product.mpn ? `MPN ${product.mpn}` : null,
+                product.sku ? `SKU ${product.sku}` : null,
+                product.gtin ? `GTIN ${product.gtin}` : null,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </p>
+          )}
+        </section>
+
+        <section className="mt-10 aff-card p-5 bg-[var(--aff-brand-soft)] border-teal-200">
+          <p className="text-xs font-bold uppercase tracking-wide text-[var(--aff-brand-dk)]">
+            Ebenezer recommendation
+          </p>
+          <p className="mt-2 text-[var(--aff-ink-2)]">
+            {product.name} suits {product.bestFor.slice(0, 2).join(" and ") || "careful buyers who match the specs"}.
+            Compare merchants above, confirm the live price, and skip it if you need{" "}
+            {product.notIdealFor[0]?.toLowerCase() || "capabilities this model does not offer"}.
           </p>
         </section>
 
@@ -296,8 +329,8 @@ export default function ProductDetailPage({ params }: Props) {
             <h2 className="text-xl font-bold">Alternatives</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-3">
               {alternatives.map((p) => (
-                <Link key={p.id} href={`/catalog/p/${p.slug}`} className="c-card p-4 hover:border-teal-300">
-                  <p className="text-xs text-[var(--c-muted)]">{p.brand}</p>
+                <Link key={p.id} href={`/catalog/p/${p.slug}`} className="aff-card p-4 hover:border-teal-300">
+                  <p className="text-xs text-[var(--aff-muted)]">{p.brand}</p>
                   <p className="font-semibold mt-1">{p.name}</p>
                 </Link>
               ))}

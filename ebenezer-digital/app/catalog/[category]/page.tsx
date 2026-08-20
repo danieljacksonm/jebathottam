@@ -46,15 +46,15 @@ export default function CategoryPage({ params, searchParams }: Props) {
   return (
     <>
       <CatalogNav />
-      <div className="c-page py-8">
-        <p className="text-sm text-[var(--c-muted)]">
-          <Link href="/catalog" className="hover:text-[var(--c-brand)]">
+      <div className="aff-page py-8">
+        <p className="text-sm text-[var(--aff-muted)]">
+          <Link href="/catalog" className="hover:text-[var(--aff-brand)]">
             Products
           </Link>{" "}
           / {cat.name}
         </p>
-        <h1 className="mt-2 text-3xl font-bold">{cat.name}</h1>
-        <p className="mt-2 text-[var(--c-muted)] max-w-2xl">{cat.description}</p>
+        <h1 className="mt-2 text-3xl font-bold tracking-tight">{cat.name}</h1>
+        <p className="mt-2 text-[var(--aff-muted)] max-w-2xl">{cat.description}</p>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[240px_1fr]">
           <Suspense fallback={<div className="c-card p-4 text-sm text-[var(--c-muted)]">Loading filters…</div>}>

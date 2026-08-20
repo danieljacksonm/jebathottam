@@ -27,6 +27,9 @@ const nextConfig = {
       { protocol: "https", hostname: "images.hindustantimes.com", pathname: "/**" },
       { protocol: "https", hostname: "static.reuters.com", pathname: "/**" },
       { protocol: "https", hostname: "cloudfront-us-east-2.images.arcpublishing.com", pathname: "/**" },
+      { protocol: "https", hostname: "logo.clearbit.com", pathname: "/**" },
+      { protocol: "https", hostname: "upload.wikimedia.org", pathname: "/**" },
+      { protocol: "https", hostname: "www.zohowebstatic.com", pathname: "/**" },
     ],
   },
 };

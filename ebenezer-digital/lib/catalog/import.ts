@@ -68,7 +68,9 @@ export function normalizeImportRows(rows: ImportRow[]): {
       categoryId,
       shortDescription: str(row.shortDescription || row.tagline) || name,
       description: str(row.description) || "Information unavailable",
-      image: str(row.image) || "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80",
+      image: str(row.image) || "",
+      imageSourceType: str(row.image) ? ("merchant_feed" as const) : ("branded_placeholder" as const),
+      brandDomain: str(row.brandDomain) || undefined,
       specs,
       pros: str(row.pros)
         .split("|")

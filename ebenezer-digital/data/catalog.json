@@ -9,7 +9,7 @@
       "categoryId": "laptops",
       "shortDescription": "Balanced everyday laptop for coding and light creative work under ₹60,000.",
       "description": "A practical 15.6\" Windows laptop aimed at students and freelancers. Strong enough for web development, Office, and light Photoshop. Not a high-refresh gaming machine.",
-      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/acer.com?size=256",
       "specs": {
         "cpu": "AMD Ryzen 5 7530U",
         "cpu_score": 72,
@@ -52,7 +52,12 @@
       "status": "active",
       "seoTitle": "Acer Aspire 5 Ryzen 5 16GB — Specs, Price Comparison",
       "seoDescription": "Compare prices and specs for Acer Aspire 5 with 16GB RAM. Best for coding and study under ₹60,000.",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "acer.com",
+      "mpn": "A515-57",
+      "sku": "lp-aspire5-ryzen5"
     },
     {
       "id": "lp-ideapad-slim3",
@@ -63,7 +68,7 @@
       "categoryId": "laptops",
       "shortDescription": "Slim Intel i5 laptop with 16GB RAM — solid for coding and Photoshop.",
       "description": "A thin-and-light style IdeaPad with Intel Core i5 and 16GB RAM. Better portability than bulkier Aspire-class machines. Integrated Iris Xe helps light creative work.",
-      "image": "https://images.unsplash.com/photo-1525547719571-a2d4ac882e75?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/lenovo.com?size=256",
       "specs": {
         "cpu": "Intel Core i5-13420H",
         "cpu_score": 78,
@@ -103,7 +108,12 @@
       "rating": 4.3,
       "reviewCount": 940,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "lenovo.com",
+      "mpn": "Slim 3 15IRH8",
+      "sku": "lp-ideapad-slim3"
     },
     {
       "id": "lp-loq-4050",
@@ -114,7 +124,7 @@
       "categoryId": "laptops",
       "shortDescription": "Gaming + creator laptop with RTX 4050 — better when budget stretches near ₹80–90k.",
       "description": "Entry gaming notebook with discrete RTX 4050. Suitable when you need occasional gaming plus coding. Heavier and louder than office laptops; battery is weaker.",
-      "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/lenovo.com?size=256",
       "specs": {
         "cpu": "Intel Core i5-13450HX",
         "cpu_score": 84,
@@ -155,7 +165,12 @@
       "rating": 4.4,
       "reviewCount": 2100,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "lenovo.com",
+      "mpn": "LOQ 15IRX9",
+      "sku": "lp-loq-4050"
     },
     {
       "id": "lp-victus-3050",
@@ -166,7 +181,7 @@
       "categoryId": "laptops",
       "shortDescription": "Budget gaming laptop — useful when you need a GPU but stay closer to ₹65–75k.",
       "description": "Victus brings an RTX 3050 into a more reachable price band. Fine for esports and older titles; not as strong as 4050 class for modern AAA or GPU-heavy creative apps.",
-      "image": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/hp.com?size=256",
       "specs": {
         "cpu": "Intel Core i5-12500H",
         "cpu_score": 76,
@@ -205,7 +220,12 @@
       "rating": 4.1,
       "reviewCount": 3200,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "hp.com",
+      "mpn": "15-fa1351TX",
+      "sku": "lp-victus-3050"
     },
     {
       "id": "lp-macbook-air-m2",
@@ -216,7 +236,7 @@
       "categoryId": "laptops",
       "shortDescription": "Premium ultralight — excellent battery and build; 8GB base is tight for heavy multitasking.",
       "description": "MacBook Air M2 is excellent for writing, coding (web), and media consumption. The 8GB base config can struggle with many Chrome tabs + Docker + design tools at once. Consider 16GB if budget allows.",
-      "image": "https://images.unsplash.com/photo-1525547719571-a2d4ac882e75?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/apple.com?size=256",
       "specs": {
         "cpu": "Apple M2",
         "cpu_score": 88,
@@ -258,7 +278,12 @@
       "rating": 4.7,
       "reviewCount": 8900,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "apple.com",
+      "mpn": "MacBook Air 13 M2",
+      "sku": "lp-macbook-air-m2"
     },
     {
       "id": "ssd-wd-sn770-1tb",
@@ -269,7 +294,7 @@
       "categoryId": "ssd",
       "shortDescription": "Fast PCIe Gen4 NVMe SSD — strong upgrade for gaming PCs and laptops with M.2 slots.",
       "description": "Dramless Gen4 drive popular for capacity upgrades. Check laptop M.2 length and heatsink clearance before buying.",
-      "image": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/westerndigital.com?size=256",
       "specs": {
         "capacity_gb": 1000,
         "interface": "NVMe PCIe Gen4",
@@ -300,7 +325,12 @@
       "rating": 4.6,
       "reviewCount": 4500,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "westerndigital.com",
+      "mpn": "SN770 1TB",
+      "sku": "ssd-wd-sn770-1tb"
     },
     {
       "id": "ram-corsair-32-ddr4",
@@ -311,7 +341,7 @@
       "categoryId": "ram",
       "shortDescription": "Desktop DDR4 kit for multitasking, video editing, and gaming PCs.",
       "description": "Common desktop upgrade kit. Confirm motherboard DDR generation (DDR4 vs DDR5) before purchase.",
-      "image": "https://images.unsplash.com/photo-1562976540-1502c5aa7c8d?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/corsair.com?size=256",
       "specs": {
         "capacity_gb": 32,
         "ddr_gen": "DDR4",
@@ -341,7 +371,12 @@
       "rating": 4.7,
       "reviewCount": 6100,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "corsair.com",
+      "mpn": "CMK32GX4M2E3200C16",
+      "sku": "ram-corsair-32-ddr4"
     },
     {
       "id": "mon-lg-27ul650",
@@ -352,7 +387,7 @@
       "categoryId": "monitors",
       "shortDescription": "4K IPS monitor for coding real-estate and photo work.",
       "description": "Sharp 4K panel useful for programming (more windows) and photo editing. Verify stand height and ports for your desk setup.",
-      "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/lg.com?size=256",
       "specs": {
         "size_inches": 27,
         "resolution": "3840×2160",
@@ -382,7 +417,12 @@
       "rating": 4.5,
       "reviewCount": 1800,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "lg.com",
+      "mpn": "27UL650-W",
+      "sku": "mon-lg-27ul650"
     },
     {
       "id": "gpu-rtx4060",
@@ -393,7 +433,7 @@
       "categoryId": "gpu",
       "shortDescription": "Efficient 1080p/1440p gaming GPU for mid-range desktops.",
       "description": "Popular mid-range card. Partner board prices vary — compare offers carefully and check PSU connectors.",
-      "image": "https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=1200&q=80",
+      "image": "https://logo.clearbit.com/nvidia.com?size=256",
       "specs": {
         "vram_gb": 8,
         "gpu_arch": "Ada Lovelace",
@@ -421,7 +461,12 @@
       "rating": 4.4,
       "reviewCount": 5200,
       "status": "active",
-      "updatedAt": "2026-08-18T10:00:00.000Z"
+      "updatedAt": "2026-08-18T10:00:00.000Z",
+      "imageSourceType": "brand_logo",
+      "imageSourceLabel": "Brand logo (Clearbit) - exact model photo pending affiliate feed",
+      "brandDomain": "nvidia.com",
+      "mpn": "RTX 4060",
+      "sku": "gpu-rtx4060"
     }
   ],
   "offers": [

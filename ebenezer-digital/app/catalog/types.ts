@@ -3,11 +3,15 @@
 export type CatalogCategoryId =
   | "laptops"
   | "desktops"
+  | "mini-pcs"
+  | "workstations"
   | "cpu"
   | "gpu"
   | "motherboard"
   | "ram"
   | "ssd"
+  | "hdd"
+  | "psu"
   | "monitors"
   | "keyboards"
   | "mice"
@@ -15,15 +19,30 @@ export type CatalogCategoryId =
   | "smartphones"
   | "tablets"
   | "routers"
+  | "wifi"
+  | "switches"
+  | "adapters"
   | "webcams"
-  | "microphones";
+  | "microphones"
+  | "laptop-bags"
+  | "usb-hubs"
+  | "cables"
+  | "chargers"
+  | "cooling";
 
 export type CatalogCategory = {
   id: CatalogCategoryId;
   name: string;
   slug: string;
   description: string;
-  parent?: "computers" | "components" | "displays" | "peripherals" | "mobile" | "networking";
+  parent?:
+    | "computers"
+    | "components"
+    | "displays"
+    | "peripherals"
+    | "mobile"
+    | "networking"
+    | "accessories";
 };
 
 export type SpecValue = string | number | boolean | null;
@@ -76,6 +95,20 @@ export type CatalogProduct = {
   description: string;
   image: string;
   gallery?: string[];
+  /** Image provenance — never use Unsplash for product representation */
+  imageSourceType?:
+    | "affiliate_feed"
+    | "affiliate_api"
+    | "merchant_feed"
+    | "official"
+    | "authorized_asset"
+    | "brand_logo"
+    | "branded_placeholder";
+  imageSourceLabel?: string;
+  brandDomain?: string;
+  gtin?: string;
+  mpn?: string;
+  sku?: string;
   specs: ProductSpecs;
   pros: string[];
   cons: string[];

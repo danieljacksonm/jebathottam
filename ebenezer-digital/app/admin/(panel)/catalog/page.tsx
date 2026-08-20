@@ -14,6 +14,13 @@ type Product = {
   status: string;
   shortDescription: string;
   image: string;
+  imageSourceType?: string;
+  imageSourceLabel?: string;
+  brandDomain?: string;
+  gtin?: string;
+  mpn?: string;
+  sku?: string;
+  updatedAt?: string;
 };
 
 type Offer = {
@@ -24,6 +31,9 @@ type Offer = {
   currency: string;
   availability: string;
   url: string;
+  affiliateUrl?: string;
+  lastCheckedAt?: string;
+  source?: string;
 };
 
 type Merchant = { id: string; name: string; website: string; status: string };
@@ -45,6 +55,10 @@ export default function AdminCatalogPage() {
     categoryId: "laptops",
     shortDescription: "",
     image: "",
+    imageSourceType: "authorized_asset",
+    mpn: "",
+    sku: "",
+    gtin: "",
     ram_gb: "16",
     storage_gb: "512",
   });
@@ -112,7 +126,14 @@ export default function AdminCatalogPage() {
         categoryId: form.categoryId,
         shortDescription: form.shortDescription,
         description: form.shortDescription,
-        image: form.image || "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80",
+        image: form.image || "",
+        imageSourceType: form.image ? form.imageSourceType || "authorized_asset" : "branded_placeholder",
+        imageSourceLabel: form.image
+          ? `Source: ${form.imageSourceType || "authorized_asset"}`
+          : "Branded placeholder — awaiting affiliate/merchant image",
+        mpn: form.mpn || undefined,
+        sku: form.sku || undefined,
+        gtin: form.gtin || undefined,
         specs: {
           ram_gb: Number(form.ram_gb) || undefined,
           storage_gb: Number(form.storage_gb) || undefined,
@@ -126,7 +147,20 @@ export default function AdminCatalogPage() {
     });
     if (res.ok) {
       setMsg("Product created");
-      setForm({ name: "", slug: "", brand: "", categoryId: "laptops", shortDescription: "", image: "", ram_gb: "16", storage_gb: "512" });
+      setForm({
+        name: "",
+        slug: "",
+        brand: "",
+        categoryId: "laptops",
+        shortDescription: "",
+        image: "",
+        imageSourceType: "authorized_asset",
+        mpn: "",
+        sku: "",
+        gtin: "",
+        ram_gb: "16",
+        storage_gb: "512",
+      });
       load();
     } else {
       const err = await res.json();
@@ -230,7 +264,18 @@ export default function AdminCatalogPage() {
                 ))}
               </select>
               <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white sm:col-span-2" placeholder="Short description" value={form.shortDescription} onChange={(e) => setForm({ ...form, shortDescription: e.target.value })} />
-              <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white" placeholder="Image URL" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} />
+              <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white" placeholder="Image URL (affiliate/merchant/official only)" value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} />
+              <select className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white" value={form.imageSourceType} onChange={(e) => setForm({ ...form, imageSourceType: e.target.value })}>
+                <option value="affiliate_feed">Affiliate Feed</option>
+                <option value="affiliate_api">Affiliate API</option>
+                <option value="merchant_feed">Merchant</option>
+                <option value="official">Official</option>
+                <option value="authorized_asset">Authorized Asset</option>
+                <option value="brand_logo">Brand logo</option>
+              </select>
+              <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white" placeholder="MPN" value={form.mpn} onChange={(e) => setForm({ ...form, mpn: e.target.value })} />
+              <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white" placeholder="SKU" value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
+              <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white" placeholder="GTIN / EAN / UPC" value={form.gtin} onChange={(e) => setForm({ ...form, gtin: e.target.value })} />
               <div className="flex gap-2">
                 <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white w-full" placeholder="RAM GB" value={form.ram_gb} onChange={(e) => setForm({ ...form, ram_gb: e.target.value })} />
                 <input className="bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white w-full" placeholder="Storage GB" value={form.storage_gb} onChange={(e) => setForm({ ...form, storage_gb: e.target.value })} />
@@ -247,11 +292,22 @@ export default function AdminCatalogPage() {
           <div className="space-y-2">
             {filtered.map((p) => (
               <div key={p.id} className="flex items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-900/40 px-4 py-3">
-                <div>
+                <div className="min-w-0">
                   <p className="text-white font-medium">{p.name} <span className="text-xs text-slate-500">({p.status})</span></p>
                   <p className="text-xs text-slate-400">{p.brand} · {p.categoryId} · {p.slug}</p>
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    Image: {p.imageSourceType || "unknown"}
+                    {p.imageSourceLabel ? ` · ${p.imageSourceLabel}` : ""}
+                    {p.mpn ? ` · MPN ${p.mpn}` : ""}
+                    {p.sku ? ` · SKU ${p.sku}` : ""}
+                    {p.gtin ? ` · GTIN ${p.gtin}` : ""}
+                    {p.updatedAt ? ` · Updated ${new Date(p.updatedAt).toLocaleDateString("en-IN")}` : ""}
+                  </p>
+                  {p.image ? (
+                    <p className="text-[11px] text-slate-600 truncate max-w-xl mt-0.5">{p.image}</p>
+                  ) : null}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 shrink-0">
                   <Link href={`/catalog/p/${p.slug}`} className="text-xs text-brand-300 hover:underline" target="_blank">View</Link>
                   <button type="button" onClick={() => archiveProduct(p.id)} className="text-xs text-amber-300">Archive</button>
                   <button type="button" onClick={() => deleteProduct(p.id)} className="text-xs text-red-400 inline-flex items-center gap-1"><Trash2 className="w-3 h-3" /> Delete</button>
@@ -286,7 +342,14 @@ export default function AdminCatalogPage() {
           <div className="space-y-2">
             {offers.map((o) => (
               <div key={o.id} className="rounded-lg border border-slate-800 px-4 py-3 text-sm text-slate-300">
-                {o.productId} · {o.merchantId} · ₹{o.price} · {o.availability}
+                <p>
+                  {o.productId} · {o.merchantId} · ₹{o.price} · {o.availability}
+                  {o.source ? ` · source ${o.source}` : ""}
+                </p>
+                <p className="text-[11px] text-slate-500 mt-1 truncate">
+                  URL: {o.affiliateUrl || o.url || "—"}
+                  {o.lastCheckedAt ? ` · checked ${new Date(o.lastCheckedAt).toLocaleString("en-IN")}` : ""}
+                </p>
               </div>
             ))}
           </div>

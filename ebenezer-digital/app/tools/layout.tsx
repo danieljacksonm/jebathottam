@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { EcosystemNav } from "@/components/EcosystemNav";
+import "../affiliate/premium.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Ebenezer Tools — Best Tools for Small Businesses",
+    default: "Ebenezer Tools — Find the right tool for the job",
     template: "%s | Ebenezer Tools",
   },
   description:
-    "Honest comparisons of the best tools for small businesses — billing, WhatsApp, social media, design, payments, and more. Find the right tool with real pros, cons, and pricing.",
+    "Discover, compare and choose the best AI tools, SaaS and software for your needs — with honest pros, cons and pricing notes.",
   openGraph: {
-    title: "Ebenezer Tools — Best Business Tools Compared",
-    description:
-      "Compare the best tools for small businesses. Real pros, cons, and pricing — no paid rankings.",
+    title: "Ebenezer Tools",
+    description: "Premium AI & SaaS discovery and comparison.",
     url: "https://tools.ebenezerdigital.com",
     siteName: "Ebenezer Tools",
     type: "website",
@@ -24,9 +24,9 @@ export const metadata: Metadata = {
 
 export default function ToolsLayout({ children }: { children: ReactNode }) {
   return (
-    <>
+    <div className="aff-root">
       <EcosystemNav variant="light" active="tools" />
       {children}
-    </>
+    </div>
   );
 }

@@ -67,7 +67,12 @@ export async function POST(request: Request) {
 
   const mode = resolveAiMode(body.mode);
   const knowledge = loadEbenKnowledge();
-  const mergedContext = [knowledge, body.context || ""].filter(Boolean).join("\n\n");
+  let extraContext = body.context || "";
+  if (mode === "tools" && !extraContext.includes("Ebenezer Tools catalog")) {
+    const { buildToolsAiContext } = await import("@/lib/tools/context");
+    extraContext = [buildToolsAiContext(50), extraContext].filter(Boolean).join("\n\n");
+  }
+  const mergedContext = [knowledge, extraContext].filter(Boolean).join("\n\n");
   const messages = normalizeMessages(body.messages, mode, mergedContext);
   const userTurns = messages.filter((m) => m.role === "user");
   if (userTurns.length === 0) {

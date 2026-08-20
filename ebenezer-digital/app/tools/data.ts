@@ -1,3 +1,11 @@
+import type { Tool } from "./types";
+
+export type { Tool } from "./types";
+import { TOOL_CATEGORIES, type ToolCategory } from "./taxonomy";
+export type { ToolCategory } from "./taxonomy";
+export { TOOL_CATEGORIES, TOOL_CATEGORY_GROUPS, groupForCategory } from "./taxonomy";
+import { DISCOVERY_TOOLS } from "./discovery-tools";
+
 /**
  * Ebenezer Tools — Affiliate comparison data
  *
@@ -39,52 +47,7 @@
  * ─────────────────────────────────────────────────────────────
  */
 
-export type ToolCategory =
-  | "Billing & Invoicing"
-  | "WhatsApp & Messaging"
-  | "Social Media"
-  | "Design & Branding"
-  | "Productivity"
-  | "Email Marketing"
-  | "Website Builders"
-  | "Payments";
-
-export type Tool = {
-  id: string;
-  name: string;
-  tagline: string;
-  description: string;
-  category: ToolCategory;
-  logo: string; // emoji fallback
-  logoImg?: string; // real logo URL from official CDN
-  url: string; // your affiliate link
-  affiliateNote?: string; // shown only in code, not on page
-  pricing: {
-    free: boolean;
-    freeLabel?: string;
-    paid?: string;
-    paidLabel?: string;
-  };
-  rating: number; // out of 5
-  bestFor: string;
-  pros: string[];
-  cons: string[];
-  badge?: "Best Value" | "Most Popular" | "Editor's Pick" | "Free Forever" | "Best for India";
-  highlighted?: boolean; // featured position
-};
-
-export const TOOL_CATEGORIES: ToolCategory[] = [
-  "Billing & Invoicing",
-  "WhatsApp & Messaging",
-  "Social Media",
-  "Design & Branding",
-  "Productivity",
-  "Email Marketing",
-  "Website Builders",
-  "Payments",
-];
-
-export const TOOLS: Tool[] = [
+const LEGACY_TOOLS: Tool[] = [
   /* ── BILLING & INVOICING ─────────────────────────────── */
   {
     id: "ebenezer-saas",
@@ -95,6 +58,7 @@ export const TOOLS: Tool[] = [
     category: "Billing & Invoicing",
     logo: "🟢",
     logoImg: "/brand/ebenezer-store-mark.svg",
+    domain: "ebenezerdigital.com",
     url: "/saas",
     pricing: { free: true, freeLabel: "Free forever (current plan)", paid: "Coming soon", paidLabel: "Paid starter plan launching soon" },
     rating: 5,
@@ -119,6 +83,7 @@ export const TOOLS: Tool[] = [
     category: "Billing & Invoicing",
     logo: "🔵",
     logoImg: "https://www.zohowebstatic.com/sites/zweb/images/zoho_general_pages/zoho-logo-web.svg",
+    domain: "zoho.com",
     url: "https://www.zoho.com/invoice/",
     affiliateNote: "APPLY NOW — https://www.zoho.com/affiliate/signup.html — 15% for 12 months, 90-day cookie, instant approval",
     pricing: { free: true, freeLabel: "Free for up to 1,000 invoices/year", paid: "$15/mo", paidLabel: "Zoho One suite" },
@@ -134,9 +99,10 @@ export const TOOLS: Tool[] = [
     tagline: "Full accounting and invoicing for growing businesses.",
     description:
       "The world's most used small business accounting software. Powerful features including GST reports, payroll, and multi-currency. Better for businesses that need full accounting.",
-    category: "Billing & Invoicing",
+    category: "Accounting",
     logo: "🟩",
     logoImg: "https://quickbooks.intuit.com/content/dam/intuit/quickbooks/logos/qb-logo-2022.svg",
+    domain: "quickbooks.intuit.com",
     url: "https://quickbooks.intuit.com/",
     affiliateNote: "APPLY — https://quickbooks.intuit.com/partners/affiliates/ — up to $50 per referral",
     pricing: { free: false, paid: "$15–$100/mo", paidLabel: "30-day free trial available" },
@@ -151,9 +117,10 @@ export const TOOLS: Tool[] = [
     tagline: "Free accounting and invoicing for small businesses.",
     description:
       "Wave is a free accounting, invoicing, and receipt scanning tool. Genuinely free with no hidden limits — makes money through payment processing fees.",
-    category: "Billing & Invoicing",
+    category: "Accounting",
     logo: "🌊",
     logoImg: "https://www.waveapps.com/wp-content/themes/waveapps/dist/images/wave-logo.svg",
+    domain: "waveapps.com",
     url: "https://www.waveapps.com/",
     affiliateNote: "Wave affiliate: https://www.waveapps.com/partners",
     pricing: { free: true, freeLabel: "Accounting and invoicing free forever", paid: "2.9% + 30¢", paidLabel: "Payment processing fee only" },
@@ -174,6 +141,7 @@ export const TOOLS: Tool[] = [
     category: "WhatsApp & Messaging",
     logo: "💬",
     logoImg: "https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg",
+    domain: "whatsapp.com",
     url: "https://business.whatsapp.com/",
     pricing: { free: true, freeLabel: "Completely free app" },
     rating: 5,
@@ -192,6 +160,7 @@ export const TOOLS: Tool[] = [
     category: "WhatsApp & Messaging",
     logo: "📲",
     logoImg: "https://www.wati.io/wp-content/uploads/2021/09/wati-logo.svg",
+    domain: "wati.io",
     url: "https://www.wati.io/",
     affiliateNote: "WATI affiliate: https://www.wati.io/partners/",
     pricing: { free: false, paid: "$49/mo", paidLabel: "14-day free trial" },
@@ -212,6 +181,7 @@ export const TOOLS: Tool[] = [
     category: "Design & Branding",
     logo: "🎨",
     logoImg: "https://upload.wikimedia.org/wikipedia/commons/b/bb/Canva_Logo.svg",
+    domain: "canva.com",
     url: "https://www.canva.com/",
     affiliateNote: "APPLY via Canvassador program — https://public.canva.site/canvassadors — takes 1-2 weeks, then get Impact tracking link",
     pricing: { free: true, freeLabel: "Free with thousands of templates", paid: "$13/mo", paidLabel: "Canva Pro — unlimited assets" },
@@ -231,6 +201,7 @@ export const TOOLS: Tool[] = [
     category: "Social Media",
     logo: "📅",
     logoImg: "https://buffer.com/static/icons/buffer-icon.svg",
+    domain: "buffer.com",
     url: "https://buffer.com/",
     affiliateNote: "Buffer affiliate: https://buffer.com/affiliate-program",
     pricing: { free: true, freeLabel: "3 channels free", paid: "$6/mo per channel", paidLabel: "Buffer Essentials" },
@@ -248,6 +219,7 @@ export const TOOLS: Tool[] = [
     category: "Social Media",
     logo: "🗓️",
     logoImg: "https://later.com/wp-content/uploads/2023/01/later-logo.svg",
+    domain: "later.com",
     url: "https://later.com/",
     affiliateNote: "Later affiliate: https://later.com/affiliate-program/",
     pricing: { free: true, freeLabel: "1 social set, 30 posts/month free", paid: "$18/mo", paidLabel: "Later Starter" },
@@ -267,6 +239,7 @@ export const TOOLS: Tool[] = [
     category: "Design & Branding",
     logo: "🅰️",
     logoImg: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Adobe_Express_logo.svg",
+    domain: "adobe.com",
     url: "https://www.adobe.com/express/",
     affiliateNote: "Adobe affiliate: https://www.adobe.com/affiliates.html — up to 85% first month commission",
     pricing: { free: true, freeLabel: "Free with limited templates", paid: "$9.99/mo", paidLabel: "Adobe Express Premium" },
@@ -284,6 +257,7 @@ export const TOOLS: Tool[] = [
     category: "Design & Branding",
     logo: "✨",
     logoImg: "https://looka.com/wp-content/themes/looka/images/logos/looka_logo_black.svg",
+    domain: "looka.com",
     url: "https://looka.com/",
     affiliateNote: "Looka affiliate: https://looka.com/affiliates/ — 15–30% commission",
     pricing: { free: false, paid: "$20 one-time or $96/yr", paidLabel: "Logo package or Brand kit subscription" },
@@ -304,6 +278,7 @@ export const TOOLS: Tool[] = [
     category: "Productivity",
     logo: "📝",
     logoImg: "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png",
+    domain: "notion.so",
     url: "https://www.notion.so/",
     affiliateNote: "MONITOR — https://www.notion.com/affiliates — currently paused for new applicants (mid-2026). Check back monthly. Pays $50 per signup + 20% year-1 revenue via PartnerStack.",
     pricing: { free: true, freeLabel: "Free for individuals — unlimited pages", paid: "$10/mo per member", paidLabel: "Notion Plus" },
@@ -323,6 +298,7 @@ export const TOOLS: Tool[] = [
     category: "Productivity",
     logo: "🔵",
     logoImg: "https://lh3.googleusercontent.com/oWxaRbF8Yyv0BNQaeMp1jZKC8U9CfIfkmU2J8Vk9ZhgJUXmxvT2zSmz1V4LU2f0IQXqpg=w16383",
+    domain: "workspace.google.com",
     url: "https://workspace.google.com/",
     affiliateNote: "Google Workspace affiliate: https://workspace.google.com/partners/",
     pricing: { free: false, paid: "$6/mo per user", paidLabel: "Business Starter — 14-day free trial" },
@@ -340,6 +316,7 @@ export const TOOLS: Tool[] = [
       "Loom lets you record your screen and camera simultaneously and share a link. Perfect for explaining things to clients, team members, or customers without a meeting.",
     category: "Productivity",
     logo: "🎥",
+    domain: "loom.com",
     url: "https://www.loom.com/",
     affiliateNote: "Loom affiliate: https://www.loom.com/affiliate-program",
     pricing: { free: true, freeLabel: "5-minute videos, 25 videos free", paid: "$12.50/mo", paidLabel: "Loom Business" },
@@ -358,6 +335,7 @@ export const TOOLS: Tool[] = [
       "Mailchimp is the most popular email marketing tool worldwide. Send newsletters, automated sequences, and promotional emails to your customer list. Good free plan up to 500 contacts.",
     category: "Email Marketing",
     logo: "🐵",
+    domain: "mailchimp.com",
     url: "https://mailchimp.com/",
     affiliateNote: "Mailchimp affiliate: https://mailchimp.com/referral-program/",
     pricing: { free: true, freeLabel: "500 contacts, 1,000 emails/month free", paid: "$13/mo", paidLabel: "Mailchimp Essentials" },
@@ -375,6 +353,7 @@ export const TOOLS: Tool[] = [
       "Brevo charges based on emails sent, not contacts stored — making it much more affordable when your list grows. Also includes SMS, WhatsApp campaigns, and live chat.",
     category: "Email Marketing",
     logo: "📧",
+    domain: "brevo.com",
     url: "https://www.brevo.com/",
     affiliateNote: "APPLY NOW — https://www.brevo.com/partners/affiliates/ — €5 per free signup + €100 per paid conversion. Open program.",
     pricing: { free: true, freeLabel: "300 emails/day, unlimited contacts free", paid: "$9/mo", paidLabel: "Brevo Starter" },
@@ -395,6 +374,7 @@ export const TOOLS: Tool[] = [
       "Framer is the best tool for building fast, beautiful websites without code. Used by startups and creators worldwide. The free plan publishes a real website on a framer.site domain.",
     category: "Website Builders",
     logo: "🖥️",
+    domain: "framer.com",
     url: "https://www.framer.com/",
     affiliateNote: "APPLY — https://www.framer.com/affiliates/ — commission on paid plans. Open program.",
     pricing: { free: true, freeLabel: "Publish on framer.site free", paid: "$14/mo", paidLabel: "Framer Mini — custom domain" },
@@ -413,6 +393,7 @@ export const TOOLS: Tool[] = [
       "Webflow gives designers and developers full CSS-level control without writing code. Steeper learning curve than Framer but more powerful for complex layouts and CMS-driven sites.",
     category: "Website Builders",
     logo: "🌐",
+    domain: "webflow.com",
     url: "https://webflow.com/",
     affiliateNote: "Webflow affiliate: https://webflow.com/partners/affiliate",
     pricing: { free: true, freeLabel: "2 projects free on webflow.io", paid: "$14/mo", paidLabel: "Webflow Basic — custom domain" },
@@ -431,6 +412,7 @@ export const TOOLS: Tool[] = [
       "Razorpay is the best payment gateway for India-based businesses. Accept UPI, debit/credit cards, net banking, and EMI. Easy integration with websites and WhatsApp payment links.",
     category: "Payments",
     logo: "💳",
+    domain: "razorpay.com",
     url: "https://razorpay.com/",
     affiliateNote: "APPLY NOW — https://razorpay.com/partners/ — INSTANT approval, no waiting. Earn 0.1% of all transactions + Rs.500 per referral. Best India affiliate.",
     pricing: { free: true, freeLabel: "No monthly fee — 2% per transaction", paid: "Custom", paidLabel: "Volume pricing available" },
@@ -449,6 +431,7 @@ export const TOOLS: Tool[] = [
       "Stripe is the global standard for online payments. Accept credit/debit cards from 195 countries. Used by millions of businesses worldwide. Better for international or USD payments.",
     category: "Payments",
     logo: "🟣",
+    domain: "stripe.com",
     url: "https://stripe.com/",
     affiliateNote: "Stripe affiliate: https://stripe.com/partners",
     pricing: { free: true, freeLabel: "No monthly fee — 2.9% + 30¢ per transaction", paid: "Custom", paidLabel: "Volume pricing" },
@@ -459,6 +442,8 @@ export const TOOLS: Tool[] = [
   },
 ];
 
+export const TOOLS: Tool[] = [...DISCOVERY_TOOLS, ...LEGACY_TOOLS];
+
 export function getToolsByCategory(category: ToolCategory): Tool[] {
   return TOOLS.filter((t) => t.category === category);
 }
@@ -468,5 +453,5 @@ export function getHighlightedTools(): Tool[] {
 }
 
 export function getAllCategories(): ToolCategory[] {
-  return TOOL_CATEGORIES;
+  return TOOL_CATEGORIES.filter((c) => TOOLS.some((t) => t.category === c));
 }

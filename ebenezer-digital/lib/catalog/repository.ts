@@ -188,7 +188,35 @@ export function loadCatalogStore(): CatalogStore {
       memory = {
         ...seedStore(),
         ...parsed,
-        products: parsed.products?.length ? parsed.products : seedStore().products,
+        products: (parsed.products?.length ? parsed.products : seedStore().products).map((p) => {
+          const seed = SEED_PRODUCTS.find((s) => s.id === p.id);
+          // Strip Unsplash; prefer authorized seed images / brand logos
+          if (p.image && /unsplash\.com/i.test(p.image)) {
+            if (seed) {
+              return {
+                ...p,
+                image: seed.image,
+                imageSourceType: seed.imageSourceType,
+                imageSourceLabel: seed.imageSourceLabel,
+                brandDomain: seed.brandDomain || p.brandDomain,
+                gtin: p.gtin || seed.gtin,
+                mpn: p.mpn || seed.mpn,
+                sku: p.sku || seed.sku,
+              };
+            }
+            return { ...p, image: "", imageSourceType: "branded_placeholder" as const };
+          }
+          if (seed && (!p.brandDomain || !p.imageSourceType)) {
+            return {
+              ...p,
+              brandDomain: p.brandDomain || seed.brandDomain,
+              imageSourceType: p.imageSourceType || seed.imageSourceType,
+              imageSourceLabel: p.imageSourceLabel || seed.imageSourceLabel,
+              image: p.image || seed.image,
+            };
+          }
+          return p;
+        }),
         offers: parsed.offers?.length ? parsed.offers : seedStore().offers,
         merchants: parsed.merchants?.length ? parsed.merchants : seedStore().merchants,
         guides: parsed.guides?.length ? parsed.guides : seedStore().guides,
