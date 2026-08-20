@@ -5,7 +5,7 @@ html.brand-cursor-on body {
 html.brand-cursor-on a,
 html.brand-cursor-on button,
 html.brand-cursor-on [data-cursor] {
-  cursor: none;
+  cursor: pointer;
 }
 html.brand-cursor-on input,
 html.brand-cursor-on textarea,

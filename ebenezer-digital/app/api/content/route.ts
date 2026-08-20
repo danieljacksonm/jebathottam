@@ -43,13 +43,15 @@ export async function GET() {
       services,
       portfolio,
       testimonials,
-      blogPosts: lightBlog,
+      blogPosts: lightBlog.slice(0, 40),
       team,
       settings,
       digitalProducts,
     };
     setCachedPublicContent(payload);
-    return NextResponse.json(payload);
+    return NextResponse.json(payload, {
+      headers: { "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600" },
+    });
   } catch (error) {
     console.error("Public content error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

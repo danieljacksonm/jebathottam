@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -11,6 +12,7 @@ import { JournalProgress } from "./components/JournalProgress";
 import { JournalMarquee } from "./components/JournalMarquee";
 import { formatDate, readingTime, splitHeadline, type JournalPost } from "./lib";
 import { rotateList, useRotate } from "./useRotate";
+import { Suspense } from "react";
 import {
   SITE_EMAIL,
   SITE_PHONE_DISPLAY,
@@ -22,10 +24,20 @@ import "./journal.css";
 const PAGE_SIZE = 24;
 
 export default function BlogIndexPage() {
+  return (
+    <Suspense fallback={<div className="journal-root min-h-screen bg-[var(--j-ink)]" />}>
+      <BlogIndexInner />
+    </Suspense>
+  );
+}
+
+function BlogIndexInner() {
+  const searchParams = useSearchParams();
   const [posts, setPosts] = useState<JournalPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("ALL");
+  const [apiCategories, setApiCategories] = useState<string[]>([]);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 120]);
@@ -33,21 +45,36 @@ export default function BlogIndexPage() {
   const heroOpacity = useTransform(scrollY, [0, 420], [1, 0.35]);
 
   useEffect(() => {
-    fetch("/api/content")
+    const cat = searchParams.get("cat");
+    if (cat) setActiveCategory(cat);
+  }, [searchParams]);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (query.trim()) params.set("q", query.trim());
+    if (activeCategory && activeCategory !== "ALL") params.set("cat", activeCategory);
+    params.set("limit", "48");
+    fetch(`/api/blog/list?${params.toString()}`)
       .then((r) => r.json())
-      .then((data) => setPosts(Array.isArray(data.blogPosts) ? data.blogPosts : []))
+      .then((data) => {
+        setPosts(Array.isArray(data.posts) ? data.posts : []);
+        if (Array.isArray(data.categories) && data.categories.length) {
+          setApiCategories(data.categories);
+        }
+      })
       .catch(() => setPosts([]))
       .finally(() => setLoading(false));
-  }, []);
+  }, [query, activeCategory]);
 
   useEffect(() => {
     setVisible(PAGE_SIZE);
   }, [query, activeCategory]);
 
   const categories = useMemo(() => {
+    if (apiCategories.length) return apiCategories;
     const set = new Set(posts.map((p) => p.category).filter(Boolean));
     return Array.from(set).sort((a, b) => a.localeCompare(b));
-  }, [posts]);
+  }, [posts, apiCategories]);
 
   const filtered = useMemo(() => {
     return posts.filter((p) => {
@@ -68,7 +95,7 @@ export default function BlogIndexPage() {
     [posts]
   );
 
-  const rotate = useRotate(filtered.length, 10000);
+  const rotate = useRotate(filtered.length, 120000);
   const rotated = useMemo(() => rotateList(filtered, rotate), [filtered, rotate]);
   const featured = rotated[0];
   const trending = rotated.slice(1, 7);

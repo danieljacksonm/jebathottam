@@ -10,6 +10,7 @@ const nextConfig = {
     return config;
   },
   images: {
+    minimumCacheTTL: 60 * 60 * 24 * 7,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com", pathname: "/**" },
       { protocol: "https", hostname: "media.guim.co.uk", pathname: "/**" },

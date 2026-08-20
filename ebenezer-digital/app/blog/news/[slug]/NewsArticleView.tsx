@@ -156,6 +156,25 @@ export function NewsArticleView({
           {article.byline ? ` · ${article.byline}` : ""}. Published {formatNewsTime(article.publishedAt)}.
         </p>
 
+        {keep[0] && (
+          <div className="mt-10 flex flex-wrap gap-3">
+            <Link
+              href={`/blog/news/${keep[0].slug}`}
+              className="inline-flex min-h-[48px] items-center bg-[var(--n-ink)] px-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--n-paper)]"
+              data-cursor="READ"
+            >
+              Next news → {keep[0].title.slice(0, 42)}{keep[0].title.length > 42 ? "…" : ""}
+            </Link>
+            <Link
+              href="/blog/news"
+              className="inline-flex min-h-[48px] items-center border border-[var(--n-ink)] px-5 text-[11px] font-semibold uppercase tracking-[0.18em]"
+              data-cursor="OPEN"
+            >
+              Browse more stories
+            </Link>
+          </div>
+        )}
+
         <div className="mt-10">
           <AskAiPanel
             mode="news"

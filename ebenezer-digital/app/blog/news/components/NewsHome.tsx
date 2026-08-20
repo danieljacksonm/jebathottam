@@ -68,7 +68,7 @@ export function NewsHome() {
     return live.length ? [...live, ...other] : articles;
   }, [articles]);
 
-  const rotate = useRotate(liveFirst.length, 10000);
+  const rotate = useRotate(liveFirst.length, 120000);
   const rotated = useMemo(() => rotateList(liveFirst, rotate), [liveFirst, rotate]);
 
   const desk = useMemo(() => {

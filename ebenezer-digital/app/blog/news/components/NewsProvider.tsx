@@ -54,7 +54,10 @@ export function NewsProvider({ children }: { children: ReactNode }) {
           if (!alive) return;
           const items = Array.isArray(data.items) ? data.items : [];
           if (items.length) {
-            setArticles(items);
+            setArticles((prev) => {
+              if (prev.length === items.length && prev[0]?.id === items[0]?.id) return prev;
+              return items;
+            });
             const stamp = new Date().toISOString();
             setUpdatedAt(stamp);
             try {
@@ -75,7 +78,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
     };
 
     load(!hasWarmCache);
-    const timer = window.setInterval(() => load(false), 10 * 1000);
+    const timer = window.setInterval(() => load(false), 5 * 60 * 1000);
     return () => {
       alive = false;
       window.clearInterval(timer);

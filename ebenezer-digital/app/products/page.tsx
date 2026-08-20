@@ -57,8 +57,13 @@ function ProductCard({
           src={p.image}
           alt={p.name}
           fill
-          className="object-cover transition duration-500 group-hover:scale-103"
+          className="object-cover transition duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          onError={(e) => {
+            const img = e.currentTarget as HTMLImageElement;
+            if (img.src.includes("og-store.png")) return;
+            img.src = "/og-store.png";
+          }}
         />
         {p.badge && (
           <span className={`${badgeClass} absolute left-3 top-3 shadow-sm`}>{p.badge}</span>
@@ -169,7 +174,7 @@ export default function ProductsPage() {
       <StoreCart />
 
       {/* ── HERO ─────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[var(--s-surface)] pt-16">
+      <section className="relative overflow-hidden bg-[var(--s-surface)]">
         <div className="s-page py-16 lg:py-24">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>

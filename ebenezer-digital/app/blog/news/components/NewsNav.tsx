@@ -6,6 +6,7 @@ import { Menu, Search, Radio, X } from "lucide-react";
 import { NEWS_NAV } from "../data";
 import { useNews } from "./NewsProvider";
 import { QuietTranslate } from "@/components/QuietTranslate";
+import { SITE_NAV } from "@/lib/site-nav";
 
 export function NewsNav() {
   const { setSearchOpen, menuOpen, setMenuOpen, setActiveNav, activeNav } = useNews();
@@ -117,16 +118,19 @@ export function NewsNav() {
             ))}
           </div>
           <div className="mt-12 space-y-3 text-sm text-[var(--n-muted)]">
-            <Link href="/ai?mode=news" onClick={() => setMenuOpen(false)} className="block text-[var(--n-live)]">
+            <Link href={`${SITE_NAV.ai}?mode=news`} onClick={() => setMenuOpen(false)} className="block text-[var(--n-live)]">
               Ask Eben AI
             </Link>
-            <Link href="/blog" onClick={() => setMenuOpen(false)}>
+            <Link href={SITE_NAV.journal} onClick={() => setMenuOpen(false)}>
               Journal
             </Link>
-            <a href="/api/news/rss" className="block">
+            <Link href={SITE_NAV.store} onClick={() => setMenuOpen(false)} className="block">
+              Store
+            </Link>
+            <a href={SITE_NAV.newsRss} className="block">
               RSS
             </a>
-            <a href="/api/news/sitemap" className="block">
+            <a href={SITE_NAV.newsSitemap} className="block">
               News sitemap
             </a>
             <Link href="/blog/newsroom/about" onClick={() => setMenuOpen(false)} className="block">
@@ -144,7 +148,7 @@ export function NewsNav() {
             <a href="/api/news/ical" className="block">
               iCal
             </a>
-            <Link href="https://ebenezerdigital.com" className="block">
+            <Link href={SITE_NAV.home} className="block">
               Studio
             </Link>
           </div>

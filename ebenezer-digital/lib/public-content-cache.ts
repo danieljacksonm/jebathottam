@@ -1,5 +1,5 @@
 let cache: { at: number; body: unknown } | null = null;
-const TTL_MS = 30_000;
+const TTL_MS = 5 * 60 * 1000;
 
 export function getCachedPublicContent(): unknown | null {
   if (!cache) return null;

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { JournalLanguage } from "./JournalLanguage";
+import { SITE_NAV, journalCategoryHref } from "@/lib/site-nav";
 
 export function JournalNav({
   categories,
@@ -71,7 +72,7 @@ export function JournalNav({
 
           <nav className="hidden items-center gap-7 md:flex">
             <Link
-              href="/blog/news"
+              href={SITE_NAV.news}
               className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.22em] text-[var(--j-brand)] transition hover:text-[var(--j-paper)]"
               data-cursor="NEWS"
             >
@@ -79,15 +80,15 @@ export function JournalNav({
               World News
             </Link>
             {categories.slice(0, 5).map((cat) => (
-              <a
+              <Link
                 key={cat}
-                href="#stream"
+                href={journalCategoryHref(cat)}
                 onClick={() => onCategory?.(cat)}
                 className="text-[11px] uppercase tracking-[0.22em] text-[var(--j-muted)] transition hover:text-[var(--j-brand)]"
                 data-cursor="VIEW"
               >
                 {cat}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -111,14 +112,14 @@ export function JournalNav({
               <span className="text-xs tracking-widest">MENU</span>
             </button>
             <Link
-              href="/ai?mode=blog"
+              href={SITE_NAV.ai}
               className="hidden text-[11px] uppercase tracking-[0.2em] text-[var(--j-muted)] hover:text-[var(--j-brand)] md:inline"
               data-cursor="AI"
             >
               Eben AI
             </Link>
             <Link
-              href="https://ebenezerdigital.com"
+              href={SITE_NAV.home}
               className="hidden rounded-full border border-[var(--j-brand)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--j-brand)] transition hover:bg-[var(--j-brand)] hover:text-[#04110c] md:inline-flex"
               data-cursor="→"
             >
@@ -137,13 +138,13 @@ export function JournalNav({
             </button>
           </div>
           <div className="space-y-5">
-            <Link href="/blog/news" className="block font-serif text-3xl text-[var(--j-brand)]">
+            <Link href={SITE_NAV.news} className="block font-serif text-3xl text-[var(--j-brand)]">
               E&gt; World News
             </Link>
             {categories.map((cat) => (
-              <a
+              <Link
                 key={cat}
-                href="#stream"
+                href={journalCategoryHref(cat)}
                 onClick={() => {
                   onCategory?.(cat);
                   setMenuOpen(false);
@@ -151,12 +152,15 @@ export function JournalNav({
                 className="block font-serif text-3xl text-[var(--j-paper)]"
               >
                 {cat}
-              </a>
+              </Link>
             ))}
-            <Link href="/ai?mode=blog" className="block pt-6 text-[var(--j-brand)]">
+            <Link href={`${SITE_NAV.ai}?mode=blog`} className="block pt-6 text-[var(--j-brand)]">
               Eben AI
             </Link>
-            <Link href="https://ebenezerdigital.com" className="block pt-2 text-[var(--j-brand)]">
+            <Link href={SITE_NAV.store} className="block pt-2 text-[var(--j-brand)]">
+              Ebenezer Store →
+            </Link>
+            <Link href={SITE_NAV.home} className="block pt-2 text-[var(--j-brand)]">
               Ebenezer Digital Studio →
             </Link>
           </div>

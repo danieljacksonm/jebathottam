@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { STORE_CATEGORIES, STORE_PRODUCTS, formatINR } from "../data";
 import { useStore } from "./StoreProvider";
 import { useStoreI18n, type StoreLocale } from "../i18n";
+import { SITE_NAV } from "@/lib/site-nav";
 
 export function StoreNav() {
   const { cartCount, setCartOpen, searchOpen, setSearchOpen } = useStore();
@@ -52,6 +53,8 @@ export function StoreNav() {
     { href: "/products#bundles",       label: t("bundles") },
     { href: "/products#freebies",      label: t("freebies") },
     { href: "/products/free-enquiry-form-kit", label: t("freeTool") },
+    { href: SITE_NAV.journal, label: "Journal" },
+    { href: SITE_NAV.news, label: "News" },
   ];
 
   return (
@@ -120,7 +123,7 @@ export function StoreNav() {
 
             {/* AI */}
             <Link
-              href="/ai?mode=product"
+              href={`${SITE_NAV.ai}?mode=product`}
               className="hidden rounded-lg border border-[var(--s-brand)] bg-[var(--s-brand-bg)] px-3 py-1.5 text-xs font-semibold text-[var(--s-brand-dk)] transition hover:bg-[var(--s-brand)] hover:text-white md:block"
             >
               Eben AI
@@ -248,14 +251,14 @@ export function StoreNav() {
           {/* CTA links */}
           <div className="mt-6 space-y-3">
             <Link
-              href="/ai?mode=product"
+              href={`${SITE_NAV.ai}?mode=product`}
               onClick={() => setMenuOpen(false)}
               className="block rounded-xl bg-[var(--s-brand)] px-4 py-3 text-center text-sm font-semibold text-white"
             >
               Eben AI — Ask a product question
             </Link>
             <Link
-              href="/saas"
+              href={SITE_NAV.saas}
               onClick={() => setMenuOpen(false)}
               className="block rounded-xl border border-[var(--s-line)] px-4 py-3 text-center text-sm font-semibold text-[var(--s-ink)]"
             >

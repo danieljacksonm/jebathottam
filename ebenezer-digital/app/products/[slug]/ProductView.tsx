@@ -32,6 +32,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
   const { t, rtl, locale } = useStoreI18n();
   const product = localizeProduct(raw, locale);
   const [activeImage, setActiveImage] = useState(product.gallery[0] || product.image);
+  const [imgBroken, setImgBroken] = useState(false);
   const [license, setLicense] = useState(product.license[0] || "Personal");
   const related = STORE_PRODUCTS.filter((p) => p.id !== raw.id && p.category === raw.category).slice(0, 3);
   const relatedFallback = related.length
@@ -57,7 +58,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
       <StoreCart />
 
       {/* ── Breadcrumb ──────────────────────────────── */}
-      <div className="border-b border-[var(--s-line)] bg-[var(--s-surface)] pt-16">
+      <div className="border-b border-[var(--s-line)] bg-[var(--s-surface)]">
         <div className="s-page flex items-center gap-2 py-3 text-sm text-[var(--s-muted)]">
           <Link href="/products" className="flex items-center gap-1 hover:text-[var(--s-brand)] transition-colors">
             <ArrowLeft className="h-3.5 w-3.5" />
@@ -76,12 +77,13 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
           <div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-[var(--s-line)] bg-[var(--s-line-soft)]">
               <Image
-                src={activeImage}
+                src={imgBroken ? "/og-store.png" : activeImage}
                 alt={product.name}
                 fill
                 priority
                 className="object-cover transition duration-300"
                 sizes="(max-width: 1024px) 100vw, 55vw"
+                onError={() => setImgBroken(true)}
               />
             </div>
             {product.gallery.length > 1 && (

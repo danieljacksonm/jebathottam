@@ -6,23 +6,24 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagneticLink } from "../studio/MagneticLink";
+import { SITE_NAV } from "@/lib/site-nav";
 
 const navLinks = [
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/work" },
-  { label: "News", href: "/blog/news" },
-  { label: "Journal", href: "/blog" },
-  { label: "Store", href: "/products" },
-  { label: "SaaS billing", href: "/saas" },
-  { label: "Eben AI", href: "/ai" },
+  { label: "Services", href: SITE_NAV.services },
+  { label: "Work", href: SITE_NAV.work },
+  { label: "News", href: SITE_NAV.news },
+  { label: "Journal", href: SITE_NAV.journal },
+  { label: "Store", href: SITE_NAV.store },
+  { label: "SaaS billing", href: SITE_NAV.saas },
+  { label: "Eben AI", href: SITE_NAV.ai },
 ];
 
 const productLinks = [
-  { label: "News", href: "/blog/news", hint: "World news desk" },
-  { label: "Journal", href: "/blog", hint: "Learning blog" },
-  { label: "Store", href: "/products", hint: "Digital products" },
-  { label: "SaaS billing", href: "/saas", hint: "Shop invoices & stock" },
-  { label: "Eben AI", href: "/ai", hint: "Chat on our server" },
+  { label: "News", href: SITE_NAV.news, hint: "World news desk" },
+  { label: "Journal", href: SITE_NAV.journal, hint: "Learning blog" },
+  { label: "Store", href: SITE_NAV.store, hint: "Digital products" },
+  { label: "SaaS billing", href: SITE_NAV.saas, hint: "Shop invoices & stock" },
+  { label: "Eben AI", href: SITE_NAV.ai, hint: "Chat on our server" },
 ];
 
 const serviceLinks = [
@@ -99,7 +100,7 @@ export default function Header() {
               )}
             </AnimatePresence>
           </div>
-          {navLinks.slice(1, 2).map((link) => (
+          {navLinks.slice(1, 5).map((link) => (
             <Link
               key={link.href}
               href={link.href}

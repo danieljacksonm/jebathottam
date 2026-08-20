@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 /** Rotate an index every `ms` so featured blog/news change without repeating the same slot. */
-export function useRotate(length: number, ms = 10000): number {
+export function useRotate(length: number, ms = 120000): number {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
