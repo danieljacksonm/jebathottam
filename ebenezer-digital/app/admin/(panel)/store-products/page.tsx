@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Plus, Search, Edit3, Trash2, Eye, EyeOff, X, ExternalLink } from "lucide-react";
-import { STORE_CATEGORIES } from "@/app/products/data";
+import { STORE_CATEGORIES, PRODUCT_TYPE_OPTIONS } from "@/app/products/data";
 
 type Product = {
   id: string;
@@ -13,6 +13,7 @@ type Product = {
   description: string;
   story: string;
   category: string;
+  productType?: string;
   price: number;
   compareAt?: number;
   badge?: string;
@@ -25,6 +26,17 @@ type Product = {
   status: "draft" | "published";
   isFree?: boolean;
   isBundle?: boolean;
+  isSoftware?: boolean;
+  externalUrl?: string;
+  externalCta?: string;
+  techStack?: string[];
+  platforms?: string[];
+  fileFormats?: string[];
+  version?: string;
+  updatePolicy?: string;
+  setupRequirements?: string;
+  accessMethod?: string;
+  supportInfo?: string;
   downloadFile?: string;
   fileName?: string;
   fileSize?: string;
@@ -36,7 +48,8 @@ const emptyForm = {
   tagline: "",
   description: "",
   story: "",
-  category: "Templates",
+  category: "Software & Tools",
+  productType: "digital_tool",
   price: 0,
   compareAt: "",
   badge: "",
@@ -51,6 +64,17 @@ const emptyForm = {
   fileName: "",
   fileSize: "",
   isBundle: false,
+  isSoftware: false,
+  externalUrl: "",
+  externalCta: "",
+  techStack: "",
+  platforms: "",
+  fileFormats: "",
+  version: "1.0",
+  updatePolicy: "",
+  setupRequirements: "",
+  accessMethod: "download",
+  supportInfo: "",
 };
 
 function splitList(value: string): string[] {
@@ -109,7 +133,8 @@ export default function StoreProductsAdminPage() {
       tagline: p.tagline || "",
       description: p.description || "",
       story: p.story || "",
-      category: p.category || "Templates",
+      category: p.category || "Software & Tools",
+      productType: p.productType || "free_resource",
       price: p.price || 0,
       compareAt: p.compareAt != null ? String(p.compareAt) : "",
       badge: p.badge || "",
@@ -124,6 +149,17 @@ export default function StoreProductsAdminPage() {
       fileName: p.fileName || "",
       fileSize: p.fileSize || "",
       isBundle: Boolean(p.isBundle),
+      isSoftware: Boolean(p.isSoftware),
+      externalUrl: p.externalUrl || "",
+      externalCta: p.externalCta || "",
+      techStack: (p.techStack || []).join(", "),
+      platforms: (p.platforms || []).join(", "),
+      fileFormats: (p.fileFormats || []).join(", "),
+      version: p.version || "",
+      updatePolicy: p.updatePolicy || "",
+      setupRequirements: p.setupRequirements || "",
+      accessMethod: p.accessMethod || "download",
+      supportInfo: p.supportInfo || "",
     });
     setModalOpen(true);
   };
@@ -137,6 +173,7 @@ export default function StoreProductsAdminPage() {
       description: form.description,
       story: form.story,
       category: form.category,
+      productType: form.productType,
       price: Number(form.price) || 0,
       compareAt: form.compareAt ? Number(form.compareAt) : undefined,
       badge: form.badge || undefined,
@@ -152,6 +189,17 @@ export default function StoreProductsAdminPage() {
       fileSize: form.fileSize || undefined,
       isFree: Number(form.price) === 0,
       isBundle: form.isBundle,
+      isSoftware: form.isSoftware,
+      externalUrl: form.externalUrl || undefined,
+      externalCta: form.externalCta || undefined,
+      techStack: splitList(form.techStack),
+      platforms: splitList(form.platforms),
+      fileFormats: splitList(form.fileFormats),
+      version: form.version || undefined,
+      updatePolicy: form.updatePolicy || undefined,
+      setupRequirements: form.setupRequirements || undefined,
+      accessMethod: form.accessMethod || undefined,
+      supportInfo: form.supportInfo || undefined,
     };
 
     if (editing) {
@@ -303,6 +351,17 @@ export default function StoreProductsAdminPage() {
                   ))}
                 </select>
               </label>
+              <label className="block text-sm text-slate-300">
+                Product type
+                <select value={form.productType} onChange={(e) => setForm({ ...form, productType: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white">
+                  {PRODUCT_TYPE_OPTIONS.map((o) => (
+                    <option key={o.value} value={o.value}>{o.label}</option>
+                  ))}
+                </select>
+              </label>
+              <p className="sm:col-span-2 text-xs text-amber-300/90">
+                PDF is documentation only. Core paid products should be software, templates, code, Canva/Figma, tools, or bundles.
+              </p>
               <label className="block text-sm text-slate-300 sm:col-span-2">
                 Tagline
                 <input value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
@@ -375,7 +434,56 @@ export default function StoreProductsAdminPage() {
                   <input value={form.fileSize} onChange={(e) => setForm({ ...form, fileSize: e.target.value })} className="w-28 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="12 MB" />
                 </div>
               </label>
-              <label className="flex items-center gap-2 text-sm text-slate-300 sm:col-span-2">
+              <label className="block text-sm text-slate-300">
+                Tech stack
+                <input value={form.techStack} onChange={(e) => setForm({ ...form, techStack: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="HTML, CSS, JavaScript" />
+              </label>
+              <label className="block text-sm text-slate-300">
+                Platforms
+                <input value={form.platforms} onChange={(e) => setForm({ ...form, platforms: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="Web, Windows" />
+              </label>
+              <label className="block text-sm text-slate-300">
+                File formats
+                <input value={form.fileFormats} onChange={(e) => setForm({ ...form, fileFormats: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+              </label>
+              <label className="block text-sm text-slate-300">
+                Version
+                <input value={form.version} onChange={(e) => setForm({ ...form, version: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+              </label>
+              <label className="block text-sm text-slate-300">
+                Access method
+                <select value={form.accessMethod} onChange={(e) => setForm({ ...form, accessMethod: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white">
+                  <option value="download">download</option>
+                  <option value="web_app">web_app</option>
+                  <option value="external_link">external_link</option>
+                  <option value="docs">docs</option>
+                </select>
+              </label>
+              <label className="block text-sm text-slate-300">
+                External / app URL
+                <input value={form.externalUrl} onChange={(e) => setForm({ ...form, externalUrl: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" placeholder="/saas or /tools/..." />
+              </label>
+              <label className="block text-sm text-slate-300">
+                CTA label
+                <input value={form.externalCta} onChange={(e) => setForm({ ...form, externalCta: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+              </label>
+              <label className="block text-sm text-slate-300 sm:col-span-2">
+                Setup requirements
+                <input value={form.setupRequirements} onChange={(e) => setForm({ ...form, setupRequirements: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+              </label>
+              <label className="block text-sm text-slate-300 sm:col-span-2">
+                Update policy
+                <input value={form.updatePolicy} onChange={(e) => setForm({ ...form, updatePolicy: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+              </label>
+              <label className="block text-sm text-slate-300 sm:col-span-2">
+                Support info
+                <input value={form.supportInfo} onChange={(e) => setForm({ ...form, supportInfo: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white" />
+              </label>
+              <label className="flex items-center gap-2 text-sm text-slate-300">
+                <input type="checkbox" checked={form.isSoftware} onChange={(e) => setForm({ ...form, isSoftware: e.target.checked })} />
+                Opens as software / web tool (no ZIP buy flow)
+              </label>
+              <label className="flex items-center gap-2 text-sm text-slate-300">
                 <input type="checkbox" checked={form.isBundle} onChange={(e) => setForm({ ...form, isBundle: e.target.checked })} />
                 This is a bundle
               </label>

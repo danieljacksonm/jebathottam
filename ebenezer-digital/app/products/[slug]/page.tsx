@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { redirect } from "next/navigation";
 import { getProduct, STORE_PRODUCTS, formatINR } from "../data";
 import { ProductView } from "./ProductView";
-import { canonicalFor } from "@/lib/site-url";
+import { canonicalFor, pageMetadata } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -15,23 +15,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = getProduct(params.slug);
   if (!product) return { title: "Product not found | Ebenezer Store" };
 
+  const base = pageMetadata({
+    title: product.seoTitle || `${product.name} | Ebenezer Store`,
+    description: product.seoDescription || product.tagline,
+    path: `/products/${product.slug}`,
+  });
   return {
-    title: `${product.name} | Ebenezer Store`,
-    description: product.tagline,
+    ...base,
     openGraph: {
-      title: product.name,
-      description: product.tagline,
-      type: "website",
-      url: canonicalFor(`/products/${product.slug}`),
+      ...base.openGraph,
       images: [{ url: product.image }],
     },
     twitter: {
-      card: "summary_large_image",
-      title: product.name,
-      description: product.tagline,
+      ...base.twitter,
       images: [product.image],
     },
-    alternates: { canonical: canonicalFor(`/products/${product.slug}`) },
   };
 }
 

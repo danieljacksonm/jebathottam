@@ -15,6 +15,8 @@ import {
   STORE_PRODUCTS,
   formatINR,
   type StoreProduct,
+  productTypeLabel,
+  productTypeShort,
 } from "../data";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
@@ -29,7 +31,7 @@ const trustItems = [
 
 export function ProductView({ product: raw }: { product: StoreProduct }) {
   const { addToCart } = useStore();
-  const { t, rtl, locale } = useStoreI18n();
+  const { t, rtl, locale, lp } = useStoreI18n();
   const product = localizeProduct(raw, locale);
   const [activeImage, setActiveImage] = useState(product.gallery[0] || product.image);
   const [imgBroken, setImgBroken] = useState(false);
@@ -39,11 +41,12 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
     ? related
     : STORE_PRODUCTS.filter((p) => p.id !== raw.id).slice(0, 3);
 
+  const isInternalApp = Boolean(product.isSoftware && product.externalUrl?.startsWith("/"));
   const buyHref = product.isSoftware && product.externalUrl
     ? product.externalUrl
     : product.isFree || product.price === 0
-    ? `/products/success?product=${product.slug}&license=${encodeURIComponent(license)}`
-    : `/products/checkout?product=${product.slug}&license=${encodeURIComponent(license)}`;
+    ? lp(`/products/success?product=${product.slug}&license=${encodeURIComponent(license)}`)
+    : lp(`/products/checkout?product=${product.slug}&license=${encodeURIComponent(license)}`);
 
   const buyLabel = product.isSoftware
     ? (product.externalCta || t("getStartedFree"))
@@ -60,7 +63,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
       {/* ── Breadcrumb ──────────────────────────────── */}
       <div className="border-b border-[var(--s-line)] bg-[var(--s-surface)]">
         <div className="s-page flex items-center gap-2 py-3 text-sm text-[var(--s-muted)]">
-          <Link href="/products" className="flex items-center gap-1 hover:text-[var(--s-brand)] transition-colors">
+          <Link href={lp("/products")} className="flex items-center gap-1 hover:text-[var(--s-brand)] transition-colors">
             <ArrowLeft className="h-3.5 w-3.5" />
             Store
           </Link>
@@ -109,7 +112,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
           {/* Right — info + buy */}
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[var(--s-brand)]">
-              {product.category}
+              {productTypeShort(product.productType)} · {product.category}
             </p>
             <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight text-[var(--s-ink)] sm:text-4xl">
               {product.name}
@@ -163,18 +166,30 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
               </div>
             )}
 
-            {/* See files link */}
-            <a href="#kit" className="mt-4 inline-flex items-center gap-1 text-sm text-[var(--s-brand)] hover:underline">
-              <FileText className="h-3.5 w-3.5" />
-              See every file in this kit
-            </a>
+            {/* See files / preview */}
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a href="#kit" className="inline-flex items-center gap-1 text-sm text-[var(--s-brand)] hover:underline">
+                <FileText className="h-3.5 w-3.5" />
+                See what you get
+              </a>
+              {product.previewUrl && (
+                <a
+                  href={product.previewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-[var(--s-brand)] hover:underline"
+                >
+                  Live preview →
+                </a>
+              )}
+            </div>
 
             {/* Buy buttons — desktop */}
             <div className="mt-6 hidden flex-col gap-3 md:flex">
               <Link
                 href={buyHref}
                 className="s-btn-primary w-full justify-center rounded-xl text-base"
-                {...(product.isSoftware && product.externalUrl
+                {...(product.isSoftware && product.externalUrl && !isInternalApp
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
               >
@@ -318,6 +333,64 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
         </div>
       </section>
 
+      {/* ── Specs ───────────────────────────────────── */}
+      <section className="s-page py-10">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-xl border border-[var(--s-line)] p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Product type</p>
+            <p className="mt-1 font-semibold text-[var(--s-ink)]">{productTypeLabel(product.productType)}</p>
+          </div>
+          {product.version && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Version</p>
+              <p className="mt-1 font-semibold text-[var(--s-ink)]">{product.version}</p>
+            </div>
+          )}
+          {product.accessMethod && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Access</p>
+              <p className="mt-1 font-semibold text-[var(--s-ink)]">{product.accessMethod.replace("_", " ")}</p>
+            </div>
+          )}
+          {product.techStack && product.techStack.length > 0 && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4 sm:col-span-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Technology</p>
+              <p className="mt-1 font-semibold text-[var(--s-ink)]">{product.techStack.join(" · ")}</p>
+            </div>
+          )}
+          {product.platforms && product.platforms.length > 0 && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Platforms</p>
+              <p className="mt-1 font-semibold text-[var(--s-ink)]">{product.platforms.join(" · ")}</p>
+            </div>
+          )}
+          {product.fileFormats && product.fileFormats.length > 0 && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">File format</p>
+              <p className="mt-1 font-semibold text-[var(--s-ink)]">{product.fileFormats.join(" · ")}</p>
+            </div>
+          )}
+          {product.setupRequirements && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4 sm:col-span-2">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Setup</p>
+              <p className="mt-1 text-sm text-[var(--s-ink)]">{product.setupRequirements}</p>
+            </div>
+          )}
+          {product.updatePolicy && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Updates</p>
+              <p className="mt-1 text-sm text-[var(--s-ink)]">{product.updatePolicy}</p>
+            </div>
+          )}
+          {product.supportInfo && (
+            <div className="rounded-xl border border-[var(--s-line)] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">Support</p>
+              <p className="mt-1 text-sm text-[var(--s-ink)]">{product.supportInfo}</p>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* ── Compatibility ───────────────────────────── */}
       <section className="s-page py-10">
         <p className="mb-4 text-sm font-semibold text-[var(--s-ink)]">Works with</p>
@@ -343,7 +416,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
             {relatedFallback.map((p) => {
               const rp = localizeProduct(p, locale);
               return (
-                <Link key={p.id} href={`/products/${rp.slug}`} className="s-card group overflow-hidden">
+                <Link key={p.id} href={lp(`/products/${rp.slug}`)} className="s-card group overflow-hidden">
                   <div className="relative aspect-[16/10] overflow-hidden bg-[var(--s-line-soft)]">
                     <Image
                       src={rp.image}
@@ -383,7 +456,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
                 linkClassName="hover:text-white transition-colors"
               />
             </div>
-            <Link href="/products" className="s-btn-outline rounded-lg border-white/20 text-white hover:border-white hover:text-white">
+            <Link href={lp("/products")} className="s-btn-outline rounded-lg border-white/20 text-white hover:border-white hover:text-white">
               <ArrowLeft className="h-4 w-4" /> Back to store
             </Link>
           </div>
@@ -411,7 +484,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
           <Link
             href={buyHref}
             className="s-btn-primary rounded-lg px-5 text-sm"
-            {...(product.isSoftware && product.externalUrl
+            {...(product.isSoftware && product.externalUrl && !isInternalApp
               ? { target: "_blank", rel: "noopener noreferrer" }
               : {})}
           >

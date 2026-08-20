@@ -7,9 +7,9 @@ import { pageMetadata } from "@/lib/site-url";
 import "./store.css";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Ebenezer Store | Premium Digital Products",
+  title: "Ebenezer Store | Ready-to-Use Digital Products",
   description:
-    "Worldwide digital kits and software — templates, UI kits, ebooks, and creator tools. Instant download. Prices in USD.",
+    "Website templates with real source code, invoice tools, and billing software. Build, create, automate, grow. PDFs are docs only — not the product.",
   path: "/products",
 });
 

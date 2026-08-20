@@ -5,14 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, ShoppingBag, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { STORE_CATEGORIES, STORE_PRODUCTS, formatINR } from "../data";
+import { STORE_CATEGORY_PAGES, STORE_PRODUCTS, formatINR } from "../data";
 import { useStore } from "./StoreProvider";
 import { useStoreI18n, type StoreLocale } from "../i18n";
 import { SITE_NAV } from "@/lib/site-nav";
 
 export function StoreNav() {
   const { cartCount, setCartOpen, searchOpen, setSearchOpen } = useStore();
-  const { locale, setLocale, t } = useStoreI18n();
+  const { locale, setLocale, t, lp } = useStoreI18n();
   const [solid, setSolid] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -48,11 +48,12 @@ export function StoreNav() {
   }, [query]);
 
   const navLinks = [
-    { href: "/products#all-products", label: t("products") },
-    { href: "/products#categories",   label: t("categories") },
-    { href: "/products#bundles",       label: t("bundles") },
-    { href: "/products#freebies",      label: t("freebies") },
-    { href: "/products/free-enquiry-form-kit", label: t("freeTool") },
+    { href: lp("/products#all-products"), label: t("products") },
+    { href: lp("/products/category/website-templates"), label: "Templates" },
+    { href: lp("/products/category/software"), label: "Software" },
+    { href: lp("/products#bundles"), label: t("bundles") },
+    { href: lp("/products/category/free-resources"), label: t("freebies") },
+    { href: lp("/products/invoice-generator"), label: t("freeTool") },
     { href: SITE_NAV.journal, label: "Journal" },
     { href: SITE_NAV.news, label: "News" },
   ];
@@ -63,7 +64,7 @@ export function StoreNav() {
       <header className={cn("store-nav", solid && "is-solid")}>
         <div className="s-page flex h-16 items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/products" className="flex items-center gap-2.5" aria-label="Ebenezer Store home">
+          <Link href={lp("/products")} className="flex items-center gap-2.5" aria-label="Ebenezer Store home">
             <Image
               src="/brand/ebenezer-store-mark.svg"
               alt="Ebenezer Store"
@@ -115,7 +116,7 @@ export function StoreNav() {
 
             {/* Account */}
             <Link
-              href="/products/account"
+              href={lp("/products/account")}
               className="hidden text-sm font-medium text-[var(--s-muted)] transition-colors hover:text-[var(--s-brand)] md:block"
             >
               {t("account")}
@@ -140,6 +141,14 @@ export function StoreNav() {
                 <option value="en">EN</option>
                 <option value="hi">HI</option>
                 <option value="ta">TA</option>
+                <option value="te">TE</option>
+                <option value="ml">ML</option>
+                <option value="kn">KN</option>
+                <option value="bn">BN</option>
+                <option value="mr">MR</option>
+                <option value="gu">GU</option>
+                <option value="pa">PA</option>
+                <option value="ur">UR</option>
                 <option value="es">ES</option>
                 <option value="fr">FR</option>
                 <option value="ar">AR</option>
@@ -186,7 +195,7 @@ export function StoreNav() {
       {menuOpen && (
         <div className="fixed inset-0 z-[75] overflow-y-auto bg-white px-5 py-5 lg:hidden">
           <div className="mb-8 flex items-center justify-between">
-            <Link href="/products" className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+            <Link href={lp("/products")} className="flex items-center gap-2" onClick={() => setMenuOpen(false)}>
               <Image src="/brand/ebenezer-store-mark.svg" alt="" width={28} height={28} className="rounded-lg" />
               <span className="font-display font-bold text-[var(--s-ink)]">Ebenezer Store</span>
             </Link>
@@ -236,15 +245,15 @@ export function StoreNav() {
             <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--s-muted)]">
               Categories
             </p>
-            {STORE_CATEGORIES.map((cat) => (
-              <a
-                key={cat}
-                href={`/products?cat=${encodeURIComponent(cat)}#all-products`}
+            {STORE_CATEGORY_PAGES.map((cat) => (
+              <Link
+                key={cat.slug}
+                href={lp(`/products/category/${cat.slug}`)}
                 onClick={() => setMenuOpen(false)}
                 className="block rounded-lg px-3 py-2 text-sm text-[var(--s-muted)] hover:bg-[var(--s-line-soft)] hover:text-[var(--s-ink)]"
               >
-                {cat}
-              </a>
+                {cat.name}
+              </Link>
             ))}
           </div>
 
@@ -298,7 +307,7 @@ export function StoreNav() {
                 {results.map((p) => (
                   <Link
                     key={p.id}
-                    href={`/products/${p.slug}`}
+                    href={lp(`/products/${p.slug}`)}
                     onClick={() => { setSearchOpen(false); setQuery(""); }}
                     className="flex items-center gap-4 rounded-xl border border-[var(--s-line)] p-3 transition hover:border-[var(--s-brand)] hover:shadow-sm"
                   >

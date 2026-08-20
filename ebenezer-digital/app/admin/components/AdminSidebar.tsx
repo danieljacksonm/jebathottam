@@ -17,6 +17,7 @@ import {
   ChevronRight,
   ShoppingBag,
   Radio,
+  Cpu,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -33,6 +34,7 @@ const navItems = [
   { icon: Briefcase, label: "Services", href: "/admin/services" },
   { icon: FolderOpen, label: "Portfolio", href: "/admin/portfolio" },
   { icon: ShoppingBag, label: "Store Products", href: "/admin/store-products" },
+  { icon: Cpu, label: "Physical Catalog", href: "/admin/catalog" },
   { icon: FileText, label: "Blog Posts", href: "/admin/blog" },
   { icon: Radio, label: "World News", href: "/admin/news" },
   { icon: MessageSquare, label: "Inquiries", href: "/admin/inquiries" },

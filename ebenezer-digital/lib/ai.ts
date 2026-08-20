@@ -8,7 +8,7 @@ export const OLLAMA_MODEL = process.env.OLLAMA_MODEL || "qwen2.5:1.5b";
 /** Public-facing model brand name shown to users */
 export const MODEL_BRAND = "Nzer 1.0";
 
-export type AiMode = "general" | "news" | "product" | "billing" | "blog";
+export type AiMode = "general" | "news" | "product" | "billing" | "blog" | "catalog";
 
 export const AI_BRAND = "Eben AI";
 
@@ -57,6 +57,13 @@ Explain checkout, licenses, downloads, and receipts in simple English.
 If live payment is not connected yet, say so clearly.
 Never invent payment confirmations, order IDs, or refunds.
 ${ANSWER_STYLE}`,
+  catalog: `You are ${AI_BRAND} on Ebenezer Products (physical hardware comparison).
+Help the user choose using ONLY the structured catalog / recommendation context provided.
+Never invent prices, specifications, availability, ratings, warranties, seller names, discounts, or product URLs.
+If a field is missing, say exactly: "Information unavailable."
+Explain pros, cons, who should buy, and who should avoid — grounded in the given data.
+Do not claim live marketplace prices unless the context includes a last-checked timestamp.
+${ANSWER_STYLE}`,
 };
 
 export function resolveAiMode(value: unknown): AiMode {
@@ -65,7 +72,8 @@ export function resolveAiMode(value: unknown): AiMode {
     value === "product" ||
     value === "billing" ||
     value === "general" ||
-    value === "blog"
+    value === "blog" ||
+    value === "catalog"
   ) {
     return value;
   }

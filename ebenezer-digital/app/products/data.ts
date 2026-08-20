@@ -1,3 +1,18 @@
+import type { StoreProductType } from "./taxonomy";
+
+export type { StoreProductType } from "./taxonomy";
+export {
+  STORE_CATEGORIES,
+  STORE_CATEGORY_PAGES,
+  PRODUCT_TYPE_OPTIONS,
+  productTypeLabel,
+  productTypeShort,
+  getCategoryPage,
+  productMatchesCategoryPage,
+  productMatchesFilter,
+  normalizeCategory,
+} from "./taxonomy";
+
 export type StoreProduct = {
   id: string;
   slug: string;
@@ -6,6 +21,7 @@ export type StoreProduct = {
   description: string;
   story: string;
   category: string;
+  productType: StoreProductType;
   price: number;
   compareAt?: number;
   badge?: "BEST SELLER" | "NEW" | "FREE" | "BUNDLE";
@@ -17,10 +33,19 @@ export type StoreProduct = {
   license: string[];
   whoItIsFor?: string;
   downloadContentsPlan?: string[];
-  /** Cloud software — open external app instead of ZIP download */
+  /** Cloud software / web tool — open URL instead of ZIP download */
   isSoftware?: boolean;
   externalUrl?: string;
   externalCta?: string;
+  previewUrl?: string;
+  techStack?: string[];
+  platforms?: string[];
+  fileFormats?: string[];
+  version?: string;
+  updatePolicy?: string;
+  setupRequirements?: string;
+  accessMethod?: "download" | "web_app" | "external_link" | "docs";
+  supportInfo?: string;
   rating?: number;
   reviews?: number;
   isFree?: boolean;
@@ -31,7 +56,7 @@ export type StoreProduct = {
   downloadFile?: string;
   fileName?: string;
   fileSize?: string;
-  /** Real PDF files the buyer can open on the product page */
+  /** Supporting PDFs only — never the core paid product */
   pdfs?: { label: string; file: string }[];
   seoTitle?: string;
   seoDescription?: string;
@@ -40,19 +65,13 @@ export type StoreProduct = {
 const U = (id: string) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1800&q=88`;
 
-export const STORE_CATEGORIES = [
-  "Software",
-  "UI Kits",
-  "Business Tools",
-  "Templates",
-  "Ebooks",
-  "Graphics",
-  "Bundles",
-  "Freebies",
-] as const;
-
 export const FEATURED_ORDER = [
   "ebenezer-saas",
+  "invoice-generator",
+  "quotation-generator",
+  "restaurant-website-template",
+  "travel-agency-website-template",
+  "church-website-template",
   "whatsapp-business-kit",
   "invoice-receipt-templates",
   "creator-landing-kit",
@@ -77,13 +96,22 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Ebenezer SaaS is a cloud billing app for small and medium shops worldwide. Create invoices, quotations, and credit notes, track stock and customers, and print on A4, A5, or thermal printers. No installation needed — works from any browser on any device.",
     story:
       "Built after watching hundreds of small shop owners still manage billing on paper or spreadsheets in 2026. Ebenezer SaaS started free so every shop owner, anywhere, can try it with zero risk before the paid plan launches.",
-    category: "Software",
+    category: "Software & Tools",
+    productType: "software",
     price: 0,
     badge: "FREE",
     isFree: true,
     isSoftware: true,
     externalUrl: "/saas",
-    externalCta: "Get started free",
+    externalCta: "Open billing app",
+    accessMethod: "web_app",
+    techStack: ["Next.js", "NestJS"],
+    platforms: ["Web", "Windows", "macOS", "Android", "iPhone"],
+    fileFormats: ["Web app"],
+    version: "1.0",
+    updatePolicy: "Cloud updates. No install required.",
+    setupRequirements: "Modern browser and an internet connection to create an account.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
     image: U("photo-1556742049-0cfed4f6a45d"),
     gallery: [
       U("photo-1556742049-0cfed4f6a45d"),
@@ -102,16 +130,14 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Works offline — data syncs when connection returns",
     ],
     includes: [
-      "Full access to the current free plan — no credit card",
-      "Invoicing, quotations, credit notes, and billing",
-      "Stock management and customer database",
-      "Expense tracking and sales reports",
+      "Full access to the current free cloud billing app",
+      "Invoices, quotations, credit notes, stock, and reports",
       "Print to A4, A5, and thermal printers",
-      "Getting started guide PDF (step-by-step setup)",
-      "Feature sheet PDF (complete feature overview)",
-      "Sample invoice PDF (see the exact invoice format)",
+      "Getting started guide PDF (documentation only)",
+      "Feature sheet PDF (documentation only)",
+      "Sample invoice PDF (example output)",
     ],
-    compatibility: ["Any modern browser", "Desktop", "Laptop", "Tablet", "Android", "iPhone", "Next.js", "NestJS"],
+    compatibility: ["Any modern browser", "Desktop", "Laptop", "Tablet", "Android", "iPhone"],
     license: ["Free Plan (current)", "Paid Starter Plan (coming soon)"],
     whoItIsFor:
       "Retail stores, traders, and shop owners worldwide who still bill on paper, Excel, or basic apps and want a fast, simple modern billing system.",
@@ -130,6 +156,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     status: "published",
     rating: 5,
     reviews: 14,
+    fileName: undefined,
+    fileSize: "Web app — no ZIP",
     seoTitle: "Ebenezer SaaS – Free Cloud Billing Software for Shops",
     seoDescription:
       "Ebenezer SaaS is free cloud billing software for shops — invoices, stock, customers, quotations, credit notes, and A4/A5/thermal printing. Start free today.",
@@ -140,12 +168,16 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     id: "dp-wa-kit",
     slug: "whatsapp-business-kit",
     name: "WhatsApp Business Setup Kit",
-    tagline: "Set up a professional WhatsApp Business presence in one afternoon.",
+    tagline: "Free starter scripts and setup notes for WhatsApp Business.",
     description:
-      "A complete, step-by-step kit to help any small business look professional on WhatsApp Business — from profile setup to automated replies, catalogue setup, product descriptions, broadcast message templates, and closing scripts. Used by shops, clinics, salons, travel agents, freelancers, and home businesses worldwide.",
+      "A free starter kit with setup notes and message templates you can copy into WhatsApp Business. This is a supporting resource, not a software product. Open the PDFs, copy what you need, and paste into your WhatsApp Business app.",
     story:
       "Over 200 million small businesses use WhatsApp worldwide, but most look unprofessional: no profile photo, no bio, no catalogue, no auto-reply. This kit fixes all of that in one afternoon without any tech skill.",
-    category: "Business Tools",
+    category: "Business",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -167,31 +199,25 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Do's and don'ts to avoid being blocked",
     ],
     includes: [
-      "Setup guide PDF — profile, catalogue, auto-replies, labels (22 pages)",
-      "40+ message templates PDF — greeting, follow-up, closing, offer (18 pages)",
-      "Broadcast message pack PDF — 12 ready announcements",
-      "WhatsApp Status ideas PDF — 30-day content plan",
-      "Quick-reply shortcut list PDF — copy-paste inside the app",
-      "Catalogue product description formula PDF",
-      "Do's and don'ts PDF — how to avoid spam blocks",
-      "Printable quick-reference card PDF",
+      "Setup guide PDF",
+      "Message templates PDF",
+      "Broadcast message pack PDF",
+      "30-day Status ideas PDF",
+      "Do's and don'ts PDF",
     ],
-    compatibility: ["WhatsApp Business (Android)", "WhatsApp Business (iPhone)", "WhatsApp Web", "Any device"],
-    license: ["Personal License", "Commercial License — use for your clients"],
+    compatibility: ["WhatsApp Business (Android)", "WhatsApp Business (iPhone)", "WhatsApp Web"],
+    license: ["Free personal and commercial use"],
     whoItIsFor:
       "Shop owners, salons, clinics, freelancers, home businesses, travel agents, and any small business using WhatsApp to talk to customers worldwide.",
     downloadContentsPlan: [
-      "01-setup-guide.pdf — complete profile + automation setup",
-      "02-message-templates.pdf — 40+ ready-to-send messages",
-      "03-broadcast-pack.pdf — 12 offer/announcement templates",
-      "04-status-ideas.pdf — 30-day WhatsApp Status plan",
-      "05-quick-replies.pdf — shortcut list for the app",
-      "06-catalogue-guide.pdf — product description formula",
-      "07-dos-and-donts.pdf — avoid spam blocks",
-      "08-quick-reference-card.pdf — print and keep at desk",
+      "setup-guide.pdf",
+      "message-templates.pdf",
+      "broadcast-pack.pdf",
+      "status-ideas.pdf",
+      "dos-and-donts.pdf",
     ],
     pdfs: [
-      { label: "Setup guide (22 pages)", file: "/downloads/pdfs/whatsapp-business-kit/setup-guide.pdf" },
+      { label: "Setup guide", file: "/downloads/pdfs/whatsapp-business-kit/setup-guide.pdf" },
       { label: "40+ message templates", file: "/downloads/pdfs/whatsapp-business-kit/message-templates.pdf" },
       { label: "Broadcast message pack", file: "/downloads/pdfs/whatsapp-business-kit/broadcast-pack.pdf" },
       { label: "30-day Status ideas", file: "/downloads/pdfs/whatsapp-business-kit/status-ideas.pdf" },
@@ -203,10 +229,10 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     reviews: 0,
     downloadFile: "/downloads/whatsapp-business-kit.zip",
     fileName: "whatsapp-business-kit.zip",
-    fileSize: "8 PDFs in ZIP",
-    seoTitle: "WhatsApp Business Setup Kit – Templates, Auto-Replies & Catalogue Guide",
+    fileSize: "5 PDFs in ZIP",
+    seoTitle: "WhatsApp Business Setup Kit – Free Starter Templates",
     seoDescription:
-      "Complete WhatsApp Business setup kit — profile guide, 40+ message templates, broadcast pack, catalogue setup, and auto-reply scripts. Free download.",
+      "Free WhatsApp Business starter kit: setup notes, message templates, broadcast pack, and status ideas. Supporting PDFs you can copy into the app.",
   },
 
   /* ── 3. Invoice & Receipt Templates (NEW — top seller) ─ */
@@ -214,12 +240,16 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     id: "dp-invoice",
     slug: "invoice-receipt-templates",
     name: "Invoice & Receipt Template Pack",
-    tagline: "Professional invoice and receipt templates for any small business — print or PDF.",
+    tagline: "Free printable invoice and receipt PDF samples for small shops.",
     description:
-      "A complete collection of invoice, receipt, and quotation templates in clean, professional formats. Covers A4 and thermal printer sizes, service businesses and product businesses, single-item and multi-item layouts. Every template is Word/Google Docs editable and also available as a ready-to-print PDF.",
+      "A free PDF sample pack: service invoice, product invoice, thermal receipt, quotation, payment receipt, and GST invoice layouts. These are print-ready PDF samples, not Word/Excel files. For a live invoice you can fill and print, use the Invoice Generator in this store.",
     story:
       "Thousands of small businesses still write receipts by hand or use badly formatted spreadsheets. A professionally designed invoice builds trust and gets paid faster. This pack gives every business type a template that looks like it was designed by a professional.",
-    category: "Templates",
+    category: "Business",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -231,38 +261,32 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       U("photo-1450101499163-c8848c66ca85"),
     ],
     features: [
-      "6 invoice layouts — service, product, hourly, project, medical, and event",
-      "A4 and 80mm thermal printer versions of every template",
-      "Receipt, quotation, and delivery note formats",
-      "GST/VAT-ready and non-tax versions",
-      "Editable in Word, Google Docs, or any PDF editor",
-      "Company logo placeholder — drop in your own",
-      "Automatic total calculation formula (in editable versions)",
-      "Printable and digital (email/WhatsApp) versions",
+      "Service invoice PDF sample (A4)",
+      "Product invoice PDF sample (A4)",
+      "Thermal receipt PDF sample (80mm)",
+      "Quotation PDF sample",
+      "Payment receipt PDF sample",
+      "GST invoice PDF sample",
     ],
     includes: [
-      "6 invoice templates PDF — service, product, hourly, project, medical, event (A4)",
-      "3 thermal invoice templates PDF — 80mm POS receipt size",
-      "Quotation template PDF — with validity date and terms",
-      "Delivery note / challan template PDF",
-      "Payment receipt template PDF (for cash/UPI/card)",
-      "GST invoice template PDF — with tax breakdown",
-      "How to fill guide PDF — field-by-field explanation",
-      "Quick branding guide PDF — add your logo and colors",
+      "Service invoice PDF",
+      "Product invoice PDF",
+      "Thermal receipt PDF",
+      "Quotation template PDF",
+      "Payment receipt PDF",
+      "GST invoice PDF",
     ],
-    compatibility: ["PDF", "Microsoft Word", "Google Docs", "Any printer", "A4", "80mm thermal", "Email", "WhatsApp"],
-    license: ["Personal License", "Commercial License — use for your clients"],
+    compatibility: ["PDF", "Any printer", "A4", "80mm thermal"],
+    license: ["Free personal and commercial use"],
     whoItIsFor:
       "Shops, freelancers, service providers, consultants, restaurants, clinics, event organizers, and any business that needs professional billing documents.",
     downloadContentsPlan: [
-      "01-service-invoice.pdf — for consultants, freelancers, agencies",
-      "02-product-invoice.pdf — for shops, retailers, wholesalers",
-      "03-thermal-receipts.pdf — A4 + 80mm thermal versions",
-      "04-quotation-template.pdf — with terms and validity",
-      "05-delivery-note.pdf — challan / delivery receipt",
-      "06-payment-receipt.pdf — for cash, UPI, card payments",
-      "07-gst-invoice.pdf — GST breakdown version",
-      "08-how-to-fill.pdf — step-by-step instructions",
+      "service-invoice.pdf",
+      "product-invoice.pdf",
+      "thermal-receipts.pdf",
+      "quotation-template.pdf",
+      "payment-receipt.pdf",
+      "gst-invoice.pdf",
     ],
     pdfs: [
       { label: "Service invoice templates (A4)", file: "/downloads/pdfs/invoice-receipt-templates/service-invoice.pdf" },
@@ -278,10 +302,10 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     reviews: 0,
     downloadFile: "/downloads/invoice-receipt-templates.zip",
     fileName: "invoice-receipt-templates.zip",
-    fileSize: "8 PDFs in ZIP",
-    seoTitle: "Invoice & Receipt Templates – Professional Billing Templates for Small Business",
+    fileSize: "6 PDFs in ZIP",
+    seoTitle: "Invoice & Receipt PDF Samples – Free Small Business Pack",
     seoDescription:
-      "Professional invoice, receipt, quotation, and delivery note templates. A4 and thermal versions. Word + PDF. Free download for any small business.",
+      "Free invoice and receipt PDF samples for shops. For a live fill-and-print invoice, use Ebenezer Invoice Generator.",
   },
 
   /* ── 4. Creator Landing Kit ──────────────────────────── */
@@ -289,12 +313,16 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     id: "dp-landing",
     slug: "creator-landing-kit",
     name: "Creator Landing Page Kit",
-    tagline: "Build a professional landing page for your offer without a designer.",
+    tagline: "Free planning notes for a landing page — not a coded template.",
     description:
-      "A complete, detailed kit to help creators, coaches, and freelancers plan and build a landing page that converts — without guessing at layout, copy, or structure. Contains a section-by-section layout guide, fill-in-the-blank copy templates, a mobile UX checklist, and a complete launch checklist to make sure nothing is missing before you go live.",
+      "A free planning pack: layout guide, copy templates, and a mobile checklist. This is documentation to help you plan a page. It does not include HTML, React, Next.js, Figma, or Canva files. For a real website you can edit and host, see our Website Templates.",
     story:
       "Most creators spend weeks 'designing' a landing page and never launch it. This kit removes every design decision and guessing moment. You fill in the blanks, place the sections in order, and publish — not design.",
-    category: "UI Kits",
+    category: "Creator",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -317,8 +345,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Launch checklist — everything to verify on go-live day",
     ],
     includes: [
-      "Layout guide PDF — 7 sections explained with diagram and purpose (24 pages)",
-      "Copy templates PDF — fill-in-the-blank for every section (28 pages)",
+      "Layout guide PDF — 7 sections explained with diagram and purpose",
+      "Copy templates PDF — fill-in-the-blank for every section",
       "Mobile UX checklist PDF — 22-item check before publishing",
       "Conversion checklist PDF — 18 trust and conversion factors",
       "Above-the-fold formula PDF — first screen structure guide",
@@ -330,8 +358,8 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     whoItIsFor:
       "Coaches, consultants, course creators, freelancers, and service providers who need a landing page but do not want to hire a designer or spend weeks on it.",
     downloadContentsPlan: [
-      "01-layout-guide.pdf — 7-section landing page structure (24 pages)",
-      "02-copy-templates.pdf — fill-in-the-blank copy for every section (28 pages)",
+      "01-layout-guide.pdf — 7-section landing page structure",
+      "02-copy-templates.pdf — fill-in-the-blank copy for every section",
       "03-mobile-ux-checklist.pdf — 22 items before publishing",
       "04-conversion-checklist.pdf — 18 trust and conversion factors",
       "05-above-the-fold-formula.pdf — first screen structure",
@@ -339,11 +367,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "07-headline-formulas.pdf — 12 proven structures with examples",
     ],
     pdfs: [
-      { label: "Layout guide (24 pages)", file: "/downloads/pdfs/creator-landing-kit/layout-guide.pdf" },
-      { label: "Copy templates (28 pages)", file: "/downloads/pdfs/creator-landing-kit/copy-templates.pdf" },
+      { label: "Layout guide", file: "/downloads/pdfs/creator-landing-kit/layout-guide.pdf" },
+      { label: "Copy templates", file: "/downloads/pdfs/creator-landing-kit/copy-templates.pdf" },
       { label: "Mobile UX checklist", file: "/downloads/pdfs/creator-landing-kit/mobile-checklist.pdf" },
-      { label: "Conversion checklist", file: "/downloads/pdfs/creator-landing-kit/mobile-checklist.pdf" },
-      { label: "Headline formula sheet", file: "/downloads/pdfs/creator-landing-kit/copy-templates.pdf" },
     ],
     publishedAt: "2026-08-11",
     status: "published",
@@ -351,7 +377,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     reviews: 7,
     downloadFile: "/downloads/creator-landing-kit.zip",
     fileName: "creator-landing-kit.zip",
-    fileSize: "7 PDFs in ZIP",
+    fileSize: "3 PDFs in ZIP",
     seoTitle: "Creator Landing Page Kit – Layout, Copy & Conversion Templates",
     seoDescription:
       "Free landing page kit for coaches, creators, and freelancers. Section layout guide, fill-in-the-blank copy, mobile checklist, and launch day checklist.",
@@ -367,7 +393,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "A complete caption pack with 365 ready-to-use social media captions organised by industry, post type, and day of the week. Covers product shops, service businesses, restaurants, travel agents, salons, clinics, and general small businesses. Includes hashtag sets, bio formulas, and a 30-day posting plan you can repeat.",
     story:
       "Most small businesses skip social media because they do not know what to write. This pack removes the blank-page problem — open the sheet, pick a caption for today, paste and post. Built from studying what actually works for small business accounts worldwide.",
-    category: "Templates",
+    category: "Creator",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "NEW",
     isFree: true,
@@ -389,7 +419,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "How-to guide — personalising captions for your brand voice",
     ],
     includes: [
-      "365 captions PDF — indexed by business type and post type (64 pages)",
+      "365 captions PDF — indexed by business type and post type",
       "Hashtag master list PDF — 200+ hashtags sorted by industry and size",
       "Instagram bio formula PDF — 6 proven formats with examples",
       "30-day posting plan PDF — printable calendar with content suggestions",
@@ -402,7 +432,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     whoItIsFor:
       "Small shop owners, service providers, restaurants, salons, clinics, and any business that wants to stay active on social media without spending hours writing captions.",
     downloadContentsPlan: [
-      "01-365-captions.pdf — full caption library by industry (64 pages)",
+      "01-365-captions.pdf — full caption library by industry",
       "02-hashtag-master-list.pdf — 200+ hashtags by industry and size",
       "03-instagram-bio-formulas.pdf — 6 formats with examples",
       "04-30-day-posting-plan.pdf — printable content calendar",
@@ -411,7 +441,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "07-quick-post-ideas.pdf — emergency post ideas when you're stuck",
     ],
     pdfs: [
-      { label: "365 captions — full library (64 pages)", file: "/downloads/pdfs/social-media-caption-pack/365-captions.pdf" },
+      { label: "365 captions — full library", file: "/downloads/pdfs/social-media-caption-pack/365-captions.pdf" },
       { label: "Hashtag master list (200+)", file: "/downloads/pdfs/social-media-caption-pack/hashtag-master-list.pdf" },
       { label: "Instagram bio formulas", file: "/downloads/pdfs/social-media-caption-pack/instagram-bio-formulas.pdf" },
       { label: "30-day posting plan", file: "/downloads/pdfs/social-media-caption-pack/30-day-posting-plan.pdf" },
@@ -439,7 +469,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "A complete admin and communication kit made specifically for churches, prayer groups, and faith communities. Contains weekly announcement sheet templates, letter formats (welcome, membership, condolence, congratulations), attendance and tithe forms, Sunday bulletin layouts, WhatsApp broadcast templates, and a church event planning checklist.",
     story:
       "Church administrators spend hours every week re-creating announcement sheets and letters from scratch. This kit provides a complete, dignified template set that any church of any size can use immediately, professionally, and for free.",
-    category: "Templates",
+    category: "Church & Ministry",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -462,7 +496,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     ],
     includes: [
       "Weekly announcement sheet PDF — A4 bulletin template (front + back, 2 layouts)",
-      "10 letter templates PDF — full-text, formal church letters (32 pages)",
+      "10 letter templates PDF — full-text, formal church letters",
       "Attendance and tithe forms PDF — weekly + monthly register layouts",
       "WhatsApp broadcast scripts PDF — 20+ ready announcements",
       "Event planning checklist PDF — 40-item church event coordinator guide",
@@ -476,7 +510,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Church administrators, pastors, deacons, and volunteers in any denomination who handle weekly admin, communication, and event coordination.",
     downloadContentsPlan: [
       "01-announcement-sheet.pdf — A4 Sunday bulletin (2 layouts)",
-      "02-church-letters.pdf — 10 complete letter templates (32 pages)",
+      "02-church-letters.pdf — 10 complete letter templates",
       "03-attendance-tithe-forms.pdf — register layouts weekly + monthly",
       "04-whatsapp-broadcasts.pdf — 20+ service and event announcements",
       "05-event-checklist.pdf — 40-item church event planning guide",
@@ -486,7 +520,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     ],
     pdfs: [
       { label: "Sunday announcement sheet (2 layouts)", file: "/downloads/pdfs/church-admin-kit/announcement-sheet.pdf" },
-      { label: "10 church letter templates (32 pages)", file: "/downloads/pdfs/church-admin-kit/church-letters.pdf" },
+      { label: "10 church letter templates", file: "/downloads/pdfs/church-admin-kit/church-letters.pdf" },
       { label: "Attendance and tithe forms", file: "/downloads/pdfs/church-admin-kit/attendance-tithe-forms.pdf" },
       { label: "WhatsApp broadcast scripts (20+)", file: "/downloads/pdfs/church-admin-kit/whatsapp-broadcasts.pdf" },
       { label: "Event planning checklist (40 items)", file: "/downloads/pdfs/church-admin-kit/event-checklist.pdf" },
@@ -508,12 +542,16 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     id: "dp-pos",
     slug: "shop-pos-starter-pack",
     name: "Shop + POS Starter Pack",
-    tagline: "A complete blueprint for planning or building a shop billing and POS system.",
+    tagline: "Free POS planning notes. For live billing, use Ebenezer SaaS.",
     description:
-      "A professional documentation and UI blueprint kit for anyone planning, designing, or building a shop billing or POS system. Covers screen-by-screen UI layouts, invoice and receipt formats for all printer sizes, stock flow diagrams, staff process guides, and a detailed checklist for choosing between buying or building your own system.",
+      "Planning documentation for a shop billing system: UI notes, invoice samples, and a buy-vs-build checklist. This is not POS software. For a working billing app, open Ebenezer SaaS.",
     story:
       "Made for shop owners and developers who need a clear, complete structure before committing to a POS system — so they know exactly what screens, flows, and formats they need before spending money or time.",
-    category: "Business Tools",
+    category: "Business",
+    productType: "documentation",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -535,7 +573,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Top 10 POS software comparison guide",
     ],
     includes: [
-      "UI blueprint PDF — 12 annotated screen diagrams with field labels (28 pages)",
+      "UI blueprint PDF — 12 annotated screen diagrams with field labels",
       "Invoice and receipt samples PDF — A4 service, A4 product, 80mm thermal",
       "Stock flow diagram PDF — receiving, tracking, and alerting",
       "Staff roles guide PDF — owner, manager, cashier, stock clerk permissions",
@@ -548,7 +586,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     license: ["Personal License", "Commercial License — use for client projects"],
     whoItIsFor: "Shop owners planning to digitize billing, developers and students building a POS project, and consultants advising small retailers.",
     downloadContentsPlan: [
-      "01-ui-blueprint.pdf — 12 screen diagrams annotated (28 pages)",
+      "01-ui-blueprint.pdf — 12 screen diagrams annotated",
       "02-invoice-samples.pdf — A4 service, A4 product, 80mm thermal",
       "03-stock-flow.pdf — receive, track, alert process diagram",
       "04-staff-roles.pdf — permissions by role (owner to cashier)",
@@ -558,11 +596,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "08-pos-comparison.pdf — 10 POS options compared",
     ],
     pdfs: [
-      { label: "UI blueprint (28 pages, 12 screens)", file: "/downloads/pdfs/shop-pos-starter-pack/ui-blueprint.pdf" },
-      { label: "Invoice + receipt samples (all sizes)", file: "/downloads/pdfs/shop-pos-starter-pack/invoice-samples.pdf" },
-      { label: "Stock flow diagram", file: "/downloads/pdfs/shop-pos-starter-pack/ui-blueprint.pdf" },
-      { label: "Buy vs build checklist (24 questions)", file: "/downloads/pdfs/shop-pos-starter-pack/pos-selection-checklist.pdf" },
-      { label: "POS software comparison (10 options)", file: "/downloads/pdfs/shop-pos-starter-pack/pos-selection-checklist.pdf" },
+      { label: "UI blueprint", file: "/downloads/pdfs/shop-pos-starter-pack/ui-blueprint.pdf" },
+      { label: "Invoice + receipt samples", file: "/downloads/pdfs/shop-pos-starter-pack/invoice-samples.pdf" },
+      { label: "POS selection checklist", file: "/downloads/pdfs/shop-pos-starter-pack/pos-selection-checklist.pdf" },
     ],
     publishedAt: "2026-08-10",
     status: "published",
@@ -586,7 +622,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "A complete lead management kit for travel agents and tour operators worldwide. Contains detailed enquiry forms, WhatsApp follow-up message sequences, quotation formats, a lead tracker sheet, a customer information checklist, and a guide to closing tour bookings over WhatsApp and phone without pressure tactics.",
     story:
       "Most small travel agents lose 60–70% of their enquiries because there is no system to capture and follow up. Enquiries come in on WhatsApp, calls go unanswered, and leads get forgotten. This kit builds a simple system that any solo or small travel agent can run without software.",
-    category: "Templates",
+    category: "Travel",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -659,7 +699,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "A comprehensive ebook for small business owners who want to start selling and promoting online but do not know where to start. Covers platform selection, pricing your offer for online, setting up WhatsApp Business, creating a basic social media plan, building trust online, handling online payments, and the most common costly mistakes to avoid. Written in plain language with real examples from small businesses in India, Africa, and Southeast Asia.",
     story:
       "Written because most 'go digital' advice online is either too advanced, too expensive, or written for Western businesses. This playbook is for the shop owner in Coimbatore, the tailor in Nairobi, the travel agent in Manila — people building real businesses in real markets.",
-    category: "Ebooks",
+    category: "Free Resources",
+    productType: "ebook",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -680,7 +724,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Chapter 8 — 12 mistakes small businesses make and how to avoid them",
     ],
     includes: [
-      "Full ebook PDF — 8 chapters, 56 pages, printable and phone-friendly",
+      "Full ebook PDF — 8 chapters, printable and phone-friendly",
       "7-day action checklist PDF — first week task list with daily priorities",
       "30-day social media plan PDF — content ideas for first month",
       "Platform comparison guide PDF — WhatsApp, Instagram, Facebook, website vs shop app",
@@ -692,7 +736,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     whoItIsFor:
       "Small shop owners, service providers, home businesses, and first-time founders in any country who are ready to go online but do not know where to start.",
     downloadContentsPlan: [
-      "01-digital-business-playbook.pdf — full 8-chapter ebook (56 pages)",
+      "01-digital-business-playbook.pdf — full 8-chapter ebook",
       "02-7-day-checklist.pdf — first week task list",
       "03-30-day-social-plan.pdf — content ideas for first month",
       "04-platform-comparison.pdf — WhatsApp vs Instagram vs website",
@@ -700,7 +744,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "06-whatsapp-quickstart.pdf — one-page setup card",
     ],
     pdfs: [
-      { label: "Full ebook — 8 chapters (56 pages)", file: "/downloads/pdfs/digital-business-playbook/digital-business-playbook.pdf" },
+      { label: "Full ebook", file: "/downloads/pdfs/digital-business-playbook/digital-business-playbook.pdf" },
       { label: "7-day action checklist", file: "/downloads/pdfs/digital-business-playbook/7-day-checklist.pdf" },
       { label: "30-day social media plan", file: "/downloads/pdfs/digital-business-playbook/7-day-checklist.pdf" },
       { label: "Platform comparison guide", file: "/downloads/pdfs/digital-business-playbook/digital-business-playbook.pdf" },
@@ -727,7 +771,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "A complete starter brand kit that gives any small business a consistent, professional visual identity without hiring a designer. Covers everything from color palette selection to font pairing, logo placement rules, social media post templates, business card layout guide, and a brand consistency checklist you can hand to anyone who creates materials for your business.",
     story:
       "Most small businesses post with random fonts and mismatched colors on every platform, which makes them look unprofessional — even when their product is excellent. This kit gives any owner a simple, fixed system that makes everything look intentional and consistent.",
-    category: "Graphics",
+    category: "Creator",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -749,7 +797,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Quick-reference brand card — one-page summary to share with anyone",
     ],
     includes: [
-      "Brand guide PDF — colors, fonts, logo rules, voice, and examples (36 pages)",
+      "Brand guide PDF — colors, fonts, logo rules, voice, and examples",
       "Color palette selection guide PDF — step-by-step color choice for any business",
       "Font pairing guide PDF — 8 combinations with where to use each",
       "Social post templates PDF — 4 layouts for Instagram and Facebook",
@@ -761,7 +809,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     license: ["Personal License", "Commercial License — use for client brand projects"],
     whoItIsFor: "Small business owners, shop owners, service providers, freelancers, and creators who want a consistent brand without the cost of a designer.",
     downloadContentsPlan: [
-      "01-brand-guide.pdf — colors, fonts, logo, voice (36 pages)",
+      "01-brand-guide.pdf — colors, fonts, logo, voice",
       "02-color-palette-guide.pdf — color selection step-by-step",
       "03-font-pairing-guide.pdf — 8 combinations with usage guide",
       "04-social-templates.pdf — 4 Instagram and Facebook layouts",
@@ -770,7 +818,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "07-brand-card.pdf — one-page summary for staff or designers",
     ],
     pdfs: [
-      { label: "Brand guide (36 pages)", file: "/downloads/pdfs/brand-kit-essentials/brand-guide.pdf" },
+      { label: "Brand guide", file: "/downloads/pdfs/brand-kit-essentials/brand-guide.pdf" },
       { label: "Color palette selection guide", file: "/downloads/pdfs/brand-kit-essentials/brand-guide.pdf" },
       { label: "Font pairing guide (8 combinations)", file: "/downloads/pdfs/brand-kit-essentials/brand-guide.pdf" },
       { label: "Social post templates (4 layouts)", file: "/downloads/pdfs/brand-kit-essentials/social-templates.pdf" },
@@ -798,7 +846,11 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "A genuinely useful, free enquiry form kit for any small business. Contains a detailed printable form, a digital Google Form field list, a WhatsApp enquiry script, and a simple follow-up process guide. Works for any business type — shop, service, clinic, event, or freelance.",
     story:
       "Every business needs a way to properly capture what a customer wants. Most use a scrap of paper or a scattered WhatsApp chat. This form gives any business a professional, complete capture method — free, with no strings attached.",
-    category: "Freebies",
+    category: "Free Resources",
+    productType: "free_resource",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -855,12 +907,16 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     id: "dp-bundle",
     slug: "creator-bundle",
     name: "Creator Starter Bundle",
-    tagline: "Landing page kit + brand kit + business playbook — everything to launch properly.",
+    tagline: "Free bundle of three starter resource packs (PDFs).",
     description:
-      "A free bundle combining the three most essential kits for anyone starting or growing a business online — the Creator Landing Page Kit, Brand Kit Essentials, and Digital Business Playbook. Together these three kits cover your online presence (landing page), your visual identity (brand), and your strategy (playbook). Everything you need before spending money on ads or tools.",
+      "Combines the Creator Landing planning pack, Brand Kit notes, and Digital Business Playbook. These are supporting PDFs, not coded websites or Canva files.",
     story:
       "Most people buy courses and tools before they have a basic, consistent online presence. This bundle gives you the three fundamentals first — free — so your next steps actually work.",
     category: "Bundles",
+    productType: "bundle",
+    accessMethod: "download",
+    fileFormats: ["PDF", "ZIP"],
+    version: "1.0",
     price: 0,
     badge: "FREE",
     isFree: true,
@@ -900,9 +956,9 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     ],
     pdfs: [
       { label: "Bundle contents index", file: "/downloads/pdfs/creator-bundle/bundle-contents.pdf" },
-      { label: "Landing page layout guide (24 pages)", file: "/downloads/pdfs/creator-landing-kit/layout-guide.pdf" },
-      { label: "Brand guide (36 pages)", file: "/downloads/pdfs/brand-kit-essentials/brand-guide.pdf" },
-      { label: "Business playbook ebook (56 pages)", file: "/downloads/pdfs/digital-business-playbook/digital-business-playbook.pdf" },
+      { label: "Landing page layout guide", file: "/downloads/pdfs/creator-landing-kit/layout-guide.pdf" },
+      { label: "Brand guide", file: "/downloads/pdfs/brand-kit-essentials/brand-guide.pdf" },
+      { label: "Business playbook ebook", file: "/downloads/pdfs/digital-business-playbook/digital-business-playbook.pdf" },
     ],
     publishedAt: "2026-08-12",
     status: "published",
@@ -910,10 +966,318 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     reviews: 8,
     downloadFile: "/downloads/creator-bundle.zip",
     fileName: "creator-bundle.zip",
-    fileSize: "20+ PDFs in ZIP",
-    seoTitle: "Creator Starter Bundle – Landing Page Kit + Brand Kit + Business Playbook",
+    fileSize: "Starter PDFs from 3 kits",
+    seoTitle: "Creator Starter Bundle – Free Planning Packs",
     seoDescription:
-      "Free bundle: landing page kit, brand kit, and digital business playbook — 20 PDFs covering your online presence, visual identity, and strategy.",
+      "Free bundle of landing planning notes, brand notes, and a digital business playbook. Supporting PDFs, not coded websites.",
+  },
+
+  /* ── 13. Invoice Generator (real web tool) ───────────── */
+  {
+    id: "dp-invoice-gen",
+    slug: "invoice-generator",
+    name: "Invoice Generator",
+    tagline: "Fill, preview, and print a professional invoice in your browser.",
+    description:
+      "A live invoice tool for shops and freelancers. Add your business details, customer, tax, and line items. Totals calculate instantly. Print or save as PDF from your browser. This is a usable tool — not a PDF of tips.",
+    story:
+      "Most small shops still type invoices in Word. This generator gives a clean invoice in minutes, with GST-ready tax fields, without installing software.",
+    category: "Software & Tools",
+    productType: "digital_tool",
+    accessMethod: "web_app",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web", "Windows", "macOS", "Android", "iPhone"],
+    fileFormats: ["Print", "PDF (browser print)"],
+    version: "1.0",
+    updatePolicy: "Updated in the cloud. Open the same URL for the latest version.",
+    setupRequirements: "Any modern browser. No account needed to try.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/tools/invoice-generator",
+    externalCta: "Open invoice generator",
+    image: U("photo-1554224155-6726b3ff858f"),
+    gallery: [
+      U("photo-1554224155-6726b3ff858f"),
+      U("photo-1460925895917-afdab827c52f"),
+      U("photo-1450101499163-c8848c66ca85"),
+    ],
+    features: [
+      "Live preview while you type",
+      "Line items with quantity, rate, and tax",
+      "Automatic subtotal, tax, and grand total",
+      "Print / Save as PDF from the browser",
+      "Works on phone and desktop",
+    ],
+    includes: [
+      "Browser invoice generator (open instantly)",
+      "Print-ready A4 layout",
+      "GST/VAT tax field",
+      "No install, no signup to start",
+    ],
+    compatibility: ["Chrome", "Edge", "Firefox", "Safari", "Mobile browsers"],
+    license: ["Free to use for your business invoices"],
+    whoItIsFor: "Shops, freelancers, and service providers who need a clean invoice today.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Free Invoice Generator – Print GST Invoices in Browser",
+    seoDescription:
+      "Free online invoice generator for shops and freelancers. Add items, tax, and print or save as PDF. No install.",
+  },
+
+  /* ── 14. Quotation Generator ─────────────────────────── */
+  {
+    id: "dp-quote-gen",
+    slug: "quotation-generator",
+    name: "Quotation Generator",
+    tagline: "Create a client quotation you can print or send today.",
+    description:
+      "A live quotation tool: company details, client, validity date, line items, and terms. Totals calculate as you type. Print or save as PDF. This is a usable generator, not a quotation-writing guide.",
+    story:
+      "Travel agents, contractors, and service businesses lose time remaking quotes in Word. This tool gives a professional quote layout in one screen.",
+    category: "Software & Tools",
+    productType: "digital_tool",
+    accessMethod: "web_app",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web", "Windows", "macOS", "Android", "iPhone"],
+    fileFormats: ["Print", "PDF (browser print)"],
+    version: "1.0",
+    updatePolicy: "Cloud updates on the same URL.",
+    setupRequirements: "Any modern browser.",
+    supportInfo: "Email and WhatsApp support from Ebenezer Digital.",
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    isSoftware: true,
+    externalUrl: "/tools/quotation-generator",
+    externalCta: "Open quotation generator",
+    image: U("photo-1454165804606-c3d57bc86b40"),
+    gallery: [
+      U("photo-1454165804606-c3d57bc86b40"),
+      U("photo-1556742049-0cfed4f6a45d"),
+    ],
+    features: [
+      "Quote number and validity date",
+      "Line items with tax",
+      "Notes / terms block",
+      "Print-ready layout",
+    ],
+    includes: [
+      "Browser quotation generator",
+      "Print / Save as PDF",
+      "Terms and validity fields",
+    ],
+    compatibility: ["Chrome", "Edge", "Firefox", "Safari", "Mobile browsers"],
+    license: ["Free to use for your business quotations"],
+    whoItIsFor: "Travel agents, contractors, agencies, and any business that sends quotes.",
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    seoTitle: "Free Quotation Generator – Print Client Quotes Online",
+    seoDescription:
+      "Free online quotation generator. Add items, validity, and terms, then print or save as PDF.",
+  },
+
+  /* ── 15. Restaurant website template ─────────────────── */
+  {
+    id: "dp-rest-site",
+    slug: "restaurant-website-template",
+    name: "Restaurant Website Template",
+    tagline: "A complete HTML/CSS/JS restaurant website you can edit and host.",
+    description:
+      "Download real source files for a restaurant website: home, menu, about, and contact pages. Includes CSS, JavaScript, README, and license. Open index.html to preview. Edit the text and photos, then upload to any host.",
+    story:
+      "Restaurant owners are often sold PDF ‘website guides’. This product is the site itself — files you can open, change, and publish.",
+    category: "Website Templates",
+    productType: "website_template",
+    accessMethod: "download",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web"],
+    fileFormats: ["HTML", "CSS", "JS", "ZIP"],
+    version: "1.0",
+    updatePolicy: "Download the latest ZIP from this product page when we ship updates.",
+    setupRequirements: "A code editor (VS Code or Notepad). Upload the folder to any static host.",
+    supportInfo: "Email and WhatsApp support for setup questions.",
+    previewUrl: "/downloads/packs/restaurant-website-template/index.html",
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    image: U("photo-1517248135467-4c7edcad34c4"),
+    gallery: [
+      U("photo-1517248135467-4c7edcad34c4"),
+      U("photo-1414235077428-338989a2e8c0"),
+      U("photo-1559339352-11d035aa65de"),
+    ],
+    features: [
+      "Home, menu, about, and contact pages",
+      "Mobile-ready layout",
+      "WhatsApp and phone call buttons",
+      "Reservation enquiry form (opens mail / WhatsApp)",
+      "README with install steps",
+    ],
+    includes: [
+      "index.html, menu.html, about.html, contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    compatibility: ["Any static host", "Netlify", "GitHub Pages", "cPanel", "Local browser"],
+    license: ["Personal License", "Commercial License — one business website"],
+    whoItIsFor: "Restaurant, cafe, and cloud-kitchen owners who need a real website, not a guide.",
+    downloadContentsPlan: [
+      "index.html",
+      "menu.html",
+      "about.html",
+      "contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    downloadFile: "/downloads/restaurant-website-template.zip",
+    fileName: "restaurant-website-template.zip",
+    fileSize: "HTML + CSS + JS source",
+    seoTitle: "Restaurant Website Template – HTML Source Download",
+    seoDescription:
+      "Free restaurant website template with real HTML, CSS, and JavaScript. Home, menu, about, contact. Download and host anywhere.",
+  },
+
+  /* ── 16. Travel agency website template ──────────────── */
+  {
+    id: "dp-travel-site",
+    slug: "travel-agency-website-template",
+    name: "Travel Agency Website Template",
+    tagline: "HTML website for tour operators — packages, enquiry, and WhatsApp.",
+    description:
+      "Real source files for a travel agency site: home, packages, about, and enquiry pages. Edit destinations and prices in HTML. Includes CSS, JS, README, and license.",
+    story:
+      "Small travel agents often run only on WhatsApp. This template gives a public site they can host, plus an enquiry path that still uses WhatsApp.",
+    category: "Travel",
+    productType: "website_template",
+    accessMethod: "download",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web"],
+    fileFormats: ["HTML", "CSS", "JS", "ZIP"],
+    previewUrl: "/downloads/packs/travel-agency-website-template/index.html",
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    image: U("photo-1488646953014-85cb44e25828"),
+    gallery: [
+      U("photo-1488646953014-85cb44e25828"),
+      U("photo-1436491865332-7a61a109cc05"),
+      U("photo-1526772662000-3f88f10405ff"),
+    ],
+    features: [
+      "Home, packages, about, enquiry pages",
+      "Package cards you can duplicate",
+      "Enquiry form + WhatsApp CTA",
+      "Mobile-ready layout",
+    ],
+    includes: [
+      "index.html, packages.html, about.html, enquiry.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    compatibility: ["Any static host", "Netlify", "GitHub Pages", "cPanel"],
+    license: ["Personal License", "Commercial License — one agency website"],
+    whoItIsFor: "Travel agents and tour operators who need a real website they can edit.",
+    downloadContentsPlan: [
+      "index.html",
+      "packages.html",
+      "about.html",
+      "enquiry.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    downloadFile: "/downloads/travel-agency-website-template.zip",
+    fileName: "travel-agency-website-template.zip",
+    fileSize: "HTML + CSS + JS source",
+    seoTitle: "Travel Agency Website Template – HTML Source Download",
+    seoDescription:
+      "Free travel agency HTML website template. Packages, enquiry, and WhatsApp CTA. Download real source files.",
+  },
+
+  /* ── 17. Church website template ─────────────────────── */
+  {
+    id: "dp-church-site",
+    slug: "church-website-template",
+    name: "Church Website Template",
+    tagline: "A calm HTML church website — service times, about, and contact.",
+    description:
+      "Real source files for a church or ministry site: home, about, ministries, and contact. Edit service times and address in HTML. Includes CSS, JS, README, and license.",
+    story:
+      "Many churches still share only a Facebook page. This template gives a simple public home people can find and trust.",
+    category: "Church & Ministry",
+    productType: "website_template",
+    accessMethod: "download",
+    techStack: ["HTML", "CSS", "JavaScript"],
+    platforms: ["Web"],
+    fileFormats: ["HTML", "CSS", "JS", "ZIP"],
+    previewUrl: "/downloads/packs/church-website-template/index.html",
+    price: 0,
+    badge: "NEW",
+    isFree: true,
+    image: U("photo-1438032005730-c779502df39b"),
+    gallery: [
+      U("photo-1438032005730-c779502df39b"),
+      U("photo-1505664194779-8beaceb5bf9b"),
+      U("photo-1523803326055-9729b9e02e5a"),
+    ],
+    features: [
+      "Home, about, ministries, contact pages",
+      "Service times block",
+      "Location and WhatsApp contact",
+      "Quiet, readable layout for ministry sites",
+    ],
+    includes: [
+      "index.html, about.html, ministries.html, contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    compatibility: ["Any static host", "Netlify", "GitHub Pages", "cPanel"],
+    license: ["Free for churches and ministries"],
+    whoItIsFor: "Churches, prayer groups, and ministries that need a real website they can edit.",
+    downloadContentsPlan: [
+      "index.html",
+      "about.html",
+      "ministries.html",
+      "contact.html",
+      "styles.css",
+      "script.js",
+      "README.md",
+      "LICENSE.txt",
+    ],
+    publishedAt: "2026-08-20",
+    status: "published",
+    rating: 5,
+    reviews: 0,
+    downloadFile: "/downloads/church-website-template.zip",
+    fileName: "church-website-template.zip",
+    fileSize: "HTML + CSS + JS source",
+    seoTitle: "Church Website Template – HTML Source Download",
+    seoDescription:
+      "Free church website template with real HTML, CSS, and JavaScript. Service times, ministries, and contact pages.",
   },
 ];
 

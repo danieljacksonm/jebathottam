@@ -1,94 +1,359 @@
 .saas-root {
-  --s-ink: #08110e;
-  --s-paper: #f4f1ea;
-  --s-muted: #8d9a94;
-  --s-line: rgba(244, 241, 234, 0.12);
-  --s-brand: #34d399;
-  min-height: 100dvh;
-  background: var(--s-ink);
-  color: var(--s-paper);
+  --saas-bg: #0d1a14;
+  --saas-ink: #f7f3eb;
+  --saas-muted: #a8c0b4;
+  --saas-gold: #c4a36a;
+  --saas-line: rgba(255, 252, 247, 0.12);
+  min-height: 100vh;
+  background: var(--saas-bg);
+  color: var(--saas-ink);
   font-family: var(--font-dm-sans), system-ui, sans-serif;
+  overflow-x: hidden;
 }
 
-.saas-root h1,
-.saas-root h2,
-.saas-root h3 {
-  font-family: var(--font-syne), system-ui, sans-serif;
-}
-
-.saas-nav {
+.saas-top {
   position: sticky;
   top: 0;
   z-index: 20;
+  border-bottom: 1px solid var(--saas-line);
+  background: rgba(13, 26, 20, 0.92);
+  backdrop-filter: blur(10px);
+}
+
+.saas-top-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.9rem 1.25rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--s-line);
-  background: rgba(8, 17, 14, 0.92);
-  backdrop-filter: blur(12px);
+  gap: 1rem;
+}
+
+.saas-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.saas-brand-mark {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.55rem;
+  display: grid;
+  place-items: center;
+  background: var(--saas-gold);
+  color: #1a1408;
+  font-family: var(--font-syne), sans-serif;
+  font-weight: 700;
+}
+
+.saas-brand strong {
+  display: block;
+  font-family: var(--font-syne), sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.saas-brand em {
+  display: block;
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--saas-muted);
+}
+
+.saas-top-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem 1rem;
+}
+
+.saas-top-nav a {
+  color: var(--saas-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.saas-top-nav a:hover {
+  color: var(--saas-ink);
+}
+
+.saas-hero,
+.saas-section,
+.saas-foot {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3.5rem 1.25rem;
+}
+
+.saas-hero {
+  text-align: center;
+  padding-top: 4.5rem;
+  padding-bottom: 2rem;
+}
+
+.saas-kicker {
+  margin: 0 0 1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--saas-gold);
+  font-weight: 600;
+}
+
+.saas-hero h1 {
+  margin: 0;
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(2.6rem, 8vw, 4.6rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.saas-lead {
+  margin: 1.25rem auto 0;
+  max-width: 38rem;
+  color: var(--saas-muted);
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.saas-cta-row {
+  margin-top: 1.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .saas-btn {
   display: inline-flex;
-  min-height: 42px;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
-  background: var(--s-brand);
-  color: #04110c;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  min-height: 46px;
+  padding: 0 1.3rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.saas-btn-gold {
+  background: var(--saas-gold);
+  color: #1a1408;
 }
 
 .saas-btn-ghost {
-  background: transparent;
-  color: var(--s-paper);
-  border: 1px solid var(--s-line);
+  border: 1px solid var(--saas-line);
+  color: var(--saas-ink);
 }
 
-.saas-input,
-.saas-root select,
-.saas-root textarea {
-  width: 100%;
-  border: 0;
-  border-bottom: 1px solid var(--s-line);
-  background: transparent;
-  padding: 10px 0;
-  color: var(--s-paper);
-  outline: none;
+.saas-preview {
+  margin: 3rem auto 0;
+  max-width: 42rem;
 }
 
-.saas-root select option {
-  color: #111;
-}
-
-.saas-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-.saas-table th,
-.saas-table td {
-  border-bottom: 1px solid var(--s-line);
-  padding: 10px 8px;
+.saas-preview-card {
+  border: 1px solid var(--saas-line);
+  border-radius: 1.4rem;
+  padding: 1.25rem;
+  background: linear-gradient(160deg, #fffcf7, #efe8dc);
+  color: #171a17;
   text-align: left;
 }
 
-@media print {
-  .saas-nav,
-  .saas-no-print {
-    display: none !important;
+.saas-preview-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.saas-preview-top span {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9a7840;
+}
+
+.saas-preview-top strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.8rem;
+  font-family: var(--font-syne), sans-serif;
+}
+
+.saas-pill {
+  border-radius: 999px;
+  background: #1f4d3a;
+  color: #f7f3eb;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+}
+
+.saas-preview-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.saas-preview-grid div {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 0.9rem;
+  padding: 0.9rem 0.75rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.saas-section h2 {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-syne), sans-serif;
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+}
+
+.saas-sub {
+  margin: 0.8rem auto 0;
+  max-width: 36rem;
+  text-align: center;
+  color: var(--saas-muted);
+  line-height: 1.6;
+}
+
+.saas-section-soft {
+  background: rgba(31, 77, 58, 0.12);
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+}
+
+.saas-section-soft > * {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.saas-grid {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.saas-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.saas-card {
+  border: 1px solid var(--saas-line);
+  border-radius: 1rem;
+  padding: 1.25rem;
+  background: rgba(255, 252, 247, 0.04);
+  min-width: 0;
+}
+
+.saas-card h3 {
+  margin: 0;
+  font-family: var(--font-syne), sans-serif;
+  font-size: 1.15rem;
+}
+
+.saas-card p {
+  margin: 0.65rem 0 0;
+  color: var(--saas-muted);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.saas-card a {
+  display: inline-block;
+  margin-top: 1rem;
+  color: var(--saas-gold);
+  font-size: 0.85rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.saas-steps {
+  list-style: none;
+  margin: 2rem auto;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem 2rem;
+}
+
+.saas-steps li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 8rem;
+}
+
+.saas-steps strong {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--saas-gold);
+  color: #1a1408;
+  font-family: var(--font-syne), sans-serif;
+}
+
+.saas-steps span {
+  color: var(--saas-muted);
+  font-size: 0.9rem;
+}
+
+.saas-foot {
+  border-top: 1px solid var(--saas-line);
+  text-align: center;
+  color: var(--saas-muted);
+  font-size: 0.9rem;
+}
+
+.saas-foot a {
+  color: var(--saas-gold);
+  text-decoration: none;
+}
+
+.saas-contact {
+  margin-bottom: 1rem;
+}
+
+.saas-contact-link {
+  color: var(--saas-gold);
+}
+
+.saas-copy {
+  margin-top: 0.85rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+@media (max-width: 720px) {
+  .saas-preview-grid {
+    grid-template-columns: 1fr;
   }
-  .saas-root {
-    background: white;
-    color: #111;
-  }
-  .saas-print {
-    display: block !important;
+
+  .saas-top-nav a:not(.saas-btn) {
+    display: none;
   }
 }

@@ -12,6 +12,7 @@ function modeFromPath(path: string | null): AiMode {
   if (path.startsWith("/blog")) return "blog";
   if (path.startsWith("/products/checkout")) return "billing";
   if (path.startsWith("/products")) return "product";
+  if (path.startsWith("/catalog")) return "catalog";
   return "general";
 }
 
@@ -76,6 +77,11 @@ const STARTERS: Record<AiMode, string[]> = {
   blog: ["Explain this lesson more simply", "Give Indian life examples", "What should I learn next?"],
   product: ["Which kit fits my business?", "What files are inside this kit?", "Compare free and paid tools"],
   billing: ["Why can’t I pay yet?", "Explain licenses simply", "What happens after payment?"],
+  catalog: [
+    "Laptop under ₹60,000 for coding",
+    "Compare these two for Photoshop",
+    "Which SSD is better for gaming?",
+  ],
 };
 
 export function EbenDock({

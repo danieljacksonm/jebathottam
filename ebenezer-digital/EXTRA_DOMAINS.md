@@ -10,6 +10,8 @@
 | ebenezerdigital.store | A | www | VPS_IP |
 | ebenezerdigital.net | A | @ | VPS_IP |
 | ebenezerdigital.net | A | www | VPS_IP |
+| products.ebenezerdigital.com | A | @ / products | VPS_IP (CNAME or A for subdomain) |
+| tools.ebenezerdigital.com | A | tools | VPS_IP |
 
 ## Purpose
 
@@ -19,6 +21,8 @@
 | ebenezerdigital.info | Blog (opens /blog) |
 | ebenezerdigital.store | Redirect → /products (digital products later) |
 | ebenezerdigital.net | Redirect → main site (client portal later) |
+| products.ebenezerdigital.com | Physical product compare → /catalog |
+| tools.ebenezerdigital.com | Software tools compare → /tools |
 
 ## VPS Nginx + SSL
 

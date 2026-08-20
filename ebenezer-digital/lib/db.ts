@@ -134,6 +134,7 @@ export interface DigitalProduct {
   description: string;
   story: string;
   category: string;
+  productType?: string;
   price: number;
   compareAt?: number;
   badge?: "BEST SELLER" | "NEW" | "FREE" | "BUNDLE";
@@ -148,6 +149,15 @@ export interface DigitalProduct {
   isSoftware?: boolean;
   externalUrl?: string;
   externalCta?: string;
+  previewUrl?: string;
+  techStack?: string[];
+  platforms?: string[];
+  fileFormats?: string[];
+  version?: string;
+  updatePolicy?: string;
+  setupRequirements?: string;
+  accessMethod?: string;
+  supportInfo?: string;
   rating?: number;
   reviews?: number;
   isFree?: boolean;
@@ -158,6 +168,7 @@ export interface DigitalProduct {
   downloadFile?: string;
   fileName?: string;
   fileSize?: string;
+  pdfs?: { label: string; file: string }[];
   seoTitle?: string;
   seoDescription?: string;
   createdAt: Date;

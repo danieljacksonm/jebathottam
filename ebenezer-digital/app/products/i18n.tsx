@@ -6,6 +6,14 @@ export type StoreLocale =
   | "en"
   | "hi"
   | "ta"
+  | "te"
+  | "ml"
+  | "kn"
+  | "bn"
+  | "mr"
+  | "gu"
+  | "pa"
+  | "ur"
   | "es"
   | "fr"
   | "ar"
@@ -20,7 +28,16 @@ export type StoreLocale =
 
 type Dict = Record<string, string>;
 
-const dictionaries: Record<StoreLocale, Dict> = {
+type StoreI18nValue = {
+  locale: StoreLocale;
+  setLocale: (next: StoreLocale) => void;
+  t: (key: string) => string;
+  rtl: boolean;
+  /** Prefix current locale onto an internal path for SEO URLs. */
+  lp: (path: string) => string;
+};
+
+const dictionaries: Record<string, Dict> = {
   en: {
     products: "Products",
     categories: "Categories",
@@ -387,39 +404,72 @@ const dictionaries: Record<StoreLocale, Dict> = {
   },
 };
 
-type StoreI18nValue = {
-  locale: StoreLocale;
-  setLocale: (locale: StoreLocale) => void;
-  t: (key: keyof typeof dictionaries.en) => string;
-  rtl: boolean;
-};
-
 const KEY = "ebenezer-store-locale";
+
+// Extra India locales: URL + SEO supported; UI strings fall back to English until translated.
+for (const loc of ["te", "ml", "kn", "bn", "mr", "gu", "pa", "ur"] as const) {
+  (dictionaries as Record<string, Dict>)[loc] = dictionaries.en;
+}
+
 const Ctx = createContext<StoreI18nValue | null>(null);
 
+function hasLocale(code: string | undefined | null): code is StoreLocale {
+  return Boolean(code && (dictionaries as Record<string, Dict>)[code]);
+}
+
+function localePath(locale: StoreLocale, path: string) {
+  const clean = path.startsWith("/") ? path : `/${path}`;
+  if (locale === "en") return clean;
+  return `/${locale}${clean}`;
+}
+
 export function StoreI18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<StoreLocale>("en");
+  const [locale, setLocaleState] = useState<StoreLocale>("en");
 
   useEffect(() => {
-    const saved = localStorage.getItem(KEY) as StoreLocale | null;
-    if (saved && dictionaries[saved]) {
-      setLocale(saved);
+    const path = window.location.pathname;
+    const fromUrl = path.match(/^\/([a-z]{2})(\/|$)/i)?.[1]?.toLowerCase();
+    if (hasLocale(fromUrl)) {
+      setLocaleState(fromUrl);
+      localStorage.setItem(KEY, fromUrl);
       return;
     }
-    const nav = (navigator.language || "en").slice(0, 2) as StoreLocale;
-    if (dictionaries[nav]) setLocale(nav);
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("eben-locale="))
+      ?.split("=")[1];
+    if (hasLocale(cookie)) {
+      setLocaleState(cookie);
+      return;
+    }
+    const saved = localStorage.getItem(KEY);
+    if (hasLocale(saved)) {
+      setLocaleState(saved);
+      return;
+    }
+    const nav = (navigator.language || "en").slice(0, 2);
+    if (hasLocale(nav)) setLocaleState(nav);
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(KEY, locale);
-  }, [locale]);
+  const setLocale = (next: StoreLocale) => {
+    setLocaleState(next);
+    localStorage.setItem(KEY, next);
+    document.cookie = `eben-locale=${next}; path=/; max-age=31536000; samesite=lax`;
+    const path = window.location.pathname.replace(/^\/[a-z]{2}(?=\/|$)/i, "") || "/";
+    const clean = path.startsWith("/") ? path : `/${path}`;
+    const target = localePath(next, clean);
+    if (target !== window.location.pathname) {
+      window.location.assign(target + window.location.search + window.location.hash);
+    }
+  };
 
   const value = useMemo<StoreI18nValue>(
     () => ({
       locale,
       setLocale,
-      t: (key) => dictionaries[locale][key] || dictionaries.en[key],
-      rtl: locale === "ar",
+      t: (key) => dictionaries[locale]?.[key] || dictionaries.en[key] || key,
+      rtl: locale === "ar" || locale === "ur",
+      lp: (path) => localePath(locale, path),
     }),
     [locale]
   );

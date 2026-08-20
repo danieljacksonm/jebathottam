@@ -57,43 +57,46 @@ function buildPdf({ title, kicker, blocks }) {
 
   const addText = (font, size, text, leading, maxChars) => {
     for (const line of wrap(text, maxChars)) {
-      need(leading);
+      need(leading + 2);
       current.push({ type: "text", font, size, text: line, x: MARGIN, y });
       y -= leading;
     }
   };
 
   current.push({ type: "header", title, kicker });
-  y = 742;
+  y = 730;
 
   for (const block of blocks) {
     if (block.type === "h") {
-      y -= 10;
-      addText("F2", 14, block.text, 20, 62);
-      y -= 4;
-    } else if (block.type === "p") {
-      addText("F1", 11, block.text, 16, 86);
+      y -= 14;
+      need(28);
+      current.push({ type: "rule", y: y + 6 });
+      addText("F2", 13, block.text, 18, 58);
       y -= 6;
+    } else if (block.type === "p") {
+      addText("F1", 11, block.text, 16, 82);
+      y -= 8;
     } else if (block.type === "li") {
-      need(16);
-      current.push({ type: "text", font: "F1", size: 11, text: `  - ${block.text}`, x: MARGIN, y });
-      const extra = wrap(block.text, 80).slice(1);
+      need(18);
+      current.push({ type: "text", font: "F1", size: 11, text: `  • ${block.text}`, x: MARGIN, y });
+      const extra = wrap(block.text, 76).slice(1);
       y -= 16;
       for (const line of extra) {
         need(16);
         current.push({ type: "text", font: "F1", size: 11, text: `    ${line}`, x: MARGIN, y });
         y -= 16;
       }
+      y -= 2;
     } else if (block.type === "check") {
-      need(18);
+      need(20);
       current.push({ type: "text", font: "F1", size: 11, text: `[ ]  ${block.text}`, x: MARGIN, y });
-      y -= 18;
+      y -= 20;
     } else if (block.type === "field") {
-      need(28);
+      need(32);
       current.push({ type: "field", label: block.text, y });
-      y -= 28;
+      y -= 32;
     } else if (block.type === "space") {
-      y -= block.h || 12;
+      y -= block.h || 14;
     }
   }
 
@@ -117,28 +120,34 @@ function buildPdf({ title, kicker, blocks }) {
   for (let i = 0; i < pages.length; i++) {
     const ops = [];
     ops.push("0.063 0.725 0.506 rg");
-    ops.push("0 790 595 52 re f");
+    ops.push("0 780 595 62 re f");
     ops.push("1 1 1 rg");
     ops.push("BT");
-    ops.push("/F2 10 Tf");
-    ops.push("1 0 0 1 48 810 Tm");
+    ops.push("/F2 9 Tf");
+    ops.push("1 0 0 1 48 818 Tm");
     ops.push(`(${pdfEscape(kicker || "EBENEZER STORE")}) Tj`);
-    ops.push("/F2 16 Tf");
-    ops.push("1 0 0 1 48 792 Tm");
+    ops.push("/F2 15 Tf");
+    ops.push("1 0 0 1 48 796 Tm");
     ops.push(`(${pdfEscape(title)}) Tj`);
     ops.push("ET");
 
     ops.push("0.07 0.11 0.16 rg");
-    ops.push("0 0 595 40 re f");
+    ops.push("0 0 595 44 re f");
     ops.push("0.85 0.87 0.89 rg");
     ops.push("BT");
     ops.push("/F1 8 Tf");
-    ops.push("1 0 0 1 48 16 Tm");
-    ops.push(`(${pdfEscape(`Ebenezer Store  |  Page ${i + 1} of ${pages.length}  |  Instant digital download worldwide`)}) Tj`);
+    ops.push("1 0 0 1 48 18 Tm");
+    ops.push(`(${pdfEscape(`Ebenezer Store  |  Page ${i + 1} of ${pages.length}  |  Professional digital kits`)}) Tj`);
     ops.push("ET");
 
     for (const item of pages[i]) {
       if (item.type === "header") continue;
+      if (item.type === "rule") {
+        ops.push("0.063 0.725 0.506 RG");
+        ops.push("1.2 w");
+        ops.push(`${MARGIN} ${item.y} m ${MARGIN + 72} ${item.y} l S`);
+        continue;
+      }
       if (item.type === "text") {
         ops.push("0.07 0.11 0.16 rg");
         ops.push("BT");
@@ -152,11 +161,11 @@ function buildPdf({ title, kicker, blocks }) {
         ops.push("BT");
         ops.push("/F1 10 Tf");
         ops.push(`1 0 0 1 ${MARGIN} ${item.y.toFixed(1)} Tm`);
-        ops.push(`(${pdfEscape(item.label)}) Tj`);
+        ops.push(`(${pdfEscape(item.label || " ")}) Tj`);
         ops.push("ET");
-        ops.push("0.85 0.87 0.89 RG");
-        ops.push("0.6 w");
-        ops.push(`${MARGIN} ${item.y - 8} m ${MARGIN + CONTENT_W} ${item.y - 8} l S`);
+        ops.push("0.78 0.81 0.84 RG");
+        ops.push("0.8 w");
+        ops.push(`${MARGIN} ${item.y - 10} m ${MARGIN + CONTENT_W} ${item.y - 10} l S`);
       }
     }
 
@@ -273,64 +282,112 @@ const saasInvoice = {
 
 const landingLayout = {
   title: "Creator Landing Kit  -  Layout guide",
-  kicker: "EBENEZER STORE  |  PDF GUIDE",
+  kicker: "EBENEZER STORE  |  PROFESSIONAL GUIDE",
   blocks: [
-    { type: "p", text: "This PDF shows how to assemble a landing page from the kit. Use it with the copy templates and mobile checklist in the same download." },
-    { type: "h", text: "Section order" },
-    { type: "li", text: "Hero - one promise + one button" },
-    { type: "li", text: "Problem - the pain you solve" },
-    { type: "li", text: "Solution - your method" },
-    { type: "li", text: "Proof - quotes or results" },
-    { type: "li", text: "Pricing - 2 or 3 plans only" },
-    { type: "li", text: "FAQ - remove buying fear" },
-    { type: "li", text: "Final CTA - repeat the offer" },
-    { type: "h", text: "Layout rules" },
-    { type: "li", text: "Reading width about 720 to 880px" },
-    { type: "li", text: "Bigger gaps between sections than inside cards" },
-    { type: "li", text: "One serif for headlines, one sans for UI" },
-    { type: "li", text: "One accent color only (brand emerald #10B981 is a good default)" },
-    { type: "h", text: "First screen" },
-    { type: "p", text: "Show brand name, headline, one sentence, and one main button. Do not put a long form above the fold." },
+    { type: "p", text: "Use this guide to build a clean, conversion-focused landing page. Follow the section order. Keep one promise and one primary action on the first screen." },
+    { type: "h", text: "1. Recommended section order" },
+    { type: "li", text: "Hero - brand, headline, one sentence, one primary button" },
+    { type: "li", text: "Problem - the pain your buyer feels today" },
+    { type: "li", text: "Solution - your method in simple steps" },
+    { type: "li", text: "Proof - results, quotes, logos, or short case notes" },
+    { type: "li", text: "Offer / pricing - two or three clear plans" },
+    { type: "li", text: "FAQ - remove the last buying fears" },
+    { type: "li", text: "Final CTA - repeat the offer and the next step" },
+    { type: "h", text: "2. First-screen rules" },
+    { type: "p", text: "The first screen must answer three questions: Who is this for? What do I get? What should I do next? Do not put a long form, pricing table, or FAQ above the fold." },
+    { type: "li", text: "Brand name must be readable without scrolling" },
+    { type: "li", text: "Headline: one idea, maximum two lines on mobile" },
+    { type: "li", text: "Supporting sentence: one short line only" },
+    { type: "li", text: "Primary button label must be specific (Book a call, Get the kit, Start free)" },
+    { type: "li", text: "Secondary link is optional; never compete with the main button" },
+    { type: "h", text: "3. Layout and spacing" },
+    { type: "li", text: "Reading width: about 720 to 880px for text blocks" },
+    { type: "li", text: "Section gaps should feel larger than card gaps" },
+    { type: "li", text: "Align left edges of text blocks for a calm professional look" },
+    { type: "li", text: "Use one accent colour only (emerald #10B981 is a safe default)" },
+    { type: "li", text: "Avoid decorative badges, floating stickers, and emoji rows in the hero" },
+    { type: "h", text: "4. Typography" },
+    { type: "p", text: "Choose one display or serif face for headlines and one clean sans for body and UI. Do not mix more than two font families." },
+    { type: "li", text: "H1: strong and short" },
+    { type: "li", text: "H2: section purpose in one line" },
+    { type: "li", text: "Body: 16 to 18px equivalent, comfortable line height" },
+    { type: "li", text: "Buttons: sentence case, not all caps" },
+    { type: "h", text: "5. Mobile checks before launch" },
+    { type: "check", text: "Headline does not wrap into three awkward lines" },
+    { type: "check", text: "Primary button is fully visible without zoom" },
+    { type: "check", text: "Tap targets are large enough for thumbs" },
+    { type: "check", text: "Images load quickly on mobile data" },
+    { type: "check", text: "Price and currency are clear if you sell" },
+    { type: "h", text: "6. Common mistakes" },
+    { type: "li", text: "Too many CTAs fighting for attention" },
+    { type: "li", text: "Weak brand presence on the first screen" },
+    { type: "li", text: "Long paragraphs instead of clear claims" },
+    { type: "li", text: "Stock photos with no product or place context" },
+    { type: "li", text: "Copy that sounds like a children's worksheet" },
+    { type: "p", text: "Keep the tone adult, calm, and commercial. Write like a professional studio, not like a classroom handout." },
   ],
 };
 
 const landingCopy = {
   title: "Creator Landing Kit  -  Copy templates",
-  kicker: "EBENEZER STORE  |  PDF TEMPLATES",
+  kicker: "EBENEZER STORE  |  COPY TEMPLATES",
   blocks: [
-    { type: "h", text: "Hero" },
-    { type: "p", text: "Headline: Get [result] without [pain]." },
+    { type: "p", text: "Replace the brackets with your offer. Keep sentences short. Prefer plain words over marketing fluff." },
+    { type: "h", text: "Hero formulas" },
+    { type: "p", text: "Headline A: Get [result] without [pain]." },
+    { type: "p", text: "Headline B: [Offer] for [audience] who want [result]." },
     { type: "p", text: "Subtext: We help [audience] achieve [result] through [method]." },
-    { type: "p", text: "Primary button: Book a free call. Secondary: See work." },
+    { type: "p", text: "Primary button: Book a free call / Get instant access / Start free." },
+    { type: "h", text: "Problem section" },
+    { type: "p", text: "Open with the buyer's current frustration. Example: You already know what to sell. The hard part is turning visitors into enquiries without sounding pushy." },
+    { type: "li", text: "Name the pain in the buyer's words" },
+    { type: "li", text: "Show the cost of waiting (lost leads, slow sales, weak brand)" },
+    { type: "li", text: "End with a bridge sentence into your solution" },
+    { type: "h", text: "Solution section" },
+    { type: "p", text: "Explain your method in three steps. Example: 1) Clarify the offer. 2) Build a clean page. 3) Add one clear next step." },
     { type: "h", text: "Pricing block" },
     { type: "li", text: "Plan name" },
     { type: "li", text: "Best for" },
     { type: "li", text: "Includes (3 to 5 lines)" },
-    { type: "li", text: "Price in USD" },
+    { type: "li", text: "Price and currency" },
     { type: "li", text: "Button label" },
-    { type: "h", text: "Testimonial" },
-    { type: "p", text: "\"[Quote in one or two sentences.]\"" },
+    { type: "h", text: "Testimonial format" },
+    { type: "p", text: "\"[One or two sentences about the result.]\"" },
     { type: "p", text: "- Name, Role / City" },
     { type: "h", text: "FAQ starters" },
-    { type: "li", text: "How long does it take?" },
+    { type: "li", text: "How long does delivery take?" },
     { type: "li", text: "Can I use this for client work?" },
-    { type: "li", text: "What do I get after I buy?" },
+    { type: "li", text: "What do I receive after purchase?" },
+    { type: "li", text: "Do you offer refunds?" },
+    { type: "li", text: "Is support included?" },
+    { type: "h", text: "Tone checklist" },
+    { type: "check", text: "No slang that weakens trust" },
+    { type: "check", text: "No fake urgency" },
+    { type: "check", text: "No childish wording" },
+    { type: "check", text: "Claims match what the product actually delivers" },
   ],
 };
 
 const landingMobile = {
   title: "Creator Landing Kit  -  Mobile checklist",
-  kicker: "EBENEZER STORE  |  PDF CHECKLIST",
+  kicker: "EBENEZER STORE  |  LAUNCH CHECKLIST",
   blocks: [
-    { type: "p", text: "Check every box on a real phone before you launch." },
-    { type: "check", text: "Headline fits in about 2 lines" },
+    { type: "p", text: "Test on a real phone before you publish. Tick every item." },
+    { type: "h", text: "Visual and layout" },
+    { type: "check", text: "Headline fits in about two lines" },
+    { type: "check", text: "Brand mark and name are clear" },
     { type: "check", text: "Main button is visible without zoom" },
-    { type: "check", text: "Form has 5 fields or fewer" },
-    { type: "check", text: "Phone and WhatsApp links are easy to tap" },
-    { type: "check", text: "Images are compressed and load fast" },
-    { type: "check", text: "No overlapping text on small screens" },
-    { type: "check", text: "Footer links are readable" },
-    { type: "check", text: "Price and currency (USD) are clear" },
+    { type: "check", text: "No overlapping text or cut-off edges" },
+    { type: "check", text: "Images are compressed and still sharp" },
+    { type: "h", text: "Forms and contact" },
+    { type: "check", text: "Form has five fields or fewer" },
+    { type: "check", text: "Phone and WhatsApp links open correctly" },
+    { type: "check", text: "Email links work on mobile" },
+    { type: "h", text: "Trust and conversion" },
+    { type: "check", text: "Price and currency are easy to read" },
+    { type: "check", text: "Footer contact details are complete" },
+    { type: "check", text: "Privacy / terms links are present if you collect data" },
+    { type: "check", text: "One primary CTA remains dominant on every section" },
   ],
 };
 
@@ -494,72 +551,117 @@ const playbookChecklist = {
 
 const brandGuide = {
   title: "Brand Kit Essentials  -  Brand guide",
-  kicker: "EBENEZER STORE  |  PDF GUIDE",
+  kicker: "EBENEZER STORE  |  BRAND GUIDE",
   blocks: [
-    { type: "h", text: "Starter palette (edit to your brand)" },
+    { type: "p", text: "A brand kit is a control system. Use it so every page, post, and PDF looks like the same business." },
+    { type: "h", text: "1. Starter palette (edit to your brand)" },
     { type: "li", text: "Ink / text: #111111" },
     { type: "li", text: "Paper / background: #F7F5F2" },
     { type: "li", text: "Accent: #10B981" },
-    { type: "li", text: "Muted: #6B7280" },
-    { type: "li", text: "Line: #E5E7EB" },
-    { type: "p", text: "Rule: one accent only. Do not add a new bright color on every post." },
-    { type: "h", text: "Type" },
-    { type: "p", text: "Headlines: one distinctive serif or strong display face. Body: one clean sans. H1 large, H2 medium, body 16-18px." },
-    { type: "h", text: "Logo rules" },
-    { type: "li", text: "Clear space around the mark = height of the mark" },
-    { type: "li", text: "Dark logo on light background, light logo on photos" },
-    { type: "li", text: "Do not stretch, rotate, or add drop shadows" },
-    { type: "li", text: "One primary lockup for the website header" },
+    { type: "li", text: "Muted text: #6B7280" },
+    { type: "li", text: "Line / border: #E5E7EB" },
+    { type: "p", text: "Rule: one accent only. Do not invent a new bright colour for every post." },
+    { type: "h", text: "2. Typography" },
+    { type: "p", text: "Pick one distinctive headline font and one clean body font. Keep sizes consistent across the website, social posts, and PDFs." },
+    { type: "li", text: "H1: large, short, high contrast" },
+    { type: "li", text: "H2: medium, purpose-led" },
+    { type: "li", text: "Body: readable at phone size" },
+    { type: "li", text: "UI labels: same family as body, slightly smaller" },
+    { type: "h", text: "3. Logo rules" },
+    { type: "li", text: "Clear space around the mark equals the height of the mark" },
+    { type: "li", text: "Dark logo on light backgrounds; light logo on photos" },
+    { type: "li", text: "Do not stretch, rotate, outline, or add drop shadows" },
+    { type: "li", text: "Use one primary lockup in the website header" },
+    { type: "h", text: "4. Voice" },
+    { type: "li", text: "Calm, direct, and adult" },
+    { type: "li", text: "Prefer short sentences" },
+    { type: "li", text: "Avoid slang and childish phrasing" },
+    { type: "li", text: "Promise only what you can deliver" },
+    { type: "h", text: "5. Consistency checklist" },
+    { type: "check", text: "Same logo file everywhere" },
+    { type: "check", text: "Same one or two fonts" },
+    { type: "check", text: "Same accent colour" },
+    { type: "check", text: "About / bio text matches the website tone" },
   ],
 };
 
 const brandSocial = {
   title: "Brand Kit Essentials  -  Social templates",
-  kicker: "EBENEZER STORE  |  PDF TEMPLATES",
+  kicker: "EBENEZER STORE  |  SOCIAL TEMPLATES",
   blocks: [
+    { type: "p", text: "Reuse layouts. Do not redesign every day. Consistency builds recognition faster than novelty." },
     { type: "h", text: "Post framework" },
-    { type: "li", text: "Hook line (problem or result)" },
+    { type: "li", text: "Hook line - problem or result" },
     { type: "li", text: "One tip, story, or offer" },
-    { type: "li", text: "Soft call to action (message / link / call)" },
-    { type: "p", text: "Visual: full-bleed photo or clean type on brand background." },
-    { type: "h", text: "Consistency checklist" },
-    { type: "check", text: "Same logo file everywhere" },
-    { type: "check", text: "Same 1-2 fonts" },
-    { type: "check", text: "Same accent color" },
-    { type: "check", text: "Bio / about text matches your tone" },
-    { type: "check", text: "Reuse templates instead of redesigning daily" },
+    { type: "li", text: "Soft call to action - message, call, or visit link" },
+    { type: "h", text: "Four reusable layouts" },
+    { type: "li", text: "Full-bleed photo with short headline" },
+    { type: "li", text: "Clean type on brand background" },
+    { type: "li", text: "Before / after or tip list" },
+    { type: "li", text: "Offer card with one price and one button text" },
+    { type: "h", text: "Weekly rhythm" },
+    { type: "li", text: "Day 1: tip" },
+    { type: "li", text: "Day 2: proof / review" },
+    { type: "li", text: "Day 3: offer" },
+    { type: "li", text: "Day 4: behind the work" },
+    { type: "li", text: "Day 5: FAQ or myth" },
+    { type: "h", text: "Publish checklist" },
+    { type: "check", text: "Logo placement is consistent" },
+    { type: "check", text: "Accent colour matches brand guide" },
+    { type: "check", text: "Caption tone matches website voice" },
+    { type: "check", text: "Contact path is obvious" },
   ],
 };
 
 const freeForm = {
   title: "Free Enquiry Form Kit  -  Printable form",
-  kicker: "EBENEZER STORE  |  FREE PDF",
+  kicker: "EBENEZER STORE  |  FREE TEMPLATE",
   blocks: [
-    { type: "p", text: "Print this form or copy it into Word / Google Docs. Use it for any small business enquiry." },
+    { type: "p", text: "Print this form or copy it into Word / Google Docs. Use it for any small-business enquiry desk." },
+    { type: "h", text: "Client details" },
     { type: "field", text: "Date" },
-    { type: "field", text: "Name" },
+    { type: "field", text: "Full name" },
+    { type: "field", text: "Business / organisation" },
     { type: "field", text: "Phone / WhatsApp" },
     { type: "field", text: "Email" },
+    { type: "field", text: "City / location" },
+    { type: "h", text: "Requirement" },
     { type: "field", text: "What do you need?" },
     { type: "field", text: "" },
-    { type: "field", text: "Preferred budget / timeline" },
+    { type: "field", text: "" },
+    { type: "field", text: "Preferred budget range" },
+    { type: "field", text: "Preferred timeline" },
+    { type: "field", text: "How did you find us?" },
+    { type: "h", text: "Internal follow-up" },
+    { type: "field", text: "Assigned staff" },
     { type: "field", text: "Follow-up date" },
+    { type: "field", text: "Next action" },
     { type: "field", text: "Staff notes" },
+    { type: "p", text: "Keep the form short in digital tools. Collect only what you need to reply with a clear quote." },
   ],
 };
 
 const freeFields = {
   title: "Free Enquiry Form Kit  -  Digital fields",
-  kicker: "EBENEZER STORE  |  FREE PDF",
+  kicker: "EBENEZER STORE  |  FREE TEMPLATE",
   blocks: [
-    { type: "p", text: "Copy these fields into Google Forms, Typeform, or your website form." },
+    { type: "p", text: "Copy these fields into Google Forms, Typeform, or your website form builder." },
+    { type: "h", text: "Recommended fields" },
     { type: "li", text: "Full name (required)" },
     { type: "li", text: "Phone / WhatsApp (required)" },
     { type: "li", text: "Email (optional)" },
     { type: "li", text: "Requirement (long text)" },
     { type: "li", text: "Preferred date / deadline" },
+    { type: "li", text: "Budget range (optional dropdown)" },
     { type: "li", text: "How did you find us?" },
-    { type: "p", text: "Keep the form short. Long forms lose people." },
+    { type: "h", text: "WhatsApp enquiry script" },
+    { type: "p", text: "Hello [Name], thanks for your enquiry about [service]. To prepare a clear quote, please share: 1) what you need, 2) preferred timeline, 3) any budget range. I will reply within one business day." },
+    { type: "h", text: "Follow-up process" },
+    { type: "li", text: "Same day: confirm you received the enquiry" },
+    { type: "li", text: "Within 24 hours: send a clear quote or clarifying questions" },
+    { type: "li", text: "Day 3: polite follow-up if no reply" },
+    { type: "li", text: "Day 7: final check-in, then close the loop politely" },
+    { type: "p", text: "Long forms lose people. Short forms and fast replies win trust." },
   ],
 };
 
