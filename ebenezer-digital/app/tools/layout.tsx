@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { EcosystemNav } from "@/components/EcosystemNav";
 
 export const metadata: Metadata = {
   title: {
@@ -22,5 +23,10 @@ export const metadata: Metadata = {
 };
 
 export default function ToolsLayout({ children }: { children: ReactNode }) {
-  return children;
+  return (
+    <>
+      <EcosystemNav variant="light" active="tools" />
+      {children}
+    </>
+  );
 }

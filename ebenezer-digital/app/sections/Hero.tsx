@@ -133,6 +133,9 @@ export default function Hero() {
           <MagneticLink href="/contact" className="studio-btn" cursor="START">
             Start a project →
           </MagneticLink>
+          <Link href="/discover" className="studio-btn studio-btn-ghost" data-cursor="FIND">
+            What are you looking for?
+          </Link>
           <Link href="/work" className="studio-btn studio-btn-ghost" data-cursor="VIEW">
             Explore our work
           </Link>

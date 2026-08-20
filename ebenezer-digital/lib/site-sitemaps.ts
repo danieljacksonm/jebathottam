@@ -55,6 +55,7 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/stats",
     "/trust",
     "/ai",
+    "/discover",
   ];
   return routes.map((route) =>
     page(

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { EbenDock } from "@/components/EbenDock";
+import { EcosystemNav } from "@/components/EcosystemNav";
 import { pageMetadata } from "@/lib/site-url";
 
 const base = pageMetadata({
@@ -31,6 +32,7 @@ export const metadata: Metadata = {
 export default function BlogLayout({ children }: { children: ReactNode }) {
   return (
     <>
+      <EcosystemNav variant="light" active="info" />
       {children}
       <EbenDock />
     </>

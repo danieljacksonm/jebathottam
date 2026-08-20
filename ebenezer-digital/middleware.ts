@@ -65,7 +65,8 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     rest.startsWith("/ai") ||
     rest.startsWith("/news") ||
     rest.startsWith("/tools") ||
-    rest.startsWith("/catalog");
+    rest.startsWith("/catalog") ||
+    rest.startsWith("/discover");
 
   if (!allowed) return null;
 
@@ -186,6 +187,7 @@ export const config = {
     "/tools/:path*",
     "/catalog",
     "/catalog/:path*",
+    "/discover",
     "/:locale",
     "/:locale/:path*",
   ],

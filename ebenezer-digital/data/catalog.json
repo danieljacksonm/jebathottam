@@ -1,0 +1,708 @@
+{
+  "products": [
+    {
+      "id": "lp-aspire5-ryzen5",
+      "slug": "acer-aspire-5-ryzen-5-16gb",
+      "name": "Acer Aspire 5 (Ryzen 5, 16GB)",
+      "brand": "Acer",
+      "model": "A515-57",
+      "categoryId": "laptops",
+      "shortDescription": "Balanced everyday laptop for coding and light creative work under ₹60,000.",
+      "description": "A practical 15.6\" Windows laptop aimed at students and freelancers. Strong enough for web development, Office, and light Photoshop. Not a high-refresh gaming machine.",
+      "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "cpu": "AMD Ryzen 5 7530U",
+        "cpu_score": 72,
+        "gpu": "Radeon Graphics (integrated)",
+        "gpu_score": 28,
+        "ram_gb": 16,
+        "storage_gb": 512,
+        "storage_type": "NVMe SSD",
+        "display_inches": 15.6,
+        "display_res": "1920×1080",
+        "refresh_hz": 60,
+        "battery_wh": 50,
+        "weight_kg": 1.8,
+        "os": "Windows 11",
+        "warranty_years": 1
+      },
+      "pros": [
+        "16GB RAM for multitasking",
+        "Decent CPU for coding",
+        "512GB SSD",
+        "Good value under ₹60k"
+      ],
+      "cons": [
+        "Integrated graphics only",
+        "Average display",
+        "Plastic build"
+      ],
+      "bestFor": [
+        "Web development",
+        "College work",
+        "Office + browsing"
+      ],
+      "notIdealFor": [
+        "AAA gaming",
+        "Heavy video editing",
+        "Color-critical design"
+      ],
+      "rating": 4.2,
+      "reviewCount": 1280,
+      "status": "active",
+      "seoTitle": "Acer Aspire 5 Ryzen 5 16GB — Specs, Price Comparison",
+      "seoDescription": "Compare prices and specs for Acer Aspire 5 with 16GB RAM. Best for coding and study under ₹60,000.",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "lp-ideapad-slim3",
+      "slug": "lenovo-ideapad-slim-3-i5-16gb",
+      "name": "Lenovo IdeaPad Slim 3 (Core i5, 16GB)",
+      "brand": "Lenovo",
+      "model": "Slim 3 15IRH8",
+      "categoryId": "laptops",
+      "shortDescription": "Slim Intel i5 laptop with 16GB RAM — solid for coding and Photoshop.",
+      "description": "A thin-and-light style IdeaPad with Intel Core i5 and 16GB RAM. Better portability than bulkier Aspire-class machines. Integrated Iris Xe helps light creative work.",
+      "image": "https://images.unsplash.com/photo-1525547719571-a2d4ac882e75?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "cpu": "Intel Core i5-13420H",
+        "cpu_score": 78,
+        "gpu": "Intel Iris Xe",
+        "gpu_score": 35,
+        "ram_gb": 16,
+        "storage_gb": 512,
+        "storage_type": "NVMe SSD",
+        "display_inches": 15.6,
+        "display_res": "1920×1080",
+        "refresh_hz": 60,
+        "battery_wh": 47,
+        "weight_kg": 1.62,
+        "os": "Windows 11",
+        "warranty_years": 1
+      },
+      "pros": [
+        "Stronger CPU for multitasking",
+        "Lighter chassis",
+        "Iris Xe for light Photoshop",
+        "Trusted brand support"
+      ],
+      "cons": [
+        "Still not for serious gaming",
+        "Screen is ordinary",
+        "RAM may be soldered on some configs"
+      ],
+      "bestFor": [
+        "Programming",
+        "Photoshop (light)",
+        "Students"
+      ],
+      "notIdealFor": [
+        "Gaming laptops seekers",
+        "4K video editors"
+      ],
+      "rating": 4.3,
+      "reviewCount": 940,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "lp-loq-4050",
+      "slug": "lenovo-loq-15-rtx-4050",
+      "name": "Lenovo LOQ 15 (RTX 4050)",
+      "brand": "Lenovo",
+      "model": "LOQ 15IRX9",
+      "categoryId": "laptops",
+      "shortDescription": "Gaming + creator laptop with RTX 4050 — better when budget stretches near ₹80–90k.",
+      "description": "Entry gaming notebook with discrete RTX 4050. Suitable when you need occasional gaming plus coding. Heavier and louder than office laptops; battery is weaker.",
+      "image": "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "cpu": "Intel Core i5-13450HX",
+        "cpu_score": 84,
+        "gpu": "NVIDIA GeForce RTX 4050 6GB",
+        "gpu_score": 72,
+        "ram_gb": 16,
+        "storage_gb": 512,
+        "storage_type": "NVMe SSD",
+        "display_inches": 15.6,
+        "display_res": "1920×1080",
+        "refresh_hz": 144,
+        "battery_wh": 60,
+        "weight_kg": 2.4,
+        "os": "Windows 11",
+        "warranty_years": 1
+      },
+      "pros": [
+        "Real discrete GPU",
+        "144Hz display",
+        "Good for coding + casual gaming",
+        "Upgradeable RAM/SSD on many units"
+      ],
+      "cons": [
+        "Heavier",
+        "Shorter battery life",
+        "Fans can be loud",
+        "Price higher than office laptops"
+      ],
+      "bestFor": [
+        "Coding + occasional gaming",
+        "Light 3D",
+        "Students who game"
+      ],
+      "notIdealFor": [
+        "Ultra-portable travel",
+        "All-day battery users"
+      ],
+      "rating": 4.4,
+      "reviewCount": 2100,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "lp-victus-3050",
+      "slug": "hp-victus-15-rtx-3050",
+      "name": "HP Victus 15 (RTX 3050)",
+      "brand": "HP",
+      "model": "15-fa1351TX",
+      "categoryId": "laptops",
+      "shortDescription": "Budget gaming laptop — useful when you need a GPU but stay closer to ₹65–75k.",
+      "description": "Victus brings an RTX 3050 into a more reachable price band. Fine for esports and older titles; not as strong as 4050 class for modern AAA or GPU-heavy creative apps.",
+      "image": "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "cpu": "Intel Core i5-12500H",
+        "cpu_score": 76,
+        "gpu": "NVIDIA GeForce RTX 3050 4GB",
+        "gpu_score": 55,
+        "ram_gb": 16,
+        "storage_gb": 512,
+        "storage_type": "NVMe SSD",
+        "display_inches": 15.6,
+        "display_res": "1920×1080",
+        "refresh_hz": 144,
+        "battery_wh": 70,
+        "weight_kg": 2.29,
+        "os": "Windows 11",
+        "warranty_years": 1
+      },
+      "pros": [
+        "Discrete GPU at lower price",
+        "144Hz panel",
+        "16GB RAM",
+        "Known service network"
+      ],
+      "cons": [
+        "Older GPU generation",
+        "Build is average",
+        "Thermals under load"
+      ],
+      "bestFor": [
+        "Budget gaming",
+        "Coding + light games"
+      ],
+      "notIdealFor": [
+        "Ray-traced AAA gaming",
+        "Thin-and-light preference"
+      ],
+      "rating": 4.1,
+      "reviewCount": 3200,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "lp-macbook-air-m2",
+      "slug": "apple-macbook-air-m2-8gb",
+      "name": "Apple MacBook Air M2 (8GB)",
+      "brand": "Apple",
+      "model": "MacBook Air 13 M2",
+      "categoryId": "laptops",
+      "shortDescription": "Premium ultralight — excellent battery and build; 8GB base is tight for heavy multitasking.",
+      "description": "MacBook Air M2 is excellent for writing, coding (web), and media consumption. The 8GB base config can struggle with many Chrome tabs + Docker + design tools at once. Consider 16GB if budget allows.",
+      "image": "https://images.unsplash.com/photo-1525547719571-a2d4ac882e75?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "cpu": "Apple M2",
+        "cpu_score": 88,
+        "gpu": "Apple M2 8-core GPU",
+        "gpu_score": 48,
+        "ram_gb": 8,
+        "storage_gb": 256,
+        "storage_type": "SSD",
+        "display_inches": 13.6,
+        "display_res": "2560×1664",
+        "refresh_hz": 60,
+        "battery_wh": 52.6,
+        "weight_kg": 1.24,
+        "os": "macOS",
+        "warranty_years": 1
+      },
+      "pros": [
+        "Excellent battery",
+        "Brilliant display",
+        "Silent and cool",
+        "Premium build"
+      ],
+      "cons": [
+        "8GB RAM limits heavy multitasking",
+        "256GB storage fills fast",
+        "Higher price",
+        "Not for Windows-only software"
+      ],
+      "bestFor": [
+        "Writing",
+        "Web development (lightweight stacks)",
+        "Travel"
+      ],
+      "notIdealFor": [
+        "Windows-only workflows",
+        "Heavy gaming",
+        "Large local media libraries"
+      ],
+      "rating": 4.7,
+      "reviewCount": 8900,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "ssd-wd-sn770-1tb",
+      "slug": "wd-black-sn770-1tb",
+      "name": "WD Black SN770 1TB NVMe",
+      "brand": "WD",
+      "model": "SN770 1TB",
+      "categoryId": "ssd",
+      "shortDescription": "Fast PCIe Gen4 NVMe SSD — strong upgrade for gaming PCs and laptops with M.2 slots.",
+      "description": "Dramless Gen4 drive popular for capacity upgrades. Check laptop M.2 length and heatsink clearance before buying.",
+      "image": "https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "capacity_gb": 1000,
+        "interface": "NVMe PCIe Gen4",
+        "form_factor": "M.2 2280",
+        "read_mbps": 5150,
+        "write_mbps": 4900,
+        "warranty_years": 5,
+        "storage_score": 82
+      },
+      "pros": [
+        "1TB capacity",
+        "Fast Gen4 speeds",
+        "Good price/performance",
+        "5-year warranty"
+      ],
+      "cons": [
+        "Dramless design",
+        "Needs Gen4 slot for full speed"
+      ],
+      "bestFor": [
+        "Gaming PC upgrades",
+        "Laptop storage upgrades"
+      ],
+      "notIdealFor": [
+        "SATA-only laptops",
+        "Enterprise write-heavy servers"
+      ],
+      "rating": 4.6,
+      "reviewCount": 4500,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "ram-corsair-32-ddr4",
+      "slug": "corsair-vengeance-32gb-ddr4-3200",
+      "name": "Corsair Vengeance 32GB (2×16) DDR4-3200",
+      "brand": "Corsair",
+      "model": "CMK32GX4M2E3200C16",
+      "categoryId": "ram",
+      "shortDescription": "Desktop DDR4 kit for multitasking, video editing, and gaming PCs.",
+      "description": "Common desktop upgrade kit. Confirm motherboard DDR generation (DDR4 vs DDR5) before purchase.",
+      "image": "https://images.unsplash.com/photo-1562976540-1502c5aa7c8d?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "capacity_gb": 32,
+        "ddr_gen": "DDR4",
+        "speed_mt": 3200,
+        "form_factor": "DIMM",
+        "kit": "2x16GB",
+        "ecc": false,
+        "ram_score": 80
+      },
+      "pros": [
+        "32GB for heavy multitasking",
+        "Widely compatible DDR4",
+        "Trusted brand"
+      ],
+      "cons": [
+        "Not for DDR5 boards",
+        "Not SODIMM for most laptops"
+      ],
+      "bestFor": [
+        "Desktop upgrades",
+        "Editing PCs"
+      ],
+      "notIdealFor": [
+        "Laptop SODIMM needs",
+        "DDR5 platforms"
+      ],
+      "rating": 4.7,
+      "reviewCount": 6100,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "mon-lg-27ul650",
+      "slug": "lg-27-4k-ips-monitor",
+      "name": "LG 27\" 4K IPS Monitor",
+      "brand": "LG",
+      "model": "27UL650-W",
+      "categoryId": "monitors",
+      "shortDescription": "4K IPS monitor for coding real-estate and photo work.",
+      "description": "Sharp 4K panel useful for programming (more windows) and photo editing. Verify stand height and ports for your desk setup.",
+      "image": "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "size_inches": 27,
+        "resolution": "3840×2160",
+        "panel": "IPS",
+        "refresh_hz": 60,
+        "ports": "HDMI, DisplayPort, USB-C",
+        "display_score": 85,
+        "warranty_years": 3
+      },
+      "pros": [
+        "4K clarity",
+        "IPS colors",
+        "Good for coding + photos"
+      ],
+      "cons": [
+        "60Hz only",
+        "Needs strong GPU for 4K gaming"
+      ],
+      "bestFor": [
+        "Programming",
+        "Photo editing",
+        "Office productivity"
+      ],
+      "notIdealFor": [
+        "Competitive esports (high Hz)"
+      ],
+      "rating": 4.5,
+      "reviewCount": 1800,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "gpu-rtx4060",
+      "slug": "nvidia-rtx-4060-8gb",
+      "name": "NVIDIA GeForce RTX 4060 8GB",
+      "brand": "NVIDIA",
+      "model": "RTX 4060",
+      "categoryId": "gpu",
+      "shortDescription": "Efficient 1080p/1440p gaming GPU for mid-range desktops.",
+      "description": "Popular mid-range card. Partner board prices vary — compare offers carefully and check PSU connectors.",
+      "image": "https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=1200&q=80",
+      "specs": {
+        "vram_gb": 8,
+        "gpu_arch": "Ada Lovelace",
+        "gpu_score": 74,
+        "power_w": 115,
+        "ports": "HDMI, DisplayPort",
+        "warranty_years": 3
+      },
+      "pros": [
+        "Efficient power use",
+        "DLSS 3",
+        "Good 1080p/1440p gaming"
+      ],
+      "cons": [
+        "8GB VRAM can limit some titles",
+        "Partner card prices vary a lot"
+      ],
+      "bestFor": [
+        "1080p/1440p gaming PCs",
+        "Light creative acceleration"
+      ],
+      "notIdealFor": [
+        "4K ultra gaming on a budget"
+      ],
+      "rating": 4.4,
+      "reviewCount": 5200,
+      "status": "active",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    }
+  ],
+  "offers": [
+    {
+      "id": "off-aspire-amz",
+      "productId": "lp-aspire5-ryzen5",
+      "merchantId": "amazon-in",
+      "price": 54990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=Acer+Aspire+5+Ryzen+5+16GB",
+      "shippingNote": "Prime shipping where available",
+      "warranty": "1 year manufacturer",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-aspire-fk",
+      "productId": "lp-aspire5-ryzen5",
+      "merchantId": "flipkart",
+      "price": 55990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.flipkart.com/search?q=acer%20aspire%205%20ryzen%205",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-ideapad-amz",
+      "productId": "lp-ideapad-slim3",
+      "merchantId": "amazon-in",
+      "price": 58990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=Lenovo+IdeaPad+Slim+3+i5+16GB",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-ideapad-fk",
+      "productId": "lp-ideapad-slim3",
+      "merchantId": "flipkart",
+      "price": 57990,
+      "currency": "INR",
+      "availability": "limited",
+      "url": "https://www.flipkart.com/search?q=ideapad%20slim%203%20i5%2016gb",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-loq-amz",
+      "productId": "lp-loq-4050",
+      "merchantId": "amazon-in",
+      "price": 84990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=Lenovo+LOQ+RTX+4050",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-victus-amz",
+      "productId": "lp-victus-3050",
+      "merchantId": "amazon-in",
+      "price": 69990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=HP+Victus+15+RTX+3050",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-victus-fk",
+      "productId": "lp-victus-3050",
+      "merchantId": "flipkart",
+      "price": 68490,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.flipkart.com/search?q=hp%20victus%2015%20rtx%203050",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-mba-amz",
+      "productId": "lp-macbook-air-m2",
+      "merchantId": "amazon-in",
+      "price": 84990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=MacBook+Air+M2+8GB",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-ssd-amz",
+      "productId": "ssd-wd-sn770-1tb",
+      "merchantId": "amazon-in",
+      "price": 6499,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=WD+Black+SN770+1TB",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-ssd-md",
+      "productId": "ssd-wd-sn770-1tb",
+      "merchantId": "mdcomputers",
+      "price": 6299,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://mdcomputers.in/",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "low"
+    },
+    {
+      "id": "off-ram-amz",
+      "productId": "ram-corsair-32-ddr4",
+      "merchantId": "amazon-in",
+      "price": 7499,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=Corsair+Vengeance+32GB+DDR4+3200",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-mon-amz",
+      "productId": "mon-lg-27ul650",
+      "merchantId": "amazon-in",
+      "price": 28990,
+      "currency": "INR",
+      "availability": "unknown",
+      "url": "https://www.amazon.in/s?k=LG+27+4K+IPS+monitor",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "low"
+    },
+    {
+      "id": "off-gpu-amz",
+      "productId": "gpu-rtx4060",
+      "merchantId": "amazon-in",
+      "price": 29990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://www.amazon.in/s?k=RTX+4060+8GB",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    },
+    {
+      "id": "off-gpu-md",
+      "productId": "gpu-rtx4060",
+      "merchantId": "mdcomputers",
+      "price": 28990,
+      "currency": "INR",
+      "availability": "in_stock",
+      "url": "https://mdcomputers.in/",
+      "lastCheckedAt": "2026-08-18T10:00:00.000Z",
+      "source": "manual",
+      "confidence": "medium"
+    }
+  ],
+  "merchants": [
+    {
+      "id": "amazon-in",
+      "name": "Amazon.in",
+      "website": "https://www.amazon.in",
+      "country": "IN",
+      "currency": "INR",
+      "affiliateNetwork": "amazon_associates",
+      "status": "active"
+    },
+    {
+      "id": "flipkart",
+      "name": "Flipkart",
+      "website": "https://www.flipkart.com",
+      "country": "IN",
+      "currency": "INR",
+      "affiliateNetwork": "flipkart_affiliate",
+      "status": "active"
+    },
+    {
+      "id": "mdcomputers",
+      "name": "MD Computers",
+      "website": "https://mdcomputers.in",
+      "country": "IN",
+      "currency": "INR",
+      "status": "active"
+    }
+  ],
+  "variants": [
+    {
+      "id": "lp-aspire5-ryzen5-var-default",
+      "productId": "lp-aspire5-ryzen5",
+      "name": "16GB / 512GB",
+      "specs": {
+        "ram_gb": 16,
+        "storage_gb": 512
+      }
+    },
+    {
+      "id": "lp-macbook-air-m2-var-8-256",
+      "productId": "lp-macbook-air-m2",
+      "name": "8GB / 256GB",
+      "specs": {
+        "ram_gb": 8,
+        "storage_gb": 256
+      }
+    }
+  ],
+  "guides": [
+    {
+      "id": "guide-laptop-50k",
+      "slug": "best-laptop-under-50000",
+      "title": "Best laptop under ₹50,000",
+      "excerpt": "What matters for study and light work when your budget is tight.",
+      "content": "## Who this guide is for\nStudents and first-time buyers who need a reliable Windows laptop under ₹50,000.\n\n## What to prioritise\n1. **RAM** — prefer 16GB if possible; 8GB fills up fast with Chrome.\n2. **SSD** — 512GB NVMe is ideal; avoid HDD-only machines.\n3. **CPU** — modern Ryzen 5 or Intel i5 generation matters more than brand stickers.\n4. **Display** — Full HD IPS is enough; ignore 4K at this price.\n5. **Battery** — check Wh rating and real reviews; gaming shells drain faster.\n\n## What to skip\n- Dedicated GPUs that force heat and noise into a thin budget chassis\n- Fake “gaming” labels without RTX-class cards\n- Inflated “compare at” prices\n\n## How Ebenezer ranks\nWe score CPU, RAM, storage, price fit, and ratings from structured catalog data — not invented claims.\n\n## Next step\nUse [Find My Product](/catalog/recommend?q=laptop%20under%2050000%20for%20students) with your exact use case.",
+      "categoryId": "laptops",
+      "relatedProductIds": [
+        "lp-aspire5-ryzen5",
+        "lp-ideapad-slim3"
+      ],
+      "seoTitle": "Best Laptop under ₹50,000 — Buying Guide",
+      "seoDescription": "Practical guide to choosing a laptop under ₹50,000 for study and everyday work.",
+      "status": "published",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "guide-ssd-gaming",
+      "slug": "best-ssd-for-gaming",
+      "title": "Best SSD for gaming",
+      "excerpt": "NVMe vs SATA, Gen3 vs Gen4, and how much capacity you actually need.",
+      "content": "## Quick answer\nFor most gaming PCs in India, a **1TB PCIe Gen4 NVMe** (M.2 2280) is the sweet spot.\n\n## Checklist\n- Confirm your motherboard has an M.2 slot\n- Gen4 needs a Gen4-capable slot for full speed\n- 1TB leaves room for Windows + several large games\n- Prefer drives with clear warranty (3–5 years)\n\n## Avoid\n- Buying SATA SSDs for a free M.2 Gen4 slot\n- Extremely cheap no-name drives with no warranty data\n\nOpen the [SSD category](/catalog/ssd) and compare offers before you buy.",
+      "categoryId": "ssd",
+      "relatedProductIds": [
+        "ssd-wd-sn770-1tb"
+      ],
+      "status": "published",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    },
+    {
+      "id": "guide-ram-laptop",
+      "slug": "best-ram-for-laptops",
+      "title": "Best RAM for laptops",
+      "excerpt": "DDR4 vs DDR5, SODIMM, and how much RAM coding and Photoshop need.",
+      "content": "## How much RAM?\n- **8GB** — basic browsing (tight)\n- **16GB** — coding, Office, light Photoshop\n- **32GB** — heavy multitasking, VMs, serious creative work\n\n## Critical\nLaptop RAM is usually **SODIMM**. Desktop DIMM will not fit.\nMatch **DDR4 vs DDR5** to your motherboard/laptop generation.\n\nIf RAM is soldered, upgrade may be impossible — check the product page specs.",
+      "categoryId": "ram",
+      "relatedProductIds": [
+        "ram-corsair-32-ddr4"
+      ],
+      "status": "published",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "cmp-aspire-ideapad",
+      "slug": "aspire-5-vs-ideapad-slim-3",
+      "title": "Acer Aspire 5 vs Lenovo IdeaPad Slim 3",
+      "productIds": [
+        "lp-aspire5-ryzen5",
+        "lp-ideapad-slim3"
+      ],
+      "recommendedProductId": "lp-ideapad-slim3",
+      "editorialNote": "For coding + light Photoshop under ₹60k, IdeaPad Slim 3 usually edges ahead on CPU and portability. Aspire 5 remains strong value if price is lower.",
+      "status": "published",
+      "updatedAt": "2026-08-18T10:00:00.000Z"
+    }
+  ],
+  "events": [],
+  "updatedAt": "2026-08-20T08:47:59.461Z"
+}

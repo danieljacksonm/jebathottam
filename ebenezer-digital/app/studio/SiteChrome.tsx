@@ -5,8 +5,9 @@ import Header from "../components/Header";
 import Footer from "../sections/Footer";
 import ScrollProgressBar from "../components/ScrollProgressBar";
 import { StudioCursor } from "./StudioCursor";
+import { EcosystemNav } from "@/components/EcosystemNav";
 
-const HIDDEN = ["/ai", "/blog", "/products", "/admin", "/saas"];
+const HIDDEN = ["/ai", "/blog", "/products", "/admin", "/saas", "/discover", "/catalog", "/tools"];
 
 export default function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/";
@@ -16,6 +17,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
 
   return (
     <div className="studio-root relative min-h-screen">
+      <EcosystemNav active="services" />
       <ScrollProgressBar />
       <Header />
       <StudioCursor />
