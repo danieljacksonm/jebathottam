@@ -18,6 +18,7 @@ import {
   productTypeLabel,
   productTypeShort,
 } from "../data";
+import { getRelatedProducts } from "../related";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { formatProductsForAi } from "@/lib/ai";
@@ -36,12 +37,8 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
   const [activeImage, setActiveImage] = useState(product.gallery[0] || product.image);
   const [imgBroken, setImgBroken] = useState(false);
   const [license, setLicense] = useState(product.license[0] || "Personal");
-  const related = STORE_PRODUCTS.filter(
-    (p) => p.status === "published" && p.id !== raw.id && p.category === raw.category
-  ).slice(0, 3);
-  const relatedFallback = related.length
-    ? related
-    : STORE_PRODUCTS.filter((p) => p.status === "published" && p.id !== raw.id).slice(0, 3);
+  const related = getRelatedProducts(raw, 4);
+  const relatedFallback = related;
 
   const isInternalApp = Boolean(product.isSoftware && product.externalUrl?.startsWith("/"));
   const buyHref = product.isSoftware && product.externalUrl
@@ -504,7 +501,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
       {/* ── Related products ────────────────────────── */}
       <section className="bg-[var(--s-surface)]">
         <div className="s-page py-12">
-          <h3 className="mb-8 text-xl font-bold text-[var(--s-ink)]">You may also like</h3>
+          <h3 className="mb-8 text-xl font-bold text-[var(--s-ink)]">You may also need</h3>
           <div className="grid gap-5 sm:grid-cols-3">
             {relatedFallback.map((p) => {
               const rp = localizeProduct(p, locale);

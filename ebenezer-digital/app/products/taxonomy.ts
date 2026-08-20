@@ -120,6 +120,49 @@ export const STORE_CATEGORY_PAGES: StoreCategoryPage[] = [
     seoTitle: "Travel Templates & Kits | Ebenezer Store",
   },
   {
+    slug: "restaurant",
+    name: "Restaurant & Cafe",
+    category: "Restaurant",
+    description: "Restaurant and cafe websites, QR menus, and food business tools.",
+    seoTitle: "Restaurant & Cafe Products | Ebenezer Store",
+  },
+  {
+    slug: "real-estate",
+    name: "Real Estate",
+    category: "Real Estate",
+    description: "Property and agent website templates you can edit and host.",
+    seoTitle: "Real Estate Templates | Ebenezer Store",
+  },
+  {
+    slug: "healthcare",
+    name: "Healthcare",
+    category: "Healthcare",
+    description: "Clinic and healthcare website templates with booking CTAs.",
+    seoTitle: "Healthcare Templates | Ebenezer Store",
+  },
+  {
+    slug: "education",
+    name: "Education",
+    category: "Education",
+    description: "Course and institute landing templates for coaches and schools.",
+    seoTitle: "Education Templates | Ebenezer Store",
+  },
+  {
+    slug: "ecommerce",
+    name: "Ecommerce",
+    category: "Ecommerce",
+    description: "Shop landing pages and ecommerce starters. Real files only when ready.",
+    seoTitle: "Ecommerce Products | Ebenezer Store",
+  },
+  {
+    slug: "productivity",
+    name: "Productivity",
+    category: "Productivity",
+    description: "Task trackers, expense tools, and productivity apps you can use in the browser.",
+    seoTitle: "Productivity Tools | Ebenezer Store",
+    types: ["digital_tool", "software"],
+  },
+  {
     slug: "creator",
     name: "Creator",
     category: "Creator",
@@ -163,6 +206,12 @@ export const LEGACY_CATEGORY_ALIASES: Record<string, string> = {
   Creator: "Creator",
   "Church & Ministry": "Church & Ministry",
   Travel: "Travel",
+  Restaurant: "Restaurant",
+  "Real Estate": "Real Estate",
+  Healthcare: "Healthcare",
+  Education: "Education",
+  Ecommerce: "Ecommerce",
+  Productivity: "Productivity",
   "Free Resources": "Free Resources",
 };
 
@@ -182,11 +231,15 @@ export function productMatchesCategoryPage(
     isBundle?: boolean;
     isFree?: boolean;
     isSoftware?: boolean;
+    tags?: string[];
+    slug?: string;
   },
   page: StoreCategoryPage
 ): boolean {
   const cat = normalizeCategory(product.category);
   const type = product.productType as StoreProductType | undefined;
+  const tags = (product.tags || []).map((t) => t.toLowerCase());
+  const hasTag = (...keys: string[]) => keys.some((k) => tags.some((t) => t.includes(k)));
 
   if (page.slug === "bundles") {
     return Boolean(product.isBundle) || type === "bundle" || cat === "Bundles";
@@ -209,9 +262,20 @@ export function productMatchesCategoryPage(
   if (page.slug === "canva-templates") return type === "canva_template";
   if (page.slug === "figma-ui-kits") return type === "figma_kit" || type === "ui_kit";
   if (page.slug === "business-tools") return cat === "Business";
-  if (page.slug === "church-templates") return cat === "Church & Ministry";
-  if (page.slug === "travel-templates") return cat === "Travel";
-  if (page.slug === "creator") return cat === "Creator";
+  if (page.slug === "church-templates") return cat === "Church & Ministry" || hasTag("church", "ministry");
+  if (page.slug === "travel-templates") return cat === "Travel" || hasTag("travel");
+  if (page.slug === "restaurant") {
+    return cat === "Restaurant" || hasTag("restaurant", "cafe", "menu") || product.slug === "qr-menu-generator";
+  }
+  if (page.slug === "real-estate") return cat === "Real Estate" || hasTag("real-estate", "property");
+  if (page.slug === "healthcare") return cat === "Healthcare" || hasTag("clinic", "healthcare", "dental");
+  if (page.slug === "education") return cat === "Education" || hasTag("education", "course", "school");
+  if (page.slug === "ecommerce") return cat === "Ecommerce" || hasTag("ecommerce", "shop");
+  if (page.slug === "productivity") {
+    return cat === "Productivity" || hasTag("productivity", "task", "expense");
+  }
+  if (page.slug === "creator") return cat === "Creator" || hasTag("creator", "portfolio", "youtube");
+  if (page.slug === "roadmap") return false;
   return cat === page.category;
 }
 

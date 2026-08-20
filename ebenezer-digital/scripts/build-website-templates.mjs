@@ -386,6 +386,160 @@ ${nav("ClearPath", [{ href: "index.html", label: "Home" }, { href: "services.htm
 ${foot("ClearPath Consulting")}</body></html>`,
 });
 
+function nichePack(name, brand, accent, pages) {
+  const css = `:root{--bg:#fafafa;--ink:#111;--muted:#666;--accent:${accent};--line:rgba(0,0,0,.1)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,sans-serif}
+a{color:inherit;text-decoration:none}.wrap{max-width:1000px;margin:0 auto;padding:0 1.25rem}
+.top{border-bottom:1px solid var(--line);background:#fff}.bar{display:flex;justify-content:space-between;align-items:center;height:64px}
+.brand{font-weight:700}.btn{display:inline-block;background:var(--accent);color:#fff;padding:.75rem 1.1rem;border-radius:8px;font-weight:600}
+.hero{padding:4rem 0}.hero h1{font-size:clamp(2rem,4.5vw,3.1rem);max-width:16ch;line-height:1.15}
+.hero p{color:var(--muted);max-width:36rem}.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin-top:1.5rem}
+.card{background:#fff;border:1px solid var(--line);padding:1rem;border-radius:12px}section{padding:2.5rem 0}
+.foot{border-top:1px solid var(--line);padding:2rem 0;color:var(--muted);font-size:.9rem}
+@media(max-width:700px){nav{display:none}}`;
+  const files = {
+    "styles.css": css,
+    "script.js": sharedJs,
+    "LICENSE.txt": license,
+    "README.md": `# ${brand} Website Template\n\nOpen index.html. Edit text and host on any static host.\n`,
+  };
+  for (const [file, html] of Object.entries(pages)) files[file] = html;
+  writeDir(path.join(packs, name), files);
+}
+
+const reLinks = [
+  { href: "index.html", label: "Home" },
+  { href: "listings.html", label: "Listings" },
+  { href: "about.html", label: "About" },
+  { href: "contact.html", label: "Contact" },
+];
+nichePack("real-estate-website-template", "Harbor Homes", "#1d4ed8", {
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Harbor Homes</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Harbor Homes", reLinks)}
+<div class="hero wrap"><p>Real estate</p><h1>Find a home that fits your life.</h1><p>Replace listings with your properties. Clear contact for buyer enquiries.</p><a class="btn" href="listings.html">View listings</a>
+<div class="grid"><div class="card"><h3>Buy</h3><p>Guided home search.</p></div><div class="card"><h3>Sell</h3><p>Valuation and marketing.</p></div><div class="card"><h3>Rent</h3><p>Tenant-ready listings.</p></div></div></div>
+${foot("Harbor Homes")}</body></html>`,
+  "listings.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Listings</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Harbor Homes", reLinks)}
+<section class="wrap"><h2>Featured listings</h2><div class="grid"><div class="card"><h3>2BHK · Sample Road</h3><p>Replace with your listing.</p></div><div class="card"><h3>Villa · Lake View</h3><p>Replace with your listing.</p></div></div></section>
+${foot("Harbor Homes")}</body></html>`,
+  "about.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Harbor Homes", reLinks)}
+<section class="wrap"><h2>About the agency</h2><p>Short agency story and service areas.</p></section>
+${foot("Harbor Homes")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Contact</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Harbor Homes", reLinks)}
+<section class="wrap"><h2>Contact</h2>
+<button class="btn" type="button" data-wa="Hi, I want property details." data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("Harbor Homes")}</body></html>`,
+});
+
+const clinicLinks = [
+  { href: "index.html", label: "Home" },
+  { href: "services.html", label: "Services" },
+  { href: "doctors.html", label: "Doctors" },
+  { href: "contact.html", label: "Book" },
+];
+nichePack("clinic-website-template", "CareFirst Clinic", "#0f766e", {
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CareFirst Clinic</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("CareFirst", clinicLinks)}
+<div class="hero wrap"><p>Healthcare</p><h1>Calm care for your family.</h1><p>Clinic landing with services and booking CTA. Edit hours and doctor names.</p><a class="btn" href="contact.html">Book appointment</a>
+<div class="grid"><div class="card"><h3>General</h3><p>Consultations.</p></div><div class="card"><h3>Dental</h3><p>Sample specialty.</p></div><div class="card"><h3>Lab</h3><p>Sample tests.</p></div></div></div>
+${foot("CareFirst Clinic")}</body></html>`,
+  "services.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Services</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("CareFirst", clinicLinks)}
+<section class="wrap"><h2>Services</h2><div class="grid"><div class="card"><h3>Check-up</h3><p>Replace details.</p></div><div class="card"><h3>Follow-up</h3><p>Replace details.</p></div></div></section>
+${foot("CareFirst Clinic")}</body></html>`,
+  "doctors.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Doctors</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("CareFirst", clinicLinks)}
+<section class="wrap"><h2>Doctors</h2><div class="grid"><div class="card"><h3>Dr. Sample</h3><p>General physician</p></div></div></section>
+${foot("CareFirst Clinic")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("CareFirst", clinicLinks)}
+<section class="wrap"><h2>Book</h2><p>Open hours: Mon–Sat 9am–6pm</p>
+<button class="btn" type="button" data-wa="Hi, I want an appointment." data-phone="919894496560">WhatsApp reception</button>
+</section>
+${foot("CareFirst Clinic")}</body></html>`,
+});
+
+const eduLinks = [
+  { href: "index.html", label: "Home" },
+  { href: "courses.html", label: "Courses" },
+  { href: "about.html", label: "About" },
+  { href: "contact.html", label: "Enroll" },
+];
+nichePack("education-website-template", "BrightPath Academy", "#7c3aed", {
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BrightPath Academy</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("BrightPath", eduLinks)}
+<div class="hero wrap"><p>Education</p><h1>Courses that move careers forward.</h1><p>Institute or coach landing page. Replace courses and enroll CTA.</p><a class="btn" href="courses.html">See courses</a></div>
+${foot("BrightPath Academy")}</body></html>`,
+  "courses.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Courses</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("BrightPath", eduLinks)}
+<section class="wrap"><h2>Courses</h2><div class="grid"><div class="card"><h3>Foundation</h3><p>8 weeks</p></div><div class="card"><h3>Advanced</h3><p>12 weeks</p></div></div></section>
+${foot("BrightPath Academy")}</body></html>`,
+  "about.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("BrightPath", eduLinks)}
+<section class="wrap"><h2>About</h2><p>Teacher bio and teaching approach.</p></section>
+${foot("BrightPath Academy")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Enroll</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("BrightPath", eduLinks)}
+<section class="wrap"><h2>Enroll</h2>
+<button class="btn" type="button" data-wa="Hi, I want course details." data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("BrightPath Academy")}</body></html>`,
+});
+
+const photoLinks = [
+  { href: "index.html", label: "Work" },
+  { href: "about.html", label: "About" },
+  { href: "contact.html", label: "Book" },
+];
+nichePack("photography-website-template", "Lumen Studio", "#b45309", {
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lumen Studio</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Lumen", photoLinks)}
+<div class="hero wrap"><p>Photography</p><h1>Quiet frames for bold stories.</h1><p>Photographer portfolio with gallery cards and booking CTA.</p>
+<div class="grid"><div class="card"><h3>Weddings</h3><p>Sample series</p></div><div class="card"><h3>Portraits</h3><p>Sample series</p></div><div class="card"><h3>Brand</h3><p>Sample series</p></div></div></div>
+${foot("Lumen Studio")}</body></html>`,
+  "about.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Lumen", photoLinks)}
+<section class="wrap"><h2>About</h2><p>Photographer bio and gear notes.</p></section>
+${foot("Lumen Studio")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Lumen", photoLinks)}
+<section class="wrap"><h2>Book a shoot</h2>
+<button class="btn" type="button" data-wa="Hi, I want to book a shoot." data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("Lumen Studio")}</body></html>`,
+});
+
+const cafeLinks = [
+  { href: "index.html", label: "Home" },
+  { href: "menu.html", label: "Menu" },
+  { href: "about.html", label: "About" },
+  { href: "contact.html", label: "Visit" },
+];
+nichePack("cafe-website-template", "Bean & Bloom", "#92400e", {
+  "index.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bean & Bloom</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Bean & Bloom", cafeLinks)}
+<div class="hero wrap"><p>Cafe</p><h1>Coffee, pastry, and a quiet corner.</h1><p>Cafe website with menu page. Pair with our QR Menu Generator for tables.</p><a class="btn" href="menu.html">See menu</a></div>
+${foot("Bean & Bloom")}</body></html>`,
+  "menu.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Menu</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Bean & Bloom", cafeLinks)}
+<section class="wrap"><h2>Menu</h2><div class="grid"><div class="card"><h3>Espresso</h3><p>₹120</p></div><div class="card"><h3>Croissant</h3><p>₹90</p></div></div></section>
+${foot("Bean & Bloom")}</body></html>`,
+  "about.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>About</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Bean & Bloom", cafeLinks)}
+<section class="wrap"><h2>About</h2><p>Cafe story and hours.</p></section>
+${foot("Bean & Bloom")}</body></html>`,
+  "contact.html": `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Visit</title><link rel="stylesheet" href="styles.css"></head><body>
+${nav("Bean & Bloom", cafeLinks)}
+<section class="wrap"><h2>Visit</h2>
+<button class="btn" type="button" data-wa="Hi, table for two?" data-phone="919894496560">WhatsApp</button>
+</section>
+${foot("Bean & Bloom")}</body></html>`,
+});
+
 zipPack("restaurant-website-template");
 zipPack("travel-agency-website-template");
 zipPack("church-website-template");
@@ -393,4 +547,9 @@ zipPack("saas-landing-website-template");
 zipPack("portfolio-website-template");
 zipPack("agency-website-template");
 zipPack("consulting-website-template");
+zipPack("real-estate-website-template");
+zipPack("clinic-website-template");
+zipPack("education-website-template");
+zipPack("photography-website-template");
+zipPack("cafe-website-template");
 console.log("website templates ready");

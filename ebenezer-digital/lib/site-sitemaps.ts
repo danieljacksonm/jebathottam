@@ -118,7 +118,10 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
 }
 
 function storeSitemap(): MetadataRoute.Sitemap {
-  const pages: MetadataRoute.Sitemap = [page(STORE_URL, "/products", "weekly", 1, undefined, true)];
+  const pages: MetadataRoute.Sitemap = [
+    page(STORE_URL, "/products", "weekly", 1, undefined, true),
+    page(STORE_URL, "/products/roadmap", "monthly", 0.5, undefined, true),
+  ];
   for (const c of STORE_CATEGORY_PAGES) {
     pages.push(page(STORE_URL, `/products/category/${c.slug}`, "weekly", 0.75, undefined, true));
   }

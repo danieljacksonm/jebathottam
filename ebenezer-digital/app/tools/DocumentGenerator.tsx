@@ -7,7 +7,7 @@ import "./document-generator.css";
 type Line = { name: string; qty: number; rate: number; tax: number };
 
 type Props = {
-  kind: "invoice" | "quotation" | "receipt";
+  kind: "invoice" | "quotation" | "receipt" | "purchase_order";
   title: string;
   backHref?: string;
 };
@@ -15,10 +15,20 @@ type Props = {
 export function DocumentGenerator({ kind, title, backHref = "/products" }: Props) {
   const [biz, setBiz] = useState("Your Shop Name");
   const [bizMeta, setBizMeta] = useState("City · GSTIN / Tax ID");
-  const [client, setClient] = useState(kind === "receipt" ? "Walk-in customer" : "Customer name");
-  const [clientMeta, setClientMeta] = useState("Phone / address");
+  const [client, setClient] = useState(
+    kind === "receipt" ? "Walk-in customer" : kind === "purchase_order" ? "Supplier name" : "Customer name"
+  );
+  const [clientMeta, setClientMeta] = useState(
+    kind === "purchase_order" ? "Supplier phone / address" : "Phone / address"
+  );
   const [docNo, setDocNo] = useState(
-    kind === "invoice" ? "INV-1001" : kind === "quotation" ? "QT-1001" : "RCP-1001"
+    kind === "invoice"
+      ? "INV-1001"
+      : kind === "quotation"
+        ? "QT-1001"
+        : kind === "purchase_order"
+          ? "PO-1001"
+          : "RCP-1001"
   );
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [valid, setValid] = useState("");
@@ -27,9 +37,13 @@ export function DocumentGenerator({ kind, title, backHref = "/products" }: Props
       ? "Validity 7 days. 50% advance to confirm."
       : kind === "receipt"
         ? "Amount received. Thank you."
-        : "Thank you for your business."
+        : kind === "purchase_order"
+          ? "Deliver within 7 days. Payment as per agreed terms."
+          : "Thank you for your business."
   );
-  const [lines, setLines] = useState<Line[]>([{ name: "Item / service", qty: 1, rate: 1000, tax: kind === "receipt" ? 0 : 18 }]);
+  const [lines, setLines] = useState<Line[]>([
+    { name: kind === "purchase_order" ? "Stock item" : "Item / service", qty: 1, rate: 1000, tax: kind === "receipt" ? 0 : 18 },
+  ]);
   const [paymentMode, setPaymentMode] = useState("Cash / UPI");
 
   const totals = useMemo(() => {
@@ -50,9 +64,25 @@ export function DocumentGenerator({ kind, title, backHref = "/products" }: Props
     setLines((prev) => prev.map((row, idx) => (idx === i ? { ...row, ...patch } : row)));
   };
 
-  const kicker = kind === "invoice" ? "INVOICE" : kind === "quotation" ? "QUOTATION" : "RECEIPT";
-  const numberLabel = kind === "invoice" ? "Invoice no." : kind === "quotation" ? "Quote no." : "Receipt no.";
-  const partyLabel = kind === "receipt" ? "Received from" : "Bill to";
+  const kicker =
+    kind === "invoice"
+      ? "INVOICE"
+      : kind === "quotation"
+        ? "QUOTATION"
+        : kind === "purchase_order"
+          ? "PURCHASE ORDER"
+          : "RECEIPT";
+  const numberLabel =
+    kind === "invoice"
+      ? "Invoice no."
+      : kind === "quotation"
+        ? "Quote no."
+        : kind === "purchase_order"
+          ? "PO no."
+          : "Receipt no.";
+  const partyLabel =
+    kind === "receipt" ? "Received from" : kind === "purchase_order" ? "Supplier" : "Bill to";
+  const partyField = kind === "purchase_order" ? "Supplier" : kind === "receipt" ? "Customer" : "Client";
 
   return (
     <div className="docgen">
@@ -75,11 +105,11 @@ export function DocumentGenerator({ kind, title, backHref = "/products" }: Props
             <input value={bizMeta} onChange={(e) => setBizMeta(e.target.value)} />
           </label>
           <label>
-            {kind === "receipt" ? "Customer" : "Client"}
+            {partyField}
             <input value={client} onChange={(e) => setClient(e.target.value)} />
           </label>
           <label>
-            {kind === "receipt" ? "Customer details" : "Client details"}
+            {partyField} details
             <input value={clientMeta} onChange={(e) => setClientMeta(e.target.value)} />
           </label>
           <div className="docgen-row">
@@ -92,9 +122,9 @@ export function DocumentGenerator({ kind, title, backHref = "/products" }: Props
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             </label>
           </div>
-          {kind === "quotation" && (
+          {(kind === "quotation" || kind === "purchase_order") && (
             <label>
-              Valid until
+              {kind === "purchase_order" ? "Needed by" : "Valid until"}
               <input type="date" value={valid} onChange={(e) => setValid(e.target.value)} />
             </label>
           )}
@@ -135,7 +165,11 @@ export function DocumentGenerator({ kind, title, backHref = "/products" }: Props
             <div>
               <p>No. {docNo}</p>
               <p>Date {date}</p>
-              {kind === "quotation" && valid ? <p>Valid until {valid}</p> : null}
+              {(kind === "quotation" || kind === "purchase_order") && valid ? (
+                <p>
+                  {kind === "purchase_order" ? "Needed by" : "Valid until"} {valid}
+                </p>
+              ) : null}
               {kind === "receipt" ? <p>Paid via {paymentMode}</p> : null}
             </div>
           </div>
@@ -168,7 +202,10 @@ export function DocumentGenerator({ kind, title, backHref = "/products" }: Props
             <p>Subtotal {money(totals.sub)}</p>
             <p>Tax {money(totals.tax)}</p>
             <p>
-              <strong>{kind === "receipt" ? "Amount received" : "Total"} {money(totals.grand)}</strong>
+              <strong>
+                {kind === "receipt" ? "Amount received" : kind === "purchase_order" ? "Order total" : "Total"}{" "}
+                {money(totals.grand)}
+              </strong>
             </p>
           </div>
           <p className="docgen-notes">{notes}</p>

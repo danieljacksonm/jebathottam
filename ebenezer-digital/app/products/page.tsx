@@ -37,6 +37,8 @@ export default function ProductsPage() {
   const [difficulty, setDifficulty] = useState("all");
   const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
   const [sort, setSort] = useState<StoreSort>("featured");
+  const [pageIndex, setPageIndex] = useState(0);
+  const PAGE_SIZE = 12;
   const shelfRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -115,6 +117,13 @@ export default function ProductsPage() {
       }),
     [activeCat, catalog, difficulty, priceFilter, productType, query, sort, technology]
   );
+
+  useEffect(() => {
+    setPageIndex(0);
+  }, [activeCat, query, productType, technology, difficulty, priceFilter, sort]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const paged = filtered.slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE);
 
   const syncUrl = (next: {
     cat?: string;
@@ -266,7 +275,10 @@ export default function ProductsPage() {
           <span className="s-section-label">{t("featured")}</span>
           <h2 className="text-2xl font-bold text-[var(--s-ink)] sm:text-3xl">All products</h2>
           <p className="mt-2 text-sm text-[var(--s-muted)]">
-            Filter by type, technology, and price. Search works on name, tags, and use case.
+            Filter by type, technology, and price. Search works on name, tags, and use case.{" "}
+            <Link href={lp("/products/roadmap")} className="text-[var(--s-brand)] hover:underline">
+              See coming soon
+            </Link>
           </p>
         </div>
         <div className="mb-4">
@@ -387,12 +399,49 @@ export default function ProductsPage() {
             </select>
           </label>
         </div>
-        <p className="mb-4 text-sm text-[var(--s-muted)]">{filtered.length} product{filtered.length === 1 ? "" : "s"}</p>
+        <p className="mb-4 text-sm text-[var(--s-muted)]">
+          {filtered.length} product{filtered.length === 1 ? "" : "s"}
+          {filtered.length > PAGE_SIZE ? ` · page ${pageIndex + 1} of ${pageCount}` : ""}
+        </p>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filtered.map((p) => (
+          {paged.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
         </div>
+        {pageCount > 1 && (
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+            <button
+              type="button"
+              disabled={pageIndex === 0}
+              onClick={() => setPageIndex((n) => Math.max(0, n - 1))}
+              className="rounded-lg border border-[var(--s-line)] px-3 py-1.5 text-sm disabled:opacity-40"
+            >
+              Previous
+            </button>
+            {Array.from({ length: pageCount }).map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setPageIndex(i)}
+                className={`rounded-lg border px-3 py-1.5 text-sm ${
+                  i === pageIndex
+                    ? "border-[var(--s-brand)] bg-[var(--s-brand)] text-white"
+                    : "border-[var(--s-line)]"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              type="button"
+              disabled={pageIndex >= pageCount - 1}
+              onClick={() => setPageIndex((n) => Math.min(pageCount - 1, n + 1))}
+              className="rounded-lg border border-[var(--s-line)] px-3 py-1.5 text-sm disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
+        )}
         {filtered.length === 0 && (
           <p className="rounded-xl border border-[var(--s-line)] bg-[var(--s-surface)] p-8 text-center text-[var(--s-muted)]">
             No products match these filters. Try clearing search or choosing All types.
@@ -480,9 +529,9 @@ export default function ProductsPage() {
               <Link href={lp("/products/category/software")} className="block hover:text-white transition-colors">
                 Software &amp; tools
               </Link>
-              <Link href={lp("/products/ebenezer-saas")} className="block hover:text-white transition-colors">
-                Ebenezer SaaS
-              </Link>
+                <Link href={lp("/products/roadmap")} className="block hover:text-white transition-colors">
+                  Product roadmap
+                </Link>
             </div>
             <div className="space-y-2 text-sm">
               <p className="font-semibold text-white mb-3">Help</p>
