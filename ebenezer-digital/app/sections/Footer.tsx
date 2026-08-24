@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { SITE_EMAIL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL, SITE_WHATSAPP_URL } from "@/lib/site-contact";
+import { SITE_NAV } from "@/lib/site-nav";
 
 const TwitterXIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
@@ -44,11 +45,11 @@ const footerLinks = {
     { label: "Trust", href: "/trust" },
   ],
   products: [
-    { label: "News", href: "/blog/news" },
-    { label: "Journal", href: "/blog" },
-    { label: "Store", href: "/products" },
+    { label: "News", href: SITE_NAV.news },
+    { label: "Journal", href: SITE_NAV.journal },
+    { label: "Store", href: SITE_NAV.store },
     { label: "SaaS billing", href: "/saas" },
-    { label: "Eben AI", href: "/ai" },
+    { label: "Eben AI", href: SITE_NAV.ai },
   ],
   support: [
     { label: "Contact", href: "/contact" },

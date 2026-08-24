@@ -6,7 +6,7 @@ import "./studio/studio.css";
 import SiteChrome from "./studio/SiteChrome";
 import GlobalStyles from "./components/GlobalStyles";
 import { SITE_EMAIL, SITE_PHONE_DISPLAY } from "@/lib/site-contact";
-import { OG_IMAGE, SITE_URL } from "@/lib/site-url";
+import { OG_IMAGE, SITE_ICONS, SITE_URL, languageAlternatesFor } from "@/lib/site-url";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -46,6 +46,12 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Ebenezer Digital Services" }],
   creator: "Ebenezer Digital Services",
+  icons: SITE_ICONS,
+  manifest: "/manifest.webmanifest",
+  alternates: {
+    canonical: SITE_URL,
+    languages: languageAlternatesFor("/", SITE_URL),
+  },
   openGraph: {
     title: "Ebenezer Digital Services | Reliable Digital & Web Services",
     description:

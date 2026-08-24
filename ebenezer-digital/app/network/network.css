@@ -1,0 +1,379 @@
+/* Ebenezer Digital Network — original premium tech design system */
+.nx-root {
+  --nx-bg: #f4f6f8;
+  --nx-bg-elev: #ffffff;
+  --nx-ink: #0b1220;
+  --nx-ink-2: #334155;
+  --nx-muted: #64748b;
+  --nx-line: #e2e8f0;
+  --nx-brand: #0f766e;
+  --nx-brand-2: #115e59;
+  --nx-brand-soft: #ecfdf5;
+  --nx-accent: #0369a1;
+  --nx-shadow: 0 12px 40px rgba(15, 23, 42, 0.06);
+  --nx-radius: 16px;
+  --nx-font: "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --nx-mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  color: var(--nx-ink);
+  background: var(--nx-bg);
+  min-height: 100vh;
+  font-family: var(--nx-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.nx-root[data-theme="dark"] {
+  --nx-bg: #070b12;
+  --nx-bg-elev: #0f1623;
+  --nx-ink: #e8eef7;
+  --nx-ink-2: #cbd5e1;
+  --nx-muted: #94a3b8;
+  --nx-line: #1e293b;
+  --nx-brand: #2dd4bf;
+  --nx-brand-2: #5eead4;
+  --nx-brand-soft: #0f2a28;
+  --nx-accent: #38bdf8;
+  --nx-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+.nx-page {
+  width: min(1120px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.nx-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(12px);
+  background: color-mix(in srgb, var(--nx-bg-elev) 86%, transparent);
+  border-bottom: 1px solid var(--nx-line);
+}
+
+.nx-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 3.75rem;
+}
+
+.nx-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.05;
+  text-decoration: none;
+  color: var(--nx-ink);
+}
+.nx-logo strong {
+  font-size: 0.92rem;
+  letter-spacing: 0.02em;
+}
+.nx-logo span {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--nx-brand);
+  font-weight: 700;
+}
+
+.nx-nav {
+  display: none;
+  gap: 1.1rem;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .nx-nav {
+    display: flex;
+  }
+}
+.nx-nav a {
+  color: var(--nx-muted);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 550;
+}
+.nx-nav a:hover {
+  color: var(--nx-ink);
+}
+
+.nx-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--nx-line);
+  background:
+    radial-gradient(900px 420px at 10% -10%, color-mix(in srgb, var(--nx-brand) 18%, transparent), transparent 55%),
+    radial-gradient(700px 360px at 90% 0%, color-mix(in srgb, var(--nx-accent) 12%, transparent), transparent 50%),
+    linear-gradient(180deg, var(--nx-bg-elev), var(--nx-bg));
+}
+
+.nx-hero h1 {
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  font-weight: 800;
+  max-width: 14ch;
+}
+
+.nx-hero .lead {
+  margin-top: 1rem;
+  max-width: 38rem;
+  color: var(--nx-muted);
+  font-size: 1.08rem;
+  line-height: 1.55;
+}
+
+.nx-search {
+  display: flex;
+  gap: 0.55rem;
+  margin-top: 1.6rem;
+  max-width: 36rem;
+}
+.nx-search input {
+  flex: 1;
+  border: 1px solid var(--nx-line);
+  background: var(--nx-bg-elev);
+  color: var(--nx-ink);
+  border-radius: 14px;
+  padding: 0.95rem 1.05rem;
+  outline: none;
+  font-size: 1rem;
+}
+.nx-search input:focus {
+  border-color: var(--nx-brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nx-brand) 22%, transparent);
+}
+
+.nx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: 12px;
+  font-weight: 650;
+  font-size: 0.92rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid transparent;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+.nx-btn:active {
+  transform: translateY(1px);
+}
+.nx-btn-primary {
+  background: var(--nx-brand);
+  color: #fff;
+}
+.nx-root[data-theme="dark"] .nx-btn-primary {
+  color: #042f2e;
+}
+.nx-btn-primary:hover {
+  background: var(--nx-brand-2);
+}
+.nx-btn-ghost {
+  background: transparent;
+  border-color: var(--nx-line);
+  color: var(--nx-ink);
+}
+.nx-btn-ghost:hover {
+  border-color: color-mix(in srgb, var(--nx-brand) 45%, var(--nx-line));
+  background: var(--nx-brand-soft);
+}
+
+.nx-chip {
+  border: 1px solid var(--nx-line);
+  background: var(--nx-bg-elev);
+  color: var(--nx-muted);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.nx-chip:hover,
+.nx-chip.is-active {
+  border-color: color-mix(in srgb, var(--nx-brand) 50%, var(--nx-line));
+  color: var(--nx-ink);
+  background: var(--nx-brand-soft);
+}
+
+.nx-card {
+  background: var(--nx-bg-elev);
+  border: 1px solid var(--nx-line);
+  border-radius: var(--nx-radius);
+  box-shadow: var(--nx-shadow);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.nx-card:hover {
+  border-color: color-mix(in srgb, var(--nx-brand) 35%, var(--nx-line));
+  transform: translateY(-1px);
+}
+
+.nx-grid-tools {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .nx-grid-tools {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 1024px) {
+  .nx-grid-tools {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+.nx-footer {
+  margin-top: 4rem;
+  border-top: 1px solid var(--nx-line);
+  background: var(--nx-bg-elev);
+  padding: 3rem 0 2rem;
+}
+.nx-footer a {
+  color: var(--nx-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.nx-footer a:hover {
+  color: var(--nx-brand);
+}
+
+.nx-constellation {
+  position: relative;
+  min-height: 280px;
+  border-radius: 24px;
+  border: 1px solid var(--nx-line);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--nx-brand-soft) 70%, transparent), transparent),
+    var(--nx-bg-elev);
+  overflow: hidden;
+}
+.nx-node {
+  position: absolute;
+  border: 1px solid var(--nx-line);
+  background: color-mix(in srgb, var(--nx-bg-elev) 90%, transparent);
+  color: var(--nx-ink-2);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 650;
+  animation: nx-float 7s ease-in-out infinite;
+}
+@keyframes nx-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nx-node {
+    animation: none;
+  }
+  .nx-btn,
+  .nx-card {
+    transition: none;
+  }
+}
+
+.nx-mobile-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.15rem;
+  border-top: 1px solid var(--nx-line);
+  background: color-mix(in srgb, var(--nx-bg-elev) 94%, transparent);
+  backdrop-filter: blur(10px);
+  padding: 0.45rem 0.35rem calc(0.45rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 900px) {
+  .nx-mobile-nav {
+    display: none;
+  }
+}
+.nx-mobile-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  text-decoration: none;
+  color: var(--nx-muted);
+  font-size: 0.65rem;
+  font-weight: 650;
+  padding: 0.25rem;
+}
+.nx-mobile-nav a.is-active,
+.nx-mobile-nav a:hover {
+  color: var(--nx-brand);
+}
+
+.nx-root.has-mobile-pad {
+  padding-bottom: 4.5rem;
+}
+@media (min-width: 900px) {
+  .nx-root.has-mobile-pad {
+    padding-bottom: 0;
+  }
+}
+
+.nx-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--nx-muted);
+  margin-bottom: 0.35rem;
+}
+.nx-input,
+.nx-textarea,
+.nx-select {
+  width: 100%;
+  border: 1px solid var(--nx-line);
+  background: var(--nx-bg);
+  color: var(--nx-ink);
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  font-size: 0.95rem;
+}
+.nx-textarea {
+  min-height: 180px;
+  font-family: var(--nx-mono);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  resize: vertical;
+}
+.nx-panel {
+  border: 1px solid var(--nx-line);
+  background: var(--nx-bg-elev);
+  border-radius: var(--nx-radius);
+  padding: 1rem;
+}
+.nx-result {
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background: var(--nx-brand-soft);
+  border: 1px solid color-mix(in srgb, var(--nx-brand) 25%, var(--nx-line));
+  color: var(--nx-ink-2);
+  font-size: 0.92rem;
+}
+.nx-error {
+  color: #b91c1c;
+  font-size: 0.88rem;
+  margin-top: 0.5rem;
+}
+.nx-root[data-theme="dark"] .nx-error {
+  color: #fca5a5;
+}
+.nx-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.75rem 0;
+}

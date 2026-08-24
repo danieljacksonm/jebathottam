@@ -15,10 +15,15 @@ function escapeXml(s: string): string {
 function resolveOrigin(url: string, host: string | null): string {
   try {
     const u = new URL(url);
-    if (host) return `${u.protocol}//${host}`;
-    return u.origin;
+    if (host) {
+      const h = host.toLowerCase().split(":")[0];
+      if (h.includes("ebenezerdigital.info") || h.includes("localhost") || h.includes("127.0.0.1")) {
+        return `${u.protocol}//${host}`;
+      }
+    }
+    return process.env.NEXT_PUBLIC_JOURNAL_URL || "https://ebenezerdigital.info";
   } catch {
-    return process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
+    return process.env.NEXT_PUBLIC_JOURNAL_URL || "https://ebenezerdigital.info";
   }
 }
 

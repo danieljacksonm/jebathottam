@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { SITE_NAV } from "@/lib/site-nav";
 
 const journey = [
   {
@@ -111,13 +112,21 @@ export default function StudioWorld() {
         </p>
         <div className="mt-12 grid gap-4 sm:grid-cols-2">
           {[
-            { href: "/blog/news", title: "NEWS", body: "World news desk — ebenezerdigital.info" },
-            { href: "/blog", title: "JOURNAL", body: "Learning blog and articles" },
-            { href: "/products", title: "STORE", body: "Digital products — ebenezerdigital.store" },
+            {
+              href: SITE_NAV.news,
+              title: "NEWS",
+              body: "World news desk — news.ebenezerdigital.info",
+            },
+            {
+              href: SITE_NAV.journal,
+              title: "JOURNAL",
+              body: "Digital learning blog — journal.ebenezerdigital.info",
+            },
+            { href: SITE_NAV.store, title: "STORE", body: "Digital products — ebenezerdigital.store" },
             { href: "/saas", title: "SAAS", body: "Shop billing — invoices, stock, print" },
-            { href: "/ai", title: "EBEN AI", body: "Chat on our own server" },
+            { href: SITE_NAV.ai, title: "EBEN AI", body: "Chat on our own server" },
           ].map((item) => (
-            <Link
+            <a
               key={item.href}
               href={item.href}
               className="border border-[var(--st-line)] bg-white/[0.03] p-8 hover:border-emerald-400/50"
@@ -125,7 +134,7 @@ export default function StudioWorld() {
             >
               <h3 className="studio-display text-3xl">{item.title}</h3>
               <p className="mt-3 text-sm text-[var(--st-muted)]">{item.body}</p>
-            </Link>
+            </a>
           ))}
         </div>
       </section>

@@ -172,31 +172,51 @@ export function NewsHome() {
       <WorldBriefing stories={briefing} totalOnDesk={liveFirst.length} />
 
       {/* FRONT PAGE */}
-      <section className="px-4 pb-10 pt-6 sm:px-8 lg:px-12">
+      <section className="news-front px-4 pb-10 pt-6 sm:px-8 lg:px-12">
+        <div className="news-masthead mb-8 overflow-hidden border-y border-[var(--n-gold)] py-6">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="news-kicker text-[var(--n-live)]">Ebenezer World News</p>
+              <h1 className="news-display mt-2 text-[11vw] leading-[0.9] sm:text-[6vw] lg:text-[4.2vw]">
+                THE DESK
+                <span className="block text-[var(--n-gold)]">IS LIVE.</span>
+              </h1>
+            </div>
+            <div className="max-w-sm text-right">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--n-muted)]">
+                news.ebenezerdigital.info
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-[var(--n-muted)]">
+                One royal paper desk for the world — wires rotate, no story repeats on this page.
+              </p>
+              {updatedAt && (
+                <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-[var(--n-live)]">
+                  Desk refreshed {relativeNewsTime(updatedAt).replace("Updated ", "")}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <p className="news-kicker text-[var(--n-muted)]">What is happening now</p>
             <p className="mt-2 max-w-xl text-sm text-[var(--n-muted)]">
-              One desk for the world: BBC, Reuters, The Hindu, NDTV, NYT, Al Jazeera and more. Headlines rotate every 10 seconds. No story is repeated on this page.
+              BBC, Reuters, The Hindu, NDTV, NYT, Al Jazeera and more — composed like a morning front page.
             </p>
           </div>
-          {updatedAt && (
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--n-muted)]">
-              Desk refreshed {relativeNewsTime(updatedAt).replace("Updated ", "")}
-            </p>
-          )}
         </div>
         <div className="mt-6 grid gap-8 lg:grid-cols-[1.35fr_0.65fr]">
-          <StoryLink story={lead} className="group block">
+          <StoryLink story={lead} className="group news-lead-card block">
             <p className="news-kicker text-[var(--n-live)]">{lead.breaking ? "Breaking" : lead.region}</p>
-            <h1 className="news-display mt-4 text-[12vw] sm:text-[7.5vw] lg:text-[5.6vw]">
+            <h2 className="news-display mt-4 text-[12vw] sm:text-[7.5vw] lg:text-[5.6vw]">
               {lines.map((line) => (
                 <span key={line} className="block">
                   {line}
                 </span>
               ))}
-            </h1>
-            <motion.div layoutId={`news-img-${lead.slug}`} className="news-frame relative mt-6 aspect-[16/9] overflow-hidden">
+            </h2>
+            <motion.div layoutId={`news-img-${lead.slug}`} className="news-frame news-lead-frame relative mt-6 aspect-[16/9] overflow-hidden">
               <NewsImage
                 src={lead.coverImage}
                 alt={lead.title}

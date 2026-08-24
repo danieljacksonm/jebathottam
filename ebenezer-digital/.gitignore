@@ -25,6 +25,9 @@ yarn-error.log*
 # local env files
 .env*.local
 
+# runtime news sitemap retention cache (regenerated on server)
+/data/news-sitemap-archive.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

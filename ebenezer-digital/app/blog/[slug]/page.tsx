@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { ArticleView } from "./ArticleView";
-import { canonicalFor } from "@/lib/site-url";
+import { canonicalFor, languageAlternatesFor, SITE_ICONS } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -16,16 +16,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const images = post.coverImage
     ? [{ url: post.coverImage }, ...(post.gallery || []).slice(1, 4).map((url) => ({ url }))]
     : undefined;
+  const path = `/blog/${post.slug}`;
 
   return {
     title,
     description,
     keywords: post.tags,
+    icons: SITE_ICONS,
     openGraph: {
       title: post.title,
       description,
       type: "article",
-      url: canonicalFor(`/blog/${post.slug}`),
+      url: canonicalFor(path),
       publishedTime: post.publishedAt?.toISOString?.() || undefined,
       authors: [post.author],
       images,
@@ -37,7 +39,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: post.coverImage ? [post.coverImage] : undefined,
     },
     alternates: {
-      canonical: canonicalFor(`/blog/${post.slug}`),
+      canonical: canonicalFor(path),
+      languages: languageAlternatesFor(path),
       types: {
         "application/rss+xml": [{ url: "/api/blog/rss", title: "Ebenezer Journal RSS" }],
       },

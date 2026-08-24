@@ -5,16 +5,30 @@ import { originForKind, siteKindFromHost } from "@/lib/site-url";
 export default function robots(): MetadataRoute.Robots {
   const kind = siteKindFromHost(headers().get("host"));
   const base = originForKind(kind);
+
+  const sitemaps =
+    kind === "journal"
+      ? [`${base}/sitemap.xml`]
+      : kind === "news"
+        ? [`${base}/sitemap.xml`, `${base}/api/news/sitemap`]
+        : [`${base}/sitemap.xml`];
+
   return {
     rules: [
       {
         userAgent: "*",
         allow: ["/", "/api/blog/rss", "/api/news/rss", "/api/news/ical", "/api/news/sitemap"],
-        disallow: ["/admin/", "/api/admin/", "/api/auth/", "/saas/login", "/products/checkout", "/products/account", "/products/success"],
+        disallow: [
+          "/admin/",
+          "/api/admin/",
+          "/api/auth/",
+          "/saas/login",
+          "/products/checkout",
+          "/products/account",
+          "/products/success",
+        ],
       },
     ],
-    sitemap: kind === "journal"
-      ? [`${base}/sitemap.xml`, `${base}/api/news/sitemap`]
-      : `${base}/sitemap.xml`,
+    sitemap: sitemaps.length === 1 ? sitemaps[0] : sitemaps,
   };
 }

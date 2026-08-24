@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { buildNewsSitemapXml, listPublicNews, resolveSiteOrigin } from "@/lib/news-service";
+import { buildNewsSitemapXml, listPublicNewsForSitemap, resolveSiteOrigin } from "@/lib/news-service";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   try {
-    const items = await listPublicNews();
+    const items = await listPublicNewsForSitemap();
     const origin = resolveSiteOrigin(request.url, request.headers.get("host"));
     const xml = buildNewsSitemapXml(items, origin);
     return new NextResponse(xml, {

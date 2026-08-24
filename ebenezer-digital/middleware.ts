@@ -1,10 +1,20 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+const AI_URL = (process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com").replace(/\/$/, "");
+const NEWS_URL = (process.env.NEXT_PUBLIC_NEWS_URL || "https://news.ebenezerdigital.info").replace(/\/$/, "");
+const JOURNAL_URL = (
+  process.env.NEXT_PUBLIC_JOURNAL_URL || "https://journal.ebenezerdigital.info"
+).replace(/\/$/, "");
+
 const LOCALES = new Set([
   "en", "hi", "ta", "te", "ml", "kn", "bn", "mr", "gu", "pa", "ur",
   "es", "fr", "ar", "de", "pt", "ru", "ja", "ko", "zh", "tr", "id",
 ]);
+
+function hostName(host: string): string {
+  return host.toLowerCase().split(":")[0];
+}
 
 function isLoginPath(pathname: string): boolean {
   const path = pathname.replace(/\/$/, "") || "/";
@@ -20,13 +30,32 @@ function isTokenPresent(token: string | undefined): boolean {
   return Boolean(token && token.length > 10);
 }
 
-function isInfoBlogHost(host: string): boolean {
-  const h = host.toLowerCase().split(":")[0];
+function isApexInfoHost(host: string): boolean {
+  const h = hostName(host);
   return h === "ebenezerdigital.info" || h === "www.ebenezerdigital.info";
 }
 
+function isJournalHost(host: string): boolean {
+  const h = hostName(host);
+  return (
+    h === "journal.ebenezerdigital.info" ||
+    h === "www.journal.ebenezerdigital.info" ||
+    isApexInfoHost(host)
+  );
+}
+
+function isNewsHost(host: string): boolean {
+  const h = hostName(host);
+  return h === "news.ebenezerdigital.info" || h === "www.news.ebenezerdigital.info";
+}
+
+function isAiHost(host: string): boolean {
+  const h = hostName(host);
+  return h === "ai.ebenezerdigital.com" || h === "www.ai.ebenezerdigital.com";
+}
+
 function isStoreHost(host: string): boolean {
-  const h = host.toLowerCase().split(":")[0];
+  const h = hostName(host);
   return (
     h === "ebenezer.store" ||
     h === "www.ebenezer.store" ||
@@ -36,14 +65,24 @@ function isStoreHost(host: string): boolean {
 }
 
 function isToolsHost(host: string): boolean {
-  const h = host.toLowerCase().split(":")[0];
+  const h = hostName(host);
   return h === "tools.ebenezerdigital.com" || h === "deals.ebenezerdigital.com";
 }
 
-/** Physical product comparison platform (NOT the digital store). */
 function isProductsCatalogHost(host: string): boolean {
-  const h = host.toLowerCase().split(":")[0];
+  const h = hostName(host);
   return h === "products.ebenezerdigital.com" || h === "www.products.ebenezerdigital.com";
+}
+
+function isNetworkHost(host: string): boolean {
+  const h = hostName(host);
+  return h === "ebenezerdigital.net" || h === "www.ebenezerdigital.net";
+}
+
+function absoluteRedirect(request: NextRequest, targetBase: string, pathname: string): NextResponse {
+  const dest = new URL(pathname || "/", targetBase);
+  dest.search = request.nextUrl.search;
+  return NextResponse.redirect(dest, 308);
 }
 
 function localeRewrite(request: NextRequest): NextResponse | null {
@@ -66,11 +105,11 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     rest.startsWith("/news") ||
     rest.startsWith("/tools") ||
     rest.startsWith("/catalog") ||
-    rest.startsWith("/discover");
+    rest.startsWith("/discover") ||
+    rest.startsWith("/network");
 
   if (!allowed) return null;
 
-  // /en/... → clean URL without prefix
   if (locale === "en") {
     const url = request.nextUrl.clone();
     url.pathname = rest;
@@ -81,7 +120,12 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   let target = rest;
   if (rest === "/") {
     if (isStoreHost(host)) target = "/products";
-    else if (isInfoBlogHost(host)) target = "/blog";
+    else if (isNewsHost(host)) target = "/blog/news";
+    else if (isAiHost(host)) target = "/ai";
+    else if (isJournalHost(host)) target = "/blog";
+    else if (isToolsHost(host)) target = "/tools";
+    else if (isProductsCatalogHost(host)) target = "/catalog";
+    else if (isNetworkHost(host)) target = "/network";
     else target = "/";
   }
 
@@ -94,6 +138,7 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     sameSite: "lax",
   });
   res.headers.set("x-eben-locale", locale);
+  res.headers.set("content-language", locale);
   return res;
 }
 
@@ -105,16 +150,61 @@ export function middleware(request: NextRequest) {
   const localized = localeRewrite(request);
   if (localized) return localized;
 
-  if (isInfoBlogHost(host)) {
+  const isProdStudio =
+    hostName(host) === "ebenezerdigital.com" || hostName(host) === "www.ebenezerdigital.com";
+
+  // Move AI off path-on-.com → ai subdomain (live hosts only)
+  if (isProdStudio && (pathname === "/ai" || pathname.startsWith("/ai/"))) {
+    return absoluteRedirect(request, AI_URL, pathname === "/ai" || pathname === "/ai/" ? "/" : pathname);
+  }
+
+  // Move news channel → news subdomain
+  if (
+    (isApexInfoHost(host) || isJournalHost(host)) &&
+    !isNewsHost(host) &&
+    (pathname === "/blog/news" || pathname.startsWith("/blog/news/"))
+  ) {
+    return absoluteRedirect(request, NEWS_URL, pathname);
+  }
+
+  // Apex .info → journal subdomain (keep blog paths)
+  if (isApexInfoHost(host) && !isNewsHost(host)) {
+    const destPath =
+      pathname === "/" || pathname === ""
+        ? "/"
+        : pathname === "/news" || pathname === "/news/"
+          ? "/"
+          : pathname;
+    if (pathname === "/news" || pathname === "/news/") {
+      return absoluteRedirect(request, NEWS_URL, "/");
+    }
+    return absoluteRedirect(request, JOURNAL_URL, destPath === "/blog" ? "/" : destPath);
+  }
+
+  if (isAiHost(host)) {
+    if (pathname === "/" || pathname === "") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/ai";
+      return NextResponse.rewrite(url);
+    }
+  }
+
+  if (isNewsHost(host)) {
+    if (pathname === "/" || pathname === "") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/blog/news";
+      return NextResponse.rewrite(url);
+    }
+  }
+
+  if (isJournalHost(host) && !isApexInfoHost(host)) {
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/blog";
-      return NextResponse.redirect(url);
+      return NextResponse.rewrite(url);
     }
     if (pathname === "/news" || pathname === "/news/") {
-      const url = request.nextUrl.clone();
-      url.pathname = "/blog/news";
-      return NextResponse.redirect(url);
+      return absoluteRedirect(request, NEWS_URL, "/");
     }
   }
 
@@ -142,12 +232,46 @@ export function middleware(request: NextRequest) {
     }
   }
 
+  if (isNetworkHost(host)) {
+    const url = request.nextUrl.clone();
+    if (pathname === "/" || pathname === "") {
+      url.pathname = "/network";
+      return NextResponse.rewrite(url);
+    }
+    // Pretty public URLs on .net → internal /network/* routes
+    const map: Record<string, string> = {
+      "/tools": "/network/tools",
+      "/developers": "/network/developers",
+      "/resources": "/network/resources",
+      "/guides": "/network/guides",
+      "/finder": "/network/finder",
+      "/about": "/network/about",
+      "/contact": "/network/contact",
+      "/privacy": "/network/privacy",
+      "/terms": "/network/terms",
+      "/affiliate-disclosure": "/network/affiliate-disclosure",
+    };
+    if (map[pathname]) {
+      url.pathname = map[pathname];
+      return NextResponse.rewrite(url);
+    }
+    if (pathname.startsWith("/tools/")) {
+      url.pathname = `/network${pathname}`;
+      return NextResponse.rewrite(url);
+    }
+    if (pathname.startsWith("/guides/")) {
+      url.pathname = `/network${pathname}`;
+      return NextResponse.rewrite(url);
+    }
+    if (pathname.startsWith("/network")) {
+      return NextResponse.next();
+    }
+  }
+
   if (isLoginPath(pathname)) {
     return NextResponse.next();
   }
 
-  // /saas is a public product landing page (Yegova Billing).
-  // Do not force login — the live app sits on billing.ebenezerdigital.com.
   if (isSaasLoginPath(pathname) || pathname === "/saas" || pathname === "/saas/") {
     return NextResponse.next();
   }
@@ -175,6 +299,8 @@ export const config = {
     "/",
     "/news",
     "/news/:path*",
+    "/ai",
+    "/ai/:path*",
     "/admin",
     "/admin/:path*",
     "/blog",
@@ -188,6 +314,18 @@ export const config = {
     "/catalog",
     "/catalog/:path*",
     "/discover",
+    "/network",
+    "/network/:path*",
+    "/developers",
+    "/resources",
+    "/guides",
+    "/guides/:path*",
+    "/finder",
+    "/about",
+    "/contact",
+    "/privacy",
+    "/terms",
+    "/affiliate-disclosure",
     "/:locale",
     "/:locale/:path*",
   ],

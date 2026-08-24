@@ -3,16 +3,22 @@ import { STORE_PRODUCTS } from "@/app/products/data";
 import { STORE_CATEGORY_PAGES } from "@/app/products/taxonomy";
 import { getEduPosts } from "@/lib/edu-blog";
 import { db } from "@/lib/db";
-import { listPublicNews } from "@/lib/news-service";
+import { listPublicNewsForSitemap } from "@/lib/news-service";
 import {
+  AI_URL,
   JOURNAL_URL,
+  NEWS_URL,
   PRODUCTS_URL,
   SITE_URL,
   STORE_URL,
+  TOOLS_URL,
+  NETWORK_URL,
   languageAlternatesFor,
   type SiteKind,
 } from "@/lib/site-url";
 import { CATALOG_CATEGORIES, CATALOG_PRODUCTS } from "@/app/catalog/data";
+import { getLiveTools } from "@/lib/network/registry";
+import { NETWORK_GUIDES } from "@/lib/network/guides";
 
 function page(
   origin: string,
@@ -29,7 +35,8 @@ function page(
     changeFrequency,
     priority,
   };
-  // Hreflang on every blog/news URL makes sitemap.xml too heavy and Google cannot fetch it.
+  // Language alternates = separate URL per locale (en unprefixed, others /{locale}/path).
+  // Do not explode every article into 22 sitemap rows — use hreflang alternates instead.
   if (withLanguages) {
     entry.alternates = {
       languages: languageAlternatesFor(cleanPath || "/", origin),
@@ -54,25 +61,24 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/website-showcase",
     "/stats",
     "/trust",
-    "/ai",
     "/discover",
   ];
   return routes.map((route) =>
-    page(
-      SITE_URL,
-      route,
-      "weekly",
-      route === "" ? 1 : route === "/ai" || route === "/saas" ? 0.8 : 0.7,
-      undefined,
-      true
-    )
+    page(SITE_URL, route, "weekly", route === "" ? 1 : route === "/saas" ? 0.8 : 0.7, undefined, true)
   );
+}
+
+async function aiSitemap(): Promise<MetadataRoute.Sitemap> {
+  return [
+    page(AI_URL, "", "weekly", 1, undefined, true),
+    page(AI_URL, "/ai", "weekly", 0.9, undefined, true),
+  ];
 }
 
 async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
+    page(JOURNAL_URL, "", "hourly", 1, undefined, true),
     page(JOURNAL_URL, "/blog", "hourly", 1, undefined, true),
-    page(JOURNAL_URL, "/blog/news", "hourly", 0.95, undefined, true),
     page(JOURNAL_URL, "/blog/newsroom/about", "monthly", 0.5, undefined, true),
     page(JOURNAL_URL, "/blog/newsroom/editorial-policy", "monthly", 0.5, undefined, true),
     page(JOURNAL_URL, "/blog/newsroom/contact", "monthly", 0.5, undefined, true),
@@ -91,7 +97,8 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
           `/blog/${p.slug}`,
           "weekly",
           0.7,
-          p.updatedAt || p.publishedAt || new Date()
+          p.updatedAt || p.publishedAt || new Date(),
+          false
         )
       );
     }
@@ -102,13 +109,34 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
   for (const p of getEduPosts()) {
     if (seen.has(p.slug)) continue;
     seen.add(p.slug);
-    pages.push(page(JOURNAL_URL, `/blog/${p.slug}`, "weekly", 0.75, new Date(p.publishedAt)));
+    pages.push(
+      page(JOURNAL_URL, `/blog/${p.slug}`, "weekly", 0.75, new Date(p.publishedAt), false)
+    );
   }
 
+  return pages;
+}
+
+async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
+  const pages: MetadataRoute.Sitemap = [
+    page(NEWS_URL, "", "hourly", 1, undefined, true),
+    page(NEWS_URL, "/blog/news", "hourly", 0.95, undefined, true),
+  ];
+
   try {
-    const news = await listPublicNews();
-    for (const n of news.slice(0, 200)) {
-      pages.push(page(JOURNAL_URL, `/blog/news/${n.slug}`, "hourly", 0.8, new Date(n.publishedAt)));
+    // Keep every story from the last 7 days (archive + live), no hard 400 cut that drops week-old URLs
+    const news = await listPublicNewsForSitemap();
+    for (const n of news) {
+      pages.push(
+        page(
+          NEWS_URL,
+          `/blog/news/${n.slug}`,
+          "hourly",
+          0.8,
+          new Date(n.publishedAt),
+          false
+        )
+      );
     }
   } catch {
     /* live news can fail; index pages still go out */
@@ -147,7 +175,6 @@ function productsCatalogSitemap(): MetadataRoute.Sitemap {
   for (const p of CATALOG_PRODUCTS.filter((x) => x.status === "active")) {
     pages.push(page(PRODUCTS_URL, `/catalog/p/${p.slug}`, "weekly", 0.85, new Date(p.updatedAt)));
   }
-  // Seed guides (static list mirrors repository defaults)
   for (const slug of [
     "best-laptop-under-50000",
     "best-ssd-for-gaming",
@@ -161,9 +188,55 @@ function productsCatalogSitemap(): MetadataRoute.Sitemap {
   return pages;
 }
 
+function toolsSitemap(): MetadataRoute.Sitemap {
+  const toolRoutes = [
+    "",
+    "/tools",
+    "/tools/invoice-generator",
+    "/tools/quotation-generator",
+    "/tools/receipt-generator",
+    "/tools/proposal-generator",
+    "/tools/purchase-order-generator",
+    "/tools/qr-menu-generator",
+    "/tools/expense-tracker",
+    "/tools/task-tracker",
+  ];
+  return toolRoutes.map((route) =>
+    page(TOOLS_URL, route, "weekly", route === "" || route === "/tools" ? 1 : 0.8, undefined, true)
+  );
+}
+
+function networkSitemap(): MetadataRoute.Sitemap {
+  const pages: MetadataRoute.Sitemap = [
+    page(NETWORK_URL, "", "daily", 1, undefined, true),
+    page(NETWORK_URL, "/tools", "daily", 0.95, undefined, true),
+    page(NETWORK_URL, "/developers", "weekly", 0.8, undefined, true),
+    page(NETWORK_URL, "/resources", "weekly", 0.75, undefined, true),
+    page(NETWORK_URL, "/guides", "weekly", 0.8, undefined, true),
+    page(NETWORK_URL, "/finder", "weekly", 0.7, undefined, true),
+    page(NETWORK_URL, "/about", "monthly", 0.4, undefined, true),
+    page(NETWORK_URL, "/contact", "monthly", 0.4, undefined, true),
+    page(NETWORK_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(NETWORK_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(NETWORK_URL, "/affiliate-disclosure", "yearly", 0.2, undefined, true),
+  ];
+  for (const t of getLiveTools()) {
+    // Public .net URLs are /tools/{slug} (middleware rewrite)
+    pages.push(page(NETWORK_URL, `/tools/${t.slug}`, "weekly", 0.9, new Date(t.updatedAt), true));
+  }
+  for (const g of NETWORK_GUIDES) {
+    pages.push(page(NETWORK_URL, `/guides/${g.slug}`, "monthly", 0.7, new Date(g.updatedAt), true));
+  }
+  return pages;
+}
+
 export async function sitemapForKind(kind: SiteKind): Promise<MetadataRoute.Sitemap> {
   if (kind === "journal") return journalSitemap();
+  if (kind === "news") return newsSitemap();
   if (kind === "store") return storeSitemap();
   if (kind === "products") return productsCatalogSitemap();
+  if (kind === "tools") return toolsSitemap();
+  if (kind === "ai") return aiSitemap();
+  if (kind === "network") return networkSitemap();
   return studioSitemap();
 }

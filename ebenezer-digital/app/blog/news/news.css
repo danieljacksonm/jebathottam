@@ -292,6 +292,24 @@
   background: #fff;
 }
 
+.news-masthead {
+  background:
+    linear-gradient(90deg, rgba(158, 27, 18, 0.06), transparent 40%),
+    linear-gradient(180deg, rgba(154, 123, 79, 0.08), transparent);
+}
+
+.news-lead-frame {
+  box-shadow:
+    0 0 0 1px rgba(18, 16, 12, 0.12),
+    0 28px 60px rgba(18, 16, 12, 0.18);
+}
+
+.news-lead-card:hover .news-lead-frame {
+  box-shadow:
+    0 0 0 1px rgba(158, 27, 18, 0.28),
+    0 36px 70px rgba(18, 16, 12, 0.22);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .news-ticker-track,
   .news-pulse,

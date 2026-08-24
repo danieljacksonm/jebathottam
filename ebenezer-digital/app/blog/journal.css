@@ -20,6 +20,59 @@
   transition: transform 1.15s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.journal-hero-glow {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 90%, rgba(16, 185, 129, 0.22), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 90% 20%, rgba(196, 165, 116, 0.12), transparent 50%);
+}
+
+.journal-hero-title {
+  text-shadow: 0 12px 60px rgba(0, 0, 0, 0.45);
+}
+
+.journal-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.35rem;
+  border: 1px solid var(--j-brand);
+  background: var(--j-brand);
+  color: #04110c;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.journal-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.35);
+}
+
+.journal-cta-ghost {
+  background: transparent;
+  color: var(--j-paper);
+  border-color: rgba(243, 239, 230, 0.28);
+}
+
+.journal-cta-ghost:hover {
+  border-color: var(--j-gold);
+  box-shadow: 0 12px 40px rgba(196, 165, 116, 0.18);
+}
+
+.journal-feature-frame {
+  box-shadow:
+    0 0 0 1px rgba(243, 239, 230, 0.08),
+    0 40px 80px rgba(0, 0, 0, 0.45);
+}
+
+.journal-feature:hover .journal-feature-frame {
+  box-shadow:
+    0 0 0 1px rgba(16, 185, 129, 0.35),
+    0 48px 90px rgba(0, 0, 0, 0.5);
+}
+
 .journal-root ::selection {
   background: var(--j-brand);
   color: #04110c;

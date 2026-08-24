@@ -19,6 +19,7 @@ import {
   SITE_PHONE_TEL,
   SITE_WHATSAPP_URL,
 } from "@/lib/site-contact";
+import { SITE_NAV } from "@/lib/site-nav";
 import "./journal.css";
 
 const PAGE_SIZE = 24;
@@ -115,7 +116,7 @@ function BlogIndexInner() {
       />
 
       {/* CINEMATIC INTRO */}
-      <section className="relative h-[100svh] overflow-hidden">
+      <section className="journal-hero relative h-[100svh] overflow-hidden">
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0">
           <Image
             src={featured?.coverImage || "/images/journal/hero.jpg"}
@@ -125,16 +126,23 @@ function BlogIndexInner() {
             className="object-cover"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-[var(--j-ink)]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-[var(--j-ink)]" />
+          <div className="journal-hero-glow pointer-events-none absolute inset-0" />
         </motion.div>
 
         <motion.div
           style={{ opacity: heroOpacity }}
           className="relative z-10 flex h-full flex-col justify-end px-4 pb-16 sm:px-8 lg:px-12"
         >
-          <p className="mb-6 text-[11px] uppercase tracking-[0.45em] text-[var(--j-brand)]">
-            Ebenezer Journal / {learnCount > 0 ? `${learnCount}+ learn stories` : "Learn Desk"}
-          </p>
+          <div className="mb-8 flex flex-wrap items-center gap-3">
+            <p className="text-[11px] uppercase tracking-[0.45em] text-[var(--j-brand)]">
+              Ebenezer Journal
+            </p>
+            <span className="hidden h-px w-10 bg-[var(--j-gold)]/50 sm:block" />
+            <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--j-muted)]">
+              {learnCount > 0 ? `${learnCount}+ learn stories` : "Learn Desk"} · journal.ebenezerdigital.info
+            </p>
+          </div>
           <motion.h1
             initial="hidden"
             animate="show"
@@ -142,7 +150,7 @@ function BlogIndexInner() {
               hidden: {},
               show: { transition: { staggerChildren: 0.08 } },
             }}
-            className="max-w-5xl font-serif text-[14vw] leading-[0.9] tracking-tight sm:text-[9vw] lg:text-[7.5vw]"
+            className="journal-hero-title max-w-5xl font-serif text-[14vw] leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[7.5vw]"
           >
             {["LEARN", "DIGITAL", "SIMPLY."].map((line) => (
               <motion.span
@@ -157,22 +165,19 @@ function BlogIndexInner() {
               </motion.span>
             ))}
           </motion.h1>
-          <div className="mt-10 flex items-end justify-between gap-6">
-            <p className="max-w-md text-sm text-[var(--j-muted)]">
-              How electricity, Wi‑Fi, AI, and the internet work—written so a Class 5 student can follow. Then explore more with{" "}
-              <Link href="/ai" className="text-[var(--j-brand)]">
-                Ebenezer AI
-              </Link>
-              .
+          <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
+            <p className="max-w-lg text-base leading-relaxed text-[var(--j-muted)] sm:text-lg">
+              How electricity, Wi‑Fi, AI, and the internet work — written so anyone can follow.
+              A calm digital library from Ebenezer.
             </p>
-            <a
-              href="#featured"
-              className="text-[10px] uppercase tracking-[0.35em] text-[var(--j-paper)]"
-              data-cursor="SCROLL"
-            >
-              Scroll
-              <span className="mt-2 block h-10 w-px bg-[var(--j-brand)]" />
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a href="#featured" className="journal-cta" data-cursor="SCROLL">
+                Read featured
+              </a>
+              <a href={SITE_NAV.news} className="journal-cta journal-cta-ghost" data-cursor="LIVE">
+                Open News desk
+              </a>
+            </div>
           </div>
         </motion.div>
       </section>
@@ -188,9 +193,9 @@ function BlogIndexInner() {
           <p className="text-[var(--j-muted)]">No published stories yet.</p>
         )}
         {featured && (
-          <Link href={`/blog/${featured.slug}`} className="group block" data-cursor="READ">
+          <Link href={`/blog/${featured.slug}`} className="group journal-feature block" data-cursor="READ">
             <div className="grid items-end gap-8 lg:grid-cols-[1.35fr_0.65fr]">
-              <div className="relative aspect-[16/11] overflow-hidden bg-[#111]">
+              <div className="relative aspect-[16/11] overflow-hidden bg-[#111] journal-feature-frame">
                 <Image
                   src={featured.coverImage || "/images/journal/hero.jpg"}
                   alt={featured.title}
@@ -198,6 +203,7 @@ function BlogIndexInner() {
                   className="object-cover transition duration-700 group-hover:scale-105"
                   sizes="(max-width: 1024px) 100vw, 65vw"
                 />
+                <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/10" />
               </div>
               <div className="pb-2">
                 <p className="text-[11px] uppercase tracking-[0.3em] text-[var(--j-brand)]">

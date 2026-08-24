@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { MagneticLink } from "../studio/MagneticLink";
+import { SITE_NAV } from "@/lib/site-nav";
 
 const stats = [
   { value: "150+", label: "Projects completed" },
@@ -18,6 +19,23 @@ const scenes: Record<string, string> = {
   digital: "Code, grids, and product surfaces in motion.",
   experiences: "Interfaces people can trust and use.",
 };
+
+const mediaDoors = [
+  {
+    href: SITE_NAV.journal,
+    kicker: "Journal",
+    title: "Learn digital simply",
+    body: "Stories, tutorials, and calm explanations — journal.ebenezerdigital.info",
+    tone: "from-emerald-500/25 via-transparent to-transparent",
+  },
+  {
+    href: SITE_NAV.news,
+    kicker: "News",
+    title: "World desk, live",
+    body: "Breaking wires and briefing — news.ebenezerdigital.info",
+    tone: "from-rose-500/20 via-transparent to-transparent",
+  },
+];
 
 export default function Hero() {
   const reduceRef = useRef(false);
@@ -67,7 +85,8 @@ export default function Hero() {
         <p className="font-mono text-[10px] leading-5 text-emerald-300/80">
           {`eben.build({
   web: true,
-  travel: true,
+  journal: true,
+  news: true,
   ai: "Eben AI"
 })`}
         </p>
@@ -122,24 +141,55 @@ export default function Hero() {
           </button>
         </motion.h1>
         <motion.p
-          className="mt-8 max-w-xl text-lg leading-relaxed text-[var(--st-muted,#8d887e)]"
+          className="mt-8 max-w-2xl text-lg leading-relaxed text-[var(--st-muted,#8d887e)]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          {scenes[scene]} Websites, systems, travel support, and AI — with the same care as this page.
+          {scenes[scene]} Websites and systems for clients — plus a publishing house:{" "}
+          <span className="text-white/90">Journal</span> for learning and{" "}
+          <span className="text-white/90">News</span> for the world desk.
         </motion.p>
+
         <div className="mt-10 flex flex-wrap gap-3">
           <MagneticLink href="/contact" className="studio-btn" cursor="START">
             Start a project →
           </MagneticLink>
-          <Link href="/discover" className="studio-btn studio-btn-ghost" data-cursor="FIND">
-            What are you looking for?
-          </Link>
+          <a href={SITE_NAV.journal} className="studio-btn studio-btn-ghost" data-cursor="READ">
+            Open Journal
+          </a>
+          <a href={SITE_NAV.news} className="studio-btn studio-btn-ghost" data-cursor="LIVE">
+            Open News
+          </a>
           <Link href="/work" className="studio-btn studio-btn-ghost" data-cursor="VIEW">
             Explore our work
           </Link>
         </div>
+
+        <div className="mt-12 grid gap-3 sm:grid-cols-2">
+          {mediaDoors.map((door, i) => (
+            <motion.a
+              key={door.href}
+              href={door.href}
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.55 + i * 0.08 }}
+              className="group relative overflow-hidden border border-white/10 bg-white/[0.03] p-6 backdrop-blur-sm transition hover:border-emerald-400/50"
+              data-cursor="OPEN"
+            >
+              <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${door.tone}`} />
+              <p className="relative text-[10px] uppercase tracking-[0.35em] text-emerald-300/90">
+                {door.kicker}
+              </p>
+              <h2 className="relative mt-3 studio-display text-3xl sm:text-4xl">{door.title}</h2>
+              <p className="relative mt-3 max-w-md text-sm text-[var(--st-muted)]">{door.body}</p>
+              <span className="relative mt-5 inline-block text-xs uppercase tracking-[0.28em] text-white/70 transition group-hover:text-emerald-300">
+                Enter →
+              </span>
+            </motion.a>
+          ))}
+        </div>
+
         <div className="mt-16 grid grid-cols-2 gap-6 border-t border-[var(--st-line)] pt-8 md:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label}>

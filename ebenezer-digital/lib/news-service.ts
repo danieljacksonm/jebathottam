@@ -6,7 +6,12 @@ import {
 } from "@/app/blog/news/data";
 import { fetchLiveNews, getLiveNewsBySlug } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
-import { originForKind, siteKindFromHost, JOURNAL_URL } from "@/lib/site-url";
+import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
+import {
+  getArchivedNewsBySlug,
+  listNewsForSitemap,
+  rememberNewsForSitemap,
+} from "@/lib/news-sitemap-archive";
 
 export type PublicNewsItem = NewsArticle & {
   origin: "seed" | "cms" | "live";
@@ -62,9 +67,24 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
   for (const l of live) put(l);
   for (const c of cms) put(recordToPublic(c), true);
 
-  return Array.from(byKey.values()).sort(
+  const list = Array.from(byKey.values()).sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
+
+  // Persist for sitemap retention (≥ 1 week) without blocking the response path too long
+  try {
+    rememberNewsForSitemap(list);
+  } catch {
+    /* archive is best-effort */
+  }
+
+  return list;
+}
+
+/** News URLs for sitemaps — includes stories from the last 7 days even if feeds dropped them. */
+export async function listPublicNewsForSitemap(): Promise<PublicNewsItem[]> {
+  const current = await listPublicNews();
+  return listNewsForSitemap(current) as PublicNewsItem[];
 }
 
 export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem | undefined> {
@@ -72,6 +92,8 @@ export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem 
   if (cms) return recordToPublic(cms);
   const live = await getLiveNewsBySlug(slug);
   if (live) return live;
+  const archived = getArchivedNewsBySlug(slug);
+  if (archived) return archived as PublicNewsItem;
   const seed = WORLD_NEWS.find((n) => n.slug === slug);
   return seed ? seedToPublic(seed) : undefined;
 }
@@ -181,7 +203,8 @@ ${entries}
 }
 
 export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string): string {
-  const urls = items.slice(0, 1000).map((n) => {
+  // Include up to 7 days of stories (caller already filters via listPublicNewsForSitemap)
+  const urls = items.slice(0, 5000).map((n) => {
     const loc = `${siteOrigin}/blog/news/${n.slug}`;
     const publicationDate = new Date(n.publishedAt).toISOString();
     return `<url>
@@ -253,6 +276,6 @@ export function resolveSiteOrigin(requestUrl: string, hostHeader?: string | null
     const u = new URL(requestUrl);
     return originForKind(siteKindFromHost(u.host));
   } catch {
-    return JOURNAL_URL;
+    return NEWS_URL;
   }
 }
