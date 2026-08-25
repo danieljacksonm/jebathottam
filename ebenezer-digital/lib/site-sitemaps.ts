@@ -11,6 +11,7 @@ import {
   JOURNAL_URL,
   NEWS_URL,
   PRODUCTS_URL,
+  SAAS_URL,
   SITE_URL,
   STORE_URL,
   TOOLS_URL,
@@ -53,7 +54,6 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/services",
     "/work",
     "/contact",
-    "/saas",
     "/testimonials",
     "/privacy",
     "/terms",
@@ -65,7 +65,7 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/trust",
   ];
   return routes.map((route) =>
-    page(SITE_URL, route, "weekly", route === "" ? 1 : route === "/saas" ? 0.8 : 0.7, undefined, true)
+    page(SITE_URL, route, "weekly", route === "" ? 1 : 0.7, undefined, true)
   );
 }
 
@@ -73,6 +73,14 @@ async function aiSitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     page(AI_URL, "", "weekly", 1, undefined, true),
     page(AI_URL, "/ai", "weekly", 0.9, undefined, true),
+  ];
+}
+
+async function saasSitemap(): Promise<MetadataRoute.Sitemap> {
+  return [
+    page(SAAS_URL, "", "weekly", 1, undefined, true),
+    page(SAAS_URL, "/saas", "weekly", 0.9, undefined, true),
+    page(SAAS_URL, "/saas/login", "monthly", 0.4, undefined, false),
   ];
 }
 
@@ -258,6 +266,7 @@ export async function sitemapForKind(kind: SiteKind): Promise<MetadataRoute.Site
   if (kind === "products") return productsCatalogSitemap();
   if (kind === "tools") return toolsSitemap();
   if (kind === "ai") return aiSitemap();
+  if (kind === "saas") return saasSitemap();
   if (kind === "discover") return discoverSitemap();
   if (kind === "network") return networkSitemap();
   return studioSitemap();

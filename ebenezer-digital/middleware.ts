@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const AI_URL = (process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com").replace(/\/$/, "");
+const SAAS_URL = (process.env.NEXT_PUBLIC_SAAS_URL || "https://saas.ebenezerdigital.com").replace(/\/$/, "");
 const DISCOVER_URL = (
   process.env.NEXT_PUBLIC_DISCOVER_URL || "https://discover.ebenezerdigital.com"
 ).replace(/\/$/, "");
@@ -51,6 +52,11 @@ function isNewsHost(host: string): boolean {
 function isAiHost(host: string): boolean {
   const h = hostName(host);
   return h === "ai.ebenezerdigital.com" || h === "www.ai.ebenezerdigital.com";
+}
+
+function isSaasHost(host: string): boolean {
+  const h = hostName(host);
+  return h === "saas.ebenezerdigital.com" || h === "www.saas.ebenezerdigital.com";
 }
 
 function isDiscoverHost(host: string): boolean {
@@ -127,6 +133,7 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     if (isStoreHost(host)) target = "/products";
     else if (isNewsHost(host)) target = "/blog/news";
     else if (isAiHost(host)) target = "/ai";
+    else if (isSaasHost(host)) target = "/saas";
     else if (isDiscoverHost(host)) target = "/discover";
     else if (isApexInfoHost(host)) target = "/info";
     else if (isJournalHost(host)) target = "/blog";
@@ -163,6 +170,15 @@ export function middleware(request: NextRequest) {
   // Move AI off path-on-.com → ai subdomain (live hosts only)
   if (isProdStudio && (pathname === "/ai" || pathname.startsWith("/ai/"))) {
     return absoluteRedirect(request, AI_URL, pathname === "/ai" || pathname === "/ai/" ? "/" : pathname);
+  }
+
+  // Move SaaS off path-on-.com → saas subdomain
+  if (isProdStudio && (pathname === "/saas" || pathname.startsWith("/saas/"))) {
+    return absoluteRedirect(
+      request,
+      SAAS_URL,
+      pathname === "/saas" || pathname === "/saas/" ? "/" : pathname
+    );
   }
 
   // Move Discover off path-on-.com → discover subdomain
@@ -218,6 +234,14 @@ export function middleware(request: NextRequest) {
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/ai";
+      return NextResponse.rewrite(url);
+    }
+  }
+
+  if (isSaasHost(host)) {
+    if (pathname === "/" || pathname === "") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/saas";
       return NextResponse.rewrite(url);
     }
   }

@@ -8,6 +8,7 @@ Use **subdomains** for each product surface (not path-on-.com).
 |--------------------|---------|---------------------|
 | `ebenezerdigital.com` | Studio / services | `/` |
 | `ai.ebenezerdigital.com` | Eben AI | `/ai` |
+| `saas.ebenezerdigital.com` | SaaS / Yegova landing | `/saas` |
 | `discover.ebenezerdigital.com` | Find / intent router | `/discover` |
 | `ebenezerdigital.info` | Information Network gateway | `/info` |
 | `journal.ebenezerdigital.info` | Journal (blogs) | `/blog` |
@@ -31,6 +32,7 @@ NEXT_PUBLIC_STORE_URL=https://ebenezerdigital.store
 NEXT_PUBLIC_PRODUCTS_URL=https://products.ebenezerdigital.com
 NEXT_PUBLIC_TOOLS_URL=https://tools.ebenezerdigital.com
 NEXT_PUBLIC_AI_URL=https://ai.ebenezerdigital.com
+NEXT_PUBLIC_SAAS_URL=https://saas.ebenezerdigital.com
 NEXT_PUBLIC_DISCOVER_URL=https://discover.ebenezerdigital.com
 NEXT_PUBLIC_NETWORK_URL=https://ebenezerdigital.net
 NEXT_PUBLIC_BILLING_URL=https://billing.ebenezerdigital.com
@@ -62,6 +64,7 @@ Journal examples:
 - `ebenezerdigital.info/` → Information gateway (`/info`)
 - `ebenezerdigital.info/blog…` → `journal.ebenezerdigital.info…`
 - `ebenezerdigital.com/ai` → `ai.ebenezerdigital.com`
+- `ebenezerdigital.com/saas` → `saas.ebenezerdigital.com`
 - `ebenezerdigital.com/discover` → `discover.ebenezerdigital.com`
 - `ebenezerdigital.info/blog/news…` → `news.ebenezerdigital.info/blog/news…`
 
