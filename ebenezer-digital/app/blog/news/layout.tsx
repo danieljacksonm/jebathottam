@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { NewsChrome } from "./components/NewsChrome";
-import { JOURNAL_URL, pageMetadata } from "@/lib/site-url";
+import { JOURNAL_URL, NEWS_URL, pageMetadata } from "@/lib/site-url";
 
 const base = pageMetadata({
-  title: "E> News | What is happening now",
+  title: "Ebenezer News | What is happening now",
   description:
-    "Ebenezer News — a global digital newsroom. World, India, politics, business, technology, science, sports, and opinion. Fast enough for breaking news. Clear enough to trust.",
+    "Ebenezer News — technology, AI and digital world news. Fast enough for breaking news. Clear enough to trust.",
   path: "/blog/news",
 });
 
@@ -28,10 +28,10 @@ export default function NewsLayout({ children }: { children: ReactNode }) {
   const newsOrg = {
     "@context": "https://schema.org",
     "@type": "NewsMediaOrganization",
-    name: "Ebenezer World News",
-    url: `${JOURNAL_URL}/blog/news`,
-    logo: `${JOURNAL_URL}/og-news.png`,
-    sameAs: [JOURNAL_URL],
+    name: "Ebenezer News",
+    url: NEWS_URL,
+    logo: `${NEWS_URL}/og-news.png`,
+    sameAs: [JOURNAL_URL, NEWS_URL],
     publishingPrinciples: `${JOURNAL_URL}/blog/newsroom/editorial-policy`,
     correctionsPolicy: `${JOURNAL_URL}/blog/newsroom/editorial-policy`,
     ethicsPolicy: `${JOURNAL_URL}/blog/newsroom/editorial-policy`,

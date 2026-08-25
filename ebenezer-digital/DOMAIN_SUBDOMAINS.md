@@ -8,8 +8,9 @@ Use **subdomains** for each product surface (not path-on-.com).
 |--------------------|---------|---------------------|
 | `ebenezerdigital.com` | Studio / services | `/` |
 | `ai.ebenezerdigital.com` | Eben AI | `/ai` |
+| `discover.ebenezerdigital.com` | Find / intent router | `/discover` |
+| `ebenezerdigital.info` | Information Network gateway | `/info` |
 | `journal.ebenezerdigital.info` | Journal (blogs) | `/blog` |
-| `ebenezerdigital.info` | 308 → journal subdomain | — |
 | `news.ebenezerdigital.info` | News channel | `/blog/news` |
 | `ebenezerdigital.store` | Digital store | `/products` |
 | `products.ebenezerdigital.com` | Hardware catalog | `/catalog` |
@@ -23,12 +24,14 @@ Optional alias: `deals.ebenezerdigital.com` → same as tools.
 
 ```bash
 NEXT_PUBLIC_SITE_URL=https://ebenezerdigital.com
+NEXT_PUBLIC_INFO_URL=https://ebenezerdigital.info
 NEXT_PUBLIC_JOURNAL_URL=https://journal.ebenezerdigital.info
 NEXT_PUBLIC_NEWS_URL=https://news.ebenezerdigital.info
 NEXT_PUBLIC_STORE_URL=https://ebenezerdigital.store
 NEXT_PUBLIC_PRODUCTS_URL=https://products.ebenezerdigital.com
 NEXT_PUBLIC_TOOLS_URL=https://tools.ebenezerdigital.com
 NEXT_PUBLIC_AI_URL=https://ai.ebenezerdigital.com
+NEXT_PUBLIC_DISCOVER_URL=https://discover.ebenezerdigital.com
 NEXT_PUBLIC_NETWORK_URL=https://ebenezerdigital.net
 NEXT_PUBLIC_BILLING_URL=https://billing.ebenezerdigital.com
 ```
@@ -56,9 +59,16 @@ Journal examples:
 
 ## Live redirects (already in middleware)
 
+- `ebenezerdigital.info/` → Information gateway (`/info`)
+- `ebenezerdigital.info/blog…` → `journal.ebenezerdigital.info…`
 - `ebenezerdigital.com/ai` → `ai.ebenezerdigital.com`
+- `ebenezerdigital.com/discover` → `discover.ebenezerdigital.com`
 - `ebenezerdigital.info/blog/news…` → `news.ebenezerdigital.info/blog/news…`
 
 ## Nginx note
 
-Point new hosts (`ai.`, `news.`) at the same Next.js upstream as `.com` / `.info`, then issue SSL (Certbot). No separate deploy needed.
+Point new hosts (`ai.`, `discover.`, `news.`, `journal.`) at the same Next.js upstream on **port 80 only** first.
+
+**Do not** add `listen 443` / `ssl_certificate` lines until Certbot has created the PEM files. If nginx already references missing certs, `nginx -t` fails and Certbot cannot run.
+
+Fix: comment out every `server { listen 443 ... }` block that points at missing `/etc/letsencrypt/live/...` paths, reload nginx, then run Certbot. Certbot will add HTTPS itself.

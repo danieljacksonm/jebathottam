@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { listPublicNewsForSitemap } from "@/lib/news-service";
 import {
   AI_URL,
+  DISCOVER_URL,
+  INFO_URL,
   JOURNAL_URL,
   NEWS_URL,
   PRODUCTS_URL,
@@ -61,7 +63,6 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/website-showcase",
     "/stats",
     "/trust",
-    "/discover",
   ];
   return routes.map((route) =>
     page(SITE_URL, route, "weekly", route === "" ? 1 : route === "/saas" ? 0.8 : 0.7, undefined, true)
@@ -72,6 +73,22 @@ async function aiSitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     page(AI_URL, "", "weekly", 1, undefined, true),
     page(AI_URL, "/ai", "weekly", 0.9, undefined, true),
+  ];
+}
+
+async function discoverSitemap(): Promise<MetadataRoute.Sitemap> {
+  return [
+    page(DISCOVER_URL, "", "weekly", 1, undefined, true),
+    page(DISCOVER_URL, "/discover", "weekly", 0.9, undefined, true),
+  ];
+}
+
+async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
+  return [
+    page(INFO_URL, "", "daily", 1, undefined, true),
+    page(INFO_URL, "/about", "monthly", 0.7, undefined, true),
+    page(INFO_URL, "/search", "weekly", 0.6, undefined, true),
+    page(INFO_URL, "/contact", "monthly", 0.5, undefined, true),
   ];
 }
 
@@ -224,6 +241,9 @@ function networkSitemap(): MetadataRoute.Sitemap {
     // Public .net URLs are /tools/{slug} (middleware rewrite)
     pages.push(page(NETWORK_URL, `/tools/${t.slug}`, "weekly", 0.9, new Date(t.updatedAt), true));
   }
+  for (const cat of ["developer", "seo", "image", "text", "calculators", "business", "ai"]) {
+    pages.push(page(NETWORK_URL, `/tools/${cat}`, "weekly", 0.85, undefined, true));
+  }
   for (const g of NETWORK_GUIDES) {
     pages.push(page(NETWORK_URL, `/guides/${g.slug}`, "monthly", 0.7, new Date(g.updatedAt), true));
   }
@@ -231,12 +251,14 @@ function networkSitemap(): MetadataRoute.Sitemap {
 }
 
 export async function sitemapForKind(kind: SiteKind): Promise<MetadataRoute.Sitemap> {
+  if (kind === "info") return infoSitemap();
   if (kind === "journal") return journalSitemap();
   if (kind === "news") return newsSitemap();
   if (kind === "store") return storeSitemap();
   if (kind === "products") return productsCatalogSitemap();
   if (kind === "tools") return toolsSitemap();
   if (kind === "ai") return aiSitemap();
+  if (kind === "discover") return discoverSitemap();
   if (kind === "network") return networkSitemap();
   return studioSitemap();
 }

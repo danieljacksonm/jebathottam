@@ -1,4 +1,15 @@
-import { AI_URL, JOURNAL_URL, NEWS_URL, SITE_URL, STORE_URL, TOOLS_URL, PRODUCTS_URL } from "./site-url";
+import {
+  AI_URL,
+  DISCOVER_URL,
+  INFO_URL,
+  JOURNAL_URL,
+  NETWORK_URL,
+  NEWS_URL,
+  SITE_URL,
+  STORE_URL,
+  TOOLS_URL,
+  PRODUCTS_URL,
+} from "./site-url";
 
 /** Cross-domain navigation — always point to the correct host (subdomain-first). */
 export const SITE_NAV = {
@@ -7,12 +18,18 @@ export const SITE_NAV = {
   work: `${SITE_URL}/work`,
   contact: `${SITE_URL}/contact`,
   ai: AI_URL,
+  discover: DISCOVER_URL,
   saas: `${SITE_URL}/saas`,
+  info: INFO_URL,
+  infoAbout: `${INFO_URL}/about`,
+  infoSearch: `${INFO_URL}/search`,
+  infoContact: `${INFO_URL}/contact`,
   journal: JOURNAL_URL,
   news: NEWS_URL,
   store: STORE_URL,
   tools: TOOLS_URL,
   products: PRODUCTS_URL,
+  network: NETWORK_URL,
   newsSitemap: `${NEWS_URL}/api/news/sitemap`,
   newsRss: `${NEWS_URL}/api/news/rss`,
 } as const;

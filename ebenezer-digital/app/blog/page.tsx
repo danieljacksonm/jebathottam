@@ -152,7 +152,7 @@ function BlogIndexInner() {
             }}
             className="journal-hero-title max-w-5xl font-serif text-[14vw] leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[7.5vw]"
           >
-            {["LEARN", "DIGITAL", "SIMPLY."].map((line) => (
+            {["STORIES,", "IDEAS,", "KNOWLEDGE."].map((line) => (
               <motion.span
                 key={line}
                 variants={{
@@ -167,8 +167,7 @@ function BlogIndexInner() {
           </motion.h1>
           <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
             <p className="max-w-lg text-base leading-relaxed text-[var(--j-muted)] sm:text-lg">
-              How electricity, Wi‑Fi, AI, and the internet work — written so anyone can follow.
-              A calm digital library from Ebenezer.
+              Stories, ideas and useful knowledge for a changing world — written clearly so anyone can follow.
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="#featured" className="journal-cta" data-cursor="SCROLL">
@@ -334,27 +333,25 @@ function BlogIndexInner() {
         </div>
       </section>
 
-      {/* WORLD NEWS TEASER */}
-      <section className="border-y border-[var(--j-line)] px-4 py-20 sm:px-8 lg:px-12">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+      {/* Soft outbound to News — gateway owns discovery; journal stays deep reading */}
+      <section className="border-y border-[var(--j-line)] px-4 py-14 sm:px-8 lg:px-12">
+        <div className="flex flex-wrap items-center justify-between gap-6">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">E&gt; News</p>
-            <h3 className="mt-4 max-w-2xl font-serif text-4xl leading-[1.05] sm:text-6xl">
-              What is happening.
-              <br />
-              What matters.
+            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">Also available</p>
+            <h3 className="mt-3 max-w-xl font-serif text-3xl leading-[1.1] sm:text-4xl">
+              Want today&apos;s news?
             </h3>
-            <p className="mt-5 max-w-lg text-[var(--j-muted)]">
-              A living world newsroom — not a newspaper clone. Open the desk for breaking, live, India, and long reads.
+            <p className="mt-3 max-w-lg text-[var(--j-muted)]">
+              Current stories live on Ebenezer News — separate from the Journal.
             </p>
           </div>
-          <Link
-            href="/blog/news"
+          <a
+            href={SITE_NAV.news}
             className="inline-flex min-h-[48px] items-center gap-2 border border-[var(--j-brand)] px-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--j-brand)] transition hover:bg-[var(--j-brand)] hover:text-[#04110c]"
             data-cursor="NEWS"
           >
-            Open newsroom <ArrowUpRight className="h-4 w-4" />
-          </Link>
+            Read Today&apos;s News <ArrowUpRight className="h-4 w-4" />
+          </a>
         </div>
       </section>
 

@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  AI_URL,
+  DISCOVER_URL,
   JOURNAL_URL,
   PRODUCTS_URL,
   SITE_URL,
@@ -19,8 +21,8 @@ const LINKS = [
   { id: "tools" as const, label: "Tools", href: TOOLS_URL },
   { id: "products" as const, label: "Hardware", href: PRODUCTS_URL },
   { id: "info" as const, label: "Guides", href: JOURNAL_URL },
-  { id: "ai" as const, label: "AI", href: `${SITE_URL}/ai` },
-  { id: "discover" as const, label: "Find", href: `${SITE_URL}/discover` },
+  { id: "ai" as const, label: "AI", href: AI_URL },
+  { id: "discover" as const, label: "Find", href: DISCOVER_URL },
 ];
 
 export function EcosystemNav({ variant = "dark", active }: Props) {

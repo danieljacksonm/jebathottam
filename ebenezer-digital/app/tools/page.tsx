@@ -18,7 +18,7 @@ import {
 } from "./data";
 import { resolveToolImage } from "@/lib/affiliate/images";
 import { AffiliateMedia } from "@/components/AffiliateMedia";
-import { SITE_URL } from "@/lib/site-url";
+import { AI_URL, DISCOVER_URL } from "@/lib/site-url";
 
 const EXAMPLES = [
   "Best AI video generator",
@@ -155,7 +155,7 @@ export default function ToolsPage() {
             <Link href="/tools/compare" className="hover:text-[var(--aff-brand)]">
               Compare
             </Link>
-            <Link href={`${SITE_URL}/discover`} className="hover:text-[var(--aff-brand)]">
+            <Link href={DISCOVER_URL} className="hover:text-[var(--aff-brand)]">
               Discover
             </Link>
             <Link href="/catalog" className="hover:text-[var(--aff-brand)] hidden sm:inline">
@@ -284,7 +284,7 @@ export default function ToolsPage() {
               Ask Ebenezer AI — grounded answers, no invented tools or prices.
             </p>
           </div>
-          <Link href={`${SITE_URL}/ai?mode=tools`} className="aff-btn aff-btn-primary">
+          <Link href={`${AI_URL}?mode=tools`} className="aff-btn aff-btn-primary">
             Ask Ebenezer AI <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

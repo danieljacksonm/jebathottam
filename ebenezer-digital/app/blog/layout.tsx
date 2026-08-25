@@ -5,9 +5,9 @@ import { EcosystemNav } from "@/components/EcosystemNav";
 import { pageMetadata } from "@/lib/site-url";
 
 const base = pageMetadata({
-  title: "Ebenezer Journal | Learn Digital Simply + World News",
+  title: "Ebenezer Journal | Stories, ideas and knowledge",
   description:
-    "Simple digital lessons and the Ebenezer Journal — written clearly, plus world news. RSS ready for Google News and Microsoft feeds.",
+    "Stories, explanations and guides for the digital world — written clearly for everyone.",
   path: "/blog",
 });
 
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     ...base.openGraph,
-    title: "Ebenezer Journal & Learn Desk",
-    description: "Simple detailed digital explainers and a world newsroom from Ebenezer Digital.",
+    title: "Ebenezer Journal",
+    description: "Stories, ideas and knowledge for a changing world.",
   },
   alternates: {
     ...base.alternates,

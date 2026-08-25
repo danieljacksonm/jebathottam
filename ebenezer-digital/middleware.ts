@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const AI_URL = (process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com").replace(/\/$/, "");
+const DISCOVER_URL = (
+  process.env.NEXT_PUBLIC_DISCOVER_URL || "https://discover.ebenezerdigital.com"
+).replace(/\/$/, "");
 const NEWS_URL = (process.env.NEXT_PUBLIC_NEWS_URL || "https://news.ebenezerdigital.info").replace(/\/$/, "");
 const JOURNAL_URL = (
   process.env.NEXT_PUBLIC_JOURNAL_URL || "https://journal.ebenezerdigital.info"
@@ -37,11 +40,7 @@ function isApexInfoHost(host: string): boolean {
 
 function isJournalHost(host: string): boolean {
   const h = hostName(host);
-  return (
-    h === "journal.ebenezerdigital.info" ||
-    h === "www.journal.ebenezerdigital.info" ||
-    isApexInfoHost(host)
-  );
+  return h === "journal.ebenezerdigital.info" || h === "www.journal.ebenezerdigital.info";
 }
 
 function isNewsHost(host: string): boolean {
@@ -52,6 +51,11 @@ function isNewsHost(host: string): boolean {
 function isAiHost(host: string): boolean {
   const h = hostName(host);
   return h === "ai.ebenezerdigital.com" || h === "www.ai.ebenezerdigital.com";
+}
+
+function isDiscoverHost(host: string): boolean {
+  const h = hostName(host);
+  return h === "discover.ebenezerdigital.com" || h === "www.discover.ebenezerdigital.com";
 }
 
 function isStoreHost(host: string): boolean {
@@ -106,6 +110,7 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     rest.startsWith("/tools") ||
     rest.startsWith("/catalog") ||
     rest.startsWith("/discover") ||
+    rest.startsWith("/info") ||
     rest.startsWith("/network");
 
   if (!allowed) return null;
@@ -122,6 +127,8 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     if (isStoreHost(host)) target = "/products";
     else if (isNewsHost(host)) target = "/blog/news";
     else if (isAiHost(host)) target = "/ai";
+    else if (isDiscoverHost(host)) target = "/discover";
+    else if (isApexInfoHost(host)) target = "/info";
     else if (isJournalHost(host)) target = "/blog";
     else if (isToolsHost(host)) target = "/tools";
     else if (isProductsCatalogHost(host)) target = "/catalog";
@@ -158,6 +165,15 @@ export function middleware(request: NextRequest) {
     return absoluteRedirect(request, AI_URL, pathname === "/ai" || pathname === "/ai/" ? "/" : pathname);
   }
 
+  // Move Discover off path-on-.com → discover subdomain
+  if (isProdStudio && (pathname === "/discover" || pathname.startsWith("/discover/"))) {
+    return absoluteRedirect(
+      request,
+      DISCOVER_URL,
+      pathname === "/discover" || pathname === "/discover/" ? "/" : pathname
+    );
+  }
+
   // Move news channel → news subdomain
   if (
     (isApexInfoHost(host) || isJournalHost(host)) &&
@@ -167,24 +183,49 @@ export function middleware(request: NextRequest) {
     return absoluteRedirect(request, NEWS_URL, pathname);
   }
 
-  // Apex .info → journal subdomain (keep blog paths)
-  if (isApexInfoHost(host) && !isNewsHost(host)) {
-    const destPath =
-      pathname === "/" || pathname === ""
-        ? "/"
-        : pathname === "/news" || pathname === "/news/"
-          ? "/"
-          : pathname;
+  // Apex .info = Information Network gateway (not full journal)
+  if (isApexInfoHost(host)) {
     if (pathname === "/news" || pathname === "/news/") {
       return absoluteRedirect(request, NEWS_URL, "/");
     }
-    return absoluteRedirect(request, JOURNAL_URL, destPath === "/blog" ? "/" : destPath);
+    if (pathname === "/blog" || pathname.startsWith("/blog/")) {
+      if (pathname === "/blog" || pathname === "/blog/") {
+        return absoluteRedirect(request, JOURNAL_URL, "/");
+      }
+      return absoluteRedirect(request, JOURNAL_URL, pathname);
+    }
+
+    const url = request.nextUrl.clone();
+    if (pathname === "/" || pathname === "") {
+      url.pathname = "/info";
+      return NextResponse.rewrite(url);
+    }
+    if (pathname === "/about" || pathname === "/about/") {
+      url.pathname = "/info/about";
+      return NextResponse.rewrite(url);
+    }
+    if (pathname === "/search" || pathname === "/search/") {
+      url.pathname = "/info/search";
+      return NextResponse.rewrite(url);
+    }
+    if (pathname === "/contact" || pathname === "/contact/") {
+      url.pathname = "/info/contact";
+      return NextResponse.rewrite(url);
+    }
   }
 
   if (isAiHost(host)) {
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/ai";
+      return NextResponse.rewrite(url);
+    }
+  }
+
+  if (isDiscoverHost(host)) {
+    if (pathname === "/" || pathname === "") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/discover";
       return NextResponse.rewrite(url);
     }
   }
@@ -197,7 +238,7 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if (isJournalHost(host) && !isApexInfoHost(host)) {
+  if (isJournalHost(host)) {
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/blog";
@@ -256,6 +297,26 @@ export function middleware(request: NextRequest) {
       return NextResponse.rewrite(url);
     }
     if (pathname.startsWith("/tools/")) {
+      const rest = pathname.slice("/tools/".length).replace(/\/$/, "");
+      // Pretty category hubs: /tools/developer → /network/tools/c/developer
+      const categoryAliases: Record<string, string> = {
+        developer: "developer",
+        seo: "seo",
+        image: "image",
+        images: "image",
+        pdf: "pdf",
+        text: "text",
+        calculator: "calculators",
+        calculators: "calculators",
+        business: "business",
+        ai: "ai",
+        converter: "calculators",
+      };
+      if (rest && !rest.includes("/") && categoryAliases[rest]) {
+        url.pathname = `/network/tools/c/${categoryAliases[rest]}`;
+        return NextResponse.rewrite(url);
+      }
+      // /tools/c/{category} → /network/tools/c/{category}
       url.pathname = `/network${pathname}`;
       return NextResponse.rewrite(url);
     }
@@ -314,6 +375,9 @@ export const config = {
     "/catalog",
     "/catalog/:path*",
     "/discover",
+    "/info",
+    "/info/:path*",
+    "/search",
     "/network",
     "/network/:path*",
     "/developers",

@@ -5,6 +5,9 @@ function clean(url: string) {
 }
 
 export const SITE_URL = clean(process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com");
+export const INFO_URL = clean(
+  process.env.NEXT_PUBLIC_INFO_URL || "https://ebenezerdigital.info"
+);
 export const JOURNAL_URL = clean(
   process.env.NEXT_PUBLIC_JOURNAL_URL || "https://journal.ebenezerdigital.info"
 );
@@ -15,9 +18,22 @@ export const PRODUCTS_URL = clean(
 );
 export const TOOLS_URL = clean(process.env.NEXT_PUBLIC_TOOLS_URL || "https://tools.ebenezerdigital.com");
 export const AI_URL = clean(process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com");
+export const DISCOVER_URL = clean(
+  process.env.NEXT_PUBLIC_DISCOVER_URL || "https://discover.ebenezerdigital.com"
+);
 export const NETWORK_URL = clean(process.env.NEXT_PUBLIC_NETWORK_URL || "https://ebenezerdigital.net");
 
-export type SiteKind = "studio" | "journal" | "news" | "store" | "products" | "tools" | "ai" | "network";
+export type SiteKind =
+  | "studio"
+  | "info"
+  | "journal"
+  | "news"
+  | "store"
+  | "products"
+  | "tools"
+  | "ai"
+  | "discover"
+  | "network";
 
 /**
  * Public locale prefixes for SEO (hreflang + sitemap language alternates).
@@ -80,13 +96,10 @@ function hostName(host?: string | null): string {
 export function siteKindFromHost(host?: string | null): SiteKind {
   const h = hostName(host);
   if (h === "ai.ebenezerdigital.com" || h === "www.ai.ebenezerdigital.com") return "ai";
+  if (h === "discover.ebenezerdigital.com" || h === "www.discover.ebenezerdigital.com") return "discover";
   if (h === "news.ebenezerdigital.info" || h === "www.news.ebenezerdigital.info") return "news";
-  if (
-    h === "journal.ebenezerdigital.info" ||
-    h === "www.journal.ebenezerdigital.info" ||
-    h === "ebenezerdigital.info" ||
-    h === "www.ebenezerdigital.info"
-  ) {
+  if (h === "ebenezerdigital.info" || h === "www.ebenezerdigital.info") return "info";
+  if (h === "journal.ebenezerdigital.info" || h === "www.journal.ebenezerdigital.info") {
     return "journal";
   }
   if (
@@ -110,18 +123,22 @@ export function siteKindFromHost(host?: string | null): SiteKind {
 }
 
 export function originForKind(kind: SiteKind): string {
+  if (kind === "info") return INFO_URL;
   if (kind === "journal") return JOURNAL_URL;
   if (kind === "news") return NEWS_URL;
   if (kind === "store") return STORE_URL;
   if (kind === "products") return PRODUCTS_URL;
   if (kind === "tools") return TOOLS_URL;
   if (kind === "ai") return AI_URL;
+  if (kind === "discover") return DISCOVER_URL;
   if (kind === "network") return NETWORK_URL;
   return SITE_URL;
 }
 
 export function originForPath(path: string): string {
   if (path === "/ai" || path.startsWith("/ai/")) return AI_URL;
+  if (path === "/discover" || path.startsWith("/discover/")) return DISCOVER_URL;
+  if (path === "/info" || path.startsWith("/info/")) return INFO_URL;
   if (path === "/blog/news" || path.startsWith("/blog/news/")) return NEWS_URL;
   if (path === "/blog" || path.startsWith("/blog/")) return JOURNAL_URL;
   if (path === "/products" || path.startsWith("/products/")) return STORE_URL;
@@ -133,6 +150,7 @@ export function originForPath(path: string): string {
 
 export function ogImageForPath(path: string) {
   if (path.startsWith("/blog/news")) return OG_NEWS;
+  if (path === "/info" || path.startsWith("/info/")) return OG_JOURNAL;
   if (path === "/blog" || path.startsWith("/blog/")) return OG_JOURNAL;
   if (path === "/products" || path.startsWith("/products/") || path === "/saas") return OG_STORE;
   return OG_IMAGE;
@@ -143,6 +161,11 @@ export function canonicalFor(path: string): string {
   if (!path || path === "/") return origin;
   // On dedicated hosts, prefer clean roots for section homes
   if (path === "/ai" && origin === AI_URL) return AI_URL;
+  if (path === "/discover" && origin === DISCOVER_URL) return DISCOVER_URL;
+  if (path === "/info" && origin === INFO_URL) return INFO_URL;
+  if (path === "/info/about" && origin === INFO_URL) return `${INFO_URL}/about`;
+  if (path === "/info/search" && origin === INFO_URL) return `${INFO_URL}/search`;
+  if (path === "/info/contact" && origin === INFO_URL) return `${INFO_URL}/contact`;
   if (path === "/blog/news" && origin === NEWS_URL) return NEWS_URL;
   if (path === "/blog" && origin === JOURNAL_URL) return JOURNAL_URL;
   if (path === "/tools" && origin === TOOLS_URL) return TOOLS_URL;
