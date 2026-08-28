@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { getGuide, NETWORK_GUIDES } from "@/lib/network/guides";
 import { getToolBySlug } from "@/lib/network/registry";
 import { NETWORK_URL } from "@/lib/site-url";
@@ -18,6 +20,11 @@ export function generateMetadata({ params }: Props): Metadata {
     title: guide.seoTitle,
     description: guide.seoDescription,
     alternates: { canonical: `${NETWORK_URL}/guides/${guide.slug}` },
+    openGraph: {
+      title: guide.seoTitle,
+      description: guide.seoDescription,
+      url: `${NETWORK_URL}/guides/${guide.slug}`,
+    },
   };
 }
 
@@ -37,8 +44,8 @@ export default function GuidePage({ params }: Props) {
       <h1 className="mt-2 text-3xl font-bold tracking-tight">{guide.title}</h1>
       <p className="mt-2 text-[var(--nx-muted)]">{guide.excerpt}</p>
       <p className="mt-2 text-xs text-[var(--nx-muted)]">Updated {guide.updatedAt}</p>
-      <div className="prose-network mt-8 space-y-4 text-[var(--nx-ink-2)] leading-relaxed whitespace-pre-wrap">
-        {guide.content}
+      <div className="nx-prose mt-8">
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{guide.content}</ReactMarkdown>
       </div>
       {related.length > 0 ? (
         <section className="mt-10">

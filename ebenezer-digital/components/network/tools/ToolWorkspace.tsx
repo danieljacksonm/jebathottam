@@ -1,5 +1,6 @@
 "use client";
 
+import { NetworkErrorBoundary } from "@/components/network/NetworkErrorBoundary";
 import type { ComponentType } from "react";
 import { Panel, Result } from "./tool-ui";
 import {
@@ -113,9 +114,15 @@ export function ToolWorkspace({ slug }: { slug: string }) {
   if (!Tool) {
     return (
       <Panel>
-        <Result>Unknown tool: {slug}</Result>
+        <Result>This tool isn&apos;t available yet. Try browsing the tools directory.</Result>
       </Panel>
     );
   }
-  return <Tool slug={slug} />;
+  return (
+    <NetworkErrorBoundary>
+      <div className="nx-workspace">
+        <Tool slug={slug} />
+      </div>
+    </NetworkErrorBoundary>
+  );
 }

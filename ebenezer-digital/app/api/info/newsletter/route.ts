@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 const FILE = path.join(process.cwd(), "data", "info-newsletter.json");
 
-type Row = { email: string; at: string };
+type Row = { email: string; at: string; source?: string };
 
 async function readRows(): Promise<Row[]> {
   try {
@@ -22,12 +22,13 @@ export async function POST(req: Request) {
     const email = String(body?.email || "")
       .trim()
       .toLowerCase();
+    const source = String(body?.source || "unknown").slice(0, 64);
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: "invalid_email" }, { status: 400 });
     }
     const rows = await readRows();
     if (!rows.some((r) => r.email === email)) {
-      rows.push({ email, at: new Date().toISOString() });
+      rows.push({ email, at: new Date().toISOString(), source });
       await fs.mkdir(path.dirname(FILE), { recursive: true });
       await fs.writeFile(FILE, JSON.stringify(rows, null, 2), "utf8");
     }

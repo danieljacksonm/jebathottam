@@ -6,15 +6,15 @@ import "./network.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Ebenezer Digital Network — Free tools for the digital world",
+    default: "Free tools that just work | Ebenezer Digital Network",
     template: "%s | Ebenezer Digital Network",
   },
   description:
-    "Powerful free online tools for developers, creators, businesses and everyday digital work.",
+    "Fast, simple and powerful online tools for developers, creators, businesses and everyday digital work.",
   metadataBase: new URL(NETWORK_URL),
   openGraph: {
-    title: "Ebenezer Digital Network",
-    description: "Free tools. Smart technology. Better digital work.",
+    title: "Free tools that just work | Ebenezer Digital Network",
+    description: "Fast, simple and powerful online tools — no account required.",
     url: NETWORK_URL,
     siteName: "Ebenezer Digital Network",
     type: "website",

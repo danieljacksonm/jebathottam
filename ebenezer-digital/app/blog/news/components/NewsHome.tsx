@@ -6,6 +6,7 @@ import { NewsImage } from "./NewsImage";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 import {
   NEWS_NAV,
   readingMinutes,
@@ -564,28 +565,12 @@ export function NewsHome() {
         <p className="mt-6 max-w-md text-sm text-[var(--n-muted)]">
           One briefing. No clutter. Subscribe to the Ebenezer News desk.
         </p>
-        <form
-          className="mt-10 flex max-w-lg flex-col gap-3 sm:flex-row"
-          onSubmit={(e) => e.preventDefault()}
-        >
-          <label className="sr-only" htmlFor="news-email">
-            Email
-          </label>
-          <input
-            id="news-email"
-            type="email"
-            required
-            placeholder="Email"
-            className="min-h-[52px] flex-1 border-b border-[var(--n-ink)] bg-transparent px-0 text-sm outline-none"
-          />
-          <button
-            type="submit"
-            className="min-h-[52px] bg-[var(--n-ink)] px-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--n-paper)]"
-            data-cursor="OPEN"
-          >
-            Subscribe
-          </button>
-        </form>
+        <NewsletterSignup
+          variant="news"
+          source="news-home"
+          className="mt-10 max-w-lg"
+          placeholder="Email"
+        />
       </section>
 
       {/* FOOTER */}

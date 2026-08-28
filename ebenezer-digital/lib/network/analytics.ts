@@ -3,10 +3,12 @@
 type EventName =
   | "tool_view"
   | "tool_use"
+  | "tool_started"
   | "tool_complete"
   | "copy"
   | "download"
   | "search"
+  | "search_result_click"
   | "ai_click"
   | "related_tool_click";
 

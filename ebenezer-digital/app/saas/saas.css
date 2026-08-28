@@ -66,7 +66,7 @@
   color: var(--saas-muted);
 }
 
-.saas-top-nav {
+.saas-top-nav-desktop {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -74,14 +74,51 @@
   gap: 0.75rem 1rem;
 }
 
-.saas-top-nav a {
+.saas-menu-btn {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--saas-line);
+  border-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--saas-ink);
+}
+
+.saas-top-nav-mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 1.25rem 1rem;
+  border-top: 1px solid var(--saas-line);
+  background: rgba(13, 26, 20, 0.98);
+}
+
+.saas-top-nav-mobile a {
+  padding: 0.65rem 0;
+  color: var(--saas-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.saas-top-nav-mobile a:hover {
+  color: var(--saas-ink);
+}
+
+@media (min-width: 768px) {
+  .saas-menu-btn {
+    display: none;
+  }
+}
+
+.saas-top-nav-desktop a {
   color: var(--saas-muted);
   text-decoration: none;
   font-size: 0.85rem;
   font-weight: 500;
 }
 
-.saas-top-nav a:hover {
+.saas-top-nav-desktop a:hover {
   color: var(--saas-ink);
 }
 
@@ -348,12 +385,12 @@
   opacity: 0.8;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
   .saas-preview-grid {
     grid-template-columns: 1fr;
   }
 
-  .saas-top-nav a:not(.saas-btn) {
+  .saas-top-nav-desktop {
     display: none;
   }
 }

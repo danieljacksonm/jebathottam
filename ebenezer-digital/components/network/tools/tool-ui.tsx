@@ -103,6 +103,7 @@ export function CopyButton({
   label?: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const [failed, setFailed] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -116,17 +117,21 @@ export function CopyButton({
     try {
       await navigator.clipboard.writeText(text);
       trackNetworkEvent("copy", { tool: slug });
+      setFailed(false);
       setCopied(true);
       if (timer.current) clearTimeout(timer.current);
       timer.current = setTimeout(() => setCopied(false), 1600);
     } catch {
-      /* ignore */
+      setFailed(true);
+      setCopied(false);
+      if (timer.current) clearTimeout(timer.current);
+      timer.current = setTimeout(() => setFailed(false), 2200);
     }
   }, [text, slug]);
 
   return (
     <button type="button" className="nx-btn nx-btn-ghost" onClick={onCopy} disabled={!text}>
-      {copied ? "Copied" : label}
+      {failed ? "Copy failed" : copied ? "Copied!" : label}
     </button>
   );
 }
@@ -185,13 +190,14 @@ export function useImageFile(slug: string) {
       const f = e.target.files?.[0];
       e.target.value = "";
       if (!f) return;
-      if (!f.type.startsWith("image/")) {
-        setError("Please choose an image file (image/*).");
+      const okMime = ["image/jpeg", "image/png", "image/webp"].includes(f.type);
+      if (!okMime) {
+        setError("Please upload a JPG, PNG or WebP image.");
         clear();
         return;
       }
       if (f.size > MAX_IMAGE_BYTES) {
-        setError("Image must be 8 MB or smaller.");
+        setError("This file is larger than the allowed size (8 MB).");
         clear();
         return;
       }
@@ -231,8 +237,8 @@ export function ImagePicker({
 }) {
   return (
     <div>
-      <Label>Image (max 8 MB)</Label>
-      <input className="nx-input" type="file" accept="image/*" onChange={onFile} />
+      <Label>Upload image (JPG, PNG or WebP · max 8 MB)</Label>
+      <input className="nx-input" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" onChange={onFile} />
       <ErrorMsg>{error}</ErrorMsg>
       {preview ? (
         // eslint-disable-next-line @next/next/no-img-element

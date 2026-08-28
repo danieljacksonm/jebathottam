@@ -45,6 +45,21 @@
   backdrop-filter: blur(12px);
 }
 
+.c-menu-btn {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--c-line);
+  border-radius: 0.5rem;
+  background: var(--c-surface);
+  color: var(--c-ink);
+}
+
+.c-nav-mobile a {
+  text-decoration: none;
+}
+
 .c-hero {
   position: relative;
   overflow: hidden;

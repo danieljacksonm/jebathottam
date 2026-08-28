@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/site-url";
 import { SITE_NAV } from "@/lib/site-nav";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
+import { SaasHeader } from "./SaasHeader";
 import "./saas.css";
 
 export const metadata: Metadata = pageMetadata({
@@ -45,25 +46,7 @@ const features = [
 export default function SaasLandingPage() {
   return (
     <main className="saas-root">
-      <header className="saas-top">
-        <div className="saas-top-inner">
-          <Link href={SITE_NAV.home} className="saas-brand">
-            <span className="saas-brand-mark">E</span>
-            <span>
-              <strong>Yegova</strong>
-              <em>by Ebenezer Digital</em>
-            </span>
-          </Link>
-          <nav className="saas-top-nav" aria-label="SaaS links">
-            <Link href={SITE_NAV.store}>Store</Link>
-            <Link href={SITE_NAV.journal}>Journal</Link>
-            <a href={`${BILLING_URL}/login`}>Sign in</a>
-            <a className="saas-btn saas-btn-gold" href={`${BILLING_URL}/register`}>
-              Start free
-            </a>
-          </nav>
-        </div>
-      </header>
+      <SaasHeader />
 
       <section className="saas-hero">
         <p className="saas-kicker">Free cloud billing for Indian shops</p>

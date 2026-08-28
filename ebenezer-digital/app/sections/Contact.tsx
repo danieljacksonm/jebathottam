@@ -25,8 +25,8 @@ const contactInfo = [
     value: SITE_PHONE_DISPLAY,
     href: SITE_WHATSAPP_URL,
   },
-  { label: "Location", value: "Remote / Worldwide", href: "#" },
-  { label: "Working Hours", value: "24/7 Support Available", href: "#" },
+  { label: "Location", value: "Remote / Worldwide" },
+  { label: "Working Hours", value: "24/7 Support Available" },
 ];
 
 const steps = [
@@ -127,9 +127,15 @@ export default function Contact() {
           <ul className="mt-10 space-y-4 text-sm text-[var(--st-muted)]">
             {contactInfo.map((item) => (
               <li key={item.label}>
-                <a href={item.href} className="hover:text-white">
-                  {item.label} — {item.value}
-                </a>
+                {"href" in item && item.href ? (
+                  <a href={item.href} className="hover:text-white">
+                    {item.label} — {item.value}
+                  </a>
+                ) : (
+                  <span>
+                    {item.label} — {item.value}
+                  </span>
+                )}
               </li>
             ))}
           </ul>

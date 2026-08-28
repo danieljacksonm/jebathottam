@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import { SITE_NAV } from "@/lib/site-nav";
 
 const LINKS = [
@@ -14,6 +16,24 @@ const LINKS = [
 
 export function InfoShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "";
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  function renderLink(l: (typeof LINKS)[number], onNavigate?: () => void) {
+    const active = l.match ? l.match(pathname) : false;
+    const className = `info-nav-link${active ? " is-active" : ""}`;
+    if (l.external) {
+      return (
+        <a key={l.label} href={l.href} className={className} onClick={onNavigate}>
+          {l.label}
+        </a>
+      );
+    }
+    return (
+      <Link key={l.label} href={l.href} className={className} onClick={onNavigate}>
+        {l.label}
+      </Link>
+    );
+  }
 
   return (
     <div className="info-root">
@@ -29,28 +49,24 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
               <em>Information</em>
             </span>
           </Link>
-          <nav className="info-nav" aria-label="Main">
-            {LINKS.map((l) => {
-              const active = l.match ? l.match(pathname) : false;
-              if (l.external) {
-                return (
-                  <a key={l.label} href={l.href} className="info-nav-link">
-                    {l.label}
-                  </a>
-                );
-              }
-              return (
-                <Link
-                  key={l.label}
-                  href={l.href}
-                  className={`info-nav-link${active ? " is-active" : ""}`}
-                >
-                  {l.label}
-                </Link>
-              );
-            })}
+          <nav className="info-nav info-nav-desktop" aria-label="Main">
+            {LINKS.map((l) => renderLink(l))}
           </nav>
+          <button
+            type="button"
+            className="info-menu-btn"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
+        {menuOpen && (
+          <nav className="info-nav-mobile" aria-label="Mobile">
+            {LINKS.map((l) => renderLink(l, () => setMenuOpen(false)))}
+          </nav>
+        )}
       </header>
       <main id="main">{children}</main>
       <footer className="info-footer">

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Mail } from "lucide-react";
 import { SITE_EMAIL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL, SITE_WHATSAPP_URL } from "@/lib/site-contact";
 import { SITE_NAV } from "@/lib/site-nav";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 const TwitterXIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
@@ -48,7 +48,7 @@ const footerLinks = {
     { label: "News", href: SITE_NAV.news },
     { label: "Journal", href: SITE_NAV.journal },
     { label: "Store", href: SITE_NAV.store },
-    { label: "SaaS billing", href: "/saas" },
+    { label: "SaaS billing", href: SITE_NAV.saas },
     { label: "Eben AI", href: SITE_NAV.ai },
   ],
   support: [
@@ -60,15 +60,17 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: TwitterXIcon, href: "#", label: "Twitter" },
-  { icon: LinkedinIcon, href: "#", label: "LinkedIn" },
-  { icon: GithubIcon, href: "#", label: "GitHub" },
-  { icon: InstagramIcon, href: "#", label: "Instagram" },
+  { icon: TwitterXIcon, href: "", label: "Twitter" },
+  { icon: LinkedinIcon, href: "", label: "LinkedIn" },
+  { icon: GithubIcon, href: "", label: "GitHub" },
+  { icon: InstagramIcon, href: "", label: "Instagram" },
 ];
 
+function isRealUrl(href?: string) {
+  return Boolean(href && href !== "#" && /^https?:\/\//i.test(href));
+}
+
 export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [siteName, setSiteName] = useState("Ebenezer");
   const [siteDescription, setSiteDescription] = useState(
     "Reliable digital work for businesses everywhere. We deliver excellence in every project."
@@ -83,21 +85,14 @@ export default function Footer() {
         if (data.settings?.siteDescription) setSiteDescription(data.settings.siteDescription);
         const s = data.settings?.socialLinks || {};
         setDynamicSocial([
-          { icon: TwitterXIcon, href: s.twitter || "#", label: "Twitter" },
-          { icon: LinkedinIcon, href: s.linkedin || "#", label: "LinkedIn" },
-          { icon: GithubIcon, href: s.github || "#", label: "GitHub" },
-          { icon: InstagramIcon, href: s.instagram || "#", label: "Instagram" },
+          { icon: TwitterXIcon, href: s.twitter || "", label: "Twitter" },
+          { icon: LinkedinIcon, href: s.linkedin || "", label: "LinkedIn" },
+          { icon: GithubIcon, href: s.github || "", label: "GitHub" },
+          { icon: InstagramIcon, href: s.instagram || "", label: "Instagram" },
         ]);
       })
       .catch(() => {});
   }, []);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubscribed(true);
-    setEmail("");
-    setTimeout(() => setIsSubscribed(false), 3000);
-  };
 
   return (
     <footer className="relative overflow-hidden border-t border-[var(--st-line,#1f1f20)] bg-[#050505]">
@@ -112,22 +107,12 @@ export default function Footer() {
           <span className="text-emerald-400">MATTER.</span>
         </p>
 
-        <form onSubmit={handleSubscribe} className="mt-12 flex max-w-xl flex-col gap-3 sm:flex-row">
-          <div className="relative flex-1">
-            <Mail className="absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="w-full border-b border-[var(--st-line,#1f1f20)] bg-transparent py-3 pl-7 text-white outline-none"
-            />
-          </div>
-          <button type="submit" className="studio-btn">
-            {isSubscribed ? "Subscribed!" : "Subscribe"}
-          </button>
-        </form>
+        <NewsletterSignup
+          variant="studio"
+          source="studio-footer"
+          className="mt-12"
+          placeholder="Enter your email"
+        />
 
         <div className="mt-16 grid grid-cols-2 gap-10 md:grid-cols-5">
           <div>
@@ -136,10 +121,10 @@ export default function Footer() {
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--st-muted,#8d887e)]">{siteDescription}</p>
             <div className="mt-5 flex gap-3">
-              {dynamicSocial.map((social) => (
+              {dynamicSocial.filter((s) => isRealUrl(s.href)).map((social) => (
                 <a
                   key={social.label}
-                  href={social.href || "#"}
+                  href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/40 hover:text-white"

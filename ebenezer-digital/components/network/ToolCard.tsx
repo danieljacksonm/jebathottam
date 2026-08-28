@@ -98,22 +98,26 @@ const ICONS: Record<string, LucideIcon> = {
   Target,
 };
 
-export function ToolCard({ tool }: { tool: NetworkToolMeta }) {
+export function ToolCard({
+  tool,
+  signal,
+}: {
+  tool: NetworkToolMeta;
+  signal?: string;
+}) {
   const Icon = ICONS[tool.icon] || WrenchFallback;
   return (
-    <Link href={`/network/tools/${tool.slug}`} className="nx-card block p-4 no-underline text-inherit">
-      <div className="flex items-start gap-3">
-        <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--nx-line)] bg-[var(--nx-brand-soft)] text-[var(--nx-brand)]">
-          <Icon className="h-5 w-5" />
-        </span>
-        <div className="min-w-0">
-          <p className="font-semibold">{tool.name}</p>
-          <p className="mt-1 text-sm text-[var(--nx-muted)] line-clamp-2">{tool.description}</p>
-          <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-[var(--nx-brand)]">
-            {categoryLabel(tool.category)}
-          </p>
-        </div>
+    <Link href={`/network/tools/${tool.slug}`} className="nx-card nx-tool-card">
+      <span className="nx-tool-icon" aria-hidden>
+        <Icon className="h-5 w-5" />
+      </span>
+      <h3>{tool.name}</h3>
+      <p>{tool.description}</p>
+      <div className="nx-tool-meta">
+        <span>{categoryLabel(tool.category)}</span>
+        {signal ? <span>{signal}</span> : null}
       </div>
+      <span className="nx-tool-cta">Use Tool →</span>
     </Link>
   );
 }

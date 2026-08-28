@@ -634,21 +634,38 @@ export const NETWORK_TOOLS: NetworkToolMeta[] = [
     id: "image-compressor",
     name: "Image Compressor",
     slug: "image-compressor",
-    description: "Compress images in your browser by re-encoding with quality control.",
+    description: "Reduce image size without losing visible quality.",
     category: "image",
     icon: "ImageDown",
-    keywords: ["compress image", "reduce size", "jpeg", "webp"],
-    synonyms: ["compress a photo", "reduce photo size"],
-    seoTitle: "Image Compressor Online — Browser Based",
-    seoDescription: "Compress JPG/PNG/WebP images locally in your browser. No server upload.",
+    keywords: ["compress image", "reduce size", "jpeg", "webp", "compress jpg", "compress png", "reduce photo size"],
+    synonyms: [
+      "compress a photo",
+      "reduce photo size",
+      "make image smaller",
+      "make photo smaller",
+      "image compressor",
+      "compress image online",
+    ],
+    seoTitle: "Free Image Compressor – Reduce Image Size Online",
+    seoDescription:
+      "Compress JPG, PNG and WebP images online. Reduce file size quickly while keeping your images looking sharp. Runs in your browser.",
     featured: true,
     related: ["image-resizer", "image-converter"],
-    howItWorks: ["Choose an image", "Set quality", "Download the compressed file"],
-    features: ["Local processing", "Quality slider", "Size comparison"],
+    howItWorks: [
+      "Upload a JPG, PNG or WebP image",
+      "Choose a quality level (we recommend a balanced starting point)",
+      "Preview the size savings",
+      "Download the compressed file",
+    ],
+    features: ["Local processing — files stay on your device", "Quality slider", "Original vs compressed size", "Works on phone and desktop"],
     faqs: [
       {
-        q: "Is the image uploaded?",
-        a: "No. Compression uses the Canvas API in your browser.",
+        q: "Is the image uploaded to a server?",
+        a: "No. Compression uses the Canvas API in your browser. Your file never leaves your device for this tool.",
+      },
+      {
+        q: "Will quality look the same?",
+        a: "Lower quality settings remove more detail. Start around 70–85 and check the preview before downloading.",
       },
     ],
   }),
@@ -793,8 +810,31 @@ export function getRelatedTools(slug: string, limit = 4): NetworkToolMeta[] {
     .map((s) => getToolBySlug(s))
     .filter(Boolean) as NetworkToolMeta[];
   if (related.length >= limit) return related.slice(0, limit);
-  const more = getToolsByCategory(tool.category).filter((t) => t.slug !== slug && !related.some((r) => r.slug === t.slug));
-  return [...related, ...more].slice(0, limit);
+
+  const keySet = new Set(
+    [...tool.keywords, ...(tool.synonyms || []), tool.category].map((k) => k.toLowerCase())
+  );
+  const scored = getLiveTools()
+    .filter((t) => t.slug !== slug && !related.some((r) => r.slug === t.slug))
+    .map((t) => {
+      let score = t.category === tool.category ? 5 : 0;
+      for (const k of [...t.keywords, ...(t.synonyms || [])]) {
+        if (keySet.has(k.toLowerCase())) score += 3;
+      }
+      // format / use-case overlap via shared tokens
+      const tokens = new Set(
+        `${t.name} ${t.description}`.toLowerCase().split(/[^a-z0-9]+/).filter((x) => x.length > 3)
+      );
+      for (const tok of Array.from(tokens)) {
+        if (keySet.has(tok) || tool.keywords.some((k) => k.toLowerCase().includes(tok))) score += 1;
+      }
+      return { t, score };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score || a.t.name.localeCompare(b.t.name))
+    .map((x) => x.t);
+
+  return [...related, ...scored].slice(0, limit);
 }
 
 export function categoryLabel(category: NetworkToolCategory): string {

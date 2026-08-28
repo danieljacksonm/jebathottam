@@ -76,7 +76,7 @@ function generateQrMatrix(text: string): boolean[][] {
         const need = Math.ceil((4 + 8 + byteLen * 8) / 8);
         if (need <= dataCW) return v;
       }
-      throw new Error("Text too long (max ~100 characters for this QR builder).");
+      throw new Error("That text is too long for this QR tool. Try a shorter URL or message (about 100 characters).");
     }
 
     function make(v: number, bytes: number[]) {
@@ -382,28 +382,65 @@ function loadToCanvas(
 }
 
 export function ImageCompressor({ slug }: { slug: string }) {
-  const { preview, error, img, onFile } = useImageFile(slug);
-  const [quality, setQuality] = useState(0.7);
+  const { preview, error, img, file, onFile } = useImageFile(slug);
+  const [quality, setQuality] = useState(0.75);
   const [out, setOut] = useState("");
-  const [info, setInfo] = useState("");
+  const [meta, setMeta] = useState<{
+    originalKb: number;
+    compressedKb: number;
+    savings: number;
+    width: number;
+    height: number;
+    format: string;
+  } | null>(null);
+  const [runError, setRunError] = useState("");
 
   const run = () => {
-    if (!img) return;
+    if (!img || !file) return;
+    trackNetworkEvent("tool_started", { tool: slug });
     try {
-      const data = loadToCanvas(img, { quality, mime: "image/jpeg", maxW: 1920, maxH: 1920 });
+      const mime = file.type === "image/png" && quality > 0.9 ? "image/png" : "image/jpeg";
+      const data = loadToCanvas(img, {
+        quality,
+        mime,
+        maxW: 2560,
+        maxH: 2560,
+      });
       setOut(data);
-      const approx = Math.round((data.length * 3) / 4 / 1024);
-      setInfo(`Compressed JPEG ≈ ${approx} KB at quality ${Math.round(quality * 100)}%`);
+      const compressedBytes = Math.round((data.length * 3) / 4);
+      const originalKb = Math.round(file.size / 1024);
+      const compressedKb = Math.max(1, Math.round(compressedBytes / 1024));
+      const savings = Math.max(0, Math.round((1 - compressedBytes / file.size) * 100));
+      setMeta({
+        originalKb,
+        compressedKb,
+        savings,
+        width: img.naturalWidth,
+        height: img.naturalHeight,
+        format: file.type.replace("image/", "").toUpperCase(),
+      });
+      setRunError("");
       trackNetworkEvent("tool_complete", { tool: slug, action: "compress" });
-    } catch (e) {
-      setInfo(e instanceof Error ? e.message : "Failed");
+    } catch {
+      setRunError("We couldn't process this image. Please make sure it is a valid JPG, PNG or WebP and try again.");
+      setOut("");
+      setMeta(null);
     }
   };
+
+  const recommended = file && file.size > 1_500_000 ? 0.65 : 0.75;
 
   return (
     <Panel>
       <ImagePicker onFile={onFile} error={error} preview={preview} />
-      <Field label={`Quality (${Math.round(quality * 100)}%)`}>
+      {img && file ? (
+        <Result>
+          Detected: {file.type.replace("image/", "").toUpperCase()} · {img.naturalWidth}×{img.naturalHeight}px ·{" "}
+          {Math.round(file.size / 1024)} KB
+          {file.size > 800_000 ? ` · Suggested quality ~${Math.round(recommended * 100)}%` : ""}
+        </Result>
+      ) : null}
+      <Field label={`Compression quality (${Math.round(quality * 100)}%)`}>
         <input
           className="nx-input"
           type="range"
@@ -412,6 +449,9 @@ export function ImageCompressor({ slug }: { slug: string }) {
           step={0.05}
           value={quality}
           onChange={(e) => setQuality(Number(e.target.value))}
+          aria-valuemin={10}
+          aria-valuemax={95}
+          aria-valuenow={Math.round(quality * 100)}
         />
       </Field>
       <Toolbar>
@@ -428,10 +468,17 @@ export function ImageCompressor({ slug }: { slug: string }) {
           Download
         </GhostBtn>
       </Toolbar>
-      {info ? <Result>{info}</Result> : null}
+      <ErrorMsg>{runError}</ErrorMsg>
+      {meta ? (
+        <Result>
+          Original {meta.originalKb} KB → Compressed {meta.compressedKb} KB
+          {meta.savings > 0 ? ` · Saved ${meta.savings}%` : " · Similar size (try lower quality)"} · {meta.width}×
+          {meta.height}px
+        </Result>
+      ) : null}
       {out ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={out} alt="Compressed" style={{ maxWidth: "100%", marginTop: 12, borderRadius: 12 }} />
+        <img src={out} alt="Compressed preview" style={{ maxWidth: "100%", marginTop: 12, borderRadius: 12 }} />
       ) : null}
     </Panel>
   );

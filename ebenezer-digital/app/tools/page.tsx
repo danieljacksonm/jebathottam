@@ -18,7 +18,8 @@ import {
 } from "./data";
 import { resolveToolImage } from "@/lib/affiliate/images";
 import { AffiliateMedia } from "@/components/AffiliateMedia";
-import { AI_URL, DISCOVER_URL } from "@/lib/site-url";
+import { ToolsHeader } from "./ToolsHeader";
+import { AI_URL } from "@/lib/site-url";
 
 const EXAMPLES = [
   "Best AI video generator",
@@ -145,25 +146,7 @@ export default function ToolsPage() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-[var(--aff-line)] bg-white/95 backdrop-blur">
-        <div className="aff-page flex h-14 items-center justify-between gap-3">
-          <Link href="/tools" className="flex items-center gap-2">
-            <span className="font-bold">Ebenezer</span>
-            <span className="rounded-md bg-[var(--aff-brand)] px-2 py-0.5 text-[11px] font-bold text-white">Tools</span>
-          </Link>
-          <div className="flex items-center gap-3 text-sm text-[var(--aff-muted)]">
-            <Link href="/tools/compare" className="hover:text-[var(--aff-brand)]">
-              Compare
-            </Link>
-            <Link href={DISCOVER_URL} className="hover:text-[var(--aff-brand)]">
-              Discover
-            </Link>
-            <Link href="/catalog" className="hover:text-[var(--aff-brand)] hidden sm:inline">
-              Hardware
-            </Link>
-          </div>
-        </div>
-      </header>
+      <ToolsHeader />
 
       <section className="aff-hero">
         <div className="aff-page py-14 sm:py-18">

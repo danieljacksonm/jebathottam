@@ -5,51 +5,80 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   BookOpen,
-  Code2,
   Home,
   Moon,
+  Monitor,
   Search,
   Sparkles,
   Sun,
   Wrench,
+  LayoutGrid,
 } from "lucide-react";
 import { AI_URL, JOURNAL_URL, PRODUCTS_URL, SITE_URL, STORE_URL, TOOLS_URL } from "@/lib/site-url";
 import { trackNetworkEvent } from "@/lib/network/analytics";
+import { PUBLIC_CATEGORIES } from "@/lib/network/paths";
+import { CATEGORY_LABELS } from "@/lib/network/types";
 
 const NAV = [
-  { href: "/network/tools", label: "Tools" },
-  { href: "/network/developers", label: "Developers" },
-  { href: "/network/resources", label: "Resources" },
-  { href: "/network/guides", label: "Guides" },
+  { href: "/network/tools", label: "Tools", match: "/network/tools" },
+  { href: "/network/tools/c/developer", label: "Categories", match: "/network/tools/c" },
+  { href: "/network/resources", label: "Resources", match: "/network/resources" },
+  { href: "/network/guides", label: "Guides", match: "/network/guides" },
 ];
 
-function basePath(pathname: string) {
-  return pathname;
+type ThemeMode = "light" | "dark" | "system";
+
+function resolveTheme(mode: ThemeMode): "light" | "dark" {
+  if (mode === "system") {
+    if (typeof window === "undefined") return "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  return mode;
 }
 
 export function NetworkShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || "/network";
+  const [mode, setMode] = useState<ThemeMode>("system");
   const [theme, setTheme] = useState<"light" | "dark">("light");
 
   useEffect(() => {
-    const saved = localStorage.getItem("eben-network-theme") as "light" | "dark" | null;
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const next = saved || (prefersDark ? "dark" : "light");
-    setTheme(next);
-    document.documentElement.dataset.nxTheme = next;
+    const saved = localStorage.getItem("eben-network-theme-mode") as ThemeMode | null;
+    const legacy = localStorage.getItem("eben-network-theme") as "light" | "dark" | null;
+    const nextMode: ThemeMode = saved || (legacy ? legacy : "system");
+    setMode(nextMode);
+    setTheme(resolveTheme(nextMode));
   }, []);
+
+  useEffect(() => {
+    const applied = resolveTheme(mode);
+    setTheme(applied);
+    const root = document.querySelector(".nx-root") as HTMLElement | null;
+    if (root) root.dataset.theme = applied;
+    localStorage.setItem("eben-network-theme-mode", mode);
+    if (mode === "system") {
+      const mq = window.matchMedia("(prefers-color-scheme: dark)");
+      const onChange = () => setTheme(resolveTheme("system"));
+      mq.addEventListener("change", onChange);
+      return () => mq.removeEventListener("change", onChange);
+    }
+  }, [mode]);
 
   useEffect(() => {
     const root = document.querySelector(".nx-root") as HTMLElement | null;
     if (root) root.dataset.theme = theme;
-    localStorage.setItem("eben-network-theme", theme);
   }, [theme]);
+
+  function cycleTheme() {
+    setMode((m) => (m === "light" ? "dark" : m === "dark" ? "system" : "light"));
+  }
+
+  const ThemeIcon = mode === "system" ? Monitor : theme === "light" ? Moon : Sun;
 
   const mobile = [
     { href: "/network", label: "Home", icon: Home },
     { href: "/network/tools", label: "Tools", icon: Wrench },
-    { href: "/network/developers", label: "Dev", icon: Code2 },
-    { href: "/network/resources", label: "Resources", icon: BookOpen },
+    { href: "/network/tools/c/developer", label: "Browse", icon: LayoutGrid },
+    { href: "/network/resources", label: "Learn", icon: BookOpen },
     { href: `${AI_URL}?mode=general`, label: "AI", icon: Sparkles, external: true },
   ];
 
@@ -63,7 +92,11 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
           </Link>
           <nav className="nx-nav" aria-label="Primary">
             {NAV.map((item) => (
-              <Link key={item.href} href={item.href}>
+              <Link
+                key={item.href}
+                href={item.href}
+                className={pathname.startsWith(item.match) ? "is-active" : undefined}
+              >
                 {item.label}
               </Link>
             ))}
@@ -73,16 +106,21 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
             >
               AI
             </a>
+            <Link href="/network/tools" className="nx-btn nx-btn-ghost !py-2 !px-3 !text-sm" aria-label="Search tools">
+              <Search className="h-4 w-4" />
+              Search
+            </Link>
             <Link href="/network/tools" className="nx-btn nx-btn-primary !py-2 !px-3 !text-sm">
               Explore Tools
             </Link>
             <button
               type="button"
               className="nx-btn nx-btn-ghost !py-2 !px-2"
-              aria-label="Toggle theme"
-              onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+              aria-label={`Theme: ${mode}. Click to change.`}
+              title={`Theme: ${mode}`}
+              onClick={cycleTheme}
             >
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              <ThemeIcon className="h-4 w-4" />
             </button>
           </nav>
           <div className="flex items-center gap-2 md:hidden">
@@ -92,10 +130,10 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
             <button
               type="button"
               className="nx-btn nx-btn-ghost !p-2"
-              aria-label="Toggle theme"
-              onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+              aria-label={`Theme: ${mode}. Click to change.`}
+              onClick={cycleTheme}
             >
-              {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              <ThemeIcon className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -108,15 +146,18 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
           <div className="lg:col-span-2">
             <p className="font-bold">Ebenezer Digital Network</p>
             <p className="mt-2 text-sm text-[var(--nx-muted)] max-w-sm">
-              Free tools. Smart technology. Better digital work.
+              Free tools that just work — fast, private in your browser, and simple enough for anyone.
             </p>
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wide text-[var(--nx-muted)]">Tools</p>
             <div className="mt-3 flex flex-col gap-2">
               <Link href="/network/tools">All tools</Link>
-              <Link href="/network/tools?category=developer">Developer</Link>
-              <Link href="/network/tools?category=seo">SEO</Link>
+              {PUBLIC_CATEGORIES.slice(0, 4).map((c) => (
+                <Link key={c} href={`/network/tools/c/${c}`}>
+                  {CATEGORY_LABELS[c]}
+                </Link>
+              ))}
               <Link href="/network/finder">Tool finder</Link>
             </div>
           </div>
@@ -155,11 +196,18 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
       <nav className="nx-mobile-nav" aria-label="Mobile">
         {mobile.map((item) => {
           const Icon = item.icon;
-          const active = !item.external && (item.href === "/network" ? pathname === "/network" : pathname.startsWith(item.href));
+          const active =
+            !item.external &&
+            (item.href === "/network" ? pathname === "/network" : pathname.startsWith(item.href));
           const className = active ? "is-active" : "";
           if (item.external) {
             return (
-              <a key={item.label} href={item.href} className={className} onClick={() => trackNetworkEvent("ai_click", { from: "mobile_nav" })}>
+              <a
+                key={item.label}
+                href={item.href}
+                className={className}
+                onClick={() => trackNetworkEvent("ai_click", { from: "mobile_nav" })}
+              >
                 <Icon className="h-4 w-4" />
                 {item.label}
               </a>
@@ -176,6 +224,3 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-// silence unused in case of tree shaking confusion
-void basePath;

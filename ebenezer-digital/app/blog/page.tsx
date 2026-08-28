@@ -20,6 +20,7 @@ import {
   SITE_WHATSAPP_URL,
 } from "@/lib/site-contact";
 import { SITE_NAV } from "@/lib/site-nav";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 import "./journal.css";
 
 const PAGE_SIZE = 24;
@@ -514,26 +515,11 @@ function BlogIndexInner() {
             READING.
           </h3>
           <div className="mt-12 grid gap-10 md:grid-cols-[1.2fr_0.8fr]">
-            <form
-              className="flex flex-col gap-3 sm:flex-row"
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
-            >
-              <input
-                type="email"
-                required
-                placeholder="Email for new stories"
-                className="min-h-[52px] flex-1 border border-[var(--j-line)] bg-transparent px-4 text-sm outline-none focus:border-[var(--j-brand)]"
-              />
-              <button
-                type="submit"
-                className="min-h-[52px] bg-[var(--j-brand)] px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
-                data-cursor="→"
-              >
-                Subscribe
-              </button>
-            </form>
+            <NewsletterSignup
+              variant="journal"
+              source="journal-footer"
+              placeholder="Email for new stories"
+            />
             <div className="text-sm text-[var(--j-muted)]">
               <Link href="https://ebenezerdigital.com" className="block text-[var(--j-paper)] hover:text-[var(--j-brand)]">
                 Ebenezer Digital Studio

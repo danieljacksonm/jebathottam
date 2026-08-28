@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Educational digital journal catalog.
  * Deterministic generator → 1000+ simple, detailed explainers (5th-grade English).
  */
