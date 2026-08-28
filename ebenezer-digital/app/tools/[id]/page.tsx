@@ -5,17 +5,20 @@ import { CheckCircle, ExternalLink, XCircle } from "lucide-react";
 import { TOOLS } from "../data";
 import { resolveToolImage, freshnessLabel } from "@/lib/affiliate/images";
 import { AffiliateMedia } from "@/components/AffiliateMedia";
-import { SITE_URL } from "@/lib/site-url";
+import { pageMetadata, SITE_URL } from "@/lib/site-url";
 
 type Props = { params: { id: string } };
 
 export function generateMetadata({ params }: Props): Metadata {
   const tool = TOOLS.find((t) => t.id === params.id);
-  if (!tool) return { title: "Tool" };
-  return {
-    title: tool.name,
-    description: tool.tagline,
-  };
+  if (!tool) return { title: "Tool | Ebenezer Tools", robots: { index: false, follow: false } };
+  const title = `${tool.name} — Review, Pricing & Alternatives`;
+  const description = `${tool.tagline} Honest review with pros, cons, pricing notes and alternatives for ${tool.bestFor}.`;
+  return pageMetadata({
+    title,
+    description,
+    path: `/tools/${params.id}`,
+  });
 }
 
 export default function ToolDetailPage({ params }: Props) {

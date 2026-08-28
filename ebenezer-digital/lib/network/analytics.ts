@@ -1,6 +1,9 @@
 "use client";
 
-type EventName =
+import { trackEvent, type AnalyticsEvent } from "@/lib/analytics";
+
+type EventName = Extract<
+  AnalyticsEvent,
   | "tool_view"
   | "tool_use"
   | "tool_started"
@@ -10,9 +13,10 @@ type EventName =
   | "search"
   | "search_result_click"
   | "ai_click"
-  | "related_tool_click";
+  | "related_tool_click"
+>;
 
-/** Lightweight local analytics — no PII. */
+/** Lightweight local + GA4 analytics — no PII. */
 export function trackNetworkEvent(name: EventName, meta?: Record<string, string | number | boolean>) {
   try {
     const payload = {
@@ -25,11 +29,9 @@ export function trackNetworkEvent(name: EventName, meta?: Record<string, string 
     const prev = JSON.parse(localStorage.getItem(key) || "[]") as unknown[];
     const next = [...prev, payload].slice(-200);
     localStorage.setItem(key, JSON.stringify(next));
-    if (process.env.NODE_ENV === "development") {
-      // eslint-disable-next-line no-console
-      console.debug("[network]", payload);
-    }
   } catch {
     /* ignore quota / private mode */
   }
+
+  trackEvent(name, meta);
 }

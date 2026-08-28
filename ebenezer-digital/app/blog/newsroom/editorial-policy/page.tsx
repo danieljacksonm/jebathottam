@@ -28,6 +28,15 @@ export default function EditorialPolicyPage() {
         <p>
           We avoid misleading thumbnails, fake urgency, and copied text blocks without attribution.
         </p>
+        <p>
+          Wire stories from partner feeds (BBC, Guardian, Reuters, and others) are summarized with clear
+          source labels and links to originals. They remain in our Google News sitemap for seven days, then
+          roll off the index.
+        </p>
+        <p>
+          Original CMS stories written by Ebenezer editors follow the same dating, correction, and source
+          citation standards.
+        </p>
       </div>
     </main>
   );

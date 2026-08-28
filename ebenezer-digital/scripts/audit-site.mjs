@@ -40,9 +40,12 @@ async function check(path) {
     const text = await res.text();
     const title = (text.match(/<title[^>]*>([^<]*)<\/title>/i) || [, ""])[1].trim();
     const expect404 = path.includes("should-404");
+    const expectRedirect = ["/ai", "/saas", "/discover"].includes(path);
     const ok = expect404
       ? res.status === 404 || /couldn.?t find|not found|404/i.test(text)
-      : res.status === 200 && text.length > 200 && !/Application error|Unhandled/i.test(text);
+      : expectRedirect
+        ? res.status >= 300 && res.status < 400
+        : res.status === 200 && text.length > 200 && !/Application error|Unhandled/i.test(text);
     return { path, status: res.status, title: title.slice(0, 72), ok, bytes: text.length };
   } catch (e) {
     return { path, status: 0, title: "", ok: false, error: String(e.message || e), bytes: 0 };

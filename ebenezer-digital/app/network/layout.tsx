@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { NetworkShell } from "@/components/network/NetworkShell";
-import { NETWORK_URL } from "@/lib/site-url";
+import { gscVerificationForKind, NETWORK_URL } from "@/lib/site-url";
 import "./network.css";
+
+const google = gscVerificationForKind("network");
 
 export const metadata: Metadata = {
   title: {
@@ -12,6 +14,7 @@ export const metadata: Metadata = {
   description:
     "Fast, simple and powerful online tools for developers, creators, businesses and everyday digital work.",
   metadataBase: new URL(NETWORK_URL),
+  ...(google ? { verification: { google } } : {}),
   openGraph: {
     title: "Free tools that just work | Ebenezer Digital Network",
     description: "Fast, simple and powerful online tools — no account required.",

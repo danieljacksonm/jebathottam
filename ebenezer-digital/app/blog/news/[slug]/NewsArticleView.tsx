@@ -60,6 +60,18 @@ export function NewsArticleView({
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--n-muted)]">{article.dek}</p>
 
+        {article.originalUrl ? (
+          <p className="mt-4 max-w-2xl rounded border border-[var(--n-line)] bg-[var(--n-paper-2)] px-4 py-3 text-sm leading-relaxed text-[var(--n-muted)]">
+            This story summarizes reporting from{" "}
+            <span className="font-semibold text-[var(--n-ink)]">{article.sourceLabel}</span>. Read the
+            original for full context. Wire items stay in our news sitemap for seven days.{" "}
+            <Link href="/blog/newsroom/editorial-policy" className="underline hover:text-[var(--n-ink)]">
+              Editorial policy
+            </Link>
+            .
+          </p>
+        ) : null}
+
         {article.originalUrl && (
           <a
             href={article.originalUrl}

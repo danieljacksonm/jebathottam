@@ -1,11 +1,21 @@
 /**
- * Network route audit — checks key pages render with expected status + title markers.
+ * Network route audit — all live tools + hub pages.
  * Usage: node scripts/audit-network-routes.mjs [baseUrl]
  * Default baseUrl: http://127.0.0.1:3000
  */
-const BASE = (process.argv[2] || "http://127.0.0.1:3000").replace(/\/$/, "");
+import { readFileSync } from "fs";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-const ROUTES = [
+const BASE = (process.argv[2] || "http://127.0.0.1:3000").replace(/\/$/, "");
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+function loadToolSlugs() {
+  const raw = readFileSync(join(ROOT, "lib/network/registry.ts"), "utf8");
+  return [...new Set([...raw.matchAll(/slug:\s*"([^"]+)"/g)].map((m) => m[1]))];
+}
+
+const HUB_ROUTES = [
   "/network",
   "/network/tools",
   "/network/tools/c/developer",
@@ -15,10 +25,6 @@ const ROUTES = [
   "/network/tools/c/calculators",
   "/network/tools/c/business",
   "/network/tools/c/ai",
-  "/network/tools/json-formatter",
-  "/network/tools/image-compressor",
-  "/network/tools/gst-calculator",
-  "/network/tools/qr-code-generator",
   "/network/developers",
   "/network/resources",
   "/network/guides",
@@ -32,6 +38,9 @@ const ROUTES = [
   "/network/this-page-should-404-xyz",
 ];
 
+const TOOL_ROUTES = loadToolSlugs().map((slug) => `/network/tools/${slug}`);
+const ROUTES = [...HUB_ROUTES.slice(0, -1), ...TOOL_ROUTES, HUB_ROUTES.at(-1)];
+
 async function check(path) {
   const url = `${BASE}${path}`;
   try {
@@ -43,7 +52,7 @@ async function check(path) {
     const title = (text.match(/<title[^>]*>([^<]*)<\/title>/i) || [, ""])[1].trim();
     const expect404 = path.includes("should-404");
     const ok = expect404
-      ? res.status === 404 || /doesn.?t exist|not found/i.test(text)
+      ? res.status === 404 || /doesn.?t exist|not found|couldn.?t find/i.test(text)
       : res.status === 200 && text.length > 200 && !/Application error|Unhandled/i.test(text);
     return {
       path,
@@ -58,21 +67,30 @@ async function check(path) {
 }
 
 async function main() {
-  console.log(`Auditing ${ROUTES.length} routes against ${BASE}\n`);
+  console.log(`Auditing ${ROUTES.length} routes (${TOOL_ROUTES.length} tools) against ${BASE}\n`);
   const results = [];
   for (const r of ROUTES) {
     const row = await check(r);
     results.push(row);
-    const mark = row.ok ? "OK" : "BROKEN";
-    console.log(`[${mark}] ${row.status} ${row.path} — ${row.title || row.error || ""}`);
+    if (!row.ok) {
+      console.log(`[BROKEN] ${row.status} ${row.path} — ${row.title || row.error || ""}`);
+    }
   }
   const working = results.filter((r) => r.ok).length;
-  const broken = results.length - working;
+  const broken = results.filter((r) => !r.ok);
   console.log("\n========== SUMMARY ==========");
   console.log(`TOTAL:   ${results.length}`);
   console.log(`WORKING: ${working}`);
-  console.log(`BROKEN:  ${broken}`);
-  if (broken > 0) process.exitCode = 1;
+  console.log(`BROKEN:  ${broken.length}`);
+  if (broken.length) {
+    console.log("\nBroken routes:");
+    for (const b of broken) {
+      console.log(`  ${b.status} ${b.path} ${b.error || b.title || ""}`);
+    }
+    process.exitCode = 1;
+  } else {
+    console.log("All routes OK.");
+  }
 }
 
 main();

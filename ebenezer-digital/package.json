@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "audit:network": "node scripts/audit-network-routes.mjs",
     "audit:site": "node scripts/audit-site.mjs",
+    "audit:all": "node scripts/audit-all.mjs",
     "build:store-kits": "node scripts/build-store-pdfs.mjs && node scripts/build-store-zips.mjs && node scripts/build-website-templates.mjs && npx tsx scripts/sync-store-products.mjs",
     "sync:store-products": "npx tsx scripts/sync-store-products.mjs"
   },

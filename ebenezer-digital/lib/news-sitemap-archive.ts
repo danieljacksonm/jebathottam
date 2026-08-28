@@ -27,6 +27,29 @@ const ARCHIVE_FILE = path.join(DATA_DIR, "news-sitemap-archive.json");
 /** Keep news in sitemap + archive for at least this long. */
 export const NEWS_SITEMAP_RETENTION_MS = 7 * 24 * 60 * 60 * 1000;
 
+/**
+ * Max article URLs in news sitemaps (standard + Google News XML).
+ * The 7-day window is kept; this cap prevents bloat when ~50 RSS feeds × 20 items
+ * accumulate thousands of syndicated URLs. Prioritize CMS, featured, and breaking
+ * stories over wire duplicates. Google News XML hard-limits at 5000 — stay well under.
+ */
+export const NEWS_SITEMAP_MAX_URLS = 400;
+
+function newsSitemapPriority(item: ArchivedNewsItem): number {
+  let score = new Date(item.publishedAt).getTime();
+  if (item.origin === "cms") score += 1e15;
+  if (item.featured) score += 1e14;
+  if (item.breaking) score += 1e13;
+  if (item.origin === "seed") score += 1e12;
+  return score;
+}
+
+/** Apply retention window then cap by editorial priority (newest + CMS first). */
+export function capNewsForSitemap(items: ArchivedNewsItem[]): ArchivedNewsItem[] {
+  const sorted = [...items].sort((a, b) => newsSitemapPriority(b) - newsSitemapPriority(a));
+  return sorted.slice(0, NEWS_SITEMAP_MAX_URLS);
+}
+
 type ArchiveFile = {
   updatedAt: string;
   items: ArchivedNewsItem[];
@@ -104,7 +127,7 @@ export function rememberNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNew
   return toSave;
 }
 
-/** Items for XML sitemaps: everything from the last 7 days (plus current list). */
+/** Items for XML sitemaps: 7-day window, capped by editorial priority. */
 export function listNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
   const archived = rememberNewsForSitemap(current);
   const now = Date.now();
@@ -117,8 +140,10 @@ export function listNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNewsIte
     if (withinRetention(item.publishedAt, now)) bySlug.set(item.slug, item);
   }
 
-  return Array.from(bySlug.values()).sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  return capNewsForSitemap(
+    Array.from(bySlug.values()).sort(
+      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+    )
   );
 }
 

@@ -128,3 +128,7 @@ Your data stays on the device. That is faster and safer for drafts and secrets-a
 export function getGuide(slug: string) {
   return NETWORK_GUIDES.find((g) => g.slug === slug);
 }
+
+export function getGuidesForTool(toolSlug: string, limit = 2) {
+  return NETWORK_GUIDES.filter((g) => g.relatedToolSlugs.includes(toolSlug)).slice(0, limit);
+}

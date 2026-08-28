@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllNews, readingMinutes } from "../data";
 import { getPublicNewsBySlug, listPublicNews } from "@/lib/news-service";
 import { NewsArticleView } from "./NewsArticleView";
-import { canonicalFor, languageAlternatesFor, SITE_ICONS } from "@/lib/site-url";
+import { NEWS_URL, canonicalFor, languageAlternatesFor, SITE_ICONS } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -16,6 +16,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getPublicNewsBySlug(params.slug);
   if (!article) return { title: "News | Ebenezer" };
+  const modified = article.updatedAt || article.publishedAt;
   return {
     title: `${article.title} | E> News`,
     description: article.dek,
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: article.coverImage ? [article.coverImage] : undefined,
       type: "article",
       publishedTime: article.publishedAt,
-      modifiedTime: article.publishedAt,
+      modifiedTime: modified,
     },
     twitter: {
       card: "summary_large_image",
@@ -51,6 +52,8 @@ export default async function NewsArticlePage({ params }: Props) {
     .filter((n) => n.id !== article.id && (n.region === article.region || n.topic === article.topic))
     .slice(0, 4);
 
+  const modified = article.updatedAt || article.publishedAt;
+  const canonical = canonicalFor(`/blog/news/${article.slug}`);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -58,17 +61,19 @@ export default async function NewsArticlePage({ params }: Props) {
     description: article.dek,
     image: article.coverImage,
     datePublished: article.publishedAt,
-    dateModified: article.publishedAt,
+    dateModified: modified,
     author: { "@type": "Organization", name: article.sourceLabel },
-        publisher: {
-          "@type": "NewsMediaOrganization",
-          name: "Ebenezer News",
-          logo: {
-            "@type": "ImageObject",
-            url: "https://ebenezerdigital.info/og-news.png",
-          },
-        },
-    mainEntityOfPage: canonicalFor(`/blog/news/${article.slug}`),
+    publisher: {
+      "@type": "NewsMediaOrganization",
+      name: "Ebenezer News",
+      url: NEWS_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${NEWS_URL}/og-news.png`,
+      },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+    isBasedOn: article.originalUrl || undefined,
     timeRequired: `PT${readingMinutes(article)}M`,
   };
 

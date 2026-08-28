@@ -125,6 +125,40 @@ export function siteKindFromHost(host?: string | null): SiteKind {
   return "studio";
 }
 
+/** Derive site kind from an internal app path (for metadata when host header unavailable). */
+export function siteKindFromPath(path: string): SiteKind {
+  if (path === "/ai" || path.startsWith("/ai/")) return "ai";
+  if (path === "/saas" || path.startsWith("/saas/")) return "saas";
+  if (path === "/discover" || path.startsWith("/discover/")) return "discover";
+  if (path === "/info" || path.startsWith("/info/")) return "info";
+  if (path === "/blog/news" || path.startsWith("/blog/news/")) return "news";
+  if (path === "/blog" || path.startsWith("/blog/")) return "journal";
+  if (path === "/products" || path.startsWith("/products/")) return "store";
+  if (path === "/catalog" || path.startsWith("/catalog/")) return "products";
+  if (path === "/network" || path.startsWith("/network/")) return "network";
+  if (path === "/tools" || path.startsWith("/tools/")) return "tools";
+  return "studio";
+}
+
+/** Google Search Console HTML verification token for the current host/kind. */
+export function gscVerificationForKind(kind: SiteKind): string | undefined {
+  const envKey: Record<SiteKind, string | undefined> = {
+    studio: process.env.NEXT_PUBLIC_GSC_VERIFICATION,
+    info: process.env.NEXT_PUBLIC_GSC_VERIFICATION_INFO,
+    journal: process.env.NEXT_PUBLIC_GSC_VERIFICATION_JOURNAL,
+    news: process.env.NEXT_PUBLIC_GSC_VERIFICATION_NEWS,
+    store: process.env.NEXT_PUBLIC_GSC_VERIFICATION_STORE,
+    products: process.env.NEXT_PUBLIC_GSC_VERIFICATION_PRODUCTS,
+    tools: process.env.NEXT_PUBLIC_GSC_VERIFICATION_TOOLS,
+    ai: process.env.NEXT_PUBLIC_GSC_VERIFICATION_AI,
+    saas: process.env.NEXT_PUBLIC_GSC_VERIFICATION_SAAS,
+    discover: process.env.NEXT_PUBLIC_GSC_VERIFICATION_DISCOVER,
+    network: process.env.NEXT_PUBLIC_GSC_VERIFICATION_NETWORK,
+  };
+  const token = envKey[kind]?.trim() || process.env.NEXT_PUBLIC_GSC_VERIFICATION?.trim();
+  return token || undefined;
+}
+
 export function originForKind(kind: SiteKind): string {
   if (kind === "info") return INFO_URL;
   if (kind === "journal") return JOURNAL_URL;
@@ -205,12 +239,15 @@ export function pageMetadata({
   const url = canonicalFor(path);
   const image = ogImageForPath(path);
   const origin = originForPath(path);
+  const kind = siteKindFromPath(path);
+  const google = gscVerificationForKind(kind);
   return {
     metadataBase: new URL(origin),
     title,
     description,
     icons: SITE_ICONS,
     alternates: { canonical: url, languages: languageAlternatesFor(path, origin) },
+    ...(google ? { verification: { google } } : {}),
     openGraph: {
       title,
       description,
@@ -227,5 +264,114 @@ export function pageMetadata({
     robots: index
       ? { index: true, follow: true }
       : { index: false, follow: false },
+  };
+}
+
+/** Fallback root metadata per host — child layouts override title/description. */
+export function rootMetadataForKind(kind: SiteKind): Metadata {
+  const origin = originForKind(kind);
+  const google = gscVerificationForKind(kind);
+
+  const defaults: Record<
+    SiteKind,
+    { title: string; description: string; siteName: string; image: typeof OG_IMAGE }
+  > = {
+    studio: {
+      title: "Ebenezer Digital Services | Reliable Digital & Web Services for Your Business",
+      description:
+        "Professional data entry, virtual assistance, travel booking support, and web development. Trusted by clients worldwide.",
+      siteName: "Ebenezer Digital Services",
+      image: OG_IMAGE,
+    },
+    info: {
+      title: "Ebenezer Digital Information | News & Journal",
+      description: "Discover news, stories and useful ideas for the digital world.",
+      siteName: "Ebenezer Digital Information",
+      image: OG_JOURNAL,
+    },
+    journal: {
+      title: "Ebenezer Journal | Stories, ideas and knowledge",
+      description: "Deep articles, guides and stories from Ebenezer Digital.",
+      siteName: "Ebenezer Journal",
+      image: OG_JOURNAL,
+    },
+    news: {
+      title: "Ebenezer News | What is happening now",
+      description: "Global news desks — world, tech, business, climate and more.",
+      siteName: "Ebenezer News",
+      image: OG_NEWS,
+    },
+    store: {
+      title: "Ebenezer Store | Ready-to-Use Digital Products",
+      description: "Templates, tools and digital products for small businesses.",
+      siteName: "Ebenezer Store",
+      image: OG_STORE,
+    },
+    products: {
+      title: "Ebenezer Products | Hardware discovery & comparison",
+      description: "Find laptops, SSDs and gear with honest comparisons.",
+      siteName: "Ebenezer Products",
+      image: OG_IMAGE,
+    },
+    tools: {
+      title: "Ebenezer Tools | Software & AI tool discovery",
+      description: "Compare software and AI tools for your business.",
+      siteName: "Ebenezer Tools",
+      image: OG_IMAGE,
+    },
+    ai: {
+      title: "Ebenezer AI | Your digital assistant studio",
+      description: "Chat with Eben AI for help across the Ebenezer ecosystem.",
+      siteName: "Ebenezer AI",
+      image: OG_IMAGE,
+    },
+    saas: {
+      title: "Yegova | Cloud billing for shops",
+      description: "Free cloud billing software — invoices, stock, customers.",
+      siteName: "Yegova",
+      image: OG_STORE,
+    },
+    discover: {
+      title: "Ebenezer Discover | Find the right solution",
+      description: "Intent router — find tools, products and services fast.",
+      siteName: "Ebenezer Discover",
+      image: OG_IMAGE,
+    },
+    network: {
+      title: "Ebenezer Digital Network | Free tools that just work",
+      description: "Fast online tools for developers, creators and businesses.",
+      siteName: "Ebenezer Digital Network",
+      image: OG_IMAGE,
+    },
+  };
+
+  const d = defaults[kind];
+  return {
+    metadataBase: new URL(origin),
+    title: d.title,
+    description: d.description,
+    icons: SITE_ICONS,
+    manifest: "/manifest.webmanifest",
+    alternates: {
+      canonical: origin,
+      ...(kind === "studio" ? { languages: languageAlternatesFor("/", origin) } : {}),
+    },
+    ...(google ? { verification: { google } } : {}),
+    openGraph: {
+      title: d.title,
+      description: d.description,
+      type: "website",
+      url: origin,
+      siteName: d.siteName,
+      locale: "en_US",
+      images: [d.image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: d.title,
+      description: d.description,
+      images: [d.image.url],
+    },
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
   };
 }

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { ToolWorkspace } from "@/components/network/tools/ToolWorkspace";
 import { ToolCard } from "@/components/network/ToolCard";
 import { getLiveTools, getRelatedTools, getToolBySlug, categoryLabel } from "@/lib/network/registry";
+import { getGuidesForTool } from "@/lib/network/guides";
 import { NETWORK_URL, AI_URL, TOOLS_URL } from "@/lib/site-url";
 import { ToolViewTracker } from "./ToolViewTracker";
 
@@ -40,6 +41,7 @@ export default function NetworkToolPage({ params }: Props) {
   const tool = getToolBySlug(params.slug);
   if (!tool) notFound();
   const related = getRelatedTools(tool.slug, 4);
+  const guides = getGuidesForTool(tool.slug, 2);
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -51,7 +53,7 @@ export default function NetworkToolPage({ params }: Props) {
         "@type": "ListItem",
         position: 3,
         name: categoryLabel(tool.category),
-        item: `${NETWORK_URL}/tools/${tool.category === "calculators" ? "calculators" : tool.category}`,
+        item: `${NETWORK_URL}/tools/c/${tool.category}`,
       },
       {
         "@type": "ListItem",
@@ -157,6 +159,22 @@ export default function NetworkToolPage({ params }: Props) {
               <ToolCard key={t.id} tool={t} />
             ))}
           </div>
+        </section>
+      ) : null}
+
+      {guides.length > 0 ? (
+        <section className="mt-12">
+          <h2 className="text-xl font-bold">Related guides</h2>
+          <ul className="mt-3 space-y-3">
+            {guides.map((g) => (
+              <li key={g.slug}>
+                <Link href={`/network/guides/${g.slug}`} className="font-semibold text-[var(--nx-brand)] hover:underline">
+                  {g.title}
+                </Link>
+                <p className="text-sm text-[var(--nx-muted)]">{g.excerpt}</p>
+              </li>
+            ))}
+          </ul>
         </section>
       ) : null}
 

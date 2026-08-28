@@ -20,19 +20,39 @@ import {
 } from "@/lib/catalog/affiliate";
 import { freshnessLabel, resolveProductImage } from "@/lib/affiliate/images";
 import { AffiliateMedia } from "@/components/AffiliateMedia";
+import { pageMetadata } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
 export function generateMetadata({ params }: Props): Metadata {
   const product = getProductBySlug(params.slug);
-  if (!product) return { title: "Product" };
+  if (!product) return { title: "Product | Ebenezer Products", robots: { index: false, follow: false } };
+  const title = product.seoTitle || `${product.name} — Compare Prices & Specs`;
+  const description =
+    product.seoDescription ||
+    `${product.shortDescription} Compare offers, specs and buying guides on Ebenezer Products.`;
+  const base = pageMetadata({
+    title,
+    description,
+    path: `/catalog/p/${params.slug}`,
+  });
+  const image = resolveProductImage({
+    name: product.name,
+    image: product.image,
+    brand: product.brand,
+    brandDomain: product.brandDomain,
+  });
   return {
-    title: product.seoTitle || product.name,
-    description: product.seoDescription || product.shortDescription,
+    ...base,
     openGraph: {
+      ...base.openGraph,
       title: product.name,
       description: product.shortDescription,
-      images: product.image ? [{ url: product.image }] : undefined,
+      images: image?.url ? [{ url: image.url, alt: product.name }] : base.openGraph?.images,
+    },
+    twitter: {
+      ...base.twitter,
+      images: image?.url ? [image.url] : base.twitter?.images,
     },
   };
 }

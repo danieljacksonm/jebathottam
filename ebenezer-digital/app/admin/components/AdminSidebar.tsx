@@ -18,6 +18,8 @@ import {
   ShoppingBag,
   Radio,
   Cpu,
+  Radar,
+  Wrench,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -30,6 +32,7 @@ interface AdminSidebarProps {
 }
 
 const navItems = [
+  { icon: Radar, label: "Command Center", href: "/admin/command-center" },
   { icon: LayoutDashboard, label: "Dashboard", href: "/admin" },
   { icon: Briefcase, label: "Services", href: "/admin/services" },
   { icon: FolderOpen, label: "Portfolio", href: "/admin/portfolio" },
@@ -37,6 +40,7 @@ const navItems = [
   { icon: Cpu, label: "Physical Catalog", href: "/admin/catalog" },
   { icon: FileText, label: "Blog Posts", href: "/admin/blog" },
   { icon: Radio, label: "World News", href: "/admin/news" },
+  { icon: Wrench, label: "Network Tools", href: "/admin/network" },
   { icon: MessageSquare, label: "Inquiries", href: "/admin/inquiries" },
   { icon: Star, label: "Testimonials", href: "/admin/testimonials" },
   { icon: Users, label: "Team", href: "/admin/team" },

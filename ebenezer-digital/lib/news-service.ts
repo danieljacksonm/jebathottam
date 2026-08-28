@@ -11,12 +11,14 @@ import {
   getArchivedNewsBySlug,
   listNewsForSitemap,
   rememberNewsForSitemap,
+  NEWS_SITEMAP_MAX_URLS,
 } from "@/lib/news-sitemap-archive";
 
 export type PublicNewsItem = NewsArticle & {
   origin: "seed" | "cms" | "live";
   originalUrl?: string;
   byline?: string;
+  updatedAt?: string;
 };
 
 function recordToPublic(n: NewsArticleRecord): PublicNewsItem {
@@ -32,6 +34,7 @@ function recordToPublic(n: NewsArticleRecord): PublicNewsItem {
     location: n.location || "Global",
     sourceLabel: n.sourceLabel || "Ebenezer News Desk",
     publishedAt: (n.publishedAt || n.createdAt).toISOString(),
+    updatedAt: (n.updatedAt || n.publishedAt || n.createdAt).toISOString(),
     coverImage: safeNewsCover(n.coverImage, fallback, n.title, n.dek, n.topic || ""),
     breaking: Boolean(n.breaking),
     featured: Boolean(n.featured),
@@ -203,8 +206,7 @@ ${entries}
 }
 
 export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string): string {
-  // Include up to 7 days of stories (caller already filters via listPublicNewsForSitemap)
-  const urls = items.slice(0, 5000).map((n) => {
+  const urls = items.slice(0, NEWS_SITEMAP_MAX_URLS).map((n) => {
     const loc = `${siteOrigin}/blog/news/${n.slug}`;
     const publicationDate = new Date(n.publishedAt).toISOString();
     return `<url>
