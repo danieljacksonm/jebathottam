@@ -5,7 +5,8 @@ import { CheckCircle, ExternalLink, XCircle } from "lucide-react";
 import { TOOLS } from "../data";
 import { resolveToolImage, freshnessLabel } from "@/lib/affiliate/images";
 import { AffiliateMedia } from "@/components/AffiliateMedia";
-import { pageMetadata, SITE_URL } from "@/lib/site-url";
+import { ToolsHeader } from "../ToolsHeader";
+import { pageMetadata, AI_URL, TOOLS_URL } from "@/lib/site-url";
 
 type Props = { params: { id: string } };
 
@@ -33,7 +34,20 @@ export default function ToolDetailPage({ params }: Props) {
   const alternatives = TOOLS.filter((t) => t.category === tool.category && t.id !== tool.id).slice(0, 4);
   const features = tool.features?.length ? tool.features : tool.pros.slice(0, 5);
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Tools", item: `${TOOLS_URL}/tools` },
+      { "@type": "ListItem", position: 2, name: tool.category, item: `${TOOLS_URL}/tools?cat=${encodeURIComponent(tool.category)}` },
+      { "@type": "ListItem", position: 3, name: tool.name, item: `${TOOLS_URL}/tools/${tool.id}` },
+    ],
+  };
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <ToolsHeader />
     <div className="aff-page py-8">
       <p className="text-sm text-[var(--aff-muted)]">
         <Link href="/tools" className="hover:text-[var(--aff-brand)]">
@@ -77,7 +91,7 @@ export default function ToolDetailPage({ params }: Props) {
             <Link href={`/tools/compare?ids=${tool.id},${alternatives[0]?.id || ""}`} className="aff-btn aff-btn-ghost">
               Compare alternatives
             </Link>
-            <Link href={`${SITE_URL}/ai?mode=tools&prompt=${encodeURIComponent(`Is ${tool.name} right for me?`)}`} className="aff-btn aff-btn-ghost">
+            <Link href={`${AI_URL}?mode=tools&prompt=${encodeURIComponent(`Is ${tool.name} right for me?`)}`} className="aff-btn aff-btn-ghost">
               Ask AI
             </Link>
           </div>
@@ -155,5 +169,6 @@ export default function ToolDetailPage({ params }: Props) {
         </section>
       ) : null}
     </div>
+    </>
   );
 }

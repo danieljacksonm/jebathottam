@@ -55,6 +55,9 @@ export default async function InfoHomePage() {
             <a className="info-btn info-btn-secondary" href={SITE_NAV.journal}>
               Explore the Journal
             </a>
+            <a className="info-btn info-btn-secondary" href="/info/search">
+              Search all
+            </a>
             <a className="info-btn info-btn-secondary" href="#explore-more">
               Explore More
             </a>

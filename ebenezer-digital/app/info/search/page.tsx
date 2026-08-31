@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SITE_NAV } from "@/lib/site-nav";
 
 type Hit = {
@@ -10,25 +11,32 @@ type Hit = {
   href: string;
 };
 
-export default function InfoSearchPage() {
-  const [q, setQ] = useState("");
+function InfoSearchInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialQ = searchParams.get("q") || "";
+
+  const [q, setQ] = useState(initialQ);
   const [loading, setLoading] = useState(false);
   const [hits, setHits] = useState<Hit[]>([]);
-  const [searched, setSearched] = useState(false);
+  const [searched, setSearched] = useState(Boolean(initialQ.trim()));
 
-  async function runSearch(e?: React.FormEvent) {
-    e?.preventDefault();
-    const query = q.trim();
-    if (!query) return;
+  const runQuery = useCallback(async (query: string) => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setHits([]);
+      setSearched(false);
+      return;
+    }
     setLoading(true);
     setSearched(true);
     try {
       const [newsRes, blogRes] = await Promise.all([
-        fetch(`/api/news?q=${encodeURIComponent(query)}&limit=12`).then((r) => r.json()),
-        fetch(`/api/blog/list?q=${encodeURIComponent(query)}&limit=12`).then((r) => r.json()),
+        fetch(`/api/news?q=${encodeURIComponent(trimmed)}&limit=12`).then((r) => r.json()),
+        fetch(`/api/blog/list?q=${encodeURIComponent(trimmed)}&limit=12`).then((r) => r.json()),
       ]);
 
-        const articles = Array.isArray(newsRes)
+      const articles = Array.isArray(newsRes)
         ? newsRes
         : newsRes.items || newsRes.articles || newsRes.results || [];
       const mappedNews: Hit[] = (articles as { title: string; dek?: string; slug: string }[])
@@ -42,14 +50,12 @@ export default function InfoSearchPage() {
         }));
 
       const posts = Array.isArray(blogRes?.posts) ? blogRes.posts : [];
-      const mappedJournal: Hit[] = posts
-        .slice(0, 12)
-        .map((p: { title: string; excerpt?: string; slug: string }) => ({
-          kind: "JOURNAL" as const,
-          title: p.title,
-          summary: p.excerpt || "",
-          href: `${SITE_NAV.journal}/blog/${p.slug}`,
-        }));
+      const mappedJournal: Hit[] = posts.slice(0, 12).map((p: { title: string; excerpt?: string; slug: string }) => ({
+        kind: "JOURNAL" as const,
+        title: p.title,
+        summary: p.excerpt || "",
+        href: `${SITE_NAV.journal}/blog/${p.slug}`,
+      }));
 
       setHits([...mappedNews, ...mappedJournal]);
     } catch {
@@ -57,6 +63,21 @@ export default function InfoSearchPage() {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    setQ(initialQ);
+    if (initialQ.trim()) runQuery(initialQ);
+  }, [initialQ, runQuery]);
+
+  function onSubmit(e?: React.FormEvent) {
+    e?.preventDefault();
+    const trimmed = q.trim();
+    const params = new URLSearchParams();
+    if (trimmed) params.set("q", trimmed);
+    const qs = params.toString();
+    router.replace(qs ? `/info/search?${qs}` : "/info/search", { scroll: false });
+    runQuery(trimmed);
   }
 
   const empty = useMemo(() => searched && !loading && hits.length === 0, [searched, loading, hits]);
@@ -65,8 +86,8 @@ export default function InfoSearchPage() {
     <section className="info-section" style={{ paddingTop: "4rem" }}>
       <p className="info-kicker">Search</p>
       <h1 className="info-h2">What are you looking for?</h1>
-      <p className="info-lead">Search News and Journal in one place.</p>
-      <form className="info-form" onSubmit={runSearch}>
+      <p className="info-lead">Search News and Journal in one place. Share this page — your query stays in the URL.</p>
+      <form className="info-form" onSubmit={onSubmit}>
         <label>
           Search
           <input
@@ -106,5 +127,13 @@ export default function InfoSearchPage() {
         )}
       </div>
     </section>
+  );
+}
+
+export default function InfoSearchPage() {
+  return (
+    <Suspense fallback={<section className="info-section" style={{ paddingTop: "4rem" }} />}>
+      <InfoSearchInner />
+    </Suspense>
   );
 }

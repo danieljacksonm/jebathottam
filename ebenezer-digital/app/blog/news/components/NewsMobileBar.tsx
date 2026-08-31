@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Radio, Search, Newspaper, Sparkles } from "lucide-react";
+import { Newspaper, Search } from "lucide-react";
 import { useNews } from "./NewsProvider";
 
 export function NewsMobileBar() {
@@ -12,18 +12,13 @@ export function NewsMobileBar() {
         <Newspaper className="mb-1 h-4 w-4" />
         Top
       </Link>
-      <a href="#live" className="grid place-items-center py-3 text-[9px] uppercase tracking-[0.16em] text-[var(--n-live)]">
-        <Radio className="mb-1 h-4 w-4" />
-        Live
-      </a>
       <button type="button" onClick={() => setSearchOpen(true)} className="grid place-items-center py-3 text-[9px] uppercase tracking-[0.16em]">
         <Search className="mb-1 h-4 w-4" />
         Search
       </button>
-      <Link href="/ai?mode=news" className="grid place-items-center py-3 text-[9px] uppercase tracking-[0.16em] text-[var(--n-live)]">
-        <Sparkles className="mb-1 h-4 w-4" />
-        Eben
-      </Link>
+      <a href="#live" className="grid place-items-center py-3 text-[9px] uppercase tracking-[0.16em] text-[var(--n-live)]">
+        Live
+      </a>
     </nav>
   );
 }

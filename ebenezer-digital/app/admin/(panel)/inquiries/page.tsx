@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Search,
@@ -47,7 +47,6 @@ const statusColors: Record<string, string> = {
 
 export default function InquiriesPage() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
-  const [filteredInquiries, setFilteredInquiries] = useState<Inquiry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -59,8 +58,21 @@ export default function InquiriesPage() {
     fetchInquiries();
   }, []);
 
-  useEffect(() => {
-    filterInquiries();
+  const filteredInquiries = useMemo(() => {
+    let filtered = [...inquiries];
+    if (statusFilter !== "all") {
+      filtered = filtered.filter((i) => i.status === statusFilter);
+    }
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (i) =>
+          i.name.toLowerCase().includes(query) ||
+          i.email.toLowerCase().includes(query) ||
+          i.message.toLowerCase().includes(query)
+      );
+    }
+    return filtered;
   }, [inquiries, searchQuery, statusFilter]);
 
   const fetchInquiries = async () => {
@@ -75,26 +87,6 @@ export default function InquiriesPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const filterInquiries = () => {
-    let filtered = [...inquiries];
-
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((i) => i.status === statusFilter);
-    }
-
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (i) =>
-          i.name.toLowerCase().includes(query) ||
-          i.email.toLowerCase().includes(query) ||
-          i.message.toLowerCase().includes(query)
-      );
-    }
-
-    setFilteredInquiries(filtered);
   };
 
   const updateStatus = async (id: string, status: Inquiry['status']) => {

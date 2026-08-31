@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { JournalNav } from "./components/JournalNav";
 import { JournalProgress } from "./components/JournalProgress";
@@ -39,10 +39,11 @@ function BlogIndexInner() {
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [apiCategories, setApiCategories] = useState<string[]>([]);
   const [visible, setVisible] = useState(PAGE_SIZE);
+  const reduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
-  const heroY = useTransform(scrollY, [0, 500], [0, 120]);
-  const heroScale = useTransform(scrollY, [0, 600], [1, 1.12]);
-  const heroOpacity = useTransform(scrollY, [0, 420], [1, 0.35]);
+  const heroY = useTransform(scrollY, [0, 500], [0, reduceMotion ? 0 : 80]);
+  const heroScale = useTransform(scrollY, [0, 600], [1, reduceMotion ? 1 : 1.06]);
+  const heroOpacity = useTransform(scrollY, [0, 420], [1, reduceMotion ? 1 : 0.5]);
 
   useEffect(() => {
     const cat = searchParams.get("cat");
@@ -109,7 +110,7 @@ function BlogIndexInner() {
       />
 
       {/* CINEMATIC INTRO */}
-      <section className="journal-hero relative h-[100svh] overflow-hidden">
+      <section className="journal-hero relative min-h-[72svh] max-h-[820px] overflow-hidden">
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0">
           <Image
             src={featured?.coverImage || "/images/journal/hero.jpg"}

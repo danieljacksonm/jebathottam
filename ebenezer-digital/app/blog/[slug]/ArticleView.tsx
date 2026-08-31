@@ -6,9 +6,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, Share2 } from "lucide-react";
 import { JournalNav } from "../components/JournalNav";
-import { JournalCursor } from "../components/JournalCursor";
 import { JournalProgress } from "../components/JournalProgress";
-import { JournalMarquee } from "../components/JournalMarquee";
 import { formatDate, readingTime, type JournalPost } from "../lib";
 import { STORE_PRODUCTS } from "@/app/products/data";
 import { AskAiPanel } from "@/components/AskAiPanel";
@@ -234,7 +232,6 @@ export function ArticleView({ slug }: { slug: string }) {
     <div className="journal-root relative min-h-screen">
       <div className="journal-grain" />
       <JournalProgress />
-      <JournalCursor />
       <JournalNav categories={categories} />
 
       <div
@@ -370,12 +367,10 @@ export function ArticleView({ slug }: { slug: string }) {
         </div>
       </article>
 
-      <JournalMarquee items={["Continue the chain", "Next lesson", "Ask AI", "Ebenezer Journal"]} />
-
       <section className="px-4 py-20 sm:px-8 lg:px-12">
-        <h2 className="font-serif text-4xl sm:text-5xl">Continue the chain</h2>
+        <h2 className="font-serif text-4xl sm:text-5xl">Related guides</h2>
         <p className="mt-3 max-w-2xl text-[var(--j-muted)]">
-          Linked lessons help you go deeper—one simple idea at a time.
+          More from Ebenezer Journal on similar topics.
         </p>
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           {related.map((item) => (

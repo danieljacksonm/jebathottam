@@ -244,9 +244,13 @@
 }
 
 @media (max-width: 767px) {
+  .news-ticker {
+    display: none;
+  }
+
   .news-bottom {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 

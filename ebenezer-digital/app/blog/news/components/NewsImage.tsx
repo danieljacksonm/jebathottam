@@ -20,7 +20,9 @@ export function NewsImage({ src, alt, fill, className = "", priority }: Props) {
     setCurrent(src || DESK_PHOTOS.default);
   }, [src]);
 
+  /** Intentional native img — onError fallback without Next/Image layout shift. */
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={current}
       alt={alt}

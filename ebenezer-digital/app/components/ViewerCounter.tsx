@@ -19,7 +19,9 @@ export default function ViewerCounter() {
 
         const postRes = await fetch("/api/counter", { method: "POST" });
         const postData = await postRes.json();
-        setCount(typeof postData.count === "number" ? postData.count : (count ?? 0) + 1);
+        setCount((prev) =>
+          typeof postData.count === "number" ? postData.count : (prev ?? 0) + 1
+        );
         sessionStorage.setItem(COUNTER_KEY, "1");
       } catch {
         setCount(0);

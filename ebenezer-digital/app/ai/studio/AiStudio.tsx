@@ -101,7 +101,7 @@ export function AiStudio() {
     () => threads.find((t) => t.id === activeId) || null,
     [threads, activeId]
   );
-  const messages = active?.messages || [];
+  const messages = useMemo(() => active?.messages ?? [], [active]);
   const inChat = messages.length > 0;
 
   const persist = useCallback((next: Thread[]) => {
