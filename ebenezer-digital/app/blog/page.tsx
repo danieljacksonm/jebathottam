@@ -7,9 +7,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { JournalNav } from "./components/JournalNav";
-import { JournalCursor } from "./components/JournalCursor";
 import { JournalProgress } from "./components/JournalProgress";
-import { JournalMarquee } from "./components/JournalMarquee";
 import { formatDate, readingTime, splitHeadline, type JournalPost } from "./lib";
 import { rotateList, useRotate } from "./useRotate";
 import { Suspense } from "react";
@@ -92,11 +90,6 @@ function BlogIndexInner() {
     });
   }, [posts, query, activeCategory]);
 
-  const learnCount = useMemo(
-    () => posts.filter((p) => (p.category || "").toLowerCase().includes("learn")).length,
-    [posts]
-  );
-
   const rotate = useRotate(filtered.length, 120000);
   const rotated = useMemo(() => rotateList(filtered, rotate), [filtered, rotate]);
   const featured = rotated[0];
@@ -109,7 +102,6 @@ function BlogIndexInner() {
     <div className="journal-root relative min-h-screen">
       <div className="journal-grain" />
       <JournalProgress />
-      <JournalCursor />
       <JournalNav
         categories={categories}
         onSearch={setQuery}
@@ -137,11 +129,11 @@ function BlogIndexInner() {
         >
           <div className="mb-8 flex flex-wrap items-center gap-3">
             <p className="text-[11px] uppercase tracking-[0.45em] text-[var(--j-brand)]">
-              Ebenezer Journal
+              Ebenezer Digital Journal
             </p>
             <span className="hidden h-px w-10 bg-[var(--j-gold)]/50 sm:block" />
             <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--j-muted)]">
-              {learnCount > 0 ? `${learnCount}+ learn stories` : "Learn Desk"} · journal.ebenezerdigital.info
+              Deep guides · Technology · Business · AI
             </p>
           </div>
           <motion.h1
@@ -153,7 +145,7 @@ function BlogIndexInner() {
             }}
             className="journal-hero-title max-w-5xl font-serif text-[14vw] leading-[0.88] tracking-tight sm:text-[9vw] lg:text-[7.5vw]"
           >
-            {["STORIES,", "IDEAS,", "KNOWLEDGE."].map((line) => (
+            {["DEEP", "GUIDES,", "INSIGHT."].map((line) => (
               <motion.span
                 key={line}
                 variants={{
@@ -168,23 +160,19 @@ function BlogIndexInner() {
           </motion.h1>
           <div className="mt-10 flex flex-wrap items-end justify-between gap-6">
             <p className="max-w-lg text-base leading-relaxed text-[var(--j-muted)] sm:text-lg">
-              Stories, ideas and useful knowledge for a changing world — written clearly so anyone can follow.
+              Practical tutorials, technology analysis, and business explainers — written for professionals who need clarity.
             </p>
             <div className="flex flex-wrap gap-3">
               <a href="#featured" className="journal-cta" data-cursor="SCROLL">
                 Read featured
               </a>
-              <a href={SITE_NAV.news} className="journal-cta journal-cta-ghost" data-cursor="LIVE">
-                Open News desk
+              <a href="#stream" className="journal-cta journal-cta-ghost" data-cursor="SCROLL">
+                Latest guides
               </a>
             </div>
           </div>
         </motion.div>
       </section>
-
-      <JournalMarquee
-        items={["Ebenezer Digital", "Ideas", "Stories", "Perspectives", "Digital Culture", "Journal"]}
-      />
 
       {/* FEATURED STORY */}
       <section id="featured" className="px-4 py-20 sm:px-8 lg:px-12">
@@ -301,41 +289,27 @@ function BlogIndexInner() {
         </section>
       )}
 
-      <JournalMarquee items={["Stories", "Perspectives", "Digital", "Business", "Faith in craft"]} />
-
-      {/* WORLD NEWS TEASER */}
-      <section className="border-y border-[var(--j-line)] px-4 py-20 sm:px-8 lg:px-12">
+      <section className="border-y border-[var(--j-line)] px-4 py-16 sm:px-8 lg:px-12">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">Learn desk</p>
-            <h3 className="mt-4 max-w-2xl font-serif text-4xl leading-[1.05] sm:text-6xl">
-              1000+ simple digital lessons.
+            <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">Topics</p>
+            <h3 className="mt-4 max-w-2xl font-serif text-4xl leading-[1.05] sm:text-5xl">
+              Technology, business, and digital transformation.
             </h3>
             <p className="mt-5 max-w-lg text-[var(--j-muted)]">
-              From electricity and Wi‑Fi to AI and cloud—each story chains to the next, links to /ai for deeper questions, and points you to store tools when you are ready to build.
+              Guides and explainers for teams adopting new tools, workflows, and AI — without the hype.
             </p>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href="/ai"
-              className="inline-flex min-h-[48px] items-center gap-2 bg-[var(--j-brand)] px-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
-              data-cursor="AI"
-            >
-              Ask AI <ArrowUpRight className="h-4 w-4" />
-            </Link>
-            <a
-              href="/api/blog/rss"
-              className="inline-flex min-h-[48px] items-center gap-2 border border-[var(--j-brand)] px-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--j-brand)]"
-              data-cursor="RSS"
-            >
-              Blog RSS <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </div>
+          <a
+            href="/api/blog/rss"
+            className="inline-flex min-h-[48px] items-center gap-2 border border-[var(--j-brand)] px-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--j-brand)]"
+          >
+            Journal RSS <ArrowUpRight className="h-4 w-4" />
+          </a>
         </div>
       </section>
 
-      {/* Soft outbound to News — gateway owns discovery; journal stays deep reading */}
-      <section className="border-y border-[var(--j-line)] px-4 py-14 sm:px-8 lg:px-12">
+      <section className="border-y border-[var(--j-line)] px-4 py-12 sm:px-8 lg:px-12">
         <div className="flex flex-wrap items-center justify-between gap-6">
           <div>
             <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">Also available</p>

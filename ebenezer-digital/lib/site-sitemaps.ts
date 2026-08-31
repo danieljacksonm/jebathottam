@@ -104,10 +104,6 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
     page(JOURNAL_URL, "", "hourly", 1, undefined, true),
     page(JOURNAL_URL, "/blog", "hourly", 1, undefined, true),
-    page(JOURNAL_URL, "/blog/newsroom/about", "monthly", 0.5, undefined, true),
-    page(JOURNAL_URL, "/blog/newsroom/editorial-policy", "monthly", 0.5, undefined, true),
-    page(JOURNAL_URL, "/blog/newsroom/contact", "monthly", 0.5, undefined, true),
-    page(JOURNAL_URL, "/blog/newsroom/feeds", "weekly", 0.6, undefined, true),
   ];
 
   const seen = new Set<string>();
@@ -146,6 +142,10 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
     page(NEWS_URL, "", "hourly", 1, undefined, true),
     page(NEWS_URL, "/blog/news", "hourly", 0.95, undefined, true),
+    page(NEWS_URL, "/blog/newsroom/about", "monthly", 0.5, undefined, true),
+    page(NEWS_URL, "/blog/newsroom/editorial-policy", "monthly", 0.5, undefined, true),
+    page(NEWS_URL, "/blog/newsroom/contact", "monthly", 0.5, undefined, true),
+    page(NEWS_URL, "/blog/newsroom/feeds", "weekly", 0.6, undefined, true),
   ];
 
   try {

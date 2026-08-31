@@ -10,6 +10,8 @@ const NEWS_URL = (process.env.NEXT_PUBLIC_NEWS_URL || "https://news.ebenezerdigi
 const JOURNAL_URL = (
   process.env.NEXT_PUBLIC_JOURNAL_URL || "https://journal.ebenezerdigital.info"
 ).replace(/\/$/, "");
+const INFO_URL = (process.env.NEXT_PUBLIC_INFO_URL || "https://ebenezerdigital.info").replace(/\/$/, "");
+const STORE_URL = (process.env.NEXT_PUBLIC_STORE_URL || "https://ebenezerdigital.store").replace(/\/$/, "");
 
 const LOCALES = new Set([
   "en", "hi", "ta", "te", "ml", "kn", "bn", "mr", "gu", "pa", "ur",
@@ -188,6 +190,39 @@ export function middleware(request: NextRequest) {
       DISCOVER_URL,
       pathname === "/discover" || pathname === "/discover/" ? "/" : pathname
     );
+  }
+
+  // Move journal, news & newsroom off .com → correct subdomains
+  if (isProdStudio && (pathname === "/blog" || pathname.startsWith("/blog/"))) {
+    if (pathname === "/blog/news" || pathname.startsWith("/blog/news/")) {
+      return absoluteRedirect(request, NEWS_URL, pathname);
+    }
+    if (pathname.startsWith("/blog/newsroom")) {
+      return absoluteRedirect(request, NEWS_URL, pathname);
+    }
+    return absoluteRedirect(
+      request,
+      JOURNAL_URL,
+      pathname === "/blog" || pathname === "/blog/" ? "/" : pathname
+    );
+  }
+
+  // Move digital store off .com → store subdomain
+  if (isProdStudio && (pathname === "/products" || pathname.startsWith("/products/"))) {
+    return absoluteRedirect(
+      request,
+      STORE_URL,
+      pathname === "/products" || pathname === "/products/" ? "/" : pathname
+    );
+  }
+
+  // Move info gateway off .com → .info apex
+  if (isProdStudio && (pathname === "/info" || pathname.startsWith("/info/"))) {
+    const rest =
+      pathname === "/info" || pathname === "/info/"
+        ? "/"
+        : pathname.replace(/^\/info/, "") || "/";
+    return absoluteRedirect(request, INFO_URL, rest);
   }
 
   // Move news channel → news subdomain

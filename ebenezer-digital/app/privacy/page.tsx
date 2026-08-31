@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
-import Link from "next/link";
+import { StudioPageShell } from "@/components/studio/StudioPageShell";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { SITE_EMAIL } from "@/lib/site-contact";
 import { pageMetadata } from "@/lib/site-url";
 
-export const metadata: Metadata = pageMetadata({
+export const metadata = pageMetadata({
   title: "Privacy Policy | Ebenezer Digital Services",
   description: "How Ebenezer Digital Services collects, uses, and protects your personal information.",
   path: "/privacy",
@@ -12,18 +11,20 @@ export const metadata: Metadata = pageMetadata({
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-gray-900 text-white px-6 py-16">
-      <div className="max-w-3xl mx-auto prose prose-invert">
-        <Link href="/" className="text-slate-400 hover:text-white text-sm no-underline">← Back to home</Link>
-        <h1 className="mt-6">Privacy Policy</h1>
-        <p>We respect your privacy. Information submitted through our contact forms is used only to respond to your inquiry and improve our services.</p>
-        <p>
-          We do not sell your personal data. You may request deletion of your contact information by emailing{" "}
-          <a href={`mailto:${SITE_EMAIL}`}>{SITE_EMAIL}</a>, or by phone / WhatsApp.
-        </p>
-        <SiteContactLinks className="not-prose mt-6 text-sm text-slate-300" linkClassName="hover:text-white" />
-        <p className="text-slate-400 text-sm">Last updated: July 2026</p>
-      </div>
-    </main>
+    <StudioPageShell kicker="Legal" title="Privacy Policy">
+      <p>
+        We respect your privacy. Information submitted through our contact forms is used only to respond to your
+        inquiry and improve our services.
+      </p>
+      <p>
+        We do not sell your personal data. You may request deletion of your contact information by emailing{" "}
+        <a href={`mailto:${SITE_EMAIL}`} className="text-emerald-400 hover:underline">
+          {SITE_EMAIL}
+        </a>
+        , or by phone / WhatsApp.
+      </p>
+      <SiteContactLinks className="text-sm text-white/60" linkClassName="hover:text-white" />
+      <p className="text-sm text-white/40">Last updated: July 2026</p>
+    </StudioPageShell>
   );
 }

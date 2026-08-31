@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { EcosystemNav } from "@/components/EcosystemNav";
 import "../affiliate/premium.css";
 import "./catalog.css";
 
@@ -24,10 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function CatalogLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className="aff-root catalog-root">
-      <EcosystemNav variant="light" active="products" />
-      {children}
-    </div>
-  );
+  return <div className="aff-root catalog-root">{children}</div>;
 }

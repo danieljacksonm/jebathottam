@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { STUDIO_STATS } from "@/lib/studio-stats";
 
 type Testimonial = {
   id: string;
@@ -84,12 +85,7 @@ export default function Testimonials() {
           </div>
         </div>
         <div className="mt-16 grid grid-cols-2 gap-6 border-t border-[var(--st-line)] pt-10 md:grid-cols-4">
-          {[
-            { value: "98%", label: "Client satisfaction" },
-            { value: "150+", label: "Projects delivered" },
-            { value: "50+", label: "Active clients" },
-            { value: "5+", label: "Years experience" },
-          ].map((stat) => (
+          {STUDIO_STATS.map((stat) => (
             <div key={stat.label}>
               <p className="studio-display text-3xl">{stat.value}</p>
               <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[var(--st-muted)]">{stat.label}</p>

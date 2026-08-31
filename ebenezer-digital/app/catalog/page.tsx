@@ -63,7 +63,7 @@ export default function CatalogHomePage() {
         <div className="aff-page py-12">
           <h2 className="text-xl font-bold">Trending research picks</h2>
           <p className="mt-1 text-sm text-[var(--aff-muted)]">
-            Sample catalog for architecture. Exact model photos arrive via affiliate/merchant feeds — we never use random stock photos as the product.
+            Curated research picks from our product catalog — specs, merchants, and comparison tools.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {trending.map((p) => (

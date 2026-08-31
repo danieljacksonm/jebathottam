@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { pageMetadata, JOURNAL_URL } from "@/lib/site-url";
+import { pageMetadata, JOURNAL_URL, NEWS_URL } from "@/lib/site-url";
 
 export const metadata: Metadata = pageMetadata({
   title: "News feeds for Google, Microsoft & more | E> Newsroom",
@@ -11,27 +11,27 @@ export const metadata: Metadata = pageMetadata({
 const FEEDS = [
   {
     name: "News RSS",
-    url: `${JOURNAL_URL}/api/news/rss`,
+    url: `${NEWS_URL}/api/news/rss`,
     use: "Google Publisher Center, Bing/Microsoft Start, Flipboard, Feedly",
   },
   {
     name: "Google News sitemap",
-    url: `${JOURNAL_URL}/api/news/sitemap`,
-    use: "Google Search Console + Publisher Center (last 2 days of news URLs)",
+    url: `${NEWS_URL}/api/news/sitemap`,
+    use: "Google Search Console + Publisher Center (recent news URLs)",
   },
   {
     name: "Journal RSS",
     url: `${JOURNAL_URL}/api/blog/rss`,
-    use: "Blog discovery, Microsoft feeds, newsletter tools",
+    use: "Journal discovery and newsletter tools",
   },
   {
     name: "News iCal",
-    url: `${JOURNAL_URL}/api/news/ical`,
+    url: `${NEWS_URL}/api/news/ical`,
     use: "Calendar apps and desk planning",
   },
   {
     name: "HTML sitemap",
-    url: `${JOURNAL_URL}/sitemap.xml`,
+    url: `${NEWS_URL}/sitemap.xml`,
     use: "Google Search Console and Bing Webmaster Tools",
   },
 ];
@@ -51,7 +51,7 @@ export default function NewsroomFeedsPage() {
           and news sitemap.
         </li>
         <li>
-          Microsoft: Bing Webmaster Tools → verify {JOURNAL_URL.replace("https://", "")} → submit
+          Microsoft: Bing Webmaster Tools → verify {NEWS_URL.replace("https://", "")} → submit
           sitemap.xml and News RSS.
         </li>
         <li>Flipboard / Feedly: add the News RSS URL as a publisher source.</li>

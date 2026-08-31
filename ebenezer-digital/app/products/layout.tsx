@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { StoreProvider } from "./components/StoreProvider";
 import { StoreI18nProvider } from "./i18n";
 import { EbenDock } from "@/components/EbenDock";
-import { EcosystemNav } from "@/components/EcosystemNav";
 import { pageMetadata } from "@/lib/site-url";
 import "./store.css";
 
@@ -18,7 +17,6 @@ export default function ProductsLayout({ children }: { children: ReactNode }) {
   return (
     <StoreI18nProvider>
       <StoreProvider>
-        <EcosystemNav variant="light" active="store" />
         {children}
         <EbenDock />
       </StoreProvider>

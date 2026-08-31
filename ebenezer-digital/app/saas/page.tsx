@@ -64,22 +64,14 @@ export default function SaasLandingPage() {
           </a>
         </div>
 
-        <div className="saas-preview" aria-hidden>
-          <div className="saas-preview-card">
-            <div className="saas-preview-top">
-              <div>
-                <span>Today&apos;s sales</span>
-                <strong>₹48,260</strong>
-              </div>
-              <span className="saas-pill">New invoice</span>
-            </div>
-            <div className="saas-preview-grid">
-              <div>12 bills</div>
-              <div>86 products</div>
-              <div>41 customers</div>
-            </div>
-          </div>
-        </div>
+        <ul className="saas-feature-strip" aria-label="Core capabilities">
+          {features.slice(0, 4).map((f) => (
+            <li key={f.title}>
+              <strong>{f.title}</strong>
+              <span>{f.desc}</span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="saas-section">

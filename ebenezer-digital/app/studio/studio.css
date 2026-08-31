@@ -189,6 +189,16 @@ body.studio-cursor-on select {
   cursor: text;
 }
 
+.studio-prose a {
+  color: var(--st-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.studio-prose a:hover {
+  color: #fff;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .studio-marquee p,
   .studio-grid,

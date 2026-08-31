@@ -32,13 +32,13 @@ export default function NewsLayout({ children }: { children: ReactNode }) {
     url: NEWS_URL,
     logo: `${NEWS_URL}/og-news.png`,
     sameAs: [JOURNAL_URL, NEWS_URL],
-    publishingPrinciples: `${JOURNAL_URL}/blog/newsroom/editorial-policy`,
-    correctionsPolicy: `${JOURNAL_URL}/blog/newsroom/editorial-policy`,
-    ethicsPolicy: `${JOURNAL_URL}/blog/newsroom/editorial-policy`,
+    publishingPrinciples: `${NEWS_URL}/blog/newsroom/editorial-policy`,
+    correctionsPolicy: `${NEWS_URL}/blog/newsroom/editorial-policy`,
+    ethicsPolicy: `${NEWS_URL}/blog/newsroom/editorial-policy`,
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "newsroom",
-      url: `${JOURNAL_URL}/blog/newsroom/contact`,
+      url: `${NEWS_URL}/blog/newsroom/contact`,
     },
   };
 

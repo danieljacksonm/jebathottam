@@ -5,9 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CheckCircle, ShieldCheck, Truck, Zap, FileText } from "lucide-react";
 import { StoreNav } from "./components/StoreNav";
-import { StoreCursor } from "./components/StoreCursor";
 import { StoreCart } from "./components/StoreCart";
-import { StoreMarquee } from "./components/StoreMarquee";
 import { ProductCard } from "./components/ProductCard";
 import { useStoreI18n } from "./i18n";
 import { localizeProduct } from "./product-i18n";
@@ -162,7 +160,6 @@ export default function ProductsPage() {
 
   return (
     <div className="store-root" dir={rtl ? "rtl" : "ltr"}>
-      <StoreCursor />
       <StoreNav />
       <StoreCart />
 
@@ -232,10 +229,6 @@ export default function ProductsPage() {
           </div>
         </div>
       </section>
-
-      <StoreMarquee
-        items={["Website templates", "Invoice tools", "Billing software", "Honest downloads", "USD pricing", "Ebenezer Store"]}
-      />
 
       <section className="bg-[var(--s-surface)]">
         <div className="s-page py-12">

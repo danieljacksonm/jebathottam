@@ -39,16 +39,15 @@ const footerLinks = {
     { label: "Our Work", href: "/work" },
     { label: "Process", href: "/process" },
     { label: "Testimonials", href: "/testimonials" },
-    { label: "Website showcase", href: "/website-showcase" },
-    { label: "Completed projects", href: "/completed-projects" },
-    { label: "By the numbers", href: "/stats" },
-    { label: "Trust", href: "/trust" },
+    { label: "Careers", href: "/careers" },
   ],
-  products: [
-    { label: "News", href: SITE_NAV.news },
+  ecosystem: [
     { label: "Journal", href: SITE_NAV.journal },
+    { label: "News", href: SITE_NAV.news },
+    { label: "Tools", href: SITE_NAV.tools },
+    { label: "Hardware", href: SITE_NAV.products },
     { label: "Store", href: SITE_NAV.store },
-    { label: "SaaS billing", href: SITE_NAV.saas },
+    { label: "Free tools", href: SITE_NAV.network },
     { label: "Eben AI", href: SITE_NAV.ai },
   ],
   support: [
@@ -148,9 +147,9 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Products</h4>
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Ecosystem</h4>
             <ul className="mt-4 space-y-2">
-              {footerLinks.products.map((link) => (
+              {footerLinks.ecosystem.map((link) => (
                 <li key={link.label}>
                   <Link href={link.href} className="text-sm text-white/60 hover:text-white">
                     {link.label}

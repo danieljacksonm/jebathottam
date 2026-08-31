@@ -191,6 +191,36 @@
   color: var(--saas-ink);
 }
 
+.saas-feature-strip {
+  margin: 2.5rem auto 0;
+  max-width: 52rem;
+  display: grid;
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.saas-feature-strip li {
+  border: 1px solid var(--saas-line);
+  border-radius: 0.85rem;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.saas-feature-strip strong {
+  display: block;
+  font-size: 0.92rem;
+  color: var(--saas-ink);
+}
+
+.saas-feature-strip span {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.82rem;
+  color: var(--saas-muted);
+}
+
 .saas-preview {
   margin: 3rem auto 0;
   max-width: 42rem;
