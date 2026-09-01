@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { ContactLinks } from "@/components/ContactLinks";
 
 export async function SiteFooter() {
   const t = await getTranslations("footer");
   const nav = await getTranslations("nav");
+  const contact = await getTranslations("contact");
   const year = new Date().getFullYear();
 
   return (
@@ -97,11 +99,33 @@ export async function SiteFooter() {
               </li>
             ))}
           </ul>
-          <p className="mt-8 text-xs text-mist/50">{t("contactSoon")}</p>
+          <div className="mt-8">
+            <p className="text-[0.68rem] uppercase tracking-[0.22em] text-gold">
+              {t("contact")}
+            </p>
+            <ContactLinks
+              className="mt-4"
+              compact
+              phoneLabel={contact("phone")}
+              whatsappLabel={contact("whatsapp")}
+              emailLabel={contact("email")}
+              facebookLabel={contact("facebook")}
+            />
+          </div>
         </div>
       </div>
-      <div className="border-t border-[var(--line)] px-5 py-6 text-center text-[0.7rem] text-mist/45 md:px-8">
-        {t("rights", { year })}
+      <div className="border-t border-[var(--line)] px-5 py-6 md:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
+          <p className="text-[0.7rem] text-mist/45">{t("rights", { year })}</p>
+          <div className="flex flex-wrap justify-center gap-5 text-[0.7rem] text-mist/55">
+            <Link href="/privacy" className="transition hover:text-gold">
+              {t("privacy")}
+            </Link>
+            <Link href="/terms" className="transition hover:text-gold">
+              {t("terms")}
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   );

@@ -66,6 +66,7 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3003,
+        NEXT_PUBLIC_SITE_URL: "https://canaantravelhub.com",
         NODE_OPTIONS: "--max-old-space-size=384"
       },
       instances: 1,

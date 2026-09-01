@@ -31,7 +31,11 @@
     "enquireTitle": "Book Your Kodaikanal Journey",
     "enquireDescription": "Enquire for Kodaikanal tour packages, honeymoon or family trips, and digital services. Canaan will respond with a calm plan.",
     "faqTitle": "Kodaikanal Travel FAQ",
-    "faqDescription": "Answers on best time to visit Kodaikanal, how many days to stay, how to reach, and how Canaan packages work."
+    "faqDescription": "Answers on best time to visit Kodaikanal, how many days to stay, how to reach, and how Canaan packages work.",
+    "privacyTitle": "Privacy Policy | Canaan Travel Hub",
+    "privacyDescription": "How Canaan Travel Hub collects, uses, and protects your personal information when you enquire or browse our site.",
+    "termsTitle": "Terms of Service | Canaan Travel Hub",
+    "termsDescription": "Terms for using canaantravelhub.com and booking Kodaikanal tour packages or digital travel services with Canaan Travel Hub."
   },
   "kodaikanalGuide": {
     "whyTitle": "Why visit Kodaikanal",
@@ -238,8 +242,12 @@
     "eyebrow": "Contact",
     "title": "Speak with Canaan",
     "subtitle": "Share your Kodaikanal package plans or a digital service need. We’ll respond with a clear next step.",
-    "note": "Phone, WhatsApp, and address will be published here soon. For now, use the enquiry form.",
-    "cta": "Go to enquiry form"
+    "note": "Reach us by phone, WhatsApp, or email. For package details and dates, the enquiry form helps us reply faster.",
+    "cta": "Send an enquiry",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "facebook": "Facebook"
   },
   "enquirePage": {
     "eyebrow": "Private enquiry",
@@ -271,7 +279,9 @@
     "tagline": "Cross Borders. Discover Blessings.",
     "about": "Kodaikanal tour packages first. Digital tourism services when you need flights, hotels, or visas.",
     "rights": "© {year} Canaan Travel Hub. All rights reserved.",
-    "contactSoon": "Contact details coming soon.",
+    "contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
     "explore": "Explore",
     "services": "Digital services",
     "support": "Support",
@@ -334,10 +344,9 @@
     "digitalTitle": "Digital tourism services",
     "digitalBody": "Packages are Kodaikanal-only. Flights, hotels, and visas support your journey.",
     "digitalCta": "View services",
-    "digitalSoft": "Stay close to the mist.",
-    "digitalDone": "You are on the list.",
-    "digitalEmail": "Email",
-    "digitalJoin": "Join",
+    "digitalSoft": "Questions about Kodai packages or digital services?",
+    "digitalWhatsapp": "WhatsApp us",
+    "digitalEnquire": "Enquire online",
     "heroEyebrow": "Canaan Travel Hub · Kodaikanal",
     "heroTitle": "Every Journey Begins With Wonder.",
     "heroSub": "Discover Kodaikanal Like Never Before.",
@@ -366,5 +375,67 @@
     "ctaTitle": "Your Kodaikanal story starts here.",
     "ctaButton": "Plan my journey",
     "farewell": "See you in the mountains."
+  },
+  "legal": {
+    "privacyEyebrow": "Legal",
+    "privacyTitle": "Privacy Policy",
+    "privacyUpdated": "Last updated: September 2026",
+    "privacyIntro": "Canaan Travel Hub (“we”, “us”) respects your privacy. This policy explains what we collect when you use canaantravelhub.com and how we use it.",
+    "privacy": {
+      "collect": {
+        "title": "Information we collect",
+        "body": "When you submit an enquiry, we collect your name, email, phone number, travel dates, package interest, and any message you provide. We also receive basic technical data such as browser type when you browse the site."
+      },
+      "use": {
+        "title": "How we use your information",
+        "body": "We use enquiry details to respond to you, plan Kodaikanal packages, and provide digital travel services you request. We do not sell your personal data."
+      },
+      "share": {
+        "title": "Sharing",
+        "body": "We may share necessary booking details with hotels, transport partners, or visa agents only to fulfil your request. We require partners to handle data responsibly."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": "The site may use essential cookies for language preference and basic functionality. We do not use third-party advertising trackers at launch."
+      },
+      "rights": {
+        "title": "Your choices",
+        "body": "You may ask us to correct or delete enquiry data by emailing managingdirector@canaantravelhub.com. We will respond within a reasonable time."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "For privacy questions, email managingdirector@canaantravelhub.com or call +91 70927 71754."
+      }
+    },
+    "termsEyebrow": "Legal",
+    "termsTitle": "Terms of Service",
+    "termsUpdated": "Last updated: September 2026",
+    "termsIntro": "By using canaantravelhub.com and enquiring with Canaan Travel Hub, you agree to these terms.",
+    "terms": {
+      "services": {
+        "title": "Our services",
+        "body": "Canaan Travel Hub offers Kodaikanal tour packages and related digital tourism services such as flight, hotel, and visa assistance. Availability depends on season, partners, and your travel dates."
+      },
+      "bookings": {
+        "title": "Enquiries and bookings",
+        "body": "Submitting an enquiry does not confirm a booking. We will share a plan and price for your approval before any commitment. You are responsible for accurate contact and travel information."
+      },
+      "pricing": {
+        "title": "Pricing and payment",
+        "body": "Package prices shown on the site are indicative and may change with season, occupancy, and inclusions. Final pricing is confirmed in writing before payment."
+      },
+      "liability": {
+        "title": "Travel responsibility",
+        "body": "Travel involves weather, road, and health factors beyond our control. We arrange services in good faith but are not liable for delays or events caused by third parties, natural conditions, or force majeure."
+      },
+      "changes": {
+        "title": "Changes to these terms",
+        "body": "We may update these terms. The latest version will always be published on this page with an updated date."
+      },
+      "law": {
+        "title": "Governing law",
+        "body": "These terms are governed by the laws of India. Disputes will be handled in good faith and, if needed, through courts in Tamil Nadu, India."
+      }
+    }
   }
 }

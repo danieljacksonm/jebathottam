@@ -3,6 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { ContactLinks } from "@/components/ContactLinks";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -28,7 +29,6 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("contact");
-
   const nav = await getTranslations("nav");
 
   return (
@@ -49,10 +49,17 @@ export default async function ContactPage({
           { name: nav("contact") },
         ]}
       />
-      <section className="mx-auto max-w-2xl px-5 py-20 text-center md:px-8">
-        <div className="glass-panel rounded-3xl px-8 py-12">
+      <section className="mx-auto max-w-2xl px-5 py-20 md:px-8">
+        <div className="glass-panel rounded-3xl px-8 py-12 text-center md:text-left">
           <p className="text-soft-gray">{t("note")}</p>
-          <Link href="/enquire" className="btn-gold mt-8 inline-flex">
+          <ContactLinks
+            className="mt-8"
+            phoneLabel={t("phone")}
+            whatsappLabel={t("whatsapp")}
+            emailLabel={t("email")}
+            facebookLabel={t("facebook")}
+          />
+          <Link href="/enquire" className="btn-gold mt-10 inline-flex">
             {t("cta")}
           </Link>
         </div>

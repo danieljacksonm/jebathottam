@@ -44,6 +44,18 @@ cp -r .next/static .next/standalone/.next/static
 
 Serve on port 3000 behind Nginx/Caddy. Enquiries are appended to `data/enquiries.jsonl` on the server.
 
+## Production
+
+- **Domain:** [canaantravelhub.com](https://canaantravelhub.com)
+- **Contact:** +91 70927 71754 · [managingdirector@canaantravelhub.com](mailto:managingdirector@canaantravelhub.com)
+- **Facebook:** [Canaan Travel Hub](https://www.facebook.com/share/14mvJi3ZWV8/)
+
+Set before build:
+
+```bash
+export NEXT_PUBLIC_SITE_URL=https://canaantravelhub.com
+```
+
 ## Brand
 
 Logo: `public/brand/canaan-logo.jpeg`  

@@ -1,19 +1,13 @@
 "use client";
 
-import { FormEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useReveal } from "./motion";
+import { BUSINESS } from "@/lib/contact";
 
 export function DigitalStrip() {
   const ref = useReveal([]);
   const t = useTranslations("homeCinematic");
-  const [done, setDone] = useState(false);
-
-  function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    setDone(true);
-  }
 
   return (
     <section
@@ -37,22 +31,20 @@ export function DigitalStrip() {
           </Link>
         </div>
         <div className="w-full max-w-md">
-          <p className="mb-3 text-sm text-mist">{t("digitalSoft")}</p>
-          {done ? (
-            <p className="text-gold-bright">{t("digitalDone")}</p>
-          ) : (
-            <form onSubmit={onSubmit} className="flex gap-2">
-              <input
-                required
-                type="email"
-                placeholder={t("digitalEmail")}
-                className="input-field"
-              />
-              <button type="submit" className="btn-gold shrink-0">
-                {t("digitalJoin")}
-              </button>
-            </form>
-          )}
+          <p className="mb-4 text-sm text-mist">{t("digitalSoft")}</p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a
+              href={BUSINESS.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-gold justify-center"
+            >
+              {t("digitalWhatsapp")}
+            </a>
+            <Link href="/enquire" className="btn-ghost justify-center">
+              {t("digitalEnquire")}
+            </Link>
+          </div>
         </div>
       </div>
     </section>

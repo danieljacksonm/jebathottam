@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { routing, type Locale } from "@/i18n/routing";
+import { BUSINESS } from "@/lib/contact";
 
-export const SITE_NAME = "Canaan Travel Hub";
+export const SITE_NAME = BUSINESS.name;
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  process.env.NEXT_PUBLIC_SITE_URL || BUSINESS.siteUrl
 ).replace(/\/$/, "");
 
 export function localizedPath(locale: string, path = "/") {
@@ -93,6 +94,16 @@ export function organizationJsonLd() {
     url: SITE_URL,
     logo: `${SITE_URL}/brand/canaan-logo.jpeg`,
     slogan: "Cross Borders. Discover Blessings.",
+    email: BUSINESS.email,
+    telephone: BUSINESS.phoneE164,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: BUSINESS.phoneE164,
+      email: BUSINESS.email,
+      contactType: "customer service",
+      availableLanguage: ["English", "Tamil", "Hindi"],
+    },
+    sameAs: [BUSINESS.facebook],
     areaServed: {
       "@type": "TouristDestination",
       name: "Kodaikanal",
