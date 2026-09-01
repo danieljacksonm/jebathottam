@@ -9,7 +9,7 @@ const canonicalHost = BUSINESS.domain;
 export default function middleware(request: NextRequest) {
   const host = request.headers.get("host")?.split(":")[0] ?? "";
 
-  if (host === `www.${canonicalHost}` || host === "canaan.yegova.store") {
+  if (host === `www.${canonicalHost}`) {
     const url = request.nextUrl.clone();
     url.protocol = "https:";
     url.host = canonicalHost;

@@ -260,7 +260,7 @@
       "description": "Premium travel website focused on Kodaikanal packages, multilingual pages (EN/TA/HI), enquiry booking, and cinematic brand storytelling.",
       "challenge": "Travel brand needed a premium online presence and enquiry flow.",
       "solution": "Designed and developed a Next.js travel hub with packages, enquire API, and brand motion.",
-      "result": "Site prepared for canaan.yegova.store deployment.",
+      "result": "Site prepared for canaantravelhub.com deployment.",
       "coverImage": "/images/portfolio/portfolio-screenshot-agency.png",
       "galleryImages": [
         "/images/portfolio/canaan-cover.png",
@@ -272,7 +272,7 @@
         "Travel",
         "Enquiry"
       ],
-      "liveUrl": "http://canaan.yegova.store",
+      "liveUrl": "https://canaantravelhub.com",
       "projectPhase": "ongoing",
       "status": "published",
       "order": 3,
