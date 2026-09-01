@@ -1,6 +1,7 @@
 import { mkdir, appendFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
+import { sendEnquiryNotification } from "@/lib/mail";
 
 type EnquiryBody = {
   name?: string;
@@ -47,6 +48,12 @@ export async function POST(request: Request) {
       `${JSON.stringify(entry)}\n`,
       "utf8",
     );
+
+    try {
+      await sendEnquiryNotification(entry);
+    } catch (error) {
+      console.error("Enquiry email failed:", error);
+    }
 
     return NextResponse.json({ ok: true });
   } catch {

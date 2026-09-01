@@ -56,6 +56,21 @@ Set before build:
 export NEXT_PUBLIC_SITE_URL=https://canaantravelhub.com
 ```
 
+### Enquiry email alerts
+
+Create `/home/dani/agntix-template/.env.production.local` on the VPS:
+
+```bash
+ENQUIRY_NOTIFY_EMAIL=managingdirector@canaantravelhub.com
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-smtp-user
+SMTP_PASS=your-app-password
+SMTP_FROM=Canaan Travel Hub <managingdirector@canaantravelhub.com>
+```
+
+Enquiries are still saved to `data/enquiries.jsonl` even if SMTP is not configured.
+
 ## Brand
 
 Logo: `public/brand/canaan-logo.jpeg`  

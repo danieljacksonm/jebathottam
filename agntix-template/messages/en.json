@@ -215,6 +215,7 @@
     "openLine1": "Escape Into The Mist.",
     "openLine2": "Kodaikanal Awaits.",
     "openHint": "Begin the day",
+    "watchFilm": "Watch the film",
     "brandSub": "Travel Hub"
   },
   "about": {
@@ -294,8 +295,7 @@
   },
   "video": {
     "title": "Kodaikanal journey film",
-    "close": "Close",
-    "note": "Video placeholder — your Kodaikanal brand film can be embedded here."
+    "close": "Close"
   },
   "destinationsSection": {
     "eyebrow": "Destination",
@@ -353,8 +353,7 @@
     "heroExplore": "Explore Experiences",
     "heroWatch": "Watch Story",
     "heroScroll": "Scroll",
-    "heroStoryTitle": "Kodaikanal story",
-    "heroStoryNote": "Embed your cinematic Kodaikanal film here."
+    "heroStoryTitle": "Kodaikanal story"
   },
   "journey": {
     "stages": {

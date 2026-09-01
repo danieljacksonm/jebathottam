@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useState } from "react";
 import {
-  AnimatePresence,
   motion,
   useReducedMotion,
   useScroll,
@@ -11,8 +10,9 @@ import {
 } from "framer-motion";
 import { useRef } from "react";
 import { useTranslations } from "next-intl";
-import { Play, X } from "lucide-react";
+import { Play } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { BrandFilmModal } from "@/components/film/BrandFilmModal";
 import { BookingBar } from "./BookingBar";
 import { KodaiMist } from "./KodaiMist";
 
@@ -101,41 +101,12 @@ export function Hero() {
         <BookingBar />
       </div>
 
-      <AnimatePresence>
-        {videoOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/80 p-5"
-            onClick={() => setVideoOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 12 }}
-              transition={{ duration: 0.35 }}
-              className="relative w-full max-w-3xl overflow-hidden rounded-2xl border border-[var(--line)] bg-navy-mid"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-3">
-                <p className="text-sm text-cream">{tv("title")}</p>
-                <button
-                  type="button"
-                  className="rounded-full border border-[var(--line)] p-1.5 text-cream"
-                  onClick={() => setVideoOpen(false)}
-                  aria-label={tv("close")}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-              <div className="flex aspect-video items-center justify-center bg-black/40 p-8 text-center">
-                <p className="max-w-md text-sm text-mist">{tv("note")}</p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <BrandFilmModal
+        open={videoOpen}
+        onClose={() => setVideoOpen(false)}
+        title={tv("title")}
+        closeLabel={tv("close")}
+      />
     </>
   );
 }

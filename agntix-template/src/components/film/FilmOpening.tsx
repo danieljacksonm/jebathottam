@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Play } from "lucide-react";
 import { AtmosphereLayer } from "./AtmosphereLayer";
+import { BrandFilmModal } from "./BrandFilmModal";
 import { afterFirstPaint, isMobileLite } from "@/lib/perf";
 import { HERO_IMAGE } from "@/lib/media";
 import { useTranslations } from "next-intl";
@@ -23,7 +25,9 @@ function LetterLine({ text }: { text: string }) {
 
 export function FilmOpening() {
   const root = useRef<HTMLElement>(null);
+  const [filmOpen, setFilmOpen] = useState(false);
   const t = useTranslations("film");
+  const tv = useTranslations("video");
   const line1 = t("openLine1");
   const line2 = t("openLine2");
   const hint = t("openHint");
@@ -235,7 +239,22 @@ export function FilmOpening() {
           data-open-hint
           className="mt-3 h-12 w-px bg-gradient-to-b from-gold-bright to-transparent opacity-100 md:opacity-0"
         />
+        <button
+          type="button"
+          data-open-hint
+          onClick={() => setFilmOpen(true)}
+          className="btn-ghost mt-8 inline-flex items-center gap-2 opacity-100 md:opacity-0"
+        >
+          <Play size={14} aria-hidden />
+          {t("watchFilm")}
+        </button>
       </div>
+      <BrandFilmModal
+        open={filmOpen}
+        onClose={() => setFilmOpen(false)}
+        title={tv("title")}
+        closeLabel={tv("close")}
+      />
     </section>
   );
 }

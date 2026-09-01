@@ -3,9 +3,10 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { AnimatePresence, motion } from "framer-motion";
-import { Play, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { Play } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { BrandFilmModal } from "@/components/film/BrandFilmModal";
 import { MagneticButton } from "./motion";
 import { useTranslations } from "next-intl";
 
@@ -23,6 +24,7 @@ export function CinematicHero() {
   const root = useRef<HTMLElement>(null);
   const [videoOpen, setVideoOpen] = useState(false);
   const t = useTranslations("homeCinematic");
+  const tv = useTranslations("video");
   const heroTitle = t("heroTitle");
 
   useEffect(() => {
@@ -177,39 +179,12 @@ export function CinematicHero() {
         </div>
       </section>
 
-      <AnimatePresence>
-        {videoOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 p-5 backdrop-blur-md"
-            onClick={() => setVideoOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 16 }}
-              className="glass-panel relative w-full max-w-3xl overflow-hidden rounded-3xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-4">
-                <p className="text-sm text-white">{t("heroStoryTitle")}</p>
-                <button
-                  type="button"
-                  className="rounded-full border border-[var(--line)] p-2"
-                  onClick={() => setVideoOpen(false)}
-                >
-                  <X size={16} />
-                </button>
-              </div>
-              <div className="flex aspect-video items-center justify-center bg-black/50 p-8 text-center text-sm text-mist">
-                {t("heroStoryNote")}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <BrandFilmModal
+        open={videoOpen}
+        onClose={() => setVideoOpen(false)}
+        title={t("heroStoryTitle")}
+        closeLabel={tv("close")}
+      />
     </>
   );
 }
