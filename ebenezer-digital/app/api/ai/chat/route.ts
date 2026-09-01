@@ -7,6 +7,7 @@ import {
   validateInternalApiKey,
   type AiMode,
 } from "@/lib/ai";
+import { hybridChat, shouldUseHybrid } from "@/lib/ai-hybrid";
 import { loadEbenKnowledge } from "@/lib/ai-knowledge";
 
 export const dynamic = "force-dynamic";
@@ -83,6 +84,12 @@ export async function POST(request: Request) {
   }
 
   const wantStream = body.stream !== false;
+
+  const useHybrid = shouldUseHybrid(body.fast, messages);
+  if (useHybrid && !wantStream) {
+    const hybrid = await hybridChat(messages, { stream: false });
+    if (hybrid) return hybrid;
+  }
 
   try {
     const ollamaRes = await fetch(`${OLLAMA_BASE_URL}/api/chat`, {

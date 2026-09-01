@@ -206,6 +206,9 @@ export function canonicalFor(path: string): string {
   if (path === "/info/about" && origin === INFO_URL) return `${INFO_URL}/about`;
   if (path === "/info/search" && origin === INFO_URL) return `${INFO_URL}/search`;
   if (path === "/info/contact" && origin === INFO_URL) return `${INFO_URL}/contact`;
+  if (path === "/info/privacy" && origin === INFO_URL) return `${INFO_URL}/privacy`;
+  if (path === "/info/terms" && origin === INFO_URL) return `${INFO_URL}/terms`;
+  if (path === "/info/sitemap" && origin === INFO_URL) return `${INFO_URL}/sitemap`;
   if (path === "/blog/news" && origin === NEWS_URL) return NEWS_URL;
   if (path === "/blog" && origin === JOURNAL_URL) return JOURNAL_URL;
   if (path === "/tools" && origin === TOOLS_URL) return TOOLS_URL;
@@ -213,6 +216,69 @@ export function canonicalFor(path: string): string {
   if (path === "/catalog" && origin === PRODUCTS_URL) return PRODUCTS_URL;
   if (path === "/network" && origin === NETWORK_URL) return NETWORK_URL;
   return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+/** Browser-visible URL path for a given internal path + locale (inverse of middleware rewrites). */
+export function publicPathForLocale(
+  internalPath: string,
+  locale: SeoLocale = "en",
+  kind?: SiteKind
+): string {
+  const path = internalPath.startsWith("/") ? internalPath : `/${internalPath}`;
+  const resolvedKind = kind ?? siteKindFromPath(path);
+
+  let publicPath = path;
+  if (resolvedKind === "info") {
+    if (path === "/info") publicPath = "/";
+    else if (path.startsWith("/info/")) publicPath = path.replace(/^\/info/, "") || "/";
+  } else if (resolvedKind === "journal" && (path === "/blog" || path.startsWith("/blog/"))) {
+    if (path === "/blog") publicPath = "/";
+    else publicPath = path.replace(/^\/blog/, "") || "/";
+  } else if (resolvedKind === "news" && path.startsWith("/blog/news")) {
+    if (path === "/blog/news") publicPath = "/";
+    else publicPath = path.replace(/^\/blog\/news/, "") || "/";
+  } else if (resolvedKind === "store" && path.startsWith("/products")) {
+    if (path === "/products") publicPath = "/";
+    else publicPath = path.replace(/^\/products/, "") || "/";
+  } else if (resolvedKind === "tools" && path.startsWith("/tools")) {
+    if (path === "/tools") publicPath = "/";
+    else publicPath = path.replace(/^\/tools/, "") || "/";
+  } else if (resolvedKind === "products" && path.startsWith("/catalog")) {
+    if (path === "/catalog") publicPath = "/";
+    else publicPath = path.replace(/^\/catalog/, "") || "/";
+  } else if (resolvedKind === "network" && path.startsWith("/network")) {
+    if (path === "/network") publicPath = "/";
+    else publicPath = path.replace(/^\/network/, "") || "/";
+  } else if (resolvedKind === "ai" && path.startsWith("/ai")) {
+    if (path === "/ai") publicPath = "/";
+    else publicPath = path.replace(/^\/ai/, "") || "/";
+  } else if (resolvedKind === "saas" && path.startsWith("/saas")) {
+    if (path === "/saas") publicPath = "/";
+    else publicPath = path.replace(/^\/saas/, "") || "/";
+  } else if (resolvedKind === "discover" && path.startsWith("/discover")) {
+    if (path === "/discover") publicPath = "/";
+    else publicPath = path.replace(/^\/discover/, "") || "/";
+  }
+
+  if (locale === "en") return publicPath === "" ? "/" : publicPath;
+  const suffix = publicPath === "/" ? "" : publicPath;
+  return `/${locale}${suffix}`;
+}
+
+export function languageAlternatesForPath(
+  internalPath: string,
+  origin?: string,
+  kind?: SiteKind
+): Record<string, string> {
+  const base = origin || originForPath(internalPath);
+  const resolvedKind = kind ?? siteKindFromPath(internalPath);
+  const languages: Record<string, string> = {};
+  for (const loc of SEO_LOCALES) {
+    const pub = publicPathForLocale(internalPath, loc, resolvedKind);
+    languages[loc] = `${base}${pub === "/" ? "" : pub}`;
+  }
+  languages["x-default"] = languages.en;
+  return languages;
 }
 
 /** Icons shared across every host/page. */

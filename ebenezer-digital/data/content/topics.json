@@ -1,0 +1,8 @@
+[
+  {"id":"ins-001","surface":"studio-insights","title":"How to choose a web development partner","slug":"choose-web-development-partner","category":"Web Development","tier":"pillar","keywords":["web dev","agency"],"wordTarget":2200},
+  {"id":"ins-002","surface":"studio-insights","title":"E-commerce checkout optimization basics","slug":"ecommerce-checkout-optimization","category":"E-commerce","tier":"standard","keywords":["checkout","conversion"],"wordTarget":1200},
+  {"id":"ins-003","surface":"studio-insights","title":"Business automation without breaking workflows","slug":"business-automation-workflows","category":"Automation","tier":"standard","keywords":["automation","ops"],"wordTarget":1100},
+  {"id":"tg-001","surface":"tools-guides","title":"Best CRM for small businesses in 2026","slug":"best-crm-small-business-2026","category":"CRM","tier":"pillar","keywords":["crm","saas"],"wordTarget":2000},
+  {"id":"ng-001","surface":"network-guides","title":"Free SEO tools for keyword research","slug":"free-seo-keyword-research-tools","category":"SEO","tier":"standard","keywords":["seo","keywords"],"wordTarget":1000},
+  {"id":"ig-001","surface":"info-guides","title":"What is the Ebenezer Digital ecosystem?","slug":"what-is-ebenezer-ecosystem","category":"Guides","tier":"standard","keywords":["ecosystem"],"wordTarget":900}
+]

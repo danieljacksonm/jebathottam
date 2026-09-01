@@ -12,6 +12,8 @@ const ROUTES = [
   "/work",
   "/privacy",
   "/terms",
+  "/sitemap",
+  "/insights",
   "/saas",
   "/ai",
   "/discover",
@@ -27,6 +29,8 @@ const ROUTES = [
   "/network",
   "/network/tools",
   "/network/tools/json-formatter",
+  "/site-legal/privacy",
+  "/site-sitemap",
   "/this-route-should-404-audit",
 ];
 

@@ -20,6 +20,7 @@ import {
   type SiteKind,
 } from "@/lib/site-url";
 import { CATALOG_CATEGORIES, CATALOG_PRODUCTS } from "@/app/catalog/data";
+import { TOOLS } from "@/app/tools/data";
 import { getLiveTools } from "@/lib/network/registry";
 import { NETWORK_GUIDES } from "@/lib/network/guides";
 
@@ -54,9 +55,11 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/services",
     "/work",
     "/contact",
+    "/insights",
     "/testimonials",
     "/privacy",
     "/terms",
+    "/sitemap",
     "/process",
     "/why",
     "/careers",
@@ -70,25 +73,18 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
 }
 
 async function aiSitemap(): Promise<MetadataRoute.Sitemap> {
-  return [
-    page(AI_URL, "", "weekly", 1, undefined, true),
-    page(AI_URL, "/ai", "weekly", 0.9, undefined, true),
-  ];
+  return [page(AI_URL, "", "weekly", 1, undefined, true)];
 }
 
 async function saasSitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     page(SAAS_URL, "", "weekly", 1, undefined, true),
-    page(SAAS_URL, "/saas", "weekly", 0.9, undefined, true),
     page(SAAS_URL, "/saas/login", "monthly", 0.4, undefined, false),
   ];
 }
 
 async function discoverSitemap(): Promise<MetadataRoute.Sitemap> {
-  return [
-    page(DISCOVER_URL, "", "weekly", 1, undefined, true),
-    page(DISCOVER_URL, "/discover", "weekly", 0.9, undefined, true),
-  ];
+  return [page(DISCOVER_URL, "", "weekly", 1, undefined, true)];
 }
 
 async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
@@ -97,13 +93,18 @@ async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
     page(INFO_URL, "/about", "monthly", 0.7, undefined, true),
     page(INFO_URL, "/search", "weekly", 0.6, undefined, true),
     page(INFO_URL, "/contact", "monthly", 0.5, undefined, true),
+    page(INFO_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(INFO_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(INFO_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
 }
 
 async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
     page(JOURNAL_URL, "", "hourly", 1, undefined, true),
-    page(JOURNAL_URL, "/blog", "hourly", 1, undefined, true),
+    page(JOURNAL_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(JOURNAL_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(JOURNAL_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
 
   const seen = new Set<string>();
@@ -172,8 +173,11 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
 
 function storeSitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
-    page(STORE_URL, "/products", "weekly", 1, undefined, true),
+    page(STORE_URL, "", "weekly", 1, undefined, true),
     page(STORE_URL, "/products/roadmap", "monthly", 0.5, undefined, true),
+    page(STORE_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(STORE_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(STORE_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
   for (const c of STORE_CATEGORY_PAGES) {
     pages.push(page(STORE_URL, `/products/category/${c.slug}`, "weekly", 0.75, undefined, true));
@@ -189,34 +193,42 @@ function storeSitemap(): MetadataRoute.Sitemap {
 
 function productsCatalogSitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
-    page(PRODUCTS_URL, "/catalog", "weekly", 1),
-    page(PRODUCTS_URL, "/catalog/compare", "weekly", 0.6),
-    page(PRODUCTS_URL, "/catalog/recommend", "weekly", 0.7),
-    page(PRODUCTS_URL, "/catalog/guides", "weekly", 0.75),
+    page(PRODUCTS_URL, "", "weekly", 1, undefined, true),
+    page(PRODUCTS_URL, "/catalog/compare", "weekly", 0.6, undefined, true),
+    page(PRODUCTS_URL, "/catalog/recommend", "weekly", 0.7, undefined, true),
+    page(PRODUCTS_URL, "/catalog/guides", "weekly", 0.75, undefined, true),
+    page(PRODUCTS_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(PRODUCTS_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(PRODUCTS_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
   for (const c of CATALOG_CATEGORIES) {
-    pages.push(page(PRODUCTS_URL, `/catalog/${c.slug}`, "weekly", 0.8));
+    pages.push(page(PRODUCTS_URL, `/catalog/${c.slug}`, "weekly", 0.8, undefined, true));
   }
   for (const p of CATALOG_PRODUCTS.filter((x) => x.status === "active")) {
-    pages.push(page(PRODUCTS_URL, `/catalog/p/${p.slug}`, "weekly", 0.85, new Date(p.updatedAt)));
+    pages.push(page(PRODUCTS_URL, `/catalog/p/${p.slug}`, "weekly", 0.85, new Date(p.updatedAt), true));
   }
   for (const slug of [
     "best-laptop-under-50000",
     "best-ssd-for-gaming",
     "best-ram-for-laptops",
   ]) {
-    pages.push(page(PRODUCTS_URL, `/catalog/guides/${slug}`, "monthly", 0.7));
+    pages.push(page(PRODUCTS_URL, `/catalog/guides/${slug}`, "monthly", 0.7, undefined, true));
   }
   for (const budget of ["50000", "60000", "70000", "80000", "100000"]) {
-    pages.push(page(PRODUCTS_URL, `/catalog/laptops/under-${budget}`, "weekly", 0.7));
+    pages.push(page(PRODUCTS_URL, `/catalog/laptops/under-${budget}`, "weekly", 0.7, undefined, true));
   }
   return pages;
 }
 
 function toolsSitemap(): MetadataRoute.Sitemap {
-  const toolRoutes = [
-    "",
-    "/tools",
+  const pages: MetadataRoute.Sitemap = [
+    page(TOOLS_URL, "", "weekly", 1, undefined, true),
+    page(TOOLS_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(TOOLS_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(TOOLS_URL, "/sitemap", "monthly", 0.3, undefined, true),
+    page(TOOLS_URL, "/tools/guides", "weekly", 0.75, undefined, true),
+  ];
+  const staticRoutes = [
     "/tools/invoice-generator",
     "/tools/quotation-generator",
     "/tools/receipt-generator",
@@ -226,9 +238,13 @@ function toolsSitemap(): MetadataRoute.Sitemap {
     "/tools/expense-tracker",
     "/tools/task-tracker",
   ];
-  return toolRoutes.map((route) =>
-    page(TOOLS_URL, route, "weekly", route === "" || route === "/tools" ? 1 : 0.8, undefined, true)
-  );
+  for (const route of staticRoutes) {
+    pages.push(page(TOOLS_URL, route, "weekly", 0.8, undefined, true));
+  }
+  for (const tool of TOOLS) {
+    pages.push(page(TOOLS_URL, `/tools/${tool.id}`, "weekly", 0.85, undefined, true));
+  }
+  return pages;
 }
 
 function networkSitemap(): MetadataRoute.Sitemap {

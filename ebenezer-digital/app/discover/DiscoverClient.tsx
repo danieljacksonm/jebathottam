@@ -195,21 +195,70 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
             ) : null}
           </section>
         ) : (
-          <section className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-sm">
-            {[
-              ["Services", "Custom websites & software", SITE_URL],
-              ["Store", "Ready-made digital products", "https://ebenezerdigital.store"],
-              ["Tools", "Compare AI & SaaS", "https://tools.ebenezerdigital.com"],
-              ["Hardware", "Laptops & electronics", "https://products.ebenezerdigital.com"],
-              ["Guides", "Learn on .info", "https://ebenezerdigital.info"],
-              ["AI", "Ask Ebenezer", `${SITE_URL}/ai`],
-            ].map(([title, sub, href]) => (
-              <a key={title} href={href as string} className="d-card">
-                <p className="font-semibold">{title}</p>
-                <p className="text-[var(--d-muted)] text-xs">{sub}</p>
-              </a>
-            ))}
-          </section>
+          <>
+            <section className="mt-14">
+              <h2 className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-[var(--d-muted)]">
+                Popular intents
+              </h2>
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                {["Build a website", "Compare software", "Buy a laptop", "Free SEO tools", "Billing for my shop"].map(
+                  (intent) => (
+                    <button
+                      key={intent}
+                      type="button"
+                      className="d-chip"
+                      onClick={() => {
+                        setQ(intent);
+                        void run(intent);
+                      }}
+                    >
+                      {intent}
+                    </button>
+                  )
+                )}
+              </div>
+            </section>
+
+            <section className="mt-12 d-glass p-6">
+              <h2 className="text-lg font-bold">Ecosystem map</h2>
+              <p className="mt-2 text-sm text-[var(--d-muted)]">
+                Twelve domains, one team — pick the surface that matches your goal.
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+                {[
+                  ["Services", "Custom websites & software", SITE_URL],
+                  ["Store", "Ready-made digital products", "https://ebenezerdigital.store"],
+                  ["Tools", "Compare AI & SaaS", "https://tools.ebenezerdigital.com"],
+                  ["Hardware", "Laptops & electronics", "https://products.ebenezerdigital.com"],
+                  ["Guides", "Learn on .info", "https://ebenezerdigital.info"],
+                  ["AI", "Ask Ebenezer", `${SITE_URL}/ai`],
+                ].map(([title, sub, href]) => (
+                  <a key={title} href={href as string} className="d-card">
+                    <p className="font-semibold">{title}</p>
+                    <p className="text-[var(--d-muted)] text-xs">{sub}</p>
+                  </a>
+                ))}
+              </div>
+            </section>
+
+            <section className="mt-10">
+              <h2 className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-[var(--d-muted)]">
+                Success paths
+              </h2>
+              <div className="mt-4 grid gap-3 sm:grid-cols-3 text-sm">
+                {[
+                  ["Launch online", "Website → Store → Marketing tools"],
+                  ["Run a shop", "SaaS billing → Inventory → Reports"],
+                  ["Grow traffic", "SEO tools → Content → Analytics"],
+                ].map(([title, path]) => (
+                  <div key={title} className="d-card">
+                    <p className="font-semibold">{title}</p>
+                    <p className="text-xs text-[var(--d-muted)]">{path}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
         )}
 
         <p className="mt-12 text-center text-xs text-[var(--d-muted)] max-w-lg mx-auto">

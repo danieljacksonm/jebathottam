@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SITE_NAV } from "@/lib/site-nav";
 
 const LINKS = [
@@ -51,6 +52,7 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
           </Link>
           <nav className="info-nav info-nav-desktop" aria-label="Main">
             {LINKS.map((l) => renderLink(l))}
+            <LanguageSwitcher compact />
           </nav>
           <button
             type="button"
@@ -95,8 +97,9 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
             </div>
             <div>
               <p className="info-footer-label">Legal</p>
-              <a href={`${SITE_NAV.home}/privacy`}>Privacy</a>
-              <a href={`${SITE_NAV.home}/terms`}>Terms</a>
+              <Link href="/privacy">Privacy</Link>
+              <Link href="/terms">Terms</Link>
+              <Link href="/sitemap">Sitemap</Link>
               <a href={`${SITE_NAV.network}/affiliate-disclosure`}>Affiliate Disclosure</a>
             </div>
           </div>

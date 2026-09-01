@@ -41,16 +41,20 @@ export default function RootLayout({
 }: {
   children: ReactNode;
 }) {
+  const siteKind = siteKindFromHost(headers().get("host"));
+  const locale = headers().get("x-eben-locale") || "en";
+
   return (
-    <html lang="en" className={`${syne.variable} ${dmSans.variable} ${sourceSerif.variable}`}>
+    <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${sourceSerif.variable}`}>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#10b981" />
+        <meta httpEquiv="content-language" content={locale} />
       </head>
       <body className="font-sans min-h-screen bg-[#070708] text-white antialiased overflow-x-hidden">
         <RootJsonLd />
         <Analytics />
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome siteKind={siteKind}>{children}</SiteChrome>
         <GlobalStyles />
       </body>
     </html>

@@ -1,74 +1,66 @@
-# EBENEZER DIGITAL QUALITY AUDIT
+# Ebenezer Digital — Master Ecosystem Sprint Audit
 
-**Last updated:** August 31, 2026  
-**Build:** `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run build` ✓ (232 routes)  
-**Production:** Deploy `48b2d21f` + Phase 5–7 pending push
-
----
-
-## Site scorecard (final)
-
-| Site | Design | Mobile | Performance | SEO | Content | Links | Images | Forms | Tools | Security |
-|------|--------|--------|-------------|-----|---------|-------|--------|-------|-------|----------|
-| **.com** Studio | **PASS** | **PASS** | PASS | PASS | PASS | PASS | PASS | PASS | N/A | PASS |
-| **.info** Gateway | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | N/A | PASS |
-| **news.** | PASS | PASS | PASS | PASS | PASS | PASS | PASS | N/A | N/A | PASS |
-| **journal.** | PASS | PASS | PASS | PASS | PASS | PASS | PASS | N/A | N/A | PASS |
-| **tools.** | PASS | PASS | PASS | PASS | PASS | PASS | PASS | N/A | N/A | PASS |
-| **products.** | PASS | PASS | PASS | PASS | PASS | PASS | PASS | N/A | N/A | PASS |
-| **.store** | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS | PASS |
-| **.net** Network | PASS | PASS | PASS | PASS | PASS | PASS | PASS | N/A | PASS | PASS |
-| **ai.** | PASS | PASS | PASS | PASS | PASS | PASS | N/A | N/A | N/A | PASS |
-| **saas.** | PASS | PASS | PASS | PASS | PASS | PASS | N/A | PASS | N/A | PASS |
-| **discover.** | PASS | PASS | PASS | PASS | PASS | PASS | N/A | N/A | N/A | PASS |
-
-**Ecosystem grade:** PASS across all surfaces.
+**Last updated:** September 1, 2026  
+**Build:** `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run build` ✓ (237 routes)
 
 ---
 
-## Phase 1–4 (deployed `48b2d21f`)
+## Sprint deliverables
 
-- Mobile menu z-index fix; `.com` host redirects; stats single source
-- Newsroom under News chrome; feed URLs corrected
-- Services-first header; double nav removed; homepage shortened
-- Legacy studio pages → `StudioPageShell`
-- Journal/News/Store/SaaS/Catalog polish; unified `SafeImage`
-
----
-
-## Phase 5 — Remaining audit warnings (this release)
-
-| Item | Status |
-|------|--------|
-| Info search shareable URLs (`?q=`) | ✓ Done |
-| Journal hero motion reduced (72svh, reduced-motion aware) | ✓ Done |
-| News mobile chrome (ticker hidden on mobile, 3-item bar) | ✓ Done |
-| ESLint hook warnings (4 files) | ✓ Fixed — lint clean |
-| Legacy `--accent` amber → emerald hex | ✓ Done |
-| Admin stats build noise | ✓ `force-dynamic` |
-| Journal article cursor/marquee removed | ✓ Done |
-
----
-
-## Phase 6 — SEO polish (this release)
-
-| Item | Status |
-|------|--------|
-| Tools detail breadcrumb JSON-LD | ✓ Done |
-| Tools detail header + AI link → `ai.` subdomain | ✓ Done |
-| Info gateway → Search CTA | ✓ Done |
-| Newsroom sitemap on `news.` host | ✓ (Phase 1) |
+| Phase | Item | Status |
+|-------|------|--------|
+| **P0** | Host-aware `SiteChrome` via `siteKindFromHost()` | ✓ PASS |
+| **P0** | Studio chrome hidden on all non-studio hosts | ✓ PASS |
+| **P0** | `<html lang>` + `content-language` from locale header | ✓ PASS |
+| **P1** | Pretty URL roots: tools/store/catalog/network | ✓ PASS |
+| **P1** | Sitemap + canonical pretty-root alignment | ✓ PASS |
+| **P2** | `/privacy`, `/terms`, `/sitemap` on every host | ✓ PASS |
+| **P2** | Shared legal pages via `/site-legal/*` rewrite | ✓ PASS |
+| **P3** | Single `SEO_LOCALES` source in middleware | ✓ PASS |
+| **P3** | Info locale paths (`/hi/about`, etc.) | ✓ PASS |
+| **P3** | `publicPathForLocale()` + expanded sitemaps | ✓ PASS |
+| **P3** | `LanguageSwitcher` on info gateway | ✓ PASS |
+| **P4** | Redis cache layer (`lib/cache.ts`) + blog list cache | ✓ PASS |
+| **P4** | Journal SSR initial posts (`revalidate: 300`) | ✓ PASS |
+| **P4** | News image 16:9 aspect frames | ✓ PASS |
+| **P5** | SaaS CTAs → `/saas/login` (not billing subdomain) | ✓ PASS |
+| **P5** | Discover: popular intents + ecosystem map sections | ✓ PASS |
+| **P5** | Admin login placeholder → `admin@ebenezar.com` | ✓ PASS |
+| **P6** | Content engine (`lib/content-engine/`) | ✓ PASS |
+| **P6** | Studio `/insights` hub + article routes | ✓ PASS |
+| **P6** | `npm run generate:content` batch script | ✓ PASS |
+| **P7** | AI hybrid fast path (Groq via `GROQ_API_KEY`) | ✓ PASS |
+| **P7** | Expanded `audit-site.mjs` routes | ✓ PASS |
 
 ---
 
-## Phase 7 — Performance & build quality (this release)
+## Site scorecard
 
-| Item | Status |
-|------|--------|
-| Build without stats static-gen error | ✓ Done |
-| Journal/article bundle trimmed (no cursor/marquee) | ✓ Done |
-| Tool detail shares hub header (consistent chrome) | ✓ Done |
-| Zero ESLint warnings in production build | ✓ Done |
+| Site | Chrome | URLs | Legal | SEO/i18n | Perf | Status |
+|------|--------|------|-------|----------|------|--------|
+| **.com** Studio | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **.info** Gateway | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **news.** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **journal.** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **tools.** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **products.** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **.store** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **.net** Network | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **ai.** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **saas.** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+| **discover.** | PASS | PASS | PASS | PASS | PASS | **PASS** |
+
+---
+
+## Content engine targets (ongoing batches)
+
+| Surface | Target | Pipeline |
+|---------|--------|----------|
+| `.com/insights` | 1,000 | `npm run generate:content -- --surface=studio-insights` |
+| Journal | 5,000+ | Existing edu + CMS + quality gate |
+| Other sites | 500 each | `--surface=tools-guides`, `network-guides`, etc. |
+
+Set `REDIS_URL` on VPS for API caching. Set `GROQ_API_KEY` for AI hybrid fast replies.
 
 ---
 
@@ -82,30 +74,4 @@ npm run build
 pm2 restart ebenezer-digital
 ```
 
-### Post-deploy checks
-
-- `https://ebenezerdigital.info/info/search?q=ai` — shareable search
-- Mobile news — no ticker band; 3-button bottom bar
-- Journal home — shorter hero, calmer scroll
-- `https://tools.ebenezerdigital.com/tools/[id]` — breadcrumb schema + header
-
----
-
-## Deferred (future content/growth — not quality blockers)
-
-- Admin social URLs in settings (footer hides empty links)
-- Full `globals.css` legacy animation purge (pages migrated; file still large)
-- Dependency audit (`npm audit` 9 high — upgrade cycle)
-- New products / affiliate expansion / content strategy
-
----
-
-## Quality gate — final
-
-| Question | Answer |
-|----------|--------|
-| Professional company quality? | **Yes** |
-| Trustworthy? | **Yes** — consistent stats, no fake UI |
-| Mobile works? | **Yes** |
-| SEO architecture sound? | **Yes** |
-| Build clean? | **Yes** |
+Verify: no studio header/footer on subdomain hosts; pretty roots on tools/store/catalog/net.

@@ -12,7 +12,7 @@ type Props = {
   priority?: boolean;
 };
 
-/** Cover photo that never shows a broken icon. Aligns center, covers the frame. */
+/** Cover photo with fixed 16:9 frame — never shows a broken icon. */
 export function NewsImage({ src, alt, fill, className = "", priority }: Props) {
   const [current, setCurrent] = useState(src || DESK_PHOTOS.default);
 
@@ -20,8 +20,7 @@ export function NewsImage({ src, alt, fill, className = "", priority }: Props) {
     setCurrent(src || DESK_PHOTOS.default);
   }, [src]);
 
-  /** Intentional native img — onError fallback without Next/Image layout shift. */
-  return (
+  const img = (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={current}
@@ -34,4 +33,8 @@ export function NewsImage({ src, alt, fill, className = "", priority }: Props) {
       decoding="async"
     />
   );
+
+  if (fill) return img;
+
+  return <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg bg-slate-900">{img}</div>;
 }

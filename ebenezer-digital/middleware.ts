@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { SEO_LOCALES } from "@/lib/site-url";
 
 const AI_URL = (process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com").replace(/\/$/, "");
 const SAAS_URL = (process.env.NEXT_PUBLIC_SAAS_URL || "https://saas.ebenezerdigital.com").replace(/\/$/, "");
@@ -13,10 +14,7 @@ const JOURNAL_URL = (
 const INFO_URL = (process.env.NEXT_PUBLIC_INFO_URL || "https://ebenezerdigital.info").replace(/\/$/, "");
 const STORE_URL = (process.env.NEXT_PUBLIC_STORE_URL || "https://ebenezerdigital.store").replace(/\/$/, "");
 
-const LOCALES = new Set([
-  "en", "hi", "ta", "te", "ml", "kn", "bn", "mr", "gu", "pa", "ur",
-  "es", "fr", "ar", "de", "pt", "ru", "ja", "ko", "zh", "tr", "id",
-]);
+const LOCALES = new Set<string>(SEO_LOCALES);
 
 function hostName(host: string): string {
   return host.toLowerCase().split(":")[0];
@@ -91,6 +89,27 @@ function isNetworkHost(host: string): boolean {
   return h === "ebenezerdigital.net" || h === "www.ebenezerdigital.net";
 }
 
+function legalSitemapRewrite(request: NextRequest, pathname: string): NextResponse | null {
+  const url = request.nextUrl.clone();
+  if (pathname === "/privacy" || pathname === "/privacy/") {
+    url.pathname = "/site-legal/privacy";
+    return NextResponse.rewrite(url);
+  }
+  if (pathname === "/terms" || pathname === "/terms/") {
+    url.pathname = "/site-legal/terms";
+    return NextResponse.rewrite(url);
+  }
+  if (pathname === "/affiliate-disclosure" || pathname === "/affiliate-disclosure/") {
+    url.pathname = "/site-legal/affiliate-disclosure";
+    return NextResponse.rewrite(url);
+  }
+  if (pathname === "/sitemap" || pathname === "/sitemap/") {
+    url.pathname = "/site-sitemap";
+    return NextResponse.rewrite(url);
+  }
+  return null;
+}
+
 function absoluteRedirect(request: NextRequest, targetBase: string, pathname: string): NextResponse {
   const dest = new URL(pathname || "/", targetBase);
   dest.search = request.nextUrl.search;
@@ -119,7 +138,13 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     rest.startsWith("/catalog") ||
     rest.startsWith("/discover") ||
     rest.startsWith("/info") ||
-    rest.startsWith("/network");
+    rest.startsWith("/network") ||
+    rest.startsWith("/about") ||
+    rest.startsWith("/search") ||
+    rest.startsWith("/privacy") ||
+    rest.startsWith("/terms") ||
+    rest.startsWith("/sitemap") ||
+    rest.startsWith("/insights");
 
   if (!allowed) return null;
 
@@ -143,6 +168,13 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     else if (isProductsCatalogHost(host)) target = "/catalog";
     else if (isNetworkHost(host)) target = "/network";
     else target = "/";
+  } else if (isApexInfoHost(host)) {
+    if (rest === "/about" || rest.startsWith("/about/")) target = "/info/about";
+    else if (rest === "/search" || rest.startsWith("/search/")) target = "/info/search";
+    else if (rest === "/contact" || rest.startsWith("/contact/")) target = "/info/contact";
+    else if (rest === "/privacy" || rest.startsWith("/privacy/")) target = "/site-legal/privacy";
+    else if (rest === "/terms" || rest.startsWith("/terms/")) target = "/site-legal/terms";
+    else if (rest === "/sitemap" || rest.startsWith("/sitemap/")) target = "/site-sitemap";
   }
 
   const url = request.nextUrl.clone();
@@ -165,6 +197,9 @@ export function middleware(request: NextRequest) {
 
   const localized = localeRewrite(request);
   if (localized) return localized;
+
+  const legal = legalSitemapRewrite(request, pathname);
+  if (legal) return legal;
 
   const isProdStudio =
     hostName(host) === "ebenezerdigital.com" || hostName(host) === "www.ebenezerdigital.com";
@@ -309,30 +344,42 @@ export function middleware(request: NextRequest) {
   }
 
   if (isStoreHost(host)) {
+    if (pathname === "/products" || pathname === "/products/") {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/products";
-      return NextResponse.redirect(url);
+      return NextResponse.rewrite(url);
     }
   }
 
   if (isToolsHost(host)) {
+    if (pathname === "/tools" || pathname === "/tools/") {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/tools";
-      return NextResponse.redirect(url);
+      return NextResponse.rewrite(url);
     }
   }
 
   if (isProductsCatalogHost(host)) {
+    if (pathname === "/catalog" || pathname === "/catalog/") {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/catalog";
-      return NextResponse.redirect(url);
+      return NextResponse.rewrite(url);
     }
   }
 
   if (isNetworkHost(host)) {
+    if (pathname === "/network" || pathname === "/network/") {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
     const url = request.nextUrl.clone();
     if (pathname === "/" || pathname === "") {
       url.pathname = "/network";
@@ -449,6 +496,11 @@ export const config = {
     "/privacy",
     "/terms",
     "/affiliate-disclosure",
+    "/insights",
+    "/insights/:path*",
+    "/site-legal",
+    "/site-legal/:path*",
+    "/site-sitemap",
     "/:locale",
     "/:locale/:path*",
   ],

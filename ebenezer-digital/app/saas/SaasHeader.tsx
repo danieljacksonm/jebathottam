@@ -5,8 +5,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { SITE_NAV } from "@/lib/site-nav";
 
-const BILLING_URL =
-  process.env.NEXT_PUBLIC_BILLING_URL || "https://billing.ebenezerdigital.com";
+const SAAS_LOGIN = "/saas/login";
 
 export function SaasHeader() {
   const [open, setOpen] = useState(false);
@@ -24,10 +23,10 @@ export function SaasHeader() {
         <nav className="saas-top-nav saas-top-nav-desktop" aria-label="SaaS links">
           <Link href={SITE_NAV.store}>Store</Link>
           <Link href={SITE_NAV.journal}>Journal</Link>
-          <a href={`${BILLING_URL}/login`}>Sign in</a>
-          <a className="saas-btn saas-btn-gold" href={`${BILLING_URL}/register`}>
+          <Link href={SAAS_LOGIN}>Sign in</Link>
+          <Link className="saas-btn saas-btn-gold" href={SAAS_LOGIN}>
             Start free
-          </a>
+          </Link>
         </nav>
         <button
           type="button"
@@ -47,12 +46,12 @@ export function SaasHeader() {
           <Link href={SITE_NAV.journal} onClick={() => setOpen(false)}>
             Journal
           </Link>
-          <a href={`${BILLING_URL}/login`} onClick={() => setOpen(false)}>
+          <Link href={SAAS_LOGIN} onClick={() => setOpen(false)}>
             Sign in
-          </a>
-          <a className="saas-btn saas-btn-gold" href={`${BILLING_URL}/register`}>
+          </Link>
+          <Link className="saas-btn saas-btn-gold" href={SAAS_LOGIN} onClick={() => setOpen(false)}>
             Start free
-          </a>
+          </Link>
         </nav>
       )}
     </header>

@@ -13,8 +13,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/saas",
 });
 
-const BILLING_URL =
-  process.env.NEXT_PUBLIC_BILLING_URL || "https://billing.ebenezerdigital.com";
+const BILLING_URL = "/saas/login";
+const REGISTER_URL = "/saas/login";
 
 const features = [
   {
@@ -56,10 +56,10 @@ export default function SaasLandingPage() {
           clear counter tool. Free to start. No credit card.
         </p>
         <div className="saas-cta-row">
-          <a className="saas-btn saas-btn-gold" href={`${BILLING_URL}/register`}>
-            Open app — start free
+          <a className="saas-btn saas-btn-gold" href={REGISTER_URL}>
+            Start free — sign in
           </a>
-          <a className="saas-btn saas-btn-ghost" href={`${BILLING_URL}/login`}>
+          <a className="saas-btn saas-btn-ghost" href={BILLING_URL}>
             Sign in to your shop
           </a>
         </div>
@@ -106,7 +106,7 @@ export default function SaasLandingPage() {
             <span>Create your first invoice</span>
           </li>
         </ol>
-        <a className="saas-btn saas-btn-gold" href={`${BILLING_URL}/register`}>
+        <a className="saas-btn saas-btn-gold" href={BILLING_URL}>
           Create free shop account
         </a>
       </section>
@@ -117,17 +117,17 @@ export default function SaasLandingPage() {
           <article className="saas-card">
             <h3>Free trial</h3>
             <p>Use the core billing tools free. No card required to begin.</p>
-            <a href={`${BILLING_URL}/register`}>Start free</a>
+            <a href={BILLING_URL}>Start free</a>
           </article>
           <article className="saas-card">
             <h3>Online plan</h3>
             <p>Cloud sync, multi-device access, and team seats — coming soon.</p>
-            <a href={`${BILLING_URL}/register`}>Get notified</a>
+            <a href={BILLING_URL}>Get notified</a>
           </article>
           <article className="saas-card">
             <h3>Offline plan</h3>
             <p>Work without internet and sync later — coming soon.</p>
-            <a href={`${BILLING_URL}/register`}>Get notified</a>
+            <a href={BILLING_URL}>Get notified</a>
           </article>
         </div>
       </section>
