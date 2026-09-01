@@ -46,7 +46,8 @@ Serve on port 3000 behind Nginx/Caddy. Enquiries are appended to `data/enquiries
 
 ## Production
 
-- **Domain:** [canaantravelhub.com](https://canaantravelhub.com)
+- **Primary domain:** [https://canaantravelhub.com](https://canaantravelhub.com)
+- **Redirects:** `www.canaantravelhub.com` and `canaan.yegova.store` → primary domain
 - **Contact:** +91 70927 71754 · [managingdirector@canaantravelhub.com](mailto:managingdirector@canaantravelhub.com)
 - **Facebook:** [Canaan Travel Hub](https://www.facebook.com/share/14mvJi3ZWV8/)
 

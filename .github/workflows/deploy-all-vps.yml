@@ -114,6 +114,12 @@ jobs:
             npm run build
             pm2 restart canaan-travel || pm2 start /home/dani/ecosystem.config.js --only canaan-travel
             echo "✅ Canaan Travel Hub deployed at: $(date)" > .deploy-timestamp
+
+            if [ -f "$MONOREPO/nginx-all-sites.conf" ]; then
+              sudo cp "$MONOREPO/nginx-all-sites.conf" /etc/nginx/sites-available/all-sites
+              sudo ln -sf /etc/nginx/sites-available/all-sites /etc/nginx/sites-enabled/all-sites
+              sudo nginx -t && sudo systemctl reload nginx
+            fi
             
             # Save PM2 configuration
             cd /home/dani
