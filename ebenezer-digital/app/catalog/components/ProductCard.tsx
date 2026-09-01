@@ -56,7 +56,7 @@ export function ProductCard({ product }: { product: CatalogProduct }) {
             <>
               <p className="text-lg font-bold text-[var(--aff-ink)]">{formatINR(offer.price)}</p>
               <p className="text-xs text-[var(--aff-muted)]">
-                Best sample price: {merchant?.name ?? "Merchant"}
+                From {merchant?.name ?? "Merchant"}
                 {stale ? <span className="aff-stale"> · Check latest price</span> : null}
               </p>
               <p className="aff-fresh mt-1">{freshnessLabel(offer.lastCheckedAt)}</p>

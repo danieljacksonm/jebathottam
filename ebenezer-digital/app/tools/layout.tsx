@@ -22,5 +22,5 @@ export const metadata: Metadata = {
 };
 
 export default function ToolsLayout({ children }: { children: ReactNode }) {
-  return <div className="aff-root">{children}</div>;
+  return <div className="aff-root tools-pro">{children}</div>;
 }

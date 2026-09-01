@@ -22,10 +22,10 @@ export default function CatalogHomePage() {
 
       <section className="aff-hero">
         <div className="aff-page py-14 sm:py-20">
-          <p className="aff-badge mb-4">Physical products · Research before you buy</p>
+          <p className="aff-badge mb-4">Hardware · Honest comparisons</p>
           <h1>
-            Find the right product.
-            <span className="block text-[var(--aff-brand)]">Buy with confidence.</span>
+            Research before you buy.
+            <span className="block text-[var(--aff-brand)]">Compare with confidence.</span>
           </h1>
           <p className="mt-4 max-w-xl text-lg text-[var(--aff-muted)]">
             Compare products, prices, specifications and trusted retailers.

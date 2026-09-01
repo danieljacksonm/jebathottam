@@ -239,3 +239,84 @@
   border-color: var(--aff-brand);
   color: #fff;
 }
+
+/* ── Tools royal/pro theme ───────────────────────────────── */
+.tools-pro {
+  --aff-bg: #070b12;
+  --aff-surface: #0f1623;
+  --aff-ink: #f1f5f9;
+  --aff-ink-2: #cbd5e1;
+  --aff-muted: #94a3b8;
+  --aff-line: rgba(148, 163, 184, 0.14);
+  --aff-brand: #34d399;
+  --aff-brand-dk: #10b981;
+  --aff-brand-soft: rgba(52, 211, 153, 0.12);
+  --aff-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.tools-pro .aff-hero {
+  background:
+    radial-gradient(900px 480px at 0% 0%, rgba(52, 211, 153, 0.14), transparent 55%),
+    radial-gradient(600px 360px at 100% 20%, rgba(196, 165, 116, 0.08), transparent 50%),
+    linear-gradient(180deg, #0c1220 0%, var(--aff-bg) 100%);
+  border-bottom-color: var(--aff-line);
+}
+
+.tools-pro .aff-hero h1 {
+  font-family: var(--font-serif, Georgia, serif);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.tools-pro .aff-search input {
+  background: rgba(15, 22, 35, 0.9);
+  border-color: var(--aff-line);
+  color: var(--aff-ink);
+}
+
+.tools-pro .aff-btn-ghost {
+  background: transparent;
+  border-color: var(--aff-line);
+  color: var(--aff-ink-2);
+}
+
+.tools-pro .aff-card {
+  background: var(--aff-surface);
+  border-color: var(--aff-line);
+}
+
+.tools-pro .aff-card:hover {
+  border-color: rgba(52, 211, 153, 0.35);
+  transform: translateY(-2px);
+}
+
+.tools-pro .aff-chip {
+  background: rgba(15, 22, 35, 0.8);
+  border-color: var(--aff-line);
+  color: var(--aff-ink-2);
+}
+
+.tools-pro .aff-badge {
+  background: var(--aff-brand-soft);
+  color: var(--aff-brand);
+  border-color: rgba(52, 211, 153, 0.25);
+}
+
+.tools-pro .tools-featured-strip {
+  background: linear-gradient(180deg, rgba(15, 22, 35, 0.6) 0%, var(--aff-bg) 100%);
+  border-bottom: 1px solid var(--aff-line);
+}
+
+.tools-pro .tools-list-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .tools-pro .tools-list-row {
+    grid-template-columns: 1fr;
+  }
+}

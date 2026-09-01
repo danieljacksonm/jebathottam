@@ -37,7 +37,7 @@ export function ProductCard({
 
   return (
     <Link href={lp(`/products/${p.slug}`)} className={`s-card group flex flex-col ${className}`}>
-      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--s-line-soft)]">
+      <div className="relative s-cover-frame">
         <Image
           src={p.image}
           alt={p.name}

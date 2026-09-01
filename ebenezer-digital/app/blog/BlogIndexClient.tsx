@@ -19,6 +19,7 @@ import {
 } from "@/lib/site-contact";
 import { SITE_NAV } from "@/lib/site-nav";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { filterEditorialPosts } from "@/lib/journal-filter";
 import "./journal.css";
 
 const PAGE_SIZE = 24;
@@ -90,7 +91,8 @@ function BlogIndexInner({
   }, [posts, apiCategories]);
 
   const filtered = useMemo(() => {
-    return posts.filter((p) => {
+    const editorial = filterEditorialPosts(posts);
+    return editorial.filter((p) => {
       const q = query.toLowerCase().trim();
       const matchesQuery =
         !q ||

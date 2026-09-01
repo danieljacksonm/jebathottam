@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import type { JournalPost } from "@/app/blog/lib";
+import { filterEditorialPosts } from "@/lib/journal-filter";
 
 export async function getJournalPostsForPage(opts?: {
   q?: string;
@@ -26,26 +27,28 @@ export async function getJournalPostsForPage(opts?: {
     return matchesCat && matchesQuery;
   });
 
-  const posts: JournalPost[] = filtered.slice(0, limit).map((p) => {
-    const publishedAt =
-      p.publishedAt instanceof Date
-        ? p.publishedAt.toISOString()
-        : typeof p.publishedAt === "string"
-          ? p.publishedAt
-          : undefined;
-    return {
-      id: p.id,
-      title: p.title,
-      slug: p.slug,
-      excerpt: p.excerpt,
-      coverImage: p.coverImage,
-      category: p.category,
-      tags: p.tags,
-      author: p.author,
-      publishedAt,
-      relatedSlugs: p.relatedSlugs,
-    };
-  });
+  const posts: JournalPost[] = filterEditorialPosts(
+    filtered.slice(0, limit).map((p) => {
+      const publishedAt =
+        p.publishedAt instanceof Date
+          ? p.publishedAt.toISOString()
+          : typeof p.publishedAt === "string"
+            ? p.publishedAt
+            : undefined;
+      return {
+        id: p.id,
+        title: p.title,
+        slug: p.slug,
+        excerpt: p.excerpt,
+        coverImage: p.coverImage,
+        category: p.category,
+        tags: p.tags,
+        author: p.author,
+        publishedAt,
+        relatedSlugs: p.relatedSlugs,
+      };
+    })
+  );
 
   return { posts, categories };
 }

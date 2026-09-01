@@ -8,15 +8,21 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const form = e.currentTarget;
     setStatus("submitting");
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(form);
     const payload = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      message: formData.get("message"),
+      name: String(formData.get("name") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      message: String(formData.get("message") || "").trim(),
       service: "general",
     };
+
+    if (!payload.name || !payload.email || !payload.message) {
+      setStatus("error");
+      return;
+    }
 
     try {
       const response = await fetch("/api/inquiries", {
@@ -26,7 +32,7 @@ export default function ContactForm() {
       });
       if (!response.ok) throw new Error("Failed");
       setStatus("success");
-      e.currentTarget.reset();
+      form.reset();
       setTimeout(() => setStatus("idle"), 5000);
     } catch {
       setStatus("error");

@@ -12,11 +12,11 @@ export const metadata: Metadata = pageMetadata({
 
 export default function ContactPage() {
   return (
-    <main className="bg-[#070708] px-4 pb-24 pt-28 sm:px-8 lg:px-10">
-      <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1fr_1.05fr]">
-        <div>
+    <main className="bg-[#070708] px-4 pb-24 pt-24 sm:pt-28 sm:px-8 lg:px-10">
+      <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-12">
+        <div className="min-w-0">
           <p className="studio-kicker">Contact</p>
-          <h1 className="studio-display mt-4 text-5xl sm:text-7xl">
+          <h1 className="studio-display mt-4 text-[2.35rem] leading-[0.95] sm:text-5xl lg:text-7xl">
             LET’S BUILD
             <br />
             SOMETHING
@@ -45,7 +45,7 @@ export default function ContactPage() {
             </p>
           </div>
         </div>
-        <div className="border border-[var(--st-line)] bg-black/30 p-6 sm:p-8">
+        <div className="relative z-10 border border-[var(--st-line)] bg-black/40 p-5 sm:p-8">
           <h2 className="font-serif text-3xl">Tell us about it.</h2>
           <div className="mt-8">
             <ContactForm />

@@ -142,16 +142,33 @@
 .s-card {
   background: var(--s-surface);
   border: 1px solid var(--s-line);
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   min-width: 0;
   height: 100%;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
 }
 
 .s-card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(16, 185, 129, 0.08);
+  transform: translateY(-3px);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.s-cover-frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, #ecfdf5 0%, #d1fae5 40%, #f0fdf4 100%);
+}
+
+.s-cover-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(15, 17, 23, 0.04) 100%);
+  pointer-events: none;
 }
 
 /* ── Buttons ─────────────────────────────────────────────── */

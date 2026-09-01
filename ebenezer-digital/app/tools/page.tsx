@@ -52,7 +52,7 @@ function domainFromUrl(url: string): string | undefined {
   }
 }
 
-function ToolCard({ tool }: { tool: Tool }) {
+function ToolCard({ tool, compact = false }: { tool: Tool; compact?: boolean }) {
   const image = resolveToolImage({
     name: tool.name,
     logoImg: tool.logoImg,
@@ -60,6 +60,39 @@ function ToolCard({ tool }: { tool: Tool }) {
     domain: tool.domain || domainFromUrl(tool.url),
   });
   const features = tool.features?.length ? tool.features : tool.pros.slice(0, 3);
+
+  if (compact) {
+    return (
+      <article className="aff-card tools-list-row">
+        <AffiliateMedia image={image} size="thumb" />
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href={`/tools/${tool.id}`} className="font-semibold text-[var(--aff-ink)] hover:text-[var(--aff-brand)]">
+              {tool.name}
+            </Link>
+            {tool.badge ? <span className="aff-badge">{tool.badge}</span> : null}
+          </div>
+          <p className="mt-0.5 text-sm text-[var(--aff-muted)] line-clamp-1">{tool.tagline}</p>
+          <p className="mt-1 text-xs text-[var(--aff-muted)]">
+            {tool.category} · {tool.pricing.free ? "Free tier" : tool.pricing.paidLabel || tool.pricing.paid || "Paid"}
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2 sm:justify-end">
+          <Link href={`/tools/${tool.id}`} className="aff-btn aff-btn-ghost !py-2 !px-3 !text-xs">
+            Details
+          </Link>
+          <a
+            href={tool.url}
+            target={tool.url.startsWith("http") ? "_blank" : undefined}
+            rel={tool.url.startsWith("http") ? "sponsored noopener noreferrer" : undefined}
+            className="aff-btn aff-btn-primary !py-2 !px-3 !text-xs"
+          >
+            Visit <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article className="aff-card flex flex-col">
@@ -149,14 +182,14 @@ export default function ToolsPage() {
       <ToolsHeader />
 
       <section className="aff-hero">
-        <div className="aff-page py-14 sm:py-18">
-          <p className="aff-badge mb-4">AI · SaaS · Software discovery</p>
+        <div className="aff-page py-16 sm:py-20">
+          <p className="aff-badge mb-4">Software discovery · Compare with confidence</p>
           <h1>
-            Find the right tool
-            <span className="block text-[var(--aff-brand)]">for the job.</span>
+            The right tool,
+            <span className="block text-[var(--aff-brand)]">without the noise.</span>
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-[var(--aff-muted)]">
-            Discover, compare and choose the best AI tools, SaaS and software for your needs.
+            Curated AI, SaaS, and business software — honest comparisons, clear pricing notes, and editor picks.
           </p>
           <form
             className="aff-search mt-8"
@@ -184,36 +217,46 @@ export default function ToolsPage() {
         </div>
       </section>
 
-      <section className="border-b border-[var(--aff-line)] bg-white">
-        <div className="aff-page py-8">
-          <h2 className="text-lg font-bold">Editor top picks</h2>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {highlighted.slice(0, 6).map((t) => (
+      <section className="tools-featured-strip">
+        <div className="aff-page py-10">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-semibold tracking-tight">Editor picks</h2>
+              <p className="mt-1 text-sm text-[var(--aff-muted)]">Start here — vetted tools our team recommends first.</p>
+            </div>
+            <Link href="/tools/compare" className="aff-btn aff-btn-ghost !text-xs">
+              Open comparison <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-3 lg:grid-cols-3">
+            {highlighted.slice(0, 3).map((t) => (
               <Link
                 key={t.id}
                 href={`/tools/${t.id}`}
-                className="aff-card p-4 flex items-center gap-3 hover:border-teal-300"
+                className="aff-card p-5 hover:border-emerald-400/40"
               >
-                <AffiliateMedia
-                  image={resolveToolImage({
-                    name: t.name,
-                    logoImg: t.logoImg,
-                    domain: t.domain || domainFromUrl(t.url),
-                  })}
-                  size="thumb"
-                />
-                <div className="min-w-0">
-                  <p className="font-semibold text-sm truncate">{t.name}</p>
-                  <p className="text-xs text-[var(--aff-muted)] truncate">{t.category}</p>
+                <div className="flex items-start gap-3">
+                  <AffiliateMedia
+                    image={resolveToolImage({
+                      name: t.name,
+                      logoImg: t.logoImg,
+                      domain: t.domain || domainFromUrl(t.url),
+                    })}
+                    size="thumb"
+                  />
+                  <div className="min-w-0">
+                    <p className="font-semibold">{t.name}</p>
+                    <p className="mt-1 text-xs text-[var(--aff-muted)] line-clamp-2">{t.tagline}</p>
+                    {t.badge ? <span className="aff-badge mt-2">{t.badge}</span> : null}
+                  </div>
                 </div>
-                {t.badge ? <span className="aff-badge ml-auto shrink-0">{t.badge}</span> : null}
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="sticky top-14 z-30 border-b border-[var(--aff-line)] bg-white/95 backdrop-blur">
+      <div className="sticky top-14 z-30 border-b border-[var(--aff-line)] bg-[var(--aff-bg)]/95 backdrop-blur">
         <div className="aff-page space-y-2 py-3">
           <div className="flex gap-2 overflow-x-auto">
             {(["All", ...TOOL_CATEGORY_GROUPS.map((g) => g.id)] as string[]).map((g) => (
@@ -249,9 +292,9 @@ export default function ToolsPage() {
         <p className="text-sm text-[var(--aff-muted)] mb-5">
           {filtered.length} tool{filtered.length === 1 ? "" : "s"}
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3">
           {filtered.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
+            <ToolCard key={tool.id} tool={tool} compact />
           ))}
         </div>
         {filtered.length === 0 ? (
@@ -259,7 +302,7 @@ export default function ToolsPage() {
         ) : null}
       </main>
 
-      <section className="border-t border-[var(--aff-line)] bg-white">
+      <section className="border-t border-[var(--aff-line)]">
         <div className="aff-page py-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <h2 className="text-lg font-bold">Need a recommendation?</h2>

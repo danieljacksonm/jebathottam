@@ -113,11 +113,11 @@ export default function Contact() {
   const prev = () => setStep((s) => Math.max(s - 1, 0));
 
   return (
-    <section id="contact" className="relative overflow-hidden border-t border-[var(--st-line)] py-24">
-      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-8 lg:grid-cols-[1fr_1.1fr] lg:px-10">
-        <div>
+    <section id="contact" className="relative overflow-hidden border-t border-[var(--st-line)] py-16 sm:py-24">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-8 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:px-10">
+        <div className="min-w-0">
           <p className="studio-kicker">Begin</p>
-          <h2 className="studio-display mt-4 text-5xl sm:text-7xl">
+          <h2 className="studio-display mt-4 text-[2.1rem] leading-[0.95] sm:text-5xl lg:text-7xl">
             LET’S BUILD
             <br />
             SOMETHING
@@ -141,7 +141,7 @@ export default function Contact() {
           </ul>
         </div>
 
-        <div className="border border-[var(--st-line)] bg-black/30 p-6 sm:p-8">
+        <div className="relative z-10 border border-[var(--st-line)] bg-black/40 p-5 sm:p-8">
           {submitStatus === "success" ? (
             <div>
               <p className="studio-kicker">Received</p>
@@ -239,7 +239,13 @@ export default function Contact() {
                 )}
               </div>
               {submitStatus === "error" && (
-                <p className="mt-4 text-sm text-red-400">Something went wrong. Please try again.</p>
+                <p className="mt-4 text-sm text-red-400">
+                  Something went wrong. Please try again or{" "}
+                  <a href={`mailto:${SITE_EMAIL}`} className="underline hover:text-red-300">
+                    email {SITE_EMAIL}
+                  </a>
+                  .
+                </p>
               )}
             </>
           )}
