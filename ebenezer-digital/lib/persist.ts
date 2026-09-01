@@ -17,12 +17,8 @@ export function loadStore<T>(fallback: T): T {
 }
 
 export function saveStore<T>(data: T): void {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    fs.writeFileSync(STORE_FILE, JSON.stringify(data, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Failed to save store:', error);
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
   }
+  fs.writeFileSync(STORE_FILE, JSON.stringify(data, null, 2), 'utf-8');
 }

@@ -30,6 +30,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, id: inquiry.id }, { status: 201 });
   } catch (error) {
     console.error('Inquiry creation error:', error);
-    return NextResponse.json({ error: 'Failed to submit inquiry' }, { status: 500 });
+    const detail = error instanceof Error ? error.message : 'Unknown error';
+    const isWrite =
+      /EACCES|EPERM|read-only|Failed to save|ENOENT/i.test(detail);
+    return NextResponse.json(
+      {
+        error: isWrite
+          ? 'Server cannot save inquiries. Please email us directly.'
+          : 'Failed to submit inquiry',
+        detail: process.env.NODE_ENV === 'development' ? detail : undefined,
+      },
+      { status: 500 }
+    );
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SITE_EMAIL } from "@/lib/site-contact";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -38,7 +39,13 @@ export default function ContactForm() {
         <p className="text-green-400 text-sm">Message sent successfully. We will reply soon.</p>
       )}
       {status === "error" && (
-        <p className="text-red-400 text-sm">Failed to send. Please try again or email us directly.</p>
+        <p className="text-red-400 text-sm">
+          Failed to send. Please try again or{" "}
+          <a href={`mailto:${SITE_EMAIL}`} className="underline hover:text-red-300">
+            email {SITE_EMAIL}
+          </a>{" "}
+          directly.
+        </p>
       )}
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-[var(--text-muted)] mb-2">

@@ -8,7 +8,7 @@ import SiteChrome from "./studio/SiteChrome";
 import GlobalStyles from "./components/GlobalStyles";
 import { Analytics } from "@/components/Analytics";
 import { RootJsonLd } from "@/components/RootJsonLd";
-import { rootMetadataForKind, siteKindFromHost } from "@/lib/site-url";
+import { rootMetadataForKind, siteKindFromHost, type SiteKind } from "@/lib/site-url";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -36,13 +36,15 @@ export async function generateMetadata(): Promise<Metadata> {
   return rootMetadataForKind(kind);
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const siteKind = siteKindFromHost(headers().get("host"));
-  const locale = headers().get("x-eben-locale") || "en";
+  const h = headers();
+  const kindHeader = h.get("x-eben-site-kind") as SiteKind | null;
+  const siteKind = kindHeader || siteKindFromHost(h.get("x-forwarded-host") || h.get("host"));
+  const locale = h.get("x-eben-locale") || "en";
 
   return (
     <html lang={locale} className={`${syne.variable} ${dmSans.variable} ${sourceSerif.variable}`}>

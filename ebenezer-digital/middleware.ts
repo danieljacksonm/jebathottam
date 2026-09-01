@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { SEO_LOCALES } from "@/lib/site-url";
+import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
 const AI_URL = (process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com").replace(/\/$/, "");
 const SAAS_URL = (process.env.NEXT_PUBLIC_SAAS_URL || "https://saas.ebenezerdigital.com").replace(/\/$/, "");
@@ -18,6 +18,21 @@ const LOCALES = new Set<string>(SEO_LOCALES);
 
 function hostName(host: string): string {
   return host.toLowerCase().split(":")[0];
+}
+
+function withSiteKind(request: NextRequest, response: NextResponse): NextResponse {
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || "";
+  const kind = siteKindFromHost(host);
+  response.headers.set("x-eben-site-kind", kind);
+  return response;
+}
+
+function nextWithSiteKind(request: NextRequest): NextResponse {
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || "";
+  const kind = siteKindFromHost(host);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-eben-site-kind", kind);
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 function isLoginPath(pathname: string): boolean {
@@ -458,7 +473,7 @@ export function middleware(request: NextRequest) {
     return res;
   }
 
-  return NextResponse.next();
+  return nextWithSiteKind(request);
 }
 
 export const config = {
