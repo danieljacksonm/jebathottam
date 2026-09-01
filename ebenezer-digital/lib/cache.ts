@@ -1,5 +1,6 @@
 /**
- * Redis-backed cache with in-memory fallback for local dev / missing REDIS_URL.
+ * Redis-backed cache with in-memory fallback.
+ * Never crashes or spam-reconnects if Redis is down — common on VPS before install.
  */
 type CacheEntry<T> = { value: T; expiresAt: number };
 
@@ -7,19 +8,49 @@ const memory = new Map<string, CacheEntry<unknown>>();
 
 let redisClient: import("ioredis").default | null = null;
 let redisInitAttempted = false;
+let redisDisabled = false;
+
+function disableRedis(client?: import("ioredis").default | null) {
+  redisDisabled = true;
+  if (client) {
+    try {
+      client.disconnect(false);
+    } catch {
+      /* ignore */
+    }
+  }
+  if (redisClient === client || client === undefined) {
+    redisClient = null;
+  }
+}
 
 async function getRedis(): Promise<import("ioredis").default | null> {
-  if (redisInitAttempted) return redisClient;
+  if (redisDisabled || redisInitAttempted) return redisClient;
   redisInitAttempted = true;
+
   const url = process.env.REDIS_URL?.trim();
   if (!url) return null;
+
   try {
     const { default: Redis } = await import("ioredis");
-    redisClient = new Redis(url, { maxRetriesPerRequest: 2, lazyConnect: true });
-    await redisClient.connect();
-    return redisClient;
+    const client = new Redis(url, {
+      maxRetriesPerRequest: 1,
+      enableOfflineQueue: false,
+      connectTimeout: 2000,
+      lazyConnect: true,
+      retryStrategy: () => null,
+    });
+
+    client.on("error", () => {
+      disableRedis(client);
+    });
+
+    await client.connect();
+    await client.ping();
+    redisClient = client;
+    return client;
   } catch {
-    redisClient = null;
+    disableRedis();
     return null;
   }
 }
@@ -45,7 +76,7 @@ export async function cacheGet<T>(key: string): Promise<T | null> {
       const raw = await redis.get(key);
       if (raw) return JSON.parse(raw) as T;
     } catch {
-      /* fall through */
+      disableRedis(redis);
     }
   }
   return memGet<T>(key);
@@ -58,7 +89,7 @@ export async function cacheSet<T>(key: string, value: T, ttlSeconds = 300): Prom
       await redis.setex(key, ttlSeconds, JSON.stringify(value));
       return;
     } catch {
-      /* fall through */
+      disableRedis(redis);
     }
   }
   memSet(key, value, ttlSeconds);
