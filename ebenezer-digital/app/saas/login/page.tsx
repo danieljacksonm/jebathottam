@@ -1,9 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { Suspense } from "react";
+import { FormEvent, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { SaasHeader } from "../SaasHeader";
+import { SITE_NAV } from "@/lib/site-nav";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
+import "../saas.css";
 
 function SaasLoginInner() {
   const router = useRouter();
@@ -36,55 +39,78 @@ function SaasLoginInner() {
   };
 
   return (
-    <div className="saas-root grid min-h-screen place-items-center px-4">
-      <div className="w-full max-w-md border border-[var(--s-line)] bg-[var(--s-bg)] p-6 sm:p-8">
-        <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--s-brand)]">Ebenezer SaaS</p>
-        <h1 className="mt-3 text-3xl">Sign in</h1>
-        <p className="mt-2 text-sm text-[var(--s-muted)]">
-          This login is only for SaaS. Store and admin logins are separate.
-        </p>
+    <main className="saas-root min-h-screen">
+      <SaasHeader />
+      <div className="saas-section flex min-h-[calc(100vh-4rem)] items-center justify-center py-12">
+        <div className="w-full max-w-md border border-[var(--saas-line)] bg-[rgba(255,252,247,0.03)] p-6 sm:p-8">
+          <p className="saas-kicker">Yegova Billing</p>
+          <h1 className="mt-2 text-3xl font-semibold">Sign in to your shop</h1>
+          <p className="mt-2 text-sm text-[var(--saas-muted)]">
+            Cloud billing for Indian traders — invoices, stock, GST reports, and thermal print.
+          </p>
 
-        <form className="mt-6 space-y-4" onSubmit={submit}>
-          <label className="block text-sm text-[var(--s-muted)]">
-            Email
-            <input
-              className="saas-input mt-1"
-              type="email"
-              required
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="saas@ebenezerdigital.com"
-            />
-          </label>
-          <label className="block text-sm text-[var(--s-muted)]">
-            Password
-            <input
-              className="saas-input mt-1"
-              type="password"
-              required
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </label>
-          {error && <p className="text-sm text-rose-300">{error}</p>}
-          <button type="submit" className="saas-btn w-full" disabled={loading}>
-            {loading ? "Signing in..." : "Sign in to SaaS"}
-          </button>
-        </form>
+          <form className="mt-6 space-y-4" onSubmit={submit}>
+            <label className="block text-sm text-[var(--saas-muted)]">
+              Email
+              <input
+                className="saas-input mt-1 w-full"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@yourshop.com"
+              />
+            </label>
+            <label className="block text-sm text-[var(--saas-muted)]">
+              Password
+              <input
+                className="saas-input mt-1 w-full"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </label>
+            {error ? <p className="text-sm text-rose-300">{error}</p> : null}
+            <button type="submit" className="saas-btn saas-btn-gold w-full" disabled={loading}>
+              {loading ? "Signing in…" : "Sign in"}
+            </button>
+          </form>
 
-        <Link href="/" className="mt-5 inline-block text-xs uppercase tracking-[0.14em] text-[var(--s-muted)]">
-          Back to site
-        </Link>
+          <p className="mt-5 text-xs text-[var(--saas-muted)]">
+            New shop?{" "}
+            <Link href="/saas" className="text-[var(--saas-gold)] hover:underline">
+              Start free on the Yegova homepage
+            </Link>
+            .
+          </p>
+          <p className="mt-3 text-xs text-[var(--saas-muted)]">
+            <Link href="/saas" className="hover:text-[var(--saas-ink)]">
+              ← Back to Yegova
+            </Link>
+            {" · "}
+            <a href={SITE_NAV.studio} className="hover:text-[var(--saas-ink)]">
+              Ebenezer Digital
+            </a>
+          </p>
+          <SiteLegalLinks className="mt-4 text-xs text-[var(--saas-muted)]" linkClassName="hover:text-[var(--saas-ink)]" />
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
 
 export default function SaasLoginPage() {
   return (
-    <Suspense fallback={<div className="saas-root grid min-h-screen place-items-center px-4">Loading login...</div>}>
+    <Suspense
+      fallback={
+        <div className="saas-root grid min-h-screen place-items-center px-4 text-[var(--saas-muted)]">
+          Loading sign-in…
+        </div>
+      }
+    >
       <SaasLoginInner />
     </Suspense>
   );

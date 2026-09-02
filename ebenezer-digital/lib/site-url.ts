@@ -1,28 +1,32 @@
 import type { Metadata } from "next";
+import { CANONICAL_URLS, resolveEcosystemUrl } from "./ecosystem-urls";
 
 function clean(url: string) {
   return url.replace(/\/$/, "");
 }
 
-export const SITE_URL = clean(process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com");
-export const INFO_URL = clean(
-  process.env.NEXT_PUBLIC_INFO_URL || "https://ebenezerdigital.info"
-);
+export const SITE_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_SITE_URL, CANONICAL_URLS.studio));
+export const INFO_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_INFO_URL, CANONICAL_URLS.info));
 export const JOURNAL_URL = clean(
-  process.env.NEXT_PUBLIC_JOURNAL_URL || "https://journal.ebenezerdigital.info"
+  resolveEcosystemUrl(process.env.NEXT_PUBLIC_JOURNAL_URL, CANONICAL_URLS.journal)
 );
-export const NEWS_URL = clean(process.env.NEXT_PUBLIC_NEWS_URL || "https://news.ebenezerdigital.info");
-export const STORE_URL = clean(process.env.NEXT_PUBLIC_STORE_URL || "https://ebenezerdigital.store");
+export const NEWS_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_NEWS_URL, CANONICAL_URLS.news));
+export const STORE_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_STORE_URL, CANONICAL_URLS.store));
 export const PRODUCTS_URL = clean(
-  process.env.NEXT_PUBLIC_PRODUCTS_URL || "https://products.ebenezerdigital.com"
+  resolveEcosystemUrl(process.env.NEXT_PUBLIC_PRODUCTS_URL, CANONICAL_URLS.products)
 );
-export const TOOLS_URL = clean(process.env.NEXT_PUBLIC_TOOLS_URL || "https://tools.ebenezerdigital.com");
-export const AI_URL = clean(process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com");
-export const SAAS_URL = clean(process.env.NEXT_PUBLIC_SAAS_URL || "https://saas.ebenezerdigital.com");
+export const TOOLS_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_TOOLS_URL, CANONICAL_URLS.tools));
+export const AI_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_AI_URL, CANONICAL_URLS.ai));
+export const SAAS_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_SAAS_URL, CANONICAL_URLS.saas));
 export const DISCOVER_URL = clean(
-  process.env.NEXT_PUBLIC_DISCOVER_URL || "https://discover.ebenezerdigital.com"
+  resolveEcosystemUrl(process.env.NEXT_PUBLIC_DISCOVER_URL, CANONICAL_URLS.discover)
 );
-export const NETWORK_URL = clean(process.env.NEXT_PUBLIC_NETWORK_URL || "https://ebenezerdigital.net");
+export const NETWORK_URL = clean(
+  resolveEcosystemUrl(process.env.NEXT_PUBLIC_NETWORK_URL, CANONICAL_URLS.network)
+);
+
+/** Studio home — always canonical .com (never env-poisoned). Use for logo/footer "Ebenezer Digital" links. */
+export const STUDIO_HOME_URL = CANONICAL_URLS.studio;
 
 export type SiteKind =
   | "studio"

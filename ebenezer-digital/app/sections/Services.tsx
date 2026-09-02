@@ -67,17 +67,58 @@ function Scene({ type }: { type: string }) {
   );
 }
 
+const FALLBACK_SERVICES: ServiceItem[] = [
+  {
+    id: "svc-web",
+    title: "Web Development",
+    description: "Modern websites and web apps — fast, mobile-ready, and built to convert.",
+    icon: "globe",
+    category: "web",
+    features: ["Next.js", "SEO", "Mobile-first"],
+  },
+  {
+    id: "svc-digital",
+    title: "Digital & Admin Support",
+    description: "Reliable data entry, virtual assistance, and back-office help.",
+    icon: "file",
+    category: "digital",
+    features: ["Data entry", "Research", "Documentation"],
+  },
+  {
+    id: "svc-travel",
+    title: "Travel & Booking Support",
+    description: "Itineraries, bookings, and travel desk support for agencies and teams.",
+    icon: "plane",
+    category: "travel",
+    features: ["Bookings", "Itineraries", "Support"],
+  },
+];
+
 export default function Services() {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState<string>("web");
 
   useEffect(() => {
-    fetch("/api/content")
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 12000);
+
+    fetch("/api/content", { signal: controller.signal })
       .then((r) => r.json())
-      .then((data) => setServices(data.services || []))
-      .catch(() => setServices([]))
-      .finally(() => setLoading(false));
+      .then((data) => {
+        const list = (data.services || []) as ServiceItem[];
+        setServices(list.length ? list : FALLBACK_SERVICES);
+      })
+      .catch(() => setServices(FALLBACK_SERVICES))
+      .finally(() => {
+        window.clearTimeout(timeout);
+        setLoading(false);
+      });
+
+    return () => {
+      window.clearTimeout(timeout);
+      controller.abort();
+    };
   }, []);
 
   const categories = useMemo(() => {
@@ -114,7 +155,16 @@ export default function Services() {
         </p>
 
         {loading ? (
-          <p className="mt-12 text-[var(--st-muted)]">Loading services…</p>
+          <p className="mt-12 text-[var(--st-muted)]" role="status">
+            Loading services…
+          </p>
+        ) : categories.length === 0 ? (
+          <p className="mt-12 text-[var(--st-muted)]">
+            Services are being updated.{" "}
+            <Link href="/services" className="text-emerald-400 hover:underline">
+              View all services →
+            </Link>
+          </p>
         ) : (
           <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div className="space-y-2">

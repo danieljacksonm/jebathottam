@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { SITE_NAV } from "@/lib/site-nav";
+import { SAAS_URL } from "@/lib/site-url";
 
 const SAAS_LOGIN = "/saas/login";
 
@@ -13,7 +14,7 @@ export function SaasHeader() {
   return (
     <header className="saas-top">
       <div className="saas-top-inner">
-        <Link href={SITE_NAV.home} className="saas-brand">
+        <Link href={SAAS_URL} className="saas-brand" aria-label="Yegova Billing home">
           <span className="saas-brand-mark">E</span>
           <span>
             <strong>Yegova</strong>

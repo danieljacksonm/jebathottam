@@ -61,7 +61,25 @@ check("Anthropic content generator", fileExists("lib/content-engine/anthropic.ts
 check("Generate content script", read("scripts/generate-content.mjs").includes("--provider=anthropic"));
 
 // Tools guides indexable
-check("Tools guide slug routes", fileExists("app/tools/guides/[slug]/page.tsx"));
+// Forbidden external domains in source (portfolio CMS data excluded)
+const FORBIDDEN = ["canaantravelhub.com", "canaan.yegova.store"];
+for (const f of FORBIDDEN) {
+  let hit = false;
+  for (const rel of [
+    "app/saas/SaasHeader.tsx",
+    "app/saas/page.tsx",
+    "lib/site-nav.ts",
+    "lib/ecosystem-urls.ts",
+  ]) {
+    const text = read(rel);
+    if (text.includes(f) && !rel.includes("ecosystem-urls")) hit = true;
+  }
+  check(`No hardcoded ${f} in nav components`, !hit);
+}
+check("Ecosystem URL sanitizer exists", read("lib/ecosystem-urls.ts").includes("resolveEcosystemUrl"));
+check("STUDIO_HOME_URL is canonical", read("lib/site-nav.ts").includes("STUDIO_HOME_URL"));
+check("llms.txt route", fileExists("app/llms.txt/route.ts"));
+check("Brand tokens shared config", fileExists("lib/brand-tokens.ts"));
 
 console.log(failed ? `\n${failed} check(s) failed.` : "\nAll quality checks passed.");
 process.exit(failed ? 1 : 0);

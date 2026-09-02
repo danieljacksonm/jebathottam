@@ -191,7 +191,7 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
                   ))}
                 </ul>
                 <Link
-                  href={`${SITE_URL}/ai?prompt=${encodeURIComponent(result.query)}`}
+                  href={`${AI_URL}?prompt=${encodeURIComponent(result.query)}`}
                   className="mt-4 inline-flex text-sm font-semibold text-emerald-300 hover:underline"
                 >
                   Continue with Ebenezer AI →

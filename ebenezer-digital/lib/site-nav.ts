@@ -6,7 +6,7 @@ import {
   NETWORK_URL,
   NEWS_URL,
   SAAS_URL,
-  SITE_URL,
+  STUDIO_HOME_URL,
   STORE_URL,
   TOOLS_URL,
   PRODUCTS_URL,
@@ -14,10 +14,11 @@ import {
 
 /** Cross-domain navigation — always point to the correct host (subdomain-first). */
 export const SITE_NAV = {
-  home: SITE_URL,
-  services: `${SITE_URL}/services`,
-  work: `${SITE_URL}/work`,
-  contact: `${SITE_URL}/contact`,
+  home: STUDIO_HOME_URL,
+  studio: STUDIO_HOME_URL,
+  services: `${STUDIO_HOME_URL}/services`,
+  work: `${STUDIO_HOME_URL}/work`,
+  contact: `${STUDIO_HOME_URL}/contact`,
   ai: AI_URL,
   saas: SAAS_URL,
   discover: DISCOVER_URL,
