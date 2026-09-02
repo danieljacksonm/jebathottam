@@ -120,7 +120,7 @@ export default function SettingsPage() {
             </div>
             <p className="mt-2 text-sm text-[var(--muted)]">
               <a className="font-semibold text-[var(--forest)]" href="/app/billing">
-                {t('bill_title')} →
+                {t('plan_title')} →
               </a>
             </p>
 

@@ -453,14 +453,14 @@ const en = {
   land_priceOfflineD: 'Offline phone app. After download, no website. Shop stays on the phone.',
   land_priceNote: 'Website is free. You only pay if you want the phone app. Same tools: GST bills, stock, udhaar, quotes, returns, reports.',
 
-  bill_trialLeft: 'App trial: {n} days left',
-  bill_trialEnd: 'App trial ended. Pay $1 / month for the online phone app.',
-  bill_onlineUntil: 'Online phone app till {d}',
-  bill_pay: 'Phone app is $1 / month',
-  bill_title: 'Website & apps',
-  bill_sub: 'This website is free. $1 / month is only the online phone app. $5 is the offline phone app.',
-  bill_offlineHint: 'The $5 offline app is on Play Store / App Store. It never connects to this website.',
-  bill_webFree: 'This website is free. Keep billing here with no monthly fee.',
+  plan_trialLeft: 'App trial: {n} days left',
+  plan_trialEnd: 'App trial ended. Pay $1 / month for the online phone app.',
+  plan_onlineUntil: 'Online phone app till {d}',
+  plan_pay: 'Phone app is $1 / month',
+  plan_title: 'Website & apps',
+  plan_sub: 'This website is free. $1 / month is only the online phone app. $5 is the offline phone app.',
+  plan_offlineHint: 'The $5 offline app is on Play Store / App Store. It never connects to this website.',
+  plan_webFree: 'This website is free. Keep billing here with no monthly fee.',
 } as const;
 
 type Dict = Record<keyof typeof en, string>;
@@ -903,14 +903,14 @@ const ta: Dict = {
   land_priceOffline: 'ஒரே முறை $5',
   land_priceOfflineD: 'ஆஃப்லைன் போன் ஆப். பதிவிறக்கம் ஆனதும் வலை இல்லை. கடை போனிலேயே.',
   land_priceNote: 'வலை இலவசம். போன் ஆப் வேண்டும் என்றால் மட்டும் பணம். ஒரே கருவிகள்: GST பில், ஸ்டாக், உதார், கோட், ரிட்டர்ன், ரிப்போர்ட்.',
-  bill_trialLeft: 'ஆப் ட்ரயல்: {n} நாள் மீதம்',
-  bill_trialEnd: 'ஆப் ட்ரயல் முடிந்தது. ஆன்லைன் போன் ஆப்புக்கு மாதம் $1.',
-  bill_onlineUntil: 'ஆன்லைன் போன் ஆப் {d} வரை',
-  bill_pay: 'போன் ஆப் மாதம் $1',
-  bill_title: 'வலை மற்றும் ஆப்',
-  bill_sub: 'இந்த வலைத்தளம் இலவசம். மாதம் $1 ஆன்லைன் போன் ஆப் மட்டும். $5 ஆஃப்லைன் போன் ஆப்.',
-  bill_offlineHint: '$5 ஆஃப்லைன் ஆப் Play / App Store-ல். இந்த வலைத்தளத்துடன் இணைக்காது.',
-  bill_webFree: 'இந்த வலைத்தளம் இலவசம். மாத கட்டணம் இல்லாமல் இங்கே பிலிங் செய்யலாம்.',
+  plan_trialLeft: 'ஆப் ட்ரயல்: {n} நாள் மீதம்',
+  plan_trialEnd: 'ஆப் ட்ரயல் முடிந்தது. ஆன்லைன் போன் ஆப்புக்கு மாதம் $1.',
+  plan_onlineUntil: 'ஆன்லைன் போன் ஆப் {d} வரை',
+  plan_pay: 'போன் ஆப் மாதம் $1',
+  plan_title: 'வலை மற்றும் ஆப்',
+  plan_sub: 'இந்த வலைத்தளம் இலவசம். மாதம் $1 ஆன்லைன் போன் ஆப் மட்டும். $5 ஆஃப்லைன் போன் ஆப்.',
+  plan_offlineHint: '$5 ஆஃப்லைன் ஆப் Play / App Store-ல். இந்த வலைத்தளத்துடன் இணைக்காது.',
+  plan_webFree: 'இந்த வலைத்தளம் இலவசம். மாத கட்டணம் இல்லாமல் இங்கே பிலிங் செய்யலாம்.',
 };
 
 const hi: Dict = {
@@ -1351,14 +1351,14 @@ const hi: Dict = {
   land_priceOffline: '$5 एक बार',
   land_priceOfflineD: 'ऑफलाइन फोन ऐप। डाउनलोड के बाद वेबसाइट नहीं। दुकान फोन पर रहती है।',
   land_priceNote: 'वेबसाइट मुफ़्त है। फोन ऐप चाहिए तो ही पैसे। एक जैसे टूल: GST बिल, स्टॉक, उधार, कोट, रिटर्न, रिपोर्ट।',
-  bill_trialLeft: 'ऐप ट्रायल: {n} दिन बाकी',
-  bill_trialEnd: 'ऐप ट्रायल खत्म। ऑनलाइन फोन ऐप के लिए $1 / महीना।',
-  bill_onlineUntil: 'ऑनलाइन फोन ऐप {d} तक',
-  bill_pay: 'फोन ऐप $1 / महीना',
-  bill_title: 'वेबसाइट और ऐप',
-  bill_sub: 'यह वेबसाइट मुफ़्त है। $1 / महीना सिर्फ़ ऑनलाइन फोन ऐप। $5 ऑफलाइन फोन ऐप।',
-  bill_offlineHint: '$5 ऑफलाइन ऐप Play / App Store पर है। यह वेबसाइट से नहीं जुड़ता।',
-  bill_webFree: 'यह वेबसाइट मुफ़्त है। बिना मासिक फीस यहाँ बिलिंग करें।',
+  plan_trialLeft: 'ऐप ट्रायल: {n} दिन बाकी',
+  plan_trialEnd: 'ऐप ट्रायल खत्म। ऑनलाइन फोन ऐप के लिए $1 / महीना।',
+  plan_onlineUntil: 'ऑनलाइन फोन ऐप {d} तक',
+  plan_pay: 'फोन ऐप $1 / महीना',
+  plan_title: 'वेबसाइट और ऐप',
+  plan_sub: 'यह वेबसाइट मुफ़्त है। $1 / महीना सिर्फ़ ऑनलाइन फोन ऐप। $5 ऑफलाइन फोन ऐप।',
+  plan_offlineHint: '$5 ऑफलाइन ऐप Play / App Store पर है। यह वेबसाइट से नहीं जुड़ता।',
+  plan_webFree: 'यह वेबसाइट मुफ़्त है। बिना मासिक फीस यहाँ बिलिंग करें।',
 };
 
 const dictionaries: Record<Lang, Dict> = { en, ta, hi };

@@ -42,7 +42,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
     setShopName(getShop()?.name || t('freeWorkspace'));
     setUserName(getUser()?.name || '');
-    setPlanNote(t('bill_webFree'));
+    setPlanNote(t('plan_webFree'));
   }, [router, t]);
 
   const groups = useMemo(
@@ -79,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           { href: '/app/activity', label: t('nav_activity'), icon: Activity },
           { href: '/app/help', label: t('nav_help'), icon: HelpCircle },
           { href: '/app/settings', label: t('nav_settings'), icon: Settings },
-          { href: '/app/billing', label: t('bill_title'), icon: Wallet },
+          { href: '/app/billing', label: t('plan_title'), icon: Wallet },
         ],
       },
     ],
