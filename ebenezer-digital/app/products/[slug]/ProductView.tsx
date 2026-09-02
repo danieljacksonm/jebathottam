@@ -21,6 +21,7 @@ import {
 import { getRelatedProducts } from "../related";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { formatProductsForAi } from "@/lib/ai";
 
 const trustItems = [
@@ -545,6 +546,7 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
                 className="mt-2 text-sm text-[var(--s-muted)]"
                 linkClassName="hover:text-white transition-colors"
               />
+              <SiteLegalLinks className="mt-4 text-xs" linkClassName="hover:text-white transition-colors" />
             </div>
             <Link href={lp("/products")} className="s-btn-outline rounded-lg border-white/20 text-white hover:border-white hover:text-white">
               <ArrowLeft className="h-4 w-4" /> Back to store

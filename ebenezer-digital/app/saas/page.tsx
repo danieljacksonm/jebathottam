@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { pageMetadata } from "@/lib/site-url";
 import { SITE_NAV } from "@/lib/site-nav";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { SaasHeader } from "./SaasHeader";
 import "./saas.css";
 
@@ -140,6 +141,7 @@ export default function SaasLandingPage() {
           <Link href={SITE_NAV.home}>Ebenezer Digital</Link>
         </p>
         <p className="saas-copy">© {new Date().getFullYear()} Ebenezer Digital · Yegova Billing</p>
+        <SiteLegalLinks className="saas-copy mt-2" linkClassName="saas-contact-link" />
       </footer>
     </main>
   );

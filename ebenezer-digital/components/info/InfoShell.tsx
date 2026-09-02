@@ -67,6 +67,7 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
         {menuOpen && (
           <nav className="info-nav-mobile" aria-label="Mobile">
             {LINKS.map((l) => renderLink(l, () => setMenuOpen(false)))}
+            <LanguageSwitcher compact />
           </nav>
         )}
       </header>

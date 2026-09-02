@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
       coverImage: body.coverImage || "/images/journal/hero.jpg",
       breaking: Boolean(body.breaking),
       featured: Boolean(body.featured),
+      pinned: Boolean(body.pinned),
       status,
       publishedAt: status === "published" ? new Date() : undefined,
     });

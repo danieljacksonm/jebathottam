@@ -181,7 +181,7 @@ export function EbenDock({
           position: fixed;
           right: 16px;
           bottom: 18px;
-          z-index: 80;
+          z-index: 70;
           display: flex;
           flex-direction: column;
           align-items: flex-end;

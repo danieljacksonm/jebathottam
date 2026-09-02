@@ -49,18 +49,14 @@ export const SEO_LOCALES = [
 export type SeoLocale = (typeof SEO_LOCALES)[number];
 
 export function languageAlternatesFor(path: string, origin?: string): Record<string, string> {
-  const base = origin || originForPath(path);
-  const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  const languages: Record<string, string> = {
-    "x-default": `${base}${cleanPath === "/" ? "" : cleanPath}`,
-  };
-  for (const loc of SEO_LOCALES) {
-    languages[loc] =
-      loc === "en"
-        ? `${base}${cleanPath === "/" ? "" : cleanPath}`
-        : `${base}/${loc}${cleanPath === "/" ? "" : cleanPath}`;
-  }
-  return languages;
+  const kind = siteKindFromPath(path);
+  return languageAlternatesForPath(path, origin, kind);
+}
+
+/** Article pages without translated content — en + x-default only. */
+export function articleLanguageAlternates(path: string): Record<string, string> {
+  const url = canonicalFor(path);
+  return { en: url, "x-default": url };
 }
 
 export const OG_IMAGE = {
@@ -218,6 +214,13 @@ export function canonicalFor(path: string): string {
   return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+export function publicUrlForInternalPath(internalPath: string, kind?: SiteKind): string {
+  const resolvedKind = kind ?? siteKindFromPath(internalPath);
+  const origin = originForKind(resolvedKind);
+  const pub = publicPathForLocale(internalPath, "en", resolvedKind);
+  return `${origin}${pub === "/" ? "" : pub}`;
+}
+
 /** Browser-visible URL path for a given internal path + locale (inverse of middleware rewrites). */
 export function publicPathForLocale(
   internalPath: string,
@@ -312,7 +315,7 @@ export function pageMetadata({
     title,
     description,
     icons: SITE_ICONS,
-    alternates: { canonical: url, languages: languageAlternatesFor(path, origin) },
+    alternates: { canonical: url, languages: languageAlternatesForPath(path, origin, kind) },
     ...(google ? { verification: { google } } : {}),
     openGraph: {
       title,
@@ -420,7 +423,31 @@ export function rootMetadataForKind(kind: SiteKind): Metadata {
     manifest: "/manifest.webmanifest",
     alternates: {
       canonical: origin,
-      ...(kind === "studio" ? { languages: languageAlternatesFor("/", origin) } : {}),
+      languages: languageAlternatesForPath(
+        kind === "info"
+          ? "/info"
+          : kind === "journal"
+            ? "/blog"
+            : kind === "news"
+              ? "/blog/news"
+              : kind === "store"
+                ? "/products"
+                : kind === "tools"
+                  ? "/tools"
+                  : kind === "products"
+                    ? "/catalog"
+                    : kind === "network"
+                      ? "/network"
+                      : kind === "ai"
+                        ? "/ai"
+                        : kind === "saas"
+                          ? "/saas"
+                          : kind === "discover"
+                            ? "/discover"
+                            : "/",
+        origin,
+        kind
+      ),
     },
     ...(google ? { verification: { google } } : {}),
     openGraph: {

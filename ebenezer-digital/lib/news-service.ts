@@ -38,6 +38,7 @@ function recordToPublic(n: NewsArticleRecord): PublicNewsItem {
     coverImage: safeNewsCover(n.coverImage, fallback, n.title, n.dek, n.topic || ""),
     breaking: Boolean(n.breaking),
     featured: Boolean(n.featured),
+    pinned: Boolean(n.pinned),
     origin: "cms",
   };
 }

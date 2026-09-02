@@ -1,38 +1,14 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { SITE_URL } from "@/lib/site-url";
+import { AI_URL, pageMetadata } from "@/lib/site-url";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
+import { TOOLS_GUIDES } from "./data";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Buying guides — Ebenezer Tools",
   description: "Practical guides to choose AI tools, CRM, SEO and SaaS — then compare on Ebenezer Tools.",
-};
-
-const GUIDES = [
-  {
-    slug: "best-ai-coding-tools",
-    title: "Best AI coding tools",
-    excerpt: "When to pick Copilot, Cursor, or a chat assistant for programming work.",
-    href: "/tools/compare?ids=github-copilot,cursor,chatgpt",
-  },
-  {
-    slug: "best-ai-tools-for-youtube",
-    title: "Best AI tools for YouTube",
-    excerpt: "Writing, thumbnails, and short-form video — grounded in our catalog.",
-    href: "/tools/compare?ids=chatgpt,runway,canva",
-  },
-  {
-    slug: "best-crm-for-small-business",
-    title: "Best CRM for small business",
-    excerpt: "HubSpot vs Zoho for Indian and global SMBs starting a pipeline.",
-    href: "/tools/compare?ids=hubspot,zoho-crm",
-  },
-  {
-    slug: "best-ai-writing-tools",
-    title: "Best AI writing tools",
-    excerpt: "ChatGPT, Claude, and Gemini for drafts, research, and rewrites.",
-    href: "/tools/compare?ids=chatgpt,claude,gemini",
-  },
-];
+  path: "/tools/guides",
+});
 
 export default function ToolsGuidesPage() {
   return (
@@ -48,21 +24,22 @@ export default function ToolsGuidesPage() {
         Genuine comparison value — not rewritten merchant blurbs. Each guide links into live comparison pages.
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {GUIDES.map((g) => (
-          <Link key={g.slug} href={g.href} className="aff-card p-5 hover:border-teal-300">
+        {TOOLS_GUIDES.map((g) => (
+          <Link key={g.slug} href={`/tools/guides/${g.slug}`} className="aff-card p-5 hover:border-teal-300">
             <h2 className="font-semibold text-lg">{g.title}</h2>
             <p className="mt-2 text-sm text-[var(--aff-muted)]">{g.excerpt}</p>
-            <p className="mt-3 text-sm font-semibold text-[var(--aff-brand-dk)]">Open comparison →</p>
+            <p className="mt-3 text-sm font-semibold text-[var(--aff-brand-dk)]">Read guide →</p>
           </Link>
         ))}
       </div>
       <p className="mt-8 text-sm text-[var(--aff-muted)]">
         Prefer a conversation?{" "}
-        <Link href={`${SITE_URL}/ai?mode=tools`} className="text-[var(--aff-brand-dk)] font-semibold hover:underline">
+        <Link href={`${AI_URL}?mode=tools`} className="text-[var(--aff-brand-dk)] font-semibold hover:underline">
           Ask Ebenezer AI
         </Link>
         .
       </p>
+      <SiteLegalLinks className="mt-8 text-xs text-[var(--aff-muted)]" linkClassName="hover:text-[var(--aff-text)]" />
     </div>
   );
 }

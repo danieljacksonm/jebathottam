@@ -11,6 +11,7 @@ import { formatDate, readingTime, type JournalPost } from "../lib";
 import { STORE_PRODUCTS } from "@/app/products/data";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import "../journal.css";
 
 type RelatedLite = Pick<JournalPost, "id" | "title" | "slug" | "excerpt" | "coverImage" | "category" | "author" | "publishedAt">;
@@ -424,6 +425,7 @@ export function ArticleView({ slug }: { slug: string }) {
           className="mt-8 text-sm text-[var(--j-muted)]"
           linkClassName="hover:text-[var(--j-brand)]"
         />
+        <SiteLegalLinks className="mt-4 text-xs text-[var(--j-muted)]" linkClassName="hover:text-[var(--j-brand)]" />
       </footer>
     </div>
   );

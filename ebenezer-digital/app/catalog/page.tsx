@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CatalogNav } from "./components/CatalogNav";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { ProductCard } from "./components/ProductCard";
 import { SmartSearch } from "./components/SmartSearch";
 import { CatalogAskAi } from "./components/CatalogAskAi";
@@ -126,6 +127,7 @@ export default function CatalogHomePage() {
             </Link>
             .
           </p>
+          <SiteLegalLinks className="mt-4 text-xs text-[var(--aff-muted)]" linkClassName="hover:text-[var(--aff-text)]" />
         </div>
       </footer>
       <CatalogAskAi />

@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllNews, readingMinutes } from "../data";
 import { getPublicNewsBySlug, listPublicNews } from "@/lib/news-service";
 import { NewsArticleView } from "./NewsArticleView";
-import { NEWS_URL, canonicalFor, languageAlternatesFor, SITE_ICONS } from "@/lib/site-url";
+import { NEWS_URL, canonicalFor, articleLanguageAlternates, SITE_ICONS } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: canonicalFor(`/blog/news/${article.slug}`),
-      languages: languageAlternatesFor(`/blog/news/${article.slug}`),
+      languages: articleLanguageAlternates(`/blog/news/${article.slug}`),
     },
     icons: SITE_ICONS,
   };

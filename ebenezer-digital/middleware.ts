@@ -105,6 +105,21 @@ function isNetworkHost(host: string): boolean {
 }
 
 function legalSitemapRewrite(request: NextRequest, pathname: string): NextResponse | null {
+  const host = request.headers.get("host") || "";
+  // .net serves custom legal pages under /network/* — do not rewrite to generic site-legal
+  if (isNetworkHost(host)) {
+    if (
+      pathname === "/privacy" ||
+      pathname === "/privacy/" ||
+      pathname === "/terms" ||
+      pathname === "/terms/" ||
+      pathname === "/affiliate-disclosure" ||
+      pathname === "/affiliate-disclosure/"
+    ) {
+      return null;
+    }
+  }
+
   const url = request.nextUrl.clone();
   if (pathname === "/privacy" || pathname === "/privacy/") {
     url.pathname = "/site-legal/privacy";
@@ -313,6 +328,10 @@ export function middleware(request: NextRequest) {
       url.pathname = "/info/contact";
       return NextResponse.rewrite(url);
     }
+    if (pathname.startsWith("/guides/")) {
+      url.pathname = `/info${pathname}`;
+      return NextResponse.rewrite(url);
+    }
   }
 
   if (isAiHost(host)) {
@@ -359,12 +378,40 @@ export function middleware(request: NextRequest) {
   }
 
   if (isStoreHost(host)) {
+    const storeReserved = new Set([
+      "products",
+      "privacy",
+      "terms",
+      "sitemap",
+      "account",
+      "checkout",
+      "success",
+      "category",
+      "roadmap",
+      "api",
+      "admin",
+      "_next",
+    ]);
+    const productPretty = pathname.match(/^\/products\/([^/]+)\/?$/);
+    if (
+      productPretty &&
+      productPretty[1] !== "category" &&
+      productPretty[1] !== "roadmap"
+    ) {
+      return absoluteRedirect(request, `https://${hostName(host)}`, `/${productPretty[1]}`);
+    }
     if (pathname === "/products" || pathname === "/products/") {
       return absoluteRedirect(request, `https://${hostName(host)}`, "/");
     }
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/products";
+      return NextResponse.rewrite(url);
+    }
+    const rootSlug = pathname.match(/^\/([^/]+)\/?$/);
+    if (rootSlug && !storeReserved.has(rootSlug[1])) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/products/${rootSlug[1]}`;
       return NextResponse.rewrite(url);
     }
   }

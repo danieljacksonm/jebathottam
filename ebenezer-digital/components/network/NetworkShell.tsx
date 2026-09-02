@@ -15,6 +15,7 @@ import {
   LayoutGrid,
 } from "lucide-react";
 import { AI_URL, JOURNAL_URL, PRODUCTS_URL, SITE_URL, STORE_URL, TOOLS_URL } from "@/lib/site-url";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { trackNetworkEvent } from "@/lib/network/analytics";
 import { PUBLIC_CATEGORIES } from "@/lib/network/paths";
 import { CATEGORY_LABELS } from "@/lib/network/types";
@@ -191,6 +192,7 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
           </a>
           <span className="ml-auto">© {new Date().getFullYear()} Ebenezer Digital</span>
         </div>
+        <SiteLegalLinks className="nx-page mt-4 text-xs text-[var(--nx-muted)]" linkClassName="hover:text-[var(--nx-ink)]" />
       </footer>
 
       <nav className="nx-mobile-nav" aria-label="Mobile">

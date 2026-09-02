@@ -25,6 +25,7 @@ import {
   SITE_PHONE_TEL,
   SITE_WHATSAPP_URL,
 } from "@/lib/site-contact";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 
 export default function ProductsPage() {
   const { t, rtl, locale, lp } = useStoreI18n();
@@ -546,6 +547,7 @@ export default function ProductsPage() {
               <p>We sell implementation you can use: code, tools, software. PDF is documentation only.</p>
             </div>
           </div>
+          <SiteLegalLinks className="mt-8 pt-6 border-t border-white/10 text-xs" linkClassName="hover:text-white transition-colors" />
         </div>
       </footer>
     </div>

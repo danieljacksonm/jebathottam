@@ -94,7 +94,7 @@ function SuccessInner() {
               )}
               {product.isSoftware && (
                 <Link
-                  href={product.externalUrl || "/saas"}
+                  href={product.externalUrl || "/saas/login"}
                   className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center bg-[var(--s-brand)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
                 >
                   Open billing app

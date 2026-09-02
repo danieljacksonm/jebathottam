@@ -93,7 +93,9 @@ export function generateFromTopic(topic: ContentTopic): GeneratedArticle {
     publishedAt: new Date().toISOString(),
     indexable: false,
     qualityScore: topic.tier === "pillar" ? 82 : 78,
+    status: "draft",
   };
 }
 
+export { generateFromTopicWithAnthropic } from "./anthropic";
 export { qualityGate, shouldIndex };

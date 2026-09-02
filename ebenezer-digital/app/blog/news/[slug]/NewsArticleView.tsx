@@ -14,6 +14,7 @@ import {
 } from "../data";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 
 export function NewsArticleView({
   article,
@@ -134,7 +135,7 @@ export function NewsArticleView({
         </p>
       </article>
 
-      <div className="sticky top-14 z-40 hidden border-b border-[var(--n-line)] bg-[var(--n-glass)] px-8 py-2 backdrop-blur md:block">
+      <div className="sticky top-[var(--news-chrome-offset)] z-40 hidden border-b border-[var(--n-line)] bg-[var(--n-glass)] px-8 py-2 backdrop-blur md:block">
         <p className="truncate font-serif text-lg">{article.title}</p>
       </div>
 
@@ -245,7 +246,11 @@ export function NewsArticleView({
         </section>
       )}
       <SiteContactLinks
-        className="px-4 pb-16 text-sm text-[var(--n-muted)] sm:px-8 lg:px-12"
+        className="px-4 pb-4 text-sm text-[var(--n-muted)] sm:px-8 lg:px-12"
+        linkClassName="hover:text-[var(--n-live)]"
+      />
+      <SiteLegalLinks
+        className="px-4 pb-16 text-xs text-[var(--n-muted)] sm:px-8 lg:px-12"
         linkClassName="hover:text-[var(--n-live)]"
       />
     </>

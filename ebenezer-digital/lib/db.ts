@@ -120,6 +120,7 @@ export interface NewsArticleRecord {
   coverImage: string;
   breaking?: boolean;
   featured?: boolean;
+  pinned?: boolean;
   status: "draft" | "published" | "archived";
   publishedAt?: Date;
   createdAt: Date;

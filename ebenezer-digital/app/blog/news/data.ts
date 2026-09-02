@@ -28,6 +28,7 @@ export type NewsArticle = {
   coverImage: string;
   breaking?: boolean;
   featured?: boolean;
+  pinned?: boolean;
   originalUrl?: string;
   byline?: string;
   origin?: "seed" | "cms" | "live";

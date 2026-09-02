@@ -31,7 +31,10 @@ export type GeneratedArticle = {
   tier: ContentTier;
   wordCount: number;
   coverImage?: string;
+  imageCredit?: string;
   publishedAt: string;
   indexable: boolean;
   qualityScore: number;
+  /** Draft-only pipeline — review before publishing to CMS */
+  status?: "draft" | "published";
 };

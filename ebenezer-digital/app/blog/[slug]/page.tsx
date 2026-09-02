@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { ArticleView } from "./ArticleView";
-import { canonicalFor, languageAlternatesFor, SITE_ICONS } from "@/lib/site-url";
+import { canonicalFor, articleLanguageAlternates, SITE_ICONS } from "@/lib/site-url";
 
 type Props = { params: { slug: string } };
 
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: canonicalFor(path),
-      languages: languageAlternatesFor(path),
+      languages: articleLanguageAlternates(path),
       types: {
         "application/rss+xml": [{ url: "/api/blog/rss", title: "Ebenezer Journal RSS" }],
       },

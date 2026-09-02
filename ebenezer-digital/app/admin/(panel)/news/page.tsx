@@ -17,6 +17,7 @@ type NewsRow = {
   coverImage: string;
   breaking?: boolean;
   featured?: boolean;
+  pinned?: boolean;
   status: "draft" | "published" | "archived";
   publishedAt?: string;
 };
@@ -48,6 +49,7 @@ const emptyForm = {
   coverImage: "/images/journal/hero.jpg",
   breaking: false,
   featured: false,
+  pinned: false,
   status: "draft" as "draft" | "published" | "archived",
 };
 
@@ -110,6 +112,7 @@ export default function AdminNewsPage() {
       coverImage: a.coverImage,
       breaking: Boolean(a.breaking),
       featured: Boolean(a.featured),
+      pinned: Boolean(a.pinned),
       status: a.status,
     });
     setError("");
@@ -362,6 +365,14 @@ export default function AdminNewsPage() {
                     onChange={(e) => setForm((f) => ({ ...f, featured: e.target.checked }))}
                   />
                   Featured
+                </label>
+                <label className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.pinned}
+                    onChange={(e) => setForm((f) => ({ ...f, pinned: e.target.checked }))}
+                  />
+                  Pinned hero
                 </label>
                 <label className="inline-flex items-center gap-2">
                   Status

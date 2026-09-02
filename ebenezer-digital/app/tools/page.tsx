@@ -19,6 +19,7 @@ import {
 import { resolveToolImage } from "@/lib/affiliate/images";
 import { AffiliateMedia } from "@/components/AffiliateMedia";
 import { ToolsHeader } from "./ToolsHeader";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { AI_URL } from "@/lib/site-url";
 
 const EXAMPLES = [
@@ -319,6 +320,7 @@ export default function ToolsPage() {
             We may earn a commission when you purchase through links on Ebenezer Tools. This does not affect our
             comparisons. Ratings are editorial signals — not fake reviews.
           </p>
+          <SiteLegalLinks className="mt-4 text-xs text-[var(--aff-muted)]" linkClassName="hover:text-[var(--aff-text)]" />
         </div>
       </section>
     </>

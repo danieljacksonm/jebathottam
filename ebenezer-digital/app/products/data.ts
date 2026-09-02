@@ -135,7 +135,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     badge: "FREE",
     isFree: true,
     isSoftware: true,
-    externalUrl: "/saas",
+    externalUrl: "/saas/login",
     externalCta: "Open billing app",
     accessMethod: "web_app",
     techStack: ["Next.js", "NestJS"],

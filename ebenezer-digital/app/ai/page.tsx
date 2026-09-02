@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { AiStudio } from "./studio/AiStudio";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { SITE_EMAIL, SITE_PHONE_DISPLAY } from "@/lib/site-contact";
 
 export default function AiPage() {
@@ -14,6 +15,10 @@ export default function AiPage() {
       >
         <AiStudio />
       </Suspense>
+
+      <footer className="sr-only focus-within:not-sr-only focus-within:fixed focus-within:bottom-0 focus-within:left-0 focus-within:right-0 focus-within:z-50 focus-within:bg-black/90 focus-within:p-4">
+        <SiteLegalLinks className="text-center text-xs text-white/70" linkClassName="hover:text-white" />
+      </footer>
 
       <section className="sr-only">
         <p>Ask anything with Eben AI</p>

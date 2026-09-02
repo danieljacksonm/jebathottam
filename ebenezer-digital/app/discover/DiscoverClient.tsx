@@ -7,8 +7,10 @@ import {
   DISCOVER_SUGGESTIONS,
   type DiscoverResult,
 } from "@/lib/discover/classify";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { EcosystemNav } from "@/components/EcosystemNav";
-import { SITE_URL } from "@/lib/site-url";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
+import { AI_URL, SITE_URL } from "@/lib/site-url";
 
 export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: string }) {
   const [q, setQ] = useState(initialQuery);
@@ -80,6 +82,9 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
   return (
     <div className="discover-root">
       <EcosystemNav active="discover" />
+      <div className="d-page flex justify-end px-4 pt-3 sm:px-6">
+        <LanguageSwitcher compact />
+      </div>
 
       <div className="d-page py-12 sm:py-16">
         <div className="text-center max-w-2xl mx-auto">
@@ -231,7 +236,7 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
                   ["Tools", "Compare AI & SaaS", "https://tools.ebenezerdigital.com"],
                   ["Hardware", "Laptops & electronics", "https://products.ebenezerdigital.com"],
                   ["Guides", "Learn on .info", "https://ebenezerdigital.info"],
-                  ["AI", "Ask Ebenezer", `${SITE_URL}/ai`],
+                  ["AI", "Ask Ebenezer", AI_URL],
                 ].map(([title, sub, href]) => (
                   <a key={title} href={href as string} className="d-card">
                     <p className="font-semibold">{title}</p>
@@ -265,6 +270,7 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
           Domains stay separate. This page only helps you choose the right Ebenezer platform — we never invent
           products or prices here.
         </p>
+        <SiteLegalLinks className="mt-6 text-center text-xs text-[var(--d-muted)]" linkClassName="hover:text-slate-300" />
       </div>
 
       <style jsx>{`

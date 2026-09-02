@@ -16,13 +16,29 @@ import {
   STORE_URL,
   TOOLS_URL,
   NETWORK_URL,
-  languageAlternatesFor,
+  languageAlternatesForPath,
+  publicUrlForInternalPath,
   type SiteKind,
 } from "@/lib/site-url";
+import { loadArticles } from "@/lib/content-engine";
 import { CATALOG_CATEGORIES, CATALOG_PRODUCTS } from "@/app/catalog/data";
 import { TOOLS } from "@/app/tools/data";
 import { getLiveTools } from "@/lib/network/registry";
 import { NETWORK_GUIDES } from "@/lib/network/guides";
+
+function kindFromOrigin(origin: string): SiteKind {
+  if (origin === INFO_URL) return "info";
+  if (origin === JOURNAL_URL) return "journal";
+  if (origin === NEWS_URL) return "news";
+  if (origin === STORE_URL) return "store";
+  if (origin === PRODUCTS_URL) return "products";
+  if (origin === TOOLS_URL) return "tools";
+  if (origin === AI_URL) return "ai";
+  if (origin === SAAS_URL) return "saas";
+  if (origin === DISCOVER_URL) return "discover";
+  if (origin === NETWORK_URL) return "network";
+  return "studio";
+}
 
 function page(
   origin: string,
@@ -30,20 +46,48 @@ function page(
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
   priority: number,
   lastModified?: Date,
-  withLanguages = false
+  withLanguages = false,
+  kind?: SiteKind,
+  internalPath?: string
 ): MetadataRoute.Sitemap[number] {
   const cleanPath = path || "";
+  const resolvedKind = kind ?? kindFromOrigin(origin);
+  const ip =
+    internalPath ??
+    (cleanPath.startsWith("/blog") ||
+    cleanPath.startsWith("/info") ||
+    cleanPath.startsWith("/products") ||
+    cleanPath.startsWith("/tools") ||
+    cleanPath.startsWith("/catalog") ||
+    cleanPath.startsWith("/network")
+      ? cleanPath
+      : resolvedKind === "info"
+        ? cleanPath === "" || cleanPath === "/"
+          ? "/info"
+          : `/info${cleanPath}`
+        : resolvedKind === "journal"
+          ? cleanPath === "" || cleanPath === "/"
+            ? "/blog"
+            : cleanPath.startsWith("/blog")
+              ? cleanPath
+              : `/blog${cleanPath}`
+          : resolvedKind === "news"
+            ? cleanPath === "" || cleanPath === "/"
+              ? "/blog/news"
+              : cleanPath.startsWith("/blog")
+                ? cleanPath
+                : `/blog/news${cleanPath}`
+            : cleanPath || "/");
+
   const entry: MetadataRoute.Sitemap[number] = {
-    url: cleanPath ? `${origin}${cleanPath}` : origin,
+    url: publicUrlForInternalPath(ip, resolvedKind),
     lastModified: lastModified || new Date(),
     changeFrequency,
     priority,
   };
-  // Language alternates = separate URL per locale (en unprefixed, others /{locale}/path).
-  // Do not explode every article into 22 sitemap rows — use hreflang alternates instead.
   if (withLanguages) {
     entry.alternates = {
-      languages: languageAlternatesFor(cleanPath || "/", origin),
+      languages: languageAlternatesForPath(ip, origin, resolvedKind),
     };
   }
   return entry;
@@ -67,28 +111,56 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/stats",
     "/trust",
   ];
-  return routes.map((route) =>
-    page(SITE_URL, route, "weekly", route === "" ? 1 : 0.7, undefined, true)
+  const pages = routes.map((route) =>
+    page(SITE_URL, route, "weekly", route === "" ? 1 : 0.7, undefined, true, "studio", route || "/")
   );
+  for (const post of loadArticles("studio-insights")) {
+    pages.push(
+      page(
+        SITE_URL,
+        `/insights/${post.slug}`,
+        "monthly",
+        0.75,
+        new Date(post.publishedAt),
+        true,
+        "studio",
+        `/insights/${post.slug}`
+      )
+    );
+  }
+  return pages;
 }
 
 async function aiSitemap(): Promise<MetadataRoute.Sitemap> {
-  return [page(AI_URL, "", "weekly", 1, undefined, true)];
+  return [
+    page(AI_URL, "", "weekly", 1, undefined, true),
+    page(AI_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(AI_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(AI_URL, "/sitemap", "monthly", 0.3, undefined, true),
+  ];
 }
 
 async function saasSitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     page(SAAS_URL, "", "weekly", 1, undefined, true),
     page(SAAS_URL, "/saas/login", "monthly", 0.4, undefined, false),
+    page(SAAS_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(SAAS_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(SAAS_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
 }
 
 async function discoverSitemap(): Promise<MetadataRoute.Sitemap> {
-  return [page(DISCOVER_URL, "", "weekly", 1, undefined, true)];
+  return [
+    page(DISCOVER_URL, "", "weekly", 1, undefined, true),
+    page(DISCOVER_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(DISCOVER_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(DISCOVER_URL, "/sitemap", "monthly", 0.3, undefined, true),
+  ];
 }
 
 async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
-  return [
+  const pages: MetadataRoute.Sitemap = [
     page(INFO_URL, "", "daily", 1, undefined, true),
     page(INFO_URL, "/about", "monthly", 0.7, undefined, true),
     page(INFO_URL, "/search", "weekly", 0.6, undefined, true),
@@ -97,6 +169,21 @@ async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
     page(INFO_URL, "/terms", "yearly", 0.2, undefined, true),
     page(INFO_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
+  for (const post of loadArticles("info-guides")) {
+    pages.push(
+      page(
+        INFO_URL,
+        `/guides/${post.slug}`,
+        "monthly",
+        0.65,
+        new Date(post.publishedAt),
+        true,
+        "info",
+        `/info/guides/${post.slug}`
+      )
+    );
+  }
+  return pages;
 }
 
 async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
@@ -120,7 +207,9 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
           "weekly",
           0.7,
           p.updatedAt || p.publishedAt || new Date(),
-          false
+          false,
+          "journal",
+          `/blog/${p.slug}`
         )
       );
     }
@@ -132,7 +221,7 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
     if (seen.has(p.slug)) continue;
     seen.add(p.slug);
     pages.push(
-      page(JOURNAL_URL, `/blog/${p.slug}`, "weekly", 0.75, new Date(p.publishedAt), false)
+      page(JOURNAL_URL, `/blog/${p.slug}`, "weekly", 0.75, new Date(p.publishedAt), false, "journal", `/blog/${p.slug}`)
     );
   }
 
@@ -147,6 +236,9 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
     page(NEWS_URL, "/blog/newsroom/editorial-policy", "monthly", 0.5, undefined, true),
     page(NEWS_URL, "/blog/newsroom/contact", "monthly", 0.5, undefined, true),
     page(NEWS_URL, "/blog/newsroom/feeds", "weekly", 0.6, undefined, true),
+    page(NEWS_URL, "/privacy", "yearly", 0.2, undefined, true),
+    page(NEWS_URL, "/terms", "yearly", 0.2, undefined, true),
+    page(NEWS_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
 
   try {
@@ -160,7 +252,9 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
           "hourly",
           0.8,
           new Date(n.publishedAt),
-          false
+          false,
+          "news",
+          `/blog/news/${n.slug}`
         )
       );
     }
@@ -226,6 +320,7 @@ function toolsSitemap(): MetadataRoute.Sitemap {
     page(TOOLS_URL, "/privacy", "yearly", 0.2, undefined, true),
     page(TOOLS_URL, "/terms", "yearly", 0.2, undefined, true),
     page(TOOLS_URL, "/sitemap", "monthly", 0.3, undefined, true),
+    page(TOOLS_URL, "/tools/compare", "weekly", 0.85, undefined, true),
     page(TOOLS_URL, "/tools/guides", "weekly", 0.75, undefined, true),
   ];
   const staticRoutes = [
@@ -242,7 +337,17 @@ function toolsSitemap(): MetadataRoute.Sitemap {
     pages.push(page(TOOLS_URL, route, "weekly", 0.8, undefined, true));
   }
   for (const tool of TOOLS) {
-    pages.push(page(TOOLS_URL, `/tools/${tool.id}`, "weekly", 0.85, undefined, true));
+    pages.push(page(TOOLS_URL, `/tools/${tool.id}`, "weekly", 0.85, undefined, true, "tools", `/tools/${tool.id}`));
+  }
+  for (const slug of [
+    "best-ai-coding-tools",
+    "best-ai-tools-for-youtube",
+    "best-crm-for-small-business",
+    "best-ai-writing-tools",
+  ]) {
+    pages.push(
+      page(TOOLS_URL, `/tools/guides/${slug}`, "monthly", 0.7, undefined, true, "tools", `/tools/guides/${slug}`)
+    );
   }
   return pages;
 }
@@ -260,16 +365,40 @@ function networkSitemap(): MetadataRoute.Sitemap {
     page(NETWORK_URL, "/privacy", "yearly", 0.2, undefined, true),
     page(NETWORK_URL, "/terms", "yearly", 0.2, undefined, true),
     page(NETWORK_URL, "/affiliate-disclosure", "yearly", 0.2, undefined, true),
+    page(NETWORK_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
   for (const t of getLiveTools()) {
-    // Public .net URLs are /tools/{slug} (middleware rewrite)
-    pages.push(page(NETWORK_URL, `/tools/${t.slug}`, "weekly", 0.9, new Date(t.updatedAt), true));
+    pages.push(
+      page(
+        NETWORK_URL,
+        `/tools/${t.slug}`,
+        "weekly",
+        0.9,
+        new Date(t.updatedAt),
+        true,
+        "network",
+        `/network/tools/${t.slug}`
+      )
+    );
   }
   for (const cat of ["developer", "seo", "image", "text", "calculators", "business", "ai"]) {
-    pages.push(page(NETWORK_URL, `/tools/${cat}`, "weekly", 0.85, undefined, true));
+    pages.push(
+      page(NETWORK_URL, `/tools/${cat}`, "weekly", 0.85, undefined, true, "network", `/network/tools/c/${cat}`)
+    );
   }
   for (const g of NETWORK_GUIDES) {
-    pages.push(page(NETWORK_URL, `/guides/${g.slug}`, "monthly", 0.7, new Date(g.updatedAt), true));
+    pages.push(
+      page(
+        NETWORK_URL,
+        `/guides/${g.slug}`,
+        "monthly",
+        0.7,
+        new Date(g.updatedAt),
+        true,
+        "network",
+        `/network/guides/${g.slug}`
+      )
+    );
   }
   return pages;
 }

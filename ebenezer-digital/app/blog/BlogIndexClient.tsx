@@ -19,6 +19,7 @@ import {
 } from "@/lib/site-contact";
 import { SITE_NAV } from "@/lib/site-nav";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { filterEditorialPosts } from "@/lib/journal-filter";
 import "./journal.css";
 
@@ -531,6 +532,7 @@ function BlogIndexInner({
                 WhatsApp
               </a>
               <p className="mt-8 text-xs">© {new Date().getFullYear()} Ebenezer Digital Journal</p>
+              <SiteLegalLinks className="mt-3 text-xs text-[var(--j-muted)]" linkClassName="hover:text-[var(--j-brand)]" />
             </div>
           </div>
         </div>

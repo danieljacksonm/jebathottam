@@ -21,6 +21,7 @@ import { WorldDeskMap } from "./WorldDeskMap";
 import { IndiaDesk } from "./IndiaDesk";
 import { WorldBriefing } from "./WorldBriefing";
 import { OriginalLink } from "./OriginalLink";
+import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import {
   SITE_EMAIL,
   SITE_PHONE_DISPLAY,
@@ -74,6 +75,13 @@ export function NewsHome() {
 
   const desk = useMemo(() => {
     const used = new Set<string>();
+    const heroLead =
+      rotated.find((a) => a.pinned) ||
+      rotated.find((a) => a.featured) ||
+      rotated.find((a) => a.breaking) ||
+      rotated[0];
+    if (heroLead) used.add(heroLead.id);
+
     const take = (count: number, list = rotated, pred?: (a: NewsArticle) => boolean) => {
       const out: NewsArticle[] = [];
       for (const a of list) {
@@ -86,7 +94,7 @@ export function NewsHome() {
       return out;
     };
     const briefing = take(12);
-    const lead = take(1)[0];
+    const lead = heroLead;
     const secondary = take(4);
     const compact = take(8);
     const wireMore = take(24);
@@ -620,6 +628,7 @@ export function NewsHome() {
             <p>Authors, times, and sources are shown on every story.</p>
             <p>We do not invent views, ratings, or follower counts.</p>
             <p className="pt-6 text-xs text-white/40">© {new Date().getFullYear()} Ebenezer News · .info</p>
+            <SiteLegalLinks className="mt-3 text-xs text-white/50" linkClassName="hover:text-white" />
           </div>
         </div>
       </footer>
