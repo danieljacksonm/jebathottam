@@ -5,6 +5,7 @@ import { SITE_NAV } from "@/lib/site-nav";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { SaasHeader } from "./SaasHeader";
+import { BILLING_LOGIN_PATH, BILLING_REGISTER_PATH } from "@/lib/billing-url";
 import "./saas.css";
 
 export const metadata: Metadata = pageMetadata({
@@ -14,8 +15,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/saas",
 });
 
-const BILLING_URL = "/saas/login";
-const REGISTER_URL = "/saas/login";
+const BILLING_URL = BILLING_LOGIN_PATH;
+const REGISTER_URL = BILLING_REGISTER_PATH;
 
 const features = [
   {

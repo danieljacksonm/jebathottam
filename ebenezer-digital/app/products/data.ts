@@ -1,5 +1,6 @@
 import type { StoreProductType } from "./taxonomy";
 import { productMatchesFilter } from "./taxonomy";
+import { billingLoginUrl } from "@/lib/billing-url";
 
 export type { StoreProductType } from "./taxonomy";
 export {
@@ -135,7 +136,7 @@ export const STORE_PRODUCTS: StoreProduct[] = [
     badge: "FREE",
     isFree: true,
     isSoftware: true,
-    externalUrl: "/saas/login",
+    externalUrl: billingLoginUrl(),
     externalCta: "Open billing app",
     accessMethod: "web_app",
     techStack: ["Next.js", "NestJS"],

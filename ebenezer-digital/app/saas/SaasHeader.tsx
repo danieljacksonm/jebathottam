@@ -6,8 +6,9 @@ import { Menu, X } from "lucide-react";
 import { SITE_NAV } from "@/lib/site-nav";
 import { SAAS_URL } from "@/lib/site-url";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { BILLING_LOGIN_PATH, BILLING_REGISTER_PATH } from "@/lib/billing-url";
 
-const SAAS_LOGIN = "/saas/login";
+const SAAS_LOGIN = BILLING_LOGIN_PATH;
 
 export function SaasHeader() {
   const [open, setOpen] = useState(false);

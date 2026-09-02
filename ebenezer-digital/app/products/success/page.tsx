@@ -13,6 +13,7 @@ import { STORE_PRODUCTS, formatINR, type StoreProduct } from "../data";
 import { useStoreI18n } from "../i18n";
 import { localizeProduct } from "../product-i18n";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
+import { billingLoginUrl } from "@/lib/billing-url";
 
 const OWNED_KEY = "ebenezer-store-owned";
 
@@ -94,7 +95,7 @@ function SuccessInner() {
               )}
               {product.isSoftware && (
                 <Link
-                  href={product.externalUrl || "/saas/login"}
+                  href={product.externalUrl || billingLoginUrl()}
                   className="mt-6 inline-flex min-h-[48px] w-full items-center justify-center bg-[var(--s-brand)] text-[11px] font-semibold uppercase tracking-[0.22em] text-[#04110c]"
                 >
                   Open billing app

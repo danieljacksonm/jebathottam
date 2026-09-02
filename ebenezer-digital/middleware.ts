@@ -506,7 +506,14 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (isSaasLoginPath(pathname) || pathname === "/saas" || pathname === "/saas/") {
+  if (isSaasLoginPath(pathname)) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/login";
+    loginUrl.search = "";
+    return NextResponse.redirect(loginUrl, 308);
+  }
+
+  if (pathname === "/saas" || pathname === "/saas/") {
     return NextResponse.next();
   }
 

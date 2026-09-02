@@ -43,9 +43,13 @@ for (const f of legalTargets) {
 
 // No /saas fallback without /login on store flows
 const productsData = read("app/products/data.ts");
-check("Store SaaS product uses /saas/login", productsData.includes('externalUrl: "/saas/login"'));
-const successPage = read("app/products/success/page.tsx");
-check("Success page SaaS fallback is /saas/login", !successPage.includes('"/saas"') || successPage.includes('"/saas/login"'));
+check("Store SaaS product uses billing login URL", productsData.includes("billingLoginUrl()"));
+const billingUrl = read("lib/billing-url.ts");
+check("Billing URL helper exists", billingUrl.includes("billingLoginUrl"));
+check(
+  "Success page SaaS fallback uses billing URL",
+  read("app/products/success/page.tsx").includes("billingLoginUrl()")
+);
 
 // Hreflang uses public paths
 const siteUrl = read("lib/site-url.ts");

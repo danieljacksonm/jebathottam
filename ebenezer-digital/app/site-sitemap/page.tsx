@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { StudioPageShell } from "@/components/studio/StudioPageShell";
 import { SITE_NAV } from "@/lib/site-nav";
+import { BILLING_LOGIN_PATH } from "@/lib/billing-url";
 import { originForKind, pageMetadata, siteKindFromHost, type SiteKind } from "@/lib/site-url";
 
 function sectionsForKind(kind: SiteKind): { label: string; href: string }[] {
@@ -66,7 +67,8 @@ function sectionsForKind(kind: SiteKind): { label: string; href: string }[] {
     ],
     saas: [
       { label: "Yegova Home", href: "/" },
-      { label: "Sign in", href: "/saas/login" },
+      { label: "Sign in", href: BILLING_LOGIN_PATH },
+      { label: "Register", href: "/register" },
       ...common,
     ],
     discover: [

@@ -1,159 +1,123 @@
-# Yegova Billing — VPS Deployment Guide
+# Yegova Billing on saas.ebenezerdigital.com
 
-This guide explains how to run the `yegova-saas` billing app on your Ubuntu VPS
-alongside the main `ebenezer-digital` website.
+Full billing (Invoice Studio, GST, stock, party ledger) runs on **the same subdomain** as marketing:
+
+| Path | Backend | PM2 process |
+|------|---------|-------------|
+| `/` | Ebenezer marketing (`/saas`) | `ebenezer-digital` :3000 |
+| `/login`, `/register`, `/app/*` | Yegova Next app | `yegova-web` :3001 |
+| `/api/*` | Yegova NestJS API | `yegova-api` :4000 |
+
+Marketing CTAs point to `/login` and `/register` (not the old stub `/saas/login`).
 
 ---
 
-## 1. Upload the project to your VPS
+## 1. Sync yegova-saas to VPS
 
-From your Windows machine, push to GitHub first (or use `scp`):
-
-```bash
-# On Windows (PowerShell) — push yegova-saas to its own GitHub repo
-cd D:\Daniel\testing\data\traders\yegova-saas
-git init
-git add .
-git commit -m "initial"
-git remote add origin https://github.com/YOUR_USERNAME/yegova-saas.git
-git push -u origin main
-```
-
-Then on your VPS:
+From the monorepo (already at `~/jebathottam/ebenezer-digital/yegova-saas`):
 
 ```bash
-cd /home/dani
-git clone https://github.com/YOUR_USERNAME/yegova-saas.git
-cd yegova-saas
-npm install
+rsync -a --delete --exclude node_modules --exclude apps/api/prisma/dev.db \
+  ~/jebathottam/ebenezer-digital/yegova-saas/ /home/dani/yegova-saas/
+cd /home/dani/yegova-saas && npm install
 ```
 
 ---
 
-## 2. Set up the database
+## 2. Database & env
 
 ```bash
-cd apps/api
+cd /home/dani/yegova-saas/apps/api
 npx prisma db push
 npx prisma generate
-cd ../..
 ```
 
-This creates a `dev.db` SQLite file in `apps/api/prisma/`.
-
----
-
-## 3. Configure environment
-
-Create `apps/api/.env`:
+**`/home/dani/yegova-saas/apps/api/.env`**
 
 ```env
 PORT=4000
 DATABASE_URL="file:./prisma/dev.db"
-JWT_SECRET=change-this-to-a-long-random-string
+JWT_SECRET=<long-random-string>
+FRONTEND_URL=https://saas.ebenezerdigital.com
 ```
 
-Create `apps/web/.env.local`:
+**`/home/dani/yegova-saas/apps/web/.env.local`**
 
 ```env
-NEXT_PUBLIC_API_URL=https://billing.ebenezerdigital.com/api
+NEXT_PUBLIC_API_URL=https://saas.ebenezerdigital.com/api
 ```
 
 ---
 
-## 4. Build the web app
+## 3. Build
 
 ```bash
-cd apps/web
-npm run build
-cd ../..
+cd /home/dani/yegova-saas
+npm run build -w @yegova/api
+npm run build -w @yegova/web
 ```
 
 ---
 
-## 5. Start with PM2
+## 4. PM2
 
 ```bash
-# Start the NestJS API on port 4000
 pm2 start "npm run start:prod -w @yegova/api" --name yegova-api --cwd /home/dani/yegova-saas
-
-# Start the Next.js web on port 3001 (main site uses 3000)
 pm2 start "npm run start -w @yegova/web -- -p 3001" --name yegova-web --cwd /home/dani/yegova-saas
-
 pm2 save
-pm2 startup
 ```
 
 ---
 
-## 6. Nginx — subdomain setup
+## 5. Nginx (saas host)
 
-Add a new Nginx config for `billing.ebenezerdigital.com`:
-
-```nginx
-# /etc/nginx/sites-available/billing.ebenezerdigital.com
-server {
-    listen 80;
-    server_name billing.ebenezerdigital.com;
-
-    # Next.js web
-    location / {
-        proxy_pass http://localhost:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-    }
-
-    # NestJS API
-    location /api/ {
-        proxy_pass http://localhost:4000/api/;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-```
-
-Enable and get SSL:
+Update the `saas.ebenezerdigital.com` server block — see `nginx-info-store.conf` in this repo (path split for `/api/`, `/app`, `/login`, `/register` → 3001/4000; `/` → 3000).
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/billing.ebenezerdigital.com /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
-sudo certbot --nginx -d billing.ebenezerdigital.com
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
 ---
 
-## 7. DNS
+## 6. Main site env
 
-In your domain registrar (or Cloudflare), add an **A record**:
-
-| Name      | Type | Value          |
-|-----------|------|----------------|
-| billing   | A    | YOUR_VPS_IP    |
-
----
-
-## 8. Update main site env
-
-In `/home/dani/ebenezer-digital/.env.local`, add:
+**`/home/dani/ebenezer-digital/.env.local`**
 
 ```env
-NEXT_PUBLIC_BILLING_URL=https://billing.ebenezerdigital.com
+NEXT_PUBLIC_BILLING_URL=https://saas.ebenezerdigital.com
 ```
 
-Then restart:
+Remove any line still pointing at `canaantravelhub.com` in `.env.local` (build logs show it may still be there).
+
+Rebuild main site:
 
 ```bash
+cd /home/dani/ebenezer-digital
+npm ci && npm run build
 pm2 restart ebenezer-digital --update-env
 ```
 
 ---
 
-## Done
+## 7. Fix OOM crashes (5481 restarts)
 
-Your Yegova Billing app will be live at `https://billing.ebenezerdigital.com`.
-The `/saas` page on the main site now links to it automatically.
+PM2 logs show **JavaScript heap out of memory**, not Redis failure.
+
+```bash
+pm2 delete ebenezer-digital
+pm2 start npm --name ebenezer-digital --cwd /home/dani/ebenezer-digital \
+  --node-args="--max-old-space-size=768" -- start
+pm2 save
+```
+
+Or use `ecosystem.config.cjs` in this repo.
+
+---
+
+## Verify
+
+1. https://saas.ebenezerdigital.com — marketing landing  
+2. https://saas.ebenezerdigital.com/register — Yegova register (shop signup)  
+3. https://saas.ebenezerdigital.com/login — Yegova login  
+4. After login → https://saas.ebenezerdigital.com/app — dashboard with Invoice Studio  
+5. Old https://saas.ebenezerdigital.com/saas/login → redirects to `/login`
