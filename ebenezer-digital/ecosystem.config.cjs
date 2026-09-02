@@ -14,9 +14,9 @@ module.exports = {
     },
     {
       name: "yegova-api",
-      cwd: "/home/dani/yegova-saas",
-      script: "npm",
-      args: "run start:prod -w @yegova/api",
+      cwd: "/home/dani/yegova-saas/apps/api",
+      script: "node",
+      args: "dist/main.js",
       max_memory_restart: "512M",
     },
     {

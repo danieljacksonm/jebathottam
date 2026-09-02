@@ -36,7 +36,7 @@ npx prisma generate
 
 ```env
 PORT=4000
-DATABASE_URL="file:./prisma/dev.db"
+DATABASE_URL="file:./dev.db"
 JWT_SECRET=<long-random-string>
 FRONTEND_URL=https://saas.ebenezerdigital.com
 ```
