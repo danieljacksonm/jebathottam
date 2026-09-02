@@ -15,14 +15,15 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "seo" });
+  const seo = await getTranslations({ locale, namespace: "seo" });
+  const blog = await getTranslations({ locale, namespace: "blog" });
   return pageMetadata({
     locale,
     path: "/blog",
-    title: t("blogTitle"),
-    description: t("blogDescription"),
+    title: seo("blogTitle"),
+    description: seo("blogDescription"),
     image: KODAI_BLOG_IMAGE,
-    imageAlt: "Kodaikanal travel stories",
+    imageAlt: blog("listImageAlt"),
   });
 }
 
@@ -57,7 +58,7 @@ export default async function BlogPage({
         title={t("title")}
         subtitle={t("subtitle")}
         image={KODAI_BLOG_IMAGE}
-        imageAlt="Kodaikanal pine forest for travel stories"
+        imageAlt={t("heroImageAlt")}
         tone="forest"
       />
       <Breadcrumbs
@@ -67,7 +68,14 @@ export default async function BlogPage({
           { name: nav("blog") },
         ]}
       />
-      <BlogGrid posts={cards} />
+      <BlogGrid
+        posts={cards}
+        labels={{
+          intro: t("gridIntro"),
+          storiesCount: t("storiesCount", { count: posts.length }),
+          readMore: t("readMore"),
+        }}
+      />
     </PageAtmosphere>
   );
 }

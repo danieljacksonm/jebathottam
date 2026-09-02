@@ -204,7 +204,12 @@
     "title": "Kodaikanal notes & guides",
     "subtitle": "Fifty-plus stories from the Princess of the Hills — places, seasons, packing, and calm travel plans.",
     "read": "{count} min read",
-    "back": "Back to blog"
+    "back": "Back to blog",
+    "gridIntro": "Notes from the Princess of the Hills — one mist, one mountain mood, many ways to arrive.",
+    "storiesCount": "{count} stories",
+    "readMore": "Read",
+    "heroImageAlt": "Kodaikanal pine forest for travel stories",
+    "listImageAlt": "Kodaikanal travel stories"
   },
   "film": {
     "frameEyebrow": "In the film of your day",

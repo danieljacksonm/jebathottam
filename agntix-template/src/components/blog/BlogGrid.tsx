@@ -15,9 +15,21 @@ export type BlogCardItem = {
   image: string;
 };
 
+type BlogGridLabels = {
+  intro: string;
+  storiesCount: string;
+  readMore: string;
+};
+
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function BlogGrid({ posts }: { posts: BlogCardItem[] }) {
+export function BlogGrid({
+  posts,
+  labels,
+}: {
+  posts: BlogCardItem[];
+  labels: BlogGridLabels;
+}) {
   const reduce = useReducedMotion();
 
   return (
@@ -30,11 +42,10 @@ export function BlogGrid({ posts }: { posts: BlogCardItem[] }) {
         transition={{ duration: 0.7, ease }}
       >
         <p className="max-w-xl text-sm leading-relaxed text-soft-gray">
-          Notes from the Princess of the Hills — one mist, one mountain mood,
-          many ways to arrive.
+          {labels.intro}
         </p>
         <p className="text-[0.65rem] uppercase tracking-[0.16em] text-gold">
-          {posts.length} stories
+          {labels.storiesCount}
         </p>
       </motion.div>
 
@@ -86,7 +97,7 @@ export function BlogGrid({ posts }: { posts: BlogCardItem[] }) {
                   {post.excerpt}
                 </p>
                 <span className="mt-5 inline-flex items-center gap-2 text-xs uppercase tracking-[0.14em] text-gold">
-                  Read
+                  {labels.readMore}
                   <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
                     →
                   </span>
