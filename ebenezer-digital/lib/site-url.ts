@@ -58,8 +58,9 @@ export function languageAlternatesFor(path: string, origin?: string): Record<str
 }
 
 /** Article pages without translated content — en + x-default only. */
-export function articleLanguageAlternates(path: string): Record<string, string> {
-  const url = canonicalFor(path);
+export function articleLanguageAlternates(path: string, kind?: SiteKind): Record<string, string> {
+  const resolvedKind = kind ?? siteKindFromPath(path);
+  const url = publicUrlForInternalPath(path, resolvedKind);
   return { en: url, "x-default": url };
 }
 
@@ -195,27 +196,10 @@ export function ogImageForPath(path: string) {
   return OG_IMAGE;
 }
 
+/** Canonical public URL for an internal app path (matches sitemap `<loc>` and pretty URLs on dedicated hosts). */
 export function canonicalFor(path: string): string {
-  const origin = originForPath(path);
-  if (!path || path === "/") return origin;
-  // On dedicated hosts, prefer clean roots for section homes
-  if (path === "/ai" && origin === AI_URL) return AI_URL;
-  if (path === "/saas" && origin === SAAS_URL) return SAAS_URL;
-  if (path === "/discover" && origin === DISCOVER_URL) return DISCOVER_URL;
-  if (path === "/info" && origin === INFO_URL) return INFO_URL;
-  if (path === "/info/about" && origin === INFO_URL) return `${INFO_URL}/about`;
-  if (path === "/info/search" && origin === INFO_URL) return `${INFO_URL}/search`;
-  if (path === "/info/contact" && origin === INFO_URL) return `${INFO_URL}/contact`;
-  if (path === "/info/privacy" && origin === INFO_URL) return `${INFO_URL}/privacy`;
-  if (path === "/info/terms" && origin === INFO_URL) return `${INFO_URL}/terms`;
-  if (path === "/info/sitemap" && origin === INFO_URL) return `${INFO_URL}/sitemap`;
-  if (path === "/blog/news" && origin === NEWS_URL) return NEWS_URL;
-  if (path === "/blog" && origin === JOURNAL_URL) return JOURNAL_URL;
-  if (path === "/tools" && origin === TOOLS_URL) return TOOLS_URL;
-  if (path === "/products" && origin === STORE_URL) return STORE_URL;
-  if (path === "/catalog" && origin === PRODUCTS_URL) return PRODUCTS_URL;
-  if (path === "/network" && origin === NETWORK_URL) return NETWORK_URL;
-  return `${origin}${path.startsWith("/") ? path : `/${path}`}`;
+  const normalized = path && path !== "/" ? path : "/";
+  return publicUrlForInternalPath(normalized, siteKindFromPath(normalized));
 }
 
 export function publicUrlForInternalPath(internalPath: string, kind?: SiteKind): string {

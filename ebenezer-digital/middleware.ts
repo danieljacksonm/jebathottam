@@ -142,6 +142,10 @@ function legalSitemapRewrite(request: NextRequest, pathname: string): NextRespon
     url.pathname = "/site-sitemap";
     return NextResponse.rewrite(url);
   }
+  if (pathname === "/sitemap.html" || pathname === "/sitemap.html/") {
+    url.pathname = "/site-sitemap";
+    return NextResponse.rewrite(url);
+  }
   return null;
 }
 
@@ -209,7 +213,13 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     else if (rest === "/contact" || rest.startsWith("/contact/")) target = "/info/contact";
     else if (rest === "/privacy" || rest.startsWith("/privacy/")) target = "/site-legal/privacy";
     else if (rest === "/terms" || rest.startsWith("/terms/")) target = "/site-legal/terms";
-    else if (rest === "/sitemap" || rest.startsWith("/sitemap/")) target = "/site-sitemap";
+    else if (
+      rest === "/sitemap" ||
+      rest === "/sitemap.html" ||
+      rest.startsWith("/sitemap/")
+    ) {
+      target = "/site-sitemap";
+    }
   }
 
   const url = request.nextUrl.clone();
@@ -575,6 +585,8 @@ export const config = {
     "/site-legal",
     "/site-legal/:path*",
     "/site-sitemap",
+    "/sitemap",
+    "/sitemap.html",
     "/:locale",
     "/:locale/:path*",
   ],

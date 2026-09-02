@@ -18,6 +18,7 @@ import {
   NETWORK_URL,
   languageAlternatesForPath,
   articleLanguageAlternates,
+  originForKind,
   publicUrlForInternalPath,
   type SiteKind,
 } from "@/lib/site-url";
@@ -201,7 +202,7 @@ function articlePage(
     changeFrequency,
     priority,
     alternates: {
-      languages: articleLanguageAlternates(internalPath),
+      languages: articleLanguageAlternates(internalPath, kind),
     },
   };
 }
@@ -420,15 +421,26 @@ function networkSitemap(): MetadataRoute.Sitemap {
 }
 
 export async function sitemapForKind(kind: SiteKind): Promise<MetadataRoute.Sitemap> {
-  if (kind === "info") return infoSitemap();
-  if (kind === "journal") return journalSitemap();
-  if (kind === "news") return newsSitemap();
-  if (kind === "store") return storeSitemap();
-  if (kind === "products") return productsCatalogSitemap();
-  if (kind === "tools") return toolsSitemap();
-  if (kind === "ai") return aiSitemap();
-  if (kind === "saas") return saasSitemap();
-  if (kind === "discover") return discoverSitemap();
-  if (kind === "network") return networkSitemap();
-  return studioSitemap();
+  let pages: MetadataRoute.Sitemap;
+  if (kind === "info") pages = await infoSitemap();
+  else if (kind === "journal") pages = await journalSitemap();
+  else if (kind === "news") pages = await newsSitemap();
+  else if (kind === "store") pages = storeSitemap();
+  else if (kind === "products") pages = productsCatalogSitemap();
+  else if (kind === "tools") pages = toolsSitemap();
+  else if (kind === "ai") pages = await aiSitemap();
+  else if (kind === "saas") pages = await saasSitemap();
+  else if (kind === "discover") pages = await discoverSitemap();
+  else if (kind === "network") pages = networkSitemap();
+  else pages = await studioSitemap();
+
+  const origin = originForKind(kind);
+  pages.push({
+    url: `${origin}/sitemap.html`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.25,
+  });
+
+  return pages;
 }

@@ -13,6 +13,8 @@ const ROUTES = [
   "/privacy",
   "/terms",
   "/sitemap",
+  "/sitemap.html",
+  "/llms.txt",
   "/insights",
   "/saas",
   "/ai",

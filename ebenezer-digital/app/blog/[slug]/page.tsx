@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: canonicalFor(path),
-      languages: articleLanguageAlternates(path),
+      languages: articleLanguageAlternates(path, "journal"),
       types: {
         "application/rss+xml": [{ url: "/api/blog/rss", title: "Ebenezer Journal RSS" }],
       },

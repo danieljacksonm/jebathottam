@@ -6,7 +6,7 @@ import {
 } from "@/app/blog/news/data";
 import { fetchLiveNews, getLiveNewsBySlug } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
-import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
+import { originForKind, siteKindFromHost, NEWS_URL, publicUrlForInternalPath } from "@/lib/site-url";
 import {
   getArchivedNewsBySlug,
   listNewsForSitemap,
@@ -208,7 +208,7 @@ ${entries}
 
 export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string): string {
   const urls = items.slice(0, NEWS_SITEMAP_MAX_URLS).map((n) => {
-    const loc = `${siteOrigin}/blog/news/${n.slug}`;
+    const loc = publicUrlForInternalPath(`/blog/news/${n.slug}`, "news");
     const publicationDate = new Date(n.publishedAt).toISOString();
     return `<url>
   <loc>${escapeXml(loc)}</loc>

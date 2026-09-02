@@ -52,6 +52,7 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="theme-color" content="#10b981" />
         <meta httpEquiv="content-language" content={locale} />
+        <link rel="alternate" type="text/plain" href="/llms.txt" title="LLMs.txt" />
       </head>
       <body className="font-sans min-h-screen bg-[#070708] text-white antialiased overflow-x-hidden">
         <RootJsonLd />
