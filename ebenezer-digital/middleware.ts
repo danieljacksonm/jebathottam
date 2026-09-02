@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { CANONICAL_URLS, resolveEcosystemUrl } from "@/lib/ecosystem-urls";
 import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
-const AI_URL = (process.env.NEXT_PUBLIC_AI_URL || "https://ai.ebenezerdigital.com").replace(/\/$/, "");
-const SAAS_URL = (process.env.NEXT_PUBLIC_SAAS_URL || "https://saas.ebenezerdigital.com").replace(/\/$/, "");
-const DISCOVER_URL = (
-  process.env.NEXT_PUBLIC_DISCOVER_URL || "https://discover.ebenezerdigital.com"
-).replace(/\/$/, "");
-const NEWS_URL = (process.env.NEXT_PUBLIC_NEWS_URL || "https://news.ebenezerdigital.info").replace(/\/$/, "");
-const JOURNAL_URL = (
-  process.env.NEXT_PUBLIC_JOURNAL_URL || "https://journal.ebenezerdigital.info"
-).replace(/\/$/, "");
-const INFO_URL = (process.env.NEXT_PUBLIC_INFO_URL || "https://ebenezerdigital.info").replace(/\/$/, "");
-const STORE_URL = (process.env.NEXT_PUBLIC_STORE_URL || "https://ebenezerdigital.store").replace(/\/$/, "");
+function clean(url: string) {
+  return url.replace(/\/$/, "");
+}
+
+const AI_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_AI_URL, CANONICAL_URLS.ai));
+const SAAS_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_SAAS_URL, CANONICAL_URLS.saas));
+const DISCOVER_URL = clean(
+  resolveEcosystemUrl(process.env.NEXT_PUBLIC_DISCOVER_URL, CANONICAL_URLS.discover)
+);
+const NEWS_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_NEWS_URL, CANONICAL_URLS.news));
+const JOURNAL_URL = clean(
+  resolveEcosystemUrl(process.env.NEXT_PUBLIC_JOURNAL_URL, CANONICAL_URLS.journal)
+);
+const INFO_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_INFO_URL, CANONICAL_URLS.info));
+const STORE_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_STORE_URL, CANONICAL_URLS.store));
 
 const LOCALES = new Set<string>(SEO_LOCALES);
 

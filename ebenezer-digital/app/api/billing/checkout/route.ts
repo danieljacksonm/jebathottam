@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { SITE_URL } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL || "https://ebenezerdigital.com";
+  const origin = SITE_URL;
   const ret = successUrl || `${origin}/products/success`;
   const cancel = cancelUrl || `${origin}/products/checkout`;
 
