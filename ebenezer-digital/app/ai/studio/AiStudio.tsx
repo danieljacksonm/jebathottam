@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, Share2 } from "lucide-react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { resolveAiMode, MODEL_BRAND, type AiMode } from "@/lib/ai";
 import { AiCore } from "./AiCore";
 import { AiComposer } from "./AiComposer";
@@ -485,6 +486,7 @@ export function AiStudio() {
             </button>
             {health.status === "ready" ? <small>Online</small> : <small>Limited</small>}
           </div>
+          <LanguageSwitcher compact />
           <button type="button" className="ai-icon" aria-label="Share" data-cursor="OPEN">
             <Share2 className="h-4 w-4" />
           </button>

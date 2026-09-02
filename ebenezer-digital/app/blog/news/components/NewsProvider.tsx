@@ -19,13 +19,21 @@ type NewsContextValue = {
 
 const NewsContext = createContext<NewsContextValue | null>(null);
 
-export function NewsProvider({ children }: { children: ReactNode }) {
-  const [articles, setArticles] = useState<NewsArticle[]>([]);
-  const [loading, setLoading] = useState(true);
+export function NewsProvider({
+  children,
+  initialArticles = [],
+  initialUpdatedAt = "",
+}: {
+  children: ReactNode;
+  initialArticles?: NewsArticle[];
+  initialUpdatedAt?: string;
+}) {
+  const [articles, setArticles] = useState<NewsArticle[]>(initialArticles);
+  const [loading, setLoading] = useState(initialArticles.length === 0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState<NewsNavId | "ALL">("ALL");
-  const [updatedAt, setUpdatedAt] = useState<string>("");
+  const [updatedAt, setUpdatedAt] = useState<string>(initialUpdatedAt);
 
   useEffect(() => {
     let alive = true;
@@ -77,7 +85,7 @@ export function NewsProvider({ children }: { children: ReactNode }) {
         });
     };
 
-    load(!hasWarmCache);
+    load(initialArticles.length === 0);
     const timer = window.setInterval(() => load(false), 5 * 60 * 1000);
     return () => {
       alive = false;

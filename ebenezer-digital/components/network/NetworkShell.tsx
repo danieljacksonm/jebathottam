@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { AI_URL, JOURNAL_URL, PRODUCTS_URL, SITE_URL, STORE_URL, TOOLS_URL } from "@/lib/site-url";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { trackNetworkEvent } from "@/lib/network/analytics";
 import { PUBLIC_CATEGORIES } from "@/lib/network/paths";
 import { CATEGORY_LABELS } from "@/lib/network/types";
@@ -114,6 +115,7 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
             <Link href="/network/tools" className="nx-btn nx-btn-primary !py-2 !px-3 !text-sm">
               Explore Tools
             </Link>
+            <LanguageSwitcher compact />
             <button
               type="button"
               className="nx-btn nx-btn-ghost !py-2 !px-2"

@@ -81,5 +81,31 @@ check("STUDIO_HOME_URL is canonical", read("lib/site-nav.ts").includes("STUDIO_H
 check("llms.txt route", fileExists("app/llms.txt/route.ts"));
 check("Brand tokens shared config", fileExists("lib/brand-tokens.ts"));
 
+const langTargets = [
+  "app/blog/components/JournalNav.tsx",
+  "app/blog/news/components/NewsNav.tsx",
+  "app/tools/ToolsHeader.tsx",
+  "app/catalog/components/CatalogNav.tsx",
+  "components/network/NetworkShell.tsx",
+  "app/saas/SaasHeader.tsx",
+  "app/components/Header.tsx",
+  "app/ai/studio/AiStudio.tsx",
+  "components/info/InfoShell.tsx",
+  "app/discover/DiscoverClient.tsx",
+];
+for (const f of langTargets) {
+  check(`LanguageSwitcher in ${f}`, read(f).includes("LanguageSwitcher"));
+}
+
+check("News SSR initialArticles", read("app/blog/news/layout.tsx").includes("initialArticles"));
+check("Article sitemap hreflang helper", read("lib/site-sitemaps.ts").includes("articleLanguageAlternates"));
+check("audit-all.mjs valid JS", !read("scripts/audit-all.mjs").includes("function run(script:"));
+
+const topicsPath = path.join(root, "data/content/topics.json");
+if (fileExists("data/content/topics.json")) {
+  const topics = JSON.parse(read("data/content/topics.json"));
+  check("Content topics seeded (>=300)", topics.length >= 300);
+}
+
 console.log(failed ? `\n${failed} check(s) failed.` : "\nAll quality checks passed.");
 process.exit(failed ? 1 : 0);

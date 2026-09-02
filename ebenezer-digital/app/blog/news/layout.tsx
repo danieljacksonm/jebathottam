@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { NewsChrome } from "./components/NewsChrome";
 import { JOURNAL_URL, NEWS_URL, pageMetadata } from "@/lib/site-url";
+import { listPublicNews } from "@/lib/news-service";
+
+export const revalidate = 300;
 
 const base = pageMetadata({
   title: "Ebenezer News | What is happening now",
@@ -24,7 +27,15 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NewsLayout({ children }: { children: ReactNode }) {
+export default async function NewsLayout({ children }: { children: ReactNode }) {
+  let initialArticles: Awaited<ReturnType<typeof listPublicNews>> = [];
+  try {
+    initialArticles = await listPublicNews();
+  } catch {
+    /* wire can fail — client will retry */
+  }
+  const initialUpdatedAt = new Date().toISOString();
+
   const newsOrg = {
     "@context": "https://schema.org",
     "@type": "NewsMediaOrganization",
@@ -45,7 +56,12 @@ export default function NewsLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(newsOrg) }} />
-      <NewsChrome>{children}</NewsChrome>
+      <NewsChrome
+        initialArticles={initialArticles.slice(0, 200)}
+        initialUpdatedAt={initialUpdatedAt}
+      >
+        {children}
+      </NewsChrome>
     </>
   );
 }

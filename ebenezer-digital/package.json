@@ -14,7 +14,8 @@
     "audit:quality": "node scripts/audit-quality.mjs",
     "build:store-kits": "node scripts/build-store-pdfs.mjs && node scripts/build-store-zips.mjs && node scripts/build-website-templates.mjs && npx tsx scripts/sync-store-products.mjs",
     "sync:store-products": "npx tsx scripts/sync-store-products.mjs",
-    "generate:content": "npx tsx scripts/generate-content.mjs"
+    "generate:content": "npx tsx scripts/generate-content.mjs",
+    "seed:topics": "node scripts/seed-content-topics.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.3.0",

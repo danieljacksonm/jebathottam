@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { SITE_NAV } from "@/lib/site-nav";
 import { SAAS_URL } from "@/lib/site-url";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const SAAS_LOGIN = "/saas/login";
 
@@ -22,6 +23,7 @@ export function SaasHeader() {
           </span>
         </Link>
         <nav className="saas-top-nav saas-top-nav-desktop" aria-label="SaaS links">
+          <LanguageSwitcher compact />
           <Link href={SITE_NAV.store}>Store</Link>
           <Link href={SITE_NAV.journal}>Journal</Link>
           <Link href={SAAS_LOGIN}>Sign in</Link>

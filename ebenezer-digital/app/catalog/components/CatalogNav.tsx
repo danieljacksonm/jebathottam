@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { SITE_NAV } from "@/lib/site-nav";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 export function CatalogNav() {
   const pathname = usePathname();
@@ -42,6 +43,7 @@ export function CatalogNav() {
           ))}
         </nav>
         <div className="flex items-center gap-2 text-sm">
+          <LanguageSwitcher compact variant="light" />
           <Link href={SITE_NAV.tools} className="hidden text-[var(--c-muted)] hover:text-[var(--c-brand)] sm:inline">
             Tools
           </Link>

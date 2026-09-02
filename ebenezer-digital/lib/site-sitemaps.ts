@@ -17,6 +17,7 @@ import {
   TOOLS_URL,
   NETWORK_URL,
   languageAlternatesForPath,
+  articleLanguageAlternates,
   publicUrlForInternalPath,
   type SiteKind,
 } from "@/lib/site-url";
@@ -186,6 +187,25 @@ async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
   return pages;
 }
 
+function articlePage(
+  origin: string,
+  internalPath: string,
+  kind: SiteKind,
+  changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"],
+  priority: number,
+  lastModified?: Date
+): MetadataRoute.Sitemap[number] {
+  return {
+    url: publicUrlForInternalPath(internalPath, kind),
+    lastModified: lastModified || new Date(),
+    changeFrequency,
+    priority,
+    alternates: {
+      languages: articleLanguageAlternates(internalPath),
+    },
+  };
+}
+
 async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
     page(JOURNAL_URL, "", "hourly", 1, undefined, true),
@@ -201,15 +221,13 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
       if (seen.has(p.slug)) continue;
       seen.add(p.slug);
       pages.push(
-        page(
+        articlePage(
           JOURNAL_URL,
           `/blog/${p.slug}`,
+          "journal",
           "weekly",
           0.7,
-          p.updatedAt || p.publishedAt || new Date(),
-          false,
-          "journal",
-          `/blog/${p.slug}`
+          p.updatedAt || p.publishedAt || new Date()
         )
       );
     }
@@ -221,7 +239,7 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
     if (seen.has(p.slug)) continue;
     seen.add(p.slug);
     pages.push(
-      page(JOURNAL_URL, `/blog/${p.slug}`, "weekly", 0.75, new Date(p.publishedAt), false, "journal", `/blog/${p.slug}`)
+      articlePage(JOURNAL_URL, `/blog/${p.slug}`, "journal", "weekly", 0.75, new Date(p.publishedAt))
     );
   }
 
@@ -246,15 +264,13 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
     const news = await listPublicNewsForSitemap();
     for (const n of news) {
       pages.push(
-        page(
+        articlePage(
           NEWS_URL,
           `/blog/news/${n.slug}`,
+          "news",
           "hourly",
           0.8,
-          new Date(n.publishedAt),
-          false,
-          "news",
-          `/blog/news/${n.slug}`
+          new Date(n.publishedAt)
         )
       );
     }

@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagneticLink } from "../studio/MagneticLink";
 import { SITE_NAV } from "@/lib/site-nav";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const navLinks = [
   { label: "Services", href: "/services" },
@@ -152,6 +153,7 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageSwitcher compact />
           <MagneticLink href="/contact" className="studio-btn hidden sm:inline-flex" cursor="START">
             Let&apos;s talk
           </MagneticLink>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { DISCOVER_URL } from "@/lib/site-url";
 import { SITE_NAV } from "@/lib/site-nav";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const NAV = [
   { href: "/tools/compare", label: "Compare" },
@@ -38,15 +39,18 @@ export function ToolsHeader() {
             ),
           )}
         </nav>
-        <button
-          type="button"
-          className="tools-menu-btn md:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher compact variant="light" />
+          <button
+            type="button"
+            className="tools-menu-btn md:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
       {open && (
         <nav className="tools-nav-mobile border-t border-[var(--aff-line)] bg-white px-4 py-3 md:hidden">

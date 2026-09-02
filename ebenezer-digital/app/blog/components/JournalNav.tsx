@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { JournalLanguage } from "./JournalLanguage";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SITE_NAV, journalCategoryHref } from "@/lib/site-nav";
 
 export function JournalNav({
@@ -93,7 +93,7 @@ export function JournalNav({
           </nav>
 
           <div className="flex items-center gap-2">
-            <JournalLanguage />
+            <LanguageSwitcher compact />
             <button
               type="button"
               aria-label="Search"

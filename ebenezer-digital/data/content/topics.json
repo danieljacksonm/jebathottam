@@ -1,8 +1,4202 @@
 [
-  {"id":"ins-001","surface":"studio-insights","title":"How to choose a web development partner","slug":"choose-web-development-partner","category":"Web Development","tier":"pillar","keywords":["web dev","agency"],"wordTarget":2200},
-  {"id":"ins-002","surface":"studio-insights","title":"E-commerce checkout optimization basics","slug":"ecommerce-checkout-optimization","category":"E-commerce","tier":"standard","keywords":["checkout","conversion"],"wordTarget":1200},
-  {"id":"ins-003","surface":"studio-insights","title":"Business automation without breaking workflows","slug":"business-automation-workflows","category":"Automation","tier":"standard","keywords":["automation","ops"],"wordTarget":1100},
-  {"id":"tg-001","surface":"tools-guides","title":"Best CRM for small businesses in 2026","slug":"best-crm-small-business-2026","category":"CRM","tier":"pillar","keywords":["crm","saas"],"wordTarget":2000},
-  {"id":"ng-001","surface":"network-guides","title":"Free SEO tools for keyword research","slug":"free-seo-keyword-research-tools","category":"SEO","tier":"standard","keywords":["seo","keywords"],"wordTarget":1000},
-  {"id":"ig-001","surface":"info-guides","title":"What is the Ebenezer Digital ecosystem?","slug":"what-is-ebenezer-ecosystem","category":"Guides","tier":"standard","keywords":["ecosystem"],"wordTarget":900}
+  {
+    "id": "ins-001",
+    "surface": "studio-insights",
+    "title": "How to choose a web development partner",
+    "slug": "how-to-choose-a-web-development-partner",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-002",
+    "surface": "studio-insights",
+    "title": "E-commerce checkout optimization basics",
+    "slug": "e-commerce-checkout-optimization-basics",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "e",
+      "commerce",
+      "checkout"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-003",
+    "surface": "studio-insights",
+    "title": "Business automation without breaking workflows",
+    "slug": "business-automation-without-breaking-workflows",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "automation",
+      "without"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-004",
+    "surface": "studio-insights",
+    "title": "When to hire a virtual assistant",
+    "slug": "when-to-hire-a-virtual-assistant",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "when",
+      "to",
+      "hire"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-005",
+    "surface": "studio-insights",
+    "title": "Travel website features that convert enquiries",
+    "slug": "travel-website-features-that-convert-enquiries",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "travel",
+      "website",
+      "features"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-006",
+    "surface": "studio-insights",
+    "title": "Small business website cost in India",
+    "slug": "small-business-website-cost-in-india",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "small",
+      "business",
+      "website"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-007",
+    "surface": "studio-insights",
+    "title": "How to brief a web designer",
+    "slug": "how-to-brief-a-web-designer",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "brief"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-008",
+    "surface": "studio-insights",
+    "title": "GST billing software for shops",
+    "slug": "gst-billing-software-for-shops",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "gst",
+      "billing",
+      "software"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-009",
+    "surface": "studio-insights",
+    "title": "WhatsApp automation for customer support",
+    "slug": "whatsapp-automation-for-customer-support",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "whatsapp",
+      "automation",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-010",
+    "surface": "studio-insights",
+    "title": "Local SEO checklist for service businesses",
+    "slug": "local-seo-checklist-for-service-businesses",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "local",
+      "seo",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-011",
+    "surface": "studio-insights",
+    "title": "How to choose a web development partner (2025)",
+    "slug": "how-to-choose-a-web-development-partner-11",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-012",
+    "surface": "studio-insights",
+    "title": "E-commerce checkout optimization basics (2026)",
+    "slug": "e-commerce-checkout-optimization-basics-12",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "e",
+      "commerce",
+      "checkout"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-013",
+    "surface": "studio-insights",
+    "title": "Business automation without breaking workflows (2024)",
+    "slug": "business-automation-without-breaking-workflows-13",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "automation",
+      "without"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-014",
+    "surface": "studio-insights",
+    "title": "When to hire a virtual assistant (2025)",
+    "slug": "when-to-hire-a-virtual-assistant-14",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "when",
+      "to",
+      "hire"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-015",
+    "surface": "studio-insights",
+    "title": "Travel website features that convert enquiries (2026)",
+    "slug": "travel-website-features-that-convert-enquiries-15",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "travel",
+      "website",
+      "features"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-016",
+    "surface": "studio-insights",
+    "title": "Small business website cost in India (2024)",
+    "slug": "small-business-website-cost-in-india-16",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "small",
+      "business",
+      "website"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-017",
+    "surface": "studio-insights",
+    "title": "How to brief a web designer (2025)",
+    "slug": "how-to-brief-a-web-designer-17",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "brief"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-018",
+    "surface": "studio-insights",
+    "title": "GST billing software for shops (2026)",
+    "slug": "gst-billing-software-for-shops-18",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "gst",
+      "billing",
+      "software"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-019",
+    "surface": "studio-insights",
+    "title": "WhatsApp automation for customer support (2024)",
+    "slug": "whatsapp-automation-for-customer-support-19",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "whatsapp",
+      "automation",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-020",
+    "surface": "studio-insights",
+    "title": "Local SEO checklist for service businesses (2025)",
+    "slug": "local-seo-checklist-for-service-businesses-20",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "local",
+      "seo",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-021",
+    "surface": "studio-insights",
+    "title": "How to choose a web development partner (2026)",
+    "slug": "how-to-choose-a-web-development-partner-21",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-022",
+    "surface": "studio-insights",
+    "title": "E-commerce checkout optimization basics (2024)",
+    "slug": "e-commerce-checkout-optimization-basics-22",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "e",
+      "commerce",
+      "checkout"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-023",
+    "surface": "studio-insights",
+    "title": "Business automation without breaking workflows (2025)",
+    "slug": "business-automation-without-breaking-workflows-23",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "automation",
+      "without"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-024",
+    "surface": "studio-insights",
+    "title": "When to hire a virtual assistant (2026)",
+    "slug": "when-to-hire-a-virtual-assistant-24",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "when",
+      "to",
+      "hire"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-025",
+    "surface": "studio-insights",
+    "title": "Travel website features that convert enquiries (2024)",
+    "slug": "travel-website-features-that-convert-enquiries-25",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "travel",
+      "website",
+      "features"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-026",
+    "surface": "studio-insights",
+    "title": "Small business website cost in India (2025)",
+    "slug": "small-business-website-cost-in-india-26",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "small",
+      "business",
+      "website"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-027",
+    "surface": "studio-insights",
+    "title": "How to brief a web designer (2026)",
+    "slug": "how-to-brief-a-web-designer-27",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "brief"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-028",
+    "surface": "studio-insights",
+    "title": "GST billing software for shops (2024)",
+    "slug": "gst-billing-software-for-shops-28",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "gst",
+      "billing",
+      "software"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-029",
+    "surface": "studio-insights",
+    "title": "WhatsApp automation for customer support (2025)",
+    "slug": "whatsapp-automation-for-customer-support-29",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "whatsapp",
+      "automation",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-030",
+    "surface": "studio-insights",
+    "title": "Local SEO checklist for service businesses (2026)",
+    "slug": "local-seo-checklist-for-service-businesses-30",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "local",
+      "seo",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-031",
+    "surface": "studio-insights",
+    "title": "How to choose a web development partner (2024)",
+    "slug": "how-to-choose-a-web-development-partner-31",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-032",
+    "surface": "studio-insights",
+    "title": "E-commerce checkout optimization basics (2025)",
+    "slug": "e-commerce-checkout-optimization-basics-32",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "e",
+      "commerce",
+      "checkout"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-033",
+    "surface": "studio-insights",
+    "title": "Business automation without breaking workflows (2026)",
+    "slug": "business-automation-without-breaking-workflows-33",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "automation",
+      "without"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-034",
+    "surface": "studio-insights",
+    "title": "When to hire a virtual assistant (2024)",
+    "slug": "when-to-hire-a-virtual-assistant-34",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "when",
+      "to",
+      "hire"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-035",
+    "surface": "studio-insights",
+    "title": "Travel website features that convert enquiries (2025)",
+    "slug": "travel-website-features-that-convert-enquiries-35",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "travel",
+      "website",
+      "features"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-036",
+    "surface": "studio-insights",
+    "title": "Small business website cost in India (2026)",
+    "slug": "small-business-website-cost-in-india-36",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "small",
+      "business",
+      "website"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-037",
+    "surface": "studio-insights",
+    "title": "How to brief a web designer (2024)",
+    "slug": "how-to-brief-a-web-designer-37",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "brief"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-038",
+    "surface": "studio-insights",
+    "title": "GST billing software for shops (2025)",
+    "slug": "gst-billing-software-for-shops-38",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "gst",
+      "billing",
+      "software"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-039",
+    "surface": "studio-insights",
+    "title": "WhatsApp automation for customer support (2026)",
+    "slug": "whatsapp-automation-for-customer-support-39",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "whatsapp",
+      "automation",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-040",
+    "surface": "studio-insights",
+    "title": "Local SEO checklist for service businesses (2024)",
+    "slug": "local-seo-checklist-for-service-businesses-40",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "local",
+      "seo",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-041",
+    "surface": "studio-insights",
+    "title": "How to choose a web development partner (2025)",
+    "slug": "how-to-choose-a-web-development-partner-41",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-042",
+    "surface": "studio-insights",
+    "title": "E-commerce checkout optimization basics (2026)",
+    "slug": "e-commerce-checkout-optimization-basics-42",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "e",
+      "commerce",
+      "checkout"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-043",
+    "surface": "studio-insights",
+    "title": "Business automation without breaking workflows (2024)",
+    "slug": "business-automation-without-breaking-workflows-43",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "automation",
+      "without"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-044",
+    "surface": "studio-insights",
+    "title": "When to hire a virtual assistant (2025)",
+    "slug": "when-to-hire-a-virtual-assistant-44",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "when",
+      "to",
+      "hire"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-045",
+    "surface": "studio-insights",
+    "title": "Travel website features that convert enquiries (2026)",
+    "slug": "travel-website-features-that-convert-enquiries-45",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "travel",
+      "website",
+      "features"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-046",
+    "surface": "studio-insights",
+    "title": "Small business website cost in India (2024)",
+    "slug": "small-business-website-cost-in-india-46",
+    "category": "Digital Business",
+    "tier": "pillar",
+    "keywords": [
+      "small",
+      "business",
+      "website"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ins-047",
+    "surface": "studio-insights",
+    "title": "How to brief a web designer (2025)",
+    "slug": "how-to-brief-a-web-designer-47",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "brief"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-048",
+    "surface": "studio-insights",
+    "title": "GST billing software for shops (2026)",
+    "slug": "gst-billing-software-for-shops-48",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "gst",
+      "billing",
+      "software"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-049",
+    "surface": "studio-insights",
+    "title": "WhatsApp automation for customer support (2024)",
+    "slug": "whatsapp-automation-for-customer-support-49",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "whatsapp",
+      "automation",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ins-050",
+    "surface": "studio-insights",
+    "title": "Local SEO checklist for service businesses (2025)",
+    "slug": "local-seo-checklist-for-service-businesses-50",
+    "category": "Digital Business",
+    "tier": "standard",
+    "keywords": [
+      "local",
+      "seo",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-001",
+    "surface": "tools-guides",
+    "title": "Best CRM for small businesses",
+    "slug": "best-crm-for-small-businesses",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "best",
+      "crm",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-002",
+    "surface": "tools-guides",
+    "title": "Notion vs Trello for teams",
+    "slug": "notion-vs-trello-for-teams",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "notion",
+      "vs",
+      "trello"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-003",
+    "surface": "tools-guides",
+    "title": "Free invoicing tools compared",
+    "slug": "free-invoicing-tools-compared",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "free",
+      "invoicing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-004",
+    "surface": "tools-guides",
+    "title": "AI writing tools for marketing",
+    "slug": "ai-writing-tools-for-marketing",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "ai",
+      "writing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-005",
+    "surface": "tools-guides",
+    "title": "Project management for freelancers",
+    "slug": "project-management-for-freelancers",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "project",
+      "management",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-006",
+    "surface": "tools-guides",
+    "title": "Email marketing for startups",
+    "slug": "email-marketing-for-startups",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "email",
+      "marketing",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-007",
+    "surface": "tools-guides",
+    "title": "Accounting software for traders",
+    "slug": "accounting-software-for-traders",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "accounting",
+      "software",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-008",
+    "surface": "tools-guides",
+    "title": "Help desk tools under $20",
+    "slug": "help-desk-tools-under-20",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "help",
+      "desk",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-009",
+    "surface": "tools-guides",
+    "title": "Video editing tools for creators",
+    "slug": "video-editing-tools-for-creators",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "video",
+      "editing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-010",
+    "surface": "tools-guides",
+    "title": "Password managers for teams",
+    "slug": "password-managers-for-teams",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "password",
+      "managers",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-011",
+    "surface": "tools-guides",
+    "title": "Best CRM for small businesses (2025)",
+    "slug": "best-crm-for-small-businesses-11",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "best",
+      "crm",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-012",
+    "surface": "tools-guides",
+    "title": "Notion vs Trello for teams (2026)",
+    "slug": "notion-vs-trello-for-teams-12",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "notion",
+      "vs",
+      "trello"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-013",
+    "surface": "tools-guides",
+    "title": "Free invoicing tools compared (2024)",
+    "slug": "free-invoicing-tools-compared-13",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "free",
+      "invoicing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-014",
+    "surface": "tools-guides",
+    "title": "AI writing tools for marketing (2025)",
+    "slug": "ai-writing-tools-for-marketing-14",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "ai",
+      "writing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-015",
+    "surface": "tools-guides",
+    "title": "Project management for freelancers (2026)",
+    "slug": "project-management-for-freelancers-15",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "project",
+      "management",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-016",
+    "surface": "tools-guides",
+    "title": "Email marketing for startups (2024)",
+    "slug": "email-marketing-for-startups-16",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "email",
+      "marketing",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-017",
+    "surface": "tools-guides",
+    "title": "Accounting software for traders (2025)",
+    "slug": "accounting-software-for-traders-17",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "accounting",
+      "software",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-018",
+    "surface": "tools-guides",
+    "title": "Help desk tools under $20 (2026)",
+    "slug": "help-desk-tools-under-20-18",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "help",
+      "desk",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-019",
+    "surface": "tools-guides",
+    "title": "Video editing tools for creators (2024)",
+    "slug": "video-editing-tools-for-creators-19",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "video",
+      "editing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-020",
+    "surface": "tools-guides",
+    "title": "Password managers for teams (2025)",
+    "slug": "password-managers-for-teams-20",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "password",
+      "managers",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-021",
+    "surface": "tools-guides",
+    "title": "Best CRM for small businesses (2026)",
+    "slug": "best-crm-for-small-businesses-21",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "best",
+      "crm",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-022",
+    "surface": "tools-guides",
+    "title": "Notion vs Trello for teams (2024)",
+    "slug": "notion-vs-trello-for-teams-22",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "notion",
+      "vs",
+      "trello"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-023",
+    "surface": "tools-guides",
+    "title": "Free invoicing tools compared (2025)",
+    "slug": "free-invoicing-tools-compared-23",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "free",
+      "invoicing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-024",
+    "surface": "tools-guides",
+    "title": "AI writing tools for marketing (2026)",
+    "slug": "ai-writing-tools-for-marketing-24",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "ai",
+      "writing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-025",
+    "surface": "tools-guides",
+    "title": "Project management for freelancers (2024)",
+    "slug": "project-management-for-freelancers-25",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "project",
+      "management",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-026",
+    "surface": "tools-guides",
+    "title": "Email marketing for startups (2025)",
+    "slug": "email-marketing-for-startups-26",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "email",
+      "marketing",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-027",
+    "surface": "tools-guides",
+    "title": "Accounting software for traders (2026)",
+    "slug": "accounting-software-for-traders-27",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "accounting",
+      "software",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-028",
+    "surface": "tools-guides",
+    "title": "Help desk tools under $20 (2024)",
+    "slug": "help-desk-tools-under-20-28",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "help",
+      "desk",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-029",
+    "surface": "tools-guides",
+    "title": "Video editing tools for creators (2025)",
+    "slug": "video-editing-tools-for-creators-29",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "video",
+      "editing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-030",
+    "surface": "tools-guides",
+    "title": "Password managers for teams (2026)",
+    "slug": "password-managers-for-teams-30",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "password",
+      "managers",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-031",
+    "surface": "tools-guides",
+    "title": "Best CRM for small businesses (2024)",
+    "slug": "best-crm-for-small-businesses-31",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "best",
+      "crm",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-032",
+    "surface": "tools-guides",
+    "title": "Notion vs Trello for teams (2025)",
+    "slug": "notion-vs-trello-for-teams-32",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "notion",
+      "vs",
+      "trello"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-033",
+    "surface": "tools-guides",
+    "title": "Free invoicing tools compared (2026)",
+    "slug": "free-invoicing-tools-compared-33",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "free",
+      "invoicing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-034",
+    "surface": "tools-guides",
+    "title": "AI writing tools for marketing (2024)",
+    "slug": "ai-writing-tools-for-marketing-34",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "ai",
+      "writing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-035",
+    "surface": "tools-guides",
+    "title": "Project management for freelancers (2025)",
+    "slug": "project-management-for-freelancers-35",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "project",
+      "management",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-036",
+    "surface": "tools-guides",
+    "title": "Email marketing for startups (2026)",
+    "slug": "email-marketing-for-startups-36",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "email",
+      "marketing",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-037",
+    "surface": "tools-guides",
+    "title": "Accounting software for traders (2024)",
+    "slug": "accounting-software-for-traders-37",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "accounting",
+      "software",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-038",
+    "surface": "tools-guides",
+    "title": "Help desk tools under $20 (2025)",
+    "slug": "help-desk-tools-under-20-38",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "help",
+      "desk",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-039",
+    "surface": "tools-guides",
+    "title": "Video editing tools for creators (2026)",
+    "slug": "video-editing-tools-for-creators-39",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "video",
+      "editing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-040",
+    "surface": "tools-guides",
+    "title": "Password managers for teams (2024)",
+    "slug": "password-managers-for-teams-40",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "password",
+      "managers",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-041",
+    "surface": "tools-guides",
+    "title": "Best CRM for small businesses (2025)",
+    "slug": "best-crm-for-small-businesses-41",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "best",
+      "crm",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-042",
+    "surface": "tools-guides",
+    "title": "Notion vs Trello for teams (2026)",
+    "slug": "notion-vs-trello-for-teams-42",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "notion",
+      "vs",
+      "trello"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-043",
+    "surface": "tools-guides",
+    "title": "Free invoicing tools compared (2024)",
+    "slug": "free-invoicing-tools-compared-43",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "free",
+      "invoicing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-044",
+    "surface": "tools-guides",
+    "title": "AI writing tools for marketing (2025)",
+    "slug": "ai-writing-tools-for-marketing-44",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "ai",
+      "writing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-045",
+    "surface": "tools-guides",
+    "title": "Project management for freelancers (2026)",
+    "slug": "project-management-for-freelancers-45",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "project",
+      "management",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-046",
+    "surface": "tools-guides",
+    "title": "Email marketing for startups (2024)",
+    "slug": "email-marketing-for-startups-46",
+    "category": "Software",
+    "tier": "pillar",
+    "keywords": [
+      "email",
+      "marketing",
+      "for"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "tg-047",
+    "surface": "tools-guides",
+    "title": "Accounting software for traders (2025)",
+    "slug": "accounting-software-for-traders-47",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "accounting",
+      "software",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-048",
+    "surface": "tools-guides",
+    "title": "Help desk tools under $20 (2026)",
+    "slug": "help-desk-tools-under-20-48",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "help",
+      "desk",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-049",
+    "surface": "tools-guides",
+    "title": "Video editing tools for creators (2024)",
+    "slug": "video-editing-tools-for-creators-49",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "video",
+      "editing",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "tg-050",
+    "surface": "tools-guides",
+    "title": "Password managers for teams (2025)",
+    "slug": "password-managers-for-teams-50",
+    "category": "Software",
+    "tier": "standard",
+    "keywords": [
+      "password",
+      "managers",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-001",
+    "surface": "network-guides",
+    "title": "Free SEO tools for keyword research",
+    "slug": "free-seo-tools-for-keyword-research",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "free",
+      "seo",
+      "tools"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-002",
+    "surface": "network-guides",
+    "title": "How to check page speed",
+    "slug": "how-to-check-page-speed",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "check"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-003",
+    "surface": "network-guides",
+    "title": "Meta title length best practices",
+    "slug": "meta-title-length-best-practices",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "meta",
+      "title",
+      "length"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-004",
+    "surface": "network-guides",
+    "title": "Schema markup for local business",
+    "slug": "schema-markup-for-local-business",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "schema",
+      "markup",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-005",
+    "surface": "network-guides",
+    "title": "Internal linking for blogs",
+    "slug": "internal-linking-for-blogs",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "internal",
+      "linking",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-006",
+    "surface": "network-guides",
+    "title": "Robots.txt basics",
+    "slug": "robots-txt-basics",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "robots",
+      "txt",
+      "basics"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-007",
+    "surface": "network-guides",
+    "title": "Canonical URL mistakes",
+    "slug": "canonical-url-mistakes",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "canonical",
+      "url",
+      "mistakes"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-008",
+    "surface": "network-guides",
+    "title": "Image alt text for SEO",
+    "slug": "image-alt-text-for-seo",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "image",
+      "alt",
+      "text"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-009",
+    "surface": "network-guides",
+    "title": "Core Web Vitals explained",
+    "slug": "core-web-vitals-explained",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "core",
+      "web",
+      "vitals"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-010",
+    "surface": "network-guides",
+    "title": "Sitemap submission checklist",
+    "slug": "sitemap-submission-checklist",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "sitemap",
+      "submission",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-011",
+    "surface": "network-guides",
+    "title": "Free SEO tools for keyword research (2025)",
+    "slug": "free-seo-tools-for-keyword-research-11",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "free",
+      "seo",
+      "tools"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-012",
+    "surface": "network-guides",
+    "title": "How to check page speed (2026)",
+    "slug": "how-to-check-page-speed-12",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "check"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-013",
+    "surface": "network-guides",
+    "title": "Meta title length best practices (2024)",
+    "slug": "meta-title-length-best-practices-13",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "meta",
+      "title",
+      "length"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-014",
+    "surface": "network-guides",
+    "title": "Schema markup for local business (2025)",
+    "slug": "schema-markup-for-local-business-14",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "schema",
+      "markup",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-015",
+    "surface": "network-guides",
+    "title": "Internal linking for blogs (2026)",
+    "slug": "internal-linking-for-blogs-15",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "internal",
+      "linking",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-016",
+    "surface": "network-guides",
+    "title": "Robots.txt basics (2024)",
+    "slug": "robots-txt-basics-16",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "robots",
+      "txt",
+      "basics"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-017",
+    "surface": "network-guides",
+    "title": "Canonical URL mistakes (2025)",
+    "slug": "canonical-url-mistakes-17",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "canonical",
+      "url",
+      "mistakes"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-018",
+    "surface": "network-guides",
+    "title": "Image alt text for SEO (2026)",
+    "slug": "image-alt-text-for-seo-18",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "image",
+      "alt",
+      "text"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-019",
+    "surface": "network-guides",
+    "title": "Core Web Vitals explained (2024)",
+    "slug": "core-web-vitals-explained-19",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "core",
+      "web",
+      "vitals"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-020",
+    "surface": "network-guides",
+    "title": "Sitemap submission checklist (2025)",
+    "slug": "sitemap-submission-checklist-20",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "sitemap",
+      "submission",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-021",
+    "surface": "network-guides",
+    "title": "Free SEO tools for keyword research (2026)",
+    "slug": "free-seo-tools-for-keyword-research-21",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "free",
+      "seo",
+      "tools"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-022",
+    "surface": "network-guides",
+    "title": "How to check page speed (2024)",
+    "slug": "how-to-check-page-speed-22",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "check"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-023",
+    "surface": "network-guides",
+    "title": "Meta title length best practices (2025)",
+    "slug": "meta-title-length-best-practices-23",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "meta",
+      "title",
+      "length"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-024",
+    "surface": "network-guides",
+    "title": "Schema markup for local business (2026)",
+    "slug": "schema-markup-for-local-business-24",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "schema",
+      "markup",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-025",
+    "surface": "network-guides",
+    "title": "Internal linking for blogs (2024)",
+    "slug": "internal-linking-for-blogs-25",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "internal",
+      "linking",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-026",
+    "surface": "network-guides",
+    "title": "Robots.txt basics (2025)",
+    "slug": "robots-txt-basics-26",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "robots",
+      "txt",
+      "basics"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-027",
+    "surface": "network-guides",
+    "title": "Canonical URL mistakes (2026)",
+    "slug": "canonical-url-mistakes-27",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "canonical",
+      "url",
+      "mistakes"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-028",
+    "surface": "network-guides",
+    "title": "Image alt text for SEO (2024)",
+    "slug": "image-alt-text-for-seo-28",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "image",
+      "alt",
+      "text"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-029",
+    "surface": "network-guides",
+    "title": "Core Web Vitals explained (2025)",
+    "slug": "core-web-vitals-explained-29",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "core",
+      "web",
+      "vitals"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-030",
+    "surface": "network-guides",
+    "title": "Sitemap submission checklist (2026)",
+    "slug": "sitemap-submission-checklist-30",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "sitemap",
+      "submission",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-031",
+    "surface": "network-guides",
+    "title": "Free SEO tools for keyword research (2024)",
+    "slug": "free-seo-tools-for-keyword-research-31",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "free",
+      "seo",
+      "tools"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-032",
+    "surface": "network-guides",
+    "title": "How to check page speed (2025)",
+    "slug": "how-to-check-page-speed-32",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "check"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-033",
+    "surface": "network-guides",
+    "title": "Meta title length best practices (2026)",
+    "slug": "meta-title-length-best-practices-33",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "meta",
+      "title",
+      "length"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-034",
+    "surface": "network-guides",
+    "title": "Schema markup for local business (2024)",
+    "slug": "schema-markup-for-local-business-34",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "schema",
+      "markup",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-035",
+    "surface": "network-guides",
+    "title": "Internal linking for blogs (2025)",
+    "slug": "internal-linking-for-blogs-35",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "internal",
+      "linking",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-036",
+    "surface": "network-guides",
+    "title": "Robots.txt basics (2026)",
+    "slug": "robots-txt-basics-36",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "robots",
+      "txt",
+      "basics"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-037",
+    "surface": "network-guides",
+    "title": "Canonical URL mistakes (2024)",
+    "slug": "canonical-url-mistakes-37",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "canonical",
+      "url",
+      "mistakes"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-038",
+    "surface": "network-guides",
+    "title": "Image alt text for SEO (2025)",
+    "slug": "image-alt-text-for-seo-38",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "image",
+      "alt",
+      "text"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-039",
+    "surface": "network-guides",
+    "title": "Core Web Vitals explained (2026)",
+    "slug": "core-web-vitals-explained-39",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "core",
+      "web",
+      "vitals"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-040",
+    "surface": "network-guides",
+    "title": "Sitemap submission checklist (2024)",
+    "slug": "sitemap-submission-checklist-40",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "sitemap",
+      "submission",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-041",
+    "surface": "network-guides",
+    "title": "Free SEO tools for keyword research (2025)",
+    "slug": "free-seo-tools-for-keyword-research-41",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "free",
+      "seo",
+      "tools"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-042",
+    "surface": "network-guides",
+    "title": "How to check page speed (2026)",
+    "slug": "how-to-check-page-speed-42",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "to",
+      "check"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-043",
+    "surface": "network-guides",
+    "title": "Meta title length best practices (2024)",
+    "slug": "meta-title-length-best-practices-43",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "meta",
+      "title",
+      "length"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-044",
+    "surface": "network-guides",
+    "title": "Schema markup for local business (2025)",
+    "slug": "schema-markup-for-local-business-44",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "schema",
+      "markup",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-045",
+    "surface": "network-guides",
+    "title": "Internal linking for blogs (2026)",
+    "slug": "internal-linking-for-blogs-45",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "internal",
+      "linking",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-046",
+    "surface": "network-guides",
+    "title": "Robots.txt basics (2024)",
+    "slug": "robots-txt-basics-46",
+    "category": "SEO",
+    "tier": "pillar",
+    "keywords": [
+      "robots",
+      "txt",
+      "basics"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ng-047",
+    "surface": "network-guides",
+    "title": "Canonical URL mistakes (2025)",
+    "slug": "canonical-url-mistakes-47",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "canonical",
+      "url",
+      "mistakes"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-048",
+    "surface": "network-guides",
+    "title": "Image alt text for SEO (2026)",
+    "slug": "image-alt-text-for-seo-48",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "image",
+      "alt",
+      "text"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-049",
+    "surface": "network-guides",
+    "title": "Core Web Vitals explained (2024)",
+    "slug": "core-web-vitals-explained-49",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "core",
+      "web",
+      "vitals"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ng-050",
+    "surface": "network-guides",
+    "title": "Sitemap submission checklist (2025)",
+    "slug": "sitemap-submission-checklist-50",
+    "category": "SEO",
+    "tier": "standard",
+    "keywords": [
+      "sitemap",
+      "submission",
+      "checklist"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-001",
+    "surface": "info-guides",
+    "title": "What is the Ebenezer Digital ecosystem",
+    "slug": "what-is-the-ebenezer-digital-ecosystem",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "what",
+      "is",
+      "the"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-002",
+    "surface": "info-guides",
+    "title": "How Ebenezer Store works",
+    "slug": "how-ebenezer-store-works",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "ebenezer",
+      "store"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-003",
+    "surface": "info-guides",
+    "title": "Using Ebenezer Tools for software research",
+    "slug": "using-ebenezer-tools-for-software-research",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "using",
+      "ebenezer",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-004",
+    "surface": "info-guides",
+    "title": "Ebenezer Journal vs Ebenezer News",
+    "slug": "ebenezer-journal-vs-ebenezer-news",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "journal",
+      "vs"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-005",
+    "surface": "info-guides",
+    "title": "Getting started with Yegova Billing",
+    "slug": "getting-started-with-yegova-billing",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "getting",
+      "started",
+      "with"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-006",
+    "surface": "info-guides",
+    "title": "Ebenezer AI assistant overview",
+    "slug": "ebenezer-ai-assistant-overview",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "ebenezer",
+      "ai",
+      "assistant"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-007",
+    "surface": "info-guides",
+    "title": "Discover intent router explained",
+    "slug": "discover-intent-router-explained",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "discover",
+      "intent",
+      "router"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-008",
+    "surface": "info-guides",
+    "title": "Ebenezer Network free tools",
+    "slug": "ebenezer-network-free-tools",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "network",
+      "free"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-009",
+    "surface": "info-guides",
+    "title": "Hardware catalog on products site",
+    "slug": "hardware-catalog-on-products-site",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "hardware",
+      "catalog",
+      "on"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-010",
+    "surface": "info-guides",
+    "title": "Contact and support options",
+    "slug": "contact-and-support-options",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "contact",
+      "and",
+      "support"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-011",
+    "surface": "info-guides",
+    "title": "What is the Ebenezer Digital ecosystem (2025)",
+    "slug": "what-is-the-ebenezer-digital-ecosystem-11",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "what",
+      "is",
+      "the"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-012",
+    "surface": "info-guides",
+    "title": "How Ebenezer Store works (2026)",
+    "slug": "how-ebenezer-store-works-12",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "ebenezer",
+      "store"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-013",
+    "surface": "info-guides",
+    "title": "Using Ebenezer Tools for software research (2024)",
+    "slug": "using-ebenezer-tools-for-software-research-13",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "using",
+      "ebenezer",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-014",
+    "surface": "info-guides",
+    "title": "Ebenezer Journal vs Ebenezer News (2025)",
+    "slug": "ebenezer-journal-vs-ebenezer-news-14",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "journal",
+      "vs"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-015",
+    "surface": "info-guides",
+    "title": "Getting started with Yegova Billing (2026)",
+    "slug": "getting-started-with-yegova-billing-15",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "getting",
+      "started",
+      "with"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-016",
+    "surface": "info-guides",
+    "title": "Ebenezer AI assistant overview (2024)",
+    "slug": "ebenezer-ai-assistant-overview-16",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "ebenezer",
+      "ai",
+      "assistant"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-017",
+    "surface": "info-guides",
+    "title": "Discover intent router explained (2025)",
+    "slug": "discover-intent-router-explained-17",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "discover",
+      "intent",
+      "router"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-018",
+    "surface": "info-guides",
+    "title": "Ebenezer Network free tools (2026)",
+    "slug": "ebenezer-network-free-tools-18",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "network",
+      "free"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-019",
+    "surface": "info-guides",
+    "title": "Hardware catalog on products site (2024)",
+    "slug": "hardware-catalog-on-products-site-19",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "hardware",
+      "catalog",
+      "on"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-020",
+    "surface": "info-guides",
+    "title": "Contact and support options (2025)",
+    "slug": "contact-and-support-options-20",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "contact",
+      "and",
+      "support"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-021",
+    "surface": "info-guides",
+    "title": "What is the Ebenezer Digital ecosystem (2026)",
+    "slug": "what-is-the-ebenezer-digital-ecosystem-21",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "what",
+      "is",
+      "the"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-022",
+    "surface": "info-guides",
+    "title": "How Ebenezer Store works (2024)",
+    "slug": "how-ebenezer-store-works-22",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "ebenezer",
+      "store"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-023",
+    "surface": "info-guides",
+    "title": "Using Ebenezer Tools for software research (2025)",
+    "slug": "using-ebenezer-tools-for-software-research-23",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "using",
+      "ebenezer",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-024",
+    "surface": "info-guides",
+    "title": "Ebenezer Journal vs Ebenezer News (2026)",
+    "slug": "ebenezer-journal-vs-ebenezer-news-24",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "journal",
+      "vs"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-025",
+    "surface": "info-guides",
+    "title": "Getting started with Yegova Billing (2024)",
+    "slug": "getting-started-with-yegova-billing-25",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "getting",
+      "started",
+      "with"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-026",
+    "surface": "info-guides",
+    "title": "Ebenezer AI assistant overview (2025)",
+    "slug": "ebenezer-ai-assistant-overview-26",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "ebenezer",
+      "ai",
+      "assistant"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-027",
+    "surface": "info-guides",
+    "title": "Discover intent router explained (2026)",
+    "slug": "discover-intent-router-explained-27",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "discover",
+      "intent",
+      "router"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-028",
+    "surface": "info-guides",
+    "title": "Ebenezer Network free tools (2024)",
+    "slug": "ebenezer-network-free-tools-28",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "network",
+      "free"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-029",
+    "surface": "info-guides",
+    "title": "Hardware catalog on products site (2025)",
+    "slug": "hardware-catalog-on-products-site-29",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "hardware",
+      "catalog",
+      "on"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-030",
+    "surface": "info-guides",
+    "title": "Contact and support options (2026)",
+    "slug": "contact-and-support-options-30",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "contact",
+      "and",
+      "support"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-031",
+    "surface": "info-guides",
+    "title": "What is the Ebenezer Digital ecosystem (2024)",
+    "slug": "what-is-the-ebenezer-digital-ecosystem-31",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "what",
+      "is",
+      "the"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-032",
+    "surface": "info-guides",
+    "title": "How Ebenezer Store works (2025)",
+    "slug": "how-ebenezer-store-works-32",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "ebenezer",
+      "store"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-033",
+    "surface": "info-guides",
+    "title": "Using Ebenezer Tools for software research (2026)",
+    "slug": "using-ebenezer-tools-for-software-research-33",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "using",
+      "ebenezer",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-034",
+    "surface": "info-guides",
+    "title": "Ebenezer Journal vs Ebenezer News (2024)",
+    "slug": "ebenezer-journal-vs-ebenezer-news-34",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "journal",
+      "vs"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-035",
+    "surface": "info-guides",
+    "title": "Getting started with Yegova Billing (2025)",
+    "slug": "getting-started-with-yegova-billing-35",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "getting",
+      "started",
+      "with"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-036",
+    "surface": "info-guides",
+    "title": "Ebenezer AI assistant overview (2026)",
+    "slug": "ebenezer-ai-assistant-overview-36",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "ebenezer",
+      "ai",
+      "assistant"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-037",
+    "surface": "info-guides",
+    "title": "Discover intent router explained (2024)",
+    "slug": "discover-intent-router-explained-37",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "discover",
+      "intent",
+      "router"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-038",
+    "surface": "info-guides",
+    "title": "Ebenezer Network free tools (2025)",
+    "slug": "ebenezer-network-free-tools-38",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "network",
+      "free"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-039",
+    "surface": "info-guides",
+    "title": "Hardware catalog on products site (2026)",
+    "slug": "hardware-catalog-on-products-site-39",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "hardware",
+      "catalog",
+      "on"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-040",
+    "surface": "info-guides",
+    "title": "Contact and support options (2024)",
+    "slug": "contact-and-support-options-40",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "contact",
+      "and",
+      "support"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-041",
+    "surface": "info-guides",
+    "title": "What is the Ebenezer Digital ecosystem (2025)",
+    "slug": "what-is-the-ebenezer-digital-ecosystem-41",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "what",
+      "is",
+      "the"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-042",
+    "surface": "info-guides",
+    "title": "How Ebenezer Store works (2026)",
+    "slug": "how-ebenezer-store-works-42",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "how",
+      "ebenezer",
+      "store"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-043",
+    "surface": "info-guides",
+    "title": "Using Ebenezer Tools for software research (2024)",
+    "slug": "using-ebenezer-tools-for-software-research-43",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "using",
+      "ebenezer",
+      "tools"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-044",
+    "surface": "info-guides",
+    "title": "Ebenezer Journal vs Ebenezer News (2025)",
+    "slug": "ebenezer-journal-vs-ebenezer-news-44",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "journal",
+      "vs"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-045",
+    "surface": "info-guides",
+    "title": "Getting started with Yegova Billing (2026)",
+    "slug": "getting-started-with-yegova-billing-45",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "getting",
+      "started",
+      "with"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-046",
+    "surface": "info-guides",
+    "title": "Ebenezer AI assistant overview (2024)",
+    "slug": "ebenezer-ai-assistant-overview-46",
+    "category": "Guides",
+    "tier": "pillar",
+    "keywords": [
+      "ebenezer",
+      "ai",
+      "assistant"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "ig-047",
+    "surface": "info-guides",
+    "title": "Discover intent router explained (2025)",
+    "slug": "discover-intent-router-explained-47",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "discover",
+      "intent",
+      "router"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-048",
+    "surface": "info-guides",
+    "title": "Ebenezer Network free tools (2026)",
+    "slug": "ebenezer-network-free-tools-48",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "ebenezer",
+      "network",
+      "free"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-049",
+    "surface": "info-guides",
+    "title": "Hardware catalog on products site (2024)",
+    "slug": "hardware-catalog-on-products-site-49",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "hardware",
+      "catalog",
+      "on"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "ig-050",
+    "surface": "info-guides",
+    "title": "Contact and support options (2025)",
+    "slug": "contact-and-support-options-50",
+    "category": "Guides",
+    "tier": "standard",
+    "keywords": [
+      "contact",
+      "and",
+      "support"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-001",
+    "surface": "store-guides",
+    "title": "How to use Canva website templates",
+    "slug": "how-to-use-canva-website-templates",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "use"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-002",
+    "surface": "store-guides",
+    "title": "Invoice generator kit walkthrough",
+    "slug": "invoice-generator-kit-walkthrough",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "invoice",
+      "generator",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-003",
+    "surface": "store-guides",
+    "title": "Social media pack setup guide",
+    "slug": "social-media-pack-setup-guide",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "social",
+      "media",
+      "pack"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-004",
+    "surface": "store-guides",
+    "title": "Business card template tips",
+    "slug": "business-card-template-tips",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "card",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-005",
+    "surface": "store-guides",
+    "title": "Restaurant menu template guide",
+    "slug": "restaurant-menu-template-guide",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "restaurant",
+      "menu",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-006",
+    "surface": "store-guides",
+    "title": "Freelancer contract template usage",
+    "slug": "freelancer-contract-template-usage",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "freelancer",
+      "contract",
+      "template"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-007",
+    "surface": "store-guides",
+    "title": "SaaS starter kit overview",
+    "slug": "saas-starter-kit-overview",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "saas",
+      "starter",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-008",
+    "surface": "store-guides",
+    "title": "Brand identity kit checklist",
+    "slug": "brand-identity-kit-checklist",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "brand",
+      "identity",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-009",
+    "surface": "store-guides",
+    "title": "Email signature template setup",
+    "slug": "email-signature-template-setup",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "email",
+      "signature",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-010",
+    "surface": "store-guides",
+    "title": "Store download and licensing FAQ",
+    "slug": "store-download-and-licensing-faq",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "store",
+      "download",
+      "and"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-011",
+    "surface": "store-guides",
+    "title": "How to use Canva website templates (2025)",
+    "slug": "how-to-use-canva-website-templates-11",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "use"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-012",
+    "surface": "store-guides",
+    "title": "Invoice generator kit walkthrough (2026)",
+    "slug": "invoice-generator-kit-walkthrough-12",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "invoice",
+      "generator",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-013",
+    "surface": "store-guides",
+    "title": "Social media pack setup guide (2024)",
+    "slug": "social-media-pack-setup-guide-13",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "social",
+      "media",
+      "pack"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-014",
+    "surface": "store-guides",
+    "title": "Business card template tips (2025)",
+    "slug": "business-card-template-tips-14",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "card",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-015",
+    "surface": "store-guides",
+    "title": "Restaurant menu template guide (2026)",
+    "slug": "restaurant-menu-template-guide-15",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "restaurant",
+      "menu",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-016",
+    "surface": "store-guides",
+    "title": "Freelancer contract template usage (2024)",
+    "slug": "freelancer-contract-template-usage-16",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "freelancer",
+      "contract",
+      "template"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-017",
+    "surface": "store-guides",
+    "title": "SaaS starter kit overview (2025)",
+    "slug": "saas-starter-kit-overview-17",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "saas",
+      "starter",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-018",
+    "surface": "store-guides",
+    "title": "Brand identity kit checklist (2026)",
+    "slug": "brand-identity-kit-checklist-18",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "brand",
+      "identity",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-019",
+    "surface": "store-guides",
+    "title": "Email signature template setup (2024)",
+    "slug": "email-signature-template-setup-19",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "email",
+      "signature",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-020",
+    "surface": "store-guides",
+    "title": "Store download and licensing FAQ (2025)",
+    "slug": "store-download-and-licensing-faq-20",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "store",
+      "download",
+      "and"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-021",
+    "surface": "store-guides",
+    "title": "How to use Canva website templates (2026)",
+    "slug": "how-to-use-canva-website-templates-21",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "use"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-022",
+    "surface": "store-guides",
+    "title": "Invoice generator kit walkthrough (2024)",
+    "slug": "invoice-generator-kit-walkthrough-22",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "invoice",
+      "generator",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-023",
+    "surface": "store-guides",
+    "title": "Social media pack setup guide (2025)",
+    "slug": "social-media-pack-setup-guide-23",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "social",
+      "media",
+      "pack"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-024",
+    "surface": "store-guides",
+    "title": "Business card template tips (2026)",
+    "slug": "business-card-template-tips-24",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "card",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-025",
+    "surface": "store-guides",
+    "title": "Restaurant menu template guide (2024)",
+    "slug": "restaurant-menu-template-guide-25",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "restaurant",
+      "menu",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-026",
+    "surface": "store-guides",
+    "title": "Freelancer contract template usage (2025)",
+    "slug": "freelancer-contract-template-usage-26",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "freelancer",
+      "contract",
+      "template"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-027",
+    "surface": "store-guides",
+    "title": "SaaS starter kit overview (2026)",
+    "slug": "saas-starter-kit-overview-27",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "saas",
+      "starter",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-028",
+    "surface": "store-guides",
+    "title": "Brand identity kit checklist (2024)",
+    "slug": "brand-identity-kit-checklist-28",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "brand",
+      "identity",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-029",
+    "surface": "store-guides",
+    "title": "Email signature template setup (2025)",
+    "slug": "email-signature-template-setup-29",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "email",
+      "signature",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-030",
+    "surface": "store-guides",
+    "title": "Store download and licensing FAQ (2026)",
+    "slug": "store-download-and-licensing-faq-30",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "store",
+      "download",
+      "and"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-031",
+    "surface": "store-guides",
+    "title": "How to use Canva website templates (2024)",
+    "slug": "how-to-use-canva-website-templates-31",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "use"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-032",
+    "surface": "store-guides",
+    "title": "Invoice generator kit walkthrough (2025)",
+    "slug": "invoice-generator-kit-walkthrough-32",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "invoice",
+      "generator",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-033",
+    "surface": "store-guides",
+    "title": "Social media pack setup guide (2026)",
+    "slug": "social-media-pack-setup-guide-33",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "social",
+      "media",
+      "pack"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-034",
+    "surface": "store-guides",
+    "title": "Business card template tips (2024)",
+    "slug": "business-card-template-tips-34",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "card",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-035",
+    "surface": "store-guides",
+    "title": "Restaurant menu template guide (2025)",
+    "slug": "restaurant-menu-template-guide-35",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "restaurant",
+      "menu",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-036",
+    "surface": "store-guides",
+    "title": "Freelancer contract template usage (2026)",
+    "slug": "freelancer-contract-template-usage-36",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "freelancer",
+      "contract",
+      "template"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-037",
+    "surface": "store-guides",
+    "title": "SaaS starter kit overview (2024)",
+    "slug": "saas-starter-kit-overview-37",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "saas",
+      "starter",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-038",
+    "surface": "store-guides",
+    "title": "Brand identity kit checklist (2025)",
+    "slug": "brand-identity-kit-checklist-38",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "brand",
+      "identity",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-039",
+    "surface": "store-guides",
+    "title": "Email signature template setup (2026)",
+    "slug": "email-signature-template-setup-39",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "email",
+      "signature",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-040",
+    "surface": "store-guides",
+    "title": "Store download and licensing FAQ (2024)",
+    "slug": "store-download-and-licensing-faq-40",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "store",
+      "download",
+      "and"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-041",
+    "surface": "store-guides",
+    "title": "How to use Canva website templates (2025)",
+    "slug": "how-to-use-canva-website-templates-41",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "use"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-042",
+    "surface": "store-guides",
+    "title": "Invoice generator kit walkthrough (2026)",
+    "slug": "invoice-generator-kit-walkthrough-42",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "invoice",
+      "generator",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-043",
+    "surface": "store-guides",
+    "title": "Social media pack setup guide (2024)",
+    "slug": "social-media-pack-setup-guide-43",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "social",
+      "media",
+      "pack"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-044",
+    "surface": "store-guides",
+    "title": "Business card template tips (2025)",
+    "slug": "business-card-template-tips-44",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "business",
+      "card",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-045",
+    "surface": "store-guides",
+    "title": "Restaurant menu template guide (2026)",
+    "slug": "restaurant-menu-template-guide-45",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "restaurant",
+      "menu",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-046",
+    "surface": "store-guides",
+    "title": "Freelancer contract template usage (2024)",
+    "slug": "freelancer-contract-template-usage-46",
+    "category": "Store",
+    "tier": "pillar",
+    "keywords": [
+      "freelancer",
+      "contract",
+      "template"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "sg-047",
+    "surface": "store-guides",
+    "title": "SaaS starter kit overview (2025)",
+    "slug": "saas-starter-kit-overview-47",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "saas",
+      "starter",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-048",
+    "surface": "store-guides",
+    "title": "Brand identity kit checklist (2026)",
+    "slug": "brand-identity-kit-checklist-48",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "brand",
+      "identity",
+      "kit"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-049",
+    "surface": "store-guides",
+    "title": "Email signature template setup (2024)",
+    "slug": "email-signature-template-setup-49",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "email",
+      "signature",
+      "template"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "sg-050",
+    "surface": "store-guides",
+    "title": "Store download and licensing FAQ (2025)",
+    "slug": "store-download-and-licensing-faq-50",
+    "category": "Store",
+    "tier": "standard",
+    "keywords": [
+      "store",
+      "download",
+      "and"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-001",
+    "surface": "catalog-guides",
+    "title": "How to choose a business laptop",
+    "slug": "how-to-choose-a-business-laptop",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-002",
+    "surface": "catalog-guides",
+    "title": "SSD vs HDD for office PCs",
+    "slug": "ssd-vs-hdd-for-office-pcs",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ssd",
+      "vs",
+      "hdd"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-003",
+    "surface": "catalog-guides",
+    "title": "Monitor size for developers",
+    "slug": "monitor-size-for-developers",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "monitor",
+      "size",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-004",
+    "surface": "catalog-guides",
+    "title": "Budget laptop buying guide India",
+    "slug": "budget-laptop-buying-guide-india",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "budget",
+      "laptop",
+      "buying"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-005",
+    "surface": "catalog-guides",
+    "title": "Thermal printer for billing counters",
+    "slug": "thermal-printer-for-billing-counters",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "thermal",
+      "printer",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-006",
+    "surface": "catalog-guides",
+    "title": "Barcode scanner setup for shops",
+    "slug": "barcode-scanner-setup-for-shops",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "barcode",
+      "scanner",
+      "setup"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-007",
+    "surface": "catalog-guides",
+    "title": "UPS for small office networks",
+    "slug": "ups-for-small-office-networks",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ups",
+      "for",
+      "small"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-008",
+    "surface": "catalog-guides",
+    "title": "Webcam quality for remote work",
+    "slug": "webcam-quality-for-remote-work",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "webcam",
+      "quality",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-009",
+    "surface": "catalog-guides",
+    "title": "Keyboard ergonomics guide",
+    "slug": "keyboard-ergonomics-guide",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "keyboard",
+      "ergonomics",
+      "guide"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-010",
+    "surface": "catalog-guides",
+    "title": "Router specs for home office",
+    "slug": "router-specs-for-home-office",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "router",
+      "specs",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-011",
+    "surface": "catalog-guides",
+    "title": "How to choose a business laptop (2025)",
+    "slug": "how-to-choose-a-business-laptop-11",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-012",
+    "surface": "catalog-guides",
+    "title": "SSD vs HDD for office PCs (2026)",
+    "slug": "ssd-vs-hdd-for-office-pcs-12",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ssd",
+      "vs",
+      "hdd"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-013",
+    "surface": "catalog-guides",
+    "title": "Monitor size for developers (2024)",
+    "slug": "monitor-size-for-developers-13",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "monitor",
+      "size",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-014",
+    "surface": "catalog-guides",
+    "title": "Budget laptop buying guide India (2025)",
+    "slug": "budget-laptop-buying-guide-india-14",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "budget",
+      "laptop",
+      "buying"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-015",
+    "surface": "catalog-guides",
+    "title": "Thermal printer for billing counters (2026)",
+    "slug": "thermal-printer-for-billing-counters-15",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "thermal",
+      "printer",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-016",
+    "surface": "catalog-guides",
+    "title": "Barcode scanner setup for shops (2024)",
+    "slug": "barcode-scanner-setup-for-shops-16",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "barcode",
+      "scanner",
+      "setup"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-017",
+    "surface": "catalog-guides",
+    "title": "UPS for small office networks (2025)",
+    "slug": "ups-for-small-office-networks-17",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ups",
+      "for",
+      "small"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-018",
+    "surface": "catalog-guides",
+    "title": "Webcam quality for remote work (2026)",
+    "slug": "webcam-quality-for-remote-work-18",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "webcam",
+      "quality",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-019",
+    "surface": "catalog-guides",
+    "title": "Keyboard ergonomics guide (2024)",
+    "slug": "keyboard-ergonomics-guide-19",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "keyboard",
+      "ergonomics",
+      "guide"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-020",
+    "surface": "catalog-guides",
+    "title": "Router specs for home office (2025)",
+    "slug": "router-specs-for-home-office-20",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "router",
+      "specs",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-021",
+    "surface": "catalog-guides",
+    "title": "How to choose a business laptop (2026)",
+    "slug": "how-to-choose-a-business-laptop-21",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-022",
+    "surface": "catalog-guides",
+    "title": "SSD vs HDD for office PCs (2024)",
+    "slug": "ssd-vs-hdd-for-office-pcs-22",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ssd",
+      "vs",
+      "hdd"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-023",
+    "surface": "catalog-guides",
+    "title": "Monitor size for developers (2025)",
+    "slug": "monitor-size-for-developers-23",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "monitor",
+      "size",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-024",
+    "surface": "catalog-guides",
+    "title": "Budget laptop buying guide India (2026)",
+    "slug": "budget-laptop-buying-guide-india-24",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "budget",
+      "laptop",
+      "buying"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-025",
+    "surface": "catalog-guides",
+    "title": "Thermal printer for billing counters (2024)",
+    "slug": "thermal-printer-for-billing-counters-25",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "thermal",
+      "printer",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-026",
+    "surface": "catalog-guides",
+    "title": "Barcode scanner setup for shops (2025)",
+    "slug": "barcode-scanner-setup-for-shops-26",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "barcode",
+      "scanner",
+      "setup"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-027",
+    "surface": "catalog-guides",
+    "title": "UPS for small office networks (2026)",
+    "slug": "ups-for-small-office-networks-27",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ups",
+      "for",
+      "small"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-028",
+    "surface": "catalog-guides",
+    "title": "Webcam quality for remote work (2024)",
+    "slug": "webcam-quality-for-remote-work-28",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "webcam",
+      "quality",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-029",
+    "surface": "catalog-guides",
+    "title": "Keyboard ergonomics guide (2025)",
+    "slug": "keyboard-ergonomics-guide-29",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "keyboard",
+      "ergonomics",
+      "guide"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-030",
+    "surface": "catalog-guides",
+    "title": "Router specs for home office (2026)",
+    "slug": "router-specs-for-home-office-30",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "router",
+      "specs",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-031",
+    "surface": "catalog-guides",
+    "title": "How to choose a business laptop (2024)",
+    "slug": "how-to-choose-a-business-laptop-31",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-032",
+    "surface": "catalog-guides",
+    "title": "SSD vs HDD for office PCs (2025)",
+    "slug": "ssd-vs-hdd-for-office-pcs-32",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ssd",
+      "vs",
+      "hdd"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-033",
+    "surface": "catalog-guides",
+    "title": "Monitor size for developers (2026)",
+    "slug": "monitor-size-for-developers-33",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "monitor",
+      "size",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-034",
+    "surface": "catalog-guides",
+    "title": "Budget laptop buying guide India (2024)",
+    "slug": "budget-laptop-buying-guide-india-34",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "budget",
+      "laptop",
+      "buying"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-035",
+    "surface": "catalog-guides",
+    "title": "Thermal printer for billing counters (2025)",
+    "slug": "thermal-printer-for-billing-counters-35",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "thermal",
+      "printer",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-036",
+    "surface": "catalog-guides",
+    "title": "Barcode scanner setup for shops (2026)",
+    "slug": "barcode-scanner-setup-for-shops-36",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "barcode",
+      "scanner",
+      "setup"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-037",
+    "surface": "catalog-guides",
+    "title": "UPS for small office networks (2024)",
+    "slug": "ups-for-small-office-networks-37",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ups",
+      "for",
+      "small"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-038",
+    "surface": "catalog-guides",
+    "title": "Webcam quality for remote work (2025)",
+    "slug": "webcam-quality-for-remote-work-38",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "webcam",
+      "quality",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-039",
+    "surface": "catalog-guides",
+    "title": "Keyboard ergonomics guide (2026)",
+    "slug": "keyboard-ergonomics-guide-39",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "keyboard",
+      "ergonomics",
+      "guide"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-040",
+    "surface": "catalog-guides",
+    "title": "Router specs for home office (2024)",
+    "slug": "router-specs-for-home-office-40",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "router",
+      "specs",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-041",
+    "surface": "catalog-guides",
+    "title": "How to choose a business laptop (2025)",
+    "slug": "how-to-choose-a-business-laptop-41",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "how",
+      "to",
+      "choose"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-042",
+    "surface": "catalog-guides",
+    "title": "SSD vs HDD for office PCs (2026)",
+    "slug": "ssd-vs-hdd-for-office-pcs-42",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ssd",
+      "vs",
+      "hdd"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-043",
+    "surface": "catalog-guides",
+    "title": "Monitor size for developers (2024)",
+    "slug": "monitor-size-for-developers-43",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "monitor",
+      "size",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-044",
+    "surface": "catalog-guides",
+    "title": "Budget laptop buying guide India (2025)",
+    "slug": "budget-laptop-buying-guide-india-44",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "budget",
+      "laptop",
+      "buying"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-045",
+    "surface": "catalog-guides",
+    "title": "Thermal printer for billing counters (2026)",
+    "slug": "thermal-printer-for-billing-counters-45",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "thermal",
+      "printer",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-046",
+    "surface": "catalog-guides",
+    "title": "Barcode scanner setup for shops (2024)",
+    "slug": "barcode-scanner-setup-for-shops-46",
+    "category": "Hardware",
+    "tier": "pillar",
+    "keywords": [
+      "barcode",
+      "scanner",
+      "setup"
+    ],
+    "wordTarget": 2200
+  },
+  {
+    "id": "cg-047",
+    "surface": "catalog-guides",
+    "title": "UPS for small office networks (2025)",
+    "slug": "ups-for-small-office-networks-47",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "ups",
+      "for",
+      "small"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-048",
+    "surface": "catalog-guides",
+    "title": "Webcam quality for remote work (2026)",
+    "slug": "webcam-quality-for-remote-work-48",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "webcam",
+      "quality",
+      "for"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-049",
+    "surface": "catalog-guides",
+    "title": "Keyboard ergonomics guide (2024)",
+    "slug": "keyboard-ergonomics-guide-49",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "keyboard",
+      "ergonomics",
+      "guide"
+    ],
+    "wordTarget": 1100
+  },
+  {
+    "id": "cg-050",
+    "surface": "catalog-guides",
+    "title": "Router specs for home office (2025)",
+    "slug": "router-specs-for-home-office-50",
+    "category": "Hardware",
+    "tier": "standard",
+    "keywords": [
+      "router",
+      "specs",
+      "for"
+    ],
+    "wordTarget": 1100
+  }
 ]

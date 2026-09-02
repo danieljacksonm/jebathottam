@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 const BASE = process.argv[2] || "http://127.0.0.1:3000";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
-function run(script: string) {
+function run(script) {
   const r = spawnSync(process.execPath, [join(ROOT, "scripts", script), BASE], {
     stdio: "inherit",
     cwd: ROOT,
