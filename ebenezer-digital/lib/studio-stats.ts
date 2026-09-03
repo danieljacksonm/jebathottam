@@ -1,12 +1,15 @@
-/** Single source of truth for studio (.com) metrics — keep all surfaces aligned. */
+/**
+ * Studio (.com) highlights — qualitative only.
+ * Do not invent project counts, satisfaction %, or “countries served” without verification.
+ */
 export const STUDIO_STATS = [
-  { value: "150+", label: "Projects delivered" },
-  { value: "98%", label: "Client satisfaction" },
-  { value: "24/7", label: "Support available" },
-  { value: "5+", label: "Years experience" },
+  { value: "Build", label: "Software & web products" },
+  { value: "Ship", label: "Store, Tools, SaaS & AI" },
+  { value: "Publish", label: "News & Journal" },
+  { value: "Support", label: "Clear project communication" },
 ] as const;
 
 export const STUDIO_STATS_EXTENDED = [
   ...STUDIO_STATS,
-  { value: "40+", label: "Countries served" },
+  { value: "Focus", label: "India-first, global-ready delivery" },
 ] as const;

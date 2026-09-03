@@ -132,6 +132,8 @@ export function siteKindFromPath(path: string): SiteKind {
   if (path === "/saas" || path.startsWith("/saas/")) return "saas";
   if (path === "/discover" || path.startsWith("/discover/")) return "discover";
   if (path === "/info" || path.startsWith("/info/")) return "info";
+  // newsroom before `/blog/news` prefix checks — `/blog/newsroom` must not become journal
+  if (path === "/blog/newsroom" || path.startsWith("/blog/newsroom/")) return "news";
   if (path === "/blog/news" || path.startsWith("/blog/news/")) return "news";
   if (path === "/blog" || path.startsWith("/blog/")) return "journal";
   if (path === "/products" || path.startsWith("/products/")) return "store";
@@ -179,6 +181,7 @@ export function originForPath(path: string): string {
   if (path === "/saas" || path.startsWith("/saas/")) return SAAS_URL;
   if (path === "/discover" || path.startsWith("/discover/")) return DISCOVER_URL;
   if (path === "/info" || path.startsWith("/info/")) return INFO_URL;
+  if (path === "/blog/newsroom" || path.startsWith("/blog/newsroom/")) return NEWS_URL;
   if (path === "/blog/news" || path.startsWith("/blog/news/")) return NEWS_URL;
   if (path === "/blog" || path.startsWith("/blog/")) return JOURNAL_URL;
   if (path === "/products" || path.startsWith("/products/")) return STORE_URL;
@@ -189,7 +192,8 @@ export function originForPath(path: string): string {
 }
 
 export function ogImageForPath(path: string) {
-  if (path.startsWith("/blog/news")) return OG_NEWS;
+  if (path === "/blog/newsroom" || path.startsWith("/blog/newsroom/")) return OG_NEWS;
+  if (path === "/blog/news" || path.startsWith("/blog/news/")) return OG_NEWS;
   if (path === "/info" || path.startsWith("/info/")) return OG_JOURNAL;
   if (path === "/blog" || path.startsWith("/blog/")) return OG_JOURNAL;
   if (path === "/products" || path.startsWith("/products/") || path === "/saas") return OG_STORE;
@@ -225,9 +229,15 @@ export function publicPathForLocale(
   } else if (resolvedKind === "journal" && (path === "/blog" || path.startsWith("/blog/"))) {
     if (path === "/blog") publicPath = "/";
     else publicPath = path.replace(/^\/blog/, "") || "/";
-  } else if (resolvedKind === "news" && path.startsWith("/blog/news")) {
-    if (path === "/blog/news") publicPath = "/";
-    else publicPath = path.replace(/^\/blog\/news/, "") || "/";
+  } else if (resolvedKind === "news") {
+    // Handle newsroom before `/blog/news` strip — otherwise `/blog/newsroom` → `/room`
+    if (path === "/blog/newsroom" || path.startsWith("/blog/newsroom/")) {
+      publicPath = path.replace(/^\/blog/, "") || "/newsroom";
+    } else if (path === "/blog/news") {
+      publicPath = "/";
+    } else if (path.startsWith("/blog/news/")) {
+      publicPath = path.replace(/^\/blog\/news/, "") || "/";
+    }
   } else if (resolvedKind === "store" && path.startsWith("/products")) {
     if (path === "/products") publicPath = "/";
     else publicPath = path.replace(/^\/products/, "") || "/";
@@ -336,7 +346,7 @@ export function rootMetadataForKind(kind: SiteKind): Metadata {
     studio: {
       title: "Ebenezer Digital Services | Reliable Digital & Web Services for Your Business",
       description:
-        "Professional data entry, virtual assistance, travel booking support, and web development. Trusted by clients worldwide.",
+        "Professional data entry, virtual assistance, travel booking support, and web development. Clear communication and on-time delivery.",
       siteName: "Ebenezer Digital Services",
       image: OG_IMAGE,
     },

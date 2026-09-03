@@ -26,7 +26,7 @@ const contactInfo = [
     href: SITE_WHATSAPP_URL,
   },
   { label: "Location", value: "Remote / Worldwide" },
-  { label: "Working Hours", value: "24/7 Support Available" },
+  { label: "Working Hours", value: "Mon–Sat · reply within one business day" },
 ];
 
 const steps = [

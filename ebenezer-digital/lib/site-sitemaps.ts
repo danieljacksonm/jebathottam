@@ -16,7 +16,6 @@ import {
   STORE_URL,
   TOOLS_URL,
   NETWORK_URL,
-  languageAlternatesForPath,
   articleLanguageAlternates,
   originForKind,
   publicUrlForInternalPath,
@@ -88,8 +87,10 @@ function page(
     priority,
   };
   if (withLanguages) {
+    // XML sitemaps: only en + x-default (must match `<loc>`). Full locale
+    // clusters live in HTML `<link rel="alternate">` via pageMetadata.
     entry.alternates = {
-      languages: languageAlternatesForPath(ip, origin, resolvedKind),
+      languages: articleLanguageAlternates(ip, resolvedKind),
     };
   }
   return entry;
@@ -249,8 +250,8 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
 
 async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
-    page(NEWS_URL, "", "hourly", 1, undefined, true),
-    page(NEWS_URL, "/blog/news", "hourly", 0.95, undefined, true),
+    // Home only once — `/blog/news` and `` both canonicalize to news host `/`
+    page(NEWS_URL, "/blog/news", "hourly", 1, undefined, true),
     page(NEWS_URL, "/blog/newsroom/about", "monthly", 0.5, undefined, true),
     page(NEWS_URL, "/blog/newsroom/editorial-policy", "monthly", 0.5, undefined, true),
     page(NEWS_URL, "/blog/newsroom/contact", "monthly", 0.5, undefined, true),

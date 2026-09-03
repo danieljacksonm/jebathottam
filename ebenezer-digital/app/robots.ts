@@ -26,6 +26,7 @@ export default function robots(): MetadataRoute.Robots {
     "/",
     "/llms.txt",
     "/sitemap.html",
+    "/sitemaps/",
     "/api/blog/rss",
     "/api/news/rss",
     "/api/news/ical",

@@ -59,7 +59,7 @@ export default function SaasLandingPage() {
         </p>
         <div className="saas-cta-row">
           <a className="saas-btn saas-btn-gold" href={REGISTER_URL}>
-            Start free — sign in
+            Start free
           </a>
           <a className="saas-btn saas-btn-ghost" href={BILLING_URL}>
             Sign in to your shop
@@ -108,7 +108,7 @@ export default function SaasLandingPage() {
             <span>Create your first invoice</span>
           </li>
         </ol>
-        <a className="saas-btn saas-btn-gold" href={BILLING_URL}>
+        <a className="saas-btn saas-btn-gold" href={REGISTER_URL}>
           Create free shop account
         </a>
       </section>
@@ -119,7 +119,7 @@ export default function SaasLandingPage() {
           <article className="saas-card">
             <h3>Free trial</h3>
             <p>Use the core billing tools free. No card required to begin.</p>
-            <a href={BILLING_URL}>Start free</a>
+            <a href={REGISTER_URL}>Start free</a>
           </article>
           <article className="saas-card">
             <h3>Online plan</h3>

@@ -168,17 +168,18 @@ export function escapeXml(value: string): string {
 }
 
 export function buildRssXml(items: PublicNewsItem[], siteOrigin: string): string {
-  const channelLink = `${siteOrigin}/blog/news`;
+  const channelLink = publicUrlForInternalPath("/blog/news", "news");
   const lastBuild = items[0]?.publishedAt || new Date().toISOString();
+  const origin = siteOrigin.replace(/\/$/, "") || NEWS_URL;
 
   const entries = items
     .slice(0, 40)
     .map((n) => {
-      const link = `${siteOrigin}/blog/news/${n.slug}`;
+      const link = publicUrlForInternalPath(`/blog/news/${n.slug}`, "news");
       const image = n.coverImage
         ? n.coverImage.startsWith("http")
           ? n.coverImage
-          : `${siteOrigin}${n.coverImage}`
+          : `${origin}${n.coverImage}`
         : "";
       return `<item>
   <title>${escapeXml(n.title)}</title>
@@ -197,7 +198,7 @@ export function buildRssXml(items: PublicNewsItem[], siteOrigin: string): string
 <channel>
   <title>E&gt; Ebenezer World News</title>
   <link>${channelLink}</link>
-  <atom:link href="${siteOrigin}/api/news/rss" rel="self" type="application/rss+xml"/>
+  <atom:link href="${origin}/api/news/rss" rel="self" type="application/rss+xml"/>
   <description>Global news desks from Ebenezer Digital .info — world, Asia, Europe, Americas, Africa, India, tech, climate.</description>
   <language>en</language>
   <lastBuildDate>${new Date(lastBuild).toUTCString()}</lastBuildDate>
@@ -253,7 +254,7 @@ export function buildIcal(items: PublicNewsItem[], siteOrigin: string): string {
     const endDate = new Date(n.publishedAt);
     endDate.setHours(endDate.getHours() + 1);
     const end = icsDate(endDate.toISOString());
-    const link = `${siteOrigin}/blog/news/${n.slug}`;
+    const link = publicUrlForInternalPath(`/blog/news/${n.slug}`, "news");
     const summary = n.title.replace(/[,;\\]/g, " ");
     const description = `${n.dek} ${link}`.replace(/[,;\\]/g, " ").replace(/\n/g, "\\n");
 

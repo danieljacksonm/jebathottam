@@ -13,7 +13,7 @@ export function RootJsonLd() {
     name: "Ebenezer Digital Services",
     url: SITE_URL,
     description:
-      "Professional data entry, virtual assistance, travel booking support, and web development. Trusted by clients worldwide.",
+      "Professional data entry, virtual assistance, travel booking support, and web development. Clear communication and on-time delivery.",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",

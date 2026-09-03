@@ -7,7 +7,7 @@ import { pageMetadata } from "@/lib/site-url";
 export const metadata = pageMetadata({
   title: "Ebenezer Digital Services | Reliable Digital & Web Services for Your Business",
   description:
-    "Professional web development, e-commerce, automation, and digital support. Trusted by clients worldwide — clear communication, on-time delivery.",
+    "Professional web development, e-commerce, automation, and digital support. Clear communication and on-time delivery.",
   path: "/",
 });
 

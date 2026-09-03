@@ -105,9 +105,12 @@ check("News SSR initialArticles", read("app/blog/news/layout.tsx").includes("ini
 check("Article sitemap hreflang helper", read("lib/site-sitemaps.ts").includes("articleLanguageAlternates"));
 check("Sitemap validate helper", fileExists("lib/sitemap-validate.ts"));
 check("HTML sitemap helper", fileExists("lib/html-sitemap.ts"));
+check("sitemap.xml route handler", fileExists("app/sitemap.xml/route.ts"));
+check("sitemap xml builder", fileExists("lib/sitemap-xml.ts"));
 check("middleware sitemap.html rewrite", read("middleware.ts").includes('"/sitemap.html"'));
 check("robots allows llms.txt", read("app/robots.ts").includes('"/llms.txt"'));
 check("llms.txt lists sitemap.html", read("app/llms.txt/route.ts").includes("sitemap.html"));
+check("XML sitemap uses en-only alternates", read("lib/site-sitemaps.ts").includes("articleLanguageAlternates(ip, resolvedKind)"));
 check("audit-all.mjs valid JS", !read("scripts/audit-all.mjs").includes("function run(script:"));
 
 const topicsPath = path.join(root, "data/content/topics.json");

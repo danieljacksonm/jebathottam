@@ -28,7 +28,7 @@ export function SaasHeader() {
           <Link href={SITE_NAV.store}>Store</Link>
           <Link href={SITE_NAV.journal}>Journal</Link>
           <Link href={SAAS_LOGIN}>Sign in</Link>
-          <Link className="saas-btn saas-btn-gold" href={SAAS_LOGIN}>
+          <Link className="saas-btn saas-btn-gold" href={BILLING_REGISTER_PATH}>
             Start free
           </Link>
         </nav>
@@ -44,6 +44,7 @@ export function SaasHeader() {
       </div>
       {open && (
         <nav className="saas-top-nav-mobile" aria-label="Mobile">
+          <LanguageSwitcher compact />
           <Link href={SITE_NAV.store} onClick={() => setOpen(false)}>
             Store
           </Link>
@@ -53,7 +54,11 @@ export function SaasHeader() {
           <Link href={SAAS_LOGIN} onClick={() => setOpen(false)}>
             Sign in
           </Link>
-          <Link className="saas-btn saas-btn-gold" href={SAAS_LOGIN} onClick={() => setOpen(false)}>
+          <Link
+            className="saas-btn saas-btn-gold"
+            href={BILLING_REGISTER_PATH}
+            onClick={() => setOpen(false)}
+          >
             Start free
           </Link>
         </nav>

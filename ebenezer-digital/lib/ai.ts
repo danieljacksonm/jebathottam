@@ -179,13 +179,71 @@ export async function checkOllamaHealth(): Promise<{
   }
 }
 
+function trustedEcosystemHosts(): string[] {
+  return [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.NEXT_PUBLIC_AI_URL,
+    process.env.NEXT_PUBLIC_SAAS_URL,
+    process.env.NEXT_PUBLIC_STORE_URL,
+    process.env.NEXT_PUBLIC_TOOLS_URL,
+    process.env.NEXT_PUBLIC_NEWS_URL,
+    process.env.NEXT_PUBLIC_JOURNAL_URL,
+    process.env.NEXT_PUBLIC_INFO_URL,
+    process.env.NEXT_PUBLIC_PRODUCTS_URL,
+    process.env.NEXT_PUBLIC_DISCOVER_URL,
+    process.env.NEXT_PUBLIC_NETWORK_URL,
+    "https://ebenezerdigital.com",
+    "https://ai.ebenezerdigital.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+  ]
+    .filter(Boolean)
+    .map((u) => {
+      try {
+        return new URL(u as string).origin;
+      } catch {
+        return "";
+      }
+    })
+    .filter(Boolean);
+}
+
+function isFirstPartyBrowserCall(request: Request): boolean {
+  const hosts = trustedEcosystemHosts();
+  const origin = request.headers.get("origin");
+  if (origin) {
+    try {
+      if (hosts.includes(new URL(origin).origin)) return true;
+    } catch {
+      /* ignore */
+    }
+  }
+  const referer = request.headers.get("referer");
+  if (referer) {
+    try {
+      if (hosts.includes(new URL(referer).origin)) return true;
+    } catch {
+      /* ignore */
+    }
+  }
+  return false;
+}
+
+/**
+ * Protect AI routes from anonymous cross-origin abuse.
+ * - Shared `AI_API_KEY` always accepted (server-to-server).
+ * - First-party browser UI (same ecosystem Origin/Referer) allowed without exposing the key.
+ * - Everything else denied (fail closed), including production when the key is unset.
+ */
 export function validateInternalApiKey(request: Request): boolean {
-  const required = process.env.AI_API_KEY;
-  if (!required) return true;
+  const required = process.env.AI_API_KEY?.trim();
   const header = request.headers.get("x-ai-api-key");
   const auth = request.headers.get("authorization");
   const bearer = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
-  return header === required || bearer === required;
+  if (required && (header === required || bearer === required)) return true;
+  if (isFirstPartyBrowserCall(request)) return true;
+  if (!required && process.env.NODE_ENV !== "production") return true;
+  return false;
 }
 
 /** Compact catalog text for product AI (keep small for CPU model). */

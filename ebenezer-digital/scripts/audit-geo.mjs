@@ -28,8 +28,11 @@ function exists(rel) {
 
 check("llms.txt route", exists("app/llms.txt/route.ts"));
 check("HTML sitemap page", exists("app/site-sitemap/page.tsx"));
+check("sitemap.xml route", exists("app/sitemap.xml/route.ts"));
+check("sitemap chunk route", exists("app/sitemaps/[id]/route.ts"));
 check("html-sitemap helper", exists("lib/html-sitemap.ts"));
 check("sitemap validate helper", exists("lib/sitemap-validate.ts"));
+check("sitemap xml builder", exists("lib/sitemap-xml.ts"));
 
 const siteUrl = read("lib/site-url.ts");
 check(

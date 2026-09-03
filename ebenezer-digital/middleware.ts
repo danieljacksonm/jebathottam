@@ -50,8 +50,21 @@ function isSaasLoginPath(pathname: string): boolean {
   return path === "/saas/login";
 }
 
+/** Soft Edge gate — APIs still verify JWT with `verifyToken`. Rejects garbage/expired cookies. */
 function isTokenPresent(token: string | undefined): boolean {
-  return Boolean(token && token.length > 10);
+  if (!token || token.length < 20) return false;
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  try {
+    const b64 = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+    const padded = b64 + "=".repeat((4 - (b64.length % 4)) % 4);
+    const payload = JSON.parse(atob(padded)) as { exp?: number; role?: string };
+    if (typeof payload.exp === "number" && payload.exp * 1000 < Date.now()) return false;
+    if (payload.role !== "admin") return false;
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function isApexInfoHost(host: string): boolean {
@@ -109,6 +122,104 @@ function isNetworkHost(host: string): boolean {
   return h === "ebenezerdigital.net" || h === "www.ebenezerdigital.net";
 }
 
+const SHARED_ROOT_RESERVED = new Set([
+  "privacy",
+  "terms",
+  "sitemap",
+  "sitemap.html",
+  "api",
+  "admin",
+  "_next",
+  "llms.txt",
+  "robots.txt",
+  "favicon.ico",
+  "icon",
+  "apple-icon",
+  "manifest.webmanifest",
+  "login",
+  "register",
+  "app",
+]);
+
+/**
+ * Map public pretty paths on dedicated hosts → internal App Router paths.
+ * Returns null when the path should pass through unchanged (or is handled elsewhere).
+ */
+function mapPrettyPathForHost(host: string, pathname: string): string | null {
+  const path = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+
+  if (isToolsHost(host)) {
+    if (path === "/" || path === "") return "/tools";
+    if (path === "/compare" || path.startsWith("/compare/")) return `/tools${path}`;
+    if (path === "/guides" || path.startsWith("/guides/")) return `/tools${path}`;
+    const slug = path.match(/^\/([^/]+)$/);
+    if (slug && !SHARED_ROOT_RESERVED.has(slug[1]) && slug[1] !== "tools") {
+      return `/tools/${slug[1]}`;
+    }
+    return null;
+  }
+
+  if (isJournalHost(host)) {
+    if (path === "/" || path === "") return "/blog";
+    if (path === "/news" || path.startsWith("/news/")) return null; // redirected to news host
+    if (path.startsWith("/blog")) return null;
+    const slug = path.match(/^\/([^/]+)$/);
+    if (slug && !SHARED_ROOT_RESERVED.has(slug[1])) {
+      return `/blog/${slug[1]}`;
+    }
+    return null;
+  }
+
+  if (isNewsHost(host)) {
+    if (path === "/" || path === "") return "/blog/news";
+    if (path === "/newsroom" || path.startsWith("/newsroom/")) return `/blog${path}`;
+    if (path === "/affiliate-disclosure") return "/site-legal/affiliate-disclosure";
+    if (path.startsWith("/blog")) return null;
+    const slug = path.match(/^\/([^/]+)$/);
+    if (
+      slug &&
+      !SHARED_ROOT_RESERVED.has(slug[1]) &&
+      slug[1] !== "newsroom" &&
+      slug[1] !== "affiliate-disclosure"
+    ) {
+      return `/blog/news/${slug[1]}`;
+    }
+    return null;
+  }
+
+  if (isProductsCatalogHost(host)) {
+    if (path === "/" || path === "") return "/catalog";
+    if (
+      path === "/compare" ||
+      path.startsWith("/compare/") ||
+      path === "/recommend" ||
+      path.startsWith("/recommend/") ||
+      path === "/guides" ||
+      path.startsWith("/guides/") ||
+      path === "/p" ||
+      path.startsWith("/p/") ||
+      path === "/laptops" ||
+      path.startsWith("/laptops/") ||
+      path === "/go" ||
+      path.startsWith("/go/")
+    ) {
+      return `/catalog${path}`;
+    }
+    const slug = path.match(/^\/([^/]+)$/);
+    if (slug && !SHARED_ROOT_RESERVED.has(slug[1]) && slug[1] !== "catalog") {
+      return `/catalog/${slug[1]}`;
+    }
+    return null;
+  }
+
+  if (isApexInfoHost(host)) {
+    if (path === "/guides" || path.startsWith("/guides/")) return `/info${path}`;
+    return null;
+  }
+
+  return null;
+}
+
 function legalSitemapRewrite(request: NextRequest, pathname: string): NextResponse | null {
   const host = request.headers.get("host") || "";
   // .net serves custom legal pages under /network/* — do not rewrite to generic site-legal
@@ -155,6 +266,41 @@ function absoluteRedirect(request: NextRequest, targetBase: string, pathname: st
   return NextResponse.redirect(dest, 308);
 }
 
+/** Only bounce clearly misplaced news/journal paths — do not reshuffle other hosts. */
+function foreignSectionRedirect(
+  request: NextRequest,
+  host: string,
+  pathname: string
+): NextResponse | null {
+  // Store / tools / saas / etc. must not serve the news desk
+  if (!isNewsHost(host)) {
+    if (pathname === "/blog/news" || pathname === "/blog/news/") {
+      return absoluteRedirect(request, NEWS_URL, "/");
+    }
+    if (pathname.startsWith("/blog/news/")) {
+      return absoluteRedirect(request, NEWS_URL, pathname.replace(/^\/blog\/news/, "") || "/");
+    }
+    if (pathname.startsWith("/blog/newsroom")) {
+      return absoluteRedirect(request, NEWS_URL, pathname.replace(/^\/blog/, "") || "/newsroom");
+    }
+  }
+
+  // Same for journal — only when this host is not journal/news/.com (studio has its own redirects)
+  const h = hostName(host);
+  const studio =
+    h === "ebenezerdigital.com" || h === "www.ebenezerdigital.com";
+  if (!isJournalHost(host) && !isNewsHost(host) && !studio) {
+    if (pathname === "/blog" || pathname === "/blog/") {
+      return absoluteRedirect(request, JOURNAL_URL, "/");
+    }
+    if (pathname.startsWith("/blog/")) {
+      return absoluteRedirect(request, JOURNAL_URL, pathname.replace(/^\/blog/, "") || "/");
+    }
+  }
+
+  return null;
+}
+
 function localeRewrite(request: NextRequest): NextResponse | null {
   const { pathname } = request.nextUrl;
   const m = pathname.match(/^\/([a-z]{2})(\/.*)?$/i);
@@ -163,8 +309,19 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   if (!LOCALES.has(locale)) return null;
 
   const rest = m[2] || "/";
+  const host = request.headers.get("host") || "";
+  const dedicatedPrettyHost =
+    isToolsHost(host) ||
+    isJournalHost(host) ||
+    isNewsHost(host) ||
+    isProductsCatalogHost(host) ||
+    isStoreHost(host) ||
+    isApexInfoHost(host) ||
+    isNetworkHost(host);
+
   const allowed =
     rest === "/" ||
+    dedicatedPrettyHost ||
     rest.startsWith("/products") ||
     rest.startsWith("/blog") ||
     rest.startsWith("/saas") ||
@@ -183,9 +340,17 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     rest.startsWith("/privacy") ||
     rest.startsWith("/terms") ||
     rest.startsWith("/sitemap") ||
-    rest.startsWith("/insights");
+    rest.startsWith("/insights") ||
+    rest.startsWith("/compare") ||
+    rest.startsWith("/guides") ||
+    rest.startsWith("/recommend");
 
   if (!allowed) return null;
+
+  // Locale prefixes must not bypass cross-host content gates
+  // (e.g. store…/hi/blog/news → news host).
+  const foreignLocalized = foreignSectionRedirect(request, host, rest);
+  if (foreignLocalized) return foreignLocalized;
 
   if (locale === "en") {
     const url = request.nextUrl.clone();
@@ -193,7 +358,6 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     return NextResponse.redirect(url);
   }
 
-  const host = request.headers.get("host") || "";
   let target = rest;
   if (rest === "/") {
     if (isStoreHost(host)) target = "/products";
@@ -219,7 +383,12 @@ function localeRewrite(request: NextRequest): NextResponse | null {
       rest.startsWith("/sitemap/")
     ) {
       target = "/site-sitemap";
+    } else {
+      target = mapPrettyPathForHost(host, rest) || rest;
     }
+  } else {
+    const mapped = mapPrettyPathForHost(host, rest);
+    if (mapped) target = mapped;
   }
 
   const url = request.nextUrl.clone();
@@ -245,6 +414,9 @@ export function middleware(request: NextRequest) {
 
   const legal = legalSitemapRewrite(request, pathname);
   if (legal) return legal;
+
+  const foreign = foreignSectionRedirect(request, host, pathname);
+  if (foreign) return foreign;
 
   const isProdStudio =
     hostName(host) === "ebenezerdigital.com" || hostName(host) === "www.ebenezerdigital.com";
@@ -283,7 +455,7 @@ export function middleware(request: NextRequest) {
     return absoluteRedirect(
       request,
       JOURNAL_URL,
-      pathname === "/blog" || pathname === "/blog/" ? "/" : pathname
+      pathname === "/blog" || pathname === "/blog/" ? "/" : pathname.replace(/^\/blog/, "") || "/"
     );
   }
 
@@ -292,7 +464,7 @@ export function middleware(request: NextRequest) {
     return absoluteRedirect(
       request,
       STORE_URL,
-      pathname === "/products" || pathname === "/products/" ? "/" : pathname
+      pathname === "/products" || pathname === "/products/" ? "/" : pathname.replace(/^\/products/, "") || "/"
     );
   }
 
@@ -311,7 +483,11 @@ export function middleware(request: NextRequest) {
     !isNewsHost(host) &&
     (pathname === "/blog/news" || pathname.startsWith("/blog/news/"))
   ) {
-    return absoluteRedirect(request, NEWS_URL, pathname);
+    const rest =
+      pathname === "/blog/news" || pathname === "/blog/news/"
+        ? "/"
+        : pathname.replace(/^\/blog\/news/, "") || "/";
+    return absoluteRedirect(request, NEWS_URL, rest);
   }
 
   // Apex .info = Information Network gateway (not full journal)
@@ -323,7 +499,7 @@ export function middleware(request: NextRequest) {
       if (pathname === "/blog" || pathname === "/blog/") {
         return absoluteRedirect(request, JOURNAL_URL, "/");
       }
-      return absoluteRedirect(request, JOURNAL_URL, pathname);
+      return absoluteRedirect(request, JOURNAL_URL, pathname.replace(/^\/blog/, "") || "/");
     }
 
     const url = request.nextUrl.clone();
@@ -343,9 +519,13 @@ export function middleware(request: NextRequest) {
       url.pathname = "/info/contact";
       return NextResponse.rewrite(url);
     }
-    if (pathname.startsWith("/guides/")) {
-      url.pathname = `/info${pathname}`;
+    if (pathname.startsWith("/guides/") || pathname === "/guides") {
+      url.pathname = pathname === "/guides" ? "/info/guides" : `/info${pathname}`;
       return NextResponse.rewrite(url);
+    }
+    if (pathname.startsWith("/info/guides/")) {
+      const rest = pathname.slice("/info".length) || "/guides";
+      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
     }
   }
 
@@ -374,21 +554,41 @@ export function middleware(request: NextRequest) {
   }
 
   if (isNewsHost(host)) {
-    if (pathname === "/" || pathname === "") {
+    if (pathname === "/blog/news" || pathname === "/blog/news/") {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
+    if (pathname.startsWith("/blog/news/")) {
+      const rest = pathname.slice("/blog/news".length) || "/";
+      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
+    }
+    if (pathname.startsWith("/blog/newsroom/")) {
+      const rest = pathname.replace(/^\/blog/, "") || "/newsroom";
+      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
+    }
+    const mapped = mapPrettyPathForHost(host, pathname);
+    if (mapped) {
       const url = request.nextUrl.clone();
-      url.pathname = "/blog/news";
+      url.pathname = mapped;
       return NextResponse.rewrite(url);
     }
   }
 
   if (isJournalHost(host)) {
-    if (pathname === "/" || pathname === "") {
-      const url = request.nextUrl.clone();
-      url.pathname = "/blog";
-      return NextResponse.rewrite(url);
-    }
     if (pathname === "/news" || pathname === "/news/") {
       return absoluteRedirect(request, NEWS_URL, "/");
+    }
+    if (pathname === "/blog" || pathname === "/blog/") {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
+    if (pathname.startsWith("/blog/") && !pathname.startsWith("/blog/news")) {
+      const rest = pathname.slice("/blog".length) || "/";
+      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
+    }
+    const mapped = mapPrettyPathForHost(host, pathname);
+    if (mapped) {
+      const url = request.nextUrl.clone();
+      url.pathname = mapped;
+      return NextResponse.rewrite(url);
     }
   }
 
@@ -435,9 +635,14 @@ export function middleware(request: NextRequest) {
     if (pathname === "/tools" || pathname === "/tools/") {
       return absoluteRedirect(request, `https://${hostName(host)}`, "/");
     }
-    if (pathname === "/" || pathname === "") {
+    if (pathname.startsWith("/tools/")) {
+      const rest = pathname.slice("/tools".length) || "/";
+      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
+    }
+    const mapped = mapPrettyPathForHost(host, pathname);
+    if (mapped) {
       const url = request.nextUrl.clone();
-      url.pathname = "/tools";
+      url.pathname = mapped;
       return NextResponse.rewrite(url);
     }
   }
@@ -446,9 +651,14 @@ export function middleware(request: NextRequest) {
     if (pathname === "/catalog" || pathname === "/catalog/") {
       return absoluteRedirect(request, `https://${hostName(host)}`, "/");
     }
-    if (pathname === "/" || pathname === "") {
+    if (pathname.startsWith("/catalog/")) {
+      const rest = pathname.slice("/catalog".length) || "/";
+      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
+    }
+    const mapped = mapPrettyPathForHost(host, pathname);
+    if (mapped) {
       const url = request.nextUrl.clone();
-      url.pathname = "/catalog";
+      url.pathname = mapped;
       return NextResponse.rewrite(url);
     }
   }
@@ -574,7 +784,15 @@ export const config = {
     "/resources",
     "/guides",
     "/guides/:path*",
+    "/compare",
+    "/compare/:path*",
+    "/recommend",
+    "/recommend/:path*",
     "/finder",
+    "/p",
+    "/p/:path*",
+    "/laptops",
+    "/laptops/:path*",
     "/about",
     "/contact",
     "/privacy",

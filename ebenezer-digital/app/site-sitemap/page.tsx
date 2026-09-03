@@ -19,12 +19,27 @@ export default async function HtmlSitemapPage() {
   const origin = originForKind(kind);
   const sections = await htmlSitemapSections(kind);
 
+  const xmlUrl = `${origin}/sitemap.xml`;
+
   return (
     <StudioPageShell
       kicker="Navigation"
-      title="Sitemap"
-      lead="Human-readable map of this site. Search engines should use sitemap.xml; AI systems can use llms.txt."
+      title="HTML Sitemap"
+      lead="This page is for humans. It lists normal links — not XML, so there are no loc tags here."
     >
+      <div className="mb-10 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm leading-relaxed text-white/90">
+        <p className="font-medium text-emerald-300">Google Search Console — submit this URL only:</p>
+        <p className="mt-2 break-all">
+          <a href={xmlUrl} className="text-emerald-400 underline hover:text-emerald-300">
+            {xmlUrl}
+          </a>
+        </p>
+        <p className="mt-2 text-white/60">
+          Do <strong className="text-white/80">not</strong> submit{" "}
+          <code className="text-white/70">/sitemap</code> or{" "}
+          <code className="text-white/70">/sitemap.html</code> — those are HTML pages.
+        </p>
+      </div>
       <div className="space-y-10">
         {sections.map((section) => (
           <section key={section.title}>
