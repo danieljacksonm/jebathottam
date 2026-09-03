@@ -101,9 +101,13 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "",
     "/services",
     "/work",
+    "/case-studies",
+    "/about",
+    "/products-overview",
+    "/media",
+    "/faq",
     "/contact",
     "/insights",
-    "/testimonials",
     "/privacy",
     "/terms",
     "/sitemap",
@@ -111,7 +115,6 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/why",
     "/careers",
     "/website-showcase",
-    "/stats",
     "/trust",
   ];
   const pages = routes.map((route) =>
@@ -238,6 +241,8 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   for (const p of getEduPosts()) {
+    // Mass-generated learn-* explainers stay reachable but are noindex — omit from XML sitemap.
+    if (p.slug.startsWith("learn-")) continue;
     if (seen.has(p.slug)) continue;
     seen.add(p.slug);
     pages.push(
@@ -340,6 +345,8 @@ function toolsSitemap(): MetadataRoute.Sitemap {
     page(TOOLS_URL, "/sitemap", "monthly", 0.3, undefined, true),
     page(TOOLS_URL, "/tools/compare", "weekly", 0.85, undefined, true),
     page(TOOLS_URL, "/tools/guides", "weekly", 0.75, undefined, true),
+    page(TOOLS_URL, "/tools/methodology", "monthly", 0.7, undefined, true),
+    page(TOOLS_URL, "/affiliate-disclosure", "yearly", 0.3, undefined, true),
   ];
   const staticRoutes = [
     "/tools/invoice-generator",

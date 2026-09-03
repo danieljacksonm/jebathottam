@@ -273,7 +273,7 @@ export const mockServices: Service[] = [
     description: "Accurate, timely data entry from forms, spreadsheets, or documents.",
     icon: "FileText",
     category: "digital",
-    features: ["Fast turnaround", "99% accuracy", "Multiple formats", "Confidential"],
+    features: ["Fast turnaround", "Careful double-check", "Multiple formats", "Confidential"],
     status: "published",
     order: 1,
     createdAt: new Date(),
@@ -343,19 +343,7 @@ export const mockInquiries: Inquiry[] = [
   },
 ];
 
-export const mockTestimonials: Testimonial[] = [
-  {
-    id: "1",
-    name: "Sarah Mitchell",
-    role: "CEO",
-    company: "TravelWise Agency",
-    content: "Excellent service and support!",
-    rating: 5,
-    status: "published",
-    order: 1,
-    createdAt: new Date(),
-  },
-];
+export const mockTestimonials: Testimonial[] = [];
 
 // File-backed storage with in-memory fallback
 type StoreData = {

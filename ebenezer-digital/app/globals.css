@@ -4,6 +4,20 @@
 
 @layer base {
   :root {
+    /* Brand tokens (lib/brand-tokens.ts) */
+    --eb-brand: #10b981;
+    --eb-brand-dk: #059669;
+    --eb-brand-lt: #34d399;
+    --eb-brand-bg: #ecfdf5;
+    --eb-accent-gold: #c4a574;
+    --eb-ink: #0f1117;
+    --eb-muted: #6b7280;
+    --eb-line: #e5e7eb;
+
+    /* Studio surface aliases */
+    --st-line: rgba(255, 255, 255, 0.12);
+    --st-muted: #8d887e;
+
     /* Design System Variables - HSL Format */
     --background: 222 47% 8%;
     --foreground: 210 40% 98%;
@@ -23,9 +37,9 @@
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
     
-    --accent: #10b981;
+    --accent: var(--eb-brand);
     --accent-foreground: #070708;
-    --accent-hover: #059669;
+    --accent-hover: var(--eb-brand-dk);
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;

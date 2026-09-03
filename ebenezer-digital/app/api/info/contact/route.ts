@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 const FILE = path.join(process.cwd(), "data", "info-contact.json");
 
@@ -17,6 +18,9 @@ async function readRows(): Promise<Row[]> {
 }
 
 export async function POST(req: Request) {
+  const limited = rateLimit(req, "info-contact", 6, 60_000);
+  if (!limited.ok) return rateLimitResponse(limited.retryAfterSec);
+
   try {
     const body = await req.json();
     const name = String(body?.name || "").trim().slice(0, 120);

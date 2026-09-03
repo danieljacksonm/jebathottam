@@ -13,8 +13,13 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    // Web + Expo / native apps (dev + production)
-    origin: true,
+    origin: (
+      process.env.CORS_ORIGINS ||
+      "https://saas.ebenezerdigital.com,http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,http://127.0.0.1:3001"
+    )
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
     credentials: true,
   });
   const port = Number(process.env.PORT || 4000);

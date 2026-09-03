@@ -77,7 +77,27 @@ export default function ToolDetailPage({ params }: Props) {
               : "No free plan"}
             {tool.pricing.paid ? ` · Paid from ${tool.pricing.paid}` : ""}
           </p>
-          <p className="aff-fresh mt-2">{freshnessLabel(tool.lastUpdated || "2026-08-18T10:00:00.000Z")}</p>
+          <p className="mt-1 text-sm text-[var(--aff-ink-2)]">
+            <span className="font-semibold">Assessment:</span>{" "}
+            {tool.ratingKind === "tested"
+              ? "Hands-on tested"
+              : tool.ratingKind === "verified"
+                ? "Verified from official docs"
+                : "Editorial assessment"}
+            {typeof tool.rating === "number" ? ` · score ${tool.rating}/5` : ""}
+          </p>
+          <p className="aff-fresh mt-2">
+            {tool.pricingVerifiedAt
+              ? `Pricing last verified: ${new Date(tool.pricingVerifiedAt).toLocaleString("en", { month: "long", year: "numeric" })}`
+              : tool.lastUpdated
+                ? freshnessLabel(tool.lastUpdated)
+                : "Pricing not independently re-verified — confirm on the official site"}
+          </p>
+          <p className="mt-2 text-xs text-[var(--aff-muted)]">
+            <Link href="/tools/methodology" className="underline hover:text-[var(--aff-brand)]">
+              How we review tools
+            </Link>
+          </p>
 
           <div className="mt-5 flex flex-wrap gap-2">
             <a

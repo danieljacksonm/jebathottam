@@ -17,8 +17,9 @@ export type Tool = {
     paid?: string;
     paidLabel?: string;
   };
-  /** Editorial signal only — never fabricate review counts */
+  /** Editorial assessment 1–5 — not a user-review aggregate */
   rating: number;
+  ratingKind?: "editorial" | "verified" | "tested";
   bestFor: string;
   whoShouldAvoid?: string;
   pros: string[];
@@ -27,6 +28,10 @@ export type Tool = {
   platforms?: string[];
   integrations?: string[];
   lastUpdated?: string;
+  /** ISO date when pricing notes were last checked against official docs */
+  pricingVerifiedAt?: string;
+  /** Short note on how this page was researched */
+  methodologyNote?: string;
   badge?: "Best Value" | "Most Popular" | "Editor's Pick" | "Free Forever" | "Best for India";
   highlighted?: boolean;
 };

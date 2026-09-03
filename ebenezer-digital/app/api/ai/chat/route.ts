@@ -9,6 +9,7 @@ import {
 } from "@/lib/ai";
 import { hybridChat, shouldUseHybrid } from "@/lib/ai-hybrid";
 import { loadEbenKnowledge } from "@/lib/ai-knowledge";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -55,6 +56,9 @@ export async function POST(request: Request) {
       headers: { "Content-Type": "application/json" },
     });
   }
+
+  const limited = rateLimit(request, "ai-chat", 20, 60_000);
+  if (!limited.ok) return rateLimitResponse(limited.retryAfterSec);
 
   let body: Body;
   try {

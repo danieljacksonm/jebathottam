@@ -1,23 +1,20 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { pageMetadata } from "@/lib/site-url";
 import "../affiliate/premium.css";
 
+const base = pageMetadata({
+  title: "Ebenezer Tools — Find the right tool for the job",
+  description:
+    "Discover, compare and choose AI tools, SaaS and software — with honest pros, cons, pricing notes and a clear review methodology.",
+  path: "/tools",
+});
+
 export const metadata: Metadata = {
+  ...base,
   title: {
     default: "Ebenezer Tools — Find the right tool for the job",
     template: "%s | Ebenezer Tools",
-  },
-  description:
-    "Discover, compare and choose the best AI tools, SaaS and software for your needs — with honest pros, cons and pricing notes.",
-  openGraph: {
-    title: "Ebenezer Tools",
-    description: "Premium AI & SaaS discovery and comparison.",
-    url: "https://tools.ebenezerdigital.com",
-    siteName: "Ebenezer Tools",
-    type: "website",
-  },
-  alternates: {
-    canonical: "https://tools.ebenezerdigital.com",
   },
 };
 

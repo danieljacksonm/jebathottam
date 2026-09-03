@@ -35,10 +35,13 @@ const footerLinks = {
     { label: "Virtual Assistance", href: "/services#digital" },
   ],
   company: [
-    { label: "About Us", href: "/why" },
+    { label: "About Us", href: "/about" },
     { label: "Our Work", href: "/work" },
+    { label: "Case studies", href: "/case-studies" },
+    { label: "Products", href: "/products-overview" },
+    { label: "Media", href: "/media" },
+    { label: "FAQ", href: "/faq" },
     { label: "Process", href: "/process" },
-    { label: "Testimonials", href: "/testimonials" },
     { label: "Careers", href: "/careers" },
   ],
   ecosystem: [

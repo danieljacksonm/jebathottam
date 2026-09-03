@@ -17,12 +17,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? [{ url: post.coverImage }, ...(post.gallery || []).slice(1, 4).map((url) => ({ url }))]
     : undefined;
   const path = `/blog/${post.slug}`;
+  const isMassEdu = post.slug.startsWith("learn-");
 
   return {
     title,
     description,
     keywords: post.tags,
     icons: SITE_ICONS,
+    robots: isMassEdu
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
     openGraph: {
       title: post.title,
       description,
