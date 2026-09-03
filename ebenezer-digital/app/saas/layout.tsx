@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { pageMetadata } from "@/lib/site-url";
+import "./saas.css";
 
 export const metadata: Metadata = pageMetadata({
   title: "Yegova Billing | Free Cloud Billing for Traders & Shops",

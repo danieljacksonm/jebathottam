@@ -12,7 +12,9 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: "/:path*",
+        // Do not attach security headers to static chunks — avoids MIME/nosniff issues with CSS/JS
+        source:
+          "/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|.*\\.(?:css|js|map|woff2?|png|jpg|jpeg|gif|webp|svg|ico)).*)",
         headers: [
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },

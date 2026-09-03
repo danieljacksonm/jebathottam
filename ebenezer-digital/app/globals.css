@@ -37,9 +37,9 @@
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
     
-    --accent: var(--eb-brand);
+    --accent: #10b981;
     --accent-foreground: #070708;
-    --accent-hover: var(--eb-brand-dk);
+    --accent-hover: #059669;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
