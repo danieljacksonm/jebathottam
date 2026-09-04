@@ -96,21 +96,33 @@ export default function WorkPage() {
                   Project {String(index + 1).padStart(2, "0")} · {project.projectPhase}
                 </p>
                 {project.clientName && <p className="mt-2 text-sm text-white/50">{project.clientName}</p>}
-                <h2 className="studio-display mt-3 text-4xl sm:text-5xl">{project.title}</h2>
+                <h2 className="studio-display mt-3 text-4xl sm:text-5xl">
+                  <Link href={`/work/${project.id}`} className="hover:text-emerald-300">
+                    {project.title}
+                  </Link>
+                </h2>
                 <p className="mt-4 text-[var(--st-muted)]">{project.description}</p>
                 <p className="mt-4 text-[10px] uppercase tracking-[0.16em] text-white/35">
                   {(project.techStack || []).slice(0, 5).join(" · ")}
                 </p>
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-6 inline-block text-sm uppercase tracking-[0.16em] text-emerald-400"
+                <div className="mt-6 flex flex-wrap gap-4">
+                  <Link
+                    href={`/work/${project.id}`}
+                    className="text-sm uppercase tracking-[0.16em] text-emerald-400"
                   >
-                    View live site →
-                  </a>
-                )}
+                    Case study →
+                  </Link>
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm uppercase tracking-[0.16em] text-white/50 hover:text-white"
+                    >
+                      View live site →
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </article>

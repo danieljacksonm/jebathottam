@@ -125,6 +125,14 @@ export interface NewsArticleRecord {
   publishedAt?: Date;
   createdAt: Date;
   updatedAt: Date;
+  originalUrl?: string;
+  byline?: string;
+  authorRole?: string;
+  sourceType?: import("@/lib/news-url").NewsSourceType;
+  seoTitle?: string;
+  seoDescription?: string;
+  reviewedBy?: string;
+  reviewedAt?: Date | string;
 }
 
 export interface DigitalProduct {

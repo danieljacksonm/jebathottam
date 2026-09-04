@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { getAllNews, readingMinutes } from "../data";
 import { getPublicNewsBySlug, listPublicNews } from "@/lib/news-service";
 import { NewsArticleView } from "./NewsArticleView";
-import { NEWS_URL, canonicalFor, articleLanguageAlternates, SITE_ICONS } from "@/lib/site-url";
+import { NEWS_URL, SITE_ICONS } from "@/lib/site-url";
+import { inferNewsSourceType, newsPublicUrl, sourceTypeLabel } from "@/lib/news-url";
 
 type Props = { params: { slug: string } };
 
@@ -17,14 +19,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getPublicNewsBySlug(params.slug);
   if (!article) return { title: "News | Ebenezer" };
   const modified = article.updatedAt || article.publishedAt;
+  const canonical = newsPublicUrl(article.region, article.slug);
+  const locale = (headers().get("x-eben-locale") || "en").toLowerCase();
+  const indexable = locale === "en";
   return {
-    title: `${article.title} | E> News`,
-    description: article.dek,
+    title: article.seoTitle || `${article.title} | E> News`,
+    description: article.seoDescription || article.dek,
     authors: [{ name: article.sourceLabel }],
+    robots: indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: {
       title: article.title,
       description: article.dek,
-      url: canonicalFor(`/blog/news/${article.slug}`),
+      url: canonical,
       images: article.coverImage ? [article.coverImage] : undefined,
       type: "article",
       publishedTime: article.publishedAt,
@@ -37,8 +45,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: article.coverImage ? [article.coverImage] : undefined,
     },
     alternates: {
-      canonical: canonicalFor(`/blog/news/${article.slug}`),
-      languages: articleLanguageAlternates(`/blog/news/${article.slug}`, "news"),
+      canonical,
+      languages: {
+        en: canonical,
+        "x-default": canonical,
+      },
     },
     icons: SITE_ICONS,
   };
@@ -53,7 +64,8 @@ export default async function NewsArticlePage({ params }: Props) {
     .slice(0, 4);
 
   const modified = article.updatedAt || article.publishedAt;
-  const canonical = canonicalFor(`/blog/news/${article.slug}`);
+  const canonical = newsPublicUrl(article.region, article.slug);
+  const sourceType = inferNewsSourceType(article);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -75,12 +87,13 @@ export default async function NewsArticlePage({ params }: Props) {
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
     isBasedOn: article.originalUrl || undefined,
     timeRequired: `PT${readingMinutes(article)}M`,
+    genre: sourceTypeLabel(sourceType),
   };
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <NewsArticleView article={article} related={related} />
+      <NewsArticleView article={{ ...article, sourceType }} related={related} />
     </>
   );
 }

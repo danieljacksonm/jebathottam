@@ -15,6 +15,7 @@ import {
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
+import { newsPublicPath, sourceTypeLabel, inferNewsSourceType } from "@/lib/news-url";
 
 export function NewsArticleView({
   article,
@@ -28,6 +29,9 @@ export function NewsArticleView({
   const lines = splitNewsHeadline(article.title);
   const pull = article.body[1] || article.dek;
   const keep = related.slice(0, 3);
+  const sourceType = inferNewsSourceType(article);
+  const isSummary =
+    sourceType === "SOURCE_SUMMARY" || sourceType === "PARTNER_WIRE";
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -51,6 +55,8 @@ export function NewsArticleView({
 
         <p className="news-kicker mt-8 text-[var(--n-live)]">
           {article.breaking ? "Breaking" : article.region}
+          <span className="mx-2 text-[var(--n-muted)]">·</span>
+          <span className="text-[var(--n-muted)]">{sourceTypeLabel(sourceType)}</span>
         </p>
         <h1 className="news-display mt-4 max-w-5xl text-5xl sm:text-7xl lg:text-8xl">
           {lines.map((line) => (
@@ -61,11 +67,14 @@ export function NewsArticleView({
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--n-muted)]">{article.dek}</p>
 
-        {article.originalUrl ? (
+        {isSummary ? (
           <p className="mt-4 max-w-2xl rounded border border-[var(--n-line)] bg-[var(--n-paper-2)] px-4 py-3 text-sm leading-relaxed text-[var(--n-muted)]">
-            This story summarizes reporting from{" "}
-            <span className="font-semibold text-[var(--n-ink)]">{article.sourceLabel}</span>. Read the
-            original for full context. Wire items stay in our news sitemap for seven days.{" "}
+            This is a <strong className="text-[var(--n-ink)]">source-based summary</strong>, not original
+            reporting by Ebenezer journalists. Source:{" "}
+            <span className="font-semibold text-[var(--n-ink)]">{article.sourceLabel}</span>
+            {article.byline ? <> · Original byline: {article.byline}</> : null}. Ebenezer published{" "}
+            {formatNewsTime(article.publishedAt)}
+            {article.updatedAt ? <> · Updated {formatNewsTime(article.updatedAt)}</> : null}.{" "}
             <Link href="/blog/newsroom/editorial-policy" className="underline hover:text-[var(--n-ink)]">
               Editorial policy
             </Link>
@@ -81,13 +90,14 @@ export function NewsArticleView({
             className="mt-6 inline-flex min-h-[48px] items-center bg-[var(--n-ink)] px-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--n-paper)]"
             data-cursor="OPEN"
           >
-            Read full story on {article.sourceLabel} →
+            Read the original report on {article.sourceLabel} →
           </a>
         )}
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-y border-[var(--n-line)] py-4 text-[11px] uppercase tracking-[0.16em] text-[var(--n-muted)]">
           <div className="flex flex-wrap gap-x-4 gap-y-1">
             <span>{article.byline || article.sourceLabel}</span>
+            {article.authorRole ? <span>{article.authorRole}</span> : null}
             <span>{formatNewsTime(article.publishedAt)}</span>
             <span>{relativeNewsTime(article.publishedAt)}</span>
             <span>{mins} min read</span>
@@ -172,7 +182,7 @@ export function NewsArticleView({
         {keep[0] && (
           <div className="mt-10 flex flex-wrap gap-3">
             <Link
-              href={`/blog/news/${keep[0].slug}`}
+              href={newsPublicPath(keep[0].region, keep[0].slug)}
               className="inline-flex min-h-[48px] items-center bg-[var(--n-ink)] px-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--n-paper)]"
               data-cursor="READ"
             >
@@ -210,7 +220,7 @@ export function NewsArticleView({
           <div className="mt-12 grid gap-8 lg:grid-cols-3">
             {keep.map((n, i) => (
               <div key={n.id}>
-                <Link href={`/blog/news/${n.slug}`} className="group block" data-cursor="READ">
+                <Link href={newsPublicPath(n.region, n.slug)} className="group block" data-cursor="READ">
                   <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--n-muted)]">
                     {i === 0 ? "Most relevant" : i === 1 ? "Editor’s choice" : "Also developing"}
                   </p>

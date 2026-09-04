@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { pageMetadata } from "@/lib/site-url";
 import { db } from "@/lib/db";
+import { portfolioSlug } from "@/lib/portfolio-slug";
 
 export const metadata = pageMetadata({
   title: "Case studies | Ebenezer Digital",
@@ -38,14 +39,26 @@ export default async function CaseStudiesPage() {
                 {p.clientName || "Client project"}
                 {p.projectPhase ? ` · ${p.projectPhase}` : ""}
               </p>
-              <h2 className="studio-display mt-3 text-3xl sm:text-4xl">{p.title}</h2>
+              <h2 className="studio-display mt-3 text-3xl sm:text-4xl">
+                <Link href={`/work/${portfolioSlug(p)}`} className="hover:text-emerald-300">
+                  {p.title}
+                </Link>
+              </h2>
               <p className="mt-4 max-w-3xl text-[var(--st-muted)] leading-relaxed">{p.description}</p>
               {p.techStack?.length ? (
                 <p className="mt-4 text-sm text-white/40">Stack: {p.techStack.join(" · ")}</p>
               ) : null}
               <div className="mt-6 flex flex-wrap gap-4 text-sm">
+                <Link href={`/work/${portfolioSlug(p)}`} className="underline hover:text-white">
+                  Full case study
+                </Link>
                 {p.liveUrl ? (
-                  <a href={p.liveUrl} className="underline hover:text-white" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={p.liveUrl}
+                    className="underline hover:text-white"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     View live
                   </a>
                 ) : null}

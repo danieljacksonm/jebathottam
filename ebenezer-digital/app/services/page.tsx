@@ -57,6 +57,25 @@ export default function ServicesPage() {
         From admin tasks to web development and travel support — a range of digital services tailored to your needs.
       </p>
 
+      <div className="mt-10 flex flex-wrap gap-3 text-sm">
+        {[
+          ["web-development", "Web development"],
+          ["saas-development", "SaaS"],
+          ["ai-solutions", "AI solutions"],
+          ["business-automation", "Automation"],
+          ["travel-booking", "Travel"],
+          ["data-entry", "Data entry"],
+        ].map(([slug, label]) => (
+          <Link
+            key={slug}
+            href={`/services/${slug}`}
+            className="border border-[var(--st-line)] px-3 py-2 text-[11px] uppercase tracking-[0.14em] text-white/70 hover:border-emerald-400/50 hover:text-white"
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
+
       <div className="mt-14 grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
           {blocks.map((block, i) => (

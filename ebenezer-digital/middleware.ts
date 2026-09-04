@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CANONICAL_URLS, resolveEcosystemUrl } from "@/lib/ecosystem-urls";
+import { isNewsCategorySegment } from "@/lib/news-url";
 import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
 function clean(url: string) {
@@ -175,12 +176,18 @@ function mapPrettyPathForHost(host: string, pathname: string): string | null {
     if (path === "/newsroom" || path.startsWith("/newsroom/")) return `/blog${path}`;
     if (path === "/affiliate-disclosure") return "/site-legal/affiliate-disclosure";
     if (path.startsWith("/blog")) return null;
+    // /{category}/{slug} → /blog/news/{slug}
+    const catSlug = path.match(/^\/([^/]+)\/([^/]+)$/);
+    if (catSlug && isNewsCategorySegment(catSlug[1])) {
+      return `/blog/news/${catSlug[2]}`;
+    }
     const slug = path.match(/^\/([^/]+)$/);
     if (
       slug &&
       !SHARED_ROOT_RESERVED.has(slug[1]) &&
       slug[1] !== "newsroom" &&
-      slug[1] !== "affiliate-disclosure"
+      slug[1] !== "affiliate-disclosure" &&
+      !isNewsCategorySegment(slug[1])
     ) {
       return `/blog/news/${slug[1]}`;
     }

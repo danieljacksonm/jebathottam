@@ -43,13 +43,13 @@ export default async function NewsLayout({ children }: { children: ReactNode }) 
     url: NEWS_URL,
     logo: `${NEWS_URL}/og-news.png`,
     sameAs: [JOURNAL_URL, NEWS_URL],
-    publishingPrinciples: `${NEWS_URL}/blog/newsroom/editorial-policy`,
-    correctionsPolicy: `${NEWS_URL}/blog/newsroom/editorial-policy`,
-    ethicsPolicy: `${NEWS_URL}/blog/newsroom/editorial-policy`,
+    publishingPrinciples: `${NEWS_URL}/newsroom/editorial-policy`,
+    correctionsPolicy: `${NEWS_URL}/newsroom/editorial-policy`,
+    ethicsPolicy: `${NEWS_URL}/newsroom/editorial-policy`,
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "newsroom",
-      url: `${NEWS_URL}/blog/newsroom/contact`,
+      url: `${NEWS_URL}/newsroom/contact`,
     },
   };
 

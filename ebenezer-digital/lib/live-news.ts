@@ -1,5 +1,6 @@
 import type { NewsArticle, NewsRegion } from "@/app/blog/news/data";
 import { photoForStory, safeNewsCover, storyFingerprint } from "@/lib/news-photos";
+import { slugifyNewsTitle } from "@/lib/news-url";
 
 export type LiveNewsItem = NewsArticle & {
   origin: "live";
@@ -75,12 +76,7 @@ function toIso(value?: string): string {
 }
 
 function slugify(value: string): string {
-  return value
-    .toLowerCase()
-    .replace(/https?:\/\//g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "")
-    .slice(0, 80);
+  return slugifyNewsTitle(value);
 }
 
 function decodeEntities(html: string): string {
@@ -208,30 +204,33 @@ async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
     if (bundle.status !== "fulfilled") continue;
     for (const r of bundle.value) {
       const fields = r.fields || {};
+      const title = decodeEntities(fields.headline || r.webTitle);
+      const region = mapGuardianSection(r.sectionId || r.sectionName || "world");
       const body = htmlToParagraphs(fields.body || fields.trailText || "");
-      const dek = htmlToParagraphs(fields.trailText || "")[0] || body[0] || r.webTitle;
+      const dek = htmlToParagraphs(fields.trailText || "")[0] || body[0] || title;
       if (!body.length) continue;
       items.push({
         id: `live-${slugify(r.id)}`,
-        slug: slugify(r.id),
-        title: decodeEntities(fields.headline || r.webTitle),
+        slug: slugify(title),
+        title,
         dek: dek.replace(/<[^>]+>/g, "").slice(0, 280),
         body,
-        region: mapGuardianSection(r.sectionId || r.sectionName || "world"),
+        region,
         topic: r.sectionName || "World",
         location: r.sectionName || "World",
         sourceLabel: fields.publication || "The Guardian",
         publishedAt: toIso(r.webPublicationDate),
         coverImage: safeNewsCover(
           fields.thumbnail,
-          photoForStory(mapGuardianSection(r.sectionId || r.sectionName || "world"), fields.headline || r.webTitle),
-          fields.headline || r.webTitle,
+          photoForStory(region, title),
+          title,
           fields.trailText || ""
         ),
         featured: items.length < 3,
         origin: "live",
         originalUrl: r.webUrl,
         byline: fields.byline,
+        sourceType: "SOURCE_SUMMARY",
       });
     }
   }
@@ -253,7 +252,7 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
     const creator = decodeEntities(tag(block, "dc:creator") || tag(block, "author"));
     return {
       id: `live-${slugify(link || title)}`,
-      slug: slugify(link || title),
+      slug: slugify(title),
       title,
       dek,
       body: body.length ? body : [dek],
@@ -266,6 +265,7 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
       origin: "live" as const,
       originalUrl: link.startsWith("http") ? link : undefined,
       byline: creator || undefined,
+      sourceType: "SOURCE_SUMMARY" as const,
     };
   }).filter((n) => n.title && n.body.length);
 }

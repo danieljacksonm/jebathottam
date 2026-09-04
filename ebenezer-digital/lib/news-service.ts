@@ -6,7 +6,8 @@ import {
 } from "@/app/blog/news/data";
 import { fetchLiveNews, getLiveNewsBySlug } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
-import { originForKind, siteKindFromHost, NEWS_URL, publicUrlForInternalPath } from "@/lib/site-url";
+import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
+import { inferNewsSourceType, newsPublicUrl } from "@/lib/news-url";
 import {
   getArchivedNewsBySlug,
   listNewsForSitemap,
@@ -23,6 +24,7 @@ export type PublicNewsItem = NewsArticle & {
 
 function recordToPublic(n: NewsArticleRecord): PublicNewsItem {
   const fallback = photoForStory(n.region || "World", n.title, n.topic || "General");
+  const originalUrl = n.originalUrl || undefined;
   return {
     id: n.id,
     slug: n.slug,
@@ -40,11 +42,32 @@ function recordToPublic(n: NewsArticleRecord): PublicNewsItem {
     featured: Boolean(n.featured),
     pinned: Boolean(n.pinned),
     origin: "cms",
+    originalUrl,
+    byline: n.byline,
+    authorRole: n.authorRole,
+    sourceType: inferNewsSourceType({
+      origin: "cms",
+      originalUrl,
+      sourceType: n.sourceType,
+    }),
+    seoTitle: n.seoTitle,
+    seoDescription: n.seoDescription,
+    reviewedBy: n.reviewedBy,
+    reviewedAt:
+      typeof n.reviewedAt === "string"
+        ? n.reviewedAt
+        : n.reviewedAt instanceof Date
+          ? n.reviewedAt.toISOString()
+          : undefined,
   };
 }
 
 function seedToPublic(n: NewsArticle): PublicNewsItem {
-  return { ...n, origin: "seed" };
+  return {
+    ...n,
+    origin: "seed",
+    sourceType: inferNewsSourceType({ origin: "seed", sourceType: n.sourceType }),
+  };
 }
 
 /** Live world wire + CMS. Seed only if the wire is thin. Dedupes same headline from many agencies. */
@@ -168,14 +191,14 @@ export function escapeXml(value: string): string {
 }
 
 export function buildRssXml(items: PublicNewsItem[], siteOrigin: string): string {
-  const channelLink = publicUrlForInternalPath("/blog/news", "news");
+  const channelLink = NEWS_URL.replace(/\/$/, "") + "/";
   const lastBuild = items[0]?.publishedAt || new Date().toISOString();
   const origin = siteOrigin.replace(/\/$/, "") || NEWS_URL;
 
   const entries = items
     .slice(0, 40)
     .map((n) => {
-      const link = publicUrlForInternalPath(`/blog/news/${n.slug}`, "news");
+      const link = newsPublicUrl(n.region, n.slug);
       const image = n.coverImage
         ? n.coverImage.startsWith("http")
           ? n.coverImage
@@ -209,7 +232,7 @@ ${entries}
 
 export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string): string {
   const urls = items.slice(0, NEWS_SITEMAP_MAX_URLS).map((n) => {
-    const loc = publicUrlForInternalPath(`/blog/news/${n.slug}`, "news");
+    const loc = newsPublicUrl(n.region, n.slug);
     const publicationDate = new Date(n.publishedAt).toISOString();
     return `<url>
   <loc>${escapeXml(loc)}</loc>
@@ -254,7 +277,7 @@ export function buildIcal(items: PublicNewsItem[], siteOrigin: string): string {
     const endDate = new Date(n.publishedAt);
     endDate.setHours(endDate.getHours() + 1);
     const end = icsDate(endDate.toISOString());
-    const link = publicUrlForInternalPath(`/blog/news/${n.slug}`, "news");
+    const link = newsPublicUrl(n.region, n.slug);
     const summary = n.title.replace(/[,;\\]/g, " ");
     const description = `${n.dek} ${link}`.replace(/[,;\\]/g, " ").replace(/\n/g, "\\n");
 

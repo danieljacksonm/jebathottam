@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authenticateUser, setAuthCookie } from "@/lib/auth";
+import { rateLimit, rateLimitResponse } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
+  const limited = rateLimit(request, "admin-login", 8, 60_000);
+  if (!limited.ok) return rateLimitResponse(limited.retryAfterSec);
+
   try {
     const { email, password } = await request.json();
 
@@ -22,8 +26,6 @@ export async function POST(request: NextRequest) {
     }
 
     const { user, token } = result;
-
-    // Set auth cookie
     const cookie = setAuthCookie(token);
 
     return NextResponse.json(

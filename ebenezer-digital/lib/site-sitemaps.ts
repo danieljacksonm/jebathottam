@@ -26,6 +26,7 @@ import { CATALOG_CATEGORIES, CATALOG_PRODUCTS } from "@/app/catalog/data";
 import { TOOLS } from "@/app/tools/data";
 import { getLiveTools } from "@/lib/network/registry";
 import { NETWORK_GUIDES } from "@/lib/network/guides";
+import { newsPublicUrl } from "@/lib/news-url";
 
 function kindFromOrigin(origin: string): SiteKind {
   if (origin === INFO_URL) return "info";
@@ -100,6 +101,12 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
   const routes = [
     "",
     "/services",
+    "/services/web-development",
+    "/services/saas-development",
+    "/services/ai-solutions",
+    "/services/business-automation",
+    "/services/travel-booking",
+    "/services/data-entry",
     "/work",
     "/case-studies",
     "/about",
@@ -120,6 +127,18 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = routes.map((route) =>
     page(SITE_URL, route, "weekly", route === "" ? 1 : 0.7, undefined, true, "studio", route || "/")
   );
+  try {
+    const portfolio = await db.getPortfolio(true);
+    const { portfolioSlug } = await import("@/lib/portfolio-slug");
+    for (const p of portfolio) {
+      const slug = portfolioSlug(p);
+      pages.push(
+        page(SITE_URL, `/work/${slug}`, "monthly", 0.75, p.updatedAt || p.createdAt, true, "studio", `/work/${slug}`)
+      );
+    }
+  } catch {
+    /* portfolio optional */
+  }
   for (const post of loadArticles("studio-insights")) {
     pages.push(
       page(
@@ -270,16 +289,19 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
     // Keep every story from the last 7 days (archive + live), no hard 400 cut that drops week-old URLs
     const news = await listPublicNewsForSitemap();
     for (const n of news) {
-      pages.push(
-        articlePage(
-          NEWS_URL,
-          `/blog/news/${n.slug}`,
-          "news",
-          "hourly",
-          0.8,
-          new Date(n.publishedAt)
-        )
-      );
+      const loc = newsPublicUrl(n.region, n.slug);
+      pages.push({
+        url: loc,
+        lastModified: new Date(n.publishedAt),
+        changeFrequency: "hourly",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: loc,
+            "x-default": loc,
+          },
+        },
+      });
     }
   } catch {
     /* live news can fail; index pages still go out */

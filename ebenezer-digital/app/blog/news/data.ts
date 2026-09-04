@@ -32,6 +32,14 @@ export type NewsArticle = {
   originalUrl?: string;
   byline?: string;
   origin?: "seed" | "cms" | "live";
+  /** Editorial classification — never mix silently */
+  sourceType?: import("@/lib/news-url").NewsSourceType;
+  updatedAt?: string;
+  authorRole?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
+  seoTitle?: string;
+  seoDescription?: string;
 };
 
 export const NEWS_REGIONS: NewsRegion[] = [
