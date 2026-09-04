@@ -1,5 +1,14 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { TOOLS } from "../data";
+import { pageMetadata } from "@/lib/site-url";
+import { EDITORIAL_COMPARISONS } from "./comparisons";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Compare tools | Ebenezer Tools",
+  description: "Editorial comparisons and live side-by-side tables from our software catalog.",
+  path: "/tools/compare",
+});
 
 type Props = { searchParams: { ids?: string } };
 
@@ -51,10 +60,21 @@ export default function ToolsComparePage({ searchParams }: Props) {
     <div className="aff-page py-8">
       <h1 className="text-3xl font-bold">Compare tools</h1>
       <p className="mt-2 text-[var(--aff-muted)] max-w-2xl">
-        Side-by-side facts from our structured catalog. We do not invent pricing or features.
+        Editorial write-ups plus live side-by-side facts from our catalog. We do not invent pricing or features.
       </p>
 
-      <div className="mt-4 flex flex-wrap gap-2">
+      <h2 className="mt-8 text-lg font-semibold">Editorial comparisons</h2>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        {EDITORIAL_COMPARISONS.map((c) => (
+          <Link key={c.slug} href={`/tools/compare/${c.slug}`} className="aff-card block p-4 hover:border-[var(--aff-brand)]">
+            <p className="font-semibold text-[var(--aff-ink)]">{c.title}</p>
+            <p className="mt-1 text-sm text-[var(--aff-muted)] line-clamp-2">{c.excerpt}</p>
+          </Link>
+        ))}
+      </div>
+
+      <h2 className="mt-8 text-lg font-semibold">Quick tables</h2>
+      <div className="mt-3 flex flex-wrap gap-2">
         <Link href="/tools/compare?ids=chatgpt,claude,gemini" className="aff-chip">
           ChatGPT vs Claude vs Gemini
         </Link>

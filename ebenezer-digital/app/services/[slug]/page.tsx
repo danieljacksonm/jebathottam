@@ -13,7 +13,7 @@ type ServiceDef = {
   faq: { q: string; a: string }[];
 };
 
-export const SERVICE_LANDINGS: ServiceDef[] = [
+const SERVICE_LANDINGS: ServiceDef[] = [
   {
     slug: "web-development",
     title: "Web development",
@@ -140,7 +140,7 @@ export const SERVICE_LANDINGS: ServiceDef[] = [
   },
 ];
 
-export function getServiceLanding(slug: string) {
+function getServiceLanding(slug: string) {
   return SERVICE_LANDINGS.find((s) => s.slug === slug);
 }
 

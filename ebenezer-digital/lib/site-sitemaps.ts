@@ -396,6 +396,17 @@ function toolsSitemap(): MetadataRoute.Sitemap {
       page(TOOLS_URL, `/tools/guides/${slug}`, "monthly", 0.7, undefined, true, "tools", `/tools/guides/${slug}`)
     );
   }
+  for (const slug of [
+    "chatgpt-vs-claude",
+    "cursor-vs-github-copilot",
+    "canva-vs-adobe-express",
+    "zoho-invoice-vs-quickbooks",
+    "notion-vs-asana",
+  ]) {
+    pages.push(
+      page(TOOLS_URL, `/tools/compare/${slug}`, "monthly", 0.8, undefined, true, "tools", `/tools/compare/${slug}`)
+    );
+  }
   return pages;
 }
 

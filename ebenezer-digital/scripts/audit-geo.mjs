@@ -59,7 +59,11 @@ check("llms.txt links to sitemap.xml", llms.includes("sitemap.xml"));
 check("llms.txt links to sitemap.html", llms.includes("sitemap.html"));
 
 const newsService = read("lib/news-service.ts");
-check("news API sitemap uses publicUrlForInternalPath", newsService.includes("publicUrlForInternalPath"));
+const newsUrl = read("lib/news-url.ts");
+check(
+  "news API sitemap uses newsPublicUrl (category canonicals)",
+  newsService.includes("newsPublicUrl") && newsUrl.includes("newsPublicPath")
+);
 
 console.log("\n--- Sitemap hreflang consistency ---");
 const tsx = spawnSync("npx", ["tsx", "scripts/audit-sitemap-consistency.mjs"], {

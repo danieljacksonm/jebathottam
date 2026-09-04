@@ -247,6 +247,34 @@ export default function ProductsPage() {
         </div>
       </section>
 
+      <section className="s-page py-10 border-b border-[var(--s-line)]">
+        <span className="s-section-label">How to grow with us</span>
+        <h2 className="mb-2 text-2xl font-bold text-[var(--s-ink)]">A clear path — no pressure</h2>
+        <p className="mb-6 max-w-2xl text-sm text-[var(--s-muted)]">
+          Start free, upgrade only when you need more. Custom work is available when kits are not enough.
+        </p>
+        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {[
+            { step: "1", label: "Free resource", href: lp("/products?price=free"), hint: "Templates & starters" },
+            { step: "2", label: "Starter product", href: lp("/products?cat=ALL"), hint: "Paid kits when ready" },
+            { step: "3", label: "Premium product", href: lp("/products/category/software"), hint: "Deeper systems" },
+            { step: "4", label: "Ebenezer SaaS", href: "https://saas.ebenezerdigital.com", hint: "Live software" },
+            { step: "5", label: "Custom development", href: "https://ebenezerdigital.com/contact", hint: "Built for you" },
+          ].map((item) => (
+            <li key={item.step}>
+              <a
+                href={item.href}
+                className="block h-full rounded-xl border border-[var(--s-line)] bg-[var(--s-surface)] p-4 transition hover:border-[var(--s-brand)]"
+              >
+                <span className="text-xs font-bold text-[var(--s-brand)]">Step {item.step}</span>
+                <p className="mt-1 font-semibold text-sm text-[var(--s-ink)]">{item.label}</p>
+                <p className="mt-0.5 text-xs text-[var(--s-muted)]">{item.hint}</p>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       <section id="categories" className="s-page py-10">
         <span className="s-section-label">Browse by type</span>
         <h2 className="mb-6 text-2xl font-bold text-[var(--s-ink)]">What you can use</h2>

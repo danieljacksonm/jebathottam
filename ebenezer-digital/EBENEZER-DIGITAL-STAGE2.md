@@ -49,16 +49,27 @@
 
 ---
 
+## Additional P1 (tools / store)
+
+| Item | Fix |
+|------|-----|
+| Editorial comparisons | `/tools/compare/{chatgpt-vs-claude,cursor-vs-github-copilot,canva-vs-adobe-express,zoho-invoice-vs-quickbooks,notion-vs-asana}` |
+| Compare hub | Links editorial pages + live tables |
+| Tools sitemap | Includes comparison URLs |
+| Store funnel | Free → Starter → Premium → SaaS → Custom (non-aggressive) |
+| GEO audit | Updated for `newsPublicUrl` category canonicals — **pass** |
+
 ## P2 / deferred (honest)
 
 | Item | Status |
 |------|--------|
-| Thin auto comparison pages | Not mass-generated (by design) |
+| Mass auto comparison pages | Intentionally not built |
 | Store AggregateRating cleanup | Still review catalog/store `reviews` counts |
 | Redis-backed rate limits | Still in-memory |
 | Full CSP | Deferred (breakage risk) |
 | Fabricated catalog review counts | Remaining business/data cleanup |
 | Labs / Help Center | Not created without real content |
+| VPS deploy of this batch | Pending push + rebuild + smoke |
 
 ---
 
@@ -122,6 +133,9 @@ Categories: `world`, `asia`, `europe`, `americas`, `africa`, `middle-east`, `ind
 ## TEST RESULTS
 
 - `tsc --noEmit` — pass
+- `npm run lint` — pass (1 existing hooks warning in NewsProvider)
+- `npm run audit:geo` — pass
+- `npm run build` — pass
 - Live smoke (prior deploy): store News 308, tools `/runway` 200
 - Deploy of this Stage 2 batch — **pending push + VPS rebuild**
 
