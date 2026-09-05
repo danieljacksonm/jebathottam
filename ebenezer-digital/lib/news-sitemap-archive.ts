@@ -126,9 +126,9 @@ export function rememberNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNew
   }
 
   // Drop pure legacy source-domain rows when a clean twin exists (same originalUrl / title)
-  for (const [slug, item] of [...bySlug.entries()]) {
+  for (const [slug, item] of Array.from(bySlug.entries())) {
     if (!isLegacySourceDomainSlug(slug)) continue;
-    const twin = [...bySlug.values()].find(
+    const twin = Array.from(bySlug.values()).find(
       (o) =>
         o.slug !== slug &&
         !isLegacySourceDomainSlug(o.slug) &&

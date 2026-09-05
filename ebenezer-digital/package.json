@@ -13,6 +13,7 @@
     "audit:all": "node scripts/audit-all.mjs",
     "audit:quality": "node scripts/audit-quality.mjs",
     "audit:geo": "node scripts/audit-geo.mjs",
+    "audit:news": "node scripts/audit-news-ownership.mjs",
     "build:store-kits": "node scripts/build-store-pdfs.mjs && node scripts/build-store-zips.mjs && node scripts/build-website-templates.mjs && npx tsx scripts/sync-store-products.mjs",
     "sync:store-products": "npx tsx scripts/sync-store-products.mjs",
     "generate:content": "npx tsx scripts/generate-content.mjs",

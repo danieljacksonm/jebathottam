@@ -28,6 +28,7 @@ import {
   SITE_PHONE_TEL,
   SITE_WHATSAPP_URL,
 } from "@/lib/site-contact";
+import { newsHref } from "@/lib/news-url";
 
 function StoryLink({
   story,
