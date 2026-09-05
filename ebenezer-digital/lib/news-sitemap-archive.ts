@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { isLegacySourceDomainSlug, legacySlugFromSourceUrl, slugifyNewsTitle } from "@/lib/news-url";
 
 /** Minimal shape stored for sitemap retention (matches PublicNewsItem fields we need). */
 export type ArchivedNewsItem = {
@@ -19,6 +20,8 @@ export type ArchivedNewsItem = {
   origin: "seed" | "cms" | "live";
   originalUrl?: string;
   byline?: string;
+  /** Prior public slugs (www-source…) kept for redirect resolution only */
+  legacySlugs?: string[];
 };
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -97,7 +100,7 @@ export function rememberNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNew
 
   for (const item of loadArchive().items) {
     if (withinRetention(item.publishedAt, now)) {
-      bySlug.set(item.slug, item);
+      bySlug.set(item.slug, normalizeArchivedSlug(item));
     }
   }
 
@@ -105,13 +108,38 @@ export function rememberNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNew
     if (!withinRetention(item.publishedAt, now) && item.origin === "live") {
       continue;
     }
-    const existing = bySlug.get(item.slug);
+    const normalized = normalizeArchivedSlug(item);
+    const existing = bySlug.get(normalized.slug);
     if (
       !existing ||
-      item.origin === "cms" ||
-      new Date(item.publishedAt) >= new Date(existing.publishedAt)
+      normalized.origin === "cms" ||
+      new Date(normalized.publishedAt) >= new Date(existing.publishedAt)
     ) {
-      bySlug.set(item.slug, item);
+      // If replacing a legacy www-* entry, keep the old slug for redirects
+      if (existing && isLegacySourceDomainSlug(existing.slug) && existing.slug !== normalized.slug) {
+        const legacy = new Set([...(normalized.legacySlugs || []), existing.slug, ...(existing.legacySlugs || [])]);
+        normalized.legacySlugs = Array.from(legacy);
+        bySlug.delete(existing.slug);
+      }
+      bySlug.set(normalized.slug, normalized);
+    }
+  }
+
+  // Drop pure legacy source-domain rows when a clean twin exists (same originalUrl / title)
+  for (const [slug, item] of [...bySlug.entries()]) {
+    if (!isLegacySourceDomainSlug(slug)) continue;
+    const twin = [...bySlug.values()].find(
+      (o) =>
+        o.slug !== slug &&
+        !isLegacySourceDomainSlug(o.slug) &&
+        ((item.originalUrl && o.originalUrl === item.originalUrl) ||
+          (item.title && o.title && item.title === o.title))
+    );
+    if (twin) {
+      const legacy = new Set([...(twin.legacySlugs || []), slug, ...(item.legacySlugs || [])]);
+      twin.legacySlugs = Array.from(legacy);
+      bySlug.set(twin.slug, twin);
+      bySlug.delete(slug);
     }
   }
 
@@ -127,17 +155,32 @@ export function rememberNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNew
   return toSave;
 }
 
-/** Items for XML sitemaps: 7-day window, capped by editorial priority. */
+function normalizeArchivedSlug(item: ArchivedNewsItem): ArchivedNewsItem {
+  if (!isLegacySourceDomainSlug(item.slug)) return item;
+  const clean = slugifyNewsTitle(item.title);
+  if (!clean || clean === item.slug) return item;
+  const legacy = new Set([...(item.legacySlugs || []), item.slug]);
+  if (item.originalUrl) legacy.add(legacySlugFromSourceUrl(item.originalUrl));
+  return { ...item, slug: clean, legacySlugs: Array.from(legacy) };
+}
+
+/** Items for XML sitemaps: 7-day window, capped by editorial priority. Never emit www-* locs. */
 export function listNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
   const archived = rememberNewsForSitemap(current);
   const now = Date.now();
   const bySlug = new Map<string, ArchivedNewsItem>();
 
   for (const item of archived) {
-    if (withinRetention(item.publishedAt, now)) bySlug.set(item.slug, item);
+    if (!withinRetention(item.publishedAt, now)) continue;
+    const n = normalizeArchivedSlug(item);
+    if (isLegacySourceDomainSlug(n.slug)) continue;
+    bySlug.set(n.slug, n);
   }
   for (const item of current) {
-    if (withinRetention(item.publishedAt, now)) bySlug.set(item.slug, item);
+    if (!withinRetention(item.publishedAt, now)) continue;
+    const n = normalizeArchivedSlug(item);
+    if (isLegacySourceDomainSlug(n.slug)) continue;
+    bySlug.set(n.slug, n);
   }
 
   return capNewsForSitemap(
@@ -148,8 +191,26 @@ export function listNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNewsIte
 }
 
 export function getArchivedNewsBySlug(slug: string): ArchivedNewsItem | undefined {
-  const item = loadArchive().items.find((n) => n.slug === slug);
+  const item = loadArchive().items.find(
+    (n) => n.slug === slug || n.legacySlugs?.includes(slug)
+  );
   if (!item) return undefined;
   if (!withinRetention(item.publishedAt) && item.origin === "live") return undefined;
-  return item;
+  return normalizeArchivedSlug(item);
+}
+
+/** Resolve Google-indexed www-source slugs to the archived article (if still retained). */
+export function findArchivedNewsByLegacySlug(slug: string): ArchivedNewsItem | undefined {
+  const items = loadArchive().items;
+  for (const n of items) {
+    if (n.slug === slug || n.legacySlugs?.includes(slug)) {
+      if (!withinRetention(n.publishedAt) && n.origin === "live") continue;
+      return normalizeArchivedSlug(n);
+    }
+    if (n.originalUrl && legacySlugFromSourceUrl(n.originalUrl) === slug) {
+      if (!withinRetention(n.publishedAt) && n.origin === "live") continue;
+      return normalizeArchivedSlug(n);
+    }
+  }
+  return undefined;
 }

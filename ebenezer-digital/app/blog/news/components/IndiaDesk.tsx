@@ -5,6 +5,7 @@ import { NewsImage } from "./NewsImage";
 import Link from "next/link";
 import { INDIA_STATES, readingMinutes, type NewsArticle } from "../data";
 import { OriginalLink } from "./OriginalLink";
+import { newsHref } from "@/lib/news-url";
 
 export function IndiaDesk({ stories }: { stories: NewsArticle[] }) {
   const [state, setState] = useState<(typeof INDIA_STATES)[number]>(INDIA_STATES[0]);
@@ -36,7 +37,7 @@ export function IndiaDesk({ stories }: { stories: NewsArticle[] }) {
         </div>
 
         <div>
-          <Link href={`/blog/news/${featured.slug}`} className="group block" data-cursor="READ">
+          <Link href={newsHref(featured)} className="group block" data-cursor="READ">
             <div className="relative aspect-[16/10] overflow-hidden bg-[#111]">
               <NewsImage
                 src={featured.coverImage}

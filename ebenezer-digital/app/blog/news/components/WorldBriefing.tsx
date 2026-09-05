@@ -4,6 +4,7 @@ import Link from "next/link";
 import { relativeNewsTime, type NewsArticle } from "../data";
 import { OriginalLink } from "./OriginalLink";
 import { AskAiPanel, NewsBriefButton } from "@/components/AskAiPanel";
+import { newsHref } from "@/lib/news-url";
 
 export function WorldBriefing({
   stories,
@@ -70,7 +71,7 @@ export function WorldBriefing({
             <p className="text-[10px] uppercase tracking-[0.18em] text-white/40">
               {String(i + 1).padStart(2, "0")} · {s.region} · {s.sourceLabel}
             </p>
-            <Link href={`/blog/news/${s.slug}`} className="mt-1 block font-serif text-lg leading-snug text-white hover:text-white/80" data-cursor="READ">
+            <Link href={newsHref(s)} className="mt-1 block font-serif text-lg leading-snug text-white hover:text-white/80" data-cursor="READ">
               {s.title}
             </Link>
             <p className="mt-1 line-clamp-2 text-xs text-white/45">{s.dek}</p>

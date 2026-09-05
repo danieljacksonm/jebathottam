@@ -2,6 +2,7 @@ import { loadArticles } from "@/lib/content-engine";
 import { db } from "@/lib/db";
 import { getEduPosts } from "@/lib/edu-blog";
 import { listPublicNewsForSitemap } from "@/lib/news-service";
+import { newsPublicUrl } from "@/lib/news-url";
 import { BILLING_LOGIN_PATH } from "@/lib/billing-url";
 import { SITE_NAV } from "@/lib/site-nav";
 import { CANONICAL_URLS } from "@/lib/ecosystem-urls";
@@ -238,7 +239,7 @@ export async function dynamicHtmlSitemapSection(kind: SiteKind): Promise<HtmlSit
       const news = await listPublicNewsForSitemap();
       const links = news.slice(0, RECENT_LIMIT).map((n) => ({
         label: n.title,
-        href: abs("news", `/blog/news/${n.slug}`),
+        href: newsPublicUrl(n.region, n.slug),
         external: true,
       }));
       return links.length ? { title: "Recent news stories", links } : null;

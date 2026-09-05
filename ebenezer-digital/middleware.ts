@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CANONICAL_URLS, resolveEcosystemUrl } from "@/lib/ecosystem-urls";
-import { isNewsCategorySegment } from "@/lib/news-url";
+import { isNewsCategorySegment, stripTrackingParams } from "@/lib/news-url";
 import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
 function clean(url: string) {
@@ -267,10 +267,12 @@ function legalSitemapRewrite(request: NextRequest, pathname: string): NextRespon
   return null;
 }
 
+/** Permanent ownership / pretty-URL migrations use 301 (not temporary 302/307/308). */
 function absoluteRedirect(request: NextRequest, targetBase: string, pathname: string): NextResponse {
   const dest = new URL(pathname || "/", targetBase);
-  dest.search = request.nextUrl.search;
-  return NextResponse.redirect(dest, 308);
+  const cleaned = stripTrackingParams(request.nextUrl.searchParams);
+  dest.search = cleaned.toString() ? `?${cleaned.toString()}` : "";
+  return NextResponse.redirect(dest, 301);
 }
 
 /** Only bounce clearly misplaced news/journal paths — do not reshuffle other hosts. */
@@ -359,10 +361,15 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   const foreignLocalized = foreignSectionRedirect(request, host, rest);
   if (foreignLocalized) return foreignLocalized;
 
+  // News has no real translations — never index /kn /pa /hi soft-duplicates.
+  if (isNewsHost(host) && locale !== "en") {
+    return absoluteRedirect(request, NEWS_URL, rest === "/" ? "/" : rest);
+  }
+
   if (locale === "en") {
     const url = request.nextUrl.clone();
     url.pathname = rest;
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(url, 301);
   }
 
   let target = rest;
@@ -454,10 +461,18 @@ export function middleware(request: NextRequest) {
   // Move journal, news & newsroom off .com → correct subdomains
   if (isProdStudio && (pathname === "/blog" || pathname.startsWith("/blog/"))) {
     if (pathname === "/blog/news" || pathname.startsWith("/blog/news/")) {
-      return absoluteRedirect(request, NEWS_URL, pathname);
+      const rest =
+        pathname === "/blog/news" || pathname === "/blog/news/"
+          ? "/"
+          : pathname.replace(/^\/blog\/news/, "") || "/";
+      return absoluteRedirect(request, NEWS_URL, rest);
     }
     if (pathname.startsWith("/blog/newsroom")) {
-      return absoluteRedirect(request, NEWS_URL, pathname);
+      return absoluteRedirect(
+        request,
+        NEWS_URL,
+        pathname.replace(/^\/blog/, "") || "/newsroom"
+      );
     }
     return absoluteRedirect(
       request,
@@ -565,8 +580,10 @@ export function middleware(request: NextRequest) {
       return absoluteRedirect(request, `https://${hostName(host)}`, "/");
     }
     if (pathname.startsWith("/blog/news/")) {
-      const rest = pathname.slice("/blog/news".length) || "/";
-      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
+      // Single hop: page issues 301 → /{category}/{slug} (avoid /blog/news → /slug → /cat/slug chain)
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-eben-public-path", pathname);
+      return NextResponse.next({ request: { headers: requestHeaders } });
     }
     if (pathname.startsWith("/blog/newsroom/")) {
       const rest = pathname.replace(/^\/blog/, "") || "/newsroom";
@@ -576,7 +593,9 @@ export function middleware(request: NextRequest) {
     if (mapped) {
       const url = request.nextUrl.clone();
       url.pathname = mapped;
-      return NextResponse.rewrite(url);
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-eben-public-path", pathname);
+      return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
     }
   }
 

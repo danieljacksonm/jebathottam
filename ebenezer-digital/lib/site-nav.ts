@@ -1,4 +1,4 @@
-import {
+﻿import {
   AI_URL,
   DISCOVER_URL,
   INFO_URL,
@@ -11,6 +11,7 @@ import {
   TOOLS_URL,
   PRODUCTS_URL,
 } from "./site-url";
+import { newsPublicPath } from "./news-url";
 
 /** Cross-domain navigation — always point to the correct host (subdomain-first). */
 export const SITE_NAV = {
@@ -41,11 +42,11 @@ export function journalCategoryHref(category: string) {
 }
 
 export function newsDeskHref(desk: string) {
-  return `${NEWS_URL}/blog/news#desk-${desk.toLowerCase()}`;
+  return `${NEWS_URL}/#desk-${desk.toLowerCase()}`;
 }
 
-export function newsArticleHref(slug: string) {
-  return `${NEWS_URL}/blog/news/${slug}`;
+export function newsArticleHref(slug: string, region = "World") {
+  return `${NEWS_URL}${newsPublicPath(region, slug)}`;
 }
 
 export function journalArticleHref(slug: string) {

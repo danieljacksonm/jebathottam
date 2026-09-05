@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { formatNewsClock, relativeNewsTime, type NewsArticle } from "../data";
 import { OriginalLink } from "./OriginalLink";
+import { newsHref } from "@/lib/news-url";
 
 export function LiveTimeline({ stories }: { stories: NewsArticle[] }) {
   const items = stories.slice(0, 14);
@@ -34,7 +35,7 @@ export function LiveTimeline({ stories }: { stories: NewsArticle[] }) {
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--n-muted)]">
               {formatNewsClock(story.publishedAt)} · {story.location}
             </p>
-            <Link href={`/blog/news/${story.slug}`} className="mt-2 block font-serif text-2xl leading-snug sm:text-3xl" data-cursor="READ">
+            <Link href={newsHref(story)} className="mt-2 block font-serif text-2xl leading-snug sm:text-3xl" data-cursor="READ">
               {story.title}
             </Link>
             <p className="mt-2 text-sm text-[var(--n-muted)]">{story.dek}</p>

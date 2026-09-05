@@ -7,12 +7,13 @@ import {
 import { fetchLiveNews, getLiveNewsBySlug } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
 import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
-import { inferNewsSourceType, newsPublicUrl } from "@/lib/news-url";
+import { inferNewsSourceType, newsPublicUrl, legacySlugFromSourceUrl, isLegacySourceDomainSlug } from "@/lib/news-url";
 import {
   getArchivedNewsBySlug,
   listNewsForSitemap,
   rememberNewsForSitemap,
   NEWS_SITEMAP_MAX_URLS,
+  findArchivedNewsByLegacySlug,
 } from "@/lib/news-sitemap-archive";
 
 export type PublicNewsItem = NewsArticle & {
@@ -122,7 +123,28 @@ export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem 
   const archived = getArchivedNewsBySlug(slug);
   if (archived) return archived as PublicNewsItem;
   const seed = WORLD_NEWS.find((n) => n.slug === slug);
-  return seed ? seedToPublic(seed) : undefined;
+  if (seed) return seedToPublic(seed);
+
+  // Legacy www-source-domain slugs → resolve via originalUrl fingerprint
+  if (isLegacySourceDomainSlug(slug)) {
+    const fromArchive = findArchivedNewsByLegacySlug(slug);
+    if (fromArchive) return fromArchive as PublicNewsItem;
+    try {
+      const liveItems = await fetchLiveNews();
+      const match = liveItems.find(
+        (n) => n.originalUrl && legacySlugFromSourceUrl(n.originalUrl) === slug
+      );
+      if (match) return match;
+    } catch {
+      /* ignore */
+    }
+    const cmsAll = await db.getNewsArticles(true);
+    const cmsMatch = cmsAll.find(
+      (n) => n.originalUrl && legacySlugFromSourceUrl(n.originalUrl) === slug
+    );
+    if (cmsMatch) return recordToPublic(cmsMatch);
+  }
+  return undefined;
 }
 
 export type NewsSearchParams = {

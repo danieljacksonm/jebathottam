@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getAllNews, readingMinutes } from "../data";
 import { getPublicNewsBySlug, listPublicNews } from "@/lib/news-service";
 import { NewsArticleView } from "./NewsArticleView";
 import { NEWS_URL, SITE_ICONS } from "@/lib/site-url";
-import { inferNewsSourceType, newsPublicUrl, sourceTypeLabel } from "@/lib/news-url";
+import {
+  inferNewsSourceType,
+  newsPublicPath,
+  newsPublicUrl,
+  sourceTypeLabel,
+} from "@/lib/news-url";
 
 type Props = { params: { slug: string } };
 
@@ -58,6 +63,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function NewsArticlePage({ params }: Props) {
   const article = await getPublicNewsBySlug(params.slug);
   if (!article) notFound();
+
+  const canonicalPath = newsPublicPath(article.region, article.slug);
+  const publicPath = headers().get("x-eben-public-path") || "";
+  const alreadyCanonical = publicPath === canonicalPath;
+  const needsSlugFix = params.slug !== article.slug;
+  const needsPathFix =
+    Boolean(publicPath) &&
+    !alreadyCanonical &&
+    (publicPath.startsWith("/blog/news/") || /^\/[^/]+$/.test(publicPath));
+
+  if (needsSlugFix || needsPathFix) {
+    redirect(canonicalPath);
+  }
+
   const all = await listPublicNews();
   const related = all
     .filter((n) => n.id !== article.id && (n.region === article.region || n.topic === article.topic))

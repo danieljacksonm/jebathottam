@@ -40,7 +40,7 @@ function StoryLink({
 }) {
   return (
     <div className={className}>
-      <Link href={`/blog/news/${story.slug}`} className="group contents" data-cursor="READ">
+      <Link href={newsHref(story)} className="group contents" data-cursor="READ">
         {children}
       </Link>
       <div className="col-span-full mt-2 flex flex-wrap items-center gap-3">
@@ -281,7 +281,7 @@ export function NewsHome() {
           <div className="grid gap-x-8 gap-y-1 md:grid-cols-2">
             {wireMore.map((s) => (
               <div key={s.id} className="border-t border-[var(--n-line)] py-3">
-                <Link href={`/blog/news/${s.slug}`} className="block" data-cursor="READ">
+                <Link href={newsHref(s)} className="block" data-cursor="READ">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--n-muted)]">
                     {s.region} · {s.sourceLabel} · {relativeNewsTime(s.publishedAt)}
                   </p>
@@ -352,7 +352,7 @@ export function NewsHome() {
               <motion.p style={{ opacity: metaOpacity }} className="mt-6 max-w-lg text-sm text-white/70">
                 {cinematic.dek}
               </motion.p>
-              <Link href={`/blog/news/${cinematic.slug}`} className="mt-8 inline-flex w-fit items-center gap-2 text-[11px] uppercase tracking-[0.22em]" data-cursor="READ">
+              <Link href={newsHref(cinematic)} className="mt-8 inline-flex w-fit items-center gap-2 text-[11px] uppercase tracking-[0.22em]" data-cursor="READ">
                 Enter the story <ArrowUpRight className="h-4 w-4" />
               </Link>
             </motion.div>
@@ -515,7 +515,7 @@ export function NewsHome() {
                     {readingMinutes(s)} min read · {s.region}
                   </p>
                 </div>
-                <Link href={`/blog/news/${s.slug}`} className="text-[11px] uppercase tracking-[0.2em]" data-cursor="READ">
+                <Link href={newsHref(s)} className="text-[11px] uppercase tracking-[0.2em]" data-cursor="READ">
                   Open
                 </Link>
               </div>

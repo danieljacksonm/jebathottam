@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useNews } from "./NewsProvider";
 import { relativeNewsTime } from "../data";
 import { rotateList, useRotate } from "../../useRotate";
+import { newsHref } from "@/lib/news-url";
 
 export function NewsTicker() {
   const { articles, updatedAt } = useNews();
@@ -21,7 +22,7 @@ export function NewsTicker() {
       </span>
       <div className="news-ticker-track">
         {items.map((a, i) => (
-          <Link key={`${a.id}-${i}`} href={`/blog/news/${a.slug}`} data-cursor="READ">
+          <Link key={`${a.id}-${i}`} href={newsHref(a)} data-cursor="READ">
             {a.breaking ? "Breaking" : a.region} · {a.title}
           </Link>
         ))}

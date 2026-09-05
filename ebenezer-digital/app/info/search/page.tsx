@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { SITE_NAV } from "@/lib/site-nav";
+import { SITE_NAV, newsArticleHref } from "@/lib/site-nav";
 
 type Hit = {
   kind: "NEWS" | "JOURNAL";
@@ -39,14 +39,16 @@ function InfoSearchInner() {
       const articles = Array.isArray(newsRes)
         ? newsRes
         : newsRes.items || newsRes.articles || newsRes.results || [];
-      const mappedNews: Hit[] = (articles as { title: string; dek?: string; slug: string }[])
+      const mappedNews: Hit[] = (
+        articles as { title: string; dek?: string; slug: string; region?: string }[]
+      )
         .slice(0, 12)
         .filter((a) => a?.slug && a?.title)
         .map((a) => ({
           kind: "NEWS" as const,
           title: a.title,
           summary: a.dek || "",
-          href: `${SITE_NAV.news}/blog/news/${a.slug}`,
+          href: newsArticleHref(a.slug, a.region || "World"),
         }));
 
       const posts = Array.isArray(blogRes?.posts) ? blogRes.posts : [];

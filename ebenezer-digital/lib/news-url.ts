@@ -70,6 +70,56 @@ export function newsPublicUrl(region: string, slug: string): string {
   return `${NEWS_URL.replace(/\/$/, "")}${newsPublicPath(region, slug)}`;
 }
 
+/** Relative href for in-app News links (pretty category URL). */
+export function newsHref(article: { region: string; slug: string }): string {
+  return newsPublicPath(article.region, article.slug);
+}
+
+/**
+ * Reconstruct the historical (buggy) slug derived from a source URL.
+ * Used only to resolve Google-indexed legacy paths → clean canonicals.
+ */
+export function legacySlugFromSourceUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    const raw = `${u.host}${u.pathname}${u.search}`.toLowerCase();
+    return (
+      raw
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "")
+        .slice(0, 96)
+        .replace(/-$/g, "") || "story"
+    );
+  } catch {
+    return slugifyNewsTitle(url, 96);
+  }
+}
+
+/** Detect source-domain artifact slugs (www-thehindu-…, bbc-co-uk-…, utm junk). */
+export function isLegacySourceDomainSlug(slug: string): boolean {
+  const s = slug.toLowerCase();
+  if (/-at-medium-rss|-at-campaign-rss|utm_/.test(s)) return true;
+  if (/^(www|feeds?|rss|edition)[-.]/.test(s)) return true;
+  if (/^(www-)?[a-z0-9-]+-(com|co-uk|org|net|in)-/.test(s)) return true;
+  return /(bbc|nytimes|thehindu|reuters|guardian|ndtv|hindustantimes|aljazeera|techcrunch|indianexpress|indiatimes)/.test(
+    s
+  ) && /(www-|com-|co-uk-|org-|net-)/.test(s);
+}
+
+const TRACKING_PARAM =
+  /^(utm_|fbclid|gclid|msclkid|mc_|ref$|source$|campaign$)/i;
+
+/** Drop tracking params from a URLSearchParams (mutate copy). */
+export function stripTrackingParams(params: URLSearchParams): URLSearchParams {
+  const next = new URLSearchParams();
+  params.forEach((value, key) => {
+    if (TRACKING_PARAM.test(key) || key.toLowerCase().startsWith("utm_")) return;
+    next.set(key, value);
+  });
+  return next;
+}
+
 export type NewsSourceType =
   | "ORIGINAL"
   | "SOURCE_SUMMARY"

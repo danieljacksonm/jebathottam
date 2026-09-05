@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { WORLD_DESKS, type NewsArticle } from "../data";
+import { newsHref } from "@/lib/news-url";
 
 export function WorldDeskMap({ stories }: { stories: NewsArticle[] }) {
   const [active, setActive] = useState<(typeof WORLD_DESKS)[number]>(WORLD_DESKS[0]);
@@ -81,7 +82,7 @@ export function WorldDeskMap({ stories }: { stories: NewsArticle[] }) {
             {top ? (
               <>
                 <p className="mt-6 text-sm text-white/55">Lead</p>
-                <Link href={`/blog/news/${top.slug}`} className="mt-2 block font-serif text-2xl leading-snug" data-cursor="READ">
+                <Link href={newsHref(top)} className="mt-2 block font-serif text-2xl leading-snug" data-cursor="READ">
                   {top.title}
                 </Link>
                 <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-white/45">{top.sourceLabel}</p>

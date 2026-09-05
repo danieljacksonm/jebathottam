@@ -5,6 +5,7 @@ import Link from "next/link";
 import { X } from "lucide-react";
 import { readingMinutes, relativeNewsTime } from "../data";
 import { useNews } from "./NewsProvider";
+import { newsHref } from "@/lib/news-url";
 
 export function NewsSearch() {
   const { articles, searchOpen, setSearchOpen } = useNews();
@@ -60,7 +61,7 @@ export function NewsSearch() {
           {results.map((a) => (
             <li key={a.id}>
               <Link
-                href={`/blog/news/${a.slug}`}
+                href={newsHref(a)}
                 onClick={() => setSearchOpen(false)}
                 className="block border-t border-white/15 pt-4 text-[var(--n-paper)]"
                 data-cursor="READ"
