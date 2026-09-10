@@ -173,7 +173,7 @@ function mergeArchive(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
   // O(n) twin cleanup (was O(n²) and burned CPU under crawlers)
   const cleanByUrl = new Map<string, ArchivedNewsItem>();
   const cleanByTitle = new Map<string, ArchivedNewsItem>();
-  for (const o of bySlug.values()) {
+  for (const o of Array.from(bySlug.values())) {
     if (isLegacySourceDomainSlug(o.slug)) continue;
     if (o.originalUrl) cleanByUrl.set(o.originalUrl, o);
     if (o.title) cleanByTitle.set(o.title, o);
