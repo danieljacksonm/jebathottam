@@ -4,25 +4,22 @@ import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 
+import { SERVICE_IMAGES } from "@/lib/media";
+
 type Namespace = "flightsPage" | "hotelsPage" | "visaPage" | "toursPage";
 
-const images: Record<Namespace, { src: string; alt: string }> = {
-  flightsPage: {
-    src: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=70",
-    alt: "Aircraft wing above clouds for flight assistance",
-  },
-  hotelsPage: {
-    src: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1600&q=70",
-    alt: "Quiet hillside stay near Kodaikanal",
-  },
-  visaPage: {
-    src: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&q=70",
-    alt: "Travel documents for visa assistance",
-  },
-  toursPage: {
-    src: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1600&q=70",
-    alt: "Mountain road towards a Kodaikanal sightseeing day",
-  },
+const imageByNamespace: Record<Namespace, keyof typeof SERVICE_IMAGES> = {
+  flightsPage: "flights",
+  hotelsPage: "hotels",
+  visaPage: "visa",
+  toursPage: "tours",
+};
+
+const altByNamespace: Record<Namespace, string> = {
+  flightsPage: "Aircraft wing above clouds for flight assistance",
+  hotelsPage: "Quiet hillside stay near Kodaikanal",
+  visaPage: "Travel documents for visa assistance",
+  toursPage: "Mountain road towards a Kodaikanal sightseeing day",
 };
 
 export async function ServicePageView({
@@ -39,7 +36,9 @@ export async function ServicePageView({
   setRequestLocale(locale);
   const t = await getTranslations(namespace);
   const nav = await getTranslations("nav");
-  const media = images[namespace];
+  const serviceKey = imageByNamespace[namespace];
+  const heroImage = SERVICE_IMAGES[serviceKey];
+  const heroAlt = altByNamespace[namespace];
 
   return (
     <PageAtmosphere>
@@ -47,8 +46,8 @@ export async function ServicePageView({
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image={media.src}
-        imageAlt={media.alt}
+        image={heroImage}
+        imageAlt={heroAlt}
         tone={namespace === "hotelsPage" ? "gold" : "mist"}
       />
       <Breadcrumbs

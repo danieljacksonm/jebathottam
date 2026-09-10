@@ -21,7 +21,7 @@ export function BookingBar() {
     if (destination) params.set("destination", destination);
     if (dates) params.set("dates", dates);
     if (guests) params.set("travelers", guests);
-    params.set("package", tab === "packages" ? "kodai-complete" : tab);
+    params.set("package", tab === "packages" ? "kodai-1n2d" : tab);
 
     if (tab === "packages") {
       router.push(`/enquire?${params.toString()}`);

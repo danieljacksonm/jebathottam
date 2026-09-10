@@ -2,8 +2,16 @@
 
 import Image from "next/image";
 import { galleryImages } from "@/data/cinematic";
+import { REAL_KODAI_ALT, REAL_KODAI } from "@/lib/media";
 import { useReveal } from "./motion";
 import { useTranslations } from "next-intl";
+
+const altBySrc = Object.fromEntries(
+  (Object.keys(REAL_KODAI) as (keyof typeof REAL_KODAI)[]).map((key) => [
+    REAL_KODAI[key],
+    REAL_KODAI_ALT[key],
+  ]),
+) as Record<string, string>;
 
 export function GalleryMasonry() {
   const ref = useReveal([]);
@@ -33,12 +41,16 @@ export function GalleryMasonry() {
             >
               <div
                 className={`relative overflow-hidden ${
-                  i % 3 === 0 ? "aspect-[4/5]" : i % 3 === 1 ? "aspect-square" : "aspect-[16/10]"
+                  i % 3 === 0
+                    ? "aspect-[4/5]"
+                    : i % 3 === 1
+                      ? "aspect-square"
+                      : "aspect-[16/10]"
                 }`}
               >
                 <Image
                   src={src}
-                  alt={`Kodaikanal gallery ${i + 1}`}
+                  alt={altBySrc[src] ?? `Kodaikanal travel photograph ${i + 1}`}
                   fill
                   className="object-cover transition-transform duration-700 hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 33vw"

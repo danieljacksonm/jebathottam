@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useReveal } from "./motion";
-import { BUSINESS } from "@/lib/contact";
+import { whatsappUrl } from "@/lib/whatsapp";
 
 export function DigitalStrip() {
   const ref = useReveal([]);
@@ -34,14 +34,14 @@ export function DigitalStrip() {
           <p className="mb-4 text-sm text-mist">{t("digitalSoft")}</p>
           <div className="flex flex-col gap-3 sm:flex-row">
             <a
-              href={BUSINESS.whatsappUrl}
+              href={whatsappUrl({ type: "general" })}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-gold justify-center"
             >
               {t("digitalWhatsapp")}
             </a>
-            <Link href="/enquire" className="btn-ghost justify-center">
+            <Link href="/plan-your-trip" className="btn-ghost justify-center">
               {t("digitalEnquire")}
             </Link>
           </div>

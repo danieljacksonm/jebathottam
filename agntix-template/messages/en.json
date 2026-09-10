@@ -1,41 +1,46 @@
 {
   "meta": {
-    "title": "Canaan Travel Hub | Premium Travel Experiences in Kodaikanal",
-    "description": "Discover premium Kodaikanal travel experiences, curated tours, holiday packages, stays and personalized journeys with Canaan Travel Hub."
+    "title": "Canaan Travel Hub | Kodaikanal Packages & Worldwide Travel",
+    "description": "Curated Kodaikanal packages and worldwide tourism support — flights, hotels, visas and trip planning with Canaan Travel Hub."
   },
   "seo": {
-    "homeTitle": "Canaan Travel Hub | Premium Travel Experiences in Kodaikanal",
-    "homeDescription": "Discover premium Kodaikanal travel experiences, curated tours, holiday packages, stays and personalized journeys with Canaan Travel Hub.",
+    "homeTitle": "Canaan Travel Hub | Kodaikanal Packages & Worldwide Travel",
+    "homeDescription": "Curated Kodaikanal packages and worldwide tourism support — flights, hotels, visas and trip planning with Canaan Travel Hub.",
     "kodaiTitle": "Kodaikanal Tour Packages & Travel Guide",
     "kodaiDescription": "Plan a calm Kodaikanal journey — sightseeing, honeymoon and family packages, lake and pine-forest days, and a clear itinerary with Canaan Travel Hub.",
-    "destinationsTitle": "Destinations | Kodaikanal",
-    "destinationsDescription": "Canaan’s tour destination for now is Kodaikanal — mist, pine, and complete hill-station packages.",
+    "destinationsTitle": "Destinations | Canaan Travel Hub",
+    "destinationsDescription": "Plan Kodaikanal with Canaan — and get tourism support for destinations worldwide through flights, hotels, visas and custom travel help.",
     "packagesTitle": "Kodaikanal Travel Packages",
     "packagesDescription": "Browse Canaan’s Kodaikanal tour packages for couples, families, luxury stays, adventure days, and complete circuits.",
     "toursTitle": "Kodaikanal Sightseeing Tours",
     "toursDescription": "Kodaikanal sightseeing and tour packages — lake, pine forest, villages, waterfalls, and unhurried highland days.",
-    "servicesTitle": "Digital Tourism Services",
-    "servicesDescription": "Flights, hotels, and visa support around your Kodaikanal package — digital services from Canaan Travel Hub.",
+    "servicesTitle": "Worldwide Digital Tourism Services",
+    "servicesDescription": "Flights, hotels, visas and travel support for journeys worldwide — with curated Kodaikanal packages as our hill-station specialty.",
     "hotelsTitle": "Kodaikanal Stays & Hotel Help",
-    "hotelsDescription": "Need a hillside stay around your Kodai package? Canaan helps with hotel guidance as a digital support service.",
-    "flightsTitle": "Flights for Your Kodaikanal Journey",
-    "flightsDescription": "Flight assistance to Madurai or Coimbatore as you plan a Kodaikanal tour with Canaan Travel Hub.",
+    "hotelsDescription": "Hotel booking assistance for Kodaikanal and destinations worldwide as a digital tourism service.",
+    "flightsTitle": "Flight Booking Assistance",
+    "flightsDescription": "Flight assistance for Kodaikanal arrivals and journeys worldwide with Canaan Travel Hub.",
     "visaTitle": "Visa Assistance",
-    "visaDescription": "Visa support as a digital service alongside Canaan’s Kodaikanal tour packages.",
+    "visaDescription": "Visa support as a digital tourism service for travellers worldwide.",
     "blogTitle": "Kodaikanal Travel Guide & Stories",
     "blogDescription": "Practical Kodaikanal travel guides — itineraries, packing, seasons, sightseeing, and slow-hill advice.",
     "aboutTitle": "About Canaan Travel Hub",
-    "aboutDescription": "Canaan Travel Hub offers complete Kodaikanal tour packages first, with digital tourism services when you need flights, hotels, or visas.",
+    "aboutDescription": "Canaan Travel Hub offers curated Kodaikanal tour packages and digital tourism services for travellers worldwide — flights, hotels, visas and trip planning.",
     "contactTitle": "Contact Canaan Travel Hub",
-    "contactDescription": "Speak with Canaan about Kodaikanal packages or digital travel services. Share your dates and we will reply with a clear next step.",
+    "contactDescription": "Speak with Canaan about Kodaikanal packages or worldwide travel support. Working hours: Monday–Saturday, 9:00 AM – 6:00 PM.",
     "enquireTitle": "Book Your Kodaikanal Journey",
-    "enquireDescription": "Enquire for Kodaikanal tour packages, honeymoon or family trips, and digital services. Canaan will respond with a calm plan.",
+    "enquireDescription": "Enquire for Kodaikanal packages or worldwide flights, hotels, visas and custom tourism support. Canaan will respond with a clear next step.",
+    "planTripTitle": "Plan Your Kodaikanal Trip",
+    "planTripDescription": "Share dates, travellers and preferences. Canaan prepares a clear plan for Kodaikanal packages or worldwide travel support.",
     "faqTitle": "Kodaikanal Travel FAQ",
     "faqDescription": "Answers on best time to visit Kodaikanal, how many days to stay, how to reach, and how Canaan packages work.",
     "privacyTitle": "Privacy Policy | Canaan Travel Hub",
     "privacyDescription": "How Canaan Travel Hub collects, uses, and protects your personal information when you enquire or browse our site.",
     "termsTitle": "Terms of Service | Canaan Travel Hub",
     "termsDescription": "Terms for using canaantravelhub.com and booking Kodaikanal tour packages or digital travel services with Canaan Travel Hub."
+  },
+  "geo": {
+    "home": "Canaan Travel Hub offers curated Kodaikanal packages (1 Night / 2 Days from INR 1,799 per person for 6 guests) and digital tourism support worldwide — flights, hotels, visas and trip planning. Call +91 70927 71754 or email managingdirector@canaantravelhub.com / canaantravelhub@gmail.com. Working hours: Monday–Saturday, 9:00 AM – 6:00 PM."
   },
   "kodaikanalGuide": {
     "whyTitle": "Why visit Kodaikanal",
@@ -49,7 +54,7 @@
     "stayTitle": "Where to stay",
     "stayBody": "Choose a quiet hillside stay slightly away from the busiest market lanes if you want still mornings. Hotel help is available as a digital service around your package.",
     "daysTitle": "How many days",
-    "daysBody": "A weekend covers the lake and one ridge. Three to five days lets you add forest, village, and a waterfall without hurry. The Complete circuit is for guests who want the full Kodai story.",
+    "daysBody": "A weekend (1 night / 2 days) covers our published core package. Ask Canaan for a custom longer stay if you want more forest, village, and waterfall time.",
     "tipsTitle": "Travel tips",
     "tipsBody": "Start viewpoints early. Keep one trusted cab for the day. Pack walking shoes, a rain layer, and cash for small shops. If you want a premium pace, pre-book timings and private transfers.",
     "linksLabel": "Continue your Kodai plan",
@@ -57,9 +62,9 @@
     "faq1q": "When is the best time to visit Kodaikanal?",
     "faq1a": "Summer (March–June) is the most comfortable for families. Winter is cooler and popular with couples. Monsoon is beautiful but needs slower driving.",
     "faq2q": "How many days do I need in Kodaikanal?",
-    "faq2a": "Two nights works for a first look. Three to five days is better for lake, forest, villages, and rest. Canaan packages are built around that pacing.",
+    "faq2a": "Our published package is 1 night / 2 days. Tell Canaan if you want extra nights — custom plans are available for longer stays and larger groups.",
     "faq3q": "Are Canaan tours only for Kodaikanal?",
-    "faq3a": "Yes. Tour packages are Kodaikanal-only for now. Flights, hotels, and visas are offered as digital support services.",
+    "faq3a": "Our published tour package is for Kodaikanal. We also support flights, hotels, visas and travel planning for destinations worldwide.",
     "faq4q": "How do I reach Kodaikanal?",
     "faq4a": "Fly to Madurai or Coimbatore, then continue by road. Private transfers make the hill climb easier, especially with children or elders.",
     "faq5q": "Do you offer honeymoon and family packages?",
@@ -81,6 +86,7 @@
     "enquire": "Enquire",
     "faq": "FAQ",
     "bookNow": "Book Now",
+    "planTrip": "Plan My Trip",
     "brand": "Canaan",
     "brandSub": "Travel Hub"
   },
@@ -88,7 +94,7 @@
     "place": "Kodaikanal · Princess of the Hills",
     "headlineBefore": "Arrive in the",
     "headlineAccent": "mist.",
-    "sub": "Canaan offers complete Kodaikanal tour packages — our only destination for now. Flights, hotels, and visas are available as digital support services.",
+    "sub": "Curated Kodaikanal packages — and flights, hotels, visas and tourism support for journeys worldwide.",
     "cta": "View Kodai packages",
     "ctaSecondary": "Feel Kodaikanal",
     "ctaVideo": "Watch Video",
@@ -140,15 +146,45 @@
   "packages": {
     "eyebrow": "Our main offering",
     "title": "Kodaikanal packages",
-    "subtitle": "Full hill-station packages only for Kodaikanal — Escape, Family, Honeymoon, Luxury, Adventure, and Complete.",
+    "subtitle": "Verified Kodaikanal 1 Night / 2 Days package — priced for 2, 4, or 6 guests. Custom rates for larger groups.",
+    "geoSummary": "Canaan Travel Hub offers a Kodaikanal 1 Night / 2 Days package from INR 1,799 per person (6 guests), INR 1,999 (4 guests), or INR 2,999 (2 guests). Includes stay, breakfast, dinner, valley tour, and complimentary campfire. Custom packages available for larger groups.",
     "from": "From",
     "perPerson": "per person",
     "days": "{count} Days",
     "nights": "{count} Nights",
     "enquire": "Enquire now",
     "viewAll": "View all packages",
+    "viewPackage": "View Package",
     "reviews": "{count} reviews",
     "detailCta": "Request this package",
+    "customTrip": "Plan a custom trip",
+    "whatsappCta": "WhatsApp us",
+    "tiersTitle": "Our 1 Night / 2 Days packages",
+    "tiersSubtitle": "Same inclusions on every tier — room type and per-person price change with group size.",
+    "bestValue": "Best Value",
+    "requestTier": "Request this tier",
+    "fromNote": "Lowest published rate · 6 PAX Family Unit",
+    "durationValue": "{days} days / {nights} night",
+    "quickFacts": "Quick facts",
+    "duration": "Duration (days / nights)",
+    "startingLocation": "Starting location",
+    "destination": "Destination",
+    "bestFor": "Best for",
+    "hotelCategory": "Hotel category",
+    "transport": "Transportation",
+    "meals": "Meal plan",
+    "itinerary": "Detailed itinerary",
+    "dayLabel": "Day {day}",
+    "overnight": "Overnight",
+    "included": "Included",
+    "notIncluded": "Not included",
+    "accommodation": "Accommodation",
+    "transportTitle": "Transportation",
+    "pricingTitle": "Pricing",
+    "startingFrom": "Starting from {price} per person",
+    "cancellation": "Cancellation",
+    "payment": "Payment terms",
+    "packageFaq": "Package FAQ",
     "luxuryEyebrow": "When you are ready",
     "luxuryTitle": "Stay in the story.",
     "luxuryBody": "Luxury Kodaikanal packages — offered only after the journey has touched you."
@@ -172,8 +208,30 @@
   "servicesPage": {
     "eyebrow": "Digital services",
     "title": "Support around your journey",
-    "subtitle": "Tourism packages are Kodaikanal-only. Digital services help with flights, hotels, visas, and related travel needs.",
+    "subtitle": "Flights, hotels, visas and travel support for journeys worldwide. Kodaikanal remains our curated hill-station specialty.",
+    "geoSummary": "Canaan Travel Hub offers a verified Kodaikanal 1 Night / 2 Days package plus digital tourism services worldwide for flights, hotels, visas and tour planning. Contact +91 70927 71754 or managingdirector@canaantravelhub.com / canaantravelhub@gmail.com.",
     "cta": "Start an enquiry"
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "Planning stays clear from the first message.",
+    "subtitle": "No rushed booking flow. Share your dates, style, and priorities, then Canaan prepares the next step.",
+    "step1": {
+      "title": "Tell us your travel plans",
+      "body": "Share dates, traveler count, and whether you want a package or only travel support."
+    },
+    "step2": {
+      "title": "We shape the itinerary",
+      "body": "Canaan suggests the right Kodai package, pace, and add-ons around your trip."
+    },
+    "step3": {
+      "title": "Confirm what fits",
+      "body": "Review the stay category, transport, and pricing assumptions before you say yes."
+    },
+    "step4": {
+      "title": "Travel with local clarity",
+      "body": "Once confirmed, you receive a clear plan for arrival, stays, and sightseeing."
+    }
   },
   "flightsPage": {
     "eyebrow": "Flights",
@@ -219,15 +277,80 @@
     "finaleBody": "Now, if your heart is still on the ridge — Canaan will take you there.",
     "openLine1": "Escape Into The Mist.",
     "openLine2": "Kodaikanal Awaits.",
+    "openEyebrow": "Kodaikanal travel specialists",
+    "openSub": "Curated Kodaikanal packages with local planning — plus flights, hotels, visas and tourism support worldwide.",
+    "openCtaPrimary": "Plan My Kodaikanal Trip",
+    "openCtaPackages": "Explore Packages",
+    "openTrust": "Personalized itineraries • Local assistance • Carefully planned stays",
     "openHint": "Begin the day",
     "watchFilm": "Watch the film",
     "brandSub": "Travel Hub"
+  },
+  "planTrip": {
+    "eyebrow": "High-clarity enquiry",
+    "title": "Plan your Kodaikanal trip",
+    "subtitle": "Nine calm steps. We use your answers to prepare a clear itinerary — no invented hotel names, no pressure.",
+    "asideTitle": "Prefer WhatsApp?",
+    "asideBody": "You can also message Canaan directly. We reply with the next clear step for your dates and group.",
+    "whatsappAside": "Chat on WhatsApp",
+    "progress": "Step {current} of {total}",
+    "stepDates": "Travel dates",
+    "datesPlaceholder": "e.g. 12–15 Oct 2026",
+    "stepAdults": "Number of adults",
+    "stepChildren": "Children",
+    "childrenCount": "Number of children",
+    "childAges": "Ages of children",
+    "childAgesPlaceholder": "e.g. 4, 9",
+    "stepCity": "Starting city",
+    "cityPlaceholder": "e.g. Chennai, Madurai, Coimbatore",
+    "stepPackage": "Preferred package",
+    "customPackage": "Custom itinerary",
+    "stepHotel": "Hotel preference",
+    "hotel_budget": "Budget",
+    "hotel_comfort": "Comfort",
+    "hotel_premium": "Premium",
+    "hotel_luxury": "Luxury",
+    "stepBudget": "Approximate budget",
+    "budgetPlaceholder": "e.g. ₹40,000 – ₹60,000 total",
+    "stepWhatsapp": "Your contact details",
+    "name": "Name",
+    "email": "Email",
+    "whatsappNumber": "WhatsApp number",
+    "stepNeeds": "Special requirements",
+    "need_honeymoon": "Honeymoon",
+    "need_seniors": "Senior citizens",
+    "need_children": "Children",
+    "need_photography": "Photography",
+    "need_adventure": "Adventure",
+    "need_vegetarian": "Vegetarian food",
+    "need_accessibility": "Accessibility",
+    "notes": "Anything else we should know?",
+    "notesPlaceholder": "Pace, must-see places, dietary needs…",
+    "back": "Back",
+    "next": "Continue",
+    "submit": "Create my itinerary",
+    "sending": "Sending…",
+    "success": "Thank you — your plan request is with Canaan.",
+    "successBody": "We will review your dates and reply with a clear next step.",
+    "whatsappAfter": "Message us on WhatsApp",
+    "browsePackages": "Browse packages",
+    "error": "We could not send your request. Please try again or WhatsApp us.",
+    "errDates": "Please share your travel dates.",
+    "errAdults": "Enter between 1 and 20 adults.",
+    "errChildren": "Enter a valid number of children.",
+    "errChildAges": "Please share the ages of your children.",
+    "errCity": "Please share your starting city.",
+    "errPackage": "Please choose a package or custom.",
+    "errHotel": "Please choose a hotel preference.",
+    "errBudget": "Please share an approximate budget.",
+    "errWhatsapp": "Enter a valid WhatsApp number.",
+    "errContact": "Name and email are required."
   },
   "about": {
     "eyebrow": "Our house",
     "title": "Canaan Travel Hub",
     "subtitle": "Cross Borders. Discover Blessings.",
-    "body": "Right now Canaan focuses on complete Kodaikanal tour packages — that is our main product. Alongside this, we offer digital tourism services such as flights, hotels, and visa assistance.",
+    "body": "Canaan Travel Hub crafts curated Kodaikanal tour packages and provides digital tourism services — flights, hotels, visas and trip planning — for travellers worldwide.",
     "valuesTitle": "What we hold",
     "values": {
       "care": {
@@ -235,8 +358,8 @@
         "body": "Details arranged before you ask."
       },
       "place": {
-        "title": "Kodaikanal first",
-        "body": "One destination, done properly — for now."
+        "title": "Kodaikanal specialty",
+        "body": "Deep local care for Kodai — with worldwide travel support when you need it."
       },
       "trust": {
         "title": "Trusted path",
@@ -247,13 +370,15 @@
   "contact": {
     "eyebrow": "Contact",
     "title": "Speak with Canaan",
-    "subtitle": "Share your Kodaikanal package plans or a digital service need. We’ll respond with a clear next step.",
-    "note": "Reach us by phone, WhatsApp, or email. For package details and dates, the enquiry form helps us reply faster.",
+    "subtitle": "Kodaikanal packages or worldwide tourism support — we are here Monday to Saturday.",
+    "note": "Share your Kodaikanal package plans or a worldwide travel need. We reply during working hours with a clear next step.",
     "cta": "Send an enquiry",
     "phone": "Phone",
     "whatsapp": "WhatsApp",
     "email": "Email",
-    "facebook": "Facebook"
+    "facebook": "Facebook",
+    "hours": "Working hours",
+    "hoursValue": "Monday–Saturday, 9:00 AM – 6:00 PM"
   },
   "enquirePage": {
     "eyebrow": "Private enquiry",
@@ -275,23 +400,26 @@
     "required": "Please fill the required fields."
   },
   "kodaikanalPage": {
-    "eyebrow": "Our only tour destination — for now",
+    "eyebrow": "Hill-station specialty",
     "title": "Kodaikanal",
     "subtitle": "Mist, pine, and unhurried highland days.",
-    "intro": "Canaan’s tour packages are for Kodaikanal only. Choose Escape, Family, Honeymoon, Luxury, Adventure, or our Complete circuit.",
+    "intro": "Our published package is Kodaikanal 1 Night / 2 Days — with 2, 4 and 6 guest tiers, plus custom plans for larger groups. Need travel beyond Kodai? We support destinations worldwide.",
     "cta": "Browse packages"
   },
   "footer": {
     "tagline": "Cross Borders. Discover Blessings.",
-    "about": "Kodaikanal tour packages first. Digital tourism services when you need flights, hotels, or visas.",
+    "about": "Kodaikanal packages with local care — plus flights, hotels, visas and tourism support worldwide.",
     "rights": "© {year} Canaan Travel Hub. All rights reserved.",
     "contact": "Contact",
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
+    "policies": "Policies",
+    "cancellation": "Cancellation & Refund",
+    "childPricing": "Child Pricing",
     "explore": "Explore",
     "services": "Digital services",
     "support": "Support",
-    "note": "Kodaikanal packages · Digital services"
+    "note": "Kodaikanal packages · Worldwide travel support"
   },
   "common": {
     "learnMore": "Learn more",
@@ -305,7 +433,7 @@
   "destinationsSection": {
     "eyebrow": "Destination",
     "title": "Kodaikanal",
-    "subtitle": "Our only tour destination for now — complete packages in the Princess of the Hills.",
+    "subtitle": "Kodaikanal is our curated hill package destination. Worldwide flights, hotels and visas are available as travel support.",
     "featured": "Featured",
     "from": "From",
     "viewAll": "View Kodaikanal"
@@ -347,7 +475,7 @@
     "timelineTitle": "A day written in mist.",
     "digitalEyebrow": "Also available",
     "digitalTitle": "Digital tourism services",
-    "digitalBody": "Packages are Kodaikanal-only. Flights, hotels, and visas support your journey.",
+    "digitalBody": "Flights, hotels and visas for journeys worldwide — alongside our Kodaikanal packages.",
     "digitalCta": "View services",
     "digitalSoft": "Questions about Kodai packages or digital services?",
     "digitalWhatsapp": "WhatsApp us",
@@ -404,11 +532,11 @@
       },
       "rights": {
         "title": "Your choices",
-        "body": "You may ask us to correct or delete enquiry data by emailing managingdirector@canaantravelhub.com. We will respond within a reasonable time."
+        "body": "You may ask us to correct or delete enquiry data by emailing managingdirector@canaantravelhub.com or canaantravelhub@gmail.com. We will respond within a reasonable time."
       },
       "contact": {
         "title": "Contact",
-        "body": "For privacy questions, email managingdirector@canaantravelhub.com or call +91 70927 71754."
+        "body": "For privacy questions, email managingdirector@canaantravelhub.com or canaantravelhub@gmail.com, or call +91 70927 71754."
       }
     },
     "termsEyebrow": "Legal",

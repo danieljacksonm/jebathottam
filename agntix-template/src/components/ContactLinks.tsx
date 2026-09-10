@@ -8,6 +8,8 @@ type Props = {
   facebookLabel: string;
   className?: string;
   compact?: boolean;
+  /** Contextual WhatsApp deep link (prefilled message). */
+  whatsappHref?: string;
 };
 
 export function ContactLinks({
@@ -17,6 +19,7 @@ export function ContactLinks({
   facebookLabel,
   className = "",
   compact = false,
+  whatsappHref,
 }: Props) {
   const linkClass = compact
     ? "flex items-center gap-2 text-sm text-white/70 transition hover:text-gold"
@@ -35,7 +38,7 @@ export function ContactLinks({
       </li>
       <li>
         <a
-          href={BUSINESS.whatsappUrl}
+          href={whatsappHref ?? BUSINESS.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className={linkClass}
@@ -44,15 +47,17 @@ export function ContactLinks({
           <span>{whatsappLabel}</span>
         </a>
       </li>
-      <li>
-        <a href={`mailto:${BUSINESS.email}`} className={linkClass}>
-          <Mail className="h-4 w-4 shrink-0 text-gold" aria-hidden />
-          <span>
-            <span className="sr-only">{emailLabel}: </span>
-            {BUSINESS.email}
-          </span>
-        </a>
-      </li>
+      {BUSINESS.emails.map((address) => (
+        <li key={address}>
+          <a href={`mailto:${address}`} className={linkClass}>
+            <Mail className="h-4 w-4 shrink-0 text-gold" aria-hidden />
+            <span>
+              <span className="sr-only">{emailLabel}: </span>
+              {address}
+            </span>
+          </a>
+        </li>
+      ))}
       <li>
         <a
           href={BUSINESS.facebook}

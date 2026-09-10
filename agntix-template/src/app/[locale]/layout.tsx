@@ -20,7 +20,7 @@ import { SkipLink } from "@/components/SkipLink";
 import { MobileBookBar } from "@/components/MobileBookBar";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DeferredChrome } from "@/components/cinematic/DeferredChrome";
-import { organizationJsonLd, SITE_NAME, SITE_URL } from "@/lib/seo";
+import { organizationJsonLd, SITE_NAME, SITE_URL, webSiteJsonLd } from "@/lib/seo";
 import "../globals.css";
 
 const manrope = Manrope({
@@ -58,7 +58,7 @@ const tamilDisplay = Tiro_Tamil({
   weight: "400",
   variable: "--font-tamil-display",
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 const hindiSans = Hind({
@@ -150,7 +150,7 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <SkipLink />
-          <JsonLd data={organizationJsonLd()} />
+          <JsonLd data={[organizationJsonLd(), webSiteJsonLd()]} />
           <GsapNavCleanup />
           <SmoothScroll />
           <DeferredChrome />

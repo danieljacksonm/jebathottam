@@ -17,7 +17,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "seo" });
   return pageMetadata({
     locale,
-    path: "/kodaikanal",
+    path: "/destinations/kodaikanal",
     title: t("kodaiTitle"),
     description: t("kodaiDescription"),
     image:

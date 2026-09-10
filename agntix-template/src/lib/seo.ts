@@ -89,31 +89,76 @@ export function pageMetadata({
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
-    "@type": ["Organization", "TravelAgency"],
+    "@type": ["Organization", "TravelAgency", "LocalBusiness"],
     name: SITE_NAME,
     url: SITE_URL,
     logo: `${SITE_URL}/brand/canaan-logo.jpeg`,
     slogan: "Cross Borders. Discover Blessings.",
-    email: BUSINESS.email,
+    email: [...BUSINESS.emails],
     telephone: BUSINESS.phoneE164,
-    contactPoint: {
+    contactPoint: BUSINESS.emails.map((email) => ({
       "@type": "ContactPoint",
       telephone: BUSINESS.phoneE164,
-      email: BUSINESS.email,
+      email,
       contactType: "customer service",
       availableLanguage: ["English", "Tamil", "Hindi"],
-    },
-    sameAs: [BUSINESS.facebook],
-    areaServed: {
-      "@type": "TouristDestination",
-      name: "Kodaikanal",
-    },
-    makesOffer: {
-      "@type": "Offer",
-      itemOffered: {
-        "@type": "TouristTrip",
-        name: "Kodaikanal tour packages",
+      hoursAvailable: {
+        "@type": "OpeningHoursSpecification",
+        dayOfWeek: [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+        ],
+        opens: "09:00",
+        closes: "18:00",
       },
+    })),
+    openingHours: BUSINESS.hoursSchema,
+    inLanguage: ["en", "ta", "hi"],
+    sameAs: [BUSINESS.facebook],
+    areaServed: [
+      {
+        "@type": "TouristDestination",
+        name: "Kodaikanal",
+      },
+      {
+        "@type": "Country",
+        name: "Worldwide",
+      },
+    ],
+    makesOffer: [
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "TouristTrip",
+          name: "Kodaikanal tour packages",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Worldwide digital tourism services",
+        },
+      },
+    ],
+  };
+}
+
+export function webSiteJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: SITE_URL,
+    inLanguage: ["en-IN", "ta-IN", "hi-IN"],
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
     },
   };
 }
@@ -134,14 +179,14 @@ export function breadcrumbJsonLd(
   };
 }
 
-export function touristAttractionJsonLd() {
+export function touristAttractionJsonLd(locale: string = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "TouristAttraction",
     name: "Kodaikanal",
     description:
       "Hill station in Tamil Nadu known for mist, pine forests, Kodai Lake, and unhurried highland travel.",
-    url: absoluteUrl("en", "/kodaikanal"),
+    url: absoluteUrl(locale, "/kodaikanal"),
     touristType: ["Family", "Couples", "Nature"],
     isAccessibleForFree: true,
   };
@@ -165,7 +210,8 @@ export function packageJsonLd(pkg: {
       "@type": "Offer",
       priceCurrency: "INR",
       price: pkg.priceFrom,
-      availability: "https://schema.org/InStock",
+      // Starting / indicative price — not a live inventory claim
+      availability: "https://schema.org/LimitedAvailability",
       url: pkg.url,
     },
   };

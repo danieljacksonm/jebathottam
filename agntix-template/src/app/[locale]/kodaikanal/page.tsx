@@ -42,7 +42,7 @@ export default async function KodaikanalPage({
 
   return (
     <PageAtmosphere>
-      <JsonLd data={touristAttractionJsonLd()} />
+      <JsonLd data={touristAttractionJsonLd(locale)} />
       <CinematicPageHero
         eyebrow={t("eyebrow")}
         title={t("title")}

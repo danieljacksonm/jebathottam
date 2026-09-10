@@ -7,9 +7,21 @@ import { AtmosphereLayer } from "./AtmosphereLayer";
 import { BrandFilmModal } from "./BrandFilmModal";
 import { afterFirstPaint, isMobileLite } from "@/lib/perf";
 import { HERO_IMAGE } from "@/lib/media";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 function LetterLine({ text }: { text: string }) {
+  const locale = useLocale();
+
+  // Per-character animation breaks Tamil/Hindi grapheme clusters (vowel signs, conjuncts).
+  if (locale !== "en") {
+    return (
+      <span data-letter className="inline-block">
+        {text}
+      </span>
+    );
+  }
+
   return (
     <span>
       {text.split("").map((ch, i) => (
@@ -220,7 +232,10 @@ export function FilmOpening() {
           </p>
         </div>
 
-        <h1 className="font-display text-4xl leading-[1.08] text-white md:text-6xl lg:text-7xl">
+        <p className="mt-4 text-[0.65rem] uppercase tracking-[0.32em] text-gold">
+          {t("openEyebrow")}
+        </p>
+        <h1 className="mt-4 font-display text-4xl leading-[1.08] text-white md:text-6xl lg:text-7xl">
           <LetterLine text={line1} />
         </h1>
         <p
@@ -229,9 +244,23 @@ export function FilmOpening() {
         >
           {line2}
         </p>
+        <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/75 md:text-base">
+          {t("openSub")}
+        </p>
+        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <Link href="/plan-your-trip" className="btn-gold">
+            {t("openCtaPrimary")}
+          </Link>
+          <Link href="/packages" className="btn-ghost">
+            {t("openCtaPackages")}
+          </Link>
+        </div>
+        <p className="mt-5 text-[0.7rem] tracking-[0.06em] text-white/55">
+          {t("openTrust")}
+        </p>
         <p
           data-open-hint
-          className="mt-14 text-[0.65rem] uppercase tracking-[0.35em] text-white/55 opacity-100 md:opacity-0"
+          className="mt-10 text-[0.65rem] uppercase tracking-[0.35em] text-white/55 opacity-100 md:opacity-0"
         >
           {hint}
         </p>

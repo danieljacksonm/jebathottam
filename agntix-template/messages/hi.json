@@ -35,7 +35,12 @@
     "privacyTitle": "गोपनीयता नीति | Canaan Travel Hub",
     "privacyDescription": "canaantravelhub.com उपयोग करते समय कनान आपकी जानकारी कैसे एकत्र और सुरक्षित करता है।",
     "termsTitle": "सेवा की शर्तें | Canaan Travel Hub",
-    "termsDescription": "canaantravelhub.com और कनान यात्रा पैकेज के लिए शर्तें।"
+    "termsDescription": "canaantravelhub.com और कनान यात्रा पैकेज के लिए शर्तें।",
+    "planTripTitle": "अपनी कोडाइकनाल यात्रा प्लान करें",
+    "planTripDescription": "तारीखें, यात्री और पसंद साझा करें। Canaan स्पष्ट कोडाइकनाल itinerary तैयार करेगा।"
+  },
+  "geo": {
+    "home": "कानान ट्रैवल हब तमिलनाडु के कोडाइकनाल में विशेषज्ञता वाली ट्रैवल एजेंसी है। प्रकाशित पैकेज: कोडाइकनाल 1 रात / 2 दिन (6 अतिथियों के लिए INR 1,799 प्रति व्यक्ति से; 2 और 4 अतिथि टियर भी)। फ़्लाइट, होटल, वीज़ा डिजिटल सेवाएँ। +91 70927 71754 / managingdirector@canaantravelhub.com / canaantravelhub@gmail.com।"
   },
   "kodaikanalGuide": {
     "whyTitle": "कोडाइकनाल क्यों जाएँ",
@@ -82,7 +87,8 @@
     "faq": "सवाल",
     "bookNow": "बुक करें",
     "brand": "Canaan",
-    "brandSub": "Travel Hub"
+    "brandSub": "Travel Hub",
+    "planTrip": "मेरी यात्रा प्लान करें"
   },
   "hero": {
     "place": "कोडाइकनाल · पहाड़ियों की राजकुमारी",
@@ -134,7 +140,8 @@
   "packages": {
     "eyebrow": "हमारी मुख्य पेशकश",
     "title": "कोडाइकनाल पैकेज",
-    "subtitle": "अभी केवल कोडाइकनाल — पूर्ण पहाड़ी पैकेज।",
+    "subtitle": "सत्यापित कोडई 1 रात / 2 दिन पैकेज — 2, 4 या 6 अतिथियों के लिए कीमत। बड़े समूहों के लिए कस्टम।",
+    "geoSummary": "कानान ट्रैवल हब कोडाइकनाल 1 रात / 2 दिन पैकेज देता है: 6 अतिथि INR 1,799/व्यक्ति, 4 अतिथि INR 1,999, 2 अतिथि INR 2,999। ठहराव, नाश्ता/डिनर, वैली टूर, मुफ़्त कैम्पफ़ायर।",
     "from": "शुरू से",
     "perPerson": "प्रति व्यक्ति",
     "days": "{count} दिन",
@@ -145,7 +152,36 @@
     "detailCta": "यह पैकेज माँगें",
     "luxuryEyebrow": "जब आप तैयार हों",
     "luxuryTitle": "कहानी में ठहरें।",
-    "luxuryBody": "लक्ज़री कोडाइकनाल पैकेज — यात्रा छू लेने के बाद ही।"
+    "luxuryBody": "लक्ज़री कोडाइकनाल पैकेज — यात्रा छू लेने के बाद ही।",
+    "viewPackage": "पैकेज देखें",
+    "customTrip": "कस्टम ट्रिप प्लान करें",
+    "whatsappCta": "WhatsApp करें",
+    "quickFacts": "त्वरित तथ्य",
+    "duration": "अवधि (दिन / रातें)",
+    "startingLocation": "शुरुआती स्थान",
+    "destination": "गंतव्य",
+    "bestFor": "उपयुक्त",
+    "hotelCategory": "होटल श्रेणी",
+    "transport": "परिवहन",
+    "meals": "भोजन योजना",
+    "itinerary": "विस्तृत itinerary",
+    "dayLabel": "दिन {day}",
+    "overnight": "रात का ठहराव",
+    "included": "शामिल",
+    "notIncluded": "शामिल नहीं",
+    "accommodation": "आवास",
+    "transportTitle": "परिवहन",
+    "pricingTitle": "मूल्य",
+    "startingFrom": "{price} प्रति व्यक्ति से शुरू",
+    "cancellation": "रद्दीकरण",
+    "payment": "भुगतान शर्तें",
+    "packageFaq": "पैकेज FAQ",
+    "tiersTitle": "हमारे 1 रात / 2 दिन पैकेज",
+    "tiersSubtitle": "हर टियर में समान समावेश — कमरा प्रकार और प्रति व्यक्ति कीमत समूह आकार से बदलती है।",
+    "bestValue": "बेस्ट वैल्यू",
+    "requestTier": "यह टियर माँगें",
+    "fromNote": "सबसे कम प्रकाशित दर · 6 PAX फ़ैमिली यूनिट",
+    "durationValue": "{days} दिन / {nights} रात"
   },
   "testimonials": {
     "eyebrow": "खुश यात्री",
@@ -167,7 +203,29 @@
     "eyebrow": "डिजिटल पर्यटन",
     "title": "वैश्विक सेवाएँ। एक भरोसेमंद हब।",
     "subtitle": "कोडई पैकेज के बाद फ़्लाइट, होटल, वीज़ा और वैश्विक योजना।",
+    "geoSummary": "कानान ट्रैवल हब कोडाइकनाल 1 रात / 2 दिन पैकेज देता है: 6 अतिथि INR 1,799/व्यक्ति, 4 अतिथि INR 1,999, 2 अतिथि INR 2,999। ठहराव, नाश्ता/डिनर, वैली टूर, मुफ़्त कैम्पफ़ायर।",
     "cta": "पूछताछ शुरू करें"
+  },
+  "howItWorks": {
+    "eyebrow": "यह कैसे काम करता है",
+    "title": "पहले संदेश से ही योजना साफ रहती है।",
+    "subtitle": "जल्दबाज़ी वाला बुकिंग फ़्लो नहीं। अपनी तिथियाँ, यात्रियों की संख्या और पसंद बताएँ, फिर कानान अगला कदम तैयार करता है।",
+    "step1": {
+      "title": "अपनी यात्रा योजना बताइए",
+      "body": "तिथियाँ, यात्रियों की संख्या और आपको पूरा पैकेज चाहिए या केवल ट्रैवल सपोर्ट, यह साझा करें।"
+    },
+    "step2": {
+      "title": "हम यात्रा रूपरेखा बनाते हैं",
+      "body": "कानान आपकी गति और ज़रूरत के हिसाब से सही कोडई पैकेज और ज़रूरी ऐड-ऑन सुझाता है।"
+    },
+    "step3": {
+      "title": "जो सही लगे उसे पक्का करें",
+      "body": "ठहराव श्रेणी, परिवहन और कीमत की धारणाएँ देखकर निर्णय लें।"
+    },
+    "step4": {
+      "title": "स्थानीय स्पष्टता के साथ यात्रा करें",
+      "body": "पुष्टि के बाद आपको आगमन, ठहराव और साइटसीइंग के लिए साफ योजना मिलती है।"
+    }
   },
   "flightsPage": {
     "eyebrow": "फ़्लाइट",
@@ -215,7 +273,12 @@
     "openLine2": "कोडाइकनाल इंतज़ार कर रहा है।",
     "openHint": "दिन शुरू करें",
     "watchFilm": "फ़िल्म देखें",
-    "brandSub": "Travel Hub"
+    "brandSub": "Travel Hub",
+    "openEyebrow": "कोडाइकनाल यात्रा विशेषज्ञ",
+    "openSub": "स्थानीय नियोजन के साथ चुनिंदा कोडई पैकेज — जरूरत पर उड़ान, होटल, वीज़ा सहायता।",
+    "openCtaPrimary": "मेरी कोडई यात्रा प्लान करें",
+    "openCtaPackages": "पैकेज देखें",
+    "openTrust": "व्यक्तिगत itinerary • स्थानीय सहायता • सावधानी से नियोजित ठहराव"
   },
   "about": {
     "eyebrow": "हमारा घर",
@@ -247,7 +310,9 @@
     "phone": "फ़ोन",
     "whatsapp": "WhatsApp",
     "email": "ईमेल",
-    "facebook": "Facebook"
+    "facebook": "Facebook",
+    "hours": "कार्य समय",
+    "hoursValue": "सोमवार–शनिवार, सुबह 9 – शाम 6"
   },
   "enquirePage": {
     "eyebrow": "निजी पूछताछ",
@@ -277,7 +342,7 @@
   },
   "footer": {
     "tagline": "Cross Borders. Discover Blessings.",
-    "about": "कोडाइकनाल पैकेज और वैश्विक डिजिटल पर्यटन।",
+    "about": "कोडई पैकेज और वैश्विक यात्रा सहायता — उड़ान, होटल, वीज़ा।",
     "rights": "© {year} Canaan Travel Hub. सर्वाधिकार सुरक्षित।",
     "contact": "संपर्क",
     "privacy": "गोपनीयता नीति",
@@ -285,7 +350,10 @@
     "explore": "खोजें",
     "services": "सेवाएँ",
     "support": "सहायता",
-    "note": "प्रीमियम यात्राएँ · कोडई पहले"
+    "note": "कोडई पैकेज · वैश्विक सहायता",
+    "policies": "नीतियाँ",
+    "cancellation": "रद्दीकरण और रिफंड",
+    "childPricing": "बाल मूल्य"
   },
   "common": {
     "learnMore": "और जानें",
@@ -386,24 +454,120 @@
     "privacyUpdated": "अंतिम अपडेट: सितंबर 2026",
     "privacyIntro": "Canaan Travel Hub आपकी गोपनीयता का सम्मान करता है। यह नीति बताती है कि canaantravelhub.com पर हम क्या जानकारी एकत्र करते हैं।",
     "privacy": {
-      "collect": { "title": "जानकारी जो हम एकत्र करते हैं", "body": "पूछताछ में नाम, ईमेल, फ़ोन, तारीखें, पैकेज रुचि और संदेश शामिल हो सकते हैं।" },
-      "use": { "title": "उपयोग", "body": "जवाब देने, कोडई पैकेज योजना बनाने और अनुरोधित डिजिटल सेवाएँ देने के लिए। हम आपका डेटा नहीं बेचते।" },
-      "share": { "title": "साझाकरण", "body": "होटल, परिवहन या वीज़ा भागीदारों के साथ केवल आवश्यक विवरण साझा किए जाते हैं।" },
-      "cookies": { "title": "कुकीज़", "body": "भाषा वरीयता के लिए आवश्यक कुकीज़। कोई विज्ञापन ट्रैकर नहीं।" },
-      "rights": { "title": "आपके विकल्प", "body": "managingdirector@canaantravelhub.com पर सुधार या हटाने का अनुरोध करें।" },
-      "contact": { "title": "संपर्क", "body": "गोपनीयता प्रश्नों के लिए managingdirector@canaantravelhub.com या +91 70927 71754।" }
+      "collect": {
+        "title": "जानकारी जो हम एकत्र करते हैं",
+        "body": "पूछताछ में नाम, ईमेल, फ़ोन, तारीखें, पैकेज रुचि और संदेश शामिल हो सकते हैं।"
+      },
+      "use": {
+        "title": "उपयोग",
+        "body": "जवाब देने, कोडई पैकेज योजना बनाने और अनुरोधित डिजिटल सेवाएँ देने के लिए। हम आपका डेटा नहीं बेचते।"
+      },
+      "share": {
+        "title": "साझाकरण",
+        "body": "होटल, परिवहन या वीज़ा भागीदारों के साथ केवल आवश्यक विवरण साझा किए जाते हैं।"
+      },
+      "cookies": {
+        "title": "कुकीज़",
+        "body": "भाषा वरीयता के लिए आवश्यक कुकीज़। कोई विज्ञापन ट्रैकर नहीं।"
+      },
+      "rights": {
+        "title": "आपके विकल्प",
+        "body": "managingdirector@canaantravelhub.com या canaantravelhub@gmail.com पर सुधार या हटाने का अनुरोध करें।"
+      },
+      "contact": {
+        "title": "संपर्क",
+        "body": "गोपनीयता प्रश्नों के लिए managingdirector@canaantravelhub.com या canaantravelhub@gmail.com या +91 70927 71754।"
+      }
     },
     "termsEyebrow": "कानूनी",
     "termsTitle": "सेवा की शर्तें",
     "termsUpdated": "अंतिम अपडेट: सितंबर 2026",
     "termsIntro": "canaantravelhub.com का उपयोग और पूछताछ भेजकर आप इन शर्तों से सहमत हैं।",
     "terms": {
-      "services": { "title": "सेवाएँ", "body": "कोडाइकनाल पैकेज और उड़ान, होटल, वीज़ा सहायता उपलब्ध।" },
-      "bookings": { "title": "पूछताछ और बुकिंग", "body": "पूछताछ बुकिंग की पुष्टि नहीं करती। अंतिम मूल्य लिखित रूप में तय होगा।" },
-      "pricing": { "title": "मूल्य", "body": "वेबसाइट पर दिखाए मूल्य संकेतात्मक हैं; मौसम और शामिल सेवाओं पर निर्भर।" },
-      "liability": { "title": "जिम्मेदारी", "body": "मौसम, सड़क और तीसरे पक्ष के कारणों से देरी संभव है।" },
-      "changes": { "title": "परिवर्तन", "body": "शर्तें अपडेट हो सकती हैं; नवीनतम संस्करण इस पृष्ठ पर रहेगा।" },
-      "law": { "title": "कानून", "body": "भारतीय कानून लागू; आवश्यकता पर तमिलनाडु अदालतें।" }
+      "services": {
+        "title": "सेवाएँ",
+        "body": "कोडाइकनाल पैकेज और उड़ान, होटल, वीज़ा सहायता उपलब्ध।"
+      },
+      "bookings": {
+        "title": "पूछताछ और बुकिंग",
+        "body": "पूछताछ बुकिंग की पुष्टि नहीं करती। अंतिम मूल्य लिखित रूप में तय होगा।"
+      },
+      "pricing": {
+        "title": "मूल्य",
+        "body": "वेबसाइट पर दिखाए मूल्य संकेतात्मक हैं; मौसम और शामिल सेवाओं पर निर्भर।"
+      },
+      "liability": {
+        "title": "जिम्मेदारी",
+        "body": "मौसम, सड़क और तीसरे पक्ष के कारणों से देरी संभव है।"
+      },
+      "changes": {
+        "title": "परिवर्तन",
+        "body": "शर्तें अपडेट हो सकती हैं; नवीनतम संस्करण इस पृष्ठ पर रहेगा।"
+      },
+      "law": {
+        "title": "कानून",
+        "body": "भारतीय कानून लागू; आवश्यकता पर तमिलनाडु अदालतें।"
+      }
     }
+  },
+  "planTrip": {
+    "eyebrow": "स्पष्ट पूछताछ",
+    "title": "अपनी कोडाइकनाल यात्रा प्लान करें",
+    "subtitle": "नौ शांत चरण। स्पष्ट itinerary के लिए आपके उत्तरों का उपयोग करते हैं।",
+    "asideTitle": "WhatsApp पसंद है?",
+    "asideBody": "सीधे Canaan को संदेश भेज सकते हैं। अगला स्पष्ट कदम भेजेंगे।",
+    "whatsappAside": "WhatsApp चैट",
+    "progress": "चरण {current} / {total}",
+    "stepDates": "यात्रा तिथियाँ",
+    "datesPlaceholder": "e.g. 12–15 Oct 2026",
+    "stepAdults": "वयस्कों की संख्या",
+    "stepChildren": "बच्चे",
+    "childrenCount": "बच्चों की संख्या",
+    "childAges": "बच्चों की आयु",
+    "childAgesPlaceholder": "e.g. 4, 9",
+    "stepCity": "शुरुआती शहर",
+    "cityPlaceholder": "e.g. Chennai, Madurai, Coimbatore",
+    "stepPackage": "पसंदीदा पैकेज",
+    "customPackage": "कस्टम itinerary",
+    "stepHotel": "होटल पसंद",
+    "hotel_budget": "बजट",
+    "hotel_comfort": "आराम",
+    "hotel_premium": "प्रीमियम",
+    "hotel_luxury": "लक्ज़री",
+    "stepBudget": "अनुमानित बजट",
+    "budgetPlaceholder": "e.g. ₹40,000 – ₹60,000 total",
+    "stepWhatsapp": "संपर्क विवरण",
+    "name": "नाम",
+    "email": "ईमेल",
+    "whatsappNumber": "WhatsApp नंबर",
+    "stepNeeds": "विशेष आवश्यकताएँ",
+    "need_honeymoon": "हनीमून",
+    "need_seniors": "वरिष्ठ नागरिक",
+    "need_children": "बच्चे",
+    "need_photography": "फ़ोटोग्राफ़ी",
+    "need_adventure": "एडवेंचर",
+    "need_vegetarian": "शाकाहारी भोजन",
+    "need_accessibility": "पहुँच",
+    "notes": "और कुछ?",
+    "notesPlaceholder": "Pace, must-see places, dietary needs…",
+    "back": "पीछे",
+    "next": "आगे",
+    "submit": "मेरा itinerary बनाएँ",
+    "sending": "भेजा जा रहा है…",
+    "success": "धन्यवाद — आपका अनुरोध Canaan के पास है।",
+    "successBody": "हम तिथियाँ देखकर अगला कदम भेजेंगे।",
+    "whatsappAfter": "WhatsApp संदेश",
+    "browsePackages": "पैकेज देखें",
+    "error": "भेज नहीं सके। फिर कोशिश करें या WhatsApp करें।",
+    "errDates": "Please share your travel dates.",
+    "errAdults": "Enter between 1 and 20 adults.",
+    "errChildren": "Enter a valid number of children.",
+    "errChildAges": "Please share the ages of your children.",
+    "errCity": "Please share your starting city.",
+    "errPackage": "Please choose a package or custom.",
+    "errHotel": "Please choose a hotel preference.",
+    "errBudget": "Please share an approximate budget.",
+    "errWhatsapp": "Enter a valid WhatsApp number.",
+    "errContact": "Name and email are required."
   }
 }

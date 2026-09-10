@@ -12,6 +12,10 @@ export type EnquiryMailPayload = {
   packageId: string | null;
   message: string | null;
   locale: string;
+  source?: string | null;
+  hotelPreference?: string | null;
+  budget?: string | null;
+  startCity?: string | null;
 };
 
 function getTransporter() {
@@ -42,7 +46,10 @@ export async function sendEnquiryNotification(
   payload: EnquiryMailPayload,
 ): Promise<{ sent: boolean; reason?: string }> {
   const transporter = getTransporter();
-  const to = process.env.ENQUIRY_NOTIFY_EMAIL || BUSINESS.email;
+  const notifyEnv = process.env.ENQUIRY_NOTIFY_EMAIL?.trim();
+  const to = notifyEnv
+    ? notifyEnv
+    : BUSINESS.emails.join(", ");
 
   if (!transporter) {
     console.warn(
@@ -56,11 +63,12 @@ export async function sendEnquiryNotification(
     process.env.SMTP_USER ||
     `Canaan Travel Hub <${BUSINESS.email}>`;
 
-  const subject = `[Canaan] New enquiry — ${payload.name}`;
+  const subject = `[Canaan] ${payload.source === "plan-your-trip" ? "Plan trip" : "Enquiry"} — ${payload.name}`;
   const text = [
     "New enquiry on canaantravelhub.com",
     "",
     `ID: ${payload.id}`,
+    `Source: ${payload.source || "enquire"}`,
     `Received: ${payload.receivedAt}`,
     `Name: ${payload.name}`,
     `Email: ${payload.email}`,
@@ -68,6 +76,9 @@ export async function sendEnquiryNotification(
     `Travellers: ${payload.travelers || "—"}`,
     `Dates: ${payload.dates || "—"}`,
     `Package: ${payload.packageId || "—"}`,
+    `Start city: ${payload.startCity || "—"}`,
+    `Hotel preference: ${payload.hotelPreference || "—"}`,
+    `Budget: ${payload.budget || "—"}`,
     `Locale: ${payload.locale}`,
     "",
     payload.message || "(no message)",
@@ -75,12 +86,16 @@ export async function sendEnquiryNotification(
 
   const html = `
     <h2>New Canaan Travel Hub enquiry</h2>
+    <p><strong>Source:</strong> ${escapeHtml(payload.source || "enquire")}</p>
     <p><strong>Name:</strong> ${escapeHtml(payload.name)}</p>
     <p><strong>Email:</strong> ${escapeHtml(payload.email)}</p>
     <p><strong>Phone:</strong> ${escapeHtml(payload.phone)}</p>
     <p><strong>Travellers:</strong> ${escapeHtml(payload.travelers || "—")}</p>
     <p><strong>Dates:</strong> ${escapeHtml(payload.dates || "—")}</p>
     <p><strong>Package:</strong> ${escapeHtml(payload.packageId || "—")}</p>
+    <p><strong>Start city:</strong> ${escapeHtml(payload.startCity || "—")}</p>
+    <p><strong>Hotel:</strong> ${escapeHtml(payload.hotelPreference || "—")}</p>
+    <p><strong>Budget:</strong> ${escapeHtml(payload.budget || "—")}</p>
     <p><strong>Locale:</strong> ${escapeHtml(payload.locale)}</p>
     <hr />
     <p>${escapeHtml(payload.message || "(no message)").replace(/\n/g, "<br/>")}</p>

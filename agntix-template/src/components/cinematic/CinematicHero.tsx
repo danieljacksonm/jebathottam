@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { HERO_IMAGE } from "@/lib/media";
 import { BrandFilmModal } from "@/components/film/BrandFilmModal";
 import { MagneticButton } from "./motion";
 import { useTranslations } from "next-intl";
@@ -90,7 +90,7 @@ export function CinematicHero() {
 
         <div data-hero-bg className="absolute inset-0 scale-110">
           <Image
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80"
+            src={HERO_IMAGE}
             alt="Kodaikanal morning mist and mountains"
             fill
             priority

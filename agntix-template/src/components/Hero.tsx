@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { HERO_IMAGE } from "@/lib/media";
 import { useState } from "react";
 import {
   motion,
@@ -46,7 +47,7 @@ export function Hero() {
 
         <motion.div style={{ y }} className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=2400&q=80"
+            src={HERO_IMAGE}
             alt="Misty Kodaikanal highland hills"
             fill
             priority

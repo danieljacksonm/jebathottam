@@ -2,8 +2,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { LuxuryPackages } from "@/components/cinematic/LuxuryPackages";
-import { CustomerStories } from "@/components/cinematic/CustomerStories";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { GeoAnswer } from "@/components/seo/GeoAnswer";
+import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { pageMetadata } from "@/lib/seo";
 
 const HERO = "/images/kodai/mannavanur.webp";
@@ -52,8 +53,9 @@ export default async function PackagesPage({
           { name: nav("packages") },
         ]}
       />
+      <GeoAnswer>{t("geoSummary")}</GeoAnswer>
       <LuxuryPackages hideIntro />
-      <CustomerStories />
+      <HowItWorksSection />
     </PageAtmosphere>
   );
 }

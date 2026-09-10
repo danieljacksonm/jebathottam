@@ -15,10 +15,9 @@ export function DigitalServicesSection() {
     hotels: nav("hotels"),
     visa: nav("visa"),
     tours: nav("tours"),
-    insurance: t("insurance"),
   };
 
-  const list = services.filter((s) => s.slug !== "insurance").slice(0, 4);
+  const list = services;
 
   return (
     <section className="section-pad border-y border-[var(--line)] bg-navy-mid/35">

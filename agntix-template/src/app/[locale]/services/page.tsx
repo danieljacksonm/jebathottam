@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { GeoAnswer } from "@/components/seo/GeoAnswer";
 import { services } from "@/data/services";
+import { SERVICE_IMAGES } from "@/lib/media";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -37,7 +39,6 @@ export default async function ServicesPage({
     hotels: nav("hotels"),
     visa: nav("visa"),
     tours: nav("tours"),
-    insurance: "Insurance",
   };
 
   return (
@@ -46,7 +47,7 @@ export default async function ServicesPage({
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=70"
+        image={SERVICE_IMAGES.flights}
         imageAlt="Travel support services around a Kodaikanal journey"
         tone="mist"
       />
@@ -58,7 +59,9 @@ export default async function ServicesPage({
         ]}
       />
 
-      <section className="mx-auto grid max-w-7xl gap-5 px-5 py-16 sm:grid-cols-2 lg:grid-cols-3 md:px-8 md:py-24">
+      <GeoAnswer>{t("geoSummary")}</GeoAnswer>
+
+      <section className="mx-auto grid max-w-7xl gap-5 px-5 py-16 sm:grid-cols-2 lg:grid-cols-2 md:px-8 md:py-24">
         {services.map((service) => (
           <Link
             key={service.slug}

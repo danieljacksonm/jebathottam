@@ -83,8 +83,8 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-3 md:flex">
           <LanguageSwitcher />
-          <Link href="/enquire" className="btn-gold !px-5 !py-2.5 text-[0.66rem]" data-cursor="book">
-            {t("bookNow")}
+          <Link href="/plan-your-trip" className="btn-gold !px-5 !py-2.5 text-[0.66rem]" data-cursor="book">
+            {t("planTrip")}
           </Link>
         </div>
 
@@ -120,8 +120,8 @@ export function SiteHeader() {
                   {t(link.key)}
                 </Link>
               ))}
-              <Link href="/enquire" className="btn-gold mt-4 w-full" onClick={() => setOpen(false)}>
-                {t("bookNow")}
+              <Link href="/plan-your-trip" className="btn-gold mt-4 w-full" onClick={() => setOpen(false)}>
+                {t("planTrip")}
               </Link>
               <LanguageSwitcher />
             </nav>

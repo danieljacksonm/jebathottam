@@ -1,10 +1,12 @@
 import dynamic from "next/dynamic";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { FilmOpening } from "@/components/film/FilmOpening";
+import { HomeGeoSummary } from "@/components/seo/HomeGeoSummary";
 import { HomeChrome } from "@/components/cinematic/HomeChrome";
+import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { LazySection } from "@/components/cinematic/LazySection";
 import { pageMetadata } from "@/lib/seo";
-import { HERO_IMAGE, HERO_OG } from "@/lib/media";
+import { HERO_OG } from "@/lib/media";
 
 const KodaiFilmJourney = dynamic(() =>
   import("@/components/film/KodaiFilmJourney").then((m) => m.KodaiFilmJourney),
@@ -17,9 +19,6 @@ const ImmersiveExperiences = dynamic(() =>
 );
 const WhyCanaan = dynamic(() =>
   import("@/components/cinematic/WhyCanaan").then((m) => m.WhyCanaan),
-);
-const CustomerStories = dynamic(() =>
-  import("@/components/cinematic/CustomerStories").then((m) => m.CustomerStories),
 );
 const InteractiveMap = dynamic(() =>
   import("@/components/cinematic/InteractiveMap").then((m) => m.InteractiveMap),
@@ -67,6 +66,7 @@ export default async function HomePage({
     <>
       <HomeChrome />
       <FilmOpening />
+      <HomeGeoSummary />
       <LazySection minHeight="120vh" rootMargin="-20% 0px">
         <KodaiFilmJourney />
       </LazySection>
@@ -80,7 +80,7 @@ export default async function HomePage({
         <WhyCanaan />
       </LazySection>
       <LazySection>
-        <CustomerStories />
+        <HowItWorksSection />
       </LazySection>
       <LazySection>
         <InteractiveMap />

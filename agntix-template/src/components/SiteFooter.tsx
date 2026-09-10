@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { ContactLinks } from "@/components/ContactLinks";
+import { whatsappUrl } from "@/lib/whatsapp";
 
 export async function SiteFooter() {
   const t = await getTranslations("footer");
@@ -86,9 +87,9 @@ export async function SiteFooter() {
           <ul className="mt-5 space-y-3">
             {(
               [
+                ["/plan-your-trip", "planTrip"],
                 ["/about", "about"],
                 ["/contact", "contact"],
-                ["/enquire", "enquire"],
                 ["/faq", "faq"],
               ] as const
             ).map(([href, key]) => (
@@ -110,6 +111,7 @@ export async function SiteFooter() {
               whatsappLabel={contact("whatsapp")}
               emailLabel={contact("email")}
               facebookLabel={contact("facebook")}
+              whatsappHref={whatsappUrl({ type: "general" })}
             />
           </div>
         </div>
@@ -118,6 +120,15 @@ export async function SiteFooter() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
           <p className="text-[0.7rem] text-mist/45">{t("rights", { year })}</p>
           <div className="flex flex-wrap justify-center gap-5 text-[0.7rem] text-mist/55">
+            <Link href="/policies" className="transition hover:text-gold">
+              {t("policies")}
+            </Link>
+            <Link href="/cancellation" className="transition hover:text-gold">
+              {t("cancellation")}
+            </Link>
+            <Link href="/child-pricing" className="transition hover:text-gold">
+              {t("childPricing")}
+            </Link>
             <Link href="/privacy" className="transition hover:text-gold">
               {t("privacy")}
             </Link>

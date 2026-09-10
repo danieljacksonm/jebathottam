@@ -18,6 +18,7 @@ export function EnquireForm() {
   const locale = useLocale() as Locale;
   const searchParams = useSearchParams();
   const preset = searchParams.get("package") ?? "";
+  const presetTier = searchParams.get("tier") ?? "";
   const presetDates = searchParams.get("dates") ?? "";
   const presetTravelers = searchParams.get("travelers") ?? "";
   const presetDestination = searchParams.get("destination") ?? "";
@@ -50,11 +51,13 @@ export function EnquireForm() {
       name: String(data.get("name") || "").trim(),
       email: String(data.get("email") || "").trim(),
       phone: String(data.get("phone") || "").trim(),
+      website: String(data.get("website") || "").trim(),
       travelers: String(data.get("travelers") || "").trim(),
       dates: String(data.get("dates") || "").trim(),
       packageId: String(data.get("packageId") || "").trim(),
       message: String(data.get("message") || "").trim(),
       locale,
+      source: "enquire",
     };
 
     if (!payload.name || !payload.email || !payload.phone) {
@@ -87,24 +90,50 @@ export function EnquireForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
+      {/* Honeypot for basic bot spam. Legit users won't fill this. */}
+      <input
+        name="website"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden
+        style={{ display: "none" }}
+      />
       <div className="grid gap-5 md:grid-cols-2">
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
             {t("name")} *
           </span>
-          <input name="name" className="input-field" required autoComplete="name" />
+          <input
+            name="name"
+            className="input-field"
+            required
+            autoComplete="name"
+            maxLength={80}
+          />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
             {t("email")} *
           </span>
-          <input name="email" type="email" className="input-field" required autoComplete="email" />
+          <input
+            name="email"
+            type="email"
+            className="input-field"
+            required
+            autoComplete="email"
+          />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
             {t("phone")} *
           </span>
-          <input name="phone" className="input-field" required autoComplete="tel" inputMode="tel" />
+          <input
+            name="phone"
+            className="input-field"
+            required
+            autoComplete="tel"
+            inputMode="tel"
+          />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
@@ -153,8 +182,14 @@ export function EnquireForm() {
           rows={5}
           className="input-field resize-y"
           placeholder={t("messagePlaceholder")}
+          maxLength={2000}
           defaultValue={
-            presetDestination ? `Destination interest: ${presetDestination}` : undefined
+            [
+              presetDestination ? `Destination interest: ${presetDestination}` : "",
+              presetTier ? `Preferred tier: ${presetTier}` : "",
+            ]
+              .filter(Boolean)
+              .join("\n") || undefined
           }
         />
       </label>

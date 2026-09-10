@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { Star } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { formatInr, getLocalizedPackages } from "@/data/packages";
@@ -53,13 +52,7 @@ export function LuxuryPackages({ hideIntro = false }: { hideIntro?: boolean }) {
                   <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent" />
                 </Link>
                 <div className="p-6">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="font-display text-3xl text-white">{pkg.title}</h3>
-                    <span className="inline-flex items-center gap-1 text-gold-bright">
-                      <Star size={14} fill="currentColor" />
-                      {pkg.rating.toFixed(1)}
-                    </span>
-                  </div>
+                  <h3 className="font-display text-3xl text-white">{pkg.title}</h3>
                   <p className="mt-2 text-sm text-mist">
                     {t("days", { count: pkg.days })} · {t("nights", { count: pkg.nights })}
                   </p>

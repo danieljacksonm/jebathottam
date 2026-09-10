@@ -1,5 +1,4 @@
 import { readFileSync, existsSync } from "node:fs";
-import { createHash } from "node:crypto";
 
 const data = JSON.parse(readFileSync("content/db/blogs.json", "utf8"));
 const rows = data.rows ?? data;

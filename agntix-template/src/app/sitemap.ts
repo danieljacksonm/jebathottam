@@ -19,9 +19,13 @@ const staticPaths = [
   "/about",
   "/contact",
   "/enquire",
+  "/plan-your-trip",
   "/faq",
   "/privacy",
   "/terms",
+  "/policies",
+  "/cancellation",
+  "/child-pricing",
 ];
 
 function hreflangAlternates(path: string) {

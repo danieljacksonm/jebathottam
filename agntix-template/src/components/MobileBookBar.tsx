@@ -26,7 +26,7 @@ export function MobileBookBar() {
   if (onEnquire || formVisible) return null;
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-[55] border-t border-[var(--line)] bg-navy/92 px-4 py-3 backdrop-blur-xl md:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-[55] border-t border-[var(--line)] bg-navy/92 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-xl md:hidden">
       <Link href="/enquire" className="btn-gold w-full">
         {t("bookNow")}
       </Link>
