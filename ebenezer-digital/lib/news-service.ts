@@ -4,7 +4,7 @@ import {
   type NewsArticle,
   type NewsRegion,
 } from "@/app/blog/news/data";
-import { getLiveNewsBySlug, peekLiveNewsCache, scheduleLiveNewsRefresh } from "@/lib/live-news";
+import { getLiveNewsBySlug, peekLiveNewsCache } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
 import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
 import { inferNewsSourceType, newsPublicUrl, legacySlugFromSourceUrl, isLegacySourceDomainSlug } from "@/lib/news-url";
@@ -72,11 +72,12 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
   };
 }
 
-/** Live world wire + CMS. Never blocks the HTTP response on RSS refresh. */
+/**
+ * Seed + CMS + optional in-memory wire cache.
+ * Never starts RSS from a request — that starved Node on this VPS
+ * (HOME/robots.txt timed out while Edge 301s stayed fine).
+ */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
-  // Throttled background refresh only — do not await feeds on the request path.
-  scheduleLiveNewsRefresh();
-
   const cached = peekLiveNewsCache();
   const cms = await db.getNewsArticles(true).catch(() => []);
   const byKey = new Map<string, PublicNewsItem>();
@@ -102,21 +103,20 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  // Archive write is sync + CPU-heavy — defer so we don't block the response.
+  // Archive write is sync — defer well past the response.
   setTimeout(() => {
     try {
       rememberNewsForSitemap(list);
     } catch {
       /* archive is best-effort */
     }
-  }, 0);
+  }, 250);
 
   return list;
 }
 
 /** News URLs for sitemaps — includes stories from the last 7 days even if feeds dropped them. */
 export async function listPublicNewsForSitemap(): Promise<PublicNewsItem[]> {
-  scheduleLiveNewsRefresh();
   const current = await listPublicNews();
   return listNewsForSitemap(current) as PublicNewsItem[];
 }
