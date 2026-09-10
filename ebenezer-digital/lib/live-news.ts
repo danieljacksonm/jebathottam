@@ -11,64 +11,30 @@ export type LiveNewsItem = NewsArticle & {
 type Cache = { at: number; items: LiveNewsItem[] };
 
 let cache: Cache | null = null;
-/** Keep wire warm longer — crawlers must not force a 50-feed refresh every 10s. */
-const CACHE_MS = 120 * 1000;
+/** Keep wire warm longer — crawlers must not force a 50-feed refresh every few seconds. */
+const CACHE_MS = 5 * 60 * 1000;
 let inflight: Promise<LiveNewsItem[]> | null = null;
+let scheduled: ReturnType<typeof setTimeout> | null = null;
 
 const RSS_FEEDS: { url: string; region: NewsRegion; source: string; location: string }[] = [
   { url: "https://www.theguardian.com/world/rss", region: "World", source: "The Guardian", location: "World" },
   { url: "https://www.theguardian.com/world/india/rss", region: "India", source: "The Guardian", location: "India" },
   { url: "https://www.theguardian.com/uk-news/rss", region: "Europe", source: "The Guardian", location: "United Kingdom" },
   { url: "https://www.theguardian.com/us-news/rss", region: "Americas", source: "The Guardian", location: "United States" },
-  { url: "https://www.theguardian.com/australia-news/rss", region: "Asia", source: "The Guardian", location: "Australia" },
-  { url: "https://www.theguardian.com/business/rss", region: "Business", source: "The Guardian", location: "Global" },
   { url: "https://www.theguardian.com/technology/rss", region: "Tech", source: "The Guardian", location: "Global" },
-  { url: "https://www.theguardian.com/science/rss", region: "Science", source: "The Guardian", location: "Global" },
-  { url: "https://www.theguardian.com/environment/rss", region: "Climate", source: "The Guardian", location: "Global" },
-  { url: "https://www.theguardian.com/sport/rss", region: "Sports", source: "The Guardian", location: "Global" },
+  { url: "https://www.theguardian.com/business/rss", region: "Business", source: "The Guardian", location: "Global" },
   { url: "https://feeds.bbci.co.uk/news/world/rss.xml", region: "World", source: "BBC News", location: "World" },
   { url: "https://feeds.bbci.co.uk/news/world/asia/rss.xml", region: "Asia", source: "BBC News", location: "Asia" },
-  { url: "https://feeds.bbci.co.uk/news/world/africa/rss.xml", region: "Africa", source: "BBC News", location: "Africa" },
-  { url: "https://feeds.bbci.co.uk/news/world/middle_east/rss.xml", region: "Middle East", source: "BBC News", location: "Middle East" },
-  { url: "https://feeds.bbci.co.uk/news/world/europe/rss.xml", region: "Europe", source: "BBC News", location: "Europe" },
-  { url: "https://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml", region: "Americas", source: "BBC News", location: "Americas" },
   { url: "https://feeds.bbci.co.uk/news/technology/rss.xml", region: "Tech", source: "BBC News", location: "Global" },
   { url: "https://feeds.bbci.co.uk/news/business/rss.xml", region: "Business", source: "BBC News", location: "Global" },
-  { url: "https://feeds.bbci.co.uk/news/science_and_environment/rss.xml", region: "Science", source: "BBC News", location: "Global" },
   { url: "https://www.thehindu.com/news/national/feeder/default.rss", region: "India", source: "The Hindu", location: "India" },
   { url: "https://www.thehindu.com/news/international/feeder/default.rss", region: "World", source: "The Hindu", location: "World" },
-  { url: "https://www.thehindu.com/business/feeder/default.rss", region: "Business", source: "The Hindu", location: "India" },
-  { url: "https://www.thehindu.com/sport/feeder/default.rss", region: "Sports", source: "The Hindu", location: "India" },
   { url: "https://indianexpress.com/section/india/feed/", region: "India", source: "Indian Express", location: "India" },
-  { url: "https://indianexpress.com/section/world/feed/", region: "World", source: "Indian Express", location: "World" },
-  { url: "https://indianexpress.com/section/business/feed/", region: "Business", source: "Indian Express", location: "India" },
-  { url: "https://timesofindia.indiatimes.com/rssfeedstopstories.cms", region: "India", source: "Times of India", location: "India" },
-  { url: "https://timesofindia.indiatimes.com/rssfeeds/296589292.cms", region: "World", source: "Times of India", location: "World" },
-  { url: "https://economictimes.indiatimes.com/rssfeedstopstories.cms", region: "Business", source: "Economic Times", location: "India" },
   { url: "https://feeds.feedburner.com/ndtvnews-top-stories", region: "India", source: "NDTV", location: "India" },
-  { url: "https://feeds.feedburner.com/ndtvnews-world-news", region: "World", source: "NDTV", location: "World" },
-  { url: "https://www.hindustantimes.com/feeds/rss/india-news/rssfeed.xml", region: "India", source: "Hindustan Times", location: "India" },
-  { url: "https://www.hindustantimes.com/feeds/rss/world-news/rssfeed.xml", region: "World", source: "Hindustan Times", location: "World" },
   { url: "https://www.aljazeera.com/xml/rss/all.xml", region: "World", source: "Al Jazeera", location: "World" },
-  { url: "https://feeds.reuters.com/Reuters/worldNews", region: "World", source: "Reuters", location: "World" },
-  { url: "https://feeds.reuters.com/reuters/INtopNews", region: "India", source: "Reuters", location: "India" },
-  { url: "https://feeds.reuters.com/reuters/businessNews", region: "Business", source: "Reuters", location: "Global" },
-  { url: "https://feeds.reuters.com/reuters/technologyNews", region: "Tech", source: "Reuters", location: "Global" },
   { url: "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", region: "World", source: "The New York Times", location: "World" },
-  { url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", region: "Business", source: "The New York Times", location: "Global" },
-  { url: "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", region: "Tech", source: "The New York Times", location: "Global" },
-  { url: "https://rss.cnn.com/rss/edition_world.rss", region: "World", source: "CNN", location: "World" },
-  { url: "https://feeds.npr.org/1004/rss.xml", region: "World", source: "NPR", location: "World" },
-  { url: "https://feeds.bbci.co.uk/news/world/latin_america/rss.xml", region: "Americas", source: "BBC News", location: "Latin America" },
-  { url: "https://www.abc.net.au/news/feed/51120/rss.xml", region: "Asia", source: "ABC News Australia", location: "Australia" },
-  { url: "https://www.cbc.ca/webfeed/rss/rss-world", region: "Americas", source: "CBC", location: "World" },
-  { url: "https://feeds.skynews.com/feeds/rss/world.xml", region: "World", source: "Sky News", location: "World" },
-  { url: "https://rss.dw.com/rdf/rss-en-world", region: "Europe", source: "Deutsche Welle", location: "World" },
-  { url: "https://www.france24.com/en/rss", region: "Europe", source: "France 24", location: "World" },
-  { url: "https://www3.nhk.or.jp/nhkworld/en/news/feeds/rss.xml", region: "Asia", source: "NHK World", location: "Asia" },
   { url: "https://techcrunch.com/feed/", region: "Tech", source: "TechCrunch", location: "Global" },
   { url: "https://www.espn.com/espn/rss/news", region: "Sports", source: "ESPN", location: "Global" },
-  { url: "https://news.un.org/feed/subscribe/en/news/all/rss.xml", region: "World", source: "UN News", location: "World" },
 ];
 
 function toIso(value?: string): string {
@@ -111,7 +77,7 @@ function htmlToParagraphs(html: string): string[] {
     .map((p) => p.trim())
     .filter((p) => p.length > 40);
 
-  return parts.length ? parts : clean ? [clean] : [];
+  return parts.length ? parts.slice(0, 6) : clean ? [clean.slice(0, 800)] : [];
 }
 
 function tag(xml: string, name: string): string {
@@ -151,6 +117,10 @@ async function fetchText(url: string): Promise<string> {
   }
 }
 
+function yieldEventLoop(): Promise<void> {
+  return new Promise((resolve) => setImmediate(resolve));
+}
+
 function mapGuardianSection(section: string): NewsRegion {
   const s = section.toLowerCase();
   if (s.includes("india")) return "India";
@@ -169,42 +139,31 @@ function mapGuardianSection(section: string): NewsRegion {
 
 async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
   const key = process.env.GUARDIAN_API_KEY || "test";
-  const endpoints = [
-    `https://content.guardianapis.com/search?order-by=newest&page-size=50&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
-    `https://content.guardianapis.com/search?q=india&order-by=newest&page-size=30&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
-    `https://content.guardianapis.com/search?section=technology|business|science|environment|sport&order-by=newest&page-size=40&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`,
-  ];
+  const url = `https://content.guardianapis.com/search?order-by=newest&page-size=40&show-fields=headline,trailText,body,thumbnail,byline,publication,lastModified&api-key=${key}`;
 
-  const bundles = await Promise.allSettled(
-    endpoints.map(async (url) => {
-      const json = JSON.parse(await fetchText(url)) as {
-        response?: {
-          results?: Array<{
-            id: string;
-            webTitle: string;
-            webUrl: string;
-            webPublicationDate: string;
-            sectionId?: string;
-            sectionName?: string;
-            fields?: {
-              headline?: string;
-              trailText?: string;
-              body?: string;
-              thumbnail?: string;
-              byline?: string;
-              publication?: string;
-            };
-          }>;
-        };
+  try {
+    const json = JSON.parse(await fetchText(url)) as {
+      response?: {
+        results?: Array<{
+          id: string;
+          webTitle: string;
+          webUrl: string;
+          webPublicationDate: string;
+          sectionId?: string;
+          sectionName?: string;
+          fields?: {
+            headline?: string;
+            trailText?: string;
+            body?: string;
+            thumbnail?: string;
+            byline?: string;
+            publication?: string;
+          };
+        }>;
       };
-      return json.response?.results || [];
-    })
-  );
-
-  const items: LiveNewsItem[] = [];
-  for (const bundle of bundles) {
-    if (bundle.status !== "fulfilled") continue;
-    for (const r of bundle.value) {
+    };
+    const items: LiveNewsItem[] = [];
+    for (const r of json.response?.results || []) {
       const fields = r.fields || {};
       const title = decodeEntities(fields.headline || r.webTitle);
       const region = mapGuardianSection(r.sectionId || r.sectionName || "world");
@@ -234,55 +193,60 @@ async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
         byline: fields.byline,
         sourceType: "SOURCE_SUMMARY",
       });
+      if (items.length % 8 === 0) await yieldEventLoop();
     }
+    return items;
+  } catch {
+    return [];
   }
-  return items;
 }
 
 async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsItem[]> {
   const xml = await fetchText(feed.url);
   const blocks = xml.split(/<item[\s>]/i).slice(1);
-  return blocks.slice(0, 12).map((raw) => {
-    const block = raw.split(/<\/item>/i)[0] || raw;
-    const title = decodeEntities(tag(block, "title")).replace(/<[^>]+>/g, "");
-    const link = decodeEntities(tag(block, "link") || tag(block, "guid"));
-    const encoded = tag(block, "content:encoded") || tag(block, "content");
-    const description = tag(block, "description");
-    const body = htmlToParagraphs(encoded || description);
-    const dek = (htmlToParagraphs(description)[0] || body[0] || title).slice(0, 280);
-    const pub = tag(block, "pubDate") || tag(block, "dc:date") || tag(block, "updated");
-    const creator = decodeEntities(tag(block, "dc:creator") || tag(block, "author"));
-    return {
-      id: `live-${slugify(link || title)}`,
-      slug: slugify(title),
-      title,
-      dek,
-      body: body.length ? body : [dek],
-      region: feed.region,
-      topic: feed.region,
-      location: feed.location,
-      sourceLabel: feed.source,
-      publishedAt: toIso(pub),
-      coverImage: pickImage(description + encoded + block, feed.region, title),
-      origin: "live" as const,
-      originalUrl: link.startsWith("http") ? link : undefined,
-      byline: creator || undefined,
-      sourceType: "SOURCE_SUMMARY" as const,
-    };
-  }).filter((n) => n.title && n.body.length);
+  return blocks
+    .slice(0, 10)
+    .map((raw) => {
+      const block = raw.split(/<\/item>/i)[0] || raw;
+      const title = decodeEntities(tag(block, "title")).replace(/<[^>]+>/g, "");
+      const link = decodeEntities(tag(block, "link") || tag(block, "guid"));
+      const encoded = tag(block, "content:encoded") || tag(block, "content");
+      const description = tag(block, "description");
+      const body = htmlToParagraphs(encoded || description);
+      const dek = (htmlToParagraphs(description)[0] || body[0] || title).slice(0, 280);
+      const pub = tag(block, "pubDate") || tag(block, "dc:date") || tag(block, "updated");
+      const creator = decodeEntities(tag(block, "dc:creator") || tag(block, "author"));
+      return {
+        id: `live-${slugify(link || title)}`,
+        slug: slugify(title),
+        title,
+        dek,
+        body: body.length ? body : [dek],
+        region: feed.region,
+        topic: feed.region,
+        location: feed.location,
+        sourceLabel: feed.source,
+        publishedAt: toIso(pub),
+        coverImage: pickImage(description + encoded + block, feed.region, title),
+        origin: "live" as const,
+        originalUrl: link.startsWith("http") ? link : undefined,
+        byline: creator || undefined,
+        sourceType: "SOURCE_SUMMARY" as const,
+      };
+    })
+    .filter((n) => n.title && n.body.length);
 }
 
+/**
+ * Fetch wire in small batches and yield between batches so robots.txt / pages
+ * are not starved by XML parsing on the Node event loop.
+ */
 export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
   if (cache && Date.now() - cache.at < CACHE_MS) return cache.items;
   if (inflight) return inflight;
 
   inflight = (async () => {
     try {
-      const [guardian, ...rss] = await Promise.allSettled([
-        fetchGuardianFull(),
-        ...RSS_FEEDS.map((feed) => fetchRssFeed(feed)),
-      ]);
-
       const byKey = new Map<string, LiveNewsItem>();
       const score = (item: LiveNewsItem) => {
         const photo =
@@ -298,9 +262,18 @@ export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
         }
       };
 
-      if (guardian.status === "fulfilled") guardian.value.forEach(push);
-      for (const result of rss) {
-        if (result.status === "fulfilled") result.value.forEach(push);
+      const guardian = await fetchGuardianFull().catch(() => [] as LiveNewsItem[]);
+      guardian.forEach(push);
+      await yieldEventLoop();
+
+      const BATCH = 3;
+      for (let i = 0; i < RSS_FEEDS.length; i += BATCH) {
+        const slice = RSS_FEEDS.slice(i, i + BATCH);
+        const results = await Promise.allSettled(slice.map((feed) => fetchRssFeed(feed)));
+        for (const result of results) {
+          if (result.status === "fulfilled") result.value.forEach(push);
+        }
+        await yieldEventLoop();
       }
 
       const items = Array.from(byKey.values()).sort(
@@ -324,12 +297,26 @@ export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
   return inflight;
 }
 
-/** Return cached wire without triggering a refresh (article pages / related). */
+/** Return cached wire without triggering a refresh. */
 export function peekLiveNewsCache(): LiveNewsItem[] {
   return cache?.items || [];
 }
 
+/**
+ * Schedule a background refresh at most once per CACHE_MS.
+ * Safe to call from request handlers — never awaited on the hot path.
+ */
+export function scheduleLiveNewsRefresh(): void {
+  if (inflight) return;
+  if (cache && Date.now() - cache.at < CACHE_MS) return;
+  if (scheduled) return;
+  scheduled = setTimeout(() => {
+    scheduled = null;
+    void fetchLiveNews().catch(() => {});
+  }, 50);
+}
+
+/** Slug lookup — cache only. Never triggers a full multi-feed refresh. */
 export async function getLiveNewsBySlug(slug: string): Promise<LiveNewsItem | undefined> {
-  const items = await fetchLiveNews();
-  return items.find((n) => n.slug === slug);
+  return peekLiveNewsCache().find((n) => n.slug === slug);
 }

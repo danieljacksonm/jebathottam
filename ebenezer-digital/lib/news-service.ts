@@ -4,7 +4,7 @@ import {
   type NewsArticle,
   type NewsRegion,
 } from "@/app/blog/news/data";
-import { fetchLiveNews, getLiveNewsBySlug, peekLiveNewsCache } from "@/lib/live-news";
+import { getLiveNewsBySlug, peekLiveNewsCache, scheduleLiveNewsRefresh } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
 import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
 import { inferNewsSourceType, newsPublicUrl, legacySlugFromSourceUrl, isLegacySourceDomainSlug } from "@/lib/news-url";
@@ -74,8 +74,8 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
 
 /** Live world wire + CMS. Never blocks the HTTP response on RSS refresh. */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
-  // Kick a background refresh; page renders must not wait on 50 feeds.
-  void fetchLiveNews().catch(() => {});
+  // Throttled background refresh only — do not await feeds on the request path.
+  scheduleLiveNewsRefresh();
 
   const cached = peekLiveNewsCache();
   const cms = await db.getNewsArticles(true).catch(() => []);
@@ -116,11 +116,7 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
 
 /** News URLs for sitemaps — includes stories from the last 7 days even if feeds dropped them. */
 export async function listPublicNewsForSitemap(): Promise<PublicNewsItem[]> {
-  // Allow a short warm-up so sitemaps see live stories, but never hang.
-  await Promise.race([
-    fetchLiveNews().catch(() => []),
-    new Promise<void>((resolve) => setTimeout(resolve, 4000)),
-  ]);
+  scheduleLiveNewsRefresh();
   const current = await listPublicNews();
   return listNewsForSitemap(current) as PublicNewsItem[];
 }
