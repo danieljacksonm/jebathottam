@@ -103,14 +103,12 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  // Archive write is sync — defer well past the response.
-  setTimeout(() => {
-    try {
-      rememberNewsForSitemap(list);
-    } catch {
-      /* archive is best-effort */
-    }
-  }, 250);
+  // Archive persist is throttled inside rememberNewsForSitemap — never block here.
+  try {
+    rememberNewsForSitemap(list);
+  } catch {
+    /* archive is best-effort */
+  }
 
   return list;
 }

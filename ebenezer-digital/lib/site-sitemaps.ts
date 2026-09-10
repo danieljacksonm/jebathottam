@@ -461,7 +461,13 @@ function networkSitemap(): MetadataRoute.Sitemap {
   return pages;
 }
 
+const SITEMAP_MEM_MS = 5 * 60 * 1000;
+const sitemapMem = new Map<SiteKind, { at: number; pages: MetadataRoute.Sitemap }>();
+
 export async function sitemapForKind(kind: SiteKind): Promise<MetadataRoute.Sitemap> {
+  const hit = sitemapMem.get(kind);
+  if (hit && Date.now() - hit.at < SITEMAP_MEM_MS) return hit.pages;
+
   let pages: MetadataRoute.Sitemap;
   if (kind === "info") pages = await infoSitemap();
   else if (kind === "journal") pages = await journalSitemap();
@@ -483,5 +489,6 @@ export async function sitemapForKind(kind: SiteKind): Promise<MetadataRoute.Site
     priority: 0.25,
   });
 
+  sitemapMem.set(kind, { at: Date.now(), pages });
   return pages;
 }
