@@ -2,7 +2,7 @@ import {
   pickLocalized,
   type LocalizedString,
 } from "@/lib/content/types";
-import { LOCAL_SCENES } from "@/lib/media";
+import { LOCAL_SCENES, REAL_KODAI } from "@/lib/media";
 
 export type CinematicExperience = {
   id: string;
@@ -92,8 +92,7 @@ export const cinematicExperiences: CinematicExperience[] = [
   {
     id: "horse",
     title: { en: "Horse Riding", ta: "குதிரை சவாரி", hi: "घुड़सवारी" },
-    image:
-      "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES.camping,
   },
 ];
 
@@ -329,14 +328,14 @@ export const mapPoints: MapPoint[] = [
 ];
 
 export const galleryImages = [
+  REAL_KODAI.mistyTerraces,
+  REAL_KODAI.kodaiLakeBoats,
+  REAL_KODAI.pineCanopy,
+  REAL_KODAI.seaOfClouds,
+  REAL_KODAI.greenHighlands,
+  REAL_KODAI.mistyValleyHomes,
+  REAL_KODAI.hillTown,
   LOCAL_SCENES["dolphins-nose"],
-  LOCAL_SCENES.mannavanur,
-  LOCAL_SCENES["pine-forest"],
-  LOCAL_SCENES.berijam,
-  LOCAL_SCENES.poombarai,
-  LOCAL_SCENES["kodai-lake"],
-  LOCAL_SCENES.camping,
-  LOCAL_SCENES.bryant,
 ];
 
 export const whyStats: WhyStat[] = [
@@ -347,17 +346,17 @@ export const whyStats: WhyStat[] = [
   },
   {
     label: {
-      en: "Private stays curated",
-      ta: "தேர்ந்த தனியார் தங்கல்",
-      hi: "चुनिंदा निजी ठहराव",
+      en: "Guest tiers",
+      ta: "விருந்தினர் அடுக்குகள்",
+      hi: "अतिथि टियर",
     },
-    value: 40,
-    suffix: "+",
+    value: 3,
+    suffix: "",
   },
   {
-    label: { en: "Guest love", ta: "விருந்தினர் விருப்பம்", hi: "अतिथि प्रेम" },
-    value: 98,
-    suffix: "%",
+    label: { en: "Languages", ta: "மொழிகள்", hi: "भाषाएँ" },
+    value: 3,
+    suffix: "",
   },
 ];
 

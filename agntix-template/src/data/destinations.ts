@@ -1,3 +1,5 @@
+import { LOCAL_SCENES } from "@/lib/media";
+
 export type DestinationSlug =
   | "kodaikanal"
   | "bali"
@@ -17,38 +19,34 @@ export const destinations: Destination[] = [
   {
     slug: "kodaikanal",
     featured: true,
-    priceFrom: 12999,
+    priceFrom: 1799,
     region: "india",
     image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
+      "/images/kodai/hero.webp",
   },
   {
     slug: "bali",
     priceFrom: 45999,
     region: "asia",
-    image:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES.berijam,
   },
   {
     slug: "dubai",
     priceFrom: 52999,
     region: "middle-east",
-    image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES.bryant,
   },
   {
     slug: "maldives",
     priceFrom: 68999,
     region: "islands",
-    image:
-      "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES["kodai-lake"],
   },
   {
     slug: "switzerland",
     priceFrom: 129999,
     region: "europe",
-    image:
-      "https://images.unsplash.com/photo-1527004013197-933c4bb611b3?auto=format&fit=crop&w=1400&q=80",
+    image: LOCAL_SCENES.mannavanur,
   },
 ];
 
@@ -68,9 +66,9 @@ export const destinationCopy: Record<
       hi: "पहाड़ियों की राजकुमारी — हमारा मुख्य गंतव्य",
     },
     body: {
-      en: "Misty pine forests, quiet lakes, and curated hill packages. Canaan begins here with full Kodaikanal collections — escape, family, honeymoon, luxury, and adventure.",
-      ta: "மூடுபனி பைன் காடுகள், அமைதியான ஏரிகள், தேர்ந்தெடுக்கப்பட்ட மலை பேக்கேஜ்கள். கானான் இங்கிருந்து தொடங்குகிறது.",
-      hi: "कोहरा, चीड़ के जंगल और शांत झीलें। कनान की शुरुआत यहीं से होती है।",
+      en: "Misty pine forests, quiet lakes, and our verified 1 Night / 2 Days Kodaikanal package — with custom plans for larger groups. Worldwide flights, hotels and visas available as travel support.",
+      ta: "மூடுபனி பைன் காடுகள், அமைதியான ஏரிகள், மற்றும் உறுதிப்படுத்தப்பட்ட 1 இரவு / 2 நாள் கொடை பேக்கேஜ் — பெரிய குழுக்களுக்கு தனிப்பயன் திட்டங்கள்.",
+      hi: "कोहरा, चीड़ के जंगल, शांत झीलें और हमारा सत्यापित 1 रात / 2 दिन कोडाइकनाल पैकेज — बड़े समूहों के लिए कस्टम प्लान।",
     },
   },
   bali: {
