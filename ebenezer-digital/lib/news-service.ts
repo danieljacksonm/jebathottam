@@ -72,14 +72,13 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
   };
 }
 
-/** Live world wire + CMS. Seed only if the wire is thin. Dedupes same headline from many agencies. */
+/** Live world wire + CMS. Never blocks the HTTP response on RSS refresh. */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
-  const liveBudgetMs = 2200;
-  const liveQuick = Promise.race<PublicNewsItem[] | []>([
-    fetchLiveNews().catch(() => []),
-    new Promise<[]>(resolve => setTimeout(() => resolve([]), liveBudgetMs)),
-  ]);
-  const [cms, live] = await Promise.all([db.getNewsArticles(true), liveQuick]);
+  // Kick a background refresh; page renders must not wait on 50 feeds.
+  void fetchLiveNews().catch(() => {});
+
+  const cached = peekLiveNewsCache();
+  const cms = await db.getNewsArticles(true).catch(() => []);
   const byKey = new Map<string, PublicNewsItem>();
 
   const put = (item: PublicNewsItem, force = false) => {
@@ -90,28 +89,38 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
     }
   };
 
-  if (live.length < 18) {
+  // Prefer warm cache; otherwise seed so the homepage stays fast after restarts.
+  if (cached.length >= 12) {
+    for (const l of cached) put(l);
+  } else {
     for (const s of WORLD_NEWS) put(seedToPublic(s));
+    for (const l of cached) put(l);
   }
-  for (const l of live) put(l);
   for (const c of cms) put(recordToPublic(c), true);
 
   const list = Array.from(byKey.values()).sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  // Persist for sitemap retention (≥ 1 week) without blocking the response path too long
-  try {
-    rememberNewsForSitemap(list);
-  } catch {
-    /* archive is best-effort */
-  }
+  // Archive write is sync + CPU-heavy — defer so we don't block the response.
+  setTimeout(() => {
+    try {
+      rememberNewsForSitemap(list);
+    } catch {
+      /* archive is best-effort */
+    }
+  }, 0);
 
   return list;
 }
 
 /** News URLs for sitemaps — includes stories from the last 7 days even if feeds dropped them. */
 export async function listPublicNewsForSitemap(): Promise<PublicNewsItem[]> {
+  // Allow a short warm-up so sitemaps see live stories, but never hang.
+  await Promise.race([
+    fetchLiveNews().catch(() => []),
+    new Promise<void>((resolve) => setTimeout(resolve, 4000)),
+  ]);
   const current = await listPublicNews();
   return listNewsForSitemap(current) as PublicNewsItem[];
 }

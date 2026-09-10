@@ -137,7 +137,7 @@ function pickImage(block: string, region: string, title: string): string {
 
 async function fetchText(url: string): Promise<string> {
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 9000);
+  const t = setTimeout(() => ctrl.abort(), 2500);
   try {
     const res = await fetch(url, {
       signal: ctrl.signal,
@@ -242,7 +242,7 @@ async function fetchGuardianFull(): Promise<LiveNewsItem[]> {
 async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsItem[]> {
   const xml = await fetchText(feed.url);
   const blocks = xml.split(/<item[\s>]/i).slice(1);
-  return blocks.slice(0, 20).map((raw) => {
+  return blocks.slice(0, 12).map((raw) => {
     const block = raw.split(/<\/item>/i)[0] || raw;
     const title = decodeEntities(tag(block, "title")).replace(/<[^>]+>/g, "");
     const link = decodeEntities(tag(block, "link") || tag(block, "guid"));
