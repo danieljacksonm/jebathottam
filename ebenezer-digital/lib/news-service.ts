@@ -4,7 +4,7 @@ import {
   type NewsArticle,
   type NewsRegion,
 } from "@/app/blog/news/data";
-import { fetchLiveNews, getLiveNewsBySlug } from "@/lib/live-news";
+import { fetchLiveNews, getLiveNewsBySlug, peekLiveNewsCache } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
 import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
 import { inferNewsSourceType, newsPublicUrl, legacySlugFromSourceUrl, isLegacySourceDomainSlug } from "@/lib/news-url";
@@ -14,6 +14,7 @@ import {
   rememberNewsForSitemap,
   NEWS_SITEMAP_MAX_URLS,
   findArchivedNewsByLegacySlug,
+  listArchivedNewsRecent,
 } from "@/lib/news-sitemap-archive";
 
 export type PublicNewsItem = NewsArticle & {
@@ -125,19 +126,10 @@ export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem 
   const seed = WORLD_NEWS.find((n) => n.slug === slug);
   if (seed) return seedToPublic(seed);
 
-  // Legacy www-source-domain slugs → resolve via originalUrl fingerprint
+  // Legacy www-source-domain slugs → archive/CMS only (never re-fetch 50+ RSS feeds)
   if (isLegacySourceDomainSlug(slug)) {
     const fromArchive = findArchivedNewsByLegacySlug(slug);
     if (fromArchive) return fromArchive as PublicNewsItem;
-    try {
-      const liveItems = await fetchLiveNews();
-      const match = liveItems.find(
-        (n) => n.originalUrl && legacySlugFromSourceUrl(n.originalUrl) === slug
-      );
-      if (match) return match;
-    } catch {
-      /* ignore */
-    }
     const cmsAll = await db.getNewsArticles(true);
     const cmsMatch = cmsAll.find(
       (n) => n.originalUrl && legacySlugFromSourceUrl(n.originalUrl) === slug
@@ -145,6 +137,25 @@ export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem 
     if (cmsMatch) return recordToPublic(cmsMatch);
   }
   return undefined;
+}
+
+/** Related stories without forcing a live RSS refresh (uses cache + archive + seed). */
+export async function listRelatedNews(
+  article: PublicNewsItem,
+  limit = 4
+): Promise<PublicNewsItem[]> {
+  const pool = new Map<string, PublicNewsItem>();
+  const put = (n: PublicNewsItem) => {
+    if (!n?.slug || n.id === article.id) return;
+    pool.set(n.slug, n);
+  };
+  for (const n of peekLiveNewsCache()) put(n);
+  for (const n of listArchivedNewsRecent(80)) put(n as PublicNewsItem);
+  for (const n of WORLD_NEWS) put(seedToPublic(n));
+
+  return Array.from(pool.values())
+    .filter((n) => n.region === article.region || n.topic === article.topic)
+    .slice(0, limit);
 }
 
 export type NewsSearchParams = {

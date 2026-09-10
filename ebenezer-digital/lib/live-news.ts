@@ -11,7 +11,9 @@ export type LiveNewsItem = NewsArticle & {
 type Cache = { at: number; items: LiveNewsItem[] };
 
 let cache: Cache | null = null;
-const CACHE_MS = 10 * 1000;
+/** Keep wire warm longer — crawlers must not force a 50-feed refresh every 10s. */
+const CACHE_MS = 120 * 1000;
+let inflight: Promise<LiveNewsItem[]> | null = null;
 
 const RSS_FEEDS: { url: string; region: NewsRegion; source: string; location: string }[] = [
   { url: "https://www.theguardian.com/world/rss", region: "World", source: "The Guardian", location: "World" },
@@ -272,44 +274,59 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
 
 export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
   if (cache && Date.now() - cache.at < CACHE_MS) return cache.items;
+  if (inflight) return inflight;
 
-  const [guardian, ...rss] = await Promise.allSettled([
-    fetchGuardianFull(),
-    ...RSS_FEEDS.map((feed) => fetchRssFeed(feed)),
-  ]);
+  inflight = (async () => {
+    try {
+      const [guardian, ...rss] = await Promise.allSettled([
+        fetchGuardianFull(),
+        ...RSS_FEEDS.map((feed) => fetchRssFeed(feed)),
+      ]);
 
-  const byKey = new Map<string, LiveNewsItem>();
-  const score = (item: LiveNewsItem) => {
-    const photo = item.coverImage.startsWith("http") && !item.coverImage.includes("unsplash.com") ? 4 : 0;
-    return photo + Math.min(item.body.join(" ").length / 80, 8) + (item.originalUrl ? 1 : 0);
-  };
-  const push = (item: LiveNewsItem) => {
-    if (!item.title || item.title.length < 12) return;
-    const key = storyFingerprint(item.title) || item.slug;
-    const existing = byKey.get(key);
-    if (!existing || score(item) > score(existing)) {
-      byKey.set(key, item);
+      const byKey = new Map<string, LiveNewsItem>();
+      const score = (item: LiveNewsItem) => {
+        const photo =
+          item.coverImage.startsWith("http") && !item.coverImage.includes("unsplash.com") ? 4 : 0;
+        return photo + Math.min(item.body.join(" ").length / 80, 8) + (item.originalUrl ? 1 : 0);
+      };
+      const push = (item: LiveNewsItem) => {
+        if (!item.title || item.title.length < 12) return;
+        const key = storyFingerprint(item.title) || item.slug;
+        const existing = byKey.get(key);
+        if (!existing || score(item) > score(existing)) {
+          byKey.set(key, item);
+        }
+      };
+
+      if (guardian.status === "fulfilled") guardian.value.forEach(push);
+      for (const result of rss) {
+        if (result.status === "fulfilled") result.value.forEach(push);
+      }
+
+      const items = Array.from(byKey.values()).sort(
+        (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+      );
+
+      const now = Date.now();
+      if (items[0]) items[0].featured = true;
+      items.forEach((n) => {
+        const age = now - new Date(n.publishedAt).getTime();
+        n.breaking = age >= 0 && age < 90 * 60 * 1000;
+      });
+
+      cache = { at: Date.now(), items };
+      return items;
+    } finally {
+      inflight = null;
     }
-  };
+  })();
 
-  if (guardian.status === "fulfilled") guardian.value.forEach(push);
-  for (const result of rss) {
-    if (result.status === "fulfilled") result.value.forEach(push);
-  }
+  return inflight;
+}
 
-  const items = Array.from(byKey.values()).sort(
-    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
-
-  const now = Date.now();
-  if (items[0]) items[0].featured = true;
-  items.forEach((n) => {
-    const age = now - new Date(n.publishedAt).getTime();
-    n.breaking = age >= 0 && age < 90 * 60 * 1000;
-  });
-
-  cache = { at: Date.now(), items };
-  return items;
+/** Return cached wire without triggering a refresh (article pages / related). */
+export function peekLiveNewsCache(): LiveNewsItem[] {
+  return cache?.items || [];
 }
 
 export async function getLiveNewsBySlug(slug: string): Promise<LiveNewsItem | undefined> {

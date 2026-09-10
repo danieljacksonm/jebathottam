@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CANONICAL_URLS, resolveEcosystemUrl } from "@/lib/ecosystem-urls";
-import { isNewsCategorySegment, stripTrackingParams } from "@/lib/news-url";
+import { isNewsCategorySegment, isLegacySourceDomainSlug, stripTrackingParams } from "@/lib/news-url";
 import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
 function clean(url: string) {
@@ -267,6 +267,32 @@ function legalSitemapRewrite(request: NextRequest, pathname: string): NextRespon
   return null;
 }
 
+/** Extract a News article slug from public or internal paths (for cheap legacy gates). */
+function extractNewsSlugCandidate(pathname: string): string | null {
+  const path = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+  if (path.startsWith("/blog/news/")) {
+    const rest = path.slice("/blog/news/".length);
+    if (!rest || rest.includes("/")) return rest.split("/")[0] || null;
+    return rest || null;
+  }
+  const catSlug = path.match(/^\/([^/]+)\/([^/]+)$/);
+  if (catSlug && isNewsCategorySegment(catSlug[1])) return catSlug[2];
+  const flat = path.match(/^\/([^/]+)$/);
+  if (!flat) return null;
+  const seg = flat[1];
+  if (
+    seg === "newsroom" ||
+    seg === "privacy" ||
+    seg === "terms" ||
+    seg === "sitemap" ||
+    seg === "affiliate-disclosure" ||
+    isNewsCategorySegment(seg)
+  ) {
+    return null;
+  }
+  return seg;
+}
+
 /** Permanent ownership / pretty-URL migrations use 301 (not temporary 302/307/308). */
 function absoluteRedirect(request: NextRequest, targetBase: string, pathname: string): NextResponse {
   const dest = new URL(pathname || "/", targetBase);
@@ -281,6 +307,14 @@ function foreignSectionRedirect(
   host: string,
   pathname: string
 ): NextResponse | null {
+  // Legacy www-* → News home on foreign hosts too (skip Next entirely)
+  if (!isNewsHost(host) && pathname.startsWith("/blog/news/")) {
+    const slug = pathname.slice("/blog/news/".length).split("/")[0];
+    if (slug && isLegacySourceDomainSlug(slug)) {
+      return absoluteRedirect(request, NEWS_URL, "/");
+    }
+  }
+
   // Store / tools / saas / etc. must not serve the news desk
   if (!isNewsHost(host)) {
     if (pathname === "/blog/news" || pathname === "/blog/news/") {
@@ -579,10 +613,19 @@ export function middleware(request: NextRequest) {
     if (pathname === "/blog/news" || pathname === "/blog/news/") {
       return absoluteRedirect(request, `https://${hostName(host)}`, "/");
     }
+
+    // Cheap exit for crawler spam: source-domain slugs must NOT hit Next.js
+    // (layout + RSS aggregation). 301 to News home — never render / fetch feeds.
+    const legacySlug = extractNewsSlugCandidate(pathname);
+    if (legacySlug && isLegacySourceDomainSlug(legacySlug)) {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
+
     if (pathname.startsWith("/blog/news/")) {
       // Single hop: page issues 301 → /{category}/{slug} (avoid /blog/news → /slug → /cat/slug chain)
       const requestHeaders = new Headers(request.headers);
       requestHeaders.set("x-eben-public-path", pathname);
+      requestHeaders.set("x-eben-news-surface", "article");
       return NextResponse.next({ request: { headers: requestHeaders } });
     }
     if (pathname.startsWith("/blog/newsroom/")) {
@@ -595,6 +638,8 @@ export function middleware(request: NextRequest) {
       url.pathname = mapped;
       const requestHeaders = new Headers(request.headers);
       requestHeaders.set("x-eben-public-path", pathname);
+      const isHome = pathname === "/" || pathname === "";
+      requestHeaders.set("x-eben-news-surface", isHome ? "home" : "article");
       return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
     }
   }

@@ -214,3 +214,12 @@ export function findArchivedNewsByLegacySlug(slug: string): ArchivedNewsItem | u
   }
   return undefined;
 }
+
+/** Recent archived items for related-rail (no RSS). */
+export function listArchivedNewsRecent(limit = 80): ArchivedNewsItem[] {
+  return loadArchive()
+    .items.filter((n) => withinRetention(n.publishedAt) || n.origin === "cms" || n.origin === "seed")
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, limit)
+    .map(normalizeArchivedSlug);
+}

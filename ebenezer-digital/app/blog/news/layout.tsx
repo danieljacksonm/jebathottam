@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { headers } from "next/headers";
 import { NewsChrome } from "./components/NewsChrome";
 import { JOURNAL_URL, NEWS_URL, pageMetadata } from "@/lib/site-url";
 import { listPublicNews } from "@/lib/news-service";
@@ -28,11 +29,15 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsLayout({ children }: { children: ReactNode }) {
+  // Article surfaces must not trigger a full RSS refresh on every crawler hit.
+  const surface = (headers().get("x-eben-news-surface") || "home").toLowerCase();
   let initialArticles: Awaited<ReturnType<typeof listPublicNews>> = [];
-  try {
-    initialArticles = await listPublicNews();
-  } catch {
-    /* wire can fail — client will retry */
+  if (surface === "home") {
+    try {
+      initialArticles = await listPublicNews();
+    } catch {
+      /* wire can fail — client will retry */
+    }
   }
   const initialUpdatedAt = new Date().toISOString();
 

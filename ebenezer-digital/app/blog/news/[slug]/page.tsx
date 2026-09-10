@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getAllNews, readingMinutes } from "../data";
-import { getPublicNewsBySlug, listPublicNews } from "@/lib/news-service";
+import { getPublicNewsBySlug, listRelatedNews } from "@/lib/news-service";
 import { NewsArticleView } from "./NewsArticleView";
 import { NEWS_URL, SITE_ICONS } from "@/lib/site-url";
 import {
@@ -77,10 +77,7 @@ export default async function NewsArticlePage({ params }: Props) {
     redirect(canonicalPath);
   }
 
-  const all = await listPublicNews();
-  const related = all
-    .filter((n) => n.id !== article.id && (n.region === article.region || n.topic === article.topic))
-    .slice(0, 4);
+  const related = await listRelatedNews(article, 4);
 
   const modified = article.updatedAt || article.publishedAt;
   const canonical = newsPublicUrl(article.region, article.slug);
