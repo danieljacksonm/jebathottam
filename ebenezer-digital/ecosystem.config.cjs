@@ -23,7 +23,8 @@ module.exports = {
       name: "yegova-web",
       cwd: "/home/dani/yegova-saas",
       script: "npm",
-      args: "run start -w @yegova/web -- -p 3001",
+      # 3001 is ministry-platform — do not reuse
+      args: "run start -w @yegova/web -- -p 3004",
       max_memory_restart: "768M",
     },
   ],

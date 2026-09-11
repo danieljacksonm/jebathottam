@@ -5,7 +5,7 @@ Full billing (Invoice Studio, GST, stock, party ledger) runs on **the same subdo
 | Path | Backend | PM2 process |
 |------|---------|-------------|
 | `/` | Ebenezer marketing (`/saas`) | `ebenezer-digital` :3000 |
-| `/login`, `/register`, `/app/*` | Yegova Next app | `yegova-web` :3001 |
+| `/login`, `/register`, `/app/*` | Yegova Next app | `yegova-web` :3004 |
 | `/api/*` | Yegova NestJS API | `yegova-api` :4000 |
 
 Marketing CTAs point to `/login` and `/register` (not the old stub `/saas/login`).
@@ -63,7 +63,7 @@ npm run build -w @yegova/web
 
 ```bash
 pm2 start "npm run start:prod -w @yegova/api" --name yegova-api --cwd /home/dani/yegova-saas
-pm2 start "npm run start -w @yegova/web -- -p 3001" --name yegova-web --cwd /home/dani/yegova-saas
+pm2 start "npm run start -w @yegova/web -- -p 3004" --name yegova-web --cwd /home/dani/yegova-saas
 pm2 save
 ```
 
