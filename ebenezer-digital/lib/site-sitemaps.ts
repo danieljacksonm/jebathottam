@@ -256,7 +256,7 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
       );
     }
   } catch {
-    /* CMS store can fail on VPS; still return edu + news URLs */
+    /* CMS store can fail on VPS; still return edu journal URLs */
   }
 
   for (const p of getEduPosts()) {

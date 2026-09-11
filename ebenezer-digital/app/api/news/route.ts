@@ -3,6 +3,9 @@ import { searchPublicNews } from "@/lib/news-service";
 
 export const dynamic = "force-dynamic";
 
+const MAX_LIMIT = 80;
+const DEFAULT_LIMIT = 60;
+
 /** Public search API for E> World News */
 export async function GET(request: NextRequest) {
   try {
@@ -12,8 +15,12 @@ export async function GET(request: NextRequest) {
     const topic = searchParams.get("topic") || undefined;
     const breaking = searchParams.get("breaking") === "1" || searchParams.get("breaking") === "true";
     const featured = searchParams.get("featured") === "1" || searchParams.get("featured") === "true";
-    const limit = Number(searchParams.get("limit") || 200);
-    const offset = Number(searchParams.get("offset") || 0);
+    const rawLimit = Number(searchParams.get("limit") || DEFAULT_LIMIT);
+    const rawOffset = Number(searchParams.get("offset") || 0);
+    const limit = Number.isFinite(rawLimit)
+      ? Math.min(Math.max(1, Math.floor(rawLimit)), MAX_LIMIT)
+      : DEFAULT_LIMIT;
+    const offset = Number.isFinite(rawOffset) ? Math.max(0, Math.floor(rawOffset)) : 0;
 
     const result = await searchPublicNews({
       q,
@@ -21,8 +28,8 @@ export async function GET(request: NextRequest) {
       topic,
       breaking: breaking || undefined,
       featured: featured || undefined,
-      limit: Number.isFinite(limit) ? limit : 50,
-      offset: Number.isFinite(offset) ? offset : 0,
+      limit,
+      offset,
     });
 
     return NextResponse.json(
@@ -38,7 +45,7 @@ export async function GET(request: NextRequest) {
       },
       {
         headers: {
-          "Cache-Control": "public, s-maxage=45, stale-while-revalidate=300",
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
         },
       }
     );

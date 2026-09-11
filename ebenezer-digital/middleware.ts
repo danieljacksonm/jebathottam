@@ -457,6 +457,22 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get("host") || "";
   const token = request.cookies.get("auth-token")?.value;
 
+  // Cheap reject for probe noise — never run host/locale/News logic for these.
+  const lower = pathname.toLowerCase();
+  if (
+    lower.startsWith("/wp-admin") ||
+    lower.startsWith("/wp-login") ||
+    lower.startsWith("/wordpress") ||
+    lower === "/xmlrpc.php" ||
+    lower === "/install.php" ||
+    lower.endsWith(".php") ||
+    lower.endsWith(".asp") ||
+    lower.endsWith(".aspx") ||
+    lower.endsWith(".cgi")
+  ) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   const localized = localeRewrite(request);
   if (localized) return localized;
 

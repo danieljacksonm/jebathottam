@@ -56,7 +56,7 @@ export function NewsProvider({
 
     const load = (first = false) => {
       if (first) setLoading(true);
-      fetch("/api/news?limit=200")
+      fetch("/api/news?limit=60")
         .then((r) => r.json())
         .then((data) => {
           if (!alive) return;

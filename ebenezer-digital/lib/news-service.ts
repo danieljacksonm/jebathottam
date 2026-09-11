@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { db, type NewsArticleRecord } from "@/lib/db";
 import {
   WORLD_NEWS,
@@ -113,13 +114,27 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
   return list;
 }
 
+/**
+ * Cheap peek for hubs that only need a few headlines (Info home).
+ * Uses in-memory wire cache + seed — no CMS scan, no archive write.
+ */
+export function listPublicNewsPreview(limit = 5): PublicNewsItem[] {
+  const cached = peekLiveNewsCache();
+  const pool = cached.length >= 3 ? cached : WORLD_NEWS.map(seedToPublic);
+  return pool
+    .slice()
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .slice(0, Math.max(1, Math.min(limit, 12)));
+}
+
 /** News URLs for sitemaps — includes stories from the last 7 days even if feeds dropped them. */
 export async function listPublicNewsForSitemap(): Promise<PublicNewsItem[]> {
   const current = await listPublicNews();
   return listNewsForSitemap(current) as PublicNewsItem[];
 }
 
-export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem | undefined> {
+/** Request-scoped dedupe for generateMetadata + page (avoids double DB/archive work). */
+export const getPublicNewsBySlug = cache(async (slug: string): Promise<PublicNewsItem | undefined> => {
   const cms = await db.getNewsArticleBySlug(slug);
   if (cms) return recordToPublic(cms);
   const live = await getLiveNewsBySlug(slug);
@@ -129,7 +144,7 @@ export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem 
   const seed = WORLD_NEWS.find((n) => n.slug === slug);
   if (seed) return seedToPublic(seed);
 
-  // Legacy www-source-domain slugs → archive/CMS only (never re-fetch 50+ RSS feeds)
+  // Legacy www-source-domain slugs → archive/CMS only (never re-fetch RSS feeds)
   if (isLegacySourceDomainSlug(slug)) {
     const fromArchive = findArchivedNewsByLegacySlug(slug);
     if (fromArchive) return fromArchive as PublicNewsItem;
@@ -140,7 +155,7 @@ export async function getPublicNewsBySlug(slug: string): Promise<PublicNewsItem 
     if (cmsMatch) return recordToPublic(cmsMatch);
   }
   return undefined;
-}
+});
 
 /** Related stories without forcing a live RSS refresh (uses cache + archive + seed). */
 export async function listRelatedNews(

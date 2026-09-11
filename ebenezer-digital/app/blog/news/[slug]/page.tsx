@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { getAllNews, readingMinutes } from "../data";
 import { getPublicNewsBySlug, listRelatedNews } from "@/lib/news-service";
 import { NewsArticleView } from "./NewsArticleView";
@@ -14,7 +14,8 @@ import {
 
 type Props = { params: { slug: string } };
 
-export const dynamic = "force-dynamic";
+/** Seed articles can be static; headers() still opts into dynamic when present. */
+export const revalidate = 300;
 
 export async function generateStaticParams() {
   return getAllNews().map((n) => ({ slug: n.slug }));
@@ -22,7 +23,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = await getPublicNewsBySlug(params.slug);
-  if (!article) return { title: "News | Ebenezer" };
+  if (!article) return { title: "News | Ebenezer", robots: { index: false, follow: true } };
   const modified = article.updatedAt || article.publishedAt;
   const canonical = newsPublicUrl(article.region, article.slug);
   const locale = (headers().get("x-eben-locale") || "en").toLowerCase();
@@ -73,8 +74,9 @@ export default async function NewsArticlePage({ params }: Props) {
     !alreadyCanonical &&
     (publicPath.startsWith("/blog/news/") || /^\/[^/]+$/.test(publicPath));
 
+  // Permanent — temporary redirect() was 307 and weakened ownership signals.
   if (needsSlugFix || needsPathFix) {
-    redirect(canonicalPath);
+    permanentRedirect(canonicalPath);
   }
 
   const related = await listRelatedNews(article, 4);

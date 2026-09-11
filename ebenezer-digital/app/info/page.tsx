@@ -2,11 +2,11 @@ import Link from "next/link";
 import { SafeImage } from "@/components/info/SafeImage";
 import { NewsletterForm } from "./NewsletterForm";
 import { DESK_PHOTOS } from "@/lib/news-photos";
-import { listPublicNews } from "@/lib/news-service";
+import { listPublicNewsPreview } from "@/lib/news-service";
 import { db } from "@/lib/db";
 import { SITE_NAV, journalArticleHref, newsArticleHref, journalCategoryHref } from "@/lib/site-nav";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 function readingMins(text: string) {
   const words = text.split(/\s+/).filter(Boolean).length;
@@ -20,17 +20,14 @@ const CATEGORIES = [
   { label: "Digital Life", href: `${SITE_NAV.journal}/blog?q=digital`, img: DESK_PHOTOS.world },
   { label: "Science", href: journalCategoryHref("Science"), img: DESK_PHOTOS.science },
   { label: "Internet", href: `${SITE_NAV.journal}/blog?q=internet`, img: DESK_PHOTOS.asia },
-  { label: "People", href: `${SITE_NAV.news}/blog/news`, img: DESK_PHOTOS.politics },
+  { label: "People", href: SITE_NAV.news, img: DESK_PHOTOS.politics },
   { label: "Ideas", href: `${SITE_NAV.journal}/blog?q=ideas`, img: DESK_PHOTOS.europe },
 ];
 
 export default async function InfoHomePage() {
-  const [newsAll, posts] = await Promise.all([
-    listPublicNews().catch(() => []),
-    db.getBlogPosts(true).catch(() => []),
-  ]);
-
-  const news = newsAll.slice(0, 5);
+  // Preview only — do not pull full CMS list / archive write on Info hub.
+  const news = listPublicNewsPreview(5);
+  const posts = await db.getBlogPosts(true).catch(() => []);
   const stories = posts.slice(0, 6);
 
   return (
@@ -73,7 +70,7 @@ export default async function InfoHomePage() {
         <p className="info-lead">A few important stories from Ebenezer News — clear and current.</p>
         <div className="info-card-grid cols-3">
           {news.map((item) => (
-            <a key={item.id} className="info-story-card" href={newsArticleHref(item.slug)}>
+            <a key={item.id} className="info-story-card" href={newsArticleHref(item.slug, item.region)}>
               <div className="info-story-media">
                 <SafeImage src={item.coverImage} alt="" fill />
               </div>

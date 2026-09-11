@@ -21,10 +21,13 @@ export function SafeImage({
   priority,
   fill,
 }: Props) {
-  const [current, setCurrent] = useState(src || fallback);
+  const initial = src && src.trim() ? src : fallback;
+  const [current, setCurrent] = useState(initial);
+  const [failedOnce, setFailedOnce] = useState(false);
 
   useEffect(() => {
-    setCurrent(src || fallback);
+    setCurrent(src && src.trim() ? src : fallback);
+    setFailedOnce(false);
   }, [src, fallback]);
 
   return (
@@ -33,11 +36,16 @@ export function SafeImage({
       src={current}
       alt={alt}
       onError={() => {
-        if (current !== fallback) setCurrent(fallback);
+        if (!failedOnce && current !== fallback) {
+          setFailedOnce(true);
+          setCurrent(fallback);
+        }
       }}
       className={`${fill ? "absolute inset-0 h-full w-full" : "h-full w-full"} object-cover object-center ${className}`}
       loading={priority ? "eager" : "lazy"}
       decoding="async"
+      width={fill ? undefined : 1200}
+      height={fill ? undefined : 675}
     />
   );
 }
