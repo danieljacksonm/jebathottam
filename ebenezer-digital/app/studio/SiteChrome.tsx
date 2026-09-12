@@ -25,10 +25,13 @@ export default function SiteChrome({
 
   return (
     <div className="studio-root relative min-h-screen">
+      <a href="#main-content" className="studio-skip-link">
+        Skip to content
+      </a>
       <ScrollProgressBar />
       <Header />
       <StudioCursor />
-      {children}
+      <div id="main-content">{children}</div>
       <Footer />
     </div>
   );

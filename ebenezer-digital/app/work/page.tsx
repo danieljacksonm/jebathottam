@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { portfolioSlug } from "@/lib/portfolio-slug";
 
 type Project = {
   id: string;
@@ -50,20 +51,26 @@ export default function WorkPage() {
           WORK.
         </h1>
         <p className="mt-6 max-w-2xl text-[var(--st-muted)]">
-          Ongoing builds and completed projects for real clients — ministry platforms, shop systems, travel sites, and business tools.
+          Ongoing builds and completed projects for real clients — ministry platforms, shop systems, travel
+          sites, and business tools.
         </p>
-        <div className="mt-8 flex flex-wrap gap-2">
-          {([
-            ["all", "All"],
-            ["ongoing", "Ongoing"],
-            ["completed", "Completed"],
-          ] as const).map(([id, label]) => (
+        <div className="mt-8 flex flex-wrap gap-3" role="group" aria-label="Filter projects">
+          {(
+            [
+              ["all", "All"],
+              ["ongoing", "Ongoing"],
+              ["completed", "Completed"],
+            ] as const
+          ).map(([id, label]) => (
             <button
               key={id}
               type="button"
               onClick={() => setFilter(id)}
-              className={`border px-4 py-2 text-[11px] uppercase tracking-[0.18em] ${
-                filter === id ? "border-emerald-400 text-emerald-300" : "border-[var(--st-line)] text-white/40"
+              aria-pressed={filter === id}
+              className={`min-h-[44px] border px-4 py-2 text-[11px] uppercase tracking-[0.18em] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400 ${
+                filter === id
+                  ? "border-emerald-400 text-emerald-300"
+                  : "border-[var(--st-line)] text-white/40 hover:text-white/70"
               }`}
             >
               {label}
@@ -73,68 +80,82 @@ export default function WorkPage() {
       </section>
 
       <div className="mt-12">
-        {visible.map((project, index) => (
-          <article key={project.id} className="border-t border-[var(--st-line)] px-4 py-12 sm:px-8 lg:px-10">
-            <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-              <a
-                href={project.liveUrl || "#"}
-                target={project.liveUrl ? "_blank" : undefined}
-                rel={project.liveUrl ? "noopener noreferrer" : undefined}
-                className="group relative block aspect-[16/10] overflow-hidden bg-[#111]"
-                data-cursor="VIEW"
-              >
-                <Image
-                  src={project.coverImage}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 60vw"
-                  className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                />
-              </a>
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.22em] text-emerald-400">
-                  Project {String(index + 1).padStart(2, "0")} · {project.projectPhase}
-                </p>
-                {project.clientName && <p className="mt-2 text-sm text-white/50">{project.clientName}</p>}
-                <h2 className="studio-display mt-3 text-4xl sm:text-5xl">
-                  <Link href={`/work/${project.id}`} className="hover:text-emerald-300">
-                    {project.title}
-                  </Link>
-                </h2>
-                <p className="mt-4 text-[var(--st-muted)]">{project.description}</p>
-                <p className="mt-4 text-[10px] uppercase tracking-[0.16em] text-white/35">
-                  {(project.techStack || []).slice(0, 5).join(" · ")}
-                </p>
-                <div className="mt-6 flex flex-wrap gap-4">
-                  <Link
-                    href={`/work/${project.id}`}
-                    className="text-sm uppercase tracking-[0.16em] text-emerald-400"
-                  >
-                    Case study →
-                  </Link>
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm uppercase tracking-[0.16em] text-white/50 hover:text-white"
+        {visible.map((project, index) => {
+          const href = `/work/${portfolioSlug(project)}`;
+          return (
+            <article
+              key={project.id}
+              className="border-t border-[var(--st-line)] px-4 py-12 sm:px-8 lg:px-10"
+            >
+              <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+                <Link
+                  href={href}
+                  className="group relative block aspect-[16/10] overflow-hidden bg-[#111] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+                  data-cursor="VIEW"
+                >
+                  <Image
+                    src={project.coverImage}
+                    alt=""
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 60vw"
+                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
+                  />
+                </Link>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.22em] text-emerald-400">
+                    Project {String(index + 1).padStart(2, "0")} · {project.projectPhase}
+                  </p>
+                  {project.clientName ? (
+                    <p className="mt-2 text-sm text-white/50">{project.clientName}</p>
+                  ) : null}
+                  <h2 className="studio-display mt-3 text-4xl sm:text-5xl">
+                    <Link
+                      href={href}
+                      className="hover:text-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
                     >
-                      View live site →
-                    </a>
-                  )}
+                      {project.title}
+                    </Link>
+                  </h2>
+                  <p className="mt-4 text-[var(--st-muted)]">{project.description}</p>
+                  <p className="mt-4 text-[10px] uppercase tracking-[0.16em] text-white/35">
+                    {(project.techStack || []).slice(0, 5).join(" · ")}
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-4">
+                    <Link
+                      href={href}
+                      className="text-sm uppercase tracking-[0.16em] text-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+                    >
+                      Case study →
+                    </Link>
+                    {project.liveUrl ? (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm uppercase tracking-[0.16em] text-white/50 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+                      >
+                        View live site →
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </div>
-            </div>
-          </article>
-        ))}
-        {visible.length === 0 && (
-          <p className="px-4 py-16 text-center text-[var(--st-muted)]">Loading projects…</p>
-        )}
+            </article>
+          );
+        })}
+        {visible.length === 0 ? (
+          <p className="px-4 py-16 text-center text-[var(--st-muted)]" role="status">
+            {projects.length === 0 ? "Loading projects…" : "No projects in this filter."}
+          </p>
+        ) : null}
       </div>
 
-      <div className="px-4 py-16 text-center">
+      <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-16">
         <Link href="/contact" className="studio-btn inline-flex" data-cursor="START">
           Start a project →
+        </Link>
+        <Link href="/services" className="studio-btn studio-btn-ghost inline-flex">
+          Explore services
         </Link>
       </div>
     </main>

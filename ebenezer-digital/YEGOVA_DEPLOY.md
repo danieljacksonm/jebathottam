@@ -71,7 +71,7 @@ pm2 save
 
 ## 5. Nginx (saas host)
 
-Update the `saas.ebenezerdigital.com` server block — see `nginx-info-store.conf` in this repo (path split for `/api/`, `/app`, `/login`, `/register` → 3001/4000; `/` → 3000).
+Update the `saas.ebenezerdigital.com` server block — see `nginx-info-store.conf` in this repo (path split for `/api/` → 4000, `/app` `/login` `/register` → 3004; `/` → 3000). Port **3001** is ministry-platform.
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx

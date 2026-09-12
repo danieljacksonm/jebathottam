@@ -72,24 +72,30 @@ export default function Hero() {
           WE{" "}
           <button
             type="button"
-            className="underline decoration-emerald-400/40 underline-offset-8"
+            className="underline decoration-emerald-400/40 underline-offset-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
             onMouseEnter={() => setScene("build")}
+            onFocus={() => setScene("build")}
+            aria-label="Show build message"
           >
             BUILD
           </button>
           <br />
           <button
             type="button"
-            className="underline decoration-emerald-400/40 underline-offset-8"
+            className="underline decoration-emerald-400/40 underline-offset-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
             onMouseEnter={() => setScene("digital")}
+            onFocus={() => setScene("digital")}
+            aria-label="Show digital message"
           >
             DIGITAL
           </button>
           <br />
           <button
             type="button"
-            className="text-emerald-400 underline decoration-white/20 underline-offset-8"
+            className="text-emerald-400 underline decoration-white/20 underline-offset-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
             onMouseEnter={() => setScene("experiences")}
+            onFocus={() => setScene("experiences")}
+            aria-label="Show experiences message"
           >
             EXPERIENCES.
           </button>
