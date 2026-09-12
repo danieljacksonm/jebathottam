@@ -45,7 +45,12 @@ check("title-only slugify", newsUrl.includes("slugifyNewsTitle"));
 check("legacy slug resolution in news-service", newsService.includes("findArchivedNewsByLegacySlug"));
 check("getPublicNewsBySlug request-deduped with cache()", newsService.includes("cache(async"));
 check("listPublicNewsPreview for hubs", newsService.includes("listPublicNewsPreview"));
+check("listPublicNewsForHome caps chrome payload", newsService.includes("listPublicNewsForHome") && newsService.includes("NEWS_HOME_CLIENT_LIMIT"));
+check("listPublicNews memo TTL", newsService.includes("LIST_PUBLIC_TTL_MS") || newsService.includes("listPublicMemo"));
 check("in-process RSS off unless LIVE_NEWS_INPROCESS=1", liveNews.includes('LIVE_NEWS_INPROCESS === "1"'));
+check("foreign /api/news redirects to News host", mw.includes('pathname.startsWith("/api/news")') && mw.includes("NEWS_URL"));
+check("soft locale URLs send X-Robots-Tag noindex", mw.includes('x-robots-tag') && mw.includes("noindex, follow"));
+check("News legacy www-* rewrites to article surface", mw.includes('x-eben-news-surface", "article"') && mw.includes("isLegacySourceDomainSlug"));
 check(
   "archive excludes www-* from sitemap",
   archive.includes("isLegacySourceDomainSlug(n.slug)") || archive.includes("if (isLegacySourceDomainSlug")

@@ -266,6 +266,11 @@ export function publicPathForLocale(
   return `/${locale}${suffix}`;
 }
 
+/**
+ * Full locale cluster (all SEO_LOCALES). Prefer {@link publishedLanguageAlternates}
+ * in metadata until real PUBLISHED translations exist — advertising /kn /pa /hi
+ * for English-only HTML creates soft duplicates.
+ */
 export function languageAlternatesForPath(
   internalPath: string,
   origin?: string,
@@ -275,6 +280,29 @@ export function languageAlternatesForPath(
   const resolvedKind = kind ?? siteKindFromPath(internalPath);
   const languages: Record<string, string> = {};
   for (const loc of SEO_LOCALES) {
+    const pub = publicPathForLocale(internalPath, loc, resolvedKind);
+    languages[loc] = `${base}${pub === "/" ? "" : pub}`;
+  }
+  languages["x-default"] = languages.en;
+  return languages;
+}
+
+/**
+ * Honest hreflang: only locales with real published translations.
+ * Today that is English only (+ x-default). Soft locale URLs stay reachable
+ * but are noindex via middleware X-Robots-Tag.
+ */
+export const PUBLISHED_HREFLANG_LOCALES: readonly SeoLocale[] = ["en"];
+
+export function publishedLanguageAlternates(
+  internalPath: string,
+  origin?: string,
+  kind?: SiteKind
+): Record<string, string> {
+  const base = origin || originForPath(internalPath);
+  const resolvedKind = kind ?? siteKindFromPath(internalPath);
+  const languages: Record<string, string> = {};
+  for (const loc of PUBLISHED_HREFLANG_LOCALES) {
     const pub = publicPathForLocale(internalPath, loc, resolvedKind);
     languages[loc] = `${base}${pub === "/" ? "" : pub}`;
   }
@@ -313,7 +341,7 @@ export function pageMetadata({
     title,
     description,
     icons: SITE_ICONS,
-    alternates: { canonical: url, languages: languageAlternatesForPath(path, origin, kind) },
+    alternates: { canonical: url, languages: publishedLanguageAlternates(path, origin, kind) },
     ...(google ? { verification: { google } } : {}),
     openGraph: {
       title,
@@ -421,7 +449,7 @@ export function rootMetadataForKind(kind: SiteKind): Metadata {
     manifest: "/manifest.webmanifest",
     alternates: {
       canonical: origin,
-      languages: languageAlternatesForPath(
+      languages: publishedLanguageAlternates(
         kind === "info"
           ? "/info"
           : kind === "journal"

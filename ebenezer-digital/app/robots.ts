@@ -22,17 +22,6 @@ export default function robots(): MetadataRoute.Robots {
       ? [`${base}/sitemap.xml`, `${base}/api/news/sitemap`]
       : [`${base}/sitemap.xml`];
 
-  const sharedAllow = [
-    "/",
-    "/llms.txt",
-    "/sitemap.html",
-    "/sitemaps/",
-    "/api/blog/rss",
-    "/api/news/rss",
-    "/api/news/ical",
-    "/api/news/sitemap",
-  ];
-
   const sharedDisallow = [
     "/admin/",
     "/api/admin/",
@@ -44,7 +33,24 @@ export default function robots(): MetadataRoute.Robots {
     "/products/checkout",
     "/products/account",
     "/products/success",
+    "/info/search",
+    "/search",
   ];
+
+  // News APIs are owned by the News host — other properties should not advertise them.
+  const sharedAllow =
+    kind === "news"
+      ? [
+          "/",
+          "/llms.txt",
+          "/sitemap.html",
+          "/sitemaps/",
+          "/api/blog/rss",
+          "/api/news/rss",
+          "/api/news/ical",
+          "/api/news/sitemap",
+        ]
+      : ["/", "/llms.txt", "/sitemap.html", "/sitemaps/", "/api/blog/rss"];
 
   return {
     rules: [

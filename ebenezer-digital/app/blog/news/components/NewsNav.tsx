@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Menu, Search, Radio, X } from "lucide-react";
 import { NEWS_NAV } from "../data";
 import { useNews } from "./NewsProvider";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SITE_NAV } from "@/lib/site-nav";
 
 export function NewsNav() {
@@ -48,7 +47,6 @@ export function NewsNav() {
           </Link>
 
           <div className="flex items-center gap-1 sm:gap-2">
-            <LanguageSwitcher compact />
             <button
               type="button"
               onClick={() => setSearchOpen(true)}

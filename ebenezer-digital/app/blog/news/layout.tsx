@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { NewsChrome } from "./components/NewsChrome";
-import { JOURNAL_URL, NEWS_URL, pageMetadata } from "@/lib/site-url";
-import { listPublicNews } from "@/lib/news-service";
+import { JOURNAL_URL, NEWS_URL, pageMetadata, articleLanguageAlternates } from "@/lib/site-url";
+import { listPublicNewsForHome } from "@/lib/news-service";
 
 export const revalidate = 300;
 
@@ -21,20 +21,21 @@ export const metadata: Metadata = {
   },
   alternates: {
     ...base.alternates,
+    languages: articleLanguageAlternates("/blog/news", "news"),
     types: {
-      "application/rss+xml": [{ url: "/api/news/rss", title: "Ebenezer World News RSS" }],
-      "application/xml": [{ url: "/api/news/sitemap", title: "Ebenezer World News Sitemap" }],
+      "application/rss+xml": [{ url: `${NEWS_URL}/api/news/rss`, title: "Ebenezer World News RSS" }],
+      "application/xml": [{ url: `${NEWS_URL}/api/news/sitemap`, title: "Ebenezer World News Sitemap" }],
     },
   },
 };
 
 export default async function NewsLayout({ children }: { children: ReactNode }) {
-  // Article surfaces must not trigger a full RSS refresh on every crawler hit.
+  // Article surfaces must not trigger a full list into client chrome.
   const surface = (headers().get("x-eben-news-surface") || "home").toLowerCase();
-  let initialArticles: Awaited<ReturnType<typeof listPublicNews>> = [];
+  let initialArticles: Awaited<ReturnType<typeof listPublicNewsForHome>> = [];
   if (surface === "home") {
     try {
-      initialArticles = await listPublicNews();
+      initialArticles = await listPublicNewsForHome();
     } catch {
       /* wire can fail — client will retry */
     }
@@ -61,10 +62,7 @@ export default async function NewsLayout({ children }: { children: ReactNode }) 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(newsOrg) }} />
-      <NewsChrome
-        initialArticles={initialArticles.slice(0, 200)}
-        initialUpdatedAt={initialUpdatedAt}
-      >
+      <NewsChrome initialArticles={initialArticles} initialUpdatedAt={initialUpdatedAt}>
         {children}
       </NewsChrome>
     </>

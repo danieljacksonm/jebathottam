@@ -53,8 +53,9 @@ check(
 
 // Hreflang uses public paths
 const siteUrl = read("lib/site-url.ts");
-check("pageMetadata uses languageAlternatesForPath", siteUrl.includes("languageAlternatesForPath(path, origin, kind)"));
+check("pageMetadata uses publishedLanguageAlternates", siteUrl.includes("publishedLanguageAlternates(path, origin, kind)"));
 check("articleLanguageAlternates helper exists", siteUrl.includes("articleLanguageAlternates"));
+check("PUBLISHED_HREFLANG_LOCALES is en-only until real translations", siteUrl.includes('PUBLISHED_HREFLANG_LOCALES') && siteUrl.includes('["en"]'));
 
 // News pinned wired
 check("Admin news has pinned field", read("app/admin/(panel)/news/page.tsx").includes("pinned"));
@@ -87,7 +88,6 @@ check("Brand tokens shared config", fileExists("lib/brand-tokens.ts"));
 
 const langTargets = [
   "app/blog/components/JournalNav.tsx",
-  "app/blog/news/components/NewsNav.tsx",
   "app/tools/ToolsHeader.tsx",
   "app/catalog/components/CatalogNav.tsx",
   "components/network/NetworkShell.tsx",
@@ -100,6 +100,10 @@ const langTargets = [
 for (const f of langTargets) {
   check(`LanguageSwitcher in ${f}`, read(f).includes("LanguageSwitcher"));
 }
+check(
+  "NewsNav has no LanguageSwitcher (News is en-only)",
+  !read("app/blog/news/components/NewsNav.tsx").includes("LanguageSwitcher")
+);
 
 check("News SSR initialArticles", read("app/blog/news/layout.tsx").includes("initialArticles"));
 check("Article sitemap hreflang helper", read("lib/site-sitemaps.ts").includes("articleLanguageAlternates"));

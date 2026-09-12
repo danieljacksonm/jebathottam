@@ -307,11 +307,16 @@ function foreignSectionRedirect(
   host: string,
   pathname: string
 ): NextResponse | null {
-  // Legacy www-* → News home on foreign hosts too (skip Next entirely)
+  // News APIs belong on the News host only (feeds/sitemap ownership).
+  if (!isNewsHost(host) && pathname.startsWith("/api/news")) {
+    return absoluteRedirect(request, NEWS_URL, pathname);
+  }
+
+  // Legacy www-* → News host with slug so article resolution can 301 to category.
   if (!isNewsHost(host) && pathname.startsWith("/blog/news/")) {
     const slug = pathname.slice("/blog/news/".length).split("/")[0];
     if (slug && isLegacySourceDomainSlug(slug)) {
-      return absoluteRedirect(request, NEWS_URL, "/");
+      return absoluteRedirect(request, NEWS_URL, `/${slug}`);
     }
   }
 
@@ -449,6 +454,10 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   });
   res.headers.set("x-eben-locale", locale);
   res.headers.set("content-language", locale);
+  // Soft locale prefixes serve English until PUBLISHED translations exist.
+  if (locale !== "en") {
+    res.headers.set("x-robots-tag", "noindex, follow");
+  }
   return res;
 }
 
@@ -630,11 +639,16 @@ export function middleware(request: NextRequest) {
       return absoluteRedirect(request, `https://${hostName(host)}`, "/");
     }
 
-    // Cheap exit for crawler spam: source-domain slugs must NOT hit Next.js
-    // (layout + RSS aggregation). 301 to News home — never render / fetch feeds.
+    // Legacy www-* → Next article surface (RSS off). getPublicNewsBySlug can
+    // permanentRedirect to the category canonical when a match exists; otherwise 404.
     const legacySlug = extractNewsSlugCandidate(pathname);
     if (legacySlug && isLegacySourceDomainSlug(legacySlug)) {
-      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+      const requestHeaders = new Headers(request.headers);
+      requestHeaders.set("x-eben-public-path", pathname.startsWith("/blog/news/") ? pathname : `/blog/news/${legacySlug}`);
+      requestHeaders.set("x-eben-news-surface", "article");
+      const url = request.nextUrl.clone();
+      url.pathname = `/blog/news/${legacySlug}`;
+      return NextResponse.rewrite(url, { request: { headers: requestHeaders } });
     }
 
     if (pathname.startsWith("/blog/news/")) {

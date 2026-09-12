@@ -73,12 +73,21 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
   };
 }
 
+/** Short TTL so home + API + sitemap share one merge within a burst. */
+const LIST_PUBLIC_TTL_MS = 60_000;
+let listPublicMemo: { at: number; data: PublicNewsItem[] } | null = null;
+
 /**
  * Seed + CMS + optional in-memory wire cache.
  * Never starts RSS from a request — that starved Node on this VPS
  * (HOME/robots.txt timed out while Edge 301s stayed fine).
  */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
+  const now = Date.now();
+  if (listPublicMemo && now - listPublicMemo.at < LIST_PUBLIC_TTL_MS) {
+    return listPublicMemo.data;
+  }
+
   const cached = peekLiveNewsCache();
   const cms = await db.getNewsArticles(true).catch(() => []);
   const byKey = new Map<string, PublicNewsItem>();
@@ -111,7 +120,17 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
     /* archive is best-effort */
   }
 
+  listPublicMemo = { at: now, data: list };
   return list;
+}
+
+/** Cap for News chrome / home client props — never ship the full list. */
+export const NEWS_HOME_CLIENT_LIMIT = 60;
+
+export async function listPublicNewsForHome(limit = NEWS_HOME_CLIENT_LIMIT): Promise<PublicNewsItem[]> {
+  const list = await listPublicNews();
+  const n = Math.max(1, Math.min(limit, NEWS_HOME_CLIENT_LIMIT));
+  return list.slice(0, n);
 }
 
 /**
