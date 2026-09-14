@@ -168,9 +168,12 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
     if (!publishedAt) continue;
     const creator = decodeEntities(tag(block, "dc:creator") || tag(block, "author"));
     if (!title || title.length < 12) continue;
+    // id must come from the title (or slug), never the source URL —
+    // slugifyNewsTitle strips https://… to "" → "story", collapsing the whole desk.
+    const slug = slugify(title);
     items.push({
-      id: `live-${slugify(link || title)}`,
-      slug: slugify(title),
+      id: `live-${slug}`,
+      slug,
       title,
       dek,
       body: [dek],

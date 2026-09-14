@@ -75,20 +75,22 @@ export function NewsHome() {
   const rotated = useMemo(() => rotateList(liveFirst, rotate), [liveFirst, rotate]);
 
   const desk = useMemo(() => {
+    // Prefer slug — live wire briefly used a broken shared id ("live-story").
+    const keyOf = (a: NewsArticle) => a.slug || a.id;
     const used = new Set<string>();
     const heroLead =
       rotated.find((a) => a.pinned) ||
       rotated.find((a) => a.featured) ||
       rotated.find((a) => a.breaking) ||
       rotated[0];
-    if (heroLead) used.add(heroLead.id);
+    if (heroLead) used.add(keyOf(heroLead));
 
     const take = (count: number, list = rotated, pred?: (a: NewsArticle) => boolean) => {
       const out: NewsArticle[] = [];
       for (const a of list) {
-        if (used.has(a.id)) continue;
+        if (used.has(keyOf(a))) continue;
         if (pred && !pred(a)) continue;
-        used.add(a.id);
+        used.add(keyOf(a));
         out.push(a);
         if (out.length >= count) break;
       }
@@ -108,7 +110,7 @@ export function NewsHome() {
     const visual = take(5);
     const audio = take(4);
     const cinematic = take(1)[0];
-    const leftover = rotated.filter((a) => !used.has(a.id));
+    const leftover = rotated.filter((a) => !used.has(keyOf(a)));
     return {
       briefing,
       lead,

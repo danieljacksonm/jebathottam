@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { NewsArticle, NewsNavId } from "../data";
 
-const CACHE_KEY = "eben-news-cache-v1";
+const CACHE_KEY = "eben-news-cache-v2";
 
 type NewsContextValue = {
   articles: NewsArticle[];
