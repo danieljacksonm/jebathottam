@@ -12,10 +12,7 @@ import {
   packagesForDestination,
   type DestinationSlug,
 } from "@/data/destinations";
-import {
-  formatInr,
-  localizePackage,
-} from "@/data/packages";
+import { formatInr, localizePackage } from "@/data/packages";
 import { DARJEELING_MEDIA } from "@/lib/media-registry";
 import { pageMetadata } from "@/lib/seo";
 import KodaikanalPage from "../../kodaikanal/page";
@@ -41,6 +38,17 @@ export async function generateMetadata({
       path: "/destinations/kodaikanal",
       title: t("kodaiTitle"),
       description: t("kodaiDescription"),
+      image: dest.image,
+      imageAlt: copy.name.en,
+    });
+  }
+
+  if (slug === "goa") {
+    return pageMetadata({
+      locale,
+      path: "/destinations/goa",
+      title: t("goaTitle"),
+      description: t("goaDescription"),
       image: dest.image,
       imageAlt: copy.name.en,
     });
@@ -79,18 +87,23 @@ export default async function DestinationDetailPage({
   const packages = packagesForDestination(dest.slug).map((row) =>
     localizePackage(row, locale),
   );
-  const gallery = [
-    DARJEELING_MEDIA.g1,
-    DARJEELING_MEDIA.g2,
-    DARJEELING_MEDIA.g3,
-    DARJEELING_MEDIA.g4,
-    DARJEELING_MEDIA.g5,
-  ];
+  const gallery =
+    dest.slug === "darjeeling"
+      ? [
+          DARJEELING_MEDIA.g1,
+          DARJEELING_MEDIA.g2,
+          DARJEELING_MEDIA.g3,
+          DARJEELING_MEDIA.g4,
+          DARJEELING_MEDIA.g5,
+        ]
+      : [];
 
   return (
     <PageAtmosphere>
       <CinematicPageHero
-        eyebrow={dest.country}
+        eyebrow={
+          dest.status === "coming_soon" ? platform("comingSoon") : dest.country
+        }
         title={copy.name[locale] ?? copy.name.en}
         subtitle={copy.tagline[locale] ?? copy.tagline.en}
         image={dest.image}
@@ -111,60 +124,99 @@ export default async function DestinationDetailPage({
           {copy.body[locale] ?? copy.body.en}
         </p>
         <div className="mt-8 flex flex-wrap gap-4">
-          <Link href="/plan-your-trip?destination=darjeeling" className="btn-gold">
+          <Link
+            href={`/plan-your-trip?destination=${dest.slug}`}
+            className="btn-gold"
+          >
             Plan this trip
           </Link>
-          <Link href="/packages" className="btn-ghost">
-            View packages
-          </Link>
+          {packages.length > 0 ? (
+            <Link href="/packages" className="btn-ghost">
+              View packages
+            </Link>
+          ) : (
+            <Link href="/enquire" className="btn-ghost">
+              {platform("requestEnquiry")}
+            </Link>
+          )}
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-5 pb-16 md:px-8">
-        <h2 className="font-display text-3xl text-cream">Available packages</h2>
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-          {packages.map((pkg) => (
-            <article key={pkg.id} className="lux-card overflow-hidden">
-              <Link href={`/packages/${pkg.id}`} className="block">
-                <div className="relative aspect-[16/10]">
-                  <Image
-                    src={pkg.image}
-                    alt={pkg.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="font-display text-2xl text-white">{pkg.title}</h3>
-                  <p className="mt-3 text-sm text-soft-gray">{pkg.blurb}</p>
-                  <p className="mt-4 text-gold-bright">
-                    {platform("from")} {formatInr(pkg.priceFrom)}{" "}
-                    {platform("perPerson")}
-                  </p>
-                </div>
-              </Link>
-            </article>
-          ))}
-        </div>
+        <h2 className="font-display text-3xl text-cream">
+          {packages.length > 0 ? "Available packages" : "Custom packages"}
+        </h2>
+        {packages.length > 0 ? (
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {packages.map((pkg) => (
+              <article key={pkg.id} className="lux-card overflow-hidden">
+                <Link href={`/packages/${pkg.id}`} className="block">
+                  <div className="relative aspect-[16/10]">
+                    <Image
+                      src={pkg.image}
+                      alt={pkg.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-display text-2xl text-white">
+                      {pkg.title}
+                    </h3>
+                    <p className="mt-3 text-sm text-soft-gray">{pkg.blurb}</p>
+                    <p className="mt-4 text-gold-bright">
+                      {platform("from")} {formatInr(pkg.priceFrom)}{" "}
+                      {platform("perPerson")}
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="lux-card mt-8 p-8">
+            <p className="text-soft-gray">
+              Fixed published prices for this destination are not listed yet.
+              Tell us your dates and group size — we will build a custom plan.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3 text-sm text-mist/80">
+              <span>Beach tours</span>
+              <span>·</span>
+              <span>Water sports</span>
+              <span>·</span>
+              <span>Sightseeing</span>
+              <span>·</span>
+              <span>Customized trips</span>
+            </div>
+            <Link href="/enquire" className="btn-gold mt-8 inline-flex">
+              Request a Goa quote
+            </Link>
+          </div>
+        )}
       </section>
 
-      <section className="mx-auto max-w-7xl px-5 pb-20 md:px-8">
-        <h2 className="font-display text-3xl text-cream">Gallery</h2>
-        <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-          {gallery.map((item) => (
-            <div key={item.src} className="relative aspect-[4/3] overflow-hidden rounded-xl">
-              <Image
-                src={item.src}
-                alt={item.alt}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 50vw, 33vw"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
+      {gallery.length > 0 ? (
+        <section className="mx-auto max-w-7xl px-5 pb-20 md:px-8">
+          <h2 className="font-display text-3xl text-cream">Gallery</h2>
+          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+            {gallery.map((item) => (
+              <div
+                key={item.src}
+                className="relative aspect-[4/3] overflow-hidden rounded-xl"
+              >
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </PageAtmosphere>
   );
 }

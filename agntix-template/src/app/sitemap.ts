@@ -10,6 +10,7 @@ const staticPaths = [
   "/destinations",
   "/destinations/kodaikanal",
   "/destinations/darjeeling",
+  "/destinations/goa",
   "/packages",
   "/corporate-travel",
   "/experiences",

@@ -59,37 +59,42 @@ export default async function DestinationsPage({
         ]}
       />
       <section className="mx-auto max-w-7xl px-5 py-16 md:px-8">
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {list.map((dest) => {
             const copy = destinationCopy[dest.slug];
+            const hasPrice =
+              typeof dest.priceFrom === "number" && dest.priceFrom > 0;
             return (
               <article key={dest.slug} className="lux-card overflow-hidden">
                 <Link
                   href={`/destinations/${dest.slug}`}
-                  className="grid md:grid-cols-2"
+                  className="flex h-full flex-col"
                 >
-                  <div className="relative aspect-[16/11] md:min-h-[260px]">
+                  <div className="relative aspect-[16/11]">
                     <Image
                       src={dest.image}
                       alt={copy.name[loc] ?? copy.name.en}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   </div>
                   <div className="p-8">
                     <p className="text-[0.68rem] uppercase tracking-[0.22em] text-gold">
-                      {dest.country}
+                      {dest.status === "coming_soon"
+                        ? platform("comingSoon")
+                        : dest.country}
                     </p>
-                    <h2 className="mt-3 font-display text-4xl text-white">
+                    <h2 className="mt-3 font-display text-3xl text-white">
                       {copy.name[loc] ?? copy.name.en}
                     </h2>
                     <p className="mt-4 text-soft-gray">
                       {copy.tagline[loc] ?? copy.tagline.en}
                     </p>
                     <p className="mt-6 text-sm text-gold-bright">
-                      {platform("from")} {formatInr(dest.priceFrom)}{" "}
-                      {platform("perPerson")} →
+                      {hasPrice
+                        ? `${platform("from")} ${formatInr(dest.priceFrom!)} ${platform("perPerson")} →`
+                        : `${platform("requestEnquiry")} →`}
                     </p>
                   </div>
                 </Link>

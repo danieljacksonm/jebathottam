@@ -2,21 +2,45 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
+const HERO_PANELS = [
+  {
+    src: "/images/marketing/kodai-banner.jpg",
+    alt: "Kodaikanal hills with Canaan Travel Hub",
+  },
+  {
+    src: "/images/marketing/darjeeling-banner.jpg",
+    alt: "Darjeeling tea hills and Himalayan views",
+  },
+  {
+    src: "/images/goa/goa-hero.jpg",
+    alt: "Goa beaches and coastal adventure",
+  },
+] as const;
+
 export async function GlobalHero() {
   const t = await getTranslations("platform");
 
   return (
     <section className="relative isolate min-h-[88vh] overflow-hidden bg-[#020b16]">
-      <Image
-        src="/images/darjeeling/hero/darjeeling-hero.jpg"
-        alt="Travel landscapes with Canaan Travel Hub"
-        fill
-        priority
-        className="object-cover object-center opacity-55"
-        sizes="100vw"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#020b16]/55 via-[#020b16]/45 to-[#020b16]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,162,39,0.18),transparent_55%)]" />
+      <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3">
+        {HERO_PANELS.map((panel, index) => (
+          <div
+            key={panel.src}
+            className={`relative ${index === 0 ? "block" : "hidden md:block"}`}
+          >
+            <Image
+              src={panel.src}
+              alt={panel.alt}
+              fill
+              priority={index === 0}
+              className="object-cover object-center opacity-50"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          </div>
+        ))}
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#020b16]/60 via-[#020b16]/50 to-[#020b16]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,162,39,0.16),transparent_55%)]" />
 
       <div className="relative mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-end px-5 pb-20 pt-36 md:px-8 md:pb-28">
         <p className="text-[0.72rem] uppercase tracking-[0.32em] text-gold">

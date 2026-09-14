@@ -66,7 +66,9 @@ export function DestinationsGrid({
                         {copy.tagline[locale]}
                       </p>
                       <p className="mt-3 text-sm text-gold-bright">
-                        {t("from")} {formatInr(dest.priceFrom)}
+                        {typeof dest.priceFrom === "number" && dest.priceFrom > 0
+                          ? `${t("from")} ${formatInr(dest.priceFrom)}`
+                          : "Enquire"}
                       </p>
                     </div>
                   </div>

@@ -12,7 +12,7 @@ const links = [
   { href: "/destinations", key: "destinations" as const },
   { href: "/packages", key: "packages" as const },
   { href: "/corporate-travel", key: "corporate" as const },
-  { href: "/experiences", key: "experiences" as const },
+  { href: "/blog", key: "blog" as const },
   { href: "/plan-your-trip", key: "planTrip" as const },
   { href: "/about", key: "about" as const },
   { href: "/contact", key: "contact" as const },

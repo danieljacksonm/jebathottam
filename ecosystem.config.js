@@ -68,7 +68,16 @@ module.exports = {
         PORT: 3003,
         HOSTNAME: "0.0.0.0",
         NEXT_PUBLIC_SITE_URL: "https://canaantravelhub.com",
-        NODE_OPTIONS: "--max-old-space-size=384"
+        NODE_OPTIONS: "--max-old-space-size=384",
+        // Enquiry email — set real SMTP_USER / SMTP_PASS on the VPS (Gmail App Password)
+        ENQUIRY_NOTIFY_EMAIL:
+          "managingdirector@canaantravelhub.com,canaantravelhub@gmail.com",
+        SMTP_HOST: "smtp.gmail.com",
+        SMTP_PORT: "587",
+        SMTP_USER: process.env.CANAAN_SMTP_USER || "",
+        SMTP_PASS: process.env.CANAAN_SMTP_PASS || "",
+        SMTP_FROM:
+          "Canaan Travel Hub <managingdirector@canaantravelhub.com>"
       },
       instances: 1,
       autorestart: true,
