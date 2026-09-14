@@ -46,3 +46,7 @@ next-env.d.ts
 
 # local audits
 lighthouse-*.json
+
+# owner WhatsApp zip duplicates (loose images kept)
+/packages/**/*.zip
+

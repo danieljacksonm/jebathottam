@@ -1,19 +1,19 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const links = [
-  { href: "/", key: "home" as const },
-  { href: "/kodaikanal", key: "kodaikanal" as const },
+  { href: "/destinations", key: "destinations" as const },
   { href: "/packages", key: "packages" as const },
-  { href: "/services", key: "services" as const },
-  { href: "/blog", key: "blog" as const },
+  { href: "/corporate-travel", key: "corporate" as const },
+  { href: "/experiences", key: "experiences" as const },
+  { href: "/plan-your-trip", key: "planTrip" as const },
   { href: "/about", key: "about" as const },
   { href: "/contact", key: "contact" as const },
 ];
@@ -64,14 +64,15 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 xl:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-6 xl:flex" aria-label="Primary">
           {links.map((link) => {
-            const active = pathname === link.href;
+            const active =
+              pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-[0.68rem] uppercase tracking-[0.18em] transition-colors ${
+                className={`text-[0.66rem] uppercase tracking-[0.16em] transition-colors ${
                   active ? "text-gold-bright" : "text-white/70 hover:text-gold"
                 }`}
               >
@@ -83,8 +84,8 @@ export function SiteHeader() {
 
         <div className="hidden items-center gap-3 md:flex">
           <LanguageSwitcher />
-          <Link href="/plan-your-trip" className="btn-gold !px-5 !py-2.5 text-[0.66rem]" data-cursor="book">
-            {t("planTrip")}
+          <Link href="/enquire" className="btn-gold !px-5 !py-2.5 text-[0.66rem]">
+            {t("enquire")}
           </Link>
         </div>
 
@@ -120,10 +121,14 @@ export function SiteHeader() {
                   {t(link.key)}
                 </Link>
               ))}
-              <Link href="/plan-your-trip" className="btn-gold mt-4 w-full" onClick={() => setOpen(false)}>
-                {t("planTrip")}
-              </Link>
               <LanguageSwitcher />
+              <Link
+                href="/enquire"
+                className="btn-gold mt-2 text-center"
+                onClick={() => setOpen(false)}
+              >
+                {t("enquire")}
+              </Link>
             </nav>
           </motion.div>
         )}

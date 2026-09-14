@@ -37,7 +37,13 @@
     "termsTitle": "सेवा की शर्तें | Canaan Travel Hub",
     "termsDescription": "canaantravelhub.com और कनान यात्रा पैकेज के लिए शर्तें।",
     "planTripTitle": "अपनी कोडाइकनाल यात्रा प्लान करें",
-    "planTripDescription": "तारीखें, यात्री और पसंद साझा करें। Canaan स्पष्ट कोडाइकनाल itinerary तैयार करेगा।"
+    "planTripDescription": "तारीखें, यात्री और पसंद साझा करें। Canaan स्पष्ट कोडाइकनाल itinerary तैयार करेगा।",
+    "corporateTitle": "Corporate Travel",
+    "corporateDescription": "",
+    "experiencesTitle": "Experiences",
+    "experiencesDescription": "",
+    "darjeelingTitle": "Darjeeling",
+    "darjeelingDescription": ""
   },
   "geo": {
     "home": "कानान ट्रैवल हब तमिलनाडु के कोडाइकनाल में विशेषज्ञता वाली ट्रैवल एजेंसी है। प्रकाशित पैकेज: कोडाइकनाल 1 रात / 2 दिन (6 अतिथियों के लिए INR 1,799 प्रति व्यक्ति से; 2 और 4 अतिथि टियर भी)। फ़्लाइट, होटल, वीज़ा डिजिटल सेवाएँ। +91 70927 71754 / managingdirector@canaantravelhub.com / canaantravelhub@gmail.com।"
@@ -74,7 +80,7 @@
     "home": "होम",
     "kodaikanal": "कोडाइकनाल",
     "packages": "पैकेज",
-    "destinations": "गंतव्य",
+    "destinations": "Destinations",
     "tours": "टूर्स",
     "services": "डिजिटल सेवाएँ",
     "flights": "फ़्लाइट",
@@ -88,7 +94,9 @@
     "bookNow": "बुक करें",
     "brand": "Canaan",
     "brandSub": "Travel Hub",
-    "planTrip": "मेरी यात्रा प्लान करें"
+    "planTrip": "Plan Your Trip",
+    "corporate": "Corporate Travel",
+    "experiences": "Experiences"
   },
   "hero": {
     "place": "कोडाइकनाल · पहाड़ियों की राजकुमारी",
@@ -569,5 +577,58 @@
     "errBudget": "Please share an approximate budget.",
     "errWhatsapp": "Enter a valid WhatsApp number.",
     "errContact": "Name and email are required."
+  },
+  "platform": {
+    "heroEyebrow": "Canaan Travel Hub",
+    "heroTitle": "आपकी यात्रा यहीं शुरू होती है।",
+    "heroSub": "गंतव्य, पैकेज, कॉर्पोरेट यात्रा और कस्टम ट्रिप।",
+    "ctaDestinations": "गंतव्य देखें",
+    "ctaPlan": "यात्रा योजना बनाएं",
+    "featuredDestinations": "विशेष गंतव्य",
+    "featuredPackages": "विशेष पैकेज",
+    "whyTitle": "क्यों Canaan",
+    "whyBody": "पारदर्शी पैकेज, मानवीय सहायता, स्थानीय ज्ञान।",
+    "corporateTitle": "कॉर्पोरेट यात्रा",
+    "corporateBody": "व्यापार यात्रा, रिट्रीट, टीम आउटिंग।",
+    "corporateCta": "कॉर्पोरेट यात्रा योजना",
+    "customTitle": "आप कहाँ जाना चाहते हैं?",
+    "customBody": "हम आपकी यात्रा योजना में मदद करेंगे।",
+    "availableNow": "अभी उपलब्ध",
+    "requestEnquiry": "अनुरोध",
+    "comingSoon": "जल्द आ रहा है",
+    "perPerson": "प्रति व्यक्ति",
+    "from": "से"
+  },
+  "corporate": {
+    "eyebrow": "B2B",
+    "title": "कॉर्पोरेट यात्रा",
+    "subtitle": "व्यापार यात्रा और समूह कार्यक्रम।",
+    "servicesTitle": "हम क्या समन्वय करते हैं",
+    "formTitle": "कॉर्पोरेट कोटेशन",
+    "formSubtitle": "अपनी आवश्यकताएँ साझा करें।",
+    "name": "Name",
+    "company": "कंपनी",
+    "workEmail": "कार्य ईमेल",
+    "phone": "Phone",
+    "travelType": "यात्रा प्रकार",
+    "travellers": "यात्री संख्या",
+    "destination": "गंतव्य",
+    "departure": "प्रस्थान स्थान",
+    "dates": "तिथियाँ",
+    "budget": "बजट",
+    "requirements": "आवश्यकताएँ",
+    "notes": "अतिरिक्त नोट्स",
+    "submit": "कोटेशन अनुरोध",
+    "success": "धन्यवाद। आपकी पूछताछ सहेज ली गई।",
+    "error": "सबमिट नहीं हो सका।",
+    "types": {
+      "business": "Business trips",
+      "retreat": "Corporate retreats",
+      "outing": "Team outings",
+      "conference": "Conferences / events",
+      "mice": "MICE",
+      "transfer": "Airport transfers",
+      "other": "Other / custom"
+    }
   }
 }

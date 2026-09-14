@@ -1,18 +1,16 @@
-import { LOCAL_SCENES } from "@/lib/media";
+import { packageRows, type PackageRow } from "@/data/packages";
 
-export type DestinationSlug =
-  | "kodaikanal"
-  | "bali"
-  | "dubai"
-  | "maldives"
-  | "switzerland";
+export type DestinationSlug = "kodaikanal" | "darjeeling";
 
 export type Destination = {
   slug: DestinationSlug;
   featured?: boolean;
   priceFrom: number;
   image: string;
-  region: "india" | "asia" | "middle-east" | "europe" | "islands";
+  country: "India";
+  region: "india";
+  status: "published";
+  continent: "Asia";
 };
 
 export const destinations: Destination[] = [
@@ -20,33 +18,21 @@ export const destinations: Destination[] = [
     slug: "kodaikanal",
     featured: true,
     priceFrom: 1799,
+    country: "India",
     region: "india",
-    image:
-      "/images/kodai/hero.webp",
+    status: "published",
+    continent: "Asia",
+    image: "/images/kodai/hero.webp",
   },
   {
-    slug: "bali",
-    priceFrom: 45999,
-    region: "asia",
-    image: LOCAL_SCENES.berijam,
-  },
-  {
-    slug: "dubai",
-    priceFrom: 52999,
-    region: "middle-east",
-    image: LOCAL_SCENES.bryant,
-  },
-  {
-    slug: "maldives",
-    priceFrom: 68999,
-    region: "islands",
-    image: LOCAL_SCENES["kodai-lake"],
-  },
-  {
-    slug: "switzerland",
-    priceFrom: 129999,
-    region: "europe",
-    image: LOCAL_SCENES.mannavanur,
+    slug: "darjeeling",
+    featured: true,
+    priceFrom: 6550,
+    country: "India",
+    region: "india",
+    status: "published",
+    continent: "Asia",
+    image: "/images/darjeeling/hero/darjeeling-hero.jpg",
   },
 ];
 
@@ -71,60 +57,31 @@ export const destinationCopy: Record<
       hi: "कोहरा, चीड़ के जंगल, शांत झीलें और हमारा सत्यापित 1 रात / 2 दिन कोडाइकनाल पैकेज — बड़े समूहों के लिए कस्टम प्लान।",
     },
   },
-  bali: {
-    name: { en: "Bali", ta: "பாலி", hi: "बाली" },
+  darjeeling: {
+    name: { en: "Darjeeling", ta: "டார்ஜீலிங்", hi: "दार्जिलिंग" },
     tagline: {
-      en: "Temples, cliffs, and warm island evenings",
-      ta: "கோயில்கள், பாறைகள் மற்றும் தீவு மாலைகள்",
-      hi: "मंदिर, चट्टानें और द्वीप की शामें",
+      en: "Tea hills, Kanchenjunga views, and NJP–NJP group circuits",
+      ta: "தேயிலை மலைகள், கஞ்சன்ஜங்கா காட்சிகள், NJP–NJP குழு சுற்றுலா",
+      hi: "चाय की पहाड़ियाँ, कंचनजंगा दृश्य, और NJP–NJP समूह सर्किट",
     },
     body: {
-      en: "Worldwide digital tourism support for Bali — stays, transfers, and curated experiences arranged through Canaan.",
-      ta: "பாலிக்கான உலகளாவிய டிஜிட்டல் சுற்றுலா ஆதரவு — தங்குமிடம், பயணம், அனுபவங்கள்.",
-      hi: "बाली के लिए वैश्विक डिजिटल पर्यटन सहायता — ठहराव, ट्रांसफर और अनुभव।",
-    },
-  },
-  dubai: {
-    name: { en: "Dubai", ta: "துபாய்", hi: "दुबई" },
-    tagline: {
-      en: "Skyline luxury and desert horizons",
-      ta: "வானளாவி ஆடம்பரம் மற்றும் பாலைவன அடிவானம்",
-      hi: "स्काईलाइन लक्ज़री और रेगिस्तानी क्षितिज",
-    },
-    body: {
-      en: "City stays, desert experiences, and seamless digital booking support for Dubai travellers.",
-      ta: "நகர தங்குமிடம், பாலைவன அனுபவங்கள், துபாய் பயணிகளுக்கான டிஜிட்டல் முன்பதிவு.",
-      hi: "शहर ठहराव, रेगिस्तान अनुभव और दुबई यात्रियों के लिए डिजिटल बुकिंग।",
-    },
-  },
-  maldives: {
-    name: { en: "Maldives", ta: "மாலத்தீவு", hi: "मालदीव" },
-    tagline: {
-      en: "Overwater calm and turquoise mornings",
-      ta: "நீரின் மேல் அமைதி மற்றும் நீல காலைகள்",
-      hi: "पानी पर शांति और फ़िरोज़ी सुबहें",
-    },
-    body: {
-      en: "Resort selection, transfers, and honeymoon-ready arrangements for the Maldives.",
-      ta: "ரிசார்ட் தேர்வு, பயணம், தேனிலவு ஏற்பாடுகள்.",
-      hi: "रिसॉर्ट चयन, ट्रांसफर और हनीमून व्यवस्था।",
-    },
-  },
-  switzerland: {
-    name: { en: "Switzerland", ta: "சுவிட்சர்லாந்து", hi: "स्विट्ज़रलैंड" },
-    tagline: {
-      en: "Alpine precision and scenic rail journeys",
-      ta: "ஆல்ப்ஸ் நேர்த்தி மற்றும் ரயில் பயணங்கள்",
-      hi: "अल्पाइन सुंदरता और रेल यात्राएँ",
-    },
-    body: {
-      en: "European digital tourism planning — stays, rail advice, and itinerary design for Switzerland.",
-      ta: "ஐரோப்பிய டிஜிட்டல் சுற்றுலா திட்டமிடல் — தங்குமிடம், ரயில் ஆலோசனை.",
-      hi: "यूरोपीय डिजिटल पर्यटन योजना — ठहराव और रेल सलाह।",
+      en: "Verified 3 Night / 4 Day Darjeeling group packages from NJP — Dawaipani, classic town sightseeing, Mimbusty or Tabakoshi stays, and Mirik on the return. From ₹6,550 per person on a 7-guest quote basis.",
+      ta: "NJP முதல் சரிபார்க்கப்பட்ட 3 இரவு / 4 நாள் டார்ஜீலிங் குழு பேக்கேஜ்கள் — தவைபனி, நகர சுற்றுலா, மிம்புஸ்டி அல்லது தபகோசி தங்கல், திரும்பும்போது மிரிக். 7 பேர் மேற்கோள் அடிப்படையில் ₹6,550/நபர் முதல்.",
+      hi: "NJP से सत्यापित 3 रात / 4 दिन दार्जिलिंग समूह पैकेज — दवाइपानी, शहर साइटसीइंग, मिम्बुस्टी या तबकोशी ठहराव, और वापसी पर मिरिक। 7 अतिथि कोट के आधार पर ₹6,550 प्रति व्यक्ति से।",
     },
   },
 };
 
 export function getDestination(slug: string) {
   return destinations.find((d) => d.slug === slug);
+}
+
+export function getPublishedDestinations() {
+  return destinations.filter((d) => d.status === "published");
+}
+
+export function packagesForDestination(
+  slug: DestinationSlug | string,
+): PackageRow[] {
+  return packageRows.filter((row) => row.destinationSlug === slug);
 }

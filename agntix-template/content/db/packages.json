@@ -11,6 +11,7 @@
       "category": "escape",
       "featured": true,
       "published": true,
+      "destinationSlug": "kodaikanal",
       "image": "/images/kodai/real/kodai-lake-boats.jpg",
       "tagline": {
         "en": "Stay. Explore. Experience More.",
@@ -135,6 +136,156 @@
         "en": "Custom packages available for larger groups. Contact us for special group rates.",
         "ta": "பெரிய குழுக்களுக்கு தனிப்பயன் பேக்கேஜ்கள் கிடைக்கும். சிறப்பு குழு விலைக்கு தொடர்பு கொள்ளுங்கள்.",
         "hi": "बड़े समूहों के लिए कस्टम पैकेज उपलब्ध। विशेष समूह दरों के लिए संपर्क करें।"
+      }
+    },
+    {
+      "id": "darjeeling-3n4d-mimbusty",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 6550,
+      "currency": "INR",
+      "category": "group",
+      "featured": true,
+      "published": true,
+      "destinationSlug": "darjeeling",
+      "image": "/images/darjeeling/mimbusty/mimbusty-1.jpg",
+      "title": {
+        "en": "Darjeeling 3N/4D — Mimbusty Stay",
+        "ta": "Darjeeling 3N/4D — Mimbusty Stay",
+        "hi": "Darjeeling 3N/4D — Mimbusty Stay"
+      },
+      "blurb": {
+        "en": "NJP to NJP circuit with Dawaipani, Darjeeling sightseeing, Mimbusty (Kanchenjunga view), Mirik return. ₹6,550 per person (group quote basis).",
+        "ta": "NJP to NJP circuit with Dawaipani, Darjeeling sightseeing, Mimbusty (Kanchenjunga view), Mirik return. ₹6,550 per person (group quote basis).",
+        "hi": "NJP to NJP circuit with Dawaipani, Darjeeling sightseeing, Mimbusty (Kanchenjunga view), Mirik return. ₹6,550 per person (group quote basis)."
+      },
+      "body": {
+        "en": "Verified 3 Night / 4 Day Darjeeling group circuit (NJP–NJP). Day 1 Dawaipani viewpoints and tea gardens; Day 2 classic Darjeeling sightseeing and Mall Road; Day 3 Mimbusty stay with Kanchenjunga views via Lepchajagat and Majhidhura; Day 4 return via Mirik. Transport by Sumo/Bolero/Innova. Meals as listed per day in the plan.",
+        "ta": "Verified 3 Night / 4 Day Darjeeling group circuit (NJP–NJP). Day 1 Dawaipani viewpoints and tea gardens; Day 2 classic Darjeeling sightseeing and Mall Road; Day 3 Mimbusty stay with Kanchenjunga views via Lepchajagat and Majhidhura; Day 4 return via Mirik. Transport by Sumo/Bolero/Innova. Meals as listed per day in the plan.",
+        "hi": "Verified 3 Night / 4 Day Darjeeling group circuit (NJP–NJP). Day 1 Dawaipani viewpoints and tea gardens; Day 2 classic Darjeeling sightseeing and Mall Road; Day 3 Mimbusty stay with Kanchenjunga views via Lepchajagat and Majhidhura; Day 4 return via Mirik. Transport by Sumo/Bolero/Innova. Meals as listed per day in the plan."
+      },
+      "highlights": {
+        "en": [
+          "Transport: Sumo / Bolero / Innova (NJP–NJP)",
+          "Meals included as per day plan",
+          "Dawaipani, Darjeeling sightseeing & Mall Road",
+          "Mimbusty overnight — Kanchenjunga view",
+          "Return via Mirik Lake & tea estate"
+        ],
+        "ta": [
+          "Transport: Sumo / Bolero / Innova (NJP–NJP)",
+          "Meals included as per day plan",
+          "Dawaipani, Darjeeling sightseeing & Mall Road",
+          "Mimbusty overnight — Kanchenjunga view",
+          "Return via Mirik Lake & tea estate"
+        ],
+        "hi": [
+          "Transport: Sumo / Bolero / Innova (NJP–NJP)",
+          "Meals included as per day plan",
+          "Dawaipani, Darjeeling sightseeing & Mall Road",
+          "Mimbusty overnight — Kanchenjunga view",
+          "Return via Mirik Lake & tea estate"
+        ]
+      },
+      "sharedInclusions": {
+        "en": [
+          "3 nights stay (homestay / hotel as per plan)",
+          "Meals as listed each day (lunch, dinner, snacks, breakfast where noted)",
+          "Sightseeing as per itinerary",
+          "Sumo / Bolero / Innova transport NJP to NJP"
+        ],
+        "ta": [
+          "3 nights stay (homestay / hotel as per plan)",
+          "Meals as listed each day (lunch, dinner, snacks, breakfast where noted)",
+          "Sightseeing as per itinerary",
+          "Sumo / Bolero / Innova transport NJP to NJP"
+        ],
+        "hi": [
+          "3 nights stay (homestay / hotel as per plan)",
+          "Meals as listed each day (lunch, dinner, snacks, breakfast where noted)",
+          "Sightseeing as per itinerary",
+          "Sumo / Bolero / Innova transport NJP to NJP"
+        ]
+      },
+      "priceNote": {
+        "en": "₹6,550 per person · based on 7 guests (owner quote). Contact us to confirm for your group size.",
+        "ta": "₹6,550 per person · based on 7 guests (owner quote). Contact us to confirm for your group size.",
+        "hi": "₹6,550 per person · based on 7 guests (owner quote). Contact us to confirm for your group size."
+      }
+    },
+    {
+      "id": "darjeeling-3n4d-tabakoshi",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 6550,
+      "currency": "INR",
+      "category": "group",
+      "featured": true,
+      "published": true,
+      "destinationSlug": "darjeeling",
+      "image": "/images/darjeeling/tabakoshi/tabakoshi-1.jpg",
+      "title": {
+        "en": "Darjeeling 3N/4D — Tabakoshi Stay",
+        "ta": "Darjeeling 3N/4D — Tabakoshi Stay",
+        "hi": "Darjeeling 3N/4D — Tabakoshi Stay"
+      },
+      "blurb": {
+        "en": "NJP to NJP circuit with Dawaipani, Darjeeling sightseeing, Tabakoshi riverside stay, Mirik return. ₹6,550 per person (group quote basis).",
+        "ta": "NJP to NJP circuit with Dawaipani, Darjeeling sightseeing, Tabakoshi riverside stay, Mirik return. ₹6,550 per person (group quote basis).",
+        "hi": "NJP to NJP circuit with Dawaipani, Darjeeling sightseeing, Tabakoshi riverside stay, Mirik return. ₹6,550 per person (group quote basis)."
+      },
+      "body": {
+        "en": "Verified 3 Night / 4 Day Darjeeling group circuit (NJP–NJP). Day 1 Dawaipani viewpoints and tea gardens; Day 2 classic Darjeeling sightseeing and Mall Road; Day 3 Tabakoshi mountain riverside stay via Lepchajagat, Simana, and Nepal border market; Day 4 return via Gopaldhara and Mirik Lake. Transport by Sumo/Bolero/Innova. Meals as listed per day in the plan.",
+        "ta": "Verified 3 Night / 4 Day Darjeeling group circuit (NJP–NJP). Day 1 Dawaipani viewpoints and tea gardens; Day 2 classic Darjeeling sightseeing and Mall Road; Day 3 Tabakoshi mountain riverside stay via Lepchajagat, Simana, and Nepal border market; Day 4 return via Gopaldhara and Mirik Lake. Transport by Sumo/Bolero/Innova. Meals as listed per day in the plan.",
+        "hi": "Verified 3 Night / 4 Day Darjeeling group circuit (NJP–NJP). Day 1 Dawaipani viewpoints and tea gardens; Day 2 classic Darjeeling sightseeing and Mall Road; Day 3 Tabakoshi mountain riverside stay via Lepchajagat, Simana, and Nepal border market; Day 4 return via Gopaldhara and Mirik Lake. Transport by Sumo/Bolero/Innova. Meals as listed per day in the plan."
+      },
+      "highlights": {
+        "en": [
+          "Transport: Sumo / Bolero / Innova (NJP–NJP)",
+          "Meals included as per day plan",
+          "Dawaipani, Darjeeling sightseeing & Mall Road",
+          "Tabakoshi overnight — mountain riverside",
+          "Return via Gopaldhara & Mirik Lake"
+        ],
+        "ta": [
+          "Transport: Sumo / Bolero / Innova (NJP–NJP)",
+          "Meals included as per day plan",
+          "Dawaipani, Darjeeling sightseeing & Mall Road",
+          "Tabakoshi overnight — mountain riverside",
+          "Return via Gopaldhara & Mirik Lake"
+        ],
+        "hi": [
+          "Transport: Sumo / Bolero / Innova (NJP–NJP)",
+          "Meals included as per day plan",
+          "Dawaipani, Darjeeling sightseeing & Mall Road",
+          "Tabakoshi overnight — mountain riverside",
+          "Return via Gopaldhara & Mirik Lake"
+        ]
+      },
+      "sharedInclusions": {
+        "en": [
+          "3 nights stay (homestay / hotel as per plan)",
+          "Meals as listed each day (lunch, dinner, snacks, breakfast where noted)",
+          "Sightseeing as per itinerary",
+          "Sumo / Bolero / Innova transport NJP to NJP"
+        ],
+        "ta": [
+          "3 nights stay (homestay / hotel as per plan)",
+          "Meals as listed each day (lunch, dinner, snacks, breakfast where noted)",
+          "Sightseeing as per itinerary",
+          "Sumo / Bolero / Innova transport NJP to NJP"
+        ],
+        "hi": [
+          "3 nights stay (homestay / hotel as per plan)",
+          "Meals as listed each day (lunch, dinner, snacks, breakfast where noted)",
+          "Sightseeing as per itinerary",
+          "Sumo / Bolero / Innova transport NJP to NJP"
+        ]
+      },
+      "priceNote": {
+        "en": "₹6,550 per person · based on 7 guests (owner quote). Contact us to confirm for your group size.",
+        "ta": "₹6,550 per person · based on 7 guests (owner quote). Contact us to confirm for your group size.",
+        "hi": "₹6,550 per person · based on 7 guests (owner quote). Contact us to confirm for your group size."
       }
     }
   ]

@@ -44,9 +44,9 @@ export async function SiteFooter() {
             {(
               [
                 ["/", "home"],
-                ["/kodaikanal", "kodaikanal"],
+                ["/destinations", "destinations"],
                 ["/packages", "packages"],
-                ["/blog", "blog"],
+                ["/corporate-travel", "corporate"],
               ] as const
             ).map(([href, key]) => (
               <li key={href}>
@@ -65,10 +65,10 @@ export async function SiteFooter() {
           <ul className="mt-5 space-y-3">
             {(
               [
+                ["/experiences", "experiences"],
                 ["/services", "services"],
                 ["/flights", "flights"],
                 ["/hotels", "hotels"],
-                ["/visa", "visa"],
               ] as const
             ).map(([href, key]) => (
               <li key={href}>

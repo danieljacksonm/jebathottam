@@ -155,7 +155,12 @@ export async function POST(request: Request) {
 
     await writeFile(rateFile, JSON.stringify(rate), "utf8");
 
-    const allowedSources = new Set(["enquire", "plan-your-trip", "contact"]);
+    const allowedSources = new Set([
+      "enquire",
+      "plan-your-trip",
+      "contact",
+      "corporate",
+    ]);
     const sourceRaw = sanitizeSingleLine(body.source ?? "enquire");
     const source = allowedSources.has(sourceRaw) ? sourceRaw : "enquire";
 

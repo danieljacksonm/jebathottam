@@ -37,7 +37,13 @@
     "termsTitle": "சேவை விதிமுறைகள் | Canaan Travel Hub",
     "termsDescription": "canaantravelhub.com மற்றும் கானான் பயணப் பேக்கேஜ்களுக்கான விதிமுறைகள்.",
     "planTripTitle": "உங்கள் கொடைக்கானல் பயணத்தைத் திட்டமிடுங்கள்",
-    "planTripDescription": "தேதிகள், பயணிகள் மற்றும் விருப்பங்களைப் பகிருங்கள். Canaan தெளிவான கொடை திட்டத்தை தயாரிக்கும்."
+    "planTripDescription": "தேதிகள், பயணிகள் மற்றும் விருப்பங்களைப் பகிருங்கள். Canaan தெளிவான கொடை திட்டத்தை தயாரிக்கும்.",
+    "corporateTitle": "Corporate Travel",
+    "corporateDescription": "",
+    "experiencesTitle": "Experiences",
+    "experiencesDescription": "",
+    "darjeelingTitle": "Darjeeling",
+    "darjeelingDescription": ""
   },
   "geo": {
     "home": "கானான் டிராவல் ஹப் தமிழ்நாட்டின் கொடைக்கானலில் கவனம் செலுத்தும் பயண நிறுவனம். வெளியிடப்பட்ட பேக்கேஜ்: கொடைக்கானல் 1 இரவு / 2 நாட்கள் (6 பேருக்கு ஒரு நபருக்கு INR 1,799 முதல்; 2 மற்றும் 4 பேர் அடுக்குகளும் உண்டு) மற்றும் விமானம், ஹோட்டல், விசா டிஜிட்டல் சேவைகள். +91 70927 71754 / managingdirector@canaantravelhub.com / canaantravelhub@gmail.com."
@@ -74,7 +80,7 @@
     "home": "முகப்பு",
     "kodaikanal": "கொடைக்கானல்",
     "packages": "பேக்கேஜ்கள்",
-    "destinations": "இடங்கள்",
+    "destinations": "Destinations",
     "tours": "சுற்றுலா",
     "services": "டிஜிட்டல் சேவைகள்",
     "flights": "விமானம்",
@@ -88,7 +94,9 @@
     "bookNow": "முன்பதிவு",
     "brand": "Canaan",
     "brandSub": "Travel Hub",
-    "planTrip": "என் பயணத்தைத் திட்டமிடு"
+    "planTrip": "Plan Your Trip",
+    "corporate": "Corporate Travel",
+    "experiences": "Experiences"
   },
   "hero": {
     "place": "கொடைக்கானல் · மலைகளின் இளவரசி",
@@ -569,5 +577,58 @@
     "errBudget": "Please share an approximate budget.",
     "errWhatsapp": "Enter a valid WhatsApp number.",
     "errContact": "Name and email are required."
+  },
+  "platform": {
+    "heroEyebrow": "Canaan Travel Hub",
+    "heroTitle": "आपकी यात्रा यहीं शुरू होती है।",
+    "heroSub": "गंतव्य, पैकेज, कॉर्पोरेट यात्रा और कस्टम ट्रिप।",
+    "ctaDestinations": "गंतव्य देखें",
+    "ctaPlan": "यात्रा योजना बनाएं",
+    "featuredDestinations": "विशेष गंतव्य",
+    "featuredPackages": "विशेष पैकेज",
+    "whyTitle": "क्यों Canaan",
+    "whyBody": "पारदर्शी पैकेज, मानवीय सहायता, स्थानीय ज्ञान।",
+    "corporateTitle": "कॉर्पोरेट यात्रा",
+    "corporateBody": "व्यापार यात्रा, रिट्रीट, टीम आउटिंग।",
+    "corporateCta": "कॉर्पोरेट यात्रा योजना",
+    "customTitle": "आप कहाँ जाना चाहते हैं?",
+    "customBody": "हम आपकी यात्रा योजना में मदद करेंगे।",
+    "availableNow": "अभी उपलब्ध",
+    "requestEnquiry": "अनुरोध",
+    "comingSoon": "जल्द आ रहा है",
+    "perPerson": "प्रति व्यक्ति",
+    "from": "से"
+  },
+  "corporate": {
+    "eyebrow": "B2B",
+    "title": "कॉर्पोरेट यात्रा",
+    "subtitle": "व्यापार यात्रा और समूह कार्यक्रम।",
+    "servicesTitle": "हम क्या समन्वय करते हैं",
+    "formTitle": "कॉर्पोरेट कोटेशन",
+    "formSubtitle": "अपनी आवश्यकताएँ साझा करें।",
+    "name": "Name",
+    "company": "कंपनी",
+    "workEmail": "कार्य ईमेल",
+    "phone": "Phone",
+    "travelType": "यात्रा प्रकार",
+    "travellers": "यात्री संख्या",
+    "destination": "गंतव्य",
+    "departure": "प्रस्थान स्थान",
+    "dates": "तिथियाँ",
+    "budget": "बजट",
+    "requirements": "आवश्यकताएँ",
+    "notes": "अतिरिक्त नोट्स",
+    "submit": "कोटेशन अनुरोध",
+    "success": "धन्यवाद। आपकी पूछताछ सहेज ली गई।",
+    "error": "सबमिट नहीं हो सका।",
+    "types": {
+      "business": "Business trips",
+      "retreat": "Corporate retreats",
+      "outing": "Team outings",
+      "conference": "Conferences / events",
+      "mice": "MICE",
+      "transfer": "Airport transfers",
+      "other": "Other / custom"
+    }
   }
 }

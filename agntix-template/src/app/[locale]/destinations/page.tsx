@@ -1,12 +1,15 @@
-import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
+import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import {
+  destinationCopy,
+  getPublishedDestinations,
+} from "@/data/destinations";
+import { formatInr } from "@/data/packages";
 import { pageMetadata } from "@/lib/seo";
-
-const HERO = "/images/kodai/hero.webp";
 
 export async function generateMetadata({
   params,
@@ -20,8 +23,8 @@ export async function generateMetadata({
     path: "/destinations",
     title: t("destinationsTitle"),
     description: t("destinationsDescription"),
-    image: HERO,
-    imageAlt: "Kodaikanal, the current Canaan destination",
+    image: "/images/darjeeling/hero/darjeeling-hero.jpg",
+    imageAlt: "Canaan Travel Hub destinations",
   });
 }
 
@@ -34,7 +37,9 @@ export default async function DestinationsPage({
   setRequestLocale(locale);
   const t = await getTranslations("seo");
   const nav = await getTranslations("nav");
-  const k = await getTranslations("kodaikanalPage");
+  const platform = await getTranslations("platform");
+  const loc = (await getLocale()) as "en" | "ta" | "hi";
+  const list = getPublishedDestinations();
 
   return (
     <PageAtmosphere>
@@ -42,8 +47,8 @@ export default async function DestinationsPage({
         eyebrow={nav("destinations")}
         title={t("destinationsTitle")}
         subtitle={t("destinationsDescription")}
-        image={HERO}
-        imageAlt="Kodaikanal mountains in mist"
+        image="/images/darjeeling/hero/darjeeling-hero.jpg"
+        imageAlt="Hill destination for Canaan travellers"
         tone="mist"
       />
       <Breadcrumbs
@@ -53,28 +58,45 @@ export default async function DestinationsPage({
           { name: nav("destinations") },
         ]}
       />
-      <section className="mx-auto max-w-5xl px-5 py-16 md:px-8">
-        <article className="lux-card overflow-hidden">
-          <Link href="/kodaikanal" className="grid md:grid-cols-2">
-            <div className="relative aspect-[16/11] md:aspect-auto">
-              <Image
-                src={HERO}
-                alt="Misty morning view of Kodaikanal mountains"
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
-              />
-            </div>
-            <div className="p-8">
-              <p className="text-[0.68rem] uppercase tracking-[0.22em] text-gold">
-                {k("eyebrow")}
-              </p>
-              <h2 className="mt-3 font-display text-4xl text-white">{k("title")}</h2>
-              <p className="mt-4 text-soft-gray">{k("subtitle")}</p>
-              <p className="mt-6 text-sm text-gold-bright">{k("cta")} →</p>
-            </div>
-          </Link>
-        </article>
+      <section className="mx-auto max-w-7xl px-5 py-16 md:px-8">
+        <div className="grid gap-6 md:grid-cols-2">
+          {list.map((dest) => {
+            const copy = destinationCopy[dest.slug];
+            return (
+              <article key={dest.slug} className="lux-card overflow-hidden">
+                <Link
+                  href={`/destinations/${dest.slug}`}
+                  className="grid md:grid-cols-2"
+                >
+                  <div className="relative aspect-[16/11] md:min-h-[260px]">
+                    <Image
+                      src={dest.image}
+                      alt={copy.name[loc] ?? copy.name.en}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                  <div className="p-8">
+                    <p className="text-[0.68rem] uppercase tracking-[0.22em] text-gold">
+                      {dest.country}
+                    </p>
+                    <h2 className="mt-3 font-display text-4xl text-white">
+                      {copy.name[loc] ?? copy.name.en}
+                    </h2>
+                    <p className="mt-4 text-soft-gray">
+                      {copy.tagline[loc] ?? copy.tagline.en}
+                    </p>
+                    <p className="mt-6 text-sm text-gold-bright">
+                      {platform("from")} {formatInr(dest.priceFrom)}{" "}
+                      {platform("perPerson")} →
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
+        </div>
       </section>
     </PageAtmosphere>
   );

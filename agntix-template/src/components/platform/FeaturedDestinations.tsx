@@ -1,0 +1,68 @@
+import Image from "next/image";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import {
+  destinationCopy,
+  getPublishedDestinations,
+} from "@/data/destinations";
+import { formatInr } from "@/data/packages";
+
+export async function FeaturedDestinations() {
+  const t = await getTranslations("platform");
+  const locale = await getLocale();
+  const list = getPublishedDestinations();
+
+  return (
+    <section className="section-pad">
+      <div className="mx-auto max-w-7xl">
+        <p className="text-[0.7rem] uppercase tracking-[0.28em] text-gold">
+          {t("availableNow")}
+        </p>
+        <h2 className="mt-3 font-display text-4xl text-cream md:text-5xl">
+          {t("featuredDestinations")}
+        </h2>
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {list.map((dest) => {
+            const copy = destinationCopy[dest.slug];
+            const name = copy.name[locale as "en" | "ta" | "hi"] ?? copy.name.en;
+            const tagline =
+              copy.tagline[locale as "en" | "ta" | "hi"] ?? copy.tagline.en;
+            return (
+              <article key={dest.slug} className="lux-card overflow-hidden">
+                <Link
+                  href={`/destinations/${dest.slug}`}
+                  className="grid md:grid-cols-2"
+                >
+                  <div className="relative aspect-[16/11] md:aspect-auto md:min-h-[280px]">
+                    <Image
+                      src={dest.image}
+                      alt={name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center p-8">
+                    <p className="text-[0.65rem] uppercase tracking-[0.2em] text-gold">
+                      {dest.country} · {dest.continent}
+                    </p>
+                    <h3 className="mt-3 font-display text-3xl text-white">
+                      {name}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-soft-gray">
+                      {tagline}
+                    </p>
+                    <p className="mt-6 text-sm text-gold-bright">
+                      {t("from")} {formatInr(dest.priceFrom)}{" "}
+                      <span className="text-mist/70">{t("perPerson")}</span>
+                    </p>
+                  </div>
+                </Link>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}

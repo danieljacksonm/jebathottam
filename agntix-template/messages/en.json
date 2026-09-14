@@ -37,7 +37,13 @@
     "privacyTitle": "Privacy Policy | Canaan Travel Hub",
     "privacyDescription": "How Canaan Travel Hub collects, uses, and protects your personal information when you enquire or browse our site.",
     "termsTitle": "Terms of Service | Canaan Travel Hub",
-    "termsDescription": "Terms for using canaantravelhub.com and booking Kodaikanal tour packages or digital travel services with Canaan Travel Hub."
+    "termsDescription": "Terms for using canaantravelhub.com and booking Kodaikanal tour packages or digital travel services with Canaan Travel Hub.",
+    "corporateTitle": "Corporate Travel",
+    "corporateDescription": "",
+    "experiencesTitle": "Experiences",
+    "experiencesDescription": "",
+    "darjeelingTitle": "Darjeeling",
+    "darjeelingDescription": ""
   },
   "geo": {
     "home": "Canaan Travel Hub offers curated Kodaikanal packages (1 Night / 2 Days from INR 1,799 per person for 6 guests) and digital tourism support worldwide — flights, hotels, visas and trip planning. Call +91 70927 71754 or email managingdirector@canaantravelhub.com / canaantravelhub@gmail.com. Working hours: Monday–Saturday, 9:00 AM – 6:00 PM."
@@ -86,9 +92,11 @@
     "enquire": "Enquire",
     "faq": "FAQ",
     "bookNow": "Book Now",
-    "planTrip": "Plan My Trip",
+    "planTrip": "Plan Your Trip",
     "brand": "Canaan",
-    "brandSub": "Travel Hub"
+    "brandSub": "Travel Hub",
+    "corporate": "Corporate Travel",
+    "experiences": "Experiences"
   },
   "hero": {
     "place": "Kodaikanal · Princess of the Hills",
@@ -568,6 +576,59 @@
         "title": "Governing law",
         "body": "These terms are governed by the laws of India. Disputes will be handled in good faith and, if needed, through courts in Tamil Nadu, India."
       }
+    }
+  },
+  "platform": {
+    "heroEyebrow": "Canaan Travel Hub",
+    "heroTitle": "आपकी यात्रा यहीं शुरू होती है।",
+    "heroSub": "गंतव्य, पैकेज, कॉर्पोरेट यात्रा और कस्टम ट्रिप।",
+    "ctaDestinations": "गंतव्य देखें",
+    "ctaPlan": "यात्रा योजना बनाएं",
+    "featuredDestinations": "विशेष गंतव्य",
+    "featuredPackages": "विशेष पैकेज",
+    "whyTitle": "क्यों Canaan",
+    "whyBody": "पारदर्शी पैकेज, मानवीय सहायता, स्थानीय ज्ञान।",
+    "corporateTitle": "कॉर्पोरेट यात्रा",
+    "corporateBody": "व्यापार यात्रा, रिट्रीट, टीम आउटिंग।",
+    "corporateCta": "कॉर्पोरेट यात्रा योजना",
+    "customTitle": "आप कहाँ जाना चाहते हैं?",
+    "customBody": "हम आपकी यात्रा योजना में मदद करेंगे।",
+    "availableNow": "अभी उपलब्ध",
+    "requestEnquiry": "अनुरोध",
+    "comingSoon": "जल्द आ रहा है",
+    "perPerson": "प्रति व्यक्ति",
+    "from": "से"
+  },
+  "corporate": {
+    "eyebrow": "B2B",
+    "title": "कॉर्पोरेट यात्रा",
+    "subtitle": "व्यापार यात्रा और समूह कार्यक्रम।",
+    "servicesTitle": "हम क्या समन्वय करते हैं",
+    "formTitle": "कॉर्पोरेट कोटेशन",
+    "formSubtitle": "अपनी आवश्यकताएँ साझा करें।",
+    "name": "Name",
+    "company": "कंपनी",
+    "workEmail": "कार्य ईमेल",
+    "phone": "Phone",
+    "travelType": "यात्रा प्रकार",
+    "travellers": "यात्री संख्या",
+    "destination": "गंतव्य",
+    "departure": "प्रस्थान स्थान",
+    "dates": "तिथियाँ",
+    "budget": "बजट",
+    "requirements": "आवश्यकताएँ",
+    "notes": "अतिरिक्त नोट्स",
+    "submit": "कोटेशन अनुरोध",
+    "success": "धन्यवाद। आपकी पूछताछ सहेज ली गई।",
+    "error": "सबमिट नहीं हो सका।",
+    "types": {
+      "business": "Business trips",
+      "retreat": "Corporate retreats",
+      "outing": "Team outings",
+      "conference": "Conferences / events",
+      "mice": "MICE",
+      "transfer": "Airport transfers",
+      "other": "Other / custom"
     }
   }
 }
