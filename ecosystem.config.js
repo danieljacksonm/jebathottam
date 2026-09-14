@@ -60,12 +60,13 @@ module.exports = {
     {
       name: "canaan-travel",
       cwd: "/home/dani/agntix-template",
-      script: "node_modules/next/dist/bin/next",
-      args: "start",
+      // Next.js output: "standalone" — do not use `next start`
+      script: ".next/standalone/server.js",
       exec_mode: "fork",
       env: {
         NODE_ENV: "production",
         PORT: 3003,
+        HOSTNAME: "0.0.0.0",
         NEXT_PUBLIC_SITE_URL: "https://canaantravelhub.com",
         NODE_OPTIONS: "--max-old-space-size=384"
       },

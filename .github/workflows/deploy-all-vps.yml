@@ -108,11 +108,19 @@ jobs:
             fi
 
             cd /home/dani/agntix-template || { echo "ERROR: agntix-template directory not found"; exit 1; }
-            npm install --legacy-peer-deps
+            rm -f src/middleware.ts
+            npm install --legacy-peer-deps --include=dev
             export NEXT_PUBLIC_SITE_URL=https://canaantravelhub.com
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
             npm run build
-            pm2 restart canaan-travel || pm2 start /home/dani/ecosystem.config.js --only canaan-travel
+            # Standalone runtime needs public + static next to server.js
+            mkdir -p .next/standalone/.next
+            cp -r public .next/standalone/public
+            cp -r .next/static .next/standalone/.next/static
+            cp /home/dani/ecosystem.config.js /home/dani/ecosystem.config.js.bak 2>/dev/null || true
+            cp "$MONOREPO/ecosystem.config.js" /home/dani/ecosystem.config.js
+            pm2 delete canaan-travel 2>/dev/null || true
+            pm2 start /home/dani/ecosystem.config.js --only canaan-travel
             echo "✅ Canaan Travel Hub deployed at: $(date)" > .deploy-timestamp
 
             if [ -f "$MONOREPO/nginx-canaan.conf" ]; then
