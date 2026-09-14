@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { NewsChrome } from "./components/NewsChrome";
 import { JOURNAL_URL, NEWS_URL, pageMetadata, articleLanguageAlternates } from "@/lib/site-url";
-import { listPublicNewsForHome } from "@/lib/news-service";
+import { listPublicNewsForHome, latestNewsPublishedAt } from "@/lib/news-service";
 
 export const revalidate = 300;
 
@@ -40,7 +40,7 @@ export default async function NewsLayout({ children }: { children: ReactNode }) 
       /* wire can fail — client will retry */
     }
   }
-  const initialUpdatedAt = new Date().toISOString();
+  const initialUpdatedAt = latestNewsPublishedAt(initialArticles);
 
   const newsOrg = {
     "@context": "https://schema.org",

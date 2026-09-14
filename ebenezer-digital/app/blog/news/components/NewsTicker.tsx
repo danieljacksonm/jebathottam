@@ -28,7 +28,7 @@ export function NewsTicker() {
         ))}
       </div>
       {updatedAt && (
-        <span className="news-ticker-age">{relativeNewsTime(updatedAt).replace("Updated ", "desk ")}</span>
+        <span className="news-ticker-age">{relativeNewsTime(updatedAt).replace(/^Updated /, "latest ")}</span>
       )}
     </div>
   );

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CANONICAL_URLS, resolveEcosystemUrl } from "@/lib/ecosystem-urls";
 import { isNewsCategorySegment, isLegacySourceDomainSlug, stripTrackingParams } from "@/lib/news-url";
-import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
+import { SEO_LOCALES, PUBLISHED_HREFLANG_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
 function clean(url: string) {
   return url.replace(/\/$/, "");
@@ -21,6 +21,7 @@ const INFO_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_INFO_URL, CAN
 const STORE_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_STORE_URL, CANONICAL_URLS.store));
 
 const LOCALES = new Set<string>(SEO_LOCALES);
+const PUBLISHED_LOCALES = new Set<string>(PUBLISHED_HREFLANG_LOCALES);
 
 function hostName(host: string): string {
   return host.toLowerCase().split(":")[0];
@@ -400,7 +401,14 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   const foreignLocalized = foreignSectionRedirect(request, host, rest);
   if (foreignLocalized) return foreignLocalized;
 
-  // News has no real translations — never index /kn /pa /hi soft-duplicates.
+  // Only published locales are public. Soft /kn /pa /de /hi … → English path.
+  if (!PUBLISHED_LOCALES.has(locale)) {
+    const url = request.nextUrl.clone();
+    url.pathname = rest === "/" ? "/" : rest;
+    return NextResponse.redirect(url, 301);
+  }
+
+  // News has no real translations — never index soft-duplicates (belt + suspenders).
   if (isNewsHost(host) && locale !== "en") {
     return absoluteRedirect(request, NEWS_URL, rest === "/" ? "/" : rest);
   }
@@ -576,10 +584,13 @@ export function middleware(request: NextRequest) {
     if (pathname === "/news" || pathname === "/news/") {
       return absoluteRedirect(request, NEWS_URL, "/");
     }
-    if (pathname === "/blog" || pathname.startsWith("/blog/")) {
-      if (pathname === "/blog" || pathname === "/blog/") {
-        return absoluteRedirect(request, JOURNAL_URL, "/");
-      }
+    // Blog hub stays on .info; individual Journal articles keep journal canonicals.
+    if (pathname === "/blog" || pathname === "/blog/") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/info/blog";
+      return NextResponse.rewrite(url);
+    }
+    if (pathname.startsWith("/blog/")) {
       return absoluteRedirect(request, JOURNAL_URL, pathname.replace(/^\/blog/, "") || "/");
     }
 

@@ -187,14 +187,16 @@ async function discoverSitemap(): Promise<MetadataRoute.Sitemap> {
 async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = [
     page(INFO_URL, "", "daily", 1, undefined, true),
+    page(INFO_URL, "/blog", "daily", 0.9, undefined, true, "info", "/info/blog"),
+    page(INFO_URL, "/guides", "weekly", 0.8, undefined, true, "info", "/info/guides"),
     page(INFO_URL, "/about", "monthly", 0.7, undefined, true),
-    page(INFO_URL, "/search", "weekly", 0.6, undefined, true),
     page(INFO_URL, "/contact", "monthly", 0.5, undefined, true),
     page(INFO_URL, "/privacy", "yearly", 0.2, undefined, true),
     page(INFO_URL, "/terms", "yearly", 0.2, undefined, true),
     page(INFO_URL, "/sitemap", "monthly", 0.3, undefined, true),
   ];
   for (const post of loadArticles("info-guides")) {
+    if (post.indexable === false) continue;
     pages.push(
       page(
         INFO_URL,

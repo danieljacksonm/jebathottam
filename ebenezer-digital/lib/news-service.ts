@@ -77,10 +77,52 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
 const LIST_PUBLIC_TTL_MS = 60_000;
 let listPublicMemo: { at: number; data: PublicNewsItem[] } | null = null;
 
+function archiveToPublic(n: {
+  id: string;
+  slug: string;
+  title: string;
+  dek: string;
+  body: string[];
+  region: string;
+  topic: string;
+  location: string;
+  sourceLabel: string;
+  publishedAt: string;
+  coverImage: string;
+  breaking?: boolean;
+  featured?: boolean;
+  origin: "seed" | "cms" | "live";
+  originalUrl?: string;
+  byline?: string;
+}): PublicNewsItem {
+  return {
+    id: n.id,
+    slug: n.slug,
+    title: n.title,
+    dek: n.dek,
+    body: n.body?.length ? n.body : [n.dek],
+    region: (n.region || "World") as NewsRegion,
+    topic: n.topic || "General",
+    location: n.location || "Global",
+    sourceLabel: n.sourceLabel || "Ebenezer News Desk",
+    publishedAt: n.publishedAt,
+    coverImage: n.coverImage,
+    breaking: Boolean(n.breaking),
+    featured: Boolean(n.featured),
+    origin: n.origin === "cms" ? "cms" : n.origin === "live" ? "live" : "seed",
+    originalUrl: n.originalUrl,
+    byline: n.byline,
+    sourceType: inferNewsSourceType({
+      origin: n.origin === "live" ? "live" : n.origin === "cms" ? "cms" : "seed",
+      originalUrl: n.originalUrl,
+    }),
+  };
+}
+
 /**
- * Seed + CMS + optional in-memory wire cache.
- * Never starts RSS from a request — that starved Node on this VPS
- * (HOME/robots.txt timed out while Edge 301s stayed fine).
+ * Latest published stories for the desk.
+ * Priority: CMS → live wire (memory/disk) → archive retention → seed only if empty.
+ * Never starts RSS from a page request.
  */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
   const now = Date.now();
@@ -93,27 +135,35 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
   const byKey = new Map<string, PublicNewsItem>();
 
   const put = (item: PublicNewsItem, force = false) => {
+    if (!item?.slug || !item.publishedAt) return;
     const key = storyFingerprint(item.title) || item.slug;
     const existing = byKey.get(key);
-    if (!existing || force || (item.origin === "live" && existing.origin !== "live")) {
+    if (!existing || force) {
+      byKey.set(key, item);
+      return;
+    }
+    // Prefer newer publishedAt; CMS already forced above.
+    if (new Date(item.publishedAt).getTime() > new Date(existing.publishedAt).getTime()) {
       byKey.set(key, item);
     }
   };
 
-  // Prefer warm cache; otherwise seed so the homepage stays fast after restarts.
-  if (cached.length >= 12) {
-    for (const l of cached) put(l);
-  } else {
-    for (const s of WORLD_NEWS) put(seedToPublic(s));
-    for (const l of cached) put(l);
-  }
   for (const c of cms) put(recordToPublic(c), true);
+  for (const l of cached) put(l);
+  for (const a of listArchivedNewsRecent(120)) {
+    if (a.origin === "seed") continue; // do not revive stale desk seed via archive
+    put(archiveToPublic(a));
+  }
+
+  // Seed is demo/fallback only — never dominate a desk that has real CMS/wire/archive.
+  if (byKey.size === 0) {
+    for (const s of WORLD_NEWS) put(seedToPublic(s));
+  }
 
   const list = Array.from(byKey.values()).sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  // Archive persist is throttled inside rememberNewsForSitemap — never block here.
   try {
     rememberNewsForSitemap(list);
   } catch {
@@ -122,6 +172,11 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
 
   listPublicMemo = { at: now, data: list };
   return list;
+}
+
+/** Drop list memo after an explicit wire refresh so home/API see new items. */
+export function invalidatePublicNewsMemo(): void {
+  listPublicMemo = null;
 }
 
 /** Cap for News chrome / home client props — never ship the full list. */
@@ -133,13 +188,29 @@ export async function listPublicNewsForHome(limit = NEWS_HOME_CLIENT_LIMIT): Pro
   return list.slice(0, n);
 }
 
+/** Latest publishedAt among items — for desk “latest story” labels (not fetch time). */
+export function latestNewsPublishedAt(items: { publishedAt?: string }[]): string {
+  let max = 0;
+  for (const item of items) {
+    const t = item.publishedAt ? new Date(item.publishedAt).getTime() : 0;
+    if (t > max) max = t;
+  }
+  return max ? new Date(max).toISOString() : "";
+}
+
 /**
  * Cheap peek for hubs that only need a few headlines (Info home).
- * Uses in-memory wire cache + seed — no CMS scan, no archive write.
+ * Prefers live disk/memory wire, then archive, then seed — no CMS scan, no archive write.
  */
 export function listPublicNewsPreview(limit = 5): PublicNewsItem[] {
   const cached = peekLiveNewsCache();
-  const pool = cached.length >= 3 ? cached : WORLD_NEWS.map(seedToPublic);
+  const archived = listArchivedNewsRecent(40).filter((a) => a.origin !== "seed");
+  const pool: PublicNewsItem[] =
+    cached.length >= 3
+      ? cached
+      : archived.length
+        ? archived.map(archiveToPublic)
+        : WORLD_NEWS.map(seedToPublic);
   return pool
     .slice()
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())

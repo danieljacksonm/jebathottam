@@ -21,6 +21,15 @@ function check(name, ok) {
   }
 }
 
+function fileExists(rel) {
+  try {
+    fs.accessSync(path.join(root, rel));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 const mw = read("middleware.ts");
 const newsUrl = read("lib/news-url.ts");
 const newsService = read("lib/news-service.ts");
@@ -47,9 +56,12 @@ check("getPublicNewsBySlug request-deduped with cache()", newsService.includes("
 check("listPublicNewsPreview for hubs", newsService.includes("listPublicNewsPreview"));
 check("listPublicNewsForHome caps chrome payload", newsService.includes("listPublicNewsForHome") && newsService.includes("NEWS_HOME_CLIENT_LIMIT"));
 check("listPublicNews memo TTL", newsService.includes("LIST_PUBLIC_TTL_MS") || newsService.includes("listPublicMemo"));
+check("listPublicNews prefers CMS/wire/archive over seed", newsService.includes("Seed is demo/fallback") || newsService.includes("byKey.size === 0"));
+check("wire refresh API exists", fileExists("app/api/admin/news/refresh-wire/route.ts") && fileExists("app/api/cron/news-wire/route.ts"));
+check("live wire disk cache", liveNews.includes("live-news-cache.json") && liveNews.includes("refreshLiveNewsWire"));
 check("in-process RSS off unless LIVE_NEWS_INPROCESS=1", liveNews.includes('LIVE_NEWS_INPROCESS === "1"'));
 check("foreign /api/news redirects to News host", mw.includes('pathname.startsWith("/api/news")') && mw.includes("NEWS_URL"));
-check("soft locale URLs send X-Robots-Tag noindex", mw.includes('x-robots-tag') && mw.includes("noindex, follow"));
+check("unpublished locales 301 to English", mw.includes("PUBLISHED_LOCALES") && mw.includes('!PUBLISHED_LOCALES.has(locale)'));
 check("News legacy www-* rewrites to article surface", mw.includes('x-eben-news-surface", "article"') && mw.includes("isLegacySourceDomainSlug"));
 check(
   "archive excludes www-* from sitemap",
@@ -69,8 +81,12 @@ check(
   infoHome.includes("listPublicNewsPreview") && !infoHome.includes("listPublicNews()")
 );
 check(
-  "Info People category links to News home not /blog/news",
-  infoHome.includes("SITE_NAV.news") && !infoHome.includes("${SITE_NAV.news}/blog/news")
+  "Info home prioritizes Blog then News",
+  infoHome.includes('id="blog-heading"') && infoHome.includes('id="news-heading"') && infoHome.indexOf("blog-heading") < infoHome.indexOf("news-heading")
+);
+check(
+  "Info News cards link to News host",
+  infoHome.includes("newsArticleHref") && infoHome.includes("Read on Ebenezer News")
 );
 check(
   "robots does not Disallow /blog/news (redirects must be crawlable)",

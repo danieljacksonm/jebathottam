@@ -54,8 +54,17 @@ export function NewsProvider({
       // ignore local cache parse errors
     }
 
+    const latestStamp = (items: NewsArticle[]) => {
+      let max = 0;
+      for (const item of items) {
+        const t = item.publishedAt ? new Date(item.publishedAt).getTime() : 0;
+        if (t > max) max = t;
+      }
+      return max ? new Date(max).toISOString() : "";
+    };
+
     const load = (first = false) => {
-      if (first) setLoading(true);
+      if (first && initialArticles.length === 0 && !hasWarmCache) setLoading(true);
       fetch("/api/news?limit=60")
         .then((r) => r.json())
         .then((data) => {
@@ -66,26 +75,27 @@ export function NewsProvider({
               if (prev.length === items.length && prev[0]?.id === items[0]?.id) return prev;
               return items;
             });
-            const stamp = new Date().toISOString();
+            const stamp = latestStamp(items);
             setUpdatedAt(stamp);
             try {
               localStorage.setItem(CACHE_KEY, JSON.stringify({ items, updatedAt: stamp }));
             } catch {
               // ignore storage full errors
             }
-          } else if (first) {
+          } else if (first && initialArticles.length === 0) {
             setArticles([]);
           }
         })
         .catch(() => {
-          if (alive && first) setArticles([]);
+          /* keep SSR/local cache on network errors */
         })
         .finally(() => {
           if (alive) setLoading(false);
         });
     };
 
-    load(initialArticles.length === 0);
+    // Always refresh once — SSR/localStorage may be stale seed after a cold deploy.
+    load(true);
     const timer = window.setInterval(() => load(false), 5 * 60 * 1000);
     return () => {
       alive = false;

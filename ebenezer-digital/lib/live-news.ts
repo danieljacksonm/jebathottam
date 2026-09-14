@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import type { NewsArticle, NewsRegion } from "@/app/blog/news/data";
 import { photoForStory, safeNewsCover, storyFingerprint } from "@/lib/news-photos";
 import { slugifyNewsTitle } from "@/lib/news-url";
@@ -12,12 +14,17 @@ type Cache = { at: number; items: LiveNewsItem[] };
 
 let cache: Cache | null = null;
 const CACHE_MS = 30 * 60 * 1000;
+/** Disk snapshot keeps the desk warm across PM2 restarts without re-fetching. */
+const DISK_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+const DATA_DIR = path.join(process.cwd(), "data");
+const DISK_FILE = path.join(DATA_DIR, "live-news-cache.json");
 let inflight: Promise<LiveNewsItem[]> | null = null;
+let diskHydrated = false;
 
 /**
  * In-process RSS must stay OFF by default on this VPS.
  * Sync XML/HTML parsing starves the Node event loop so / and /robots.txt time out.
- * Enable only via cron/admin with LIVE_NEWS_INPROCESS=1.
+ * Enable only via cron/admin with LIVE_NEWS_INPROCESS=1, or admin/cron refresh route.
  */
 function liveNewsInProcessEnabled(): boolean {
   return process.env.LIVE_NEWS_INPROCESS === "1";
@@ -36,9 +43,9 @@ const MAX_XML_CHARS = 120_000;
 const MAX_ITEMS_PER_FEED = 6;
 
 function toIso(value?: string): string {
-  if (!value) return new Date().toISOString();
+  if (!value) return "";
   const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+  return Number.isNaN(d.getTime()) ? "" : d.toISOString();
 }
 
 function slugify(value: string): string {
@@ -91,6 +98,41 @@ function yieldEventLoop(): Promise<void> {
   return new Promise((resolve) => setImmediate(resolve));
 }
 
+function readDiskCache(): Cache | null {
+  try {
+    if (!fs.existsSync(DISK_FILE)) return null;
+    const raw = JSON.parse(fs.readFileSync(DISK_FILE, "utf8")) as {
+      at?: number;
+      items?: LiveNewsItem[];
+    };
+    if (!raw?.at || !Array.isArray(raw.items) || !raw.items.length) return null;
+    if (Date.now() - raw.at > DISK_MAX_AGE_MS) return null;
+    return { at: raw.at, items: raw.items };
+  } catch {
+    return null;
+  }
+}
+
+function writeDiskCache(next: Cache): void {
+  try {
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+    const slim: LiveNewsItem[] = next.items.slice(0, 80).map((item) => ({
+      ...item,
+      body: item.body?.length ? [String(item.body[0] || item.dek).slice(0, 400)] : [item.dek],
+    }));
+    fs.writeFileSync(DISK_FILE, JSON.stringify({ at: next.at, items: slim }, null, 0), "utf8");
+  } catch {
+    /* disk best-effort */
+  }
+}
+
+function hydrateFromDisk(): void {
+  if (diskHydrated || cache) return;
+  diskHydrated = true;
+  const disk = readDiskCache();
+  if (disk) cache = disk;
+}
+
 async function fetchText(url: string): Promise<string> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), 2000);
@@ -116,12 +158,14 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
 
   for (const raw of blocks) {
     const block = raw.split(/<\/item>/i)[0] || raw;
-    // Description only — content:encoded full HTML tanks the event loop on this VPS.
     const title = decodeEntities(tag(block, "title")).replace(/<[^>]+>/g, "");
     const link = decodeEntities(tag(block, "link") || tag(block, "guid"));
     const description = tag(block, "description");
     const dek = shortText(description, 280) || title;
     const pub = tag(block, "pubDate") || tag(block, "dc:date") || tag(block, "updated");
+    const publishedAt = toIso(pub);
+    // Skip items without a real feed date — avoids fake "just now" freshness.
+    if (!publishedAt) continue;
     const creator = decodeEntities(tag(block, "dc:creator") || tag(block, "author"));
     if (!title || title.length < 12) continue;
     items.push({
@@ -134,7 +178,7 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
       topic: feed.region,
       location: feed.location,
       sourceLabel: feed.source,
-      publishedAt: toIso(pub),
+      publishedAt,
       coverImage: pickImage(description + block.slice(0, 2000), feed.region, title),
       origin: "live",
       originalUrl: link.startsWith("http") ? link : undefined,
@@ -147,13 +191,7 @@ async function fetchRssFeed(feed: (typeof RSS_FEEDS)[number]): Promise<LiveNewsI
   return items;
 }
 
-/**
- * Optional wire fetch. Off unless LIVE_NEWS_INPROCESS=1.
- * Always one feed at a time with yields — never batch-parse large HTML bodies.
- */
-export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
-  if (!liveNewsInProcessEnabled()) return peekLiveNewsCache();
-  if (cache && Date.now() - cache.at < CACHE_MS) return cache.items;
+async function runWireFetch(): Promise<LiveNewsItem[]> {
   if (inflight) return inflight;
 
   inflight = (async () => {
@@ -179,7 +217,10 @@ export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
         (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
       );
       if (items[0]) items[0].featured = true;
-      cache = { at: Date.now(), items };
+      if (items.length) {
+        cache = { at: Date.now(), items };
+        writeDiskCache(cache);
+      }
       return items;
     } finally {
       inflight = null;
@@ -189,8 +230,33 @@ export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
   return inflight;
 }
 
-/** Return cached wire without triggering a refresh. */
+/**
+ * Optional wire fetch. Off unless LIVE_NEWS_INPROCESS=1.
+ * Always one feed at a time with yields — never batch-parse large HTML bodies.
+ */
+export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
+  hydrateFromDisk();
+  if (!liveNewsInProcessEnabled()) return peekLiveNewsCache();
+  if (cache && Date.now() - cache.at < CACHE_MS) return cache.items;
+  return runWireFetch();
+}
+
+/**
+ * Explicit refresh for admin/cron only — does not require LIVE_NEWS_INPROCESS.
+ * Still uses the same bounded parser; do not call from page renders.
+ */
+export async function refreshLiveNewsWire(): Promise<{ items: LiveNewsItem[]; fetchedAt: string }> {
+  hydrateFromDisk();
+  if (cache && Date.now() - cache.at < 60_000 && cache.items.length >= 8) {
+    return { items: cache.items, fetchedAt: new Date(cache.at).toISOString() };
+  }
+  const items = await runWireFetch();
+  return { items, fetchedAt: new Date(cache?.at || Date.now()).toISOString() };
+}
+
+/** Return cached wire without triggering a refresh. Hydrates from disk once. */
 export function peekLiveNewsCache(): LiveNewsItem[] {
+  hydrateFromDisk();
   return cache?.items || [];
 }
 
@@ -201,10 +267,10 @@ export function peekLiveNewsCache(): LiveNewsItem[] {
 export function scheduleLiveNewsRefresh(): void {
   if (!liveNewsInProcessEnabled()) return;
   if (inflight) return;
+  hydrateFromDisk();
   if (cache && Date.now() - cache.at < CACHE_MS) return;
-  // Defer well past the response — do not compete with the current request.
   setTimeout(() => {
-    void fetchLiveNews().catch(() => {});
+    void runWireFetch().catch(() => {});
   }, 5_000);
 }
 

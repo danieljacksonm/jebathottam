@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SEO_LOCALES, type SeoLocale } from "@/lib/site-url";
+import { PUBLISHED_HREFLANG_LOCALES, type SeoLocale } from "@/lib/site-url";
 
 const LABELS: Partial<Record<SeoLocale, string>> = {
   en: "English",
@@ -46,6 +46,9 @@ function localeHref(pathname: string, locale: SeoLocale): string {
   return locale === "en" ? base || "/" : `/${locale}${base}`;
 }
 
+/** Only locales with real PUBLISHED translations — never advertise empty /kn /pa /de shells. */
+const UI_LOCALES = PUBLISHED_HREFLANG_LOCALES as readonly SeoLocale[];
+
 export function LanguageSwitcher({
   compact = false,
   variant = "dark",
@@ -58,9 +61,10 @@ export function LanguageSwitcher({
     (pathname.match(/^\/([a-z]{2})(\/|$)/i)?.[1]?.toLowerCase() as SeoLocale | undefined) ||
     "en";
 
-  const pillLocales = compact
-    ? (["en", "hi", "ta", "te", "es", "fr"] as SeoLocale[])
-    : SEO_LOCALES;
+  // Nothing to switch until more than English is published.
+  if (UI_LOCALES.length <= 1) {
+    return null;
+  }
 
   const inactiveClass =
     variant === "light"
@@ -79,7 +83,7 @@ export function LanguageSwitcher({
         aria-label="Language"
         className={compact ? "hidden items-center gap-1 sm:flex sm:flex-wrap" : "hidden items-center gap-2 md:flex md:flex-wrap"}
       >
-        {pillLocales.map((loc) => (
+        {UI_LOCALES.map((loc) => (
           <Link
             key={loc}
             href={localeHref(pathname, loc)}
@@ -95,7 +99,7 @@ export function LanguageSwitcher({
       </label>
       <select
         id="eben-lang-select"
-        value={current}
+        value={UI_LOCALES.includes(current) ? current : "en"}
         onChange={(e) => {
           const next = e.target.value as SeoLocale;
           window.location.href = localeHref(pathname, next);
@@ -103,7 +107,7 @@ export function LanguageSwitcher({
         className={compact ? `${selectClass} sm:hidden` : `${selectClass} md:hidden`}
         aria-label="Language"
       >
-        {SEO_LOCALES.map((loc) => (
+        {UI_LOCALES.map((loc) => (
           <option key={loc} value={loc}>
             {LABELS[loc] || loc.toUpperCase()}
           </option>

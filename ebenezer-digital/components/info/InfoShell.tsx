@@ -9,8 +9,9 @@ import { SITE_NAV } from "@/lib/site-nav";
 
 const LINKS = [
   { href: SITE_NAV.info, label: "Home", match: (p: string) => p === "/info" || p === "/" },
+  { href: "/blog", label: "Blog", match: (p: string) => p.includes("/blog") },
   { href: SITE_NAV.news, label: "News", external: true },
-  { href: SITE_NAV.journal, label: "Journal", external: true },
+  { href: "/guides", label: "Guides", match: (p: string) => p.includes("/guides") },
   { href: "/about", label: "About", match: (p: string) => p.includes("/about") },
   { href: "/search", label: "Search", match: (p: string) => p.includes("/search") },
 ];
@@ -83,8 +84,9 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
           <div className="info-footer-cols">
             <div>
               <p className="info-footer-label">Here</p>
+              <Link href="/blog">Blog</Link>
               <a href={SITE_NAV.news}>News</a>
-              <a href={SITE_NAV.journal}>Journal</a>
+              <Link href="/guides">Guides</Link>
               <Link href="/about">About</Link>
               <Link href="/contact">Contact</Link>
               <Link href="/search">Search</Link>

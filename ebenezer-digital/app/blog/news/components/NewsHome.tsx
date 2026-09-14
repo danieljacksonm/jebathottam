@@ -201,7 +201,7 @@ export function NewsHome() {
               </p>
               {updatedAt && (
                 <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-[var(--n-live)]">
-                  Desk refreshed {relativeNewsTime(updatedAt).replace("Updated ", "")}
+                  Latest story {relativeNewsTime(updatedAt).replace(/^Updated /, "")}
                 </p>
               )}
             </div>

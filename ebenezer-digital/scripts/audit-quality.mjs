@@ -101,9 +101,11 @@ for (const f of langTargets) {
   check(`LanguageSwitcher in ${f}`, read(f).includes("LanguageSwitcher"));
 }
 check(
-  "NewsNav has no LanguageSwitcher (News is en-only)",
-  !read("app/blog/news/components/NewsNav.tsx").includes("LanguageSwitcher")
+  "LanguageSwitcher only lists PUBLISHED locales",
+  read("components/LanguageSwitcher.tsx").includes("PUBLISHED_HREFLANG_LOCALES")
 );
+check("Info blog index exists", fileExists("app/info/blog/page.tsx"));
+check("Info guides index exists", fileExists("app/info/guides/page.tsx"));
 
 check("News SSR initialArticles", read("app/blog/news/layout.tsx").includes("initialArticles"));
 check("Article sitemap hreflang helper", read("lib/site-sitemaps.ts").includes("articleLanguageAlternates"));

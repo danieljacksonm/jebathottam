@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import ReactMarkdown from "react-markdown";
 import { loadArticles } from "@/lib/content-engine";
 import { pageMetadata } from "@/lib/site-url";
-import { InfoShell } from "@/components/info/InfoShell";
 
 type Props = { params: { slug: string } };
 
@@ -28,17 +27,15 @@ export default function InfoGuidePage({ params }: Props) {
   if (!post) notFound();
 
   return (
-    <InfoShell>
-      <div className="info-page">
-        <p className="text-sm text-[var(--info-muted,#6b7280)]">
-          <Link href="/">Home</Link> / Guides
-        </p>
-        <h1 className="info-title mt-2">{post.title}</h1>
-        <p className="info-lead mt-3">{post.excerpt}</p>
-        <article className="prose prose-slate mt-8 max-w-none">
-          <ReactMarkdown>{post.body}</ReactMarkdown>
-        </article>
-      </div>
-    </InfoShell>
+    <div className="info-page">
+      <p className="text-sm text-[var(--info-muted,#6b7280)]">
+        <Link href="/">Home</Link> / <Link href="/guides">Guides</Link>
+      </p>
+      <h1 className="info-title mt-2">{post.title}</h1>
+      <p className="info-lead mt-3">{post.excerpt}</p>
+      <article className="prose prose-slate mt-8 max-w-none">
+        <ReactMarkdown>{post.body}</ReactMarkdown>
+      </article>
+    </div>
   );
 }

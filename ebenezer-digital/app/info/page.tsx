@@ -2,8 +2,9 @@ import Link from "next/link";
 import { SafeImage } from "@/components/info/SafeImage";
 import { NewsletterForm } from "./NewsletterForm";
 import { DESK_PHOTOS } from "@/lib/news-photos";
-import { listPublicNewsPreview } from "@/lib/news-service";
+import { listPublicNewsPreview, latestNewsPublishedAt } from "@/lib/news-service";
 import { db } from "@/lib/db";
+import { loadArticles } from "@/lib/content-engine";
 import { SITE_NAV, journalArticleHref, newsArticleHref, journalCategoryHref } from "@/lib/site-nav";
 
 export const revalidate = 300;
@@ -13,22 +14,31 @@ function readingMins(text: string) {
   return Math.max(1, Math.round(words / 180));
 }
 
-const CATEGORIES = [
+const TOPICS = [
   { label: "Technology", href: journalCategoryHref("Technology"), img: DESK_PHOTOS.tech },
-  { label: "AI", href: `${SITE_NAV.journal}/blog?q=AI`, img: DESK_PHOTOS.tech },
+  { label: "AI", href: `${SITE_NAV.journal}?q=AI`, img: DESK_PHOTOS.tech },
   { label: "Business", href: journalCategoryHref("Business"), img: DESK_PHOTOS.business },
-  { label: "Digital Life", href: `${SITE_NAV.journal}/blog?q=digital`, img: DESK_PHOTOS.world },
-  { label: "Science", href: journalCategoryHref("Science"), img: DESK_PHOTOS.science },
-  { label: "Internet", href: `${SITE_NAV.journal}/blog?q=internet`, img: DESK_PHOTOS.asia },
-  { label: "People", href: SITE_NAV.news, img: DESK_PHOTOS.politics },
-  { label: "Ideas", href: `${SITE_NAV.journal}/blog?q=ideas`, img: DESK_PHOTOS.europe },
+  { label: "Websites", href: `${SITE_NAV.journal}?q=website`, img: DESK_PHOTOS.world },
+  { label: "Digital Tools", href: SITE_NAV.network, img: DESK_PHOTOS.tech },
+  { label: "Digital Life", href: `${SITE_NAV.journal}?q=digital`, img: DESK_PHOTOS.asia },
+  { label: "Travel", href: `${SITE_NAV.journal}?q=travel`, img: DESK_PHOTOS.europe },
+  { label: "How-To Guides", href: "/guides", img: DESK_PHOTOS.science },
 ];
 
 export default async function InfoHomePage() {
-  // Preview only — do not pull full CMS list / archive write on Info hub.
   const news = listPublicNewsPreview(5);
+  const newsLatest = latestNewsPublishedAt(news);
   const posts = await db.getBlogPosts(true).catch(() => []);
-  const stories = posts.slice(0, 6);
+  const blog = posts
+    .slice()
+    .sort(
+      (a, b) =>
+        new Date(b.publishedAt || b.createdAt || 0).getTime() -
+        new Date(a.publishedAt || a.createdAt || 0).getTime()
+    )
+    .slice(0, 6);
+  const picks = blog.slice(0, 3);
+  const guides = loadArticles("info-guides").filter((g) => g.indexable !== false).slice(0, 4);
 
   return (
     <>
@@ -43,31 +53,84 @@ export default async function InfoHomePage() {
           </p>
           <h1>Discover. Understand. Explore.</h1>
           <p className="info-hero-sub">
-            News, stories and useful ideas for the digital world — explained simply for everyone.
+            Original articles, guides and a clear window into Ebenezer News — explained simply.
           </p>
           <div className="info-cta-row">
-            <a className="info-btn info-btn-primary" href={SITE_NAV.news}>
-              Read Today&apos;s News
+            <a className="info-btn info-btn-primary" href="/blog">
+              Read the Blog
             </a>
-            <a className="info-btn info-btn-secondary" href={SITE_NAV.journal}>
-              Explore the Journal
+            <a className="info-btn info-btn-secondary" href={SITE_NAV.news}>
+              Open Ebenezer News
             </a>
-            <a className="info-btn info-btn-secondary" href="/info/search">
-              Search all
+            <a className="info-btn info-btn-secondary" href="/guides">
+              Guides
             </a>
-            <a className="info-btn info-btn-secondary" href="#explore-more">
-              Explore More
+            <a className="info-btn info-btn-secondary" href="/search">
+              Search
             </a>
           </div>
         </div>
       </section>
 
-      <section className="info-section" aria-labelledby="today-heading">
-        <p className="info-kicker">Today</p>
-        <h2 className="info-h2" id="today-heading">
-          What&apos;s happening today?
+      <section className="info-section" aria-labelledby="blog-heading">
+        <p className="info-kicker">Blog</p>
+        <h2 className="info-h2" id="blog-heading">
+          Latest original articles
         </h2>
-        <p className="info-lead">A few important stories from Ebenezer News — clear and current.</p>
+        <p className="info-lead">
+          Longer-form writing from the Ebenezer Journal — technology, AI, business and digital life.
+        </p>
+        <div className="info-card-grid cols-3">
+          {blog.map((post) => {
+            const mins = readingMins(`${post.title} ${post.excerpt || ""}`);
+            const published = post.publishedAt || post.createdAt;
+            return (
+              <a key={post.id} className="info-story-card" href={journalArticleHref(post.slug)}>
+                <div className="info-story-media">
+                  <SafeImage src={post.coverImage || DESK_PHOTOS.world} alt="" fill />
+                </div>
+                <div className="info-story-body">
+                  <p className="info-meta">
+                    {post.category || "Article"} · {mins} min read
+                    {published
+                      ? ` · ${new Date(published).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}`
+                      : ""}
+                  </p>
+                  <h3 className="info-story-title">{post.title}</h3>
+                  <p className="info-story-dek">{post.excerpt}</p>
+                  <span className="info-badge">Read article</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+        <div className="info-cta-row" style={{ marginTop: "1.5rem" }}>
+          <a className="info-btn info-btn-outline" href="/blog">
+            All blog articles
+          </a>
+        </div>
+      </section>
+
+      <section className="info-section" aria-labelledby="news-heading">
+        <p className="info-kicker">News</p>
+        <h2 className="info-h2" id="news-heading">
+          From Ebenezer News
+        </h2>
+        <p className="info-lead">
+          Headlines from the canonical news desk
+          {newsLatest
+            ? ` · latest ${new Date(newsLatest).toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}`
+            : ""}
+          . Full stories open on news.ebenezerdigital.info.
+        </p>
         <div className="info-card-grid cols-3">
           {news.map((item) => (
             <a key={item.id} className="info-story-card" href={newsArticleHref(item.slug, item.region)}>
@@ -86,50 +149,62 @@ export default async function InfoHomePage() {
                 </p>
                 <h3 className="info-story-title">{item.title}</h3>
                 <p className="info-story-dek">{item.dek}</p>
+                <span className="info-badge">Read on Ebenezer News →</span>
               </div>
             </a>
           ))}
         </div>
         <div className="info-cta-row" style={{ marginTop: "1.5rem" }}>
           <a className="info-btn info-btn-solid" href={SITE_NAV.news}>
-            See All News
+            See all news
           </a>
         </div>
       </section>
 
-      <section className="info-section" aria-labelledby="stories-heading" id="explore-more">
-        <p className="info-kicker">Journal</p>
-        <h2 className="info-h2" id="stories-heading">
-          Stories worth your time
-        </h2>
-        <p className="info-lead">Deeper reading — explanations, guides and ideas from the Journal.</p>
-        <div className="info-card-grid cols-3">
-          {stories.map((post) => {
-            const mins = readingMins(`${post.title} ${post.excerpt || ""}`);
-            return (
+      {picks.length > 0 ? (
+        <section className="info-section" aria-labelledby="picks-heading">
+          <p className="info-kicker">Editor&apos;s picks</p>
+          <h2 className="info-h2" id="picks-heading">
+            Worth your time
+          </h2>
+          <div className="info-card-grid cols-3">
+            {picks.map((post) => (
               <a key={post.id} className="info-story-card" href={journalArticleHref(post.slug)}>
-                <div className="info-story-media">
-                  <SafeImage
-                    src={post.coverImage || DESK_PHOTOS.world}
-                    alt=""
-                    fill
-                  />
-                </div>
                 <div className="info-story-body">
-                  <p className="info-meta">
-                    {post.category || "Story"} · {mins} min read
-                  </p>
+                  <p className="info-meta">{post.category || "Pick"}</p>
                   <h3 className="info-story-title">{post.title}</h3>
                   <p className="info-story-dek">{post.excerpt}</p>
-                  <span className="info-badge">Read Story</span>
                 </div>
               </a>
-            );
-          })}
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="info-section" aria-labelledby="guides-heading">
+        <p className="info-kicker">Guides</p>
+        <h2 className="info-h2" id="guides-heading">
+          Explainers &amp; digital knowledge
+        </h2>
+        <p className="info-lead">Practical guides hosted on this information hub.</p>
+        <div className="info-card-grid cols-3">
+          {guides.length ? (
+            guides.map((g) => (
+              <Link key={g.slug} className="info-story-card" href={`/guides/${g.slug}`}>
+                <div className="info-story-body">
+                  <p className="info-meta">Guide</p>
+                  <h3 className="info-story-title">{g.title}</h3>
+                  <p className="info-story-dek">{g.excerpt}</p>
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="info-lead">Guides are being prepared. Check back soon.</p>
+          )}
         </div>
         <div className="info-cta-row" style={{ marginTop: "1.5rem" }}>
-          <a className="info-btn info-btn-outline" href={SITE_NAV.journal}>
-            Open the Journal
+          <a className="info-btn info-btn-outline" href="/guides">
+            Browse guides
           </a>
         </div>
       </section>
@@ -139,66 +214,13 @@ export default async function InfoHomePage() {
         <h2 className="info-h2" id="cats-heading">
           Explore what interests you
         </h2>
-        <p className="info-lead">Pick a topic. Every link opens real stories.</p>
         <div className="info-cat-grid">
-          {CATEGORIES.map((c) => (
+          {TOPICS.map((c) => (
             <a key={c.label} className="info-cat" href={c.href}>
               <SafeImage src={c.img} alt="" />
               <span>{c.label}</span>
             </a>
           ))}
-        </div>
-      </section>
-
-      <section className="info-section" aria-labelledby="new-heading">
-        <p className="info-kicker">Start here</p>
-        <h2 className="info-h2" id="new-heading">
-          New here?
-        </h2>
-        <p className="info-lead">Not sure where to start? Choose one path.</p>
-        <div className="info-split">
-          <div className="info-guide">
-            <h3>News</h3>
-            <p>Choose News if you want to know what&apos;s happening right now in tech, AI and the digital world.</p>
-            <a className="info-btn info-btn-solid" href={SITE_NAV.news}>
-              Read Today&apos;s News
-            </a>
-          </div>
-          <div className="info-guide">
-            <h3>Journal</h3>
-            <p>
-              Choose Journal if you want to understand ideas, stories and useful knowledge — at a slower, clearer pace.
-            </p>
-            <a className="info-btn info-btn-outline" href={SITE_NAV.journal}>
-              Read the Journal
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="info-section" aria-labelledby="pause-heading">
-        <h2 className="sr-only" id="pause-heading">
-          Take a peaceful moment
-        </h2>
-        <div className="info-pause">
-          <SafeImage src={DESK_PHOTOS.climate} alt="" />
-          <blockquote>
-            Good information should make life easier, not more complicated.
-          </blockquote>
-        </div>
-      </section>
-
-      <section className="info-section" aria-labelledby="eco-heading">
-        <p className="info-kicker">Ecosystem</p>
-        <h2 className="info-h2" id="eco-heading">
-          Explore Ebenezer Digital
-        </h2>
-        <p className="info-lead">When you&apos;re ready, these other places may help.</p>
-        <div className="info-ecosystem">
-          <a href={SITE_NAV.home}>Digital Services — websites and digital work</a>
-          <a href={SITE_NAV.network}>Free Tools — helpful utilities</a>
-          <a href={SITE_NAV.ai}>AI — calm AI space</a>
-          <a href={SITE_NAV.store}>Digital Products — ready-made kits</a>
         </div>
       </section>
 
