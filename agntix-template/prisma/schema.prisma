@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Destination {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  nameEn    String
+  nameTa    String
+  nameHi    String
+  country   String
+  continent String
+  region    String
+  taglineEn String
+  taglineTa String
+  taglineHi String
+  bodyEn    String
+  bodyTa    String
+  bodyHi    String
+  image     String
+  status    String   @default("enquiry")
+  featured  Boolean  @default(false)
+  priceFrom Int?
+  sortOrder Int      @default(0)
+  blogs     BlogPost[]
+  places    TouristPlace[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TouristPlace {
+  id            String      @id @default(cuid())
+  slug          String
+  destinationId String
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+  nameEn        String
+  nameTa        String
+  nameHi        String
+  summaryEn     String
+  summaryTa     String
+  summaryHi     String
+  image         String?
+  sortOrder     Int         @default(0)
+
+  @@unique([destinationId, slug])
+}
+
+model BlogPost {
+  id            String       @id @default(cuid())
+  slug          String       @unique
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  date          String
+  readMinutes   Int
+  image         String
+  tagsEn        String
+  tagsTa        String
+  tagsHi        String
+  titleEn       String
+  titleTa       String
+  titleHi       String
+  excerptEn     String
+  excerptTa     String
+  excerptHi     String
+  bodyEn        String
+  bodyTa        String
+  bodyHi        String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}

@@ -263,13 +263,13 @@
   },
   "blog": {
     "eyebrow": "ஜர்னல்",
-    "title": "Travel guides & stories",
-    "subtitle": "180+ practical guides for Kodaikanal, Darjeeling, and Goa — places, seasons, packing, and calm travel plans.",
+    "title": "Worldwide travel guides",
+    "subtitle": "500+ practical guides across India, Asia, Europe, the Americas, Africa, and Oceania — every major destination and tourist place, with calm travel planning.",
     "filteredTitle": "{destination} travel guides",
     "filteredSubtitle": "Verified notes and itineraries for {destination} — filter, read, and enquire when you are ready.",
     "read": "{count} நிமிட வாசிப்பு",
     "back": "வலைப்பதிவுக்குத் திரும்பு",
-    "gridIntro": "Hill mist, Himalayan tea ridges, and coastal calm — browse by destination or read everything.",
+    "gridIntro": "Hills, coasts, cities, and deserts — browse by continent or destination, including place-level guides.",
     "filteredIntro": "Guides focused on {destination}.",
     "storiesCount": "{count} கதைகள்",
     "readMore": "வாசிக்க",
@@ -279,7 +279,7 @@
     "destinationGoa": "Goa",
     "viewAllGuides": "View all {destination} guides",
     "recentGuides": "Recent guides",
-    "heroImageAlt": "Travel guides from Canaan Travel Hub",
+    "heroImageAlt": "Worldwide travel guides from Canaan Travel Hub",
     "listImageAlt": "Canaan travel stories and destination guides"
   },
   "film": {

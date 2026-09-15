@@ -1,16 +1,13 @@
 import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import {
-  destinationCopy,
-  getPublishedDestinations,
-} from "@/data/destinations";
+import { getFeaturedDestinations } from "@/data/destinations";
 import { formatInr } from "@/data/packages";
 
 export async function FeaturedDestinations() {
   const t = await getTranslations("platform");
   const locale = await getLocale();
-  const list = getPublishedDestinations();
+  const list = await getFeaturedDestinations(locale, 6);
 
   return (
     <section className="section-pad">
@@ -23,11 +20,8 @@ export async function FeaturedDestinations() {
         </h2>
         <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {list.map((dest) => {
-            const copy = destinationCopy[dest.slug];
-            const name = copy.name[locale as "en" | "ta" | "hi"] ?? copy.name.en;
-            const tagline =
-              copy.tagline[locale as "en" | "ta" | "hi"] ?? copy.tagline.en;
-            const hasPrice = typeof dest.priceFrom === "number" && dest.priceFrom > 0;
+            const hasPrice =
+              typeof dest.priceFrom === "number" && dest.priceFrom > 0;
             return (
               <article key={dest.slug} className="lux-card overflow-hidden">
                 <Link
@@ -37,7 +31,7 @@ export async function FeaturedDestinations() {
                   <div className="relative aspect-[16/11]">
                     <Image
                       src={dest.image}
-                      alt={name}
+                      alt={dest.name}
                       fill
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
@@ -50,10 +44,10 @@ export async function FeaturedDestinations() {
                         : `${dest.country} · ${dest.continent}`}
                     </p>
                     <h3 className="mt-3 font-display text-3xl text-white">
-                      {name}
+                      {dest.name}
                     </h3>
                     <p className="mt-3 text-sm leading-relaxed text-soft-gray">
-                      {tagline}
+                      {dest.tagline}
                     </p>
                     <p className="mt-auto pt-6 text-sm text-gold-bright">
                       {hasPrice

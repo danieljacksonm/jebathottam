@@ -1,26 +1,5 @@
-import blogsTable from "../../content/db/blogs.json";
-import {
-  pickLocalized,
-  type ContentTable,
-  type LocaleCode,
-  type LocalizedString,
-  type LocalizedStringList,
-} from "@/lib/content/types";
-
-export type BlogDestination = "kodaikanal" | "darjeeling" | "goa";
-
-export type BlogRow = {
-  id: string;
-  slug: string;
-  date: string;
-  readMinutes: number;
-  image: string;
-  destination?: BlogDestination;
-  tags: LocalizedStringList;
-  title: LocalizedString;
-  excerpt: LocalizedString;
-  body: LocalizedStringList;
-};
+import type { Prisma } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 export type LocalizedBlog = {
   id: string;
@@ -28,112 +7,172 @@ export type LocalizedBlog = {
   date: string;
   readMinutes: number;
   image: string;
-  destination?: BlogDestination;
+  destinationSlug: string | null;
+  destinationName: string | null;
+  continent: string | null;
   tags: string[];
   title: string;
   excerpt: string;
   body: string[];
 };
 
-export const BLOG_DESTINATIONS: BlogDestination[] = [
-  "kodaikanal",
-  "darjeeling",
-  "goa",
-];
-
-const table = blogsTable as ContentTable<BlogRow>;
-
-export const KODAI_BLOG_IMAGE =
-  table.rows[0]?.image ??
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1600&q=80";
-
-/** Raw DB rows (all languages). Same routes — locale picks fields. */
-export const blogRows: BlogRow[] = table.rows;
-
-export function getBlogRows() {
-  return blogRows;
+function pickLocale(en: string, ta: string, hi: string, locale: string) {
+  if (locale === "ta") return ta || en;
+  if (locale === "hi") return hi || en;
+  return en;
 }
 
-export function getBlogRow(slug: string) {
-  return blogRows.find((row) => row.slug === slug);
+function parseTags(raw: string) {
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
 }
 
-export function localizeBlog(
-  row: BlogRow,
+function parseBody(raw: string) {
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
+}
+
+function localizeBlogRow(
+  row: BlogWithDestination | null,
   locale: string,
-): LocalizedBlog {
+): LocalizedBlog | null {
+  if (!row) return null;
   return {
     id: row.id,
     slug: row.slug,
     date: row.date,
     readMinutes: row.readMinutes,
     image: row.image,
-    destination: row.destination,
-    tags: pickLocalized(row.tags, locale),
-    title: pickLocalized(row.title, locale),
-    excerpt: pickLocalized(row.excerpt, locale),
-    body: pickLocalized(row.body, locale),
+    destinationSlug: row.destination?.slug ?? null,
+    destinationName: row.destination
+      ? pickLocale(
+          row.destination.nameEn,
+          row.destination.nameTa,
+          row.destination.nameHi,
+          locale,
+        )
+      : null,
+    continent: row.destination?.continent ?? null,
+    tags: parseTags(
+      locale === "ta"
+        ? row.tagsTa
+        : locale === "hi"
+          ? row.tagsHi
+          : row.tagsEn,
+    ),
+    title: pickLocale(row.titleEn, row.titleTa, row.titleHi, locale),
+    excerpt: pickLocale(row.excerptEn, row.excerptTa, row.excerptHi, locale),
+    body: parseBody(
+      pickLocale(row.bodyEn, row.bodyTa, row.bodyHi, locale),
+    ),
   };
 }
 
-export function getBlogDestinations(): BlogDestination[] {
-  return BLOG_DESTINATIONS.filter((slug) =>
-    blogRows.some((row) => row.destination === slug),
-  );
-}
-
-export function getBlogCountByDestination(destination: BlogDestination) {
-  return blogRows.filter((row) => row.destination === destination).length;
-}
-
-export function getLocalizedBlogs(locale: string): LocalizedBlog[] {
-  return blogRows.map((row) => localizeBlog(row, locale));
-}
-
-export function getLocalizedBlogsByDestination(
-  locale: string,
-  destination?: string,
-): LocalizedBlog[] {
-  const rows =
-    destination && BLOG_DESTINATIONS.includes(destination as BlogDestination)
-      ? blogRows.filter((row) => row.destination === destination)
-      : blogRows;
-  return rows.map((row) => localizeBlog(row, locale));
-}
-
-export function getLocalizedBlog(slug: string, locale: string) {
-  const row = getBlogRow(slug);
-  if (!row) return undefined;
-  return localizeBlog(row, locale);
-}
-
-export function getAllBlogSlugs() {
-  return blogRows.map((row) => row.slug);
-}
-
-/** @deprecated Prefer getLocalizedBlogs — kept for any legacy imports */
-export const blogPosts = blogRows.map((row) => ({
-  slug: row.slug,
-  date: row.date,
-  readMinutes: row.readMinutes,
-  image: row.image,
-  tags: row.tags.en,
-}));
-
-/** @deprecated Prefer localizeBlog */
-export const blogCopy = Object.fromEntries(
-  blogRows.map((row) => [
-    row.slug,
-    {
-      title: row.title,
-      excerpt: row.excerpt,
-      body: row.body.en,
+const blogInclude = {
+  destination: {
+    select: {
+      slug: true,
+      nameEn: true,
+      nameTa: true,
+      nameHi: true,
+      continent: true,
     },
-  ]),
-);
+  },
+} as const;
 
-export function getBlogPost(slug: string) {
-  return blogPosts.find((p) => p.slug === slug);
+type BlogWithDestination = Prisma.BlogPostGetPayload<{
+  include: typeof blogInclude;
+}>;
+
+export const KODAI_BLOG_IMAGE = "/images/marketing/kodai-banner.jpg";
+
+export async function getLocalizedBlogs(
+  locale: string,
+  filters?: { destination?: string; continent?: string },
+) {
+  const rows = await prisma.blogPost.findMany({
+    where: {
+      ...(filters?.destination
+        ? { destination: { slug: filters.destination } }
+        : {}),
+      ...(filters?.continent
+        ? { destination: { continent: filters.continent } }
+        : {}),
+    },
+    include: blogInclude,
+    orderBy: [{ date: "desc" }, { titleEn: "asc" }],
+  });
+  return rows
+    .map((row) => localizeBlogRow(row, locale))
+    .filter(Boolean) as LocalizedBlog[];
 }
 
-export type { LocaleCode };
+export async function getLocalizedBlog(slug: string, locale: string) {
+  const row = await prisma.blogPost.findUnique({
+    where: { slug },
+    include: blogInclude,
+  });
+  return localizeBlogRow(row, locale);
+}
+
+export async function getAllBlogSlugs() {
+  const rows = await prisma.blogPost.findMany({ select: { slug: true } });
+  return rows.map((r) => r.slug);
+}
+
+export async function getBlogCount(filters?: {
+  destination?: string;
+  continent?: string;
+}) {
+  return prisma.blogPost.count({
+    where: {
+      ...(filters?.destination
+        ? { destination: { slug: filters.destination } }
+        : {}),
+      ...(filters?.continent
+        ? { destination: { continent: filters.continent } }
+        : {}),
+    },
+  });
+}
+
+export async function getBlogDestinationOptions(locale: string) {
+  const rows = await prisma.destination.findMany({
+    orderBy: [{ sortOrder: "asc" }, { nameEn: "asc" }],
+    include: {
+      _count: { select: { blogs: true } },
+    },
+  });
+  return rows
+    .filter((r) => r._count.blogs > 0)
+    .map((r) => ({
+      slug: r.slug,
+      label: pickLocale(r.nameEn, r.nameTa, r.nameHi, locale),
+      continent: r.continent,
+      count: r._count.blogs,
+    }));
+}
+
+export async function getBlogContinentOptions() {
+  const rows = await prisma.destination.findMany({
+    select: { continent: true },
+    distinct: ["continent"],
+    orderBy: { continent: "asc" },
+  });
+  const options = [];
+  for (const row of rows) {
+    const count = await getBlogCount({ continent: row.continent });
+    if (count > 0) {
+      options.push({ continent: row.continent, count });
+    }
+  }
+  return options;
+}

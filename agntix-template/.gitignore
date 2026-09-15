@@ -50,3 +50,10 @@ lighthouse-*.json
 # owner WhatsApp zip duplicates (loose images kept)
 /packages/**/*.zip
 
+
+/data/content.db
+/data/content.db-journal
+
+# Prisma SQLite (seed regenerates)
+/prisma/data/
+

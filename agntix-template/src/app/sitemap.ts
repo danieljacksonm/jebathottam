@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { blogRows } from "@/data/blog";
+import { getAllBlogSlugs } from "@/data/blog";
+import { getDestinationSlugs } from "@/data/destinations";
 import { packageRows } from "@/data/packages";
 import { SITE_URL, absoluteUrl, localizedPath } from "@/lib/seo";
 
@@ -8,12 +9,7 @@ const staticPaths = [
   "/",
   "/kodaikanal",
   "/destinations",
-  "/destinations/kodaikanal",
-  "/destinations/darjeeling",
-  "/destinations/goa",
   "/packages",
-  "/corporate-travel",
-  "/experiences",
   "/tours",
   "/services",
   "/hotels",
@@ -42,17 +38,38 @@ function hreflangAlternates(path: string) {
   return languages;
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
+  const [blogSlugs, destinationSlugs] = await Promise.all([
+    getAllBlogSlugs(),
+    getDestinationSlugs(),
+  ]);
 
   for (const locale of routing.locales) {
     for (const path of staticPaths) {
       entries.push({
         url: `${SITE_URL}${localizedPath(locale, path)}`,
         lastModified: new Date(),
-        changeFrequency: path === "/" || path === "/kodaikanal" ? "weekly" : "monthly",
-        priority: path === "/" ? 1 : path === "/kodaikanal" || path === "/packages" ? 0.9 : 0.7,
+        changeFrequency:
+          path === "/" || path === "/kodaikanal" ? "weekly" : "monthly",
+        priority:
+          path === "/"
+            ? 1
+            : path === "/kodaikanal" || path === "/packages"
+              ? 0.9
+              : 0.7,
         alternates: { languages: hreflangAlternates(path) },
+      });
+    }
+
+    for (const slug of destinationSlugs) {
+      const destPath = `/destinations/${slug}`;
+      entries.push({
+        url: `${SITE_URL}${localizedPath(locale, destPath)}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.75,
+        alternates: { languages: hreflangAlternates(destPath) },
       });
     }
 
@@ -67,11 +84,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       });
     }
 
-    for (const post of blogRows) {
-      const postPath = `/blog/${post.slug}`;
+    for (const slug of blogSlugs) {
+      const postPath = `/blog/${slug}`;
       entries.push({
         url: `${SITE_URL}${localizedPath(locale, postPath)}`,
-        lastModified: new Date(post.date),
+        lastModified: new Date(),
         changeFrequency: "monthly",
         priority: 0.6,
         alternates: { languages: hreflangAlternates(postPath) },

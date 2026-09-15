@@ -1,9 +1,6 @@
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
-import {
-  blogRows,
-  getLocalizedBlog,
-} from "@/data/blog";
+import { getAllBlogSlugs, getLocalizedBlog } from "@/data/blog";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { BlogArticle } from "@/components/blog/BlogArticle";
@@ -11,8 +8,9 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { absoluteUrl, articleJsonLd, pageMetadata } from "@/lib/seo";
 
-export function generateStaticParams() {
-  return blogRows.map((post) => ({ slug: post.slug }));
+export async function generateStaticParams() {
+  const slugs = await getAllBlogSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -21,7 +19,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const post = getLocalizedBlog(slug, locale);
+  const post = await getLocalizedBlog(slug, locale);
   if (!post) return {};
   return pageMetadata({
     locale,
@@ -43,7 +41,7 @@ export default async function BlogPostPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const loc = await getLocale();
-  const post = getLocalizedBlog(slug, loc);
+  const post = await getLocalizedBlog(slug, loc);
   if (!post) notFound();
 
   const t = await getTranslations("blog");
