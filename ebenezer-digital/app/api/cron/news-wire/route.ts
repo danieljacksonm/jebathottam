@@ -8,7 +8,8 @@ export const maxDuration = 60;
 
 /**
  * Cron/wire refresh. Set CRON_SECRET and call with Authorization: Bearer secret.
- * Example crontab (every 15 minutes, off the hot path):
+ * Example crontab (every 10 minutes, off the hot path):
+ *   */10 * * * * dani … /api/cron/news-wire
  *   curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://news.ebenezerdigital.info/api/cron/news-wire
  */
 export async function POST(request: NextRequest) {

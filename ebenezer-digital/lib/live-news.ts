@@ -40,7 +40,7 @@ const RSS_FEEDS: { url: string; region: NewsRegion; source: string; location: st
 ];
 
 const MAX_XML_CHARS = 120_000;
-const MAX_ITEMS_PER_FEED = 6;
+const MAX_ITEMS_PER_FEED = 10;
 
 function toIso(value?: string): string {
   if (!value) return "";

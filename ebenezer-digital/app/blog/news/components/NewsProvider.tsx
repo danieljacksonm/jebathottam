@@ -3,7 +3,8 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { NewsArticle, NewsNavId } from "../data";
 
-const CACHE_KEY = "eben-news-cache-v2";
+const CACHE_KEY = "eben-news-cache-v3";
+const POLL_MS = 90_000;
 
 type NewsContextValue = {
   articles: NewsArticle[];
@@ -18,6 +19,21 @@ type NewsContextValue = {
 };
 
 const NewsContext = createContext<NewsContextValue | null>(null);
+
+function latestStamp(items: NewsArticle[]) {
+  let max = 0;
+  for (const item of items) {
+    const t = item.publishedAt ? new Date(item.publishedAt).getTime() : 0;
+    if (t > max) max = t;
+  }
+  return max ? new Date(max).toISOString() : "";
+}
+
+function stampMs(value?: string) {
+  if (!value) return 0;
+  const t = new Date(value).getTime();
+  return Number.isNaN(t) ? 0 : t;
+}
 
 export function NewsProvider({
   children,
@@ -37,51 +53,58 @@ export function NewsProvider({
 
   useEffect(() => {
     let alive = true;
-    let hasWarmCache = false;
-    // Quick paint from last successful fetch so first open is not blank.
+    let hasWarmCache = initialArticles.length > 0;
+
+    // Local cache only if newer than SSR — never flash older headlines over present wire.
     try {
       const raw = localStorage.getItem(CACHE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw) as { items?: NewsArticle[]; updatedAt?: string };
         if (Array.isArray(parsed.items) && parsed.items.length) {
-          hasWarmCache = true;
-          setArticles(parsed.items);
-          setUpdatedAt(parsed.updatedAt || "");
-          setLoading(false);
+          const localStamp = stampMs(parsed.updatedAt || latestStamp(parsed.items));
+          const ssrStamp = stampMs(initialUpdatedAt || latestStamp(initialArticles));
+          if (localStamp >= ssrStamp) {
+            hasWarmCache = true;
+            setArticles(parsed.items);
+            setUpdatedAt(parsed.updatedAt || latestStamp(parsed.items));
+            setLoading(false);
+          }
         }
       }
     } catch {
       // ignore local cache parse errors
     }
 
-    const latestStamp = (items: NewsArticle[]) => {
-      let max = 0;
-      for (const item of items) {
-        const t = item.publishedAt ? new Date(item.publishedAt).getTime() : 0;
-        if (t > max) max = t;
+    const applyItems = (items: NewsArticle[]) => {
+      if (!items.length) return;
+      setArticles((prev) => {
+        if (
+          prev.length === items.length &&
+          prev[0]?.id === items[0]?.id &&
+          prev[0]?.publishedAt === items[0]?.publishedAt
+        ) {
+          return prev;
+        }
+        return items;
+      });
+      const stamp = latestStamp(items);
+      setUpdatedAt(stamp);
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ items, updatedAt: stamp }));
+      } catch {
+        // ignore storage full errors
       }
-      return max ? new Date(max).toISOString() : "";
     };
 
     const load = (first = false) => {
       if (first && initialArticles.length === 0 && !hasWarmCache) setLoading(true);
-      fetch("/api/news?limit=60")
+      fetch("/api/news?limit=80", { cache: "no-store" })
         .then((r) => r.json())
         .then((data) => {
           if (!alive) return;
           const items = Array.isArray(data.items) ? data.items : [];
           if (items.length) {
-            setArticles((prev) => {
-              if (prev.length === items.length && prev[0]?.id === items[0]?.id) return prev;
-              return items;
-            });
-            const stamp = latestStamp(items);
-            setUpdatedAt(stamp);
-            try {
-              localStorage.setItem(CACHE_KEY, JSON.stringify({ items, updatedAt: stamp }));
-            } catch {
-              // ignore storage full errors
-            }
+            applyItems(items);
           } else if (first && initialArticles.length === 0) {
             setArticles([]);
           }
@@ -94,14 +117,23 @@ export function NewsProvider({
         });
     };
 
-    // Always refresh once — SSR/localStorage may be stale seed after a cold deploy.
     load(true);
-    const timer = window.setInterval(() => load(false), 5 * 60 * 1000);
+    const timer = window.setInterval(() => load(false), POLL_MS);
+
+    const onVisible = () => {
+      if (document.visibilityState === "visible") load(false);
+    };
+    const onFocus = () => load(false);
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onFocus);
+
     return () => {
       alive = false;
       window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onFocus);
     };
-  }, []);
+  }, []); // mount once — live poll + focus/visibility keep the desk current
 
   const value = useMemo(
     () => ({

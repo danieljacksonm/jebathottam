@@ -74,7 +74,7 @@ function seedToPublic(n: NewsArticle): PublicNewsItem {
 }
 
 /** Short TTL so home + API + sitemap share one merge within a burst. */
-const LIST_PUBLIC_TTL_MS = 60_000;
+const LIST_PUBLIC_TTL_MS = 20_000;
 let listPublicMemo: { at: number; data: PublicNewsItem[] } | null = null;
 
 function archiveToPublic(n: {
@@ -179,13 +179,29 @@ export function invalidatePublicNewsMemo(): void {
   listPublicMemo = null;
 }
 
-/** Cap for News chrome / home client props — never ship the full list. */
-export const NEWS_HOME_CLIENT_LIMIT = 60;
+/** Cap for News chrome / home client props — denser desk like a live channel. */
+export const NEWS_HOME_CLIENT_LIMIT = 80;
+
+/** Prefer present wire: live first, then stories from the last 48h, then older. */
+function deskSort(a: PublicNewsItem, b: PublicNewsItem): number {
+  const now = Date.now();
+  const freshMs = 48 * 60 * 60 * 1000;
+  const score = (n: PublicNewsItem) => {
+    const t = new Date(n.publishedAt).getTime();
+    let s = t;
+    if (n.origin === "live") s += 2e15;
+    else if (n.origin === "cms") s += 1e15;
+    if (now - t <= freshMs) s += 1e14;
+    return s;
+  };
+  return score(b) - score(a);
+}
 
 export async function listPublicNewsForHome(limit = NEWS_HOME_CLIENT_LIMIT): Promise<PublicNewsItem[]> {
   const list = await listPublicNews();
+  const sorted = [...list].sort(deskSort);
   const n = Math.max(1, Math.min(limit, NEWS_HOME_CLIENT_LIMIT));
-  return list.slice(0, n);
+  return sorted.slice(0, n);
 }
 
 /** Latest publishedAt among items — for desk “latest story” labels (not fetch time). */
@@ -306,10 +322,10 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
     });
   }
 
-  // Prefer live world stories so visitors see current events first
+  // Prefer live + newest so the desk reads like a live news channel
   list = [...list].sort((a, b) => {
-    const ao = a.origin === "live" ? 0 : 1;
-    const bo = b.origin === "live" ? 0 : 1;
+    const ao = a.origin === "live" ? 0 : a.origin === "cms" ? 1 : 2;
+    const bo = b.origin === "live" ? 0 : b.origin === "cms" ? 1 : 2;
     if (ao !== bo) return ao - bo;
     return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
   });
