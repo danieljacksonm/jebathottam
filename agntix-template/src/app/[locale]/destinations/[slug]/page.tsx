@@ -12,6 +12,11 @@ import {
   packagesForDestination,
   type DestinationSlug,
 } from "@/data/destinations";
+import {
+  getBlogCountByDestination,
+  getLocalizedBlogsByDestination,
+  type BlogDestination,
+} from "@/data/blog";
 import { formatInr, localizePackage } from "@/data/packages";
 import { DARJEELING_MEDIA } from "@/lib/media-registry";
 import { pageMetadata } from "@/lib/seo";
@@ -97,6 +102,13 @@ export default async function DestinationDetailPage({
           DARJEELING_MEDIA.g5,
         ]
       : [];
+  const blogDestination = dest.slug as BlogDestination;
+  const blogPosts = getLocalizedBlogsByDestination(locale, blogDestination).slice(
+    0,
+    3,
+  );
+  const blogT = await getTranslations("blog");
+  const blogCount = getBlogCountByDestination(blogDestination);
 
   return (
     <PageAtmosphere>
@@ -213,6 +225,48 @@ export default async function DestinationDetailPage({
                   sizes="(max-width: 768px) 50vw, 33vw"
                 />
               </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {blogCount > 0 ? (
+        <section className="mx-auto max-w-7xl px-5 pb-20 md:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 className="font-display text-3xl text-cream">
+              {blogT("recentGuides")}
+            </h2>
+            <Link
+              href={`/blog?destination=${blogDestination}`}
+              className="text-sm uppercase tracking-[0.12em] text-gold hover:text-gold-bright"
+            >
+              {blogT("viewAllGuides", {
+                destination:
+                  blogT(
+                    blogDestination === "kodaikanal"
+                      ? "destinationKodaikanal"
+                      : blogDestination === "darjeeling"
+                        ? "destinationDarjeeling"
+                        : "destinationGoa",
+                  ),
+              })}
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {blogPosts.map((post) => (
+              <article key={post.slug} className="lux-card overflow-hidden">
+                <Link href={`/blog/${post.slug}`} className="block p-6">
+                  <p className="text-[0.65rem] uppercase tracking-[0.14em] text-mist">
+                    {post.date} · {blogT("read", { count: post.readMinutes })}
+                  </p>
+                  <h3 className="mt-3 font-display text-xl text-white">
+                    {post.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-soft-gray">
+                    {post.excerpt}
+                  </p>
+                </Link>
+              </article>
             ))}
           </div>
         </section>

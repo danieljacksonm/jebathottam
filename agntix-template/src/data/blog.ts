@@ -7,12 +7,15 @@ import {
   type LocalizedStringList,
 } from "@/lib/content/types";
 
+export type BlogDestination = "kodaikanal" | "darjeeling" | "goa";
+
 export type BlogRow = {
   id: string;
   slug: string;
   date: string;
   readMinutes: number;
   image: string;
+  destination?: BlogDestination;
   tags: LocalizedStringList;
   title: LocalizedString;
   excerpt: LocalizedString;
@@ -25,11 +28,18 @@ export type LocalizedBlog = {
   date: string;
   readMinutes: number;
   image: string;
+  destination?: BlogDestination;
   tags: string[];
   title: string;
   excerpt: string;
   body: string[];
 };
+
+export const BLOG_DESTINATIONS: BlogDestination[] = [
+  "kodaikanal",
+  "darjeeling",
+  "goa",
+];
 
 const table = blogsTable as ContentTable<BlogRow>;
 
@@ -58,6 +68,7 @@ export function localizeBlog(
     date: row.date,
     readMinutes: row.readMinutes,
     image: row.image,
+    destination: row.destination,
     tags: pickLocalized(row.tags, locale),
     title: pickLocalized(row.title, locale),
     excerpt: pickLocalized(row.excerpt, locale),
@@ -65,8 +76,29 @@ export function localizeBlog(
   };
 }
 
+export function getBlogDestinations(): BlogDestination[] {
+  return BLOG_DESTINATIONS.filter((slug) =>
+    blogRows.some((row) => row.destination === slug),
+  );
+}
+
+export function getBlogCountByDestination(destination: BlogDestination) {
+  return blogRows.filter((row) => row.destination === destination).length;
+}
+
 export function getLocalizedBlogs(locale: string): LocalizedBlog[] {
   return blogRows.map((row) => localizeBlog(row, locale));
+}
+
+export function getLocalizedBlogsByDestination(
+  locale: string,
+  destination?: string,
+): LocalizedBlog[] {
+  const rows =
+    destination && BLOG_DESTINATIONS.includes(destination as BlogDestination)
+      ? blogRows.filter((row) => row.destination === destination)
+      : blogRows;
+  return rows.map((row) => localizeBlog(row, locale));
 }
 
 export function getLocalizedBlog(slug: string, locale: string) {

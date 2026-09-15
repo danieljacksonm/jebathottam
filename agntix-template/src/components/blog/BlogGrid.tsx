@@ -13,6 +13,7 @@ export type BlogCardItem = {
   tags: string[];
   readLabel: string;
   image: string;
+  destinationLabel?: string;
 };
 
 type BlogGridLabels = {
@@ -88,6 +89,9 @@ export function BlogGrid({
               </div>
               <div className="p-6">
                 <p className="text-[0.65rem] uppercase tracking-[0.14em] text-mist">
+                  {post.destinationLabel ? (
+                    <span className="text-gold/90">{post.destinationLabel} · </span>
+                  ) : null}
                   {post.date} · {post.readLabel}
                 </p>
                 <h2 className="mt-3 font-display text-2xl leading-snug text-white transition-colors duration-300 group-hover:text-gold-bright">
