@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import type { JournalPost } from "@/app/blog/lib";
-import { filterEditorialPosts } from "@/lib/journal-filter";
+import { sortEditorialFirst } from "@/lib/journal-filter";
 
 export async function getJournalPostsForPage(opts?: {
   q?: string;
@@ -27,7 +27,7 @@ export async function getJournalPostsForPage(opts?: {
     return matchesCat && matchesQuery;
   });
 
-  const posts: JournalPost[] = filterEditorialPosts(
+  const posts: JournalPost[] = sortEditorialFirst(
     filtered.slice(0, limit).map((p) => {
       const publishedAt =
         p.publishedAt instanceof Date

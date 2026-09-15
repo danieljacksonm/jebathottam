@@ -24,3 +24,17 @@ export function filterEditorialPosts<T extends {
   const editorial = posts.filter(isEditorialJournalPost);
   return editorial.length > 0 ? editorial : posts.slice(0, 12);
 }
+
+/** Editorial guides first for hero/ticker — never drop Learn · posts from the list. */
+export function sortEditorialFirst<T extends {
+  category?: string;
+  excerpt?: string;
+  author?: string;
+}>(posts: T[]): T[] {
+  const editorial: T[] = [];
+  const edu: T[] = [];
+  for (const post of posts) {
+    (isEditorialJournalPost(post) ? editorial : edu).push(post);
+  }
+  return [...editorial, ...edu];
+}

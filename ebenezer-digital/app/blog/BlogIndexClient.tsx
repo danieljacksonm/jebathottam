@@ -20,7 +20,7 @@ import {
 import { SITE_NAV } from "@/lib/site-nav";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
-import { filterEditorialPosts } from "@/lib/journal-filter";
+import { sortEditorialFirst } from "@/lib/journal-filter";
 import "./journal.css";
 
 const PAGE_SIZE = 24;
@@ -92,8 +92,7 @@ function BlogIndexInner({
   }, [posts, apiCategories]);
 
   const filtered = useMemo(() => {
-    const editorial = filterEditorialPosts(posts);
-    return editorial.filter((p) => {
+    const matched = posts.filter((p) => {
       const q = query.toLowerCase().trim();
       const matchesQuery =
         !q ||
@@ -104,15 +103,39 @@ function BlogIndexInner({
       const matchesCat = activeCategory === "ALL" || p.category === activeCategory;
       return matchesQuery && matchesCat;
     });
+    return sortEditorialFirst(matched);
   }, [posts, query, activeCategory]);
 
   const rotate = useRotate(filtered.length, 120000);
   const rotated = useMemo(() => rotateList(filtered, rotate), [filtered, rotate]);
-  const featured = rotated[0];
-  const trending = rotated.slice(1, 7);
-  const stream = rotated.slice(7, 7 + visible);
-  const latest = rotated.slice(7 + visible, 7 + visible + visible);
-  const hasMore = 7 + visible + visible < rotated.length;
+
+  const { featured, trending, stream, latest, hasMore } = useMemo(() => {
+    const n = rotated.length;
+    if (n === 0) {
+      return { featured: undefined, trending: [], stream: [], latest: [], hasMore: false };
+    }
+    const hero = rotated[0];
+    // Small desks: don't burn 7 slots before Latest — that looked empty with only 4 editorial posts.
+    if (n <= 12) {
+      const rest = rotated.slice(1);
+      const trend = rest.slice(0, Math.min(6, rest.length));
+      const remainder = rest.slice(trend.length);
+      return {
+        featured: hero,
+        trending: trend,
+        stream: remainder.slice(0, visible),
+        latest: remainder.slice(visible, visible + visible),
+        hasMore: visible + visible < remainder.length,
+      };
+    }
+    return {
+      featured: hero,
+      trending: rotated.slice(1, 7),
+      stream: rotated.slice(7, 7 + visible),
+      latest: rotated.slice(7 + visible, 7 + visible + visible),
+      hasMore: 7 + visible + visible < n,
+    };
+  }, [rotated, visible]);
 
   return (
     <div className="journal-root relative min-h-screen">

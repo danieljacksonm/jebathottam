@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { cached } from "@/lib/cache";
-import { filterEditorialPosts } from "@/lib/journal-filter";
+import { sortEditorialFirst } from "@/lib/journal-filter";
 
 export const dynamic = "force-dynamic";
 
@@ -32,8 +32,8 @@ export async function GET(request: Request) {
       });
 
       const start = (page - 1) * limit;
-      const editorial = filterEditorialPosts(filtered);
-      const slice = editorial.slice(start, start + limit).map((p) => ({
+      const ordered = sortEditorialFirst(filtered);
+      const slice = ordered.slice(start, start + limit).map((p) => ({
         id: p.id,
         title: p.title,
         slug: p.slug,
@@ -48,7 +48,7 @@ export async function GET(request: Request) {
 
       return {
         posts: slice,
-        total: editorial.length,
+        total: filtered.length,
         page,
         limit,
         categories,

@@ -261,15 +261,8 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
     /* CMS store can fail on VPS; still return edu journal URLs */
   }
 
-  for (const p of getEduPosts()) {
-    // Mass-generated learn-* explainers stay reachable but are noindex — omit from XML sitemap.
-    if (p.slug.startsWith("learn-")) continue;
-    if (seen.has(p.slug)) continue;
-    seen.add(p.slug);
-    pages.push(
-      articlePage(JOURNAL_URL, `/blog/${p.slug}`, "journal", "weekly", 0.75, new Date(p.publishedAt))
-    );
-  }
+  // Learn-desk explainers are reachable on /blog/{slug} but stay noindex — omit from XML sitemap.
+  // (All generated slugs are learn-*; iterating getEduPosts() here was wasted work on every crawl.)
 
   return pages;
 }

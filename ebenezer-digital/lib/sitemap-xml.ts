@@ -11,9 +11,18 @@ function escapeXml(value: string): string {
 
 type Entry = MetadataRoute.Sitemap[number];
 
+function safeIsoDate(value: Date | string | number | undefined): string | null {
+  if (value == null) return null;
+  const d = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toISOString();
+}
+
 /** Build GSC-safe urlset. Always sets hreflang en + x-default equal to `<loc>`. */
 export function buildUrlsetXml(entries: Entry[]): string {
-  const urls = entries.map((entry) => {
+  const urls = entries
+    .filter((entry) => typeof entry.url === "string" && entry.url.length > 0)
+    .map((entry) => {
     const loc = escapeXml(entry.url);
     const langs = entry.alternates?.languages;
     // Prefer explicit en if present and matching; otherwise always self-reference loc
@@ -40,9 +49,8 @@ export function buildUrlsetXml(entries: Entry[]): string {
       `<xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(xDefault)}" />`,
     ];
 
-    const lastmod = entry.lastModified
-      ? `<lastmod>${new Date(entry.lastModified).toISOString()}</lastmod>`
-      : "";
+    const iso = safeIsoDate(entry.lastModified);
+    const lastmod = iso ? `<lastmod>${iso}</lastmod>` : "";
     const changefreq = entry.changeFrequency
       ? `<changefreq>${entry.changeFrequency}</changefreq>`
       : "";
