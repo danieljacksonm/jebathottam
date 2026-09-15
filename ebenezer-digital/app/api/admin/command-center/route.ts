@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getLiveTools } from "@/lib/network/registry";
-import { NEWS_SITEMAP_MAX_URLS } from "@/lib/news-sitemap-archive";
+import { NEWS_GOOGLE_NEWS_MAX_URLS } from "@/lib/news-sitemap-archive";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { verifyToken } from "@/lib/auth";
 import {
@@ -31,8 +31,10 @@ async function newsSitemapStats() {
     return {
       standardCount,
       googleCount,
-      cap: NEWS_SITEMAP_MAX_URLS,
-      atCap: googleCount >= NEWS_SITEMAP_MAX_URLS,
+      cap: NEWS_GOOGLE_NEWS_MAX_URLS,
+      atCap: googleCount >= NEWS_GOOGLE_NEWS_MAX_URLS,
+      windowDays: 7,
+      archiveDays: 30,
       oldest: dates[0] || null,
       newest: dates.at(-1) || null,
       ok: standard.ok && google.ok,

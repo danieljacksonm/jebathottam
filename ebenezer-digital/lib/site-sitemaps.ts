@@ -281,7 +281,7 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   try {
-    // Keep every story from the last 7 days (archive + live), no hard 400 cut that drops week-old URLs
+    // Every story from the last 7 days (archive + live). Server keeps articles ≥ 30 days.
     const news = await listPublicNewsForSitemap();
     for (const n of news) {
       const loc = newsPublicUrl(n.region, n.slug);

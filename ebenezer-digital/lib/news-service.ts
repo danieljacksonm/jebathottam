@@ -13,7 +13,7 @@ import {
   getArchivedNewsBySlug,
   listNewsForSitemap,
   rememberNewsForSitemap,
-  NEWS_SITEMAP_MAX_URLS,
+  NEWS_GOOGLE_NEWS_MAX_URLS,
   findArchivedNewsByLegacySlug,
   listArchivedNewsRecent,
 } from "@/lib/news-sitemap-archive";
@@ -217,7 +217,7 @@ export function listPublicNewsPreview(limit = 5): PublicNewsItem[] {
     .slice(0, Math.max(1, Math.min(limit, 12)));
 }
 
-/** News URLs for sitemaps — includes stories from the last 7 days even if feeds dropped them. */
+/** News URLs for sitemaps — every story from the last 7 days (archive + live), even if feeds dropped them. */
 export async function listPublicNewsForSitemap(): Promise<PublicNewsItem[]> {
   const current = await listPublicNews();
   return listNewsForSitemap(current) as PublicNewsItem[];
@@ -372,7 +372,8 @@ ${entries}
 }
 
 export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string): string {
-  const urls = items.slice(0, NEWS_SITEMAP_MAX_URLS).map((n) => {
+  // Google News XML: max 1000 URLs/file — week window is included in full when under that.
+  const urls = items.slice(0, NEWS_GOOGLE_NEWS_MAX_URLS).map((n) => {
     const loc = newsPublicUrl(n.region, n.slug);
     const publicationDate = new Date(n.publishedAt).toISOString();
     return `<url>

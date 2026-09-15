@@ -27,16 +27,27 @@ export type ArchivedNewsItem = {
 const DATA_DIR = path.join(process.cwd(), "data");
 const ARCHIVE_FILE = path.join(DATA_DIR, "news-sitemap-archive.json");
 
-/** Keep news in sitemap + archive for at least this long. */
-export const NEWS_SITEMAP_RETENTION_MS = 7 * 24 * 60 * 60 * 1000;
+/** Keep stories on disk / resolvable for at least this long (desk + article URLs). */
+export const NEWS_ARCHIVE_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** Sitemap / Google News XML includes every story published in this window. */
+export const NEWS_SITEMAP_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
- * Max article URLs in news sitemaps (standard + Google News XML).
- * The 7-day window is kept; this cap prevents bloat when ~50 RSS feeds × 20 items
- * accumulate thousands of syndicated URLs. Prioritize CMS, featured, and breaking
- * stories over wire duplicates. Google News XML hard-limits at 5000 — stay well under.
+ * Soft safety ceiling only — week window is included in full when under this.
+ * Google News XML hard-limits at 1000 URLs per file; standard urlset can go higher.
+ * @deprecated Prefer NEWS_GOOGLE_NEWS_MAX_URLS / NEWS_SITEMAP_SOFT_MAX — kept for admin UI.
  */
-export const NEWS_SITEMAP_MAX_URLS = 400;
+export const NEWS_SITEMAP_MAX_URLS = 1000;
+
+/** Google News sitemap format hard limit. */
+export const NEWS_GOOGLE_NEWS_MAX_URLS = 1000;
+
+/** Absolute soft max for standard host sitemap entries from the week window. */
+export const NEWS_SITEMAP_SOFT_MAX = 5000;
+
+/** @deprecated Alias — archive retention is now 30 days. */
+export const NEWS_SITEMAP_RETENTION_MS = NEWS_ARCHIVE_RETENTION_MS;
 
 /** Disk writes at most this often — crawlers were triggering sync rewrite storms. */
 const ARCHIVE_WRITE_MIN_MS = 5 * 60 * 1000;
@@ -68,16 +79,34 @@ function newsSitemapPriority(item: ArchivedNewsItem): number {
   return score;
 }
 
-/** Apply retention window then cap by editorial priority (newest + CMS first). */
-export function capNewsForSitemap(items: ArchivedNewsItem[]): ArchivedNewsItem[] {
-  const sorted = [...items].sort((a, b) => newsSitemapPriority(b) - newsSitemapPriority(a));
-  return sorted.slice(0, NEWS_SITEMAP_MAX_URLS);
+function ageMs(publishedAt: string, now = Date.now()): number {
+  const t = new Date(publishedAt).getTime();
+  if (Number.isNaN(t)) return Number.POSITIVE_INFINITY;
+  return now - t;
 }
 
+function withinArchiveRetention(publishedAt: string, now = Date.now()): boolean {
+  return ageMs(publishedAt, now) <= NEWS_ARCHIVE_RETENTION_MS;
+}
+
+function withinSitemapWindow(publishedAt: string, now = Date.now()): boolean {
+  return ageMs(publishedAt, now) <= NEWS_SITEMAP_WINDOW_MS;
+}
+
+/** @deprecated Use withinArchiveRetention */
 function withinRetention(publishedAt: string, now = Date.now()): boolean {
-  const t = new Date(publishedAt).getTime();
-  if (Number.isNaN(t)) return false;
-  return now - t <= NEWS_SITEMAP_RETENTION_MS;
+  return withinArchiveRetention(publishedAt, now);
+}
+
+/**
+ * Sitemap list: every URL in the 7-day window (newest first).
+ * Soft-max only if volume somehow exceeds NEWS_SITEMAP_SOFT_MAX.
+ */
+export function capNewsForSitemap(items: ArchivedNewsItem[]): ArchivedNewsItem[] {
+  const week = items.filter((n) => withinSitemapWindow(n.publishedAt));
+  const sorted = [...week].sort((a, b) => newsSitemapPriority(b) - newsSitemapPriority(a));
+  if (sorted.length <= NEWS_SITEMAP_SOFT_MAX) return sorted;
+  return sorted.slice(0, NEWS_SITEMAP_SOFT_MAX);
 }
 
 /** Drop article bodies — sitemap/redirects only need metadata. Shrinks disk + CPU. */
@@ -147,13 +176,13 @@ function mergeArchive(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
   const bySlug = new Map<string, ArchivedNewsItem>();
 
   for (const item of idx.file.items) {
-    if (withinRetention(item.publishedAt, now) || item.origin === "cms" || item.origin === "seed") {
+    if (withinArchiveRetention(item.publishedAt, now) || item.origin === "cms" || item.origin === "seed") {
       bySlug.set(item.slug, normalizeArchivedSlug(item));
     }
   }
 
   for (const item of current) {
-    if (!withinRetention(item.publishedAt, now) && item.origin === "live") continue;
+    if (!withinArchiveRetention(item.publishedAt, now) && item.origin === "live") continue;
     const normalized = slimItem(normalizeArchivedSlug(item));
     const existing = bySlug.get(normalized.slug);
     if (
@@ -191,17 +220,13 @@ function mergeArchive(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
     }
   }
 
-  const merged = Array.from(bySlug.values())
-    .filter((n) => withinRetention(n.publishedAt, now) || n.origin === "cms" || n.origin === "seed")
+  return Array.from(bySlug.values())
+    .filter((n) => withinArchiveRetention(n.publishedAt, now) || n.origin === "cms" || n.origin === "seed")
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
-
-  const weekItems = merged.filter((n) => withinRetention(n.publishedAt, now));
-  const olderKept = merged.filter((n) => !withinRetention(n.publishedAt, now)).slice(0, 200);
-  return [...weekItems, ...olderKept];
 }
 
 /**
- * Remember current news so items stay in the sitemap for ≥ 1 week.
+ * Remember current news so items stay on disk for ≥ 30 days and in sitemaps for ≥ 7 days.
  * Throttled + deferred — never sync-write on the request hot path.
  */
 export function rememberNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
@@ -241,20 +266,20 @@ function normalizeArchivedSlug(item: ArchivedNewsItem): ArchivedNewsItem {
   return { ...item, slug: clean, legacySlugs: Array.from(legacy) };
 }
 
-/** Read-only sitemap list — does not rewrite disk on every crawler hit. */
+/** Read-only sitemap list — every URL from the last 7 days. */
 export function listNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
   const now = Date.now();
   const bySlug = new Map<string, ArchivedNewsItem>();
   const idx = getIndex();
 
   for (const item of idx.file.items) {
-    if (!withinRetention(item.publishedAt, now)) continue;
+    if (!withinSitemapWindow(item.publishedAt, now)) continue;
     const n = normalizeArchivedSlug(item);
     if (isLegacySourceDomainSlug(n.slug)) continue;
     bySlug.set(n.slug, n);
   }
   for (const item of current) {
-    if (!withinRetention(item.publishedAt, now)) continue;
+    if (!withinSitemapWindow(item.publishedAt, now)) continue;
     const n = normalizeArchivedSlug(item);
     if (isLegacySourceDomainSlug(n.slug)) continue;
     bySlug.set(n.slug, n);
@@ -280,7 +305,7 @@ export function getArchivedNewsBySlug(slug: string): ArchivedNewsItem | undefine
   const idx = getIndex();
   const item = idx.bySlug.get(slug) || idx.byLegacy.get(slug);
   if (!item) return undefined;
-  if (!withinRetention(item.publishedAt) && item.origin === "live") return undefined;
+  if (!withinArchiveRetention(item.publishedAt) && item.origin === "live") return undefined;
   return normalizeArchivedSlug(item);
 }
 
@@ -289,12 +314,12 @@ export function findArchivedNewsByLegacySlug(slug: string): ArchivedNewsItem | u
   const idx = getIndex();
   const direct = idx.bySlug.get(slug) || idx.byLegacy.get(slug);
   if (direct) {
-    if (!withinRetention(direct.publishedAt) && direct.origin === "live") return undefined;
+    if (!withinArchiveRetention(direct.publishedAt) && direct.origin === "live") return undefined;
     return normalizeArchivedSlug(direct);
   }
   for (const n of idx.file.items) {
     if (n.originalUrl && legacySlugFromSourceUrl(n.originalUrl) === slug) {
-      if (!withinRetention(n.publishedAt) && n.origin === "live") continue;
+      if (!withinArchiveRetention(n.publishedAt) && n.origin === "live") continue;
       return normalizeArchivedSlug(n);
     }
   }
@@ -304,7 +329,7 @@ export function findArchivedNewsByLegacySlug(slug: string): ArchivedNewsItem | u
 /** Recent archived items for related-rail (no RSS). */
 export function listArchivedNewsRecent(limit = 80): ArchivedNewsItem[] {
   return getIndex()
-    .file.items.filter((n) => withinRetention(n.publishedAt) || n.origin === "cms" || n.origin === "seed")
+    .file.items.filter((n) => withinArchiveRetention(n.publishedAt) || n.origin === "cms" || n.origin === "seed")
     .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
     .slice(0, limit)
     .map(normalizeArchivedSlug);

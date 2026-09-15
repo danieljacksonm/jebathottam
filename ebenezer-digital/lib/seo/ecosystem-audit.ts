@@ -1,6 +1,6 @@
 import { getLiveTools } from "@/lib/network/registry";
 import { NETWORK_GUIDES } from "@/lib/network/guides";
-import { NEWS_SITEMAP_MAX_URLS } from "@/lib/news-sitemap-archive";
+import { NEWS_GOOGLE_NEWS_MAX_URLS } from "@/lib/news-sitemap-archive";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { ECOSYSTEM_SITES } from "@/lib/command-center/health-check";
 import { gscVerificationForKind } from "@/lib/site-url";
@@ -36,7 +36,7 @@ export function runStaticSeoAudit(): SeoAuditResult {
       missingCanonical: 0,
     },
     guides: NETWORK_GUIDES.length,
-    newsSitemapCap: NEWS_SITEMAP_MAX_URLS,
+    newsSitemapCap: NEWS_GOOGLE_NEWS_MAX_URLS,
     ga4: Boolean(GA_MEASUREMENT_ID),
     gscHostsConfigured: gscConfigured,
     gscHostsTotal: ECOSYSTEM_SITES.length,
