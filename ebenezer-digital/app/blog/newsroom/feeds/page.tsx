@@ -17,7 +17,7 @@ const FEEDS = [
   {
     name: "Google News sitemap",
     url: `${NEWS_URL}/api/news/sitemap`,
-    use: "Google Search Console + Publisher Center (recent news URLs)",
+    use: "Google Search Console + Publisher Center (index splits at 1000 URLs/file)",
   },
   {
     name: "Journal RSS",

@@ -371,9 +371,18 @@ ${entries}
 </rss>`;
 }
 
-export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string): string {
-  // Google News XML: max 1000 URLs/file — week window is included in full when under that.
-  const urls = items.slice(0, NEWS_GOOGLE_NEWS_MAX_URLS).map((n) => {
+export function buildNewsSitemapXml(
+  items: PublicNewsItem[],
+  siteOrigin: string,
+  opts?: { offset?: number; limit?: number }
+): string {
+  // Google News XML: max 1000 URLs/file — use offset/limit for multi-file indexes.
+  const offset = Math.max(0, opts?.offset ?? 0);
+  const limit = Math.min(
+    NEWS_GOOGLE_NEWS_MAX_URLS,
+    Math.max(1, opts?.limit ?? NEWS_GOOGLE_NEWS_MAX_URLS)
+  );
+  const urls = items.slice(offset, offset + limit).map((n) => {
     const loc = newsPublicUrl(n.region, n.slug);
     const publicationDate = new Date(n.publishedAt).toISOString();
     return `<url>
@@ -397,6 +406,29 @@ export function buildNewsSitemapXml(items: PublicNewsItem[], siteOrigin: string)
 >
 ${urls.join("\n")}
 </urlset>`;
+}
+
+/** Sitemap index pointing at /api/news/sitemap/0 … N-1 (1000 URLs each). */
+export function buildNewsSitemapIndexXml(totalItems: number, siteOrigin: string): string {
+  const origin = siteOrigin.replace(/\/$/, "") || NEWS_URL;
+  const chunks = Math.max(1, Math.ceil(totalItems / NEWS_GOOGLE_NEWS_MAX_URLS));
+  const lastmod = new Date().toISOString();
+  const body = Array.from({ length: chunks }, (_, i) => {
+    const loc = `${origin}/api/news/sitemap/${i}`;
+    return `<sitemap>
+  <loc>${escapeXml(loc)}</loc>
+  <lastmod>${lastmod}</lastmod>
+</sitemap>`;
+  }).join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${body}
+</sitemapindex>`;
+}
+
+export function newsSitemapChunkCount(totalItems: number): number {
+  return Math.max(1, Math.ceil(Math.max(0, totalItems) / NEWS_GOOGLE_NEWS_MAX_URLS));
 }
 
 function icsDate(iso: string): string {

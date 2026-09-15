@@ -21,8 +21,12 @@ type CommandCenterData = {
   newsSitemap: {
     standardCount: number;
     googleCount: number;
-    cap: number;
-    atCap: boolean;
+    chunkFiles?: number;
+    capPerFile?: number;
+    cap?: number;
+    atCap?: boolean;
+    windowDays?: number;
+    archiveDays?: number;
     oldest: string | null;
     newest: string | null;
     ok: boolean;
@@ -121,7 +125,7 @@ export default function CommandCenterPage() {
               value={data.newsSitemap ? String(data.newsSitemap.googleCount) : "—"}
               sub={
                 data.newsSitemap
-                  ? `Cap ${data.newsSitemap.cap}${data.newsSitemap.atCap ? " · at cap" : ""}`
+                  ? `${data.newsSitemap.chunkFiles || 1} file(s) · ${data.newsSitemap.capPerFile || data.newsSitemap.cap || 1000}/file`
                   : "Could not fetch"
               }
             />
@@ -174,10 +178,14 @@ export default function CommandCenterPage() {
               <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-3">
                 <Item label="Standard sitemap URLs" value={String(data.newsSitemap.standardCount)} />
                 <Item label="Google News XML URLs" value={String(data.newsSitemap.googleCount)} />
-                <Item label="Configured cap" value={String(data.newsSitemap.cap)} />
+                <Item label="Chunk files" value={String(data.newsSitemap.chunkFiles || 1)} />
+                <Item
+                  label="Per-file cap"
+                  value={String(data.newsSitemap.capPerFile || data.newsSitemap.cap || 1000)}
+                />
                 <Item label="Oldest in Google XML" value={data.newsSitemap.oldest || "—"} />
                 <Item label="Newest in Google XML" value={data.newsSitemap.newest || "—"} />
-                <Item label="Window" value="7 days (unchanged)" />
+                <Item label="Window" value="7 days in sitemap · 30 days on server" />
               </dl>
             </section>
           ) : null}

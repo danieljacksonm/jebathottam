@@ -35,7 +35,9 @@ export default function EditorialPolicyPage() {
           claims that outside reporters work for Ebenezer Digital.
         </p>
         <p>
-          Wire stories remain in our Google News sitemap for seven days, then roll off the index.
+          Wire stories remain in our Google News sitemap for seven days (split across multiple
+          sitemap files when there are more than 1,000 URLs). Article pages stay available on the
+          server for at least 30 days.
         </p>
         <p>
           Original CMS stories written by Ebenezer editors follow the same dating, correction, and source

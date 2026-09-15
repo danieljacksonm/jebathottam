@@ -49,6 +49,7 @@ export default function robots(): MetadataRoute.Robots {
           "/api/news/rss",
           "/api/news/ical",
           "/api/news/sitemap",
+          "/api/news/sitemap/",
         ]
       : ["/", "/llms.txt", "/sitemap.html", "/sitemaps/", "/api/blog/rss"];
 

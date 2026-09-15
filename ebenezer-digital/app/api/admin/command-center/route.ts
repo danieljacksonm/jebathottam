@@ -23,16 +23,46 @@ async function newsSitemapStats() {
     const standardXml = standard.ok ? await standard.text() : "";
     const googleXml = google.ok ? await google.text() : "";
     const standardCount = (standardXml.match(/<loc>/g) || []).length;
-    const googleCount = (googleXml.match(/<loc>/g) || []).length;
-    const dates = Array.from(
-      googleXml.matchAll(/<news:publication_date>([^<]+)<\/news:publication_date>/g)
-    ).map((m) => m[1]);
+
+    let googleCount = 0;
+    let dates: string[] = [];
+    let chunkFiles = 0;
+
+    if (googleXml.includes("<sitemapindex")) {
+      const chunkLocs = Array.from(
+        googleXml.matchAll(/<sitemap>\s*<loc>([^<]+)<\/loc>/g)
+      ).map((m) => m[1]);
+      chunkFiles = chunkLocs.length;
+      const chunks = await Promise.all(
+        chunkLocs.map((loc) =>
+          fetch(loc, { cache: "no-store", signal: AbortSignal.timeout(15000) })
+            .then(async (r) => (r.ok ? r.text() : ""))
+            .catch(() => "")
+        )
+      );
+      for (const xml of chunks) {
+        googleCount += (xml.match(/<loc>/g) || []).length;
+        dates.push(
+          ...Array.from(xml.matchAll(/<news:publication_date>([^<]+)<\/news:publication_date>/g)).map(
+            (m) => m[1]
+          )
+        );
+      }
+    } else {
+      chunkFiles = 1;
+      googleCount = (googleXml.match(/<loc>/g) || []).length;
+      dates = Array.from(
+        googleXml.matchAll(/<news:publication_date>([^<]+)<\/news:publication_date>/g)
+      ).map((m) => m[1]);
+    }
+
     dates.sort();
     return {
       standardCount,
       googleCount,
-      cap: NEWS_GOOGLE_NEWS_MAX_URLS,
-      atCap: googleCount >= NEWS_GOOGLE_NEWS_MAX_URLS,
+      chunkFiles,
+      capPerFile: NEWS_GOOGLE_NEWS_MAX_URLS,
+      atCap: chunkFiles > 0 && googleCount >= NEWS_GOOGLE_NEWS_MAX_URLS * chunkFiles,
       windowDays: 7,
       archiveDays: 30,
       oldest: dates[0] || null,
