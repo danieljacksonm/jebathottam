@@ -8,7 +8,7 @@ import { EnhancedImageSlider } from '@/components/ui/enhanced-image-slider';
 import { Navigation } from '@/components/layout/navigation';
 import { Footer } from '@/components/layout/footer';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ministryInfo as defaultInfo, blogPosts, events, missionVision as defaultMV } from '@/data/demo-content';
+import { ministryInfo as defaultInfo, blogPosts, events, ministryPillars } from '@/data/demo-content';
 import { galleryImages as fallbackGalleryImages } from '@/data/gallery-content';
 import { getOptimizedImageUrl, getImageSrc } from '@/lib/image-utils';
 import { AudioPlayer } from '@/components/audio/audio-player';
@@ -304,20 +304,19 @@ export default function Home() {
       }));
 
   const galleryForHome = homeGallery.length > 0 ? homeGallery : fallbackGalleryImages.slice(0, 6);
-  const mv = defaultMV;
   const sectionOrder: string[] = getShuffledSections(currentHour);
 
   const about = {
-    heading: siteSettings.about_heading || 'Our Story',
-    text: siteSettings.about_text || 'We are a community dedicated to spreading faith and hope.',
-    textSecondary: siteSettings.about_text_secondary || 'Join us in our mission to make a difference.',
+    heading: siteSettings.about_heading || 'Welcome to Our Fellowship',
+    text: siteSettings.about_text || 'Jesus is the Way Jebathottam in Keelamudiman, Tuticorin is a Christian fellowship and prayer ministry dedicated to leading individuals into a deeper relationship with God. Under the direction of Pastor Bro. John Barnabas and Sis. Anselma John, we conduct physical fasting prayers, weekly Sunday services, and daily conference calls.',
+    textSecondary: siteSettings.about_text_secondary || 'Our mission is to establish prayer altars that intercede for family restoration, youth guidance, and national spiritual revival. We invite you to seek the Lord early in the morning and experience his peaceful grace.',
   };
 
   const info = {
-    name: siteSettings.ministry_name || 'Digital Ministry Platform',
-    subtitle: siteSettings.ministry_subtitle || 'Spreading Faith Through Technology',
-    tagline: siteSettings.ministry_tagline || 'Where Faith Meets Innovation',
-    scripture: siteSettings.ministry_scripture || 'For where two or three gather in my name, there am I with them. - Matthew 18:20',
+    name: siteSettings.ministry_name || defaultInfo.name,
+    subtitle: siteSettings.ministry_subtitle || defaultInfo.subtitle,
+    tagline: siteSettings.ministry_tagline || defaultInfo.tagline,
+    scripture: siteSettings.ministry_scripture || defaultInfo.scripture,
   };
 
   /* ════════════════════════════════════════════════════════════════════════
@@ -476,38 +475,27 @@ export default function Home() {
           <ScrollReveal>
             <div className="max-w-2xl mb-16">
               <span className="text-[11px] sm:text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-[0.2em]">Purpose</span>
-              <AnimatedHeading text="Mission & Vision" className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-3 mb-4 tracking-tight" />
-              <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">The calling that drives everything we do</p>
+              <AnimatedHeading text="Our Three Pillars" className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-gray-900 dark:text-white mt-3 mb-4 tracking-tight" />
+              <p className="text-lg text-gray-500 dark:text-gray-400 leading-relaxed">We ground our ministry in three key callings which help lead believers into a deeper walk with Jesus Christ</p>
             </div>
           </ScrollReveal>
 
           <InViewStagger>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-5xl">
-              <InViewStaggerItem>
-                <motion.div
-                  whileHover={{ y: -6, boxShadow: `0 25px 50px -12px ${accent.glow}` }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
-                  className="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-10 lg:p-12 border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-500 h-full relative overflow-hidden group"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: accent.gradient }} />
-                  <div className="text-5xl mb-6">{mv.mission.icon}</div>
-                  <h3 className="text-xl lg:text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">{mv.mission.title}</h3>
-                  <p className="text-gray-500 dark:text-gray-400 leading-relaxed">{mv.mission.description}</p>
-                </motion.div>
-              </InViewStaggerItem>
-
-              <InViewStaggerItem>
-                <motion.div
-                  whileHover={{ y: -6, boxShadow: `0 25px 50px -12px ${accent.glow}` }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
-                  className="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-10 lg:p-12 border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-500 h-full relative overflow-hidden group"
-                >
-                  <div className="absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: accent.gradient }} />
-                  <div className="text-5xl mb-6">{mv.vision.icon}</div>
-                  <h3 className="text-xl lg:text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">{mv.vision.title}</h3>
-                  <p className="text-gray-500 dark:text-gray-400 leading-relaxed">{mv.vision.description}</p>
-                </motion.div>
-              </InViewStaggerItem>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl">
+              {ministryPillars.map((pillar) => (
+                <InViewStaggerItem key={pillar.title}>
+                  <motion.div
+                    whileHover={{ y: -6, boxShadow: `0 25px 50px -12px ${accent.glow}` }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    className="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-10 border border-gray-100 dark:border-gray-800 shadow-sm transition-all duration-500 h-full relative overflow-hidden group"
+                  >
+                    <div className="absolute top-0 left-0 w-full h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: accent.gradient }} />
+                    <div className="text-5xl mb-6">{pillar.icon}</div>
+                    <h3 className="text-xl lg:text-2xl font-serif font-bold text-gray-900 dark:text-white mb-4">{pillar.title}</h3>
+                    <p className="text-gray-500 dark:text-gray-400 leading-relaxed">{pillar.description}</p>
+                  </motion.div>
+                </InViewStaggerItem>
+              ))}
             </div>
           </InViewStagger>
 

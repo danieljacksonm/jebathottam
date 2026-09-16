@@ -1,7 +1,7 @@
 export const testimonies = [
   {
     id: 1,
-    name: 'Sarah Johnson',
+    name: 'Sis. Anselma John',
     location: 'New York, USA',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     testimony: 'Through this ministry, I found hope and purpose. The teachings have transformed my life and brought me closer to God. I am forever grateful for the prophetic words that guided me through difficult times.',
@@ -11,7 +11,7 @@ export const testimonies = [
   },
   {
     id: 2,
-    name: 'Michael Chen',
+    name: 'Bro. John Barnabas',
     location: 'California, USA',
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
     testimony: 'The continuous worship audio has been a blessing in my daily walk. It keeps me connected to God throughout the day, and I\'ve seen incredible breakthroughs in my prayer life.',

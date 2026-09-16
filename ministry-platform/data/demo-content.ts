@@ -3,7 +3,8 @@
 export const ministryInfo = {
   name: 'Jesus is the Way Jebathottam',
   subtitle: 'Jebathottam',
-  tagline: 'The place where God dwells',
+  tagline: 'A Christian prayer ministry in Keelamudiman, Tuticorin — seeking spiritual revival through daily prayer and fellowship.',
+  motto: 'The place where God dwells',
   scripture: 'We aim to express our love of Jesus Christ by living the will of the Father.',
   email: 'anselmajohn2020@gmail.com',
   phone: '+91 9380662377 / +91 9884239002',
@@ -20,7 +21,7 @@ export const sliderImages = [
     src: 'https://jesusisthewayjebathottam.com/images/parallax-1-1920x90044.jpeg',
     alt: 'Jesus is the Way Jebathottam',
     title: 'Welcome to Jesus is the Way Jebathottam',
-    description: 'The place where God dwells — a caring and gracious spirit',
+    description: 'Seeking spiritual revival through daily prayer and fellowship',
   },
   {
     id: 2,
@@ -67,7 +68,7 @@ export const blogPosts = [
     `,
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop',
     date: '2024-01-15',
-    author: 'Pastor John Smith',
+    author: 'Bro. John Barnabas',
     category: 'Teaching',
     featured: true,
   },
@@ -88,7 +89,7 @@ export const blogPosts = [
     `,
     image: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800&h=400&fit=crop',
     date: '2024-01-10',
-    author: 'Pastor Sarah Johnson',
+    author: 'Sis. Anselma John',
     category: 'Reflection',
     featured: false,
   },
@@ -106,7 +107,7 @@ export const blogPosts = [
     `,
     image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&h=400&fit=crop',
     date: '2024-01-05',
-    author: 'Pastor Michael Chen',
+    author: 'Bro. John Barnabas',
     category: 'Community',
     featured: false,
   },
@@ -121,7 +122,7 @@ export const blogPosts = [
     `,
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=400&fit=crop',
     date: '2023-12-28',
-    author: 'Pastor John Smith',
+    author: 'Bro. John Barnabas',
     category: 'Mission',
     featured: false,
   },
@@ -132,7 +133,7 @@ export const teamMembers = [
     id: 1,
     name: 'Bro. John Barnabas',
     role: 'Pastor & Founder',
-    bio: 'Brother John Barnabas is the primary guide of Jesus is the Way Jebathottam, leading outreach ministries and overseeing spiritual developments in Keelamudiman, Tuticorin. Balancing corporate assignments with dynamic service commitments, he leads with a heart for community restoration and youth development. He coordinates local fasting prayers and weekly services.',
+    bio: 'Bro. John Barnabas leads this mission, balancing business callings with full-time dedication to local ministry. He leads outreach, coordinates fasting prayers and weekly services, and oversees spiritual developments in Keelamudiman, Tuticorin.',
     image: 'https://jesusisthewayjebathottam.com/images/team-1-170x172.png',
     email: 'anselmajohn2020@gmail.com',
     phone: '+91 9380662377',
@@ -141,7 +142,7 @@ export const teamMembers = [
     id: 2,
     name: 'Sis. Anselma John',
     role: 'Pastor & Prayer Leader',
-    bio: 'Sister Anselma John directs the virtual prayer chambers of the ministry, shepherding hundreds of daily prayer line attendees in Tamil Nadu. Devoted fully to continuous intercessions, she supports families and youth through direct counseling and daily scriptures. She leads morning, noon, and night prayer calls on conference lines.',
+    bio: 'Sis. Anselma John dedicates her life fully to prayer operations, ministering to hundreds daily via online lines. She manages morning, noon, and night conference calls and supports families and youth through intercession and counseling.',
     image: 'https://jesusisthewayjebathottam.com/images/team-2-170x172.png',
     email: 'anselmajohn2020@gmail.com',
     phone: '+91 9884239002',
@@ -182,7 +183,7 @@ export const events = [
     date: '2024-03-03',
     time: '4:30 AM - 5:30 AM',
     location: 'Free Conference Call: anselmajohn919',
-    description: 'Youth team 5:30 AM - 6:00 AM: jesusisthewayjebathottam',
+    description: 'Youth team 5:30 AM - 6:00 AM: jesusisthewayjebathottam — https://join.freeconferencecall.com/anselmajohn919 (morning) / https://join.freeconferencecall.com/jesusisthewayjebathottam (youth)',
     type: 'Online',
   },
   {
@@ -191,7 +192,7 @@ export const events = [
     date: '2024-03-03',
     time: '12:00 PM - 1:00 PM',
     location: 'Free Conference Call: anselmajohn919',
-    description: 'Join online for noon prayer.',
+    description: 'Join online for noon prayer — https://join.freeconferencecall.com/anselmajohn919',
     type: 'Online',
   },
   {
@@ -200,7 +201,7 @@ export const events = [
     date: '2024-03-03',
     time: '9:45 PM - 11:00 PM',
     location: 'Free Conference Call: anselmajohn919',
-    description: 'Bible reading 9:45-10:00 PM, Getsmanae Prayer 10:00-11:00 PM.',
+    description: 'Bible reading 9:45-10:00 PM, Getsmanae Prayer 10:00-11:00 PM — https://join.freeconferencecall.com/anselmajohn919',
     type: 'Online',
   },
 ];
@@ -208,12 +209,87 @@ export const events = [
 export const missionVision = {
   mission: {
     title: 'Our Mission',
-    description: 'Our mission is to have revival in our country. If you like, you can be also one among that wonderful mission.',
+    description:
+      'Raising an altar of prayer to spark a holy revival in Tamil Nadu. We stand in intercession for broken families and struggling youth.',
     icon: '📖',
   },
   vision: {
     title: 'Prayer Life',
-    description: 'Join with our Prayer Community to have better Prayer life, to have good communication with God.',
+    description:
+      'Foster a disciplined daily quiet hour. Our morning calls at 4:30 AM and 5:30 AM establish spiritual alignment before daily duties begin.',
     icon: '🙏',
   },
+  bible: {
+    title: 'Bible Meditation',
+    description:
+      'Understanding scriptural truths through systematic daily reading. We seek to apply biblical principles to overcome worldly challenges.',
+    icon: '✝️',
+  },
 };
+
+export const ministryPillars = [
+  missionVision.vision,
+  missionVision.mission,
+  missionVision.bible,
+];
+
+export const startHereLinks = [
+  {
+    title: 'Daily online prayer schedule',
+    href: '/services',
+    detail: 'Tuticorin & worldwide',
+  },
+  {
+    title: 'Youth morning prayer 5:30 AM',
+    href: '/attendance',
+    detail: 'Mark attendance',
+  },
+  {
+    title: 'Carmel 24x7 prayer watch',
+    href: '/carmel-attendance',
+    detail: 'கர்மேல் ஜெபம்',
+  },
+  {
+    title: 'Christian devotionals & Bible encouragement',
+    href: '/blog',
+    detail: 'Read & share',
+  },
+  {
+    title: 'Send a confidential prayer request',
+    href: '/contact',
+    detail: 'We will pray with you',
+  },
+  {
+    title: 'Monthly fasting prayer',
+    href: '/services',
+    detail: 'Chennai & Keelamudiman',
+  },
+];
+
+export const faqItems = [
+  {
+    question: 'What is Jesus is the Way Jebathottam?',
+    answer:
+      'Jesus is the Way Jebathottam is a Christian prayer ministry based in Keelamudiman, Tuticorin, Tamil Nadu. Led by Bro. John Barnabas and Sis. Anselma John, we seek spiritual revival through weekly physical services, monthly fasting prayers, and daily online prayer lines.',
+  },
+  {
+    question: 'When is the Youth Morning Prayer?',
+    answer:
+      'Every day from 5:30 AM to 6:00 AM online via FreeConferenceCall using the dial-in link: jesusisthewayjebathottam. Youth attendees are encouraged to register their attendance online.',
+  },
+  {
+    question: 'How do I join the online prayer?',
+    answer:
+      'Visit https://join.freeconferencecall.com/jesusisthewayjebathottam for the youth morning prayer, or https://join.freeconferencecall.com/anselmajohn919 for daily morning (4:30 AM), noon (12:00 PM), and night (9:45 PM) prayers. These calls are free and open to everyone.',
+  },
+  {
+    question: 'When and where is the Fasting Prayer?',
+    answer:
+      'The monthly Fasting Prayer is held on the Second Saturday at 10:00 AM in Getsamanae Jebasthalam, Chennai, and on the Last Saturday at 10:00 AM in Jesus is the Way Jebathottam, Keelamudiman, Tuticorin.',
+  },
+  {
+    question: 'Who leads Jesus is the Way Jebathottam?',
+    answer:
+      'The ministry is led by Bro. John Barnabas (Pastor and founder) and Sis. Anselma John (Pastor). They coordinate physical worship gatherings and manage the daily intercessory phone lines.',
+  },
+];

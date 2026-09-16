@@ -42,7 +42,7 @@ export const exampleSliderSlides = [
 export const exampleTestimonies = [
   {
     id: 0,
-    name: 'Sarah Johnson',
+    name: 'Sis. Anselma John',
     content: 'Through this ministry, I found hope and purpose. The teachings have transformed my life and brought me closer to God. I am forever grateful for the prophetic words that guided me through difficult times.',
     image_url: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     created_at: '2024-01-10T00:00:00.000Z',
@@ -50,7 +50,7 @@ export const exampleTestimonies = [
   },
   {
     id: -1,
-    name: 'Michael Chen',
+    name: 'Bro. John Barnabas',
     content: "The continuous worship audio has been a blessing in my daily walk. It keeps me connected to God throughout the day, and I've seen incredible breakthroughs in my prayer life.",
     image_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
     created_at: '2024-01-05T00:00:00.000Z',

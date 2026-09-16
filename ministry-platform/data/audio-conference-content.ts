@@ -22,7 +22,7 @@ export const audioConferences: AudioConference[] = [
     title: 'Prayer & Intercession Session',
     description: 'Join us for a powerful time of prayer and intercession. We will be praying for our nation, families, and personal breakthroughs.',
     speaker: {
-      name: 'Pastor John Smith',
+      name: 'Pastor Bro. John Barnabas',
       role: 'Senior Pastor',
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
     },
@@ -39,7 +39,7 @@ export const audioConferences: AudioConference[] = [
     title: 'Bible Study: Book of Romans',
     description: 'Deep dive into the Book of Romans. We will explore Paul\'s letter and its relevance to our lives today.',
     speaker: {
-      name: 'Pastor Sarah Johnson',
+      name: 'Pastor Sis. Anselma John',
       role: 'Teaching Pastor',
       image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
     },
@@ -56,7 +56,7 @@ export const audioConferences: AudioConference[] = [
     title: 'Worship & Testimony Night',
     description: 'An evening of worship, testimonies, and fellowship. Share what God has done in your life!',
     speaker: {
-      name: 'Michael Chen',
+      name: 'Bro. John Barnabas',
       role: 'Worship Leader',
       image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
     },

@@ -22,11 +22,11 @@ const SITE_NAME = "Jesus is the Way Jebathottam";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Preserving God's Word for Generations`,
+    default: `${SITE_NAME} | Christian Prayer Ministry Tuticorin Tamil Nadu`,
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    "Jesus is the Way Jebathottam — a trusted ministry platform for teachings, prophecies, prayer, and community.",
+    "A Christian prayer ministry in Keelamudiman, Tuticorin — seeking spiritual revival through daily prayer, youth morning prayer, fasting prayer, and fellowship.",
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -34,13 +34,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: SITE_NAME,
     description:
-      "Teachings, prayer, and community from Jesus is the Way Jebathottam ministry.",
+      "Christian prayer ministry in Keelamudiman, Tuticorin. Daily online prayer, youth morning prayer, fasting prayer, and 24x7 Carmel watch.",
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_NAME,
     description:
-      "Teachings, prayer, and community from Jesus is the Way Jebathottam ministry.",
+      "Christian prayer ministry in Keelamudiman, Tuticorin. Daily online prayer, youth morning prayer, fasting prayer, and 24x7 Carmel watch.",
   },
 };
 
