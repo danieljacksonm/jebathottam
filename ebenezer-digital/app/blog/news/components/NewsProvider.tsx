@@ -3,9 +3,9 @@
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { NewsArticle, NewsNavId } from "../data";
 
-const CACHE_KEY = "eben-news-cache-v4";
+const CACHE_KEY = "eben-news-cache-v5";
 const POLL_MS = 90_000;
-const PAGE = 40;
+const PAGE = 120;
 
 type NewsContextValue = {
   articles: NewsArticle[];

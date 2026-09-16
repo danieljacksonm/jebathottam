@@ -96,13 +96,24 @@ export function NewsHome() {
       }
       return out;
     };
-    const briefing = take(12);
     const lead = heroLead;
     const secondary = take(4);
+
+    // MSN-style: fill Live + More from the headline feed first (stories may repeat in lower modules).
+    const liveHeadlines = rotated.filter((a) => a.breaking || a.origin === "live");
+    const live =
+      liveHeadlines.length >= 10
+        ? liveHeadlines.slice(0, 12)
+        : [
+            ...liveHeadlines,
+            ...rotated.filter(
+              (a) => !liveHeadlines.some((h) => keyOf(h) === keyOf(a))
+            ),
+          ].slice(0, 12);
+    const wireMore = rotated.filter((a) => keyOf(a) !== keyOf(lead)).slice(0, 24);
+
+    const briefing = take(8);
     const compact = take(8);
-    const wireMore = take(24);
-    let live = take(12, rotated, (a) => Boolean(a.breaking));
-    if (live.length < 10) live = live.concat(take(10 - live.length));
     const topBig = take(1);
     const topPair = take(2);
     const trending = take(10);
@@ -199,7 +210,7 @@ export function NewsHome() {
                 news.ebenezerdigital.info
               </p>
               <p className="mt-2 text-sm leading-relaxed text-[var(--n-muted)]">
-                One royal paper desk for the world — wires rotate, no story repeats on this page.
+                One royal paper desk for the world — live wires up top, deeper modules below.
               </p>
               {updatedAt && (
                 <p className="mt-3 text-[10px] uppercase tracking-[0.2em] text-[var(--n-live)]">

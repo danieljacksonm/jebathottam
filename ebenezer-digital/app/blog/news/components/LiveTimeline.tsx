@@ -8,6 +8,7 @@ import { newsHref } from "@/lib/news-url";
 
 export function LiveTimeline({ stories }: { stories: NewsArticle[] }) {
   const items = stories.slice(0, 14);
+  if (!items.length) return null;
 
   return (
     <section id="live" className="border-y border-[var(--n-line)] px-4 py-16 sm:px-8 lg:px-12">

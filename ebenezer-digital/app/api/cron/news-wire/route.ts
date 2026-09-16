@@ -7,12 +7,8 @@ import { upsertNewsLibrary } from "@/lib/news-library";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-/**
- * Cron/wire refresh. Set CRON_SECRET and call with Authorization: Bearer secret.
- * Example crontab (every 10 minutes, off the hot path):
- *   */10 * * * * dani … /api/cron/news-wire
- *   curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" https://news.ebenezerdigital.info/api/cron/news-wire
- */
+// Cron/wire refresh. Set CRON_SECRET and call with Authorization: Bearer secret.
+// Schedule: every 10 minutes — see scripts/install-news-wire-cron.sh
 export async function POST(request: NextRequest) {
   const secret = process.env.CRON_SECRET?.trim();
   if (!secret) {

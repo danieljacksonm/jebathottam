@@ -181,15 +181,16 @@ export function invalidatePublicNewsMemo(): void {
   listPublicMemo = null;
 }
 
-/** Page size for the live desk. Total stored stories are not capped. */
-export const NEWS_HOME_CLIENT_LIMIT = 40;
+/** Page size for the MSN-style home desk — enough stories to fill every module. */
+export const NEWS_HOME_CLIENT_LIMIT = 120;
 
-export async function listPublicNewsForHome(limit = 40): Promise<PublicNewsItem[]> {
+export async function listPublicNewsForHome(limit = NEWS_HOME_CLIENT_LIMIT): Promise<PublicNewsItem[]> {
   const list = await listPublicNews();
   const sorted = [...list].sort(
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
-  return sorted.slice(0, Math.max(1, Math.min(limit, 40)));
+  const cap = Math.max(1, Math.min(limit, NEWS_HOME_CLIENT_LIMIT));
+  return sorted.slice(0, cap);
 }
 
 /** Latest publishedAt among items — for desk “latest story” labels (not fetch time). */
@@ -303,7 +304,8 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
     limit: pageSize,
     offset,
   });
-  if (fromDb && (query || since || fromDb.total > 0)) {
+  // DB is for search / refresh — do not replace the full wire+archive desk when browsing home.
+  if (fromDb && (query || since)) {
     const items = fromDb.items.map((n) => archiveToPublic(n));
     return {
       total: fromDb.total,
@@ -316,7 +318,10 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
     };
   }
 
-  const pool = query || since ? listArchivedNewsAll().map(archiveToPublic) : await listPublicNews();
+  const pool =
+    query || since || offset > 0
+      ? listArchivedNewsAll().map(archiveToPublic)
+      : await listPublicNews();
   let list = pool;
 
   if (since) {

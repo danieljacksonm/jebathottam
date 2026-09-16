@@ -4,7 +4,7 @@ import { searchPublicNews } from "@/lib/news-service";
 export const dynamic = "force-dynamic";
 
 const MAX_LIMIT = 100;
-const DEFAULT_LIMIT = 40;
+const DEFAULT_LIMIT = 120;
 
 /** Public search API for E> World News */
 export async function GET(request: NextRequest) {
