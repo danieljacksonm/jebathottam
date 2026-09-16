@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id               String   @id
+  slug             String   @unique
+  name             String
+  description      String
+  shortDescription String
+  price            Int
+  compareAtPrice   Int?
+  tradePrice       Int?
+  currency         String   @default("INR")
+  imageUrl         String
+  imagesJson       String   @default("[]")
+  category         String
+  categoriesJson   String   @default("[]")
+  tagsJson         String   @default("[]")
+  keywordsJson     String   @default("[]")
+  sku              String   @unique
+  brand            String   @default("Raj Stickers")
+  material         String   @default("High Quality PVC")
+  finish           String
+  finishLabel      String
+  color            String
+  adhesive         String   @default("High Tack, Air Release")
+  thickness        String   @default("~150 Micron")
+  stock            Int      @default(0)
+  featured         Boolean  @default(false)
+  bestSeller       Boolean  @default(false)
+  newArrival       Boolean  @default(false)
+  published        Boolean  @default(true)
+  seoTitle         String
+  seoDescription   String
+  altText          String
+  applicationJson  String   @default("[]")
+  careJson         String   @default("[]")
+  detailsJson      String   @default("[]")
+  faqJson          String   @default("[]")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  sizes            ProductSize[]
+  billItems        BillItem[]
+}
+
+model ProductSize {
+  id              String  @id @default(cuid())
+  productId       String
+  product         Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sizeKey         String
+  label           String
+  widthCm         Float
+  lengthM         Float
+  priceMultiplier Float
+  price           Int?
+
+  @@unique([productId, sizeKey])
+}
+
+model Bill {
+  id            String        @id
+  customerName  String?
+  customerPhone String?
+  saleType      String        @default("retail")
+  gstEnabled    Boolean       @default(true)
+  subtotal      Int
+  discountTotal Int           @default(0)
+  gstAmount     Int           @default(0)
+  total         Int
+  createdAt     DateTime      @default(now())
+  items         BillItem[]
+  payments      BillPayment[]
+}
+
+model BillItem {
+  id        String  @id @default(cuid())
+  billId    String
+  bill      Bill    @relation(fields: [billId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  name      String
+  sizeKey   String
+  sizeLabel String
+  unitPrice Int
+  quantity  Int
+  discount  Int     @default(0)
+  lineTotal Int
+}
+
+model BillPayment {
+  id     String @id @default(cuid())
+  billId String
+  bill   Bill   @relation(fields: [billId], references: [id], onDelete: Cascade)
+  method String
+  amount Int
+}
