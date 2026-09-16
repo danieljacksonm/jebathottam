@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { refreshLiveNewsWire } from "@/lib/live-news";
 import { invalidatePublicNewsMemo } from "@/lib/news-service";
 import { rememberNewsForSitemap } from "@/lib/news-sitemap-archive";
+import { upsertNewsLibrary } from "@/lib/news-library";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -28,6 +29,7 @@ export async function POST(request: NextRequest) {
     invalidatePublicNewsMemo();
     try {
       rememberNewsForSitemap(items);
+      await upsertNewsLibrary(items);
     } catch {
       /* archive best-effort */
     }

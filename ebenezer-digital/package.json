@@ -20,6 +20,7 @@
     "seed:topics": "node scripts/seed-content-topics.mjs"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
     "@radix-ui/react-slot": "^1.3.0",
     "@studio-freight/lenis": "^1.0.42",
     "bcryptjs": "^2.4.3",
@@ -50,6 +51,7 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "^14.2.35",
     "postcss": "^8.4.0",
+    "prisma": "^6.19.3",
     "tailwindcss": "^3.4.0",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.0.0"

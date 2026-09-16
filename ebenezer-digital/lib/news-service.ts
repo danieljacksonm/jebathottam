@@ -16,7 +16,9 @@ import {
   NEWS_GOOGLE_NEWS_MAX_URLS,
   findArchivedNewsByLegacySlug,
   listArchivedNewsRecent,
+  listArchivedNewsAll,
 } from "@/lib/news-sitemap-archive";
+import { searchNewsLibrary } from "@/lib/news-library";
 
 export type PublicNewsItem = NewsArticle & {
   origin: "seed" | "cms" | "live";
@@ -179,29 +181,15 @@ export function invalidatePublicNewsMemo(): void {
   listPublicMemo = null;
 }
 
-/** Cap for News chrome / home client props — denser desk like a live channel. */
-export const NEWS_HOME_CLIENT_LIMIT = 80;
+/** Page size for the live desk. Total stored stories are not capped. */
+export const NEWS_HOME_CLIENT_LIMIT = 40;
 
-/** Prefer present wire: live first, then stories from the last 48h, then older. */
-function deskSort(a: PublicNewsItem, b: PublicNewsItem): number {
-  const now = Date.now();
-  const freshMs = 48 * 60 * 60 * 1000;
-  const score = (n: PublicNewsItem) => {
-    const t = new Date(n.publishedAt).getTime();
-    let s = t;
-    if (n.origin === "live") s += 2e15;
-    else if (n.origin === "cms") s += 1e15;
-    if (now - t <= freshMs) s += 1e14;
-    return s;
-  };
-  return score(b) - score(a);
-}
-
-export async function listPublicNewsForHome(limit = NEWS_HOME_CLIENT_LIMIT): Promise<PublicNewsItem[]> {
+export async function listPublicNewsForHome(limit = 40): Promise<PublicNewsItem[]> {
   const list = await listPublicNews();
-  const sorted = [...list].sort(deskSort);
-  const n = Math.max(1, Math.min(limit, NEWS_HOME_CLIENT_LIMIT));
-  return sorted.slice(0, n);
+  const sorted = [...list].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+  return sorted.slice(0, Math.max(1, Math.min(limit, 40)));
 }
 
 /** Latest publishedAt among items — for desk “latest story” labels (not fetch time). */
@@ -290,6 +278,8 @@ export type NewsSearchParams = {
   featured?: boolean;
   limit?: number;
   offset?: number;
+  /** Only stories newer than this ISO time (refresh button). */
+  since?: string;
 };
 
 export async function searchPublicNews(params: NewsSearchParams = {}) {
@@ -299,13 +289,40 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
     topic,
     breaking,
     featured,
-    limit = 160,
+    limit = 40,
     offset = 0,
+    since,
   } = params;
 
-  let list = await listPublicNews();
   const query = q.trim().toLowerCase();
+  const pageSize = Math.max(1, Math.min(limit, 100));
 
+  const fromDb = await searchNewsLibrary({
+    q: query || undefined,
+    since,
+    limit: pageSize,
+    offset,
+  });
+  if (fromDb && (query || since || fromDb.total > 0)) {
+    const items = fromDb.items.map((n) => archiveToPublic(n));
+    return {
+      total: fromDb.total,
+      items,
+      regions: Array.from(new Set(items.map((n) => n.region))).sort(),
+      sources: Array.from(new Set(items.map((n) => n.sourceLabel))).sort(),
+      query: q,
+      region: region || "ALL",
+      hasMore: offset + items.length < fromDb.total,
+    };
+  }
+
+  const pool = query || since ? listArchivedNewsAll().map(archiveToPublic) : await listPublicNews();
+  let list = pool;
+
+  if (since) {
+    const cut = new Date(since).getTime();
+    if (!Number.isNaN(cut)) list = list.filter((n) => new Date(n.publishedAt).getTime() > cut);
+  }
   if (region && region !== "ALL") {
     list = list.filter((n) => n.region.toLowerCase() === region.toLowerCase());
   }
@@ -322,20 +339,24 @@ export async function searchPublicNews(params: NewsSearchParams = {}) {
     });
   }
 
-  // Prefer live + newest so the desk reads like a live news channel
-  list = [...list].sort((a, b) => {
-    const ao = a.origin === "live" ? 0 : a.origin === "cms" ? 1 : 2;
-    const bo = b.origin === "live" ? 0 : b.origin === "cms" ? 1 : 2;
-    if (ao !== bo) return ao - bo;
-    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
-  });
+  list = [...list].sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
 
   const total = list.length;
-  const items = list.slice(Math.max(0, offset), Math.max(0, offset) + Math.min(limit, 240));
+  const items = list.slice(offset, offset + pageSize);
   const regions = Array.from(new Set(list.map((n) => n.region))).sort();
   const sources = Array.from(new Set(list.map((n) => n.sourceLabel))).sort();
 
-  return { total, items, regions, sources, query: q, region: region || "ALL" };
+  return {
+    total,
+    items,
+    regions,
+    sources,
+    query: q,
+    region: region || "ALL",
+    hasMore: offset + items.length < total,
+  };
 }
 
 export function escapeXml(value: string): string {

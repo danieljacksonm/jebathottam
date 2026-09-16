@@ -53,7 +53,7 @@ function StoryLink({
 }
 
 export function NewsHome() {
-  const { articles, loading, updatedAt } = useNews();
+  const { articles, loading, updatedAt, loadMore, hasMore } = useNews();
   const [playing, setPlaying] = useState<string | null>(null);
   const featureRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -585,6 +585,17 @@ export function NewsHome() {
       </section>
 
       {/* FOOTER */}
+      {hasMore && (
+        <div className="flex justify-center px-4 py-12">
+          <button
+            type="button"
+            onClick={() => void loadMore()}
+            className="border border-[var(--n-ink)] px-6 py-3 text-[11px] uppercase tracking-[0.22em]"
+          >
+            Older stories
+          </button>
+        </div>
+      )}
       <footer className="bg-[var(--n-ink)] px-4 py-24 text-[var(--n-paper)] sm:px-8 lg:px-12">
         <h2 className="news-display text-[16vw] leading-[0.85] sm:text-[9vw]">
           STAY

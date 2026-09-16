@@ -85,8 +85,10 @@ function ageMs(publishedAt: string, now = Date.now()): number {
   return now - t;
 }
 
-function withinArchiveRetention(publishedAt: string, now = Date.now()): boolean {
-  return ageMs(publishedAt, now) <= NEWS_ARCHIVE_RETENTION_MS;
+function withinArchiveRetention(publishedAt: string, _now = Date.now()): boolean {
+  // Keep every story for search. Age only limits Google News XML, not storage.
+  void publishedAt;
+  return true;
 }
 
 function withinSitemapWindow(publishedAt: string, now = Date.now()): boolean {
@@ -220,9 +222,9 @@ function mergeArchive(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
     }
   }
 
-  return Array.from(bySlug.values())
-    .filter((n) => withinArchiveRetention(n.publishedAt, now) || n.origin === "cms" || n.origin === "seed")
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  return Array.from(bySlug.values()).sort(
+    (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
 }
 
 /**
@@ -324,6 +326,14 @@ export function findArchivedNewsByLegacySlug(slug: string): ArchivedNewsItem | u
     }
   }
   return undefined;
+}
+
+/** Every saved story, newest first. Used by search so old headlines are not dropped. */
+export function listArchivedNewsAll(): ArchivedNewsItem[] {
+  return getIndex()
+    .file.items.slice()
+    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+    .map(normalizeArchivedSlug);
 }
 
 /** Recent archived items for related-rail (no RSS). */

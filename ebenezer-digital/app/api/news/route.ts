@@ -3,8 +3,8 @@ import { searchPublicNews } from "@/lib/news-service";
 
 export const dynamic = "force-dynamic";
 
-const MAX_LIMIT = 80;
-const DEFAULT_LIMIT = 80;
+const MAX_LIMIT = 100;
+const DEFAULT_LIMIT = 40;
 
 /** Public search API for E> World News */
 export async function GET(request: NextRequest) {
@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
     const q = searchParams.get("q") || undefined;
     const region = searchParams.get("region") || undefined;
     const topic = searchParams.get("topic") || undefined;
+    const since = searchParams.get("since") || undefined;
     const breaking = searchParams.get("breaking") === "1" || searchParams.get("breaking") === "true";
     const featured = searchParams.get("featured") === "1" || searchParams.get("featured") === "true";
     const rawLimit = Number(searchParams.get("limit") || DEFAULT_LIMIT);
@@ -30,6 +31,7 @@ export async function GET(request: NextRequest) {
       featured: featured || undefined,
       limit,
       offset,
+      since,
     });
 
     return NextResponse.json(

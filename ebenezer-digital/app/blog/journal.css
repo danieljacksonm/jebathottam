@@ -1,15 +1,16 @@
 /* Ebenezer Journal — one brand color: Emerald #10B981 */
 .journal-root {
-  --j-ink: #070b10;
-  --j-paper: #f3efe6;
-  --j-muted: #9aa3ad;
-  --j-line: rgba(243, 239, 230, 0.12);
-  --j-brand: #10b981;
-  --j-brand-soft: rgba(16, 185, 129, 0.16);
-  --j-gold: #c4a574;
+  /* Light editorial: --j-ink is the page, --j-paper is the type (names kept for existing classes). */
+  --j-ink: #f6f1e8;
+  --j-paper: #16140f;
+  --j-muted: #5e574d;
+  --j-line: rgba(22, 20, 15, 0.12);
+  --j-brand: #0f6e56;
+  --j-brand-soft: rgba(15, 110, 86, 0.12);
+  --j-gold: #8a6232;
   color: var(--j-paper);
   background:
-    radial-gradient(900px 420px at 80% -10%, rgba(16, 185, 129, 0.08), transparent 55%),
+    radial-gradient(900px 420px at 90% -10%, rgba(15, 110, 86, 0.08), transparent 55%),
     var(--j-ink);
   font-feature-settings: "ss01" on, "kern" on;
   scroll-behavior: smooth;

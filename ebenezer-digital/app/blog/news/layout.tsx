@@ -47,7 +47,7 @@ export default async function NewsLayout({ children }: { children: ReactNode }) 
     "@type": "NewsMediaOrganization",
     name: "Ebenezer News",
     url: NEWS_URL,
-    logo: `${NEWS_URL}/og-news.png`,
+    logo: `${NEWS_URL}/brand/news-logo.svg`,
     sameAs: [JOURNAL_URL, NEWS_URL],
     publishingPrinciples: `${NEWS_URL}/newsroom/editorial-policy`,
     correctionsPolicy: `${NEWS_URL}/newsroom/editorial-policy`,

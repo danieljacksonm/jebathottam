@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// Wire + CMS stories. Never deleted by age — search must still find them.
+model NewsArticle {
+  id          String   @id
+  slug        String   @unique
+  title       String   @db.VarChar(500)
+  dek         String   @db.Text
+  body        Json
+  region      String
+  topic       String   @default("General")
+  location    String   @default("Global")
+  sourceLabel String   @default("Ebenezer News Desk")
+  publishedAt DateTime
+  coverImage  String   @db.Text
+  origin      String   @default("live")
+  originalUrl String?  @db.Text
+  byline      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([publishedAt])
+  @@index([region])
+}
+
+/// Journal explainers. Digital topics stay published for search and sitemap.
+model JournalPost {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String   @db.VarChar(300)
+  excerpt        String   @db.Text
+  content        String   @db.LongText
+  category       String
+  tags           Json
+  author         String   @default("Ebenezer Digital")
+  coverImage     String?  @db.Text
+  seoTitle       String?  @db.VarChar(300)
+  seoDescription String?  @db.VarChar(320)
+  publishedAt    DateTime
+  status         String   @default("published")
+  indexable      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([publishedAt])
+  @@index([category])
+  @@index([status])
+}

@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import type { JournalPost } from "@/app/blog/lib";
 import { sortEditorialFirst } from "@/lib/journal-filter";
+import { getPrisma, prismaEnabled } from "@/lib/prisma";
 
 export async function getJournalPostsForPage(opts?: {
   q?: string;
@@ -11,7 +12,32 @@ export async function getJournalPostsForPage(opts?: {
   const cat = (opts?.cat || "").trim();
   const limit = Math.min(48, Math.max(12, opts?.limit ?? 36));
 
-  const all = await db.getBlogPosts(true);
+  const filePosts = await db.getBlogPosts(true);
+  let dbPosts: JournalPost[] = [];
+  if (prismaEnabled()) {
+    try {
+      const rows = await getPrisma()?.journalPost.findMany({
+        where: { status: "published" },
+        orderBy: { publishedAt: "desc" },
+        take: 500,
+      });
+      dbPosts = (rows || []).map((p) => ({
+        id: p.id,
+        title: p.title,
+        slug: p.slug,
+        excerpt: p.excerpt,
+        coverImage: p.coverImage || "/images/journal/hero.jpg",
+        category: p.category,
+        tags: Array.isArray(p.tags) ? p.tags.map(String) : [],
+        author: p.author,
+        publishedAt: p.publishedAt.toISOString(),
+      }));
+    } catch {
+      dbPosts = [];
+    }
+  }
+  const seen = new Set(dbPosts.map((p) => p.slug));
+  const all = [...dbPosts, ...filePosts.filter((p) => !seen.has(p.slug))];
   const categories = Array.from(new Set(all.map((p) => p.category).filter(Boolean))).sort((a, b) =>
     a.localeCompare(b)
   );

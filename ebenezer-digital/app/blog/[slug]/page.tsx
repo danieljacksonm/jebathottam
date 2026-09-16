@@ -74,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
           name: "Ebenezer Digital",
           logo: {
             "@type": "ImageObject",
-            url: "https://ebenezerdigital.info/og-journal.png",
+            url: "https://journal.ebenezerdigital.info/brand/journal-logo.svg",
           },
         },
       }

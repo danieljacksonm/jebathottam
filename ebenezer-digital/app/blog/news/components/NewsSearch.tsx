@@ -24,7 +24,25 @@ export function NewsSearch() {
     };
   }, [searchOpen, setSearchOpen]);
 
+  const [remote, setRemote] = useState<typeof articles | null>(null);
+
+  useEffect(() => {
+    const query = q.trim();
+    if (!searchOpen || query.length < 2) {
+      setRemote(null);
+      return;
+    }
+    const t = window.setTimeout(() => {
+      fetch(`/api/news?q=${encodeURIComponent(query)}&limit=20`, { cache: "no-store" })
+        .then((r) => r.json())
+        .then((data) => setRemote(Array.isArray(data.items) ? data.items : []))
+        .catch(() => setRemote(null));
+    }, 250);
+    return () => window.clearTimeout(t);
+  }, [q, searchOpen]);
+
   const results = useMemo(() => {
+    if (remote) return remote;
     const query = q.trim().toLowerCase();
     if (!query) return articles.slice(0, 8);
     return articles
@@ -32,7 +50,7 @@ export function NewsSearch() {
         `${a.title} ${a.dek} ${a.topic} ${a.region} ${a.location}`.toLowerCase().includes(query)
       )
       .slice(0, 12);
-  }, [articles, q]);
+  }, [articles, q, remote]);
 
   if (!searchOpen) return null;
 

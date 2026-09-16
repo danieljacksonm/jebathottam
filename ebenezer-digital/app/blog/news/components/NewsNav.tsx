@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Menu, Search, Radio, X } from "lucide-react";
+import { Menu, Search, Radio, X, RefreshCw } from "lucide-react";
 import { NEWS_NAV } from "../data";
 import { useNews } from "./NewsProvider";
 import { SITE_NAV } from "@/lib/site-nav";
 
 export function NewsNav() {
-  const { setSearchOpen, menuOpen, setMenuOpen, setActiveNav, activeNav } = useNews();
+  const { setSearchOpen, menuOpen, setMenuOpen, setActiveNav, activeNav, refreshNews, refreshing } = useNews();
   const [solid, setSolid] = useState(false);
 
   useEffect(() => {
@@ -47,6 +47,16 @@ export function NewsNav() {
           </Link>
 
           <div className="flex items-center gap-1 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => void refreshNews()}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[var(--n-line)] px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em]"
+              aria-label="Refresh for new stories"
+              data-cursor="OPEN"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
+              <span className="hidden sm:inline">{refreshing ? "Updating" : "Refresh"}</span>
+            </button>
             <button
               type="button"
               onClick={() => setSearchOpen(true)}

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Ebenezer News">
+  <rect width="64" height="64" rx="8" fill="#111"/>
+  <circle cx="18" cy="20" r="4" fill="#e11d2e"/>
+  <path d="M14 36h36M14 44h24" stroke="#f4efe6" stroke-width="3"/>
+  <text x="28" y="28" fill="#f4efe6" font-family="Georgia, serif" font-size="16" font-weight="700">N</text>
+</svg>
