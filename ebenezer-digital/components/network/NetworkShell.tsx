@@ -16,7 +16,9 @@ import {
 } from "lucide-react";
 import { AI_URL, JOURNAL_URL, PRODUCTS_URL, SITE_URL, STORE_URL, TOOLS_URL } from "@/lib/site-url";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { EcosystemNav } from "@/components/EcosystemNav";
+import { EcosystemFooter } from "@/components/EcosystemFooter";
+import { ChannelLogo } from "@/components/ChannelLogo";
 import { trackNetworkEvent } from "@/lib/network/analytics";
 import { PUBLIC_CATEGORIES } from "@/lib/network/paths";
 import { CATEGORY_LABELS } from "@/lib/network/types";
@@ -24,8 +26,8 @@ import { CATEGORY_LABELS } from "@/lib/network/types";
 const NAV = [
   { href: "/network/tools", label: "Tools", match: "/network/tools" },
   { href: "/network/tools/c/developer", label: "Categories", match: "/network/tools/c" },
-  { href: "/network/resources", label: "Resources", match: "/network/resources" },
   { href: "/network/guides", label: "Guides", match: "/network/guides" },
+  { href: "/network/resources", label: "Resources", match: "/network/resources" },
 ];
 
 type ThemeMode = "light" | "dark" | "system";
@@ -86,12 +88,10 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="nx-root has-mobile-pad" data-theme={theme}>
+      <EcosystemNav active="network" variant={theme === "light" ? "light" : "dark"} />
       <header className="nx-header">
         <div className="nx-page nx-header-inner">
-          <Link href="/network" className="nx-logo">
-            <strong>EBENEZER DIGITAL</strong>
-            <span>Network</span>
-          </Link>
+          <ChannelLogo channel="network" href="/network" variant={theme === "light" ? "light" : "dark"} />
           <nav className="nx-nav" aria-label="Primary">
             {NAV.map((item) => (
               <Link
@@ -115,7 +115,6 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
             <Link href="/network/tools" className="nx-btn nx-btn-primary !py-2 !px-3 !text-sm">
               Explore Tools
             </Link>
-            <LanguageSwitcher compact />
             <button
               type="button"
               className="nx-btn nx-btn-ghost !py-2 !px-2"
@@ -196,6 +195,7 @@ export function NetworkShell({ children }: { children: React.ReactNode }) {
         </div>
         <SiteLegalLinks className="nx-page mt-4 text-xs text-[var(--nx-muted)]" linkClassName="hover:text-[var(--nx-ink)]" />
       </footer>
+      <EcosystemFooter variant={theme === "light" ? "light" : "dark"} />
 
       <nav className="nx-mobile-nav" aria-label="Mobile">
         {mobile.map((item) => {

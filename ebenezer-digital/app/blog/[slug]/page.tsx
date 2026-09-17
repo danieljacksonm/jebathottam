@@ -1,14 +1,30 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { ArticleView } from "./ArticleView";
-import { canonicalFor, articleLanguageAlternates, SITE_ICONS } from "@/lib/site-url";
+import { canonicalFor, publishedLanguageAlternates, SITE_ICONS } from "@/lib/site-url";
+import { contentKeyFor, resolveLocalizedContent } from "@/lib/i18n/resolve-content";
 
 type Props = { params: { slug: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await db.getBlogPostBySlug(params.slug);
+  let post = await db.getBlogPostBySlug(params.slug);
   if (!post) {
     return { title: "Story not found | Ebenezer Journal" };
+  }
+
+  const locale = (headers().get("x-eben-locale") || "en").toLowerCase();
+  if (locale !== "en") {
+    const localized = await resolveLocalizedContent(contentKeyFor("journal", params.slug), locale);
+    if (localized) {
+      post = {
+        ...post,
+        title: localized.title,
+        excerpt: localized.excerpt,
+        seoTitle: localized.metaTitle || localized.title,
+        seoDescription: localized.metaDescription || localized.excerpt,
+      };
+    }
   }
 
   const title = post.seoTitle || `${post.title} | Ebenezer Journal`;
@@ -17,16 +33,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? [{ url: post.coverImage }, ...(post.gallery || []).slice(1, 4).map((url) => ({ url }))]
     : undefined;
   const path = `/blog/${post.slug}`;
-  const isMassEdu = post.slug.startsWith("learn-");
-
   return {
     title,
     description,
     keywords: post.tags,
     icons: SITE_ICONS,
-    robots: isMassEdu
-      ? { index: false, follow: true }
-      : { index: true, follow: true },
+    robots: { index: true, follow: true },
     openGraph: {
       title: post.title,
       description,
@@ -44,7 +56,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     alternates: {
       canonical: canonicalFor(path),
-      languages: articleLanguageAlternates(path, "journal"),
+      languages: publishedLanguageAlternates(path, undefined, "journal"),
       types: {
         "application/rss+xml": [{ url: "/api/blog/rss", title: "Ebenezer Journal RSS" }],
       },

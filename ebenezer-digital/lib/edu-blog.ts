@@ -2,6 +2,7 @@
  * Educational digital journal catalog.
  * Deterministic generator → 1000+ simple, detailed explainers (5th-grade English).
  */
+import { journalCoverForTopic } from "./journal-images";
 
 export type EduAngle =
   | "how-it-works"
@@ -208,7 +209,7 @@ const IMG: Record<string, string[]> = {
     `https://images.unsplash.com/photo-1498050108023-c5249f4df085?${Q}`,
     `https://images.unsplash.com/photo-1587831990711-23ca6441447b?${Q}`,
     `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?${Q}`,
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1515879218367-8466d910aaa4?${Q}`,
     `https://images.unsplash.com/photo-1496181133206-80ce9b88a853?${Q}`,
   ],
@@ -245,14 +246,14 @@ const IMG: Record<string, string[]> = {
     `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?${Q}`,
     `https://images.unsplash.com/photo-1496181133206-80ce9b88a853?${Q}`,
     `https://images.unsplash.com/photo-1587831990711-23ca6441447b?${Q}`,
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?${Q}`,
   ],
   algorithm: [
     `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?${Q}`,
     `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?${Q}`,
     `https://images.unsplash.com/photo-1498050108023-c5249f4df085?${Q}`,
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1587831990711-23ca6441447b?${Q}`,
     `https://images.unsplash.com/photo-1515879218367-8466d910aaa4?${Q}`,
     `https://images.unsplash.com/photo-1496181133206-80ce9b88a853?${Q}`,
@@ -263,11 +264,11 @@ const IMG: Record<string, string[]> = {
     `https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?${Q}`,
     `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?${Q}`,
     `https://images.unsplash.com/photo-1498050108023-c5249f4df085?${Q}`,
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?${Q}`,
   ],
   programming: [
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1515879218367-8466d910aaa4?${Q}`,
     `https://images.unsplash.com/photo-1498050108023-c5249f4df085?${Q}`,
     `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?${Q}`,
@@ -425,7 +426,7 @@ const IMG: Record<string, string[]> = {
     `https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?${Q}`,
     `https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?${Q}`,
     `https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?${Q}`,
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1498050108023-c5249f4df085?${Q}`,
   ],
   seo: [
@@ -501,7 +502,7 @@ const IMG: Record<string, string[]> = {
     `https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?${Q}`,
   ],
   api: [
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1498050108023-c5249f4df085?${Q}`,
     `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?${Q}`,
     `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?${Q}`,
@@ -511,7 +512,7 @@ const IMG: Record<string, string[]> = {
   ],
   json: [
     `https://images.unsplash.com/photo-1496181133206-80ce9b88a853?${Q}`,
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1498050108023-c5249f4df085?${Q}`,
     `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?${Q}`,
     `https://images.unsplash.com/photo-1516321318423-f06f85e504b3?${Q}`,
@@ -650,18 +651,26 @@ const IMG: Record<string, string[]> = {
     `https://images.unsplash.com/photo-1517694712202-14dd9538aa97?${Q}`,
     `https://images.unsplash.com/photo-1551288049-bebda4e38f71?${Q}`,
     `https://images.unsplash.com/photo-1460925895917-afdab827c52f?${Q}`,
-    `https://images.unsplash.com/photo-1555066931-4365d14bab8c?${Q}`,
+    `https://images.unsplash.com/photo-1504639725590-34d0984388bd?${Q}`,
     `https://images.unsplash.com/photo-1451187580459-43490279c0fa?${Q}`,
     `https://images.unsplash.com/photo-1558494949-ef010cbdcc31?${Q}`,
   ],
 };
 
 /** Get topic-specific images, with a unique cover per angle index */
-function topicImages(key: string, angleIndex: number): string[] {
-  const pool = IMG[key] || IMG._default;
-  // Rotate so each angle gets a different cover image
-  const rotated = [...pool.slice(angleIndex % pool.length), ...pool.slice(0, angleIndex % pool.length)];
-  return rotated;
+function topicImages(
+  key: string,
+  angleIndex: number,
+  category?: string,
+  titleBase?: string
+): string[] {
+  const pool = IMG[key];
+  if (pool?.length) {
+    const rotated = [...pool.slice(angleIndex % pool.length), ...pool.slice(0, angleIndex % pool.length)];
+    return rotated;
+  }
+  const hero = journalCoverForTopic(category, titleBase || key, angleIndex);
+  return Array.from({ length: 7 }, (_, i) => journalCoverForTopic(category, titleBase || key, angleIndex + i));
 }
 
 function t(
@@ -953,7 +962,7 @@ export function getEduPosts(): EduPost[] {
       const title = angleTitle(topic, angle);
       const slug = slugify(["learn", topic.key, angle.id]);
       // Each angle gets its own unique cover (rotated by angleIdx) + a full gallery
-      const gallery = topicImages(topic.key, angleIdx);
+      const gallery = topicImages(topic.key, angleIdx, topic.category, topic.titleBase);
       const excerpt = `${topic.what} Written in simple English so even a Class 5 student can follow — then explore more with Ebenezer AI.`;
       posts.push({
         id: `edu-${topic.key}-${angle.id}`,

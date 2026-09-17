@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { headers } from "next/headers";
 import { db } from "@/lib/db";
+import { contentKeyFor, resolveLocalizedContent } from "@/lib/i18n/resolve-content";
 
 export const dynamic = "force-dynamic";
 
@@ -7,9 +9,24 @@ type Ctx = { params: { slug: string } };
 
 export async function GET(_req: Request, { params }: Ctx) {
   try {
-    const post = await db.getBlogPostBySlug(params.slug);
+    let post = await db.getBlogPostBySlug(params.slug);
     if (!post) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    const locale = (headers().get("x-eben-locale") || "en").toLowerCase();
+    if (locale !== "en") {
+      const localized = await resolveLocalizedContent(contentKeyFor("journal", params.slug), locale);
+      if (localized) {
+        post = {
+          ...post,
+          title: localized.title,
+          excerpt: localized.excerpt,
+          content: localized.body,
+          seoTitle: localized.metaTitle || localized.title,
+          seoDescription: localized.metaDescription || localized.excerpt,
+        };
+      }
     }
 
     const related = post.relatedSlugs?.length

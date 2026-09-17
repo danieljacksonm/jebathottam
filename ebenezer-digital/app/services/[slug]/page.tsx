@@ -1,151 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { pageMetadata } from "@/lib/site-url";
+import { SERVICE_LANDINGS } from "@/lib/services-catalog";
+import { getLocalizedService } from "@/lib/i18n/localize-service";
+import { loadMessages } from "@/lib/i18n/load-messages";
+import type { SeoLocale } from "@/lib/site-url";
+import { SITE_NAV } from "@/lib/site-nav";
 
-type ServiceDef = {
-  slug: string;
-  title: string;
-  forWho: string;
-  value: string;
-  capabilities: string[];
-  process: string[];
-  tech: string[];
-  faq: { q: string; a: string }[];
-};
-
-const SERVICE_LANDINGS: ServiceDef[] = [
-  {
-    slug: "web-development",
-    title: "Web development",
-    forWho: "Businesses that need a fast, clear website or web app — not a template clone.",
-    value: "We design and build production websites with clean architecture, SEO foundations, and maintainable code.",
-    capabilities: [
-      "Marketing sites and product sites",
-      "Custom Next.js / React applications",
-      "CMS-backed content systems",
-      "Performance and Core Web Vitals work",
-    ],
-    process: ["Discovery & scope", "Design & information architecture", "Build & QA", "Launch & handoff"],
-    tech: ["Next.js", "TypeScript", "Tailwind", "Node"],
-    faq: [
-      {
-        q: "Do you only use templates?",
-        a: "No. We build from your requirements. Templates are used only when they clearly fit the job.",
-      },
-      {
-        q: "Can you take over an existing site?",
-        a: "Yes — after a short technical review of stack, hosting, and content ownership.",
-      },
-    ],
-  },
-  {
-    slug: "saas-development",
-    title: "SaaS development",
-    forWho: "Founders and operators building billing, inventory, or multi-tenant tools.",
-    value: "We ship practical SaaS foundations — auth, multi-tenant data, invoicing flows, and admin tools.",
-    capabilities: [
-      "Multi-tenant application structure",
-      "Billing and invoice workflows",
-      "Role-based admin panels",
-      "API design for web and mobile clients",
-    ],
-    process: ["Product framing", "Architecture", "MVP build", "Iterate with real users"],
-    tech: ["Next.js", "NestJS", "Prisma", "PostgreSQL / SQLite"],
-    faq: [
-      {
-        q: "Do you build Ebenezer SaaS for clients?",
-        a: "Ebenezer SaaS is our product. Custom SaaS work is scoped separately for your business.",
-      },
-    ],
-  },
-  {
-    slug: "ai-solutions",
-    title: "AI solutions",
-    forWho: "Teams that want AI assistants or workflows grounded in their own data — not hype demos.",
-    value: "We integrate practical AI features: chat, summarization, and internal tools with clear limits and human review.",
-    capabilities: [
-      "Product chat assistants",
-      "Document and news summarization",
-      "Workflow automation with human checkpoints",
-      "Model routing for cost and quality",
-    ],
-    process: ["Use-case definition", "Data & safety constraints", "Prototype", "Production hardening"],
-    tech: ["Eben AI stack", "API integrations", "Next.js"],
-    faq: [
-      {
-        q: "Do you train custom models?",
-        a: "Usually we compose existing models with your content and rules. Custom training is rare and scoped explicitly.",
-      },
-    ],
-  },
-  {
-    slug: "business-automation",
-    title: "Business automation",
-    forWho: "Shops and offices drowning in repetitive WhatsApp, spreadsheet, or form work.",
-    value: "We replace fragile manual steps with simple systems — forms, notifications, and operational dashboards.",
-    capabilities: [
-      "Lead capture and follow-up flows",
-      "Document and PDF packs",
-      "Ops dashboards",
-      "Integrations between existing tools",
-    ],
-    process: ["Map the current process", "Remove waste", "Automate the bottleneck", "Train the team"],
-    tech: ["Web apps", "APIs", "Store kits", "WhatsApp workflows"],
-    faq: [
-      {
-        q: "Will you force a full rewrite?",
-        a: "No. We prefer the smallest system that removes the pain.",
-      },
-    ],
-  },
-  {
-    slug: "travel-booking",
-    title: "Travel booking support",
-    forWho: "Travel desks and agencies that need reliable booking operations and web presence.",
-    value: "We support travel businesses with booking workflows, enquiry kits, and customer-facing sites.",
-    capabilities: [
-      "Enquiry and quotation flows",
-      "Travel agency websites",
-      "Operational templates",
-      "Ongoing digital support",
-    ],
-    process: ["Understand routes & seasons", "Design the booking path", "Implement tools", "Support"],
-    tech: ["Web", "Forms", "Store kits"],
-    faq: [
-      {
-        q: "Do you book tickets as a travel agency?",
-        a: "We build systems and support digital operations. Ticket inventory depends on your agency relationships.",
-      },
-    ],
-  },
-  {
-    slug: "data-entry",
-    title: "Data entry & admin",
-    forWho: "Teams that need careful, confidential digitization and admin support.",
-    value: "Accurate data entry, document conversion, and virtual assistance with clear turnaround expectations.",
-    capabilities: [
-      "Spreadsheet and form digitization",
-      "Document formatting",
-      "Virtual assistance",
-      "Confidential handling",
-    ],
-    process: ["Sample batch", "Quality check", "Full run", "Delivery & archive"],
-    tech: ["Office formats", "Secure transfer"],
-    faq: [
-      {
-        q: "How do you protect data?",
-        a: "We use agreed transfer channels and do not republish client data. Details are confirmed per project.",
-      },
-    ],
-  },
-];
-
-function getServiceLanding(slug: string) {
-  return SERVICE_LANDINGS.find((s) => s.slug === slug);
+function requestLocale(): SeoLocale {
+  return (headers().get("x-eben-locale") || "en").toLowerCase() as SeoLocale;
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
-  const service = getServiceLanding(params.slug);
+  const locale = requestLocale();
+  const service = getLocalizedService(params.slug, locale);
   if (!service) return { title: "Service | Ebenezer Digital", robots: { index: false } };
   return pageMetadata({
     title: `${service.title} | Ebenezer Digital`,
@@ -159,13 +28,16 @@ export function generateStaticParams() {
 }
 
 export default function ServiceLandingPage({ params }: { params: { slug: string } }) {
-  const service = getServiceLanding(params.slug);
+  const locale = requestLocale();
+  const labels = loadMessages(locale).sections;
+  const service = getLocalizedService(params.slug, locale);
+
   if (!service) {
     return (
       <main className="bg-[#070708] px-4 py-28">
-        <p className="text-[var(--st-muted)]">Service not found.</p>
+        <p className="text-[var(--st-muted)]">{labels.serviceNotFound}</p>
         <Link href="/services" className="mt-4 inline-block underline">
-          All services
+          {labels.allServices}
         </Link>
       </main>
     );
@@ -181,16 +53,29 @@ export default function ServiceLandingPage({ params }: { params: { slug: string 
     })),
   };
 
+  const serviceLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.title,
+    description: service.value,
+    provider: { "@type": "Organization", name: "Ebenezer Digital", url: SITE_NAV.home },
+    areaServed: "Worldwide",
+    inLanguage: locale,
+  };
+
   return (
     <main className="bg-[#070708] px-4 pb-24 pt-28 sm:px-8 lg:px-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <p className="studio-kicker">Services</p>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }} />
+      <p className="studio-kicker">{labels.services}</p>
       <h1 className="studio-display mt-4 max-w-4xl text-5xl sm:text-7xl">{service.title.toUpperCase()}.</h1>
       <p className="mt-6 max-w-2xl text-lg text-[var(--st-muted)]">{service.value}</p>
-      <p className="mt-4 max-w-2xl text-sm text-white/45">Who it is for: {service.forWho}</p>
+      <p className="mt-4 max-w-2xl text-sm text-white/45">
+        {labels.whoItIsFor}: {service.forWho}
+      </p>
 
       <section className="mt-16 border-t border-[var(--st-line)] pt-10">
-        <h2 className="studio-display text-3xl">Capabilities</h2>
+        <h2 className="studio-display text-3xl">{labels.whatWeDeliver}</h2>
         <ul className="mt-6 space-y-3 text-[var(--st-muted)]">
           {service.capabilities.map((c) => (
             <li key={c}>— {c}</li>
@@ -199,7 +84,7 @@ export default function ServiceLandingPage({ params }: { params: { slug: string 
       </section>
 
       <section className="mt-14 border-t border-[var(--st-line)] pt-10">
-        <h2 className="studio-display text-3xl">Process</h2>
+        <h2 className="studio-display text-3xl">{labels.howWeWork}</h2>
         <ol className="mt-6 space-y-3 text-[var(--st-muted)]">
           {service.process.map((step, i) => (
             <li key={step}>
@@ -210,12 +95,12 @@ export default function ServiceLandingPage({ params }: { params: { slug: string 
       </section>
 
       <section className="mt-14 border-t border-[var(--st-line)] pt-10">
-        <h2 className="studio-display text-3xl">Technology</h2>
+        <h2 className="studio-display text-3xl">{labels.technology}</h2>
         <p className="mt-4 text-[var(--st-muted)]">{service.tech.join(" · ")}</p>
       </section>
 
       <section className="mt-14 border-t border-[var(--st-line)] pt-10">
-        <h2 className="studio-display text-3xl">FAQ</h2>
+        <h2 className="studio-display text-3xl">{labels.faq}</h2>
         <div className="mt-8 max-w-2xl space-y-8">
           {service.faq.map((f) => (
             <div key={f.q}>
@@ -226,18 +111,38 @@ export default function ServiceLandingPage({ params }: { params: { slug: string 
         </div>
       </section>
 
+      <section className="mt-14 border-t border-[var(--st-line)] pt-10">
+        <h2 className="studio-display text-3xl">{labels.relatedLinks}</h2>
+        <div className="mt-6 flex flex-wrap gap-4 text-sm">
+          <Link href={SITE_NAV.journal} className="underline hover:text-white">
+            Journal guides
+          </Link>
+          <Link href={SITE_NAV.network} className="underline hover:text-white">
+            Free tools (.net)
+          </Link>
+          <Link href={SITE_NAV.store} className="underline hover:text-white">
+            Digital products
+          </Link>
+          <Link href={SITE_NAV.saas} className="underline hover:text-white">
+            Yegova Billing SaaS
+          </Link>
+          {service.relatedInsights?.map((slug) => (
+            <Link key={slug} href={`/insights/${slug}`} className="underline hover:text-white">
+              Insight: {slug.replace(/-/g, " ")}
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <div className="mt-16 flex flex-wrap gap-4 text-sm">
         <Link href="/work" className="underline hover:text-white">
           Selected work
         </Link>
-        <Link href="/case-studies" className="underline hover:text-white">
-          Case studies
-        </Link>
-        <Link href="/contact" className="underline hover:text-white">
-          Contact
+        <Link href="/contact" className="rounded-full border border-emerald-500/40 px-5 py-2 text-emerald-400 hover:bg-emerald-500/10">
+          {labels.contactUs}
         </Link>
         <Link href="/services" className="underline hover:text-white">
-          All services
+          {labels.allServices}
         </Link>
       </div>
     </main>

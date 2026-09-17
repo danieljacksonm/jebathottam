@@ -141,6 +141,7 @@ function BlogIndexInner({
     <div className="journal-root relative min-h-screen">
       <div className="journal-grain" />
       <JournalProgress />
+      <div className="h-[4.25rem]" aria-hidden />
       <JournalNav
         categories={categories}
         onSearch={setQuery}

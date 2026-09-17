@@ -5,7 +5,9 @@ import {
   buildSitemapIndexXml,
   buildUrlsetXml,
 } from "@/lib/sitemap-xml";
+import { getPublishedLocales } from "@/lib/i18n/published-locales";
 import { originForKind, siteKindFromHost } from "@/lib/site-url";
+import { factorySitemapLocsForKind } from "@/lib/content-factory/sitemap";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
@@ -21,11 +23,21 @@ export async function GET(request: NextRequest) {
     const kind = siteKindFromHost(request.headers.get("host"));
     const origin = originForKind(kind);
     const entries = await sitemapForKind(kind);
+    const published = getPublishedLocales();
+    const localeSitemaps = published.map((loc) => `${origin}/sitemaps/locale/${loc}`);
+    const factoryLocs = factorySitemapLocsForKind(kind);
 
     if (entries.length > SITEMAP_CHUNK_SIZE) {
       const chunks = Math.ceil(entries.length / SITEMAP_CHUNK_SIZE);
-      const locs = Array.from({ length: chunks }, (_, i) => `${origin}/sitemaps/${i}`);
-      return new NextResponse(buildSitemapIndexXml(locs), {
+      const chunkLocs = Array.from({ length: chunks }, (_, i) => `${origin}/sitemaps/${i}`);
+      return new NextResponse(buildSitemapIndexXml([...chunkLocs, ...factoryLocs, ...localeSitemaps]), {
+        status: 200,
+        headers: CACHE_HEADERS,
+      });
+    }
+
+    if (published.length > 1 || factoryLocs.length) {
+      return new NextResponse(buildSitemapIndexXml([...factoryLocs, ...localeSitemaps]), {
         status: 200,
         headers: CACHE_HEADERS,
       });

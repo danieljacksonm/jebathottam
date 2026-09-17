@@ -26,6 +26,7 @@ import {
   SITE_WHATSAPP_URL,
 } from "@/lib/site-contact";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
+import { EcosystemFooter } from "@/components/EcosystemFooter";
 
 export default function ProductsPage() {
   const { t, rtl, locale, lp } = useStoreI18n();
@@ -528,6 +529,7 @@ export default function ProductsPage() {
         </div>
       </section>
 
+      <EcosystemFooter variant="light" />
       <footer className="border-t border-[var(--s-line)] bg-[var(--s-ink)] text-[var(--s-muted)]">
         <div className="s-page py-14">
           <div className="mb-10 flex flex-wrap items-center justify-between gap-4">

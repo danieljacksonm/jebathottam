@@ -5,6 +5,7 @@ import { SITE_NAV } from "@/lib/site-nav";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { SaasHeader } from "./SaasHeader";
+import { EcosystemFooter } from "@/components/EcosystemFooter";
 import { BILLING_LOGIN_PATH, BILLING_REGISTER_PATH } from "@/lib/billing-url";
 import "./saas.css";
 
@@ -114,6 +115,21 @@ export default function SaasLandingPage() {
       </section>
 
       <section className="saas-section">
+        <h2>SEO guides</h2>
+        <p className="saas-lead" style={{ maxWidth: "42rem", marginBottom: "1rem" }}>
+          Learn how Yegova Billing helps Indian shops with GST invoices, stock, and thermal print.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/saas/gst-billing" className="saas-btn saas-btn-ghost">
+            GST billing →
+          </Link>
+          <Link href="/saas/shop-inventory" className="saas-btn saas-btn-ghost">
+            Shop inventory →
+          </Link>
+        </div>
+      </section>
+
+      <section className="saas-section">
         <h2>Plans</h2>
         <div className="saas-grid saas-grid-3">
           <article className="saas-card">
@@ -134,6 +150,7 @@ export default function SaasLandingPage() {
         </div>
       </section>
 
+      <EcosystemFooter variant="light" />
       <footer className="saas-foot">
         <SiteContactLinks className="saas-contact" linkClassName="saas-contact-link" />
         <p>

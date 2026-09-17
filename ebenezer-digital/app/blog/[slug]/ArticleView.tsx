@@ -7,6 +7,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, Share2 } from "lucide-react";
 import { JournalNav } from "../components/JournalNav";
 import { JournalProgress } from "../components/JournalProgress";
+import { JournalTableOfContents, extractHeadings } from "../components/JournalTableOfContents";
+import { journalHeroFallback } from "@/lib/journal-images";
 import { formatDate, readingTime, type JournalPost } from "../lib";
 import { STORE_PRODUCTS } from "@/app/products/data";
 import { AskAiPanel } from "@/components/AskAiPanel";
@@ -15,6 +17,15 @@ import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import "../journal.css";
 
 type RelatedLite = Pick<JournalPost, "id" | "title" | "slug" | "excerpt" | "coverImage" | "category" | "author" | "publishedAt">;
+
+function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .slice(0, 60);
+}
 
 function renderBlocks(content: string, images: string[], title: string) {
   const blocks = content.split(/\n\n+/).map((p) => p.trim()).filter(Boolean);
@@ -25,15 +36,25 @@ function renderBlocks(content: string, images: string[], title: string) {
 
   blocks.forEach((para, i) => {
     if (para.startsWith("## ")) {
+      const text = para.replace(/^##\s+/, "");
       nodes.push(
-        <h2 key={`h2-${i}`} className="mt-14 font-serif text-3xl text-[var(--j-paper)] sm:text-4xl">
-          {para.replace(/^##\s+/, "")}
+        <h2
+          key={`h2-${i}`}
+          id={slugifyHeading(text)}
+          className="mt-14 scroll-mt-28 font-serif text-3xl text-[var(--j-paper)] sm:text-4xl"
+        >
+          {text}
         </h2>
       );
     } else if (para.startsWith("### ")) {
+      const text = para.replace(/^###\s+/, "");
       nodes.push(
-        <h3 key={`h3-${i}`} className="mt-10 font-serif text-2xl text-[var(--j-paper)]">
-          {para.replace(/^###\s+/, "")}
+        <h3
+          key={`h3-${i}`}
+          id={slugifyHeading(text)}
+          className="mt-10 scroll-mt-28 font-serif text-2xl text-[var(--j-paper)]"
+        >
+          {text}
         </h3>
       );
     } else if (para.startsWith("> ")) {
@@ -245,6 +266,13 @@ export function ArticleView({ slug }: { slug: string }) {
 
       <article>
         <header className="px-4 pb-10 pt-28 sm:px-8 lg:px-12">
+          <nav aria-label="Breadcrumb" className="mb-6 text-[11px] uppercase tracking-[0.2em] text-[var(--j-muted)]">
+            <Link href="/blog" className="hover:text-[var(--j-brand)]">
+              Journal
+            </Link>
+            <span className="mx-2 opacity-40">/</span>
+            <span>{post.category}</span>
+          </nav>
           <p className="text-[11px] uppercase tracking-[0.35em] text-[var(--j-brand)]">{post.category}</p>
           <h1 className="mt-5 max-w-5xl font-serif text-4xl leading-[1.05] sm:text-6xl lg:text-7xl">
             {post.title}
@@ -266,7 +294,7 @@ export function ArticleView({ slug }: { slug: string }) {
 
         <motion.div style={{ scale: heroScale }} className="relative mx-4 aspect-[21/9] overflow-hidden bg-[#111] sm:mx-8 lg:mx-12">
           <Image
-            src={post.coverImage || "/images/journal/hero.jpg"}
+            src={journalHeroFallback(post.coverImage)}
             alt={post.title}
             fill
             priority
@@ -278,6 +306,8 @@ export function ArticleView({ slug }: { slug: string }) {
 
         <div className="mx-auto max-w-3xl px-4 py-14 sm:px-6">
           <p className="font-serif text-2xl leading-relaxed text-[var(--j-paper)]/90">{post.excerpt}</p>
+
+          <JournalTableOfContents content={post.content || post.excerpt} />
 
           <div className="mt-12 space-y-7 text-[1.05rem] leading-8 text-[var(--j-muted)]">
             {post.content ? renderBlocks(post.content, gallery, post.title) : null}
@@ -382,7 +412,7 @@ export function ArticleView({ slug }: { slug: string }) {
               className="group relative aspect-[3/4] overflow-hidden"
             >
               <Image
-                src={item.coverImage || "/images/journal/hero.jpg"}
+                src={journalHeroFallback(item.coverImage)}
                 alt={item.title}
                 fill
                 className="object-cover transition duration-700 group-hover:scale-105"

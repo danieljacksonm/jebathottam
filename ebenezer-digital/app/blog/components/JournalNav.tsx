@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SITE_NAV, journalCategoryHref } from "@/lib/site-nav";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 export function JournalNav({
   categories,
@@ -23,7 +24,7 @@ export function JournalNav({
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    const onScroll = () => setSolid(window.scrollY > 40);
+    const onScroll = () => setSolid(window.scrollY > 24);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -46,102 +47,93 @@ export function JournalNav({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  const topics = categories.slice(0, 8);
+
   return (
     <>
-      <header className={cn("journal-nav", solid && "is-solid")}>
-        <div className="mx-auto flex h-16 max-w-[1400px] items-center justify-between px-4 sm:px-6 lg:px-10">
-          <Link href="/blog" className="flex items-center gap-3" data-cursor="HOME">
+      <header
+        className={cn(
+          "journal-nav journal-nav-v2 fixed inset-x-0 top-0 z-[70] border-b transition-colors duration-300",
+          solid
+            ? "border-[var(--j-line)] bg-[rgba(6,10,14,0.94)] backdrop-blur-xl"
+            : "border-transparent bg-gradient-to-b from-[rgba(6,10,14,0.92)] to-transparent"
+        )}
+      >
+        <div className="mx-auto flex h-[4.25rem] max-w-[1440px] items-center gap-4 px-4 sm:px-6 lg:px-10">
+          <Link href="/blog" className="flex shrink-0 items-center gap-3" data-cursor="HOME">
             <Image
-              src="/brand/ebenezer-journal-mark.svg"
+              src="/brand/journal-logo.svg"
               alt="Ebenezer Journal"
-              width={36}
-              height={36}
-              className="rounded-lg"
+              width={180}
+              height={40}
+              className="h-9 w-auto"
               priority
             />
-            <div className="leading-none">
-              <p className="font-serif text-[11px] tracking-[0.35em] text-[var(--j-paper)]">EBENEZER</p>
-              <div className="mt-1 flex items-center gap-2">
-                <p className="text-[10px] tracking-[0.42em] text-[var(--j-brand)]">JOURNAL</p>
-                <span className="rounded border border-[var(--j-brand)] px-1.5 py-0.5 text-[9px] font-semibold tracking-[0.2em] text-[var(--j-brand)]">
-                  E&gt;
-                </span>
-              </div>
-            </div>
           </Link>
 
-          <nav className="hidden items-center gap-7 md:flex">
-            <Link
-              href={SITE_NAV.news}
-              className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.22em] text-[var(--j-brand)] transition hover:text-[var(--j-paper)]"
-              data-cursor="NEWS"
-            >
-              <span className="rounded border border-[var(--j-brand)] px-1 py-0.5 text-[9px] tracking-[0.15em]">E&gt;</span>
-              World News
-            </Link>
-            {categories.slice(0, 5).map((cat) => (
+          <nav className="hidden min-w-0 flex-1 items-center gap-1 overflow-x-auto lg:flex" aria-label="Topics">
+            {topics.map((cat) => (
               <Link
                 key={cat}
                 href={journalCategoryHref(cat)}
                 onClick={() => onCategory?.(cat)}
-                className="text-[11px] uppercase tracking-[0.22em] text-[var(--j-muted)] transition hover:text-[var(--j-brand)]"
-                data-cursor="VIEW"
+                className="whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-[var(--j-muted)] transition hover:bg-white/5 hover:text-[var(--j-paper)]"
               >
                 {cat}
               </Link>
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher compact />
+          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            <Link
+              href={SITE_NAV.news}
+              className="hidden rounded-full border border-[var(--j-brand)]/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--j-brand)] transition hover:bg-[var(--j-brand)] hover:text-[#04110c] md:inline-flex"
+            >
+              News
+            </Link>
+            <LanguageSwitcher compact variant="dark" />
             <button
               type="button"
               aria-label="Search"
-              className="grid h-10 w-10 place-items-center rounded-full border border-[var(--j-line)] text-[var(--j-paper)] transition hover:border-[var(--j-brand)] hover:text-[var(--j-brand)]"
+              className="grid h-10 w-10 place-items-center rounded-full border border-[var(--j-line)] text-[var(--j-paper)] transition hover:border-[var(--j-brand)]"
               onClick={() => setSearchOpen(true)}
-              data-cursor="FIND"
             >
               <Search className="h-4 w-4" />
             </button>
+            <Link
+              href="#subscribe"
+              className="hidden rounded-full bg-[var(--j-brand)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#04110c] transition hover:brightness-110 lg:inline-flex"
+            >
+              Subscribe
+            </Link>
             <button
               type="button"
-              className="grid h-10 w-10 place-items-center rounded-full border border-[var(--j-line)] text-[var(--j-paper)] md:hidden"
+              className="grid h-10 w-10 place-items-center rounded-full border border-[var(--j-line)] text-[var(--j-paper)] lg:hidden"
               onClick={() => setMenuOpen(true)}
               aria-label="Open menu"
             >
-              <span className="text-xs tracking-widest">MENU</span>
+              <Menu className="h-4 w-4" />
             </button>
-            <Link
-              href={SITE_NAV.ai}
-              className="hidden text-[11px] uppercase tracking-[0.2em] text-[var(--j-muted)] hover:text-[var(--j-brand)] md:inline"
-              data-cursor="AI"
-            >
-              Eben AI
-            </Link>
-            <Link
-              href={SITE_NAV.home}
-              className="hidden rounded-full border border-[var(--j-brand)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--j-brand)] transition hover:bg-[var(--j-brand)] hover:text-[#04110c] md:inline-flex"
-              data-cursor="→"
-            >
-              Studio
-            </Link>
           </div>
         </div>
       </header>
 
       {menuOpen && (
-        <div className="fixed inset-0 z-[75] bg-[var(--j-ink)] px-6 py-8 md:hidden">
-          <div className="mb-10 flex justify-between">
-            <p className="text-xs tracking-[0.3em] text-[var(--j-brand)]">MENU</p>
-            <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close">
-              <X className="h-6 w-6" />
+        <div className="fixed inset-0 z-[80] overflow-y-auto bg-[var(--j-ink)] px-6 py-8 lg:hidden">
+          <div className="mb-8 flex items-center justify-between">
+            <p className="text-xs tracking-[0.3em] text-[var(--j-brand)]">Journal</p>
+            <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu">
+              <X className="h-6 w-6 text-[var(--j-paper)]" />
             </button>
           </div>
-          <div className="space-y-5">
-            <Link href={SITE_NAV.news} className="block font-serif text-3xl text-[var(--j-brand)]">
-              E&gt; World News
+          <div className="space-y-1">
+            <Link
+              href={SITE_NAV.news}
+              className="block border-b border-[var(--j-line)] py-4 font-serif text-2xl text-[var(--j-brand)]"
+            >
+              Ebenezer News
             </Link>
-            {categories.map((cat) => (
+            {topics.map((cat) => (
               <Link
                 key={cat}
                 href={journalCategoryHref(cat)}
@@ -149,33 +141,24 @@ export function JournalNav({
                   onCategory?.(cat);
                   setMenuOpen(false);
                 }}
-                className="block font-serif text-3xl text-[var(--j-paper)]"
+                className="block border-b border-[var(--j-line)] py-4 font-serif text-2xl text-[var(--j-paper)]"
               >
                 {cat}
               </Link>
             ))}
-            <Link href={`${SITE_NAV.ai}?mode=blog`} className="block pt-6 text-[var(--j-brand)]">
-              Eben AI
-            </Link>
-            <Link href={SITE_NAV.store} className="block pt-2 text-[var(--j-brand)]">
-              Ebenezer Store →
-            </Link>
-            <Link href={SITE_NAV.home} className="block pt-2 text-[var(--j-brand)]">
-              Ebenezer Digital Studio →
-            </Link>
+          </div>
+          <div id="subscribe" className="mt-10">
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--j-muted)]">Newsletter</p>
+            <NewsletterSignup variant="journal" source="journal-nav-mobile" className="mt-4" />
           </div>
         </div>
       )}
 
       {searchOpen && (
-        <div className="fixed inset-0 z-[75] flex items-start justify-center bg-black/85 px-4 pt-28 backdrop-blur-md">
+        <div className="fixed inset-0 z-[80] flex items-start justify-center bg-black/90 px-4 pt-28 backdrop-blur-md">
           <div className="w-full max-w-3xl">
             <div className="mb-8 flex items-start justify-between gap-4">
-              <h2 className="font-serif text-4xl leading-none text-[var(--j-paper)] sm:text-6xl">
-                What are you
-                <br />
-                looking for?
-              </h2>
+              <h2 className="font-serif text-4xl leading-none text-[var(--j-paper)] sm:text-5xl">Search the Journal</h2>
               <button type="button" onClick={() => setSearchOpen(false)} aria-label="Close search">
                 <X className="h-7 w-7 text-[var(--j-paper)]" />
               </button>
@@ -187,12 +170,9 @@ export function JournalNav({
                 setQuery(e.target.value);
                 onSearch?.(e.target.value);
               }}
-              placeholder="Search stories, ideas, topics…"
+              placeholder="Topics, guides, explainers…"
               className="w-full border-b border-[var(--j-line)] bg-transparent pb-4 font-serif text-2xl text-[var(--j-paper)] outline-none placeholder:text-[var(--j-muted)] focus:border-[var(--j-brand)]"
             />
-            <p className="mt-4 text-sm text-[var(--j-muted)]">
-              Press Esc to close. Results filter the stream below.
-            </p>
           </div>
         </div>
       )}

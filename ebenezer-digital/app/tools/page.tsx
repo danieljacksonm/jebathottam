@@ -192,6 +192,14 @@ export default function ToolsPage() {
           <p className="mt-4 max-w-2xl text-lg text-[var(--aff-muted)]">
             Curated AI, SaaS, and business software — honest comparisons, clear pricing notes, and editor picks.
           </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/tools/blog" className="aff-btn aff-btn-primary">
+              100,000+ tool guides
+            </Link>
+            <Link href="/tools/guides" className="aff-btn aff-btn-ghost">
+              Comparison guides
+            </Link>
+          </div>
           <form
             className="aff-search mt-8"
             onSubmit={(e) => {

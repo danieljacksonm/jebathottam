@@ -1,0 +1,103 @@
+import type { SeoLocale } from "@/lib/site-url";
+
+/** Native script labels for the language switcher. */
+export const LOCALE_LABELS: Record<SeoLocale, string> = {
+  en: "English",
+  hi: "हिन्दी",
+  ta: "தமிழ்",
+  te: "తెలుగు",
+  ml: "മലയാളം",
+  kn: "ಕನ್ನಡ",
+  bn: "বাংলা",
+  mr: "मराठी",
+  gu: "ગુજરાતી",
+  pa: "ਪੰਜਾਬੀ",
+  ur: "اردو",
+  es: "Español",
+  fr: "Français",
+  ar: "العربية",
+  de: "Deutsch",
+  pt: "Português",
+  ru: "Русский",
+  ja: "日本語",
+  ko: "한국어",
+  zh: "中文",
+  tr: "Türkçe",
+  id: "Bahasa Indonesia",
+  it: "Italiano",
+  nl: "Nederlands",
+  pl: "Polski",
+  vi: "Tiếng Việt",
+  th: "ไทย",
+  sv: "Svenska",
+  no: "Norsk",
+  da: "Dansk",
+  fi: "Suomi",
+  cs: "Čeština",
+  ro: "Română",
+  hu: "Magyar",
+  uk: "Українська",
+  he: "עברית",
+  fa: "فارسی",
+  ms: "Bahasa Melayu",
+  sw: "Kiswahili",
+  el: "Ελληνικά",
+  bg: "Български",
+  sr: "Српски",
+  hr: "Hrvatski",
+  sk: "Slovenčina",
+  lt: "Lietuvių",
+  lv: "Latviešu",
+  et: "Eesti",
+  ne: "नेपाली",
+  sl: "Slovenščina",
+  af: "Afrikaans",
+  ca: "Català",
+  fil: "Filipino",
+  sq: "Shqip",
+  am: "አማርኛ",
+  km: "ខ្មែរ",
+  lo: "ລາວ",
+  my: "မြန်မာ",
+  ka: "ქართული",
+  kk: "Қазақ",
+  uz: "Oʻzbek",
+  az: "Azərbaycan",
+  be: "Беларуская",
+  eu: "Euskara",
+  gl: "Galego",
+  is: "Íslenska",
+  cy: "Cymraeg",
+  ga: "Gaeilge",
+  mk: "Македонски",
+  bs: "Bosanski",
+  hy: "Հայերեն",
+  mn: "Монгол",
+};
+
+export const LOCALE_SHORT: Partial<Record<SeoLocale, string>> = {
+  en: "EN",
+  hi: "हि",
+  ta: "த",
+  te: "తె",
+  ml: "മ",
+  ar: "ع",
+  he: "עב",
+  fa: "فا",
+  ja: "日",
+  ko: "한",
+  zh: "中",
+  ru: "RU",
+  uk: "UA",
+};
+
+/** Right-to-left locales for `dir` attribute. */
+export const RTL_LOCALES = new Set<SeoLocale>(["ar", "ur", "he", "fa"]);
+
+export function isRtlLocale(locale: string): boolean {
+  return RTL_LOCALES.has(locale as SeoLocale);
+}
+
+export function localeLabel(locale: SeoLocale): string {
+  return LOCALE_LABELS[locale] || locale.toUpperCase();
+}

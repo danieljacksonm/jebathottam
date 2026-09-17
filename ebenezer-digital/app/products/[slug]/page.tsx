@@ -54,6 +54,9 @@ export default function ProductPage({ params }: Props) {
       availability: "https://schema.org/InStock",
       url: canonicalFor(`/products/${product.slug}`),
     },
+    ...(product.license?.length
+      ? { additionalProperty: product.license.map((l) => ({ "@type": "PropertyValue", name: "License", value: l })) }
+      : {}),
     ...(product.rating && (product.reviews || 0) > 0
       ? {
           aggregateRating: {

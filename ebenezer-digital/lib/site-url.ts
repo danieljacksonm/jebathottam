@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
 import { CANONICAL_URLS, resolveEcosystemUrl } from "./ecosystem-urls";
+import { getPublishedLocales } from "./i18n/published-locales";
+import { SEO_LOCALES, type SeoLocale } from "./i18n/seo-locales";
+
+export { SEO_LOCALES, type SeoLocale } from "./i18n/seo-locales";
 
 function clean(url: string) {
   return url.replace(/\/$/, "");
@@ -45,13 +49,6 @@ export type SiteKind =
  * Public locale prefixes for SEO (hreflang + sitemap language alternates).
  * Each locale gets its own URL: /{locale}/path (en stays unprefixed).
  */
-export const SEO_LOCALES = [
-  "en", "hi", "ta", "te", "ml", "kn", "bn", "mr", "gu", "pa", "ur",
-  "es", "fr", "ar", "de", "pt", "ru", "ja", "ko", "zh", "tr", "id",
-] as const;
-
-export type SeoLocale = (typeof SEO_LOCALES)[number];
-
 export function languageAlternatesFor(path: string, origin?: string): Record<string, string> {
   const kind = siteKindFromPath(path);
   return languageAlternatesForPath(path, origin, kind);
@@ -292,6 +289,7 @@ export function languageAlternatesForPath(
  * Today that is English only (+ x-default). Soft locale URLs stay reachable
  * but are noindex via middleware X-Robots-Tag.
  */
+/** @deprecated Use getPublishedLocales() — kept for static analysis compatibility */
 export const PUBLISHED_HREFLANG_LOCALES: readonly SeoLocale[] = ["en"];
 
 export function publishedLanguageAlternates(
@@ -302,7 +300,7 @@ export function publishedLanguageAlternates(
   const base = origin || originForPath(internalPath);
   const resolvedKind = kind ?? siteKindFromPath(internalPath);
   const languages: Record<string, string> = {};
-  for (const loc of PUBLISHED_HREFLANG_LOCALES) {
+  for (const loc of getPublishedLocales()) {
     const pub = publicPathForLocale(internalPath, loc, resolvedKind);
     languages[loc] = `${base}${pub === "/" ? "" : pub}`;
   }

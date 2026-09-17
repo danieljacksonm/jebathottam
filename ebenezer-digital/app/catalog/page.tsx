@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CatalogNav } from "./components/CatalogNav";
+import { EcosystemFooter } from "@/components/EcosystemFooter";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { ProductCard } from "./components/ProductCard";
 import { SmartSearch } from "./components/SmartSearch";
@@ -116,6 +117,7 @@ export default function CatalogHomePage() {
         </div>
       </section>
 
+      <EcosystemFooter variant="light" />
       <footer className="border-t border-[var(--aff-line)] bg-white">
         <div className="aff-page py-8">
           <p className="aff-disclosure">{discloseAffiliate()}</p>

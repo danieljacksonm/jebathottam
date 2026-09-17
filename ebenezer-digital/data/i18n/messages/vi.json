@@ -1,0 +1,328 @@
+{
+  "shell": {
+    "home": "Trang chủ",
+    "services": "Các dịch vụ",
+    "journal": "Nhật ký",
+    "news": "Tin tức",
+    "store": "Cửa hàng",
+    "tools": "Công cụ",
+    "network": "Công cụ",
+    "saas": "SaaS",
+    "contact": "Danh bạ",
+    "search": "Tìm kiếm",
+    "subscribe": "Đăng ký",
+    "readMore": "Đọc thêm",
+    "language": "Ngôn ngữ:"
+  },
+  "sections": {
+    "services": "Các dịch vụ",
+    "whatWeDeliver": "Những gì chúng tôi cung cấp",
+    "howWeWork": "Chúng ta làm việc như thế nào",
+    "technology": "Công nghệ",
+    "faq": "Câu hỏi thường gặp",
+    "relatedLinks": "Đường dẫn liên quan",
+    "contactUs": "Liên hệ với chúng tôi",
+    "allServices": "Tất cả dịch vụ ",
+    "whoItIsFor": "Nó dành cho ai: ",
+    "serviceNotFound": "Không tìm thấy dịch vụ."
+  },
+  "services": {
+    "web-development": {
+      "title": "Web development ",
+      "forWho": "Các doanh nghiệp cần một trang web hoặc ứng dụng web nhanh, rõ ràng — không phải là bản sao mẫu.",
+      "value": "Chúng tôi thiết kế và xây dựng các trang web sản xuất với kiến trúc sạch, nền tảng SEO và mã có thể bảo trì.",
+      "capabilities": [
+        "Trang web tiếp thị và trang web sản phẩm",
+        "Ứng dụng Next.js / React tùy chỉnh",
+        "Hệ thống nội dung được CMS hỗ trợ",
+        "Hiệu suất và Core Web Vitals hoạt động"
+      ],
+      "process": [
+        "Khám phá & phạm VI",
+        "Thiết kế & kiến trúc thông tin",
+        "Xây dựng & Đảm bảo chất lượng",
+        "Khởi động & bàn giao"
+      ],
+      "faq": [
+        {
+          "q": "Bạn chỉ sử dụng các mẫu?",
+          "a": "Không. Chúng tôi xây dựng theo yêu cầu của bạn. Các mẫu chỉ được sử dụng khi chúng rõ ràng phù hợp với công việc."
+        },
+        {
+          "q": "Bạn có thể tiếp quản một trang web hiện có không?",
+          "a": "Có — sau khi xem xét kỹ thuật ngắn gọn về ngăn xếp, lưu trữ và quyền sở hữu nội dung."
+        }
+      ]
+    },
+    "website-design": {
+      "title": "Thiết kế web",
+      "forWho": "Các thương hiệu cần có bản sắc hình ảnh cao cấp và bố cục tập trung vào chuyển đổi.",
+      "value": "Hệ thống thiết kế chất lượng biên tập, bố cục đáp ứng và giao diện người dùng dễ tiếp cận phù hợp với thị trường của bạn.",
+      "capabilities": [
+        "Giao diện người dùng phù hợp với thương hiệu",
+        "Bố cục ưu tiên thiết bị di động",
+        "Hệ thống thiết kế",
+        "Tối ưu hóa trang đích"
+      ],
+      "process": [
+        "Kiểm toán thương hiệu",
+        "Khung dây",
+        "tk",
+        "Bàn giao nhà phát triển"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có thiết kế lại các trang web hiện có không?",
+          "a": "Có — chúng tôi kiểm tra những gì hoạt động và xây dựng lại những gì ngăn chặn sự phát triển."
+        }
+      ]
+    },
+    "ecommerce-development": {
+      "title": "Phát triển thương mại điện tử",
+      "forWho": "Các cửa hàng chuyển từ đơn đặt hàng WhatsApp sang bán hàng trực tuyến có cấu trúc.",
+      "value": "Catalog, thanh toán, móc hàng tồn kho và các trang sản phẩm sẵn sàng cho SEO.",
+      "capabilities": [
+        "Catalog sản phẩm",
+        "Luồng thanh toán",
+        "Tích hợp thanh toán",
+        "Thông báo đơn hàng"
+      ],
+      "process": [
+        "Lập kế hoạch catalogue",
+        "Xây dựng cửa hàng",
+        "Thanh toán & kiểm tra",
+        "Khởi chạy hỗ trợ"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có thể kết nối với hàng tồn kho hiện có không?",
+          "a": "Có — phạm vi phụ thuộc vào các công cụ và API hiện tại của bạn."
+        }
+      ]
+    },
+    "saas-development": {
+      "title": "Phát triển SaaS",
+      "forWho": "Người sáng lập xây dựng các công cụ thanh toán, hàng tồn kho hoặc nhiều người thuê.",
+      "value": "Nền tảng SaaS thực tế — xác thực, dữ liệu nhiều người thuê, luồng hóa đơn và công cụ quản trị.",
+      "capabilities": [
+        "Cấu trúc ứng dụng nhiều người thuê",
+        "Quy trình lập hóa đơn và lập hóa đơn",
+        "Bảng quản trị dựa trên vai trò",
+        "Thiết kế API cho máy khách web và di động"
+      ],
+      "process": [
+        "Khung sản phẩm",
+        "Kiến trúc",
+        "Bản dựng MVP",
+        "Lặp lại với người dùng thực"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có xây dựng Ebenezer SaaS cho khách hàng không?",
+          "a": "Ebenezer SaaS là sản phẩm của chúng tôi. Công việc SaaS tùy chỉnh được thực hiện riêng cho doanh nghiệp của bạn."
+        }
+      ]
+    },
+    "laravel-development": {
+      "title": "Phát triển Laravel",
+      "forWho": "Các nhóm cần hỗ trợ PHP mạnh mẽ, bảng quản trị hoặc dịch vụ API.",
+      "value": "Bảo mật các ứng dụng Laravel với các mô hình, hàng đợi và đường dẫn triển khai rõ ràng.",
+      "capabilities": [
+        "API REST",
+        "Bảng điều khiển dành cho quản trị viên",
+        "Tích hợp MySQL",
+        "Tác vụ nền"
+      ],
+      "process": [
+        "Yêu cầu",
+        "Thiết kế sơ đồ",
+        "Xây dựng & thử nghiệm",
+        "Triển khai"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có di chuyển PHP cũ không?",
+          "a": "Có — sau khi xem xét tính bảo mật và toàn vẹn dữ liệu."
+        }
+      ]
+    },
+    "nextjs-development": {
+      "title": "Phát triển Next.js",
+      "forWho": "Các sản phẩm cần SEO, tốc độ và ngăn xếp React hiện đại.",
+      "value": "Các trang web Bộ định tuyến ứng dụng với các thành phần máy chủ, dữ liệu có cấu trúc và định tuyến sẵn sàng đa ngôn ngữ.",
+      "capabilities": [
+        "Trang SSR/SSG",
+        "Các tuyến API",
+        "URL đa ngôn ngữ",
+        "Điều chỉnh hiệu suất"
+      ],
+      "process": [
+        "Kiến trúc",
+        "Triển khai thực hiện",
+        "Thẻ SEO",
+        "Phát hành"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có thể lưu trữ trên VPS của chúng tôi không?",
+          "a": "Có — chúng tôi hỗ trợ triển khai PM2, nginx và Node tiêu chuẩn."
+        }
+      ]
+    },
+    "ai-solutions": {
+      "title": "Giải pháp AI",
+      "forWho": "Các nhóm muốn trợ lý AI dựa trên dữ liệu của riêng họ — chứ không phải các bản demo cường điệu.",
+      "value": "AI thực tế: trò chuyện, tóm tắt và quy trình làm việc với giới hạn rõ ràng và đánh giá của con người.",
+      "capabilities": [
+        "Trợ lý trò chuyện sản phẩm",
+        "Tóm tắt tài liệu và tin tức",
+        "Tự động hóa quy trình làm việc với các trạm kiểm soát của con người",
+        "Định tuyến mô hình cho chi phí và chất lượng"
+      ],
+      "process": [
+        "Định nghĩa trường hợp sử dụng",
+        "Ràng buộc về dữ liệu & an toàn",
+        "Mẫu Thử Nghiệm",
+        "Làm cứng sản xuất"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có đào tạo các mô hình tùy chỉnh không?",
+          "a": "Thông thường, chúng tôi soạn các mô hình hiện có với nội dung và quy tắc của bạn. Đào tạo tùy chỉnh được xác định phạm vi một cách rõ ràng."
+        }
+      ]
+    },
+    "seo-services": {
+      "title": "Dịch vụ SEO",
+      "forWho": "Các trang web cần SEO kỹ thuật, sơ đồ trang web và thu thập dữ liệu sức khỏe — không phải nhồi nhét từ khóa.",
+      "value": "URL chuẩn, dữ liệu có cấu trúc, kiến trúc sơ đồ trang web, Core Web Vitals và thiết lập Search Console.",
+      "capabilities": [
+        "Kiểm toán SEO kỹ thuật",
+        "Sơ đồ trang web & hreflang",
+        "Dữ liệu có cấu trúc",
+        "Bản sửa lỗi về hiệu suất"
+      ],
+      "process": [
+        "Kiểm tra thu thập thông tin",
+        "Sửa chữa công cụ chặn",
+        "Cụm nội dung",
+        "Giám sát GSC"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có đảm bảo thứ hạng không?",
+          "a": "Không. Chúng tôi khắc phục các rào cản kỹ thuật và cải thiện khả năng phát hiện một cách trung thực."
+        }
+      ]
+    },
+    "business-automation": {
+      "title": "tự động hóa xí nghiệp",
+      "forWho": "Các cửa hàng và văn phòng chìm đắm trong WhatsApp, bảng tính hoặc biểu mẫu công việc lặp đi lặp lại.",
+      "value": "Thay thế các bước thủ công dễ vỡ bằng các hệ thống đơn giản — biểu mẫu, thông báo và bảng điều khiển.",
+      "capabilities": [
+        "Thu thập khách hàng tiềm năng và các luồng theo dõi",
+        "Gói tài liệu và PDF",
+        "Bảng điều khiển vận hành",
+        "Tích hợp giữa các công cụ hiện có"
+      ],
+      "process": [
+        "Lập bản đồ quy trình hiện tại",
+        "Loại bỏ chất thải",
+        "Tự động hóa nút cổ chai",
+        "Đào tạo đội ngũ"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có bắt buộc phải viết lại toàn bộ không?",
+          "a": "Không. Chúng tôi thích hệ thống nhỏ nhất giúp loại bỏ cơn đau."
+        }
+      ]
+    },
+    "travel-booking": {
+      "title": "Hỗ trợ đặt phòng du lịch",
+      "forWho": "Bàn làm việc du lịch cần hoạt động đặt phòng đáng tin cậy và sự hiện diện trên web.",
+      "value": "Quy trình đặt phòng, bộ công cụ hỏi đáp và các trang web du lịch dành cho khách hàng.",
+      "capabilities": [
+        "Luồng truy vấn và báo giá",
+        "Trang web của đại lý du lịch",
+        "Mẫu vận hành",
+        "Hỗ trợ kỹ thuật số cho CFO"
+      ],
+      "process": [
+        "Tìm hiểu các tuyến đường & mùa",
+        "Thiết kế đường dẫn đặt phòng",
+        "Công cụ thực hiện",
+        "Hỗ trợ"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có đặt vé với tư cách là đại lý du lịch không?",
+          "a": "Chúng tôi xây dựng hệ thống và hỗ trợ các hoạt động kỹ thuật số. Việc kiểm kê vé phụ thuộc vào các mối quan hệ đại lý của bạn."
+        }
+      ]
+    },
+    "data-entry": {
+      "title": "Nhập dữ liệu & quản trị viên",
+      "forWho": "Các nhóm cần số hóa cẩn thận, bảo mật và hỗ trợ quản trị viên.",
+      "value": "Nhập dữ liệu chính xác, chuyển đổi tài liệu và hỗ trợ ảo với kỳ vọng quay vòng rõ ràng.",
+      "capabilities": [
+        "Số hóa bảng tính và biểu mẫu",
+        "Định dạng tài liệu",
+        "Hỗ trợ trực tuyến",
+        "Xử lý bảo mật"
+      ],
+      "process": [
+        "Lô mẫu",
+        "Kiểm tra chất lượng",
+        "Chạy toàn bộ",
+        "Giao hàng & lưu trữ"
+      ],
+      "faq": [
+        {
+          "q": "Bạn bảo vệ dữ liệu như thế nào?",
+          "a": "Chúng tôi sử dụng các kênh chuyển khoản đã thỏa thuận và không công bố lại dữ liệu khách hàng. Chi tiết được xác nhận cho mỗi dự án."
+        }
+      ]
+    },
+    "website-maintenance": {
+      "title": "Bảo trì website",
+      "forWho": "Các doanh nghiệp có trang web trực tiếp cần cập nhật, bản vá bảo mật và giám sát thời gian hoạt động.",
+      "value": "Chăm sóc liên tục: cập nhật phụ thuộc, sao lưu, thay đổi nội dung và kiểm tra hiệu suất.",
+      "capabilities": [
+        "Cập nhật bảo mật",
+        "Cập nhật nội dung",
+        "Giám sát thời gian hoạt động",
+        "Xác minh sao lưu"
+      ],
+      "process": [
+        "Kiểm toán cơ sở",
+        "Kế hoạch bảo trì",
+        "Kiểm tra hàng tháng",
+        "Ứng phó sự cố<g id=\"1\">:</g>"
+      ],
+      "faq": [
+        {
+          "q": "Bạn có hỗ trợ các trang web mà bạn không xây dựng không?",
+          "a": "Có — sau khi xem xét kỹ thuật đào tạo nhập môn."
+        }
+      ]
+    }
+  },
+  "journal": {
+    "what-is-dns": {
+      "title": "DNS là gì? Hướng dẫn đầy đủ",
+      "excerpt": "Cách tên miền trở thành địa chỉ IP — hồ sơ, tuyên truyền, bảo mật và khắc phục sự cố.",
+      "body": "## Định nghĩa\n\nDNS (Hệ thống tên miền) là danh bạ điện thoại của internet. Nó dịch các tên có thể đọc được của con người như example.com thành địa chỉ IP mà máy tính sử dụng.\n\n## Cách thức hoạt động của DNS\n\n1. Bạn nhập tên miền vào trình duyệt.\n2. Thiết bị của bạn yêu cầu trình giải quyết.\n3. Trình giải quyết truy vấn các máy chủ có thẩm quyền.\n4. Địa chỉ IP trả về và kết nối bắt đầu.\n\n## Các loại bản ghi phổ biến\n\n- **A** — Địa chỉ IPv4\n- **AAAA** — Địa chỉ IPv6\n- **CNAME** — bí danh cho một nam khác"
+    },
+    "what-is-seo": {
+      "title": "SEO là gì? Tối ưu hóa công cụ tìm kiếm được giải thích",
+      "excerpt": "Thu thập thông tin, lập chỉ mục, xếp hạng, SEO kỹ thuật, nội dung và Search Console — một tổng quan thực tế.",
+      "body": "## Định nghĩa\n\nSEO là thực hành làm cho nội dung web dễ tìm, thu thập dữ liệu, lập chỉ mục và xếp hạng trong các công cụ tìm kiếm.\n\n## Công cụ tìm kiếm hoạt động như thế nào\n\n1. **Thu thập thông tin** — bot tìm nạp URL\n2. * * Chỉ mục * * — các trang nhập cơ sở dữ liệu tìm kiếm\n3. **Xếp hạng** — truy vấn khớp với kết quả tốt nhất\n\n## Danh sách kiểm tra kỹ thuật SEO\n\n- Sơ đồ trang web hợp lệ.xml\n- URL chính tắc chính xác\n- hreflang cho các trang web đa ngôn ngữ\n- Fast Core Web Vitals\n- Không có chỉ số noindex ngẫu nhiên\n\n## Câu hỏi thường gặp\n\n### SEO có đảm bảo"
+    },
+    "what-is-ssl-tls": {
+      "title": "SSL/TLS là gì?",
+      "excerpt": "Https, chứng chỉ, mã hóa và lý do tại sao mọi trang web đều cần TLS ngày nay.",
+      "body": "## Định nghĩa\n\nSSL/TLS mã hóa dữ liệu giữa các trình duyệt và máy chủ. Https được bảo mật bằng TLS.\n\n## Tại sao điều đó lại quan trọng\n\n- Bảo vệ mật khẩu và thanh toán\n- Xây dựng niềm tin của người dùng (khóa móc)\n- Bắt buộc đối với các tính năng của trình duyệt hiện đại\n\n## Câu hỏi thường gặp\n\n# ## Chúng ta có mã hóa đủ cho các trang web nhỏ không?\nThường có cho các trang web công cộng."
+    }
+  }
+}

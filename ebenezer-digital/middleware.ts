@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { CANONICAL_URLS, resolveEcosystemUrl } from "@/lib/ecosystem-urls";
 import { isNewsCategorySegment, isLegacySourceDomainSlug, stripTrackingParams } from "@/lib/news-url";
-import { SEO_LOCALES, PUBLISHED_HREFLANG_LOCALES, siteKindFromHost } from "@/lib/site-url";
+import { getPublishedLocales } from "@/lib/i18n/published-locales";
+import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
 function clean(url: string) {
   return url.replace(/\/$/, "");
@@ -21,7 +22,10 @@ const INFO_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_INFO_URL, CAN
 const STORE_URL = clean(resolveEcosystemUrl(process.env.NEXT_PUBLIC_STORE_URL, CANONICAL_URLS.store));
 
 const LOCALES = new Set<string>(SEO_LOCALES);
-const PUBLISHED_LOCALES = new Set<string>(PUBLISHED_HREFLANG_LOCALES);
+
+function publishedLocaleSet(): Set<string> {
+  return new Set<string>(getPublishedLocales());
+}
 
 function hostName(host: string): string {
   return host.toLowerCase().split(":")[0];
@@ -154,6 +158,8 @@ function mapPrettyPathForHost(host: string, pathname: string): string | null {
     if (path === "/" || path === "") return "/tools";
     if (path === "/compare" || path.startsWith("/compare/")) return `/tools${path}`;
     if (path === "/guides" || path.startsWith("/guides/")) return `/tools${path}`;
+    if (path === "/blog" || path.startsWith("/blog/")) return `/tools${path}`;
+    if (path === "/learn" || path.startsWith("/learn/")) return `/tools/blog${path.replace(/^\/learn/, "")}`;
     const slug = path.match(/^\/([^/]+)$/);
     if (slug && !SHARED_ROOT_RESERVED.has(slug[1]) && slug[1] !== "tools") {
       return `/tools/${slug[1]}`;
@@ -225,7 +231,62 @@ function mapPrettyPathForHost(host: string, pathname: string): string | null {
     return null;
   }
 
+  if (isNetworkHost(host)) {
+    return mapNetworkPrettyPath(path);
+  }
+
   return null;
+}
+
+/** Map ebenezerdigital.net public paths → internal /network/* routes. */
+function mapNetworkPrettyPath(pathname: string): string | null {
+  const path = pathname.length > 1 && pathname.endsWith("/") ? pathname.slice(0, -1) : pathname;
+  if (path === "/network" || path.startsWith("/network/")) return path;
+  if (path === "/" || path === "") return "/network";
+
+  const map: Record<string, string> = {
+    "/tools": "/network/tools",
+    "/developers": "/network/developers",
+    "/resources": "/network/resources",
+    "/guides": "/network/guides",
+    "/finder": "/network/finder",
+    "/about": "/network/about",
+    "/contact": "/network/contact",
+    "/privacy": "/network/privacy",
+    "/terms": "/network/terms",
+    "/affiliate-disclosure": "/network/affiliate-disclosure",
+  };
+  if (map[path]) return map[path];
+
+  if (path.startsWith("/tools/")) {
+    const rest = path.slice("/tools/".length).replace(/\/$/, "");
+    const categoryAliases: Record<string, string> = {
+      developer: "developer",
+      seo: "seo",
+      image: "image",
+      images: "image",
+      pdf: "pdf",
+      text: "text",
+      calculator: "calculators",
+      calculators: "calculators",
+      business: "business",
+      ai: "ai",
+      converter: "calculators",
+    };
+    if (rest && !rest.includes("/") && categoryAliases[rest]) {
+      return `/network/tools/c/${categoryAliases[rest]}`;
+    }
+    return `/network${path}`;
+  }
+
+  if (path.startsWith("/guides/")) return `/network${path}`;
+  return null;
+}
+
+function networkPublicPathFromInternal(internal: string): string {
+  if (internal === "/network") return "/";
+  if (internal.startsWith("/network/")) return internal.slice("/network".length) || "/";
+  return internal;
 }
 
 function legalSitemapRewrite(request: NextRequest, pathname: string): NextResponse | null {
@@ -402,7 +463,7 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   if (foreignLocalized) return foreignLocalized;
 
   // Only published locales are public. Soft /kn /pa /de /hi … → English path.
-  if (!PUBLISHED_LOCALES.has(locale)) {
+  if (!publishedLocaleSet().has(locale)) {
     const url = request.nextUrl.clone();
     url.pathname = rest === "/" ? "/" : rest;
     return NextResponse.redirect(url, 301);
@@ -411,6 +472,16 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   // News has no real translations — never index soft-duplicates (belt + suspenders).
   if (isNewsHost(host) && locale !== "en") {
     return absoluteRedirect(request, NEWS_URL, rest === "/" ? "/" : rest);
+  }
+
+  // .net free tools are English-only — /hi/tools/… must not hit affiliate /tools routes.
+  if (isNetworkHost(host) && locale !== "en") {
+    const internal = mapNetworkPrettyPath(rest) || (rest === "/" ? "/network" : rest);
+    return absoluteRedirect(
+      request,
+      `https://${hostName(host)}`,
+      networkPublicPathFromInternal(internal)
+    );
   }
 
   if (locale === "en") {
@@ -462,8 +533,8 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   });
   res.headers.set("x-eben-locale", locale);
   res.headers.set("content-language", locale);
-  // Soft locale prefixes serve English until PUBLISHED translations exist.
-  if (locale !== "en") {
+  // Unpublished locale shells stay noindex; published locales are indexable.
+  if (locale !== "en" && !publishedLocaleSet().has(locale)) {
     res.headers.set("x-robots-tag", "noindex, follow");
   }
   return res;
@@ -498,6 +569,22 @@ export function middleware(request: NextRequest) {
 
   const foreign = foreignSectionRedirect(request, host, pathname);
   if (foreign) return foreign;
+
+  if (pathname === "/tools/learn" || pathname.startsWith("/tools/learn/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/tools\/learn/, "/tools/blog");
+    return NextResponse.redirect(url, 308);
+  }
+  if (pathname === "/products/learn" || pathname.startsWith("/products/learn/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/products\/learn/, "/products/blog");
+    return NextResponse.redirect(url, 308);
+  }
+  if (pathname === "/discover/learn" || pathname.startsWith("/discover/learn/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.replace(/^\/discover\/learn/, "/discover/blog");
+    return NextResponse.redirect(url, 308);
+  }
 
   const isProdStudio =
     hostName(host) === "ebenezerdigital.com" || hostName(host) === "www.ebenezerdigital.com";
@@ -638,9 +725,25 @@ export function middleware(request: NextRequest) {
   }
 
   if (isDiscoverHost(host)) {
+    if (pathname === "/discover" || pathname === "/discover/") {
+      return absoluteRedirect(request, `https://${hostName(host)}`, "/");
+    }
+    if (pathname.startsWith("/discover/")) {
+      const rest = pathname.slice("/discover".length) || "/";
+      return absoluteRedirect(request, `https://${hostName(host)}`, rest);
+    }
+    if (pathname === "/learn" || pathname.startsWith("/learn/")) {
+      const rest = pathname.replace(/^\/learn/, "") || "";
+      return absoluteRedirect(request, `https://${hostName(host)}`, `/blog${rest}`);
+    }
     if (pathname === "/" || pathname === "") {
       const url = request.nextUrl.clone();
       url.pathname = "/discover";
+      return NextResponse.rewrite(url);
+    }
+    if (pathname === "/blog" || pathname.startsWith("/blog/")) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/discover${pathname}`;
       return NextResponse.rewrite(url);
     }
   }
@@ -718,7 +821,18 @@ export function middleware(request: NextRequest) {
       "api",
       "admin",
       "_next",
+      "blog",
+      "learn",
     ]);
+    if (pathname === "/learn" || pathname.startsWith("/learn/")) {
+      const rest = pathname.replace(/^\/learn/, "") || "";
+      return absoluteRedirect(request, `https://${hostName(host)}`, `/blog${rest}`);
+    }
+    if (pathname === "/blog" || pathname.startsWith("/blog/")) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/products${pathname}`;
+      return NextResponse.rewrite(url);
+    }
     const productPretty = pathname.match(/^\/products\/([^/]+)\/?$/);
     if (
       productPretty &&
@@ -779,54 +893,10 @@ export function middleware(request: NextRequest) {
     if (pathname === "/network" || pathname === "/network/") {
       return absoluteRedirect(request, `https://${hostName(host)}`, "/");
     }
-    const url = request.nextUrl.clone();
-    if (pathname === "/" || pathname === "") {
-      url.pathname = "/network";
-      return NextResponse.rewrite(url);
-    }
-    // Pretty public URLs on .net → internal /network/* routes
-    const map: Record<string, string> = {
-      "/tools": "/network/tools",
-      "/developers": "/network/developers",
-      "/resources": "/network/resources",
-      "/guides": "/network/guides",
-      "/finder": "/network/finder",
-      "/about": "/network/about",
-      "/contact": "/network/contact",
-      "/privacy": "/network/privacy",
-      "/terms": "/network/terms",
-      "/affiliate-disclosure": "/network/affiliate-disclosure",
-    };
-    if (map[pathname]) {
-      url.pathname = map[pathname];
-      return NextResponse.rewrite(url);
-    }
-    if (pathname.startsWith("/tools/")) {
-      const rest = pathname.slice("/tools/".length).replace(/\/$/, "");
-      // Pretty category hubs: /tools/developer → /network/tools/c/developer
-      const categoryAliases: Record<string, string> = {
-        developer: "developer",
-        seo: "seo",
-        image: "image",
-        images: "image",
-        pdf: "pdf",
-        text: "text",
-        calculator: "calculators",
-        calculators: "calculators",
-        business: "business",
-        ai: "ai",
-        converter: "calculators",
-      };
-      if (rest && !rest.includes("/") && categoryAliases[rest]) {
-        url.pathname = `/network/tools/c/${categoryAliases[rest]}`;
-        return NextResponse.rewrite(url);
-      }
-      // /tools/c/{category} → /network/tools/c/{category}
-      url.pathname = `/network${pathname}`;
-      return NextResponse.rewrite(url);
-    }
-    if (pathname.startsWith("/guides/")) {
-      url.pathname = `/network${pathname}`;
+    const mapped = mapNetworkPrettyPath(pathname);
+    if (mapped) {
+      const url = request.nextUrl.clone();
+      url.pathname = mapped;
       return NextResponse.rewrite(url);
     }
     if (pathname.startsWith("/network")) {

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { StudioPageShell } from "@/components/studio/StudioPageShell";
 import { loadArticles } from "@/lib/content-engine";
 import { pageMetadata } from "@/lib/site-url";
+import { SERVICE_LANDINGS } from "@/lib/services-catalog";
 
 export const metadata: Metadata = pageMetadata({
   title: "Insights | Ebenezer Digital Services",
@@ -19,6 +20,25 @@ export default function InsightsHubPage() {
       title="Studio insights"
       lead="Practical guides on web development, e-commerce, and automation — written for business owners and builders."
     >
+      <section className="mb-12 rounded-2xl border border-white/10 bg-white/5 p-6">
+        <h2 className="text-lg font-semibold text-white">Related services</h2>
+        <p className="mt-2 text-sm text-white/60">
+          Each insight connects to a service we actually deliver.
+        </p>
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {SERVICE_LANDINGS.slice(0, 8).map((s) => (
+            <li key={s.slug}>
+              <Link
+                href={`/services/${s.slug}`}
+                className="inline-block rounded-full border border-emerald-500/30 px-3 py-1 text-sm text-emerald-300 hover:bg-emerald-500/10"
+              >
+                {s.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       {posts.length === 0 ? (
         <p className="text-white/60">New articles are being published. Check back soon.</p>
       ) : (

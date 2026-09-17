@@ -6,7 +6,9 @@ import { TOOLS } from "../data";
 import { resolveToolImage, freshnessLabel } from "@/lib/affiliate/images";
 import { AffiliateMedia } from "@/components/AffiliateMedia";
 import { ToolsHeader } from "../ToolsHeader";
-import { pageMetadata, AI_URL, TOOLS_URL } from "@/lib/site-url";
+import { pageMetadata, AI_URL, TOOLS_URL, JOURNAL_URL } from "@/lib/site-url";
+import { CROSS_SITE_BLOGS } from "@/lib/cross-site-blogs";
+import { TOOLS_GUIDES } from "../guides/data";
 
 type Props = { params: { id: string } };
 
@@ -176,7 +178,7 @@ export default function ToolDetailPage({ params }: Props) {
       </section>
 
       {alternatives.length > 0 ? (
-        <section className="mt-12 pb-10">
+        <section className="mt-12">
           <h2 className="text-xl font-bold">Alternatives</h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {alternatives.map((a) => (
@@ -188,6 +190,32 @@ export default function ToolDetailPage({ params }: Props) {
           </div>
         </section>
       ) : null}
+
+      <section className="mt-12 pb-10">
+        <h2 className="text-xl font-bold">Guides &amp; comparisons</h2>
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+          {TOOLS_GUIDES.slice(0, 4).map((g) => (
+            <li key={g.slug}>
+              <Link href={`/tools/guides/${g.slug}`} className="aff-card block p-4 hover:border-teal-300">
+                <p className="font-semibold">{g.title}</p>
+                <p className="mt-1 text-sm text-[var(--aff-muted)]">{g.excerpt}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+          {CROSS_SITE_BLOGS.filter((b) => b.tags.includes("tools") || b.tags.includes("ai"))
+            .slice(0, 3)
+            .map((b) => (
+              <li key={b.slug}>
+                <a href={`${JOURNAL_URL}/${b.slug}`} className="aff-card block p-4 hover:border-teal-300">
+                  <p className="font-semibold">{b.title}</p>
+                  <p className="mt-1 text-sm text-[var(--aff-muted)]">{b.excerpt}</p>
+                </a>
+              </li>
+            ))}
+        </ul>
+      </section>
     </div>
     </>
   );

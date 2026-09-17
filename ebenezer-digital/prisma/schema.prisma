@@ -53,3 +53,26 @@ model JournalPost {
   @@index([category])
   @@index([status])
 }
+
+/// Localized page content — one row per contentKey + locale. English stays on source routes.
+model LocalizedContent {
+  id              String    @id @default(cuid())
+  contentKey      String
+  locale          String    @db.VarChar(8)
+  slug            String    @db.VarChar(300)
+  title           String    @db.VarChar(500)
+  excerpt         String    @db.Text
+  body            String    @db.LongText
+  metaTitle       String?   @db.VarChar(300)
+  metaDescription String?   @db.VarChar(320)
+  heroImage       String?   @db.Text
+  status          String    @default("draft")
+  sourceLocale    String    @default("en") @db.VarChar(8)
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([contentKey, locale])
+  @@index([locale, status])
+  @@index([slug])
+}

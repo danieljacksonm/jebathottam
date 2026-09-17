@@ -2,52 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PUBLISHED_HREFLANG_LOCALES, type SeoLocale } from "@/lib/site-url";
-
-const LABELS: Partial<Record<SeoLocale, string>> = {
-  en: "English",
-  hi: "Hindi",
-  ta: "Tamil",
-  te: "Telugu",
-  ml: "Malayalam",
-  kn: "Kannada",
-  bn: "Bengali",
-  mr: "Marathi",
-  gu: "Gujarati",
-  pa: "Punjabi",
-  ur: "Urdu",
-  es: "Spanish",
-  fr: "French",
-  ar: "Arabic",
-  de: "German",
-  pt: "Portuguese",
-  ru: "Russian",
-  ja: "Japanese",
-  ko: "Korean",
-  zh: "Chinese",
-  tr: "Turkish",
-  id: "Indonesian",
-};
-
-const SHORT: Partial<Record<SeoLocale, string>> = {
-  en: "EN",
-  hi: "हि",
-  ta: "த",
-  te: "తె",
-  es: "ES",
-  fr: "FR",
-  ar: "ع",
-  de: "DE",
-};
+import { getPublishedLocales } from "@/lib/i18n/published-locales";
+import { LOCALE_LABELS, LOCALE_SHORT } from "@/lib/i18n/locale-registry";
+import type { SeoLocale } from "@/lib/site-url";
 
 function localeHref(pathname: string, locale: SeoLocale): string {
   const clean = pathname.replace(/^\/[a-z]{2}(\/|$)/i, "/") || "/";
   const base = clean === "/" ? "" : clean;
   return locale === "en" ? base || "/" : `/${locale}${base}`;
 }
-
-/** Only locales with real PUBLISHED translations — never advertise empty /kn /pa /de shells. */
-const UI_LOCALES = PUBLISHED_HREFLANG_LOCALES as readonly SeoLocale[];
 
 export function LanguageSwitcher({
   compact = false,
@@ -57,14 +20,16 @@ export function LanguageSwitcher({
   variant?: "dark" | "light";
 }) {
   const pathname = usePathname() || "/";
+  const UI_LOCALES = getPublishedLocales();
   const current =
     (pathname.match(/^\/([a-z]{2})(\/|$)/i)?.[1]?.toLowerCase() as SeoLocale | undefined) ||
     "en";
 
-  // Nothing to switch until more than English is published.
   if (UI_LOCALES.length <= 1) {
     return null;
   }
+
+  const useCompactNav = UI_LOCALES.length > 12;
 
   const inactiveClass =
     variant === "light"
@@ -79,21 +44,23 @@ export function LanguageSwitcher({
 
   return (
     <div className="lang-switcher">
-      <nav
-        aria-label="Language"
-        className={compact ? "hidden items-center gap-1 sm:flex sm:flex-wrap" : "hidden items-center gap-2 md:flex md:flex-wrap"}
-      >
-        {UI_LOCALES.map((loc) => (
-          <Link
-            key={loc}
-            href={localeHref(pathname, loc)}
-            className={loc === current ? activeClass : inactiveClass}
-            hrefLang={loc}
-          >
-            {SHORT[loc] || loc.toUpperCase()}
-          </Link>
-        ))}
-      </nav>
+      {!useCompactNav && (
+        <nav
+          aria-label="Language"
+          className={compact ? "hidden items-center gap-1 sm:flex sm:flex-wrap" : "hidden items-center gap-2 md:flex md:flex-wrap"}
+        >
+          {UI_LOCALES.map((loc) => (
+            <Link
+              key={loc}
+              href={localeHref(pathname, loc)}
+              className={loc === current ? activeClass : inactiveClass}
+              hrefLang={loc}
+            >
+              {LOCALE_SHORT[loc] || loc.toUpperCase()}
+            </Link>
+          ))}
+        </nav>
+      )}
       <label className="sr-only" htmlFor="eben-lang-select">
         Language
       </label>
@@ -104,12 +71,18 @@ export function LanguageSwitcher({
           const next = e.target.value as SeoLocale;
           window.location.href = localeHref(pathname, next);
         }}
-        className={compact ? `${selectClass} sm:hidden` : `${selectClass} md:hidden`}
+        className={
+          useCompactNav
+            ? selectClass
+            : compact
+              ? `${selectClass} sm:hidden`
+              : `${selectClass} md:hidden`
+        }
         aria-label="Language"
       >
         {UI_LOCALES.map((loc) => (
           <option key={loc} value={loc}>
-            {LABELS[loc] || loc.toUpperCase()}
+            {LOCALE_LABELS[loc] || loc.toUpperCase()}
           </option>
         ))}
       </select>

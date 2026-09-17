@@ -6,6 +6,9 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SITE_NAV } from "@/lib/site-nav";
+import { EcosystemNav } from "@/components/EcosystemNav";
+import { EcosystemFooter } from "@/components/EcosystemFooter";
+import { ChannelLogo } from "@/components/ChannelLogo";
 
 const LINKS = [
   { href: SITE_NAV.info, label: "Home", match: (p: string) => p === "/info" || p === "/" },
@@ -42,15 +45,10 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
       <a className="info-skip" href="#main">
         Skip to content
       </a>
+      <EcosystemNav active="info" variant="light" />
       <header className="info-header">
         <div className="info-header-inner">
-          <Link href="/" className="info-brand" aria-label="Ebenezer Digital Information — Home">
-            <span className="info-brand-mark" aria-hidden />
-            <span className="info-brand-text">
-              <strong>Ebenezer</strong>
-              <em>Information</em>
-            </span>
-          </Link>
+          <ChannelLogo channel="info" href="/" variant="light" />
           <nav className="info-nav info-nav-desktop" aria-label="Main">
             {LINKS.map((l) => renderLink(l))}
             <LanguageSwitcher compact />
@@ -108,6 +106,7 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </footer>
+      <EcosystemFooter variant="light" />
     </div>
   );
 }

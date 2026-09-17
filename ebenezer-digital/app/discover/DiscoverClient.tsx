@@ -9,6 +9,8 @@ import {
 } from "@/lib/discover/classify";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { EcosystemNav } from "@/components/EcosystemNav";
+import { EcosystemFooter } from "@/components/EcosystemFooter";
+import { ChannelLogo } from "@/components/ChannelLogo";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { AI_URL, SITE_URL } from "@/lib/site-url";
 
@@ -82,7 +84,8 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
   return (
     <div className="discover-root">
       <EcosystemNav active="discover" />
-      <div className="d-page flex justify-end px-4 pt-3 sm:px-6">
+      <div className="d-page flex items-center justify-between px-4 pt-3 sm:px-6">
+        <ChannelLogo channel="discover" href="/discover" />
         <LanguageSwitcher compact />
       </div>
 
@@ -124,6 +127,17 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
             </button>
           </div>
         </form>
+
+        <div className="mt-8 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-5 text-left sm:p-6">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-300">Hardware knowledge base</p>
+          <h2 className="mt-2 text-xl font-bold text-white">100,000+ hardware buying guides</h2>
+          <p className="mt-2 text-sm text-[var(--d-muted)]">
+            Laptops, GPUs, monitors, routers, and components — indexed guides for every scenario and brand.
+          </p>
+          <Link href="/discover/blog" className="d-btn d-btn-primary mt-4 inline-flex">
+            Browse hardware guides <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
 
         <div className="mt-4 flex flex-wrap justify-center gap-2">
           {rotating.slice(0, 5).map((s) => (
@@ -272,6 +286,7 @@ export default function DiscoverClient({ initialQuery = "" }: { initialQuery?: s
         </p>
         <SiteLegalLinks className="mt-6 text-center text-xs text-[var(--d-muted)]" linkClassName="hover:text-slate-300" />
       </div>
+      <EcosystemFooter />
 
       <style jsx>{`
         @keyframes fadeIn {

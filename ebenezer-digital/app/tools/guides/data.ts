@@ -23,4 +23,34 @@ export const TOOLS_GUIDES = [
     excerpt: "ChatGPT, Claude, and Gemini for drafts, research, and rewrites.",
     href: "/tools/compare?ids=chatgpt,claude,gemini",
   },
+  {
+    slug: "best-hosting-for-small-business",
+    title: "Best hosting for small business",
+    excerpt: "Shared, VPS, and managed options — what matters for a business site.",
+    href: "/tools/compare?ids=hostinger,bluehost,siteground",
+  },
+  {
+    slug: "best-seo-tools-for-beginners",
+    title: "Best SEO tools for beginners",
+    excerpt: "Search Console, analytics, and lightweight audit tools to start with.",
+    href: "/tools?category=SEO",
+  },
+  {
+    slug: "best-invoicing-software-india",
+    title: "Best invoicing software for India",
+    excerpt: "Zoho Invoice, Razorpay, and Ebenezer SaaS for GST-ready billing.",
+    href: "/tools/compare?ids=zoho-invoice,razorpay,ebenezer-saas",
+  },
+  {
+    slug: "best-design-tools-for-marketers",
+    title: "Best design tools for marketers",
+    excerpt: "Canva, Adobe Express, and Framer for social and landing pages.",
+    href: "/tools/compare?ids=canva,adobe-express,framer",
+  },
+  {
+    slug: "best-email-marketing-tools",
+    title: "Best email marketing tools",
+    excerpt: "Brevo, Mailchimp alternatives, and CRM-linked email for SMBs.",
+    href: "/tools?category=Email",
+  },
 ] as const;

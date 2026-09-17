@@ -23,6 +23,8 @@ import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
 import { formatProductsForAi } from "@/lib/ai";
+import { CROSS_SITE_BLOGS } from "@/lib/cross-site-blogs";
+import { SITE_NAV } from "@/lib/site-nav";
 
 const trustItems = [
   { icon: <Truck className="h-4 w-4 text-[var(--s-brand)]" />, label: "Instant worldwide download" },
@@ -494,6 +496,31 @@ export function ProductView({ product: raw }: { product: StoreProduct }) {
               {c}
             </span>
           ))}
+        </div>
+      </section>
+
+      {/* ── Related guides (Journal) ───────────────── */}
+      <section className="border-t border-[var(--s-line)] bg-[var(--s-surface)]">
+        <div className="s-page py-10">
+          <h3 className="text-lg font-bold text-[var(--s-ink)]">Guides on Ebenezer Journal</h3>
+          <p className="mt-1 text-sm text-[var(--s-muted)]">
+            Articles about digital products, billing, and shop workflows.
+          </p>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            {CROSS_SITE_BLOGS.filter((b) => b.tags.includes("store") || b.tags.includes("saas"))
+              .slice(0, 4)
+              .map((b) => (
+                <li key={b.slug}>
+                  <a
+                    href={`${SITE_NAV.journal}/${b.slug}`}
+                    className="block rounded-lg border border-[var(--s-line)] p-4 text-sm hover:border-[var(--s-brand)]"
+                  >
+                    <span className="font-semibold text-[var(--s-ink)]">{b.title}</span>
+                    <span className="mt-1 block text-[var(--s-muted)]">{b.excerpt}</span>
+                  </a>
+                </li>
+              ))}
+          </ul>
         </div>
       </section>
 

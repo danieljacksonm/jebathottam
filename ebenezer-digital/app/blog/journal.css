@@ -99,6 +99,11 @@
   transform-origin: left center;
 }
 
+.journal-nav-v2 + .journal-hero-offset,
+.journal-root > .h-\[4\.25rem\] {
+  flex-shrink: 0;
+}
+
 .journal-nav {
   position: fixed;
   top: 0;

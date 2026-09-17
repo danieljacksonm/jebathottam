@@ -305,6 +305,35 @@
   font-weight: 600;
 }
 
+.saas-list {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  color: var(--saas-muted);
+  line-height: 1.8;
+}
+
+.saas-faq {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1.5rem;
+  max-width: 42rem;
+}
+
+.saas-faq h3 {
+  font-size: 1.1rem;
+  color: var(--saas-ink);
+}
+
+.saas-faq p {
+  margin-top: 0.35rem;
+  color: var(--saas-muted);
+  line-height: 1.65;
+}
+
+.saas-hero-sub {
+  padding-top: 6rem;
+}
+
 .saas-section h2 {
   margin: 0;
   text-align: center;

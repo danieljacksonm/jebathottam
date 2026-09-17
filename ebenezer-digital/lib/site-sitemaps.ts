@@ -17,6 +17,7 @@ import {
   TOOLS_URL,
   NETWORK_URL,
   articleLanguageAlternates,
+  publishedLanguageAlternates,
   originForKind,
   publicUrlForInternalPath,
   type SiteKind,
@@ -24,6 +25,7 @@ import {
 import { loadArticles } from "@/lib/content-engine";
 import { CATALOG_CATEGORIES, CATALOG_PRODUCTS } from "@/app/catalog/data";
 import { TOOLS } from "@/app/tools/data";
+import { TOOLS_GUIDES } from "@/app/tools/guides/data";
 import { getLiveTools } from "@/lib/network/registry";
 import { NETWORK_GUIDES } from "@/lib/network/guides";
 import { newsPublicUrl } from "@/lib/news-url";
@@ -91,7 +93,7 @@ function page(
     // XML sitemaps: only en + x-default (must match `<loc>`). Full locale
     // clusters live in HTML `<link rel="alternate">` via pageMetadata.
     entry.alternates = {
-      languages: articleLanguageAlternates(ip, resolvedKind),
+      languages: publishedLanguageAlternates(ip, origin, resolvedKind),
     };
   }
   return entry;
@@ -115,6 +117,7 @@ async function studioSitemap(): Promise<MetadataRoute.Sitemap> {
     "/faq",
     "/contact",
     "/insights",
+    "/guides",
     "/privacy",
     "/terms",
     "/sitemap",
@@ -178,6 +181,7 @@ async function saasSitemap(): Promise<MetadataRoute.Sitemap> {
 async function discoverSitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     page(DISCOVER_URL, "", "weekly", 1, undefined, true),
+    page(DISCOVER_URL, "/discover/blog", "daily", 0.9, undefined, true, "discover", "/discover/blog"),
     page(DISCOVER_URL, "/privacy", "yearly", 0.2, undefined, true),
     page(DISCOVER_URL, "/terms", "yearly", 0.2, undefined, true),
     page(DISCOVER_URL, "/sitemap", "monthly", 0.3, undefined, true),
@@ -261,8 +265,21 @@ async function journalSitemap(): Promise<MetadataRoute.Sitemap> {
     /* CMS store can fail on VPS; still return edu journal URLs */
   }
 
-  // Learn-desk explainers are reachable on /blog/{slug} but stay noindex — omit from XML sitemap.
-  // (All generated slugs are learn-*; iterating getEduPosts() here was wasted work on every crawl.)
+  // Learn-desk explainers — indexable; included in sitemap for crawl discovery.
+  for (const p of getEduPosts()) {
+    if (seen.has(p.slug)) continue;
+    seen.add(p.slug);
+    pages.push(
+      articlePage(
+        JOURNAL_URL,
+        `/blog/${p.slug}`,
+        "journal",
+        "monthly",
+        0.55,
+        p.publishedAt ? new Date(p.publishedAt) : new Date()
+      )
+    );
+  }
 
   return pages;
 }
@@ -308,6 +325,7 @@ async function newsSitemap(): Promise<MetadataRoute.Sitemap> {
 function storeSitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
     page(STORE_URL, "", "weekly", 1, undefined, true),
+    page(STORE_URL, "/products/blog", "daily", 0.9, undefined, true, "store", "/products/blog"),
     page(STORE_URL, "/products/roadmap", "monthly", 0.5, undefined, true),
     page(STORE_URL, "/privacy", "yearly", 0.2, undefined, true),
     page(STORE_URL, "/terms", "yearly", 0.2, undefined, true),
@@ -363,6 +381,7 @@ function toolsSitemap(): MetadataRoute.Sitemap {
     page(TOOLS_URL, "/tools/compare", "weekly", 0.85, undefined, true),
     page(TOOLS_URL, "/tools/guides", "weekly", 0.75, undefined, true),
     page(TOOLS_URL, "/tools/methodology", "monthly", 0.7, undefined, true),
+    page(TOOLS_URL, "/tools/blog", "daily", 0.9, undefined, true, "tools", "/tools/blog"),
     page(TOOLS_URL, "/affiliate-disclosure", "yearly", 0.3, undefined, true),
   ];
   const staticRoutes = [
@@ -381,14 +400,9 @@ function toolsSitemap(): MetadataRoute.Sitemap {
   for (const tool of TOOLS) {
     pages.push(page(TOOLS_URL, `/tools/${tool.id}`, "weekly", 0.85, undefined, true, "tools", `/tools/${tool.id}`));
   }
-  for (const slug of [
-    "best-ai-coding-tools",
-    "best-ai-tools-for-youtube",
-    "best-crm-for-small-business",
-    "best-ai-writing-tools",
-  ]) {
+  for (const g of TOOLS_GUIDES) {
     pages.push(
-      page(TOOLS_URL, `/tools/guides/${slug}`, "monthly", 0.7, undefined, true, "tools", `/tools/guides/${slug}`)
+      page(TOOLS_URL, `/tools/guides/${g.slug}`, "monthly", 0.7, undefined, true, "tools", `/tools/guides/${g.slug}`)
     );
   }
   for (const slug of [

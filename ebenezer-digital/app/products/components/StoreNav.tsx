@@ -9,6 +9,8 @@ import { STORE_CATEGORY_PAGES, STORE_PRODUCTS, formatINR } from "../data";
 import { useStore } from "./StoreProvider";
 import { useStoreI18n, type StoreLocale } from "../i18n";
 import { SITE_NAV } from "@/lib/site-nav";
+import { EcosystemNav } from "@/components/EcosystemNav";
+import { ChannelLogo } from "@/components/ChannelLogo";
 
 export function StoreNav() {
   const { cartCount, setCartOpen, searchOpen, setSearchOpen } = useStore();
@@ -60,24 +62,10 @@ export function StoreNav() {
 
   return (
     <>
-      {/* ── Top bar ──────────────────────────────────────── */}
+      <EcosystemNav active="store" variant="light" />
       <header className={cn("store-nav", solid && "is-solid")}>
         <div className="s-page flex h-16 items-center justify-between gap-4">
-          {/* Logo */}
-          <Link href={lp("/products")} className="flex items-center gap-2.5" aria-label="Ebenezer Store home">
-            <Image
-              src="/brand/ebenezer-store-mark.svg"
-              alt="Ebenezer Store"
-              width={32}
-              height={32}
-              className="rounded-lg"
-              priority
-            />
-            <div className="leading-none">
-              <p className="font-display text-sm font-bold text-[var(--s-ink)]">Ebenezer</p>
-              <p className="text-[10px] font-semibold text-[var(--s-brand)]">Store</p>
-            </div>
-          </Link>
+          <ChannelLogo channel="store" href={lp("/products")} variant="light" />
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-6 lg:flex">

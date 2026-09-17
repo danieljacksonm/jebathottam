@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { pageMetadata } from "@/lib/site-url";
+import { EcosystemFooter } from "@/components/EcosystemFooter";
 import "../affiliate/premium.css";
 
 const base = pageMetadata({
@@ -19,5 +20,10 @@ export const metadata: Metadata = {
 };
 
 export default function ToolsLayout({ children }: { children: ReactNode }) {
-  return <div className="aff-root tools-pro">{children}</div>;
+  return (
+    <div className="aff-root tools-pro">
+      {children}
+      <EcosystemFooter variant="light" />
+    </div>
+  );
 }

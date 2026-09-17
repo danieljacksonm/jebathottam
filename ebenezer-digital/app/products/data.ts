@@ -1,6 +1,7 @@
 import type { StoreProductType } from "./taxonomy";
 import { productMatchesFilter } from "./taxonomy";
 import { billingLoginUrl } from "@/lib/billing-url";
+import { STORE_PRODUCT_HERO } from "@/lib/store-product-images";
 
 export type { StoreProductType } from "./taxonomy";
 export {
@@ -119,7 +120,7 @@ export const FEATURED_ORDER = [
   "free-enquiry-form-kit",
 ] as const;
 
-export const STORE_PRODUCTS: StoreProduct[] = [
+const STORE_PRODUCTS_RAW: StoreProduct[] = [
   /* ── 1. Ebenezer SaaS ────────────────────────────────── */
   {
     id: "dp-yegova",
@@ -2373,6 +2374,17 @@ export const STORE_PRODUCTS: StoreProduct[] = [
       "Draft listing for an editable church Canva pack. Not available until real Canva templates are ready.",
   },
 ];
+
+export const STORE_PRODUCTS: StoreProduct[] = STORE_PRODUCTS_RAW.map((p) => {
+  const heroId = STORE_PRODUCT_HERO[p.slug];
+  if (!heroId) return p;
+  const hero = U(heroId);
+  return {
+    ...p,
+    image: hero,
+    gallery: p.gallery?.length ? [hero, ...p.gallery.filter((g) => g !== p.image).slice(0, 3)] : [hero],
+  };
+});
 
 export function orderedProducts(): StoreProduct[] {
   const map = new Map(STORE_PRODUCTS.map((p) => [p.slug, p]));

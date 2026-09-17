@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { SITE_NAV } from "@/lib/site-nav";
 import { SAAS_URL } from "@/lib/site-url";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { EcosystemNav } from "@/components/EcosystemNav";
 import { BILLING_LOGIN_PATH, BILLING_REGISTER_PATH } from "@/lib/billing-url";
 
 const SAAS_LOGIN = BILLING_LOGIN_PATH;
@@ -14,6 +15,8 @@ export function SaasHeader() {
   const [open, setOpen] = useState(false);
 
   return (
+    <>
+    <EcosystemNav active="saas" variant="light" />
     <header className="saas-top">
       <div className="saas-top-inner">
         <Link href={SAAS_URL} className="saas-brand" aria-label="Yegova Billing home">
@@ -64,5 +67,6 @@ export function SaasHeader() {
         </nav>
       )}
     </header>
+    </>
   );
 }

@@ -72,64 +72,21 @@ export default async function InfoHomePage() {
         </div>
       </section>
 
-      <section className="info-section" aria-labelledby="blog-heading">
-        <p className="info-kicker">Blog</p>
-        <h2 className="info-h2" id="blog-heading">
-          Latest original articles
-        </h2>
-        <p className="info-lead">
-          Longer-form writing from the Ebenezer Journal — technology, AI, business and digital life.
-        </p>
-        <div className="info-card-grid cols-3">
-          {blog.map((post) => {
-            const mins = readingMins(`${post.title} ${post.excerpt || ""}`);
-            const published = post.publishedAt || post.createdAt;
-            return (
-              <a key={post.id} className="info-story-card" href={journalArticleHref(post.slug)}>
-                <div className="info-story-media">
-                  <SafeImage src={post.coverImage || DESK_PHOTOS.world} alt="" fill />
-                </div>
-                <div className="info-story-body">
-                  <p className="info-meta">
-                    {post.category || "Article"} · {mins} min read
-                    {published
-                      ? ` · ${new Date(published).toLocaleDateString("en-IN", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}`
-                      : ""}
-                  </p>
-                  <h3 className="info-story-title">{post.title}</h3>
-                  <p className="info-story-dek">{post.excerpt}</p>
-                  <span className="info-badge">Read article</span>
-                </div>
-              </a>
-            );
-          })}
-        </div>
-        <div className="info-cta-row" style={{ marginTop: "1.5rem" }}>
-          <a className="info-btn info-btn-outline" href="/blog">
-            All blog articles
-          </a>
-        </div>
-      </section>
-
-      <section className="info-section" aria-labelledby="news-heading">
-        <p className="info-kicker">News</p>
+      <section className="info-section info-section-featured" aria-labelledby="news-heading">
+        <p className="info-kicker">News — live desk</p>
         <h2 className="info-h2" id="news-heading">
-          From Ebenezer News
+          Latest headlines
         </h2>
         <p className="info-lead">
-          Headlines from the canonical news desk
+          Breaking and developing stories from the canonical Ebenezer News desk
           {newsLatest
-            ? ` · latest ${new Date(newsLatest).toLocaleDateString("en-IN", {
+            ? ` · updated ${new Date(newsLatest).toLocaleDateString("en-IN", {
                 day: "numeric",
                 month: "short",
                 year: "numeric",
               })}`
             : ""}
-          . Full stories open on news.ebenezerdigital.info.
+          . Cards link to news.ebenezerdigital.info — we do not duplicate full articles here.
         </p>
         <div className="info-card-grid cols-3">
           {news.map((item) => (
@@ -156,7 +113,50 @@ export default async function InfoHomePage() {
         </div>
         <div className="info-cta-row" style={{ marginTop: "1.5rem" }}>
           <a className="info-btn info-btn-solid" href={SITE_NAV.news}>
-            See all news
+            Open Ebenezer News
+          </a>
+        </div>
+      </section>
+
+      <section className="info-section" aria-labelledby="blog-heading">
+        <p className="info-kicker">Journal</p>
+        <h2 className="info-h2" id="blog-heading">
+          Original articles &amp; explainers
+        </h2>
+        <p className="info-lead">
+          Deep digital knowledge from the Ebenezer Journal — technology, AI, business and how the web works.
+        </p>
+        <div className="info-card-grid cols-3">
+          {blog.map((post) => {
+            const mins = readingMins(`${post.title} ${post.excerpt || ""}`);
+            const published = post.publishedAt || post.createdAt;
+            return (
+              <a key={post.id} className="info-story-card" href={journalArticleHref(post.slug)}>
+                <div className="info-story-media">
+                  <SafeImage src={post.coverImage || DESK_PHOTOS.world} alt="" fill />
+                </div>
+                <div className="info-story-body">
+                  <p className="info-meta">
+                    {post.category || "Article"} · {mins} min read
+                    {published
+                      ? ` · ${new Date(published).toLocaleDateString("en-IN", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })}`
+                      : ""}
+                  </p>
+                  <h3 className="info-story-title">{post.title}</h3>
+                  <p className="info-story-dek">{post.excerpt}</p>
+                  <span className="info-badge">Read on Journal</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+        <div className="info-cta-row" style={{ marginTop: "1.5rem" }}>
+          <a className="info-btn info-btn-outline" href={SITE_NAV.journal}>
+            All journal articles
           </a>
         </div>
       </section>
