@@ -8,8 +8,10 @@ import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { absoluteUrl, articleJsonLd, pageMetadata } from "@/lib/seo";
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const slugs = await getAllBlogSlugs();
+  const slugs = await getAllBlogSlugs(200);
   return slugs.map((slug) => ({ slug }));
 }
 

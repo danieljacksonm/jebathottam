@@ -96,6 +96,7 @@ jobs:
               mkdir -p /home/dani/agntix-template
               rsync -a --delete \
                 --exclude node_modules --exclude .next --exclude data/enquiries.jsonl \
+                --exclude prisma/data \
                 "$MONOREPO/agntix-template/" /home/dani/agntix-template/
               cp "$MONOREPO/ecosystem.config.js" /home/dani/ecosystem.config.js
             elif [ -d /home/dani/agntix-template/.git ]; then
@@ -109,9 +110,16 @@ jobs:
 
             cd /home/dani/agntix-template || { echo "ERROR: agntix-template directory not found"; exit 1; }
             rm -f src/middleware.ts
+            mkdir -p prisma/data data
             npm install --legacy-peer-deps --include=dev
+            export DATABASE_URL="file:/home/dani/agntix-template/prisma/data/content.db"
             export NEXT_PUBLIC_SITE_URL=https://canaantravelhub.com
             export NEXT_PUBLIC_BUILD_TIME=$(date -Iseconds)
+            if [ ! -f prisma/data/content.db ]; then
+              echo "WARNING: prisma/data/content.db missing — run seed once or copy from dev machine"
+              ./node_modules/.bin/prisma db push
+              node prisma/seed.mjs
+            fi
             npm run build
             # Standalone runtime needs public + static next to server.js
             mkdir -p .next/standalone/.next

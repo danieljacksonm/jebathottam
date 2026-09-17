@@ -10,10 +10,7 @@ import {
   type PackageDetails,
 } from "@/data/package-details";
 
-export type PackageId =
-  | "kodai-1n2d"
-  | "darjeeling-3n4d-mimbusty"
-  | "darjeeling-3n4d-tabakoshi";
+export type PackageId = "kodai-1n2d";
 
 /** Old marketing package IDs — redirect to the verified flyer package. */
 export const LEGACY_PACKAGE_REDIRECTS: Record<string, PackageId> = {
@@ -42,17 +39,9 @@ export type PackageRow = {
   priceFrom: number;
   currency: "INR";
   image: string;
-  category:
-    | "escape"
-    | "family"
-    | "honeymoon"
-    | "luxury"
-    | "adventure"
-    | "complete"
-    | "group";
+  category: "escape" | "family" | "honeymoon" | "luxury" | "adventure" | "complete";
   featured?: boolean;
   published?: boolean;
-  destinationSlug?: string;
   tagline?: LocalizedString;
   highlights: LocalizedStringList;
   title: LocalizedString;
@@ -61,7 +50,6 @@ export type PackageRow = {
   sharedInclusions?: LocalizedStringList;
   tiers?: PackageTierRow[];
   groupNote?: LocalizedString;
-  priceNote?: LocalizedString;
 };
 
 export type LocalizedTier = {
@@ -106,7 +94,6 @@ export type LocalizedPackage = {
   image: string;
   category: PackageRow["category"];
   featured?: boolean;
-  destinationSlug?: string;
   tagline?: string;
   highlights: string[];
   title: string;
@@ -115,7 +102,6 @@ export type LocalizedPackage = {
   sharedInclusions: string[];
   tiers: LocalizedTier[];
   groupNote?: string;
-  priceNote?: string;
   details: LocalizedPackageDetails;
 };
 
@@ -176,7 +162,6 @@ export function localizePackage(
     image: row.image,
     category: row.category,
     featured: row.featured,
-    destinationSlug: row.destinationSlug,
     tagline: row.tagline ? pickLocalized(row.tagline, locale) : undefined,
     highlights: pickLocalized(row.highlights, locale),
     title: pickLocalized(row.title, locale),
@@ -196,9 +181,6 @@ export function localizePackage(
     })),
     groupNote: row.groupNote
       ? pickLocalized(row.groupNote, locale)
-      : undefined,
-    priceNote: row.priceNote
-      ? pickLocalized(row.priceNote, locale)
       : undefined,
     details: localizeDetails(details, locale),
   };

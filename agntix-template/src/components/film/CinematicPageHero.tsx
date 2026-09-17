@@ -32,7 +32,7 @@ export function CinematicPageHero({
           alt={imageAlt || title}
           fill
           priority={priority}
-          quality={70}
+          quality={90}
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 1600px"
         />

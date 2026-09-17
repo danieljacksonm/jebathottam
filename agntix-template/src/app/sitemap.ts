@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { getAllBlogSlugs } from "@/data/blog";
-import { getDestinationSlugs } from "@/data/destinations";
+import { getAllPlaceParams, getDestinationSlugs } from "@/data/destinations";
 import { packageRows } from "@/data/packages";
 import { SITE_URL, absoluteUrl, localizedPath } from "@/lib/seo";
 
@@ -40,9 +40,10 @@ function hreflangAlternates(path: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
-  const [blogSlugs, destinationSlugs] = await Promise.all([
-    getAllBlogSlugs(),
+  const [blogSlugs, destinationSlugs, places] = await Promise.all([
+    getAllBlogSlugs(8000),
     getDestinationSlugs(),
+    getAllPlaceParams(),
   ]);
 
   for (const locale of routing.locales) {
@@ -70,6 +71,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "monthly",
         priority: 0.75,
         alternates: { languages: hreflangAlternates(destPath) },
+      });
+    }
+
+    for (const place of places) {
+      const placePath = `/destinations/${place.destination}/places/${place.place}`;
+      entries.push({
+        url: `${SITE_URL}${localizedPath(locale, placePath)}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.7,
+        alternates: { languages: hreflangAlternates(placePath) },
       });
     }
 

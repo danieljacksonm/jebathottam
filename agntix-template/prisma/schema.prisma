@@ -44,8 +44,15 @@ model TouristPlace {
   summaryEn     String
   summaryTa     String
   summaryHi     String
+  detailEn      String      @default("")
+  detailTa      String      @default("")
+  detailHi      String      @default("")
+  bestTimeEn    String      @default("")
+  bestTimeTa    String      @default("")
+  bestTimeHi    String      @default("")
   image         String?
   sortOrder     Int         @default(0)
+  blogs         BlogPost[]
 
   @@unique([destinationId, slug])
 }
@@ -55,6 +62,8 @@ model BlogPost {
   slug          String       @unique
   destinationId String?
   destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  placeId       String?
+  place         TouristPlace? @relation(fields: [placeId], references: [id], onDelete: SetNull)
   date          String
   readMinutes   Int
   image         String
@@ -72,4 +81,8 @@ model BlogPost {
   bodyHi        String
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
+
+  @@index([destinationId])
+  @@index([placeId])
+  @@index([date])
 }

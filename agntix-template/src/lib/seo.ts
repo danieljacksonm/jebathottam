@@ -217,6 +217,51 @@ export function packageJsonLd(pkg: {
   };
 }
 
+export function destinationJsonLd(dest: {
+  name: string;
+  description: string;
+  image: string;
+  url: string;
+  country?: string;
+}) {
+  const image = dest.image?.startsWith("http")
+    ? dest.image
+    : `${SITE_URL}${dest.image || ""}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "TouristDestination",
+    name: dest.name,
+    description: dest.description,
+    image,
+    url: dest.url,
+    ...(dest.country ? { containedInPlace: { "@type": "Country", name: dest.country } } : {}),
+    touristType: ["Family", "Couples", "Culture", "Nature"],
+  };
+}
+
+export function placeJsonLd(place: {
+  name: string;
+  description: string;
+  image: string;
+  url: string;
+  destinationName?: string;
+}) {
+  const image = place.image?.startsWith("http")
+    ? place.image
+    : `${SITE_URL}${place.image || ""}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "TouristAttraction",
+    name: place.name,
+    description: place.description,
+    image,
+    url: place.url,
+    ...(place.destinationName
+      ? { containedInPlace: { "@type": "TouristDestination", name: place.destinationName } }
+      : {}),
+  };
+}
+
 export function articleJsonLd(article: {
   title: string;
   description: string;
@@ -229,7 +274,9 @@ export function articleJsonLd(article: {
     "@type": "Article",
     headline: article.title,
     description: article.description,
-    image: article.image,
+    image: article.image?.startsWith("http")
+      ? article.image
+      : `${SITE_URL}${article.image || ""}`,
     datePublished: article.datePublished,
     author: { "@type": "Organization", name: SITE_NAME },
     publisher: {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -11,7 +12,8 @@ import {
 } from "@/data/destinations";
 import { getBlogCount, getLocalizedBlogs } from "@/data/blog";
 import { formatInr, packageRows } from "@/data/packages";
-import { pageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { absoluteUrl, destinationJsonLd, pageMetadata } from "@/lib/seo";
 import KodaikanalPage from "../../kodaikanal/page";
 
 export async function generateStaticParams() {
@@ -71,6 +73,15 @@ export default async function DestinationDetailPage({
 
   return (
     <PageAtmosphere>
+      <JsonLd
+        data={destinationJsonLd({
+          name: dest.name,
+          description: dest.body,
+          image: dest.image,
+          url: absoluteUrl(resolved.locale, `/destinations/${resolved.slug}`),
+          country: dest.country,
+        })}
+      />
       <CinematicPageHero
         eyebrow={
           dest.status === "coming_soon"
@@ -135,11 +146,34 @@ export default async function DestinationDetailPage({
           <h2 className="font-display text-3xl text-cream">Top places</h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {places.map((place) => (
-              <article key={place.slug} className="lux-card p-6">
-                <h3 className="font-display text-xl text-white">{place.name}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-soft-gray">
-                  {place.summary}
-                </p>
+              <article key={place.slug} className="lux-card overflow-hidden">
+                <Link
+                  href={`/destinations/${dest.slug}/places/${place.slug}`}
+                  className="block"
+                >
+                  {place.image ? (
+                    <div className="relative aspect-[16/10]">
+                      <Image
+                        src={place.image}
+                        alt={place.name}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
+                  ) : null}
+                  <div className="p-6">
+                    <h3 className="font-display text-xl text-white">
+                      {place.name}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-soft-gray">
+                      {place.summary}
+                    </p>
+                    <p className="mt-4 text-xs uppercase tracking-[0.14em] text-gold">
+                      50 guides →
+                    </p>
+                  </div>
+                </Link>
               </article>
             ))}
           </div>

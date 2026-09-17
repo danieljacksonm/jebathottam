@@ -63,13 +63,7 @@ export async function sendEnquiryNotification(
     process.env.SMTP_USER ||
     `Canaan Travel Hub <${BUSINESS.email}>`;
 
-  const subjectLabel =
-    payload.source === "plan-your-trip"
-      ? "Plan trip"
-      : payload.source === "corporate"
-        ? "Corporate"
-        : "Enquiry";
-  const subject = `[Canaan] ${subjectLabel} — ${payload.name}`;
+  const subject = `[Canaan] ${payload.source === "plan-your-trip" ? "Plan trip" : "Enquiry"} — ${payload.name}`;
   const text = [
     "New enquiry on canaantravelhub.com",
     "",

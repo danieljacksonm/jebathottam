@@ -4,8 +4,8 @@
     "description": "Curated Kodaikanal packages and worldwide tourism support — flights, hotels, visas and trip planning with Canaan Travel Hub."
   },
   "seo": {
-    "homeTitle": "Canaan Travel Hub | Discover. Plan. Travel. Experience.",
-    "homeDescription": "Global travel planning from Canaan Travel Hub — domestic and international destinations, curated packages, corporate travel, and custom trips. Start with Kodaikanal and Darjeeling.",
+    "homeTitle": "Canaan Travel Hub | Kodaikanal Packages & Worldwide Travel",
+    "homeDescription": "Curated Kodaikanal packages and worldwide tourism support — flights, hotels, visas and trip planning with Canaan Travel Hub.",
     "kodaiTitle": "Kodaikanal Tour Packages & Travel Guide",
     "kodaiDescription": "Plan a calm Kodaikanal journey — sightseeing, honeymoon and family packages, lake and pine-forest days, and a clear itinerary with Canaan Travel Hub.",
     "destinationsTitle": "Destinations | Canaan Travel Hub",
@@ -22,8 +22,8 @@
     "flightsDescription": "Flight assistance for Kodaikanal arrivals and journeys worldwide with Canaan Travel Hub.",
     "visaTitle": "Visa Assistance",
     "visaDescription": "Visa support as a digital tourism service for travellers worldwide.",
-    "blogTitle": "Worldwide Travel Guides & Stories | Canaan Travel Hub",
-    "blogDescription": "500+ practical travel guides for destinations and tourist places worldwide — Kodaikanal, Darjeeling, Bali, Dubai, Europe, and more. Filter by region or destination.",
+    "blogTitle": "Worldwide Tourism Guides | 50 Articles Per Place | Canaan",
+    "blogDescription": "Detailed, SEO-ready travel guides for tourist places worldwide — 50 unique articles per place covering timing, access, culture, families, and responsible travel.",
     "aboutTitle": "About Canaan Travel Hub",
     "aboutDescription": "Canaan Travel Hub offers curated Kodaikanal tour packages and digital tourism services for travellers worldwide — flights, hotels, visas and trip planning.",
     "contactTitle": "Contact Canaan Travel Hub",
@@ -37,15 +37,7 @@
     "privacyTitle": "Privacy Policy | Canaan Travel Hub",
     "privacyDescription": "How Canaan Travel Hub collects, uses, and protects your personal information when you enquire or browse our site.",
     "termsTitle": "Terms of Service | Canaan Travel Hub",
-    "termsDescription": "Terms for using canaantravelhub.com and booking Kodaikanal tour packages or digital travel services with Canaan Travel Hub.",
-    "corporateTitle": "Corporate Travel | Canaan Travel Hub",
-    "corporateDescription": "Business trips, retreats, team outings, MICE support, airport transfers, and coordinated group travel with Canaan Travel Hub.",
-    "experiencesTitle": "Travel Experiences | Canaan Travel Hub",
-    "experiencesDescription": "Travel styles we support — family, honeymoon, adventure, group, pilgrimage, corporate, and custom journeys.",
-    "darjeelingTitle": "Darjeeling Packages | Canaan Travel Hub",
-    "darjeelingDescription": "Verified Darjeeling 3 Night / 4 Days circuits from NJP — Mimbusty or Tabakoshi stays, sightseeing, and Mirik return. Enquire for your group.",
-    "goaTitle": "Goa Trips | Canaan Travel Hub",
-    "goaDescription": "Custom Goa getaways on request — beaches, water sports, sightseeing, and tailored group plans. Enquire with Canaan Travel Hub."
+    "termsDescription": "Terms for using canaantravelhub.com and booking Kodaikanal tour packages or digital travel services with Canaan Travel Hub."
   },
   "geo": {
     "home": "Canaan Travel Hub offers curated Kodaikanal packages (1 Night / 2 Days from INR 1,799 per person for 6 guests) and digital tourism support worldwide — flights, hotels, visas and trip planning. Call +91 70927 71754 or email managingdirector@canaantravelhub.com / canaantravelhub@gmail.com. Working hours: Monday–Saturday, 9:00 AM – 6:00 PM."
@@ -94,11 +86,9 @@
     "enquire": "Enquire",
     "faq": "FAQ",
     "bookNow": "Book Now",
-    "planTrip": "Plan Your Trip",
+    "planTrip": "Plan My Trip",
     "brand": "Canaan",
-    "brandSub": "Travel Hub",
-    "corporate": "Corporate Travel",
-    "experiences": "Experiences"
+    "brandSub": "Travel Hub"
   },
   "hero": {
     "place": "Kodaikanal · Princess of the Hills",
@@ -269,20 +259,17 @@
   },
   "blog": {
     "eyebrow": "Journal",
-    "title": "Worldwide travel guides",
-    "subtitle": "500+ practical guides across India, Asia, Europe, the Americas, Africa, and Oceania — every major destination and tourist place, with calm travel planning.",
+    "title": "Worldwide tourism guides",
+    "subtitle": "Every major place gets 50 detailed, SEO-ready guides — unique images, verified pacing advice, and Canaan enquiry support. No invented package prices.",
     "filteredTitle": "{destination} travel guides",
     "filteredSubtitle": "Verified notes and itineraries for {destination} — filter, read, and enquire when you are ready.",
     "read": "{count} min read",
     "back": "Back to blog",
-    "gridIntro": "Hills, coasts, cities, and deserts — browse by continent or destination, including place-level guides.",
+    "gridIntro": "Hills, coasts, cities, and deserts — 50 guides per tourist place, browsable by continent or destination.",
     "filteredIntro": "Guides focused on {destination}.",
     "storiesCount": "{count} stories",
     "readMore": "Read",
     "filterAll": "All",
-    "destinationKodaikanal": "Kodaikanal",
-    "destinationDarjeeling": "Darjeeling",
-    "destinationGoa": "Goa",
     "viewAllGuides": "View all {destination} guides",
     "recentGuides": "Recent guides",
     "heroImageAlt": "Worldwide travel guides from Canaan Travel Hub",
@@ -427,7 +414,7 @@
   },
   "footer": {
     "tagline": "Cross Borders. Discover Blessings.",
-    "about": "Canaan Travel Hub helps you discover, plan, and experience journeys — from Indian hill stations to worldwide travel support and corporate coordination.",
+    "about": "Kodaikanal packages with local care — plus flights, hotels, visas and tourism support worldwide.",
     "rights": "© {year} Canaan Travel Hub. All rights reserved.",
     "contact": "Contact",
     "privacy": "Privacy Policy",
@@ -587,59 +574,6 @@
         "title": "Governing law",
         "body": "These terms are governed by the laws of India. Disputes will be handled in good faith and, if needed, through courts in Tamil Nadu, India."
       }
-    }
-  },
-  "platform": {
-    "heroEyebrow": "Canaan Travel Hub",
-    "heroTitle": "Your journey starts here.",
-    "heroSub": "Discover destinations, curated packages, corporate travel, and custom trips — with human planning you can trust.",
-    "ctaDestinations": "Explore Destinations",
-    "ctaPlan": "Plan Your Trip",
-    "featuredDestinations": "Featured destinations",
-    "featuredPackages": "Featured packages",
-    "whyTitle": "Why travel with Canaan",
-    "whyBody": "Transparent packages, human assistance, local knowledge, and corporate coordination — without fake reviews or invented inventory.",
-    "corporateTitle": "Corporate travel",
-    "corporateBody": "Business trips, retreats, team outings, conferences, transfers, and coordinated group travel.",
-    "corporateCta": "Plan corporate travel",
-    "customTitle": "Tell us where you want to go.",
-    "customBody": "We'll help you plan the journey — destinations, dates, style, and budget.",
-    "availableNow": "Available now",
-    "requestEnquiry": "Request / Enquiry",
-    "comingSoon": "Coming soon",
-    "perPerson": "per person",
-    "from": "From"
-  },
-  "corporate": {
-    "eyebrow": "B2B travel",
-    "title": "Corporate Travel",
-    "subtitle": "Coordinated business travel, retreats, and group programmes — planned with Canaan.",
-    "servicesTitle": "What we coordinate",
-    "formTitle": "Request a corporate quote",
-    "formSubtitle": "Share your requirements. We'll respond with a human plan — not automated fake availability.",
-    "name": "Name",
-    "company": "Company",
-    "workEmail": "Work email",
-    "phone": "Phone",
-    "travelType": "Travel type",
-    "travellers": "Number of travellers",
-    "destination": "Destination",
-    "departure": "Departure location",
-    "dates": "Travel dates",
-    "budget": "Budget range",
-    "requirements": "Requirements",
-    "notes": "Additional notes",
-    "submit": "Request corporate quote",
-    "success": "Thank you. Your corporate enquiry was saved. We'll contact you shortly.",
-    "error": "Unable to submit. Please try again or WhatsApp us.",
-    "types": {
-      "business": "Business trips",
-      "retreat": "Corporate retreats",
-      "outing": "Team outings",
-      "conference": "Conferences / events",
-      "mice": "MICE",
-      "transfer": "Airport transfers",
-      "other": "Other / custom"
     }
   }
 }

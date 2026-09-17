@@ -1,6 +1,8 @@
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import {
   getBlogContinentOptions,
+  getBlogCount,
   getBlogDestinationOptions,
   getLocalizedBlogs,
   KODAI_BLOG_IMAGE,
@@ -11,6 +13,8 @@ import { BlogFilterChips } from "@/components/blog/BlogFilterChips";
 import { BlogGrid } from "@/components/blog/BlogGrid";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { pageMetadata } from "@/lib/seo";
+
+const PAGE_SIZE = 24;
 
 export async function generateMetadata({
   params,
@@ -35,17 +39,28 @@ export default async function BlogPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ destination?: string; continent?: string }>;
+  searchParams: Promise<{
+    destination?: string;
+    continent?: string;
+    page?: string;
+  }>;
 }) {
   const { locale } = await params;
-  const { destination, continent } = await searchParams;
+  const { destination, continent, page: pageRaw } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("blog");
   const loc = await getLocale();
+  const page = Math.max(1, Number(pageRaw) || 1);
   const filters = { destination, continent };
-  const posts = await getLocalizedBlogs(loc, filters);
+  const total = await getBlogCount(filters);
+  const posts = await getLocalizedBlogs(loc, {
+    ...filters,
+    take: PAGE_SIZE,
+    skip: (page - 1) * PAGE_SIZE,
+  });
   const destinationOptions = await getBlogDestinationOptions(loc);
   const continentOptions = await getBlogContinentOptions();
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   const filterLabel =
     destinationOptions.find((d) => d.slug === destination)?.label ??
@@ -76,10 +91,17 @@ export default async function BlogPage({
     tags: post.tags,
     readLabel: t("read", { count: post.readMinutes }),
     image: post.image,
-    destinationLabel: post.destinationName ?? undefined,
+    destinationLabel: post.placeName
+      ? `${post.placeName}${post.destinationName ? ` · ${post.destinationName}` : ""}`
+      : post.destinationName ?? undefined,
   }));
 
   const nav = await getTranslations("nav");
+  const queryBase = destination
+    ? `destination=${destination}`
+    : continent
+      ? `continent=${encodeURIComponent(continent)}`
+      : "";
 
   return (
     <PageAtmosphere>
@@ -113,10 +135,33 @@ export default async function BlogPage({
           intro: filterLabel
             ? t("filteredIntro", { destination: filterLabel })
             : t("gridIntro"),
-          storiesCount: t("storiesCount", { count: posts.length }),
+          storiesCount: t("storiesCount", { count: total }),
           readMore: t("readMore"),
         }}
       />
+      {totalPages > 1 ? (
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-3 px-5 pb-16 md:px-8">
+          {page > 1 ? (
+            <Link
+              href={`/blog?${queryBase}${queryBase ? "&" : ""}page=${page - 1}`}
+              className="border border-[var(--line)] px-4 py-2 text-xs uppercase tracking-[0.14em] text-mist hover:border-gold/40"
+            >
+              Previous
+            </Link>
+          ) : null}
+          <span className="text-xs uppercase tracking-[0.14em] text-soft-gray">
+            Page {page} / {totalPages}
+          </span>
+          {page < totalPages ? (
+            <Link
+              href={`/blog?${queryBase}${queryBase ? "&" : ""}page=${page + 1}`}
+              className="border border-[var(--line)] px-4 py-2 text-xs uppercase tracking-[0.14em] text-mist hover:border-gold/40"
+            >
+              Next
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
     </PageAtmosphere>
   );
 }

@@ -1,0 +1,19 @@
+[Unit]
+Description=Canaan Travel Hub
+After=network.target
+
+[Service]
+Type=simple
+User=dani
+WorkingDirectory=/home/dani/agntix-template
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=0.0.0.0
+EnvironmentFile=/home/dani/agntix-template/.env
+EnvironmentFile=-/home/dani/agntix-template/.env.production.local
+ExecStart=/usr/bin/node .next/standalone/server.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

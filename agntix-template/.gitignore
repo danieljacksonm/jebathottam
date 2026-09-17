@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -43,17 +44,11 @@ next-env.d.ts
 # local enquiry store (VPS runtime)
 /data/enquiries.jsonl
 /data/enquire-rate.json
+/data/content.db
+/data/content.db-journal
 
 # local audits
 lighthouse-*.json
 
-# owner WhatsApp zip duplicates (loose images kept)
-/packages/**/*.zip
-
-
-/data/content.db
-/data/content.db-journal
-
-# Prisma SQLite (seed regenerates)
 /prisma/data/
-
+/prisma/image-catalog.json

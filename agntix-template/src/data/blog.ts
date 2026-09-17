@@ -9,6 +9,8 @@ export type LocalizedBlog = {
   image: string;
   destinationSlug: string | null;
   destinationName: string | null;
+  placeSlug: string | null;
+  placeName: string | null;
   continent: string | null;
   tags: string[];
   title: string;
@@ -60,6 +62,10 @@ function localizeBlogRow(
           locale,
         )
       : null,
+    placeSlug: row.place?.slug ?? null,
+    placeName: row.place
+      ? pickLocale(row.place.nameEn, row.place.nameTa, row.place.nameHi, locale)
+      : null,
     continent: row.destination?.continent ?? null,
     tags: parseTags(
       locale === "ta"
@@ -86,6 +92,14 @@ const blogInclude = {
       continent: true,
     },
   },
+  place: {
+    select: {
+      slug: true,
+      nameEn: true,
+      nameTa: true,
+      nameHi: true,
+    },
+  },
 } as const;
 
 type BlogWithDestination = Prisma.BlogPostGetPayload<{
@@ -96,7 +110,13 @@ export const KODAI_BLOG_IMAGE = "/images/marketing/kodai-banner.jpg";
 
 export async function getLocalizedBlogs(
   locale: string,
-  filters?: { destination?: string; continent?: string },
+  filters?: {
+    destination?: string;
+    continent?: string;
+    place?: string;
+    take?: number;
+    skip?: number;
+  },
 ) {
   const rows = await prisma.blogPost.findMany({
     where: {
@@ -106,9 +126,12 @@ export async function getLocalizedBlogs(
       ...(filters?.continent
         ? { destination: { continent: filters.continent } }
         : {}),
+      ...(filters?.place ? { place: { slug: filters.place } } : {}),
     },
     include: blogInclude,
     orderBy: [{ date: "desc" }, { titleEn: "asc" }],
+    ...(typeof filters?.take === "number" ? { take: filters.take } : {}),
+    ...(typeof filters?.skip === "number" ? { skip: filters.skip } : {}),
   });
   return rows
     .map((row) => localizeBlogRow(row, locale))
@@ -123,14 +146,20 @@ export async function getLocalizedBlog(slug: string, locale: string) {
   return localizeBlogRow(row, locale);
 }
 
-export async function getAllBlogSlugs() {
-  const rows = await prisma.blogPost.findMany({ select: { slug: true } });
+/** Prebuild a capped set for SSG; remaining posts render on demand. */
+export async function getAllBlogSlugs(limit = 300) {
+  const rows = await prisma.blogPost.findMany({
+    select: { slug: true },
+    orderBy: [{ date: "desc" }],
+    take: limit,
+  });
   return rows.map((r) => r.slug);
 }
 
 export async function getBlogCount(filters?: {
   destination?: string;
   continent?: string;
+  place?: string;
 }) {
   return prisma.blogPost.count({
     where: {
@@ -140,6 +169,7 @@ export async function getBlogCount(filters?: {
       ...(filters?.continent
         ? { destination: { continent: filters.continent } }
         : {}),
+      ...(filters?.place ? { place: { slug: filters.place } } : {}),
     },
   });
 }

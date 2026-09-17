@@ -19,10 +19,15 @@ export type LocalizedDestination = {
 };
 
 export type LocalizedPlace = {
+  id: string;
   slug: string;
   name: string;
   summary: string;
+  detail: string;
+  bestTime: string;
   image: string | null;
+  destinationSlug?: string;
+  destinationName?: string;
 };
 
 function pickLocale(en: string, ta: string, hi: string, locale: string) {
@@ -117,9 +122,57 @@ export async function getPlacesForDestination(
     orderBy: { sortOrder: "asc" },
   });
   return rows.map((row) => ({
+    id: row.id,
     slug: row.slug,
     name: pickLocale(row.nameEn, row.nameTa, row.nameHi, locale),
     summary: pickLocale(row.summaryEn, row.summaryTa, row.summaryHi, locale),
+    detail: pickLocale(row.detailEn, row.detailTa, row.detailHi, locale),
+    bestTime: pickLocale(row.bestTimeEn, row.bestTimeTa, row.bestTimeHi, locale),
     image: row.image,
   })) satisfies LocalizedPlace[];
+}
+
+export async function getPlace(
+  destinationSlug: string,
+  placeSlug: string,
+  locale: string,
+) {
+  const dest = await prisma.destination.findUnique({
+    where: { slug: destinationSlug },
+  });
+  if (!dest) return null;
+  const row = await prisma.touristPlace.findUnique({
+    where: {
+      destinationId_slug: {
+        destinationId: dest.id,
+        slug: placeSlug,
+      },
+    },
+  });
+  if (!row) return null;
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: pickLocale(row.nameEn, row.nameTa, row.nameHi, locale),
+    summary: pickLocale(row.summaryEn, row.summaryTa, row.summaryHi, locale),
+    detail: pickLocale(row.detailEn, row.detailTa, row.detailHi, locale),
+    bestTime: pickLocale(row.bestTimeEn, row.bestTimeTa, row.bestTimeHi, locale),
+    image: row.image,
+    destinationSlug: dest.slug,
+    destinationName: pickLocale(dest.nameEn, dest.nameTa, dest.nameHi, locale),
+    destinationId: dest.id,
+  };
+}
+
+export async function getAllPlaceParams() {
+  const rows = await prisma.touristPlace.findMany({
+    select: {
+      slug: true,
+      destination: { select: { slug: true } },
+    },
+  });
+  return rows.map((r) => ({
+    destination: r.destination.slug,
+    place: r.slug,
+  }));
 }

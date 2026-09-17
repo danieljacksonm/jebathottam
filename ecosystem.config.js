@@ -68,6 +68,7 @@ module.exports = {
         PORT: 3003,
         HOSTNAME: "0.0.0.0",
         NEXT_PUBLIC_SITE_URL: "https://canaantravelhub.com",
+        DATABASE_URL: "file:/home/dani/agntix-template/prisma/data/content.db",
         NODE_OPTIONS: "--max-old-space-size=384",
         // Enquiry email — set real SMTP_USER / SMTP_PASS on the VPS (Gmail App Password)
         ENQUIRY_NOTIFY_EMAIL:

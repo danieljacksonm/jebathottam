@@ -1,3 +1,5 @@
+import { LOCAL_SCENES } from "@/lib/media";
+
 export type ExperienceSlug =
   | "kodai-lake"
   | "coakers-walk"
@@ -12,31 +14,11 @@ export type KodaiExperience = {
 
 /** Places and moments inside Kodaikanal only — not other cities. */
 export const kodaiExperiences: KodaiExperience[] = [
-  {
-    slug: "kodai-lake",
-    image:
-      "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=1400&q=80",
-  },
-  {
-    slug: "coakers-walk",
-    image:
-      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=80",
-  },
-  {
-    slug: "pillar-rocks",
-    image:
-      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=80",
-  },
-  {
-    slug: "pine-trails",
-    image:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1400&q=80",
-  },
-  {
-    slug: "valley-light",
-    image:
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80",
-  },
+  { slug: "kodai-lake", image: LOCAL_SCENES["kodai-lake"] },
+  { slug: "coakers-walk", image: LOCAL_SCENES["coakers-walk"] },
+  { slug: "pillar-rocks", image: LOCAL_SCENES["pillar-rocks"] },
+  { slug: "pine-trails", image: LOCAL_SCENES["pine-forest"] },
+  { slug: "valley-light", image: LOCAL_SCENES.mannavanur },
 ];
 
 export const experienceCopy: Record<

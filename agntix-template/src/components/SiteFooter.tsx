@@ -44,7 +44,7 @@ export async function SiteFooter() {
             {(
               [
                 ["/", "home"],
-                ["/destinations", "destinations"],
+                ["/kodaikanal", "kodaikanal"],
                 ["/packages", "packages"],
                 ["/blog", "blog"],
               ] as const
@@ -65,10 +65,10 @@ export async function SiteFooter() {
           <ul className="mt-5 space-y-3">
             {(
               [
-                ["/experiences", "experiences"],
                 ["/services", "services"],
                 ["/flights", "flights"],
                 ["/hotels", "hotels"],
+                ["/visa", "visa"],
               ] as const
             ).map(([href, key]) => (
               <li key={href}>

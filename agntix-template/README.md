@@ -27,22 +27,26 @@ Open [http://localhost:3000](http://localhost:3000) (redirects to `/en`).
 | `npm run start` | Run production server |
 | `npm run lint` | ESLint |
 
-## VPS deploy (simple)
+## VPS deploy
+
+Pages read destinations and blogs from SQLite at runtime. That file is not in git, so a pull alone does not update the catalogue. After the new code is on the server (`/home/dani/agntix-template`):
 
 ```bash
-npm ci
-npm run build
-NODE_ENV=production node .next/standalone/server.js
+cd /home/dani/agntix-template
+bash scripts/vps-deploy.sh
 ```
 
-Also copy static assets next to standalone (Next docs):
+The script installs dependencies, writes `DATABASE_URL` into `.env` if missing, seeds `prisma/data/content.db`, builds standalone, and copies `public` plus `.next/static`. It does not overwrite `.env.production.local` (SMTP).
+
+Start from the app root so enquiries still append to `data/enquiries.jsonl`:
 
 ```bash
-cp -r public .next/standalone/public
-cp -r .next/static .next/standalone/.next/static
+NODE_ENV=production PORT=3000 node .next/standalone/server.js
 ```
 
-Serve on port 3000 behind Nginx/Caddy. Enquiries are appended to `data/enquiries.jsonl` on the server.
+Optional systemd unit: `scripts/canaan-travel-hub.service` (install with `sudo cp` into `/etc/systemd/system/`, then `sudo systemctl enable --now canaan-travel-hub`). If that unit is already active, the deploy script restarts it.
+
+Serve on port 3000 behind Nginx/Caddy.
 
 ## Production
 

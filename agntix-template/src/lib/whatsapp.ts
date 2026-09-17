@@ -18,15 +18,15 @@ export function whatsappMessage(ctx: WhatsAppContext): string {
         ? `Hi Canaan Travel Hub, I have a question after reading “${ctx.title}” about Kodaikanal travel.`
         : `Hi Canaan Travel Hub, I have a question about your Kodaikanal travel guide.`;
     case "planTrip":
-      return `Hi Canaan Travel Hub, I would like to plan a trip. Can you help with destinations, dates, and a suitable package?`;
+      return `Hi Canaan Travel Hub, I would like to plan a Kodaikanal trip. Can you help me with an itinerary?`;
     case "contact":
-      return `Hi Canaan Travel Hub, I would like to get in touch about travel packages and planning.`;
+      return `Hi Canaan Travel Hub, I would like to get in touch about Kodaikanal packages.`;
     case "attraction":
-      return `Hi Canaan Travel Hub, I am interested in visiting ${ctx.name} as part of a trip.`;
+      return `Hi Canaan Travel Hub, I am interested in visiting ${ctx.name} as part of a Kodaikanal trip.`;
     case "custom":
       return ctx.message;
     default:
-      return `Hi Canaan Travel Hub, I am interested in planning a trip with you.`;
+      return `Hi Canaan Travel Hub, I am interested in a Kodaikanal trip.`;
   }
 }
 
