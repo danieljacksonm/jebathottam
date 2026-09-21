@@ -1,16 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-const categories = [
-  { id: "all", label: "All" },
-  { id: "ongoing", label: "Ongoing" },
-  { id: "completed", label: "Completed" },
-  { id: "web", label: "Web" },
-  { id: "travel", label: "Travel" },
-];
+import { useLocalePath, useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 
 type Project = {
   id: string;
@@ -25,6 +18,22 @@ type Project = {
 };
 
 export default function Portfolio() {
+  const copy = useStudioSiteCopy();
+  const p = copy.portfolio;
+  const common = copy.common;
+  const lp = useLocalePath();
+
+  const categories = useMemo(
+    () => [
+      { id: "all", label: common.all },
+      { id: "ongoing", label: common.ongoing },
+      { id: "completed", label: common.completed },
+      { id: "web", label: common.web },
+      { id: "travel", label: common.travel },
+    ],
+    [common]
+  );
+
   const [activeCategory, setActiveCategory] = useState("all");
   const [projects, setProjects] = useState<Project[]>([]);
 
@@ -32,7 +41,7 @@ export default function Portfolio() {
     fetch("/api/content")
       .then((r) => r.json())
       .then((data) => {
-        const list = (data.portfolio || []).map((p: {
+        const list = (data.portfolio || []).map((item: {
           id: string;
           title: string;
           description: string;
@@ -43,15 +52,15 @@ export default function Portfolio() {
           projectPhase?: "ongoing" | "completed";
           clientName?: string;
         }) => ({
-          id: p.id,
-          title: p.title,
-          description: p.description,
-          category: (p.category && p.category[0]) || "web",
-          tags: p.techStack || [],
-          coverImage: p.coverImage || "/images/portfolio/canaan-cover.png",
-          liveUrl: p.liveUrl,
-          projectPhase: p.projectPhase || "completed",
-          clientName: p.clientName,
+          id: item.id,
+          title: item.title,
+          description: item.description,
+          category: (item.category && item.category[0]) || "web",
+          tags: item.techStack || [],
+          coverImage: item.coverImage || "/images/portfolio/canaan-cover.png",
+          liveUrl: item.liveUrl,
+          projectPhase: item.projectPhase || "completed",
+          clientName: item.clientName,
         }));
         setProjects(list);
       })
@@ -62,23 +71,21 @@ export default function Portfolio() {
     activeCategory === "all"
       ? projects
       : activeCategory === "ongoing" || activeCategory === "completed"
-        ? projects.filter((p) => p.projectPhase === activeCategory)
-        : projects.filter((p) => p.category === activeCategory);
+        ? projects.filter((project) => project.projectPhase === activeCategory)
+        : projects.filter((project) => project.category === activeCategory);
 
   return (
     <section id="work" className="relative overflow-hidden py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
-        <p className="studio-kicker">Selected work</p>
+        <p className="studio-kicker">{p.kicker}</p>
         <h2 className="studio-display mt-4 text-6xl sm:text-8xl">
-          WORK
+          {p.titleLine1}
           <br />
-          IN THE
+          {p.titleLine2}
           <br />
-          WORLD.
+          {p.titleLine3}
         </h2>
-        <p className="mt-6 max-w-xl text-[var(--st-muted)]">
-          Real client projects — ongoing builds and completed deliveries across web, travel, and business systems.
-        </p>
+        <p className="mt-6 max-w-xl text-[var(--st-muted)]">{p.intro}</p>
         <div className="mt-10 flex flex-wrap gap-2">
           {categories.map((category) => (
             <button
@@ -104,7 +111,7 @@ export default function Portfolio() {
           >
             <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1.15fr_0.85fr]">
               <Link
-                href={project.liveUrl || "/work"}
+                href={project.liveUrl || lp("/work")}
                 target={project.liveUrl ? "_blank" : undefined}
                 rel={project.liveUrl ? "noopener noreferrer" : undefined}
                 className="group relative block aspect-[16/10] overflow-hidden bg-[#111]"
@@ -120,7 +127,7 @@ export default function Portfolio() {
               </Link>
               <div>
                 <p className="text-[10px] uppercase tracking-[0.22em] text-emerald-400">
-                  Project {String(index + 1).padStart(2, "0")} · {project.projectPhase}
+                  {common.project} {String(index + 1).padStart(2, "0")} · {project.projectPhase}
                 </p>
                 {project.clientName && (
                   <p className="mt-2 text-sm text-white/50">{project.clientName}</p>
@@ -134,8 +141,8 @@ export default function Portfolio() {
                     </span>
                   ))}
                 </div>
-                <Link href="/work" className="mt-6 inline-block text-sm uppercase tracking-[0.16em] text-emerald-400">
-                  View case study →
+                <Link href={lp("/work")} className="mt-6 inline-block text-sm uppercase tracking-[0.16em] text-emerald-400">
+                  {common.viewCaseStudy}
                 </Link>
               </div>
             </div>
@@ -144,8 +151,8 @@ export default function Portfolio() {
       </div>
 
       <div className="px-4 pt-8 text-center sm:px-8">
-        <Link href="/work" className="studio-btn studio-btn-ghost inline-flex" data-cursor="OPEN">
-          See how we build
+        <Link href={lp("/work")} className="studio-btn studio-btn-ghost inline-flex" data-cursor="OPEN">
+          {common.seeHowWeBuild}
         </Link>
       </div>
     </section>

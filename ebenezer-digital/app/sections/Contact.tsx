@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   SITE_EMAIL,
@@ -8,47 +8,7 @@ import {
   SITE_PHONE_TEL,
   SITE_WHATSAPP_URL,
 } from "@/lib/site-contact";
-
-const contactInfo = [
-  {
-    label: "Email",
-    value: SITE_EMAIL,
-    href: `mailto:${SITE_EMAIL}`,
-  },
-  {
-    label: "Phone",
-    value: SITE_PHONE_DISPLAY,
-    href: SITE_PHONE_TEL,
-  },
-  {
-    label: "WhatsApp",
-    value: SITE_PHONE_DISPLAY,
-    href: SITE_WHATSAPP_URL,
-  },
-  { label: "Location", value: "Remote / Worldwide" },
-  { label: "Working Hours", value: "Mon–Sat · reply within one business day" },
-];
-
-const steps = [
-  { key: "service", label: "What are you building?" },
-  { key: "budget", label: "What’s your budget?" },
-  { key: "message", label: "Tell us about it." },
-  { key: "details", label: "How do we reach you?" },
-] as const;
-
-const serviceOptions = [
-  { value: "web", label: "Web Development" },
-  { value: "data", label: "Data Entry & Admin" },
-  { value: "travel", label: "Travel & Booking" },
-  { value: "other", label: "Other Services" },
-];
-
-const budgetOptions = [
-  { value: "500-1000", label: "$500 – $1,000" },
-  { value: "1000-5000", label: "$1,000 – $5,000" },
-  { value: "5000-10000", label: "$5,000 – $10,000" },
-  { value: "10000+", label: "$10,000+" },
-];
+import { useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 
 function StudioChoices({
   value,
@@ -78,6 +38,44 @@ function StudioChoices({
 }
 
 export default function Contact() {
+  const copy = useStudioSiteCopy();
+  const c = copy.contact;
+  const common = copy.common;
+  const steps = useMemo(
+    () => [
+      { key: "service", label: c.stepService },
+      { key: "budget", label: c.stepBudget },
+      { key: "message", label: c.stepMessage },
+      { key: "details", label: c.stepDetails },
+    ],
+    [c]
+  );
+
+  const serviceOptions = useMemo(
+    () => [
+      { value: "web", label: c.optWeb },
+      { value: "data", label: c.optData },
+      { value: "travel", label: c.optTravel },
+      { value: "other", label: c.optOther },
+    ],
+    [c]
+  );
+
+  const budgetOptions = [
+    { value: "500-1000", label: "$500 – $1,000" },
+    { value: "1000-5000", label: "$1,000 – $5,000" },
+    { value: "5000-10000", label: "$5,000 – $10,000" },
+    { value: "10000+", label: "$10,000+" },
+  ];
+
+  const contactInfo = [
+    { label: c.email, value: SITE_EMAIL, href: `mailto:${SITE_EMAIL}` },
+    { label: c.phone, value: SITE_PHONE_DISPLAY, href: SITE_PHONE_TEL },
+    { label: c.whatsapp, value: SITE_PHONE_DISPLAY, href: SITE_WHATSAPP_URL },
+    { label: c.location, value: c.locationValue },
+    { label: c.hours, value: c.hoursValue },
+  ];
+
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState({
     name: "",
@@ -116,13 +114,13 @@ export default function Contact() {
     <section id="contact" className="relative overflow-hidden border-t border-[var(--st-line)] py-16 sm:py-24">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-8 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:px-10">
         <div className="min-w-0">
-          <p className="studio-kicker">Begin</p>
+          <p className="studio-kicker">{c.kicker}</p>
           <h2 className="studio-display mt-4 text-[2.1rem] leading-[0.95] sm:text-5xl lg:text-7xl">
-            LET’S BUILD
+            {c.titleLine1}
             <br />
-            SOMETHING
+            {c.titleLine2}
             <br />
-            EXCEPTIONAL.
+            {c.titleLine3}
           </h2>
           <ul className="mt-10 space-y-4 text-sm text-[var(--st-muted)]">
             {contactInfo.map((item) => (
@@ -144,9 +142,9 @@ export default function Contact() {
         <div className="relative z-10 border border-[var(--st-line)] bg-black/40 p-5 sm:p-8">
           {submitStatus === "success" ? (
             <div>
-              <p className="studio-kicker">Received</p>
-              <h3 className="studio-display mt-4 text-4xl">PROJECT RECEIVED.</h3>
-              <p className="mt-4 text-[var(--st-muted)]">We’ll reply soon.</p>
+              <p className="studio-kicker">{c.receivedKicker}</p>
+              <h3 className="studio-display mt-4 text-4xl">{c.receivedTitle}</h3>
+              <p className="mt-4 text-[var(--st-muted)]">{c.receivedBody}</p>
             </div>
           ) : (
             <>
@@ -183,7 +181,7 @@ export default function Contact() {
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Tell us about your project..."
+                      placeholder={c.messagePlaceholder}
                       className="w-full border-b border-[var(--st-line)] bg-transparent py-3 text-white outline-none"
                     />
                   )}
@@ -194,7 +192,7 @@ export default function Contact() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Your name"
+                        placeholder={c.namePlaceholder}
                         className="border-b border-[var(--st-line)] bg-transparent py-3 text-white outline-none"
                       />
                       <input
@@ -203,7 +201,7 @@ export default function Contact() {
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="your@email.com"
+                        placeholder={c.emailPlaceholder}
                         className="border-b border-[var(--st-line)] bg-transparent py-3 text-white outline-none"
                       />
                     </div>
@@ -213,7 +211,7 @@ export default function Contact() {
               <div className="mt-8 flex flex-wrap gap-3">
                 {step > 0 && (
                   <button type="button" onClick={prev} className="studio-btn studio-btn-ghost">
-                    Previous
+                    {common.previous}
                   </button>
                 )}
                 {step < steps.length - 1 ? (
@@ -224,7 +222,7 @@ export default function Contact() {
                     className="studio-btn disabled:opacity-40"
                     data-cursor="START"
                   >
-                    Continue
+                    {common.continue}
                   </button>
                 ) : (
                   <button
@@ -234,15 +232,15 @@ export default function Contact() {
                     className="studio-btn disabled:opacity-40"
                     data-cursor="START"
                   >
-                    {isSubmitting ? "Sending…" : "Send project →"}
+                    {isSubmitting ? common.sending : common.sendProject}
                   </button>
                 )}
               </div>
               {submitStatus === "error" && (
                 <p className="mt-4 text-sm text-red-400">
-                  Something went wrong. Please try again or{" "}
+                  {c.errorBody}{" "}
                   <a href={`mailto:${SITE_EMAIL}`} className="underline hover:text-red-300">
-                    email {SITE_EMAIL}
+                    {SITE_EMAIL}
                   </a>
                   .
                 </p>

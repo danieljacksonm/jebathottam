@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { portfolioSlug } from "@/lib/portfolio-slug";
+import { useLocalePath, useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 
 type Project = {
   id: string;
@@ -17,6 +18,20 @@ type Project = {
 };
 
 export default function WorkPage() {
+  const copy = useStudioSiteCopy();
+  const w = copy.work;
+  const common = copy.common;
+  const lp = useLocalePath();
+  const filters = useMemo(
+    () =>
+      [
+        ["all", common.all],
+        ["ongoing", common.ongoing],
+        ["completed", common.completed],
+      ] as const,
+    [common]
+  );
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [filter, setFilter] = useState<"all" | "ongoing" | "completed">("all");
 
@@ -44,24 +59,15 @@ export default function WorkPage() {
   return (
     <main className="bg-[#070708] pt-28">
       <section className="px-4 sm:px-8 lg:px-10">
-        <p className="studio-kicker">Work</p>
+        <p className="studio-kicker">{w.kicker}</p>
         <h1 className="studio-display mt-4 text-6xl sm:text-8xl">
-          OUR
+          {w.titleLine1}
           <br />
-          WORK.
+          {w.titleLine2}
         </h1>
-        <p className="mt-6 max-w-2xl text-[var(--st-muted)]">
-          Ongoing builds and completed projects for real clients — ministry platforms, shop systems, travel
-          sites, and business tools.
-        </p>
+        <p className="mt-6 max-w-2xl text-[var(--st-muted)]">{w.intro}</p>
         <div className="mt-8 flex flex-wrap gap-3" role="group" aria-label="Filter projects">
-          {(
-            [
-              ["all", "All"],
-              ["ongoing", "Ongoing"],
-              ["completed", "Completed"],
-            ] as const
-          ).map(([id, label]) => (
+          {filters.map(([id, label]) => (
             <button
               key={id}
               type="button"
@@ -81,7 +87,7 @@ export default function WorkPage() {
 
       <div className="mt-12">
         {visible.map((project, index) => {
-          const href = `/work/${portfolioSlug(project)}`;
+          const href = lp(`/work/${portfolioSlug(project)}`);
           return (
             <article
               key={project.id}
@@ -103,7 +109,7 @@ export default function WorkPage() {
                 </Link>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.22em] text-emerald-400">
-                    Project {String(index + 1).padStart(2, "0")} · {project.projectPhase}
+                    {common.project} {String(index + 1).padStart(2, "0")} · {project.projectPhase}
                   </p>
                   {project.clientName ? (
                     <p className="mt-2 text-sm text-white/50">{project.clientName}</p>
@@ -125,7 +131,7 @@ export default function WorkPage() {
                       href={href}
                       className="text-sm uppercase tracking-[0.16em] text-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
                     >
-                      Case study →
+                      {w.caseStudy}
                     </Link>
                     {project.liveUrl ? (
                       <a
@@ -134,7 +140,7 @@ export default function WorkPage() {
                         rel="noopener noreferrer"
                         className="text-sm uppercase tracking-[0.16em] text-white/50 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
                       >
-                        View live site →
+                        {w.viewLive}
                       </a>
                     ) : null}
                   </div>
@@ -145,17 +151,17 @@ export default function WorkPage() {
         })}
         {visible.length === 0 ? (
           <p className="px-4 py-16 text-center text-[var(--st-muted)]" role="status">
-            {projects.length === 0 ? "Loading projects…" : "No projects in this filter."}
+            {projects.length === 0 ? w.loading : w.emptyFilter}
           </p>
         ) : null}
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3 px-4 py-16">
-        <Link href="/contact" className="studio-btn inline-flex" data-cursor="START">
-          Start a project →
+        <Link href={lp("/contact")} className="studio-btn inline-flex" data-cursor="START">
+          {copy.studio.startProject}
         </Link>
-        <Link href="/services" className="studio-btn studio-btn-ghost inline-flex">
-          Explore services
+        <Link href={lp("/services")} className="studio-btn studio-btn-ghost inline-flex">
+          {common.exploreServices}
         </Link>
       </div>
     </main>

@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import type { SeoLocale } from "@/lib/site-url";
 import { localeFromPathname } from "./locale-utils";
 import { clientShellMessages } from "./client-shell";
-import { clientHomeMessages, clientStudioMessages } from "./client-page-messages";
+import { getStudioSiteCopy } from "./studio-site-copy";
+import { localePath } from "./locale-path";
 
 function localeFromCookie(): SeoLocale {
   if (typeof document === "undefined") return "en";
@@ -29,12 +30,22 @@ export function useShellMessages() {
   return useMemo(() => clientShellMessages(locale), [locale]);
 }
 
-export function useHomeMessages() {
+export function useStudioSiteCopy() {
   const locale = useRequestLocale();
-  return useMemo(() => clientHomeMessages(locale), [locale]);
+  return useMemo(() => getStudioSiteCopy(locale), [locale]);
 }
 
+/** @deprecated use useStudioSiteCopy().home */
+export function useHomeMessages() {
+  return useStudioSiteCopy().home;
+}
+
+/** @deprecated use useStudioSiteCopy().studio */
 export function useStudioMessages() {
+  return useStudioSiteCopy().studio;
+}
+
+export function useLocalePath() {
   const locale = useRequestLocale();
-  return useMemo(() => clientStudioMessages(locale), [locale]);
+  return useMemo(() => (path: string) => localePath(path, locale), [locale]);
 }

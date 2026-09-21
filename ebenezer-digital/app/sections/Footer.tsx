@@ -5,6 +5,7 @@ import Link from "next/link";
 import { SITE_EMAIL, SITE_PHONE_DISPLAY, SITE_PHONE_TEL, SITE_WHATSAPP_URL } from "@/lib/site-contact";
 import { SITE_NAV } from "@/lib/site-nav";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { useLocalePath, useShellMessages, useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 
 const TwitterXIcon = () => (
   <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
@@ -27,40 +28,6 @@ const InstagramIcon = () => (
   </svg>
 );
 
-const footerLinks = {
-  services: [
-    { label: "Web Development", href: "/services#web" },
-    { label: "Data Entry", href: "/services#digital" },
-    { label: "Travel Booking", href: "/services#travel" },
-    { label: "Virtual Assistance", href: "/services#digital" },
-  ],
-  company: [
-    { label: "About Us", href: "/about" },
-    { label: "Our Work", href: "/work" },
-    { label: "Case studies", href: "/case-studies" },
-    { label: "Products", href: "/products-overview" },
-    { label: "Media", href: "/media" },
-    { label: "FAQ", href: "/faq" },
-    { label: "Process", href: "/process" },
-    { label: "Careers", href: "/careers" },
-  ],
-  ecosystem: [
-    { label: "Journal", href: SITE_NAV.journal },
-    { label: "News", href: SITE_NAV.news },
-    { label: "Tools", href: SITE_NAV.tools },
-    { label: "Hardware", href: SITE_NAV.products },
-    { label: "Store", href: SITE_NAV.store },
-    { label: "Free tools", href: SITE_NAV.network },
-    { label: "Eben AI", href: SITE_NAV.ai },
-  ],
-  support: [
-    { label: "Contact", href: "/contact" },
-    { label: "Careers", href: "/careers" },
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
-  ],
-};
-
 const socialLinks = [
   { icon: TwitterXIcon, href: "", label: "Twitter" },
   { icon: LinkedinIcon, href: "", label: "LinkedIn" },
@@ -73,10 +40,48 @@ function isRealUrl(href?: string) {
 }
 
 export default function Footer() {
+  const copy = useStudioSiteCopy();
+  const f = copy.footer;
+  const t = useShellMessages();
+  const common = copy.common;
+  const lp = useLocalePath();
+
+  const footerLinks = {
+    services: [
+      { label: f.linkWebDev, href: lp("/services#web") },
+      { label: f.linkDataEntry, href: lp("/services#digital") },
+      { label: f.linkTravel, href: lp("/services#travel") },
+      { label: f.linkVirtualAssist, href: lp("/services#digital") },
+    ],
+    company: [
+      { label: f.linkAbout, href: lp("/about") },
+      { label: f.linkWork, href: lp("/work") },
+      { label: f.linkCaseStudies, href: lp("/case-studies") },
+      { label: f.linkProducts, href: lp("/products-overview") },
+      { label: f.linkMedia, href: lp("/media") },
+      { label: f.linkFaq, href: lp("/faq") },
+      { label: copy.studio.process, href: lp("/process") },
+      { label: f.linkCareers, href: lp("/careers") },
+    ],
+    ecosystem: [
+      { label: t.journal, href: SITE_NAV.journal },
+      { label: t.news, href: SITE_NAV.news },
+      { label: t.tools, href: SITE_NAV.tools },
+      { label: t.hardware, href: SITE_NAV.products },
+      { label: t.store, href: SITE_NAV.store },
+      { label: t.network, href: SITE_NAV.network },
+      { label: t.ai, href: SITE_NAV.ai },
+    ],
+    support: [
+      { label: f.linkContact, href: lp("/contact") },
+      { label: f.linkCareers, href: lp("/careers") },
+      { label: f.linkPrivacy, href: lp("/privacy") },
+      { label: f.linkTerms, href: lp("/terms") },
+    ],
+  };
+
   const [siteName, setSiteName] = useState("Ebenezer");
-  const [siteDescription, setSiteDescription] = useState(
-    "Reliable digital work for businesses everywhere. We deliver excellence in every project."
-  );
+  const [siteDescription, setSiteDescription] = useState(f.defaultDescription);
   const [dynamicSocial, setDynamicSocial] = useState(socialLinks);
 
   useEffect(() => {
@@ -100,25 +105,25 @@ export default function Footer() {
     <footer className="relative overflow-hidden border-t border-[var(--st-line,#1f1f20)] bg-[#050505]">
       <div className="mx-auto max-w-7xl px-4 py-20 sm:px-8 lg:px-10">
         <p className="studio-display text-[16vw] leading-[0.86] sm:text-[9rem]">
-          LET’S
+          {f.titleLine1}
           <br />
-          MAKE
+          {f.titleLine2}
           <br />
-          DIGITAL
+          {f.titleLine3}
           <br />
-          <span className="text-emerald-400">MATTER.</span>
+          <span className="text-emerald-400">{f.titleAccent}</span>
         </p>
 
         <NewsletterSignup
           variant="studio"
           source="studio-footer"
           className="mt-12"
-          placeholder="Enter your email"
+          placeholder={f.newsletterPlaceholder}
         />
 
         <div className="mt-16 grid grid-cols-2 gap-10 md:grid-cols-5">
           <div>
-            <Link href="/" className="font-display text-lg text-white">
+            <Link href={lp("/")} className="font-display text-lg text-white">
               {siteName.replace(/\s*Digital.*$/i, "") || "Ebenezer"}
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-[var(--st-muted,#8d887e)]">{siteDescription}</p>
@@ -138,7 +143,7 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Services</h4>
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">{f.servicesHeading}</h4>
             <ul className="mt-4 space-y-2">
               {footerLinks.services.map((link) => (
                 <li key={link.label}>
@@ -150,7 +155,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Ecosystem</h4>
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">{f.ecosystemHeading}</h4>
             <ul className="mt-4 space-y-2">
               {footerLinks.ecosystem.map((link) => (
                 <li key={link.label}>
@@ -162,7 +167,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Company</h4>
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">{f.companyHeading}</h4>
             <ul className="mt-4 space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.label}>
@@ -174,7 +179,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">Support</h4>
+            <h4 className="text-[10px] uppercase tracking-[0.2em] text-white/40">{f.supportHeading}</h4>
             <ul className="mt-4 space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.label}>
@@ -202,14 +207,14 @@ export default function Footer() {
       <div className="border-t border-[var(--st-line,#1f1f20)]">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
           <p className="text-sm text-white/35">
-            © {new Date().getFullYear()} Ebenezer Digital Services. All rights reserved.
+            © {new Date().getFullYear()} Ebenezer Digital Services. {common.rights}
           </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-sm text-white/35 hover:text-white">
-              Privacy
+            <Link href={lp("/privacy")} className="text-sm text-white/35 hover:text-white">
+              {common.privacy}
             </Link>
-            <Link href="/terms" className="text-sm text-white/35 hover:text-white">
-              Terms
+            <Link href={lp("/terms")} className="text-sm text-white/35 hover:text-white">
+              {common.terms}
             </Link>
           </div>
         </div>

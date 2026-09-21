@@ -1,4 +1,6 @@
 import { pageMetadata } from "@/lib/site-url";
+import { resolveRequestLocale } from "@/lib/i18n/request-locale";
+import { getStudioSiteCopy } from "@/lib/i18n/studio-site-copy";
 
 export const metadata = pageMetadata({
   title: "Why Ebenezer Digital | About our studio",
@@ -8,27 +10,23 @@ export const metadata = pageMetadata({
 });
 
 export default function WhyPage() {
+  const copy = getStudioSiteCopy(resolveRequestLocale());
+  const w = copy.why;
+
   return (
     <main className="bg-[#070708] px-4 pb-24 pt-28 sm:px-8 lg:px-10">
-      <p className="studio-kicker">About</p>
+      <p className="studio-kicker">{w.kicker}</p>
       <h1 className="studio-display mt-4 max-w-5xl text-5xl sm:text-7xl">
-        WE FOCUS ON
+        {w.titleLine1}
         <br />
-        WHAT MATTERS.
+        {w.titleLine2}
       </h1>
-      <p className="mt-6 max-w-2xl text-lg text-[var(--st-muted)]">
-        Getting the job done well, on time, and at a fair price.
-      </p>
+      <p className="mt-6 max-w-2xl text-lg text-[var(--st-muted)]">{w.intro}</p>
       <div className="mt-16 grid gap-10 sm:grid-cols-2">
-        {[
-          { title: "Communication you can count on", body: "We reply quickly and in plain English. You will always know where your project stands." },
-          { title: "Quality without the jargon", body: "We deliver work that meets your standards. No technical overload—just results that fit your business." },
-          { title: "Affordable pricing", body: "Transparent quotes so you can plan. We aim to offer value that works for startups and established clients alike." },
-          { title: "Long-term support", body: "Need follow-up work or small changes? We are here for ongoing support so you can rely on us again and again." },
-        ].map((item) => (
+        {w.pillars.map((item) => (
           <article key={item.title} className="border-t border-[var(--st-line)] pt-8">
             <h2 className="studio-display text-3xl">{item.title}</h2>
-            <p className="mt-4 text-[var(--st-muted)] leading-relaxed">{item.body}</p>
+            <p className="mt-4 leading-relaxed text-[var(--st-muted)]">{item.body}</p>
           </article>
         ))}
       </div>

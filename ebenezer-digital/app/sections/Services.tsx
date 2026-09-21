@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocalePath } from "@/lib/i18n/use-shell-messages";
 
 type ServiceItem = {
   id: string;
@@ -103,6 +104,8 @@ function FeaturedServices({
   featuredServices: FeaturedService[];
   sectionsLabel: string;
 }) {
+  const lp = useLocalePath();
+
   return (
     <section id="services" className="relative overflow-hidden px-4 py-24 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-7xl">
@@ -110,7 +113,7 @@ function FeaturedServices({
         <ul className="mt-10 grid gap-6 md:grid-cols-2">
           {featuredServices.map((service) => (
             <li key={service.slug} className="border border-[var(--st-line)] p-6">
-              <Link href={`/services/${service.slug}`} className="block">
+              <Link href={lp(`/services/${service.slug}`)} className="block">
                 <h3 className="text-xl text-white">{service.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--st-muted)]">{service.value}</p>
               </Link>
@@ -118,7 +121,7 @@ function FeaturedServices({
           ))}
         </ul>
         <Link
-          href="/services"
+          href={lp("/services")}
           className="mt-12 inline-block text-sm uppercase tracking-[0.16em] text-emerald-400"
         >
           {sectionsLabel} →

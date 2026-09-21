@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MagneticLink } from "../studio/MagneticLink";
 import { SITE_NAV } from "@/lib/site-nav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { useShellMessages, useStudioMessages } from "@/lib/i18n/use-shell-messages";
+import { useLocalePath, useShellMessages, useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 
 const serviceLinks = [
   { label: "Digital & Admin", href: "/services#digital" },
@@ -20,13 +20,16 @@ const serviceLinks = [
 export default function Header() {
   const pathname = usePathname() || "/";
   const t = useShellMessages();
-  const studio = useStudioMessages();
+  const copy = useStudioSiteCopy();
+  const studio = copy.studio;
+  const common = copy.common;
+  const lp = useLocalePath();
 
   const navLinks = [
-    { label: t.services, href: "/services" },
-    { label: studio.work, href: "/work" },
-    { label: studio.process, href: "/process" },
-    { label: studio.about, href: "/why" },
+    { label: t.services, href: lp("/services") },
+    { label: studio.work, href: lp("/work") },
+    { label: studio.process, href: lp("/process") },
+    { label: studio.about, href: lp("/why") },
   ];
 
   const ecosystemLinks = [
@@ -67,7 +70,7 @@ export default function Header() {
       <header
         className={`studio-nav ${isScrolled ? "is-solid" : ""} ${isMobileMenuOpen ? "z-[80]" : ""}`}
       >
-        <Link href="/" className="flex items-center gap-2" data-cursor="OPEN">
+        <Link href={lp("/")} className="flex items-center gap-2" data-cursor="OPEN">
           <Image src="/brand/eben-mark.svg" alt="Ebenezer" width={28} height={28} className="rounded-md" />
           <span className="hidden font-display text-sm tracking-[0.12em] text-white sm:inline">
             EBENEZER
@@ -81,7 +84,7 @@ export default function Header() {
             onMouseLeave={() => setIsServicesOpen(false)}
           >
             <Link
-              href="/services"
+              href={lp("/services")}
               className={`text-[11px] uppercase tracking-[0.18em] ${
                 active("/services") ? "text-emerald-400" : "text-white/60 hover:text-white"
               }`}
@@ -130,7 +133,7 @@ export default function Header() {
               type="button"
               className="text-[11px] uppercase tracking-[0.18em] text-white/60 hover:text-white"
             >
-              Ecosystem
+              {common.ecosystem}
             </button>
             <AnimatePresence>
               {isEcosystemOpen && (
@@ -157,8 +160,8 @@ export default function Header() {
 
         <div className="flex items-center gap-2">
           <LanguageSwitcher compact />
-          <MagneticLink href="/contact" className="studio-btn hidden sm:inline-flex" cursor="START">
-            {t.contact}
+          <MagneticLink href={lp("/contact")} className="studio-btn hidden sm:inline-flex" cursor="START">
+            {common.letsTalk}
           </MagneticLink>
           <button
             type="button"
@@ -167,7 +170,7 @@ export default function Header() {
             aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMobileMenuOpen}
           >
-            {isMobileMenuOpen ? "Close" : "Menu"}
+            {isMobileMenuOpen ? common.close : common.menu}
           </button>
         </div>
       </header>
@@ -195,13 +198,13 @@ export default function Header() {
                 </Link>
               ))}
               <Link
-                href="/contact"
+                href={lp("/contact")}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="studio-display block py-2 text-4xl text-white/80 sm:text-5xl"
               >
-                Contact
+                {t.contact}
               </Link>
-              <p className="pt-6 text-[10px] uppercase tracking-[0.2em] text-white/35">Ecosystem</p>
+              <p className="pt-6 text-[10px] uppercase tracking-[0.2em] text-white/35">{common.ecosystem}</p>
               {ecosystemLinks.map((link) => (
                 <a
                   key={link.href}
@@ -224,11 +227,11 @@ export default function Header() {
               ))}
             </nav>
             <Link
-              href="/contact"
+              href={lp("/contact")}
               onClick={() => setIsMobileMenuOpen(false)}
               className="studio-btn mt-10 inline-flex"
             >
-              Let&apos;s talk
+              {common.letsTalk}
             </Link>
           </motion.div>
         )}

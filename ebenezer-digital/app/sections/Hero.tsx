@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { MagneticLink } from "../studio/MagneticLink";
-import { STUDIO_STATS } from "@/lib/studio-stats";
+import Link from "next/link";
 import type { HomeMessages } from "@/lib/i18n/page-messages";
 import { EN_HOME } from "@/lib/i18n/page-messages";
+import { useLocalePath, useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 
 export default function Hero({ home = EN_HOME }: { home?: HomeMessages }) {
+  const copy = useStudioSiteCopy();
+  const stats = copy.stats;
+  const lp = useLocalePath();
   const scenes: Record<string, string> = {
     build: home.sceneBuild,
     digital: home.sceneDigital,
@@ -111,19 +114,19 @@ export default function Hero({ home = EN_HOME }: { home?: HomeMessages }) {
         </motion.p>
 
         <div className="mt-10 flex flex-wrap gap-3">
-          <MagneticLink href="/contact" className="studio-btn" cursor="START">
+          <MagneticLink href={lp("/contact")} className="studio-btn" cursor="START">
             {home.ctaStart}
           </MagneticLink>
-          <Link href="/work" className="studio-btn studio-btn-ghost" data-cursor="VIEW">
+          <Link href={lp("/work")} className="studio-btn studio-btn-ghost" data-cursor="VIEW">
             {home.ctaWork}
           </Link>
-          <Link href="/services" className="studio-btn studio-btn-ghost" data-cursor="VIEW">
+          <Link href={lp("/services")} className="studio-btn studio-btn-ghost" data-cursor="VIEW">
             {home.ctaServices}
           </Link>
         </div>
 
         <div className="mt-16 grid grid-cols-2 gap-6 border-t border-[var(--st-line)] pt-8 md:grid-cols-4">
-          {STUDIO_STATS.map((s) => (
+          {stats.map((s) => (
             <div key={s.label}>
               <p className="studio-display text-3xl sm:text-4xl">{s.value}</p>
               <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[var(--st-muted)]">{s.label}</p>

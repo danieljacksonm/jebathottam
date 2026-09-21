@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { ServiceLanding } from "@/lib/services-catalog";
 import type { LocaleMessages } from "@/lib/i18n/load-messages";
-import { useShellMessages } from "@/lib/i18n/use-shell-messages";
+import { useLocalePath, useShellMessages } from "@/lib/i18n/use-shell-messages";
 
 type Props = {
   services: ServiceLanding[];
@@ -13,6 +13,7 @@ type Props = {
 
 export default function ServicesPageClient({ services, sections, studio }: Props) {
   const t = useShellMessages();
+  const lp = useLocalePath();
 
   return (
     <main className="bg-[#070708] px-4 pb-24 pt-28 sm:px-8 lg:px-10">
@@ -26,7 +27,7 @@ export default function ServicesPageClient({ services, sections, studio }: Props
             key={service.slug}
             className="border border-[var(--st-line)] p-6 transition hover:border-emerald-400/40"
           >
-            <Link href={`/services/${service.slug}`} className="block" data-cursor="EXPLORE">
+            <Link href={lp(`/services/${service.slug}`)} className="block" data-cursor="EXPLORE">
               <h2 className="text-xl text-white">{service.title}</h2>
               <p className="mt-3 text-sm leading-relaxed text-[var(--st-muted)]">{service.value}</p>
               <span className="mt-4 inline-block text-xs uppercase tracking-[0.14em] text-emerald-400">
@@ -37,7 +38,7 @@ export default function ServicesPageClient({ services, sections, studio }: Props
         ))}
       </ul>
 
-      <Link href="/contact" className="mt-16 inline-flex studio-btn" data-cursor="START">
+      <Link href={lp("/contact")} className="mt-16 inline-flex studio-btn" data-cursor="START">
         {studio.startProject}
       </Link>
     </main>

@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import type { SiteKind } from "@/lib/site-url";
+import { useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 import Header from "../components/Header";
 import Footer from "../sections/Footer";
 import ScrollProgressBar from "../components/ScrollProgressBar";
@@ -17,6 +18,7 @@ export default function SiteChrome({
   siteKind?: SiteKind;
 }) {
   const pathname = usePathname() || "/";
+  const common = useStudioSiteCopy().common;
   const hide =
     siteKind !== "studio" ||
     HIDDEN.some((p) => pathname === p || pathname.startsWith(`${p}/`));
@@ -26,7 +28,7 @@ export default function SiteChrome({
   return (
     <div className="studio-root relative min-h-screen">
       <a href="#main-content" className="studio-skip-link">
-        Skip to content
+        {common.skipToContent}
       </a>
       <ScrollProgressBar />
       <Header />
