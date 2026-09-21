@@ -438,6 +438,18 @@ function localeRewrite(request: NextRequest): NextResponse | null {
     rest.startsWith("/services") ||
     rest.startsWith("/work") ||
     rest.startsWith("/contact") ||
+    rest.startsWith("/process") ||
+    rest.startsWith("/why") ||
+    rest.startsWith("/faq") ||
+    rest.startsWith("/careers") ||
+    rest.startsWith("/case-studies") ||
+    rest.startsWith("/media") ||
+    rest.startsWith("/products-overview") ||
+    rest.startsWith("/testimonials") ||
+    rest.startsWith("/trust") ||
+    rest.startsWith("/stats") ||
+    rest.startsWith("/completed-projects") ||
+    rest.startsWith("/website-showcase") ||
     rest.startsWith("/ai") ||
     rest.startsWith("/news") ||
     rest.startsWith("/tools") ||
