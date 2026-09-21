@@ -6,14 +6,15 @@ import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { MagneticLink } from "../studio/MagneticLink";
 import { STUDIO_STATS } from "@/lib/studio-stats";
+import type { HomeMessages } from "@/lib/i18n/page-messages";
+import { EN_HOME } from "@/lib/i18n/page-messages";
 
-const scenes: Record<string, string> = {
-  build: "Websites, systems, and operations that ship on time.",
-  digital: "Clear code, reliable delivery, and interfaces people trust.",
-  experiences: "Digital work for businesses that need a dependable partner.",
-};
-
-export default function Hero() {
+export default function Hero({ home = EN_HOME }: { home?: HomeMessages }) {
+  const scenes: Record<string, string> = {
+    build: home.sceneBuild,
+    digital: home.sceneDigital,
+    experiences: home.sceneExperiences,
+  };
   const reduceRef = useRef(false);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
@@ -62,7 +63,7 @@ export default function Hero() {
       )}
 
       <div className="relative z-10 mx-auto flex min-h-[92dvh] max-w-7xl flex-col justify-end px-4 pb-16 pt-28 sm:px-8 lg:px-10">
-        <p className="studio-kicker">Ebenezer Digital Services</p>
+        <p className="studio-kicker">{home.kicker}</p>
         <motion.h1
           className="studio-display mt-6 max-w-5xl text-[16vw] sm:text-[11vw] lg:text-[7.2rem]"
           initial={{ opacity: 0, y: 28 }}
@@ -77,7 +78,7 @@ export default function Hero() {
             onFocus={() => setScene("build")}
             aria-label="Show build message"
           >
-            BUILD
+            {home.build}
           </button>
           <br />
           <button
@@ -87,7 +88,7 @@ export default function Hero() {
             onFocus={() => setScene("digital")}
             aria-label="Show digital message"
           >
-            DIGITAL
+            {home.digital}
           </button>
           <br />
           <button
@@ -97,7 +98,7 @@ export default function Hero() {
             onFocus={() => setScene("experiences")}
             aria-label="Show experiences message"
           >
-            EXPERIENCES.
+            {home.experiences}
           </button>
         </motion.h1>
         <motion.p
@@ -106,18 +107,18 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          {scenes[scene]} Web development, e-commerce, automation, and ongoing support for teams worldwide.
+          {scenes[scene]} {home.subtextSuffix}
         </motion.p>
 
         <div className="mt-10 flex flex-wrap gap-3">
           <MagneticLink href="/contact" className="studio-btn" cursor="START">
-            Start a project →
+            {home.ctaStart}
           </MagneticLink>
           <Link href="/work" className="studio-btn studio-btn-ghost" data-cursor="VIEW">
-            View our work
+            {home.ctaWork}
           </Link>
           <Link href="/services" className="studio-btn studio-btn-ghost" data-cursor="VIEW">
-            Our services
+            {home.ctaServices}
           </Link>
         </div>
 

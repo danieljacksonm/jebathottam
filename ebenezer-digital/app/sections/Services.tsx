@@ -13,6 +13,8 @@ type ServiceItem = {
   features: string[];
 };
 
+type FeaturedService = { slug: string; title: string; value: string };
+
 const categoryMeta: Record<string, { title: string; scene: string }> = {
   digital: { title: "Digital & Admin", scene: "sheets" },
   travel: { title: "Travel & Booking", scene: "ticket" },
@@ -94,7 +96,53 @@ const FALLBACK_SERVICES: ServiceItem[] = [
   },
 ];
 
-export default function Services() {
+function FeaturedServices({
+  featuredServices,
+  sectionsLabel,
+}: {
+  featuredServices: FeaturedService[];
+  sectionsLabel: string;
+}) {
+  return (
+    <section id="services" className="relative overflow-hidden px-4 py-24 sm:px-8 lg:px-10">
+      <div className="mx-auto max-w-7xl">
+        <p className="studio-kicker">{sectionsLabel}</p>
+        <ul className="mt-10 grid gap-6 md:grid-cols-2">
+          {featuredServices.map((service) => (
+            <li key={service.slug} className="border border-[var(--st-line)] p-6">
+              <Link href={`/services/${service.slug}`} className="block">
+                <h3 className="text-xl text-white">{service.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--st-muted)]">{service.value}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <Link
+          href="/services"
+          className="mt-12 inline-block text-sm uppercase tracking-[0.16em] text-emerald-400"
+        >
+          {sectionsLabel} →
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+export default function Services({
+  featuredServices,
+  sectionsLabel = "Services",
+}: {
+  featuredServices?: FeaturedService[];
+  sectionsLabel?: string;
+}) {
+  if (featuredServices?.length) {
+    return <FeaturedServices featuredServices={featuredServices} sectionsLabel={sectionsLabel} />;
+  }
+
+  return <ServicesCatalog sectionsLabel={sectionsLabel} />;
+}
+
+function ServicesCatalog({ sectionsLabel }: { sectionsLabel: string }) {
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [active, setActive] = useState<string>("web");

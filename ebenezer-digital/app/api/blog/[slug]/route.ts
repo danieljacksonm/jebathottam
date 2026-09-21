@@ -2,19 +2,27 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { contentKeyFor, resolveLocalizedContent } from "@/lib/i18n/resolve-content";
+import { localeFromCookieHeader } from "@/lib/i18n/locale-utils";
+import type { SeoLocale } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
 type Ctx = { params: { slug: string } };
 
-export async function GET(_req: Request, { params }: Ctx) {
+function resolveBlogLocale(req: Request): SeoLocale {
+  const fromHeader = headers().get("x-eben-locale")?.toLowerCase();
+  if (fromHeader && fromHeader !== "en") return fromHeader as SeoLocale;
+  return localeFromCookieHeader(req.headers.get("cookie"));
+}
+
+export async function GET(req: Request, { params }: Ctx) {
   try {
     let post = await db.getBlogPostBySlug(params.slug);
     if (!post) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    const locale = (headers().get("x-eben-locale") || "en").toLowerCase();
+    const locale = resolveBlogLocale(req);
     if (locale !== "en") {
       const localized = await resolveLocalizedContent(contentKeyFor("journal", params.slug), locale);
       if (localized) {

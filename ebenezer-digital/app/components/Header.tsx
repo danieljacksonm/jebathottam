@@ -8,13 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MagneticLink } from "../studio/MagneticLink";
 import { SITE_NAV } from "@/lib/site-nav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-
-const navLinks = [
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/work" },
-  { label: "Process", href: "/process" },
-  { label: "About", href: "/why" },
-];
+import { useShellMessages, useStudioMessages } from "@/lib/i18n/use-shell-messages";
 
 const serviceLinks = [
   { label: "Digital & Admin", href: "/services#digital" },
@@ -23,16 +17,25 @@ const serviceLinks = [
   { label: "Other Services", href: "/services#other" },
 ];
 
-const ecosystemLinks = [
-  { label: "Journal", href: SITE_NAV.journal },
-  { label: "News", href: SITE_NAV.news },
-  { label: "Tools", href: SITE_NAV.tools },
-  { label: "Store", href: SITE_NAV.store },
-  { label: "Free tools", href: SITE_NAV.network },
-];
-
 export default function Header() {
   const pathname = usePathname() || "/";
+  const t = useShellMessages();
+  const studio = useStudioMessages();
+
+  const navLinks = [
+    { label: t.services, href: "/services" },
+    { label: studio.work, href: "/work" },
+    { label: studio.process, href: "/process" },
+    { label: studio.about, href: "/why" },
+  ];
+
+  const ecosystemLinks = [
+    { label: t.journal, href: SITE_NAV.journal },
+    { label: t.news, href: SITE_NAV.news },
+    { label: t.tools, href: SITE_NAV.tools },
+    { label: t.store, href: SITE_NAV.store },
+    { label: t.network, href: SITE_NAV.network },
+  ];
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -83,7 +86,7 @@ export default function Header() {
                 active("/services") ? "text-emerald-400" : "text-white/60 hover:text-white"
               }`}
             >
-              Services
+              {t.services}
             </Link>
             <AnimatePresence>
               {isServicesOpen && (
@@ -155,7 +158,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <LanguageSwitcher compact />
           <MagneticLink href="/contact" className="studio-btn hidden sm:inline-flex" cursor="START">
-            Let&apos;s talk
+            {t.contact}
           </MagneticLink>
           <button
             type="button"

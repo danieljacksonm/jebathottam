@@ -2,6 +2,12 @@ import { readFileSync, existsSync } from "fs";
 import { join } from "path";
 import type { SeoLocale } from "@/lib/site-url";
 import { EN_SHELL, type ShellMessages } from "./en-shell";
+import {
+  EN_HOME,
+  EN_STUDIO,
+  type HomeMessages,
+  type StudioMessages,
+} from "./page-messages";
 
 export type ServiceTranslation = {
   title: string;
@@ -20,6 +26,8 @@ export type JournalTranslation = {
 
 export type LocaleMessages = {
   shell: ShellMessages;
+  home: HomeMessages;
+  studio: StudioMessages;
   sections: {
     services: string;
     whatWeDeliver: string;
@@ -68,11 +76,17 @@ export function getEnglishMessages(): LocaleMessages {
   if (enCache) return enCache;
   const fromFile = readJson(join(MESSAGES_DIR, "en.json"));
   if (fromFile) {
-    enCache = fromFile;
-    return fromFile;
+    enCache = {
+      ...fromFile,
+      home: { ...EN_HOME, ...fromFile.home },
+      studio: { ...EN_STUDIO, ...fromFile.studio },
+    };
+    return enCache;
   }
   enCache = {
     shell: EN_SHELL,
+    home: EN_HOME,
+    studio: EN_STUDIO,
     sections: EN_SECTIONS,
     services: {},
   };
@@ -93,6 +107,8 @@ export function loadMessages(locale: SeoLocale): LocaleMessages {
   }
   const merged: LocaleMessages = {
     shell: { ...en.shell, ...file.shell },
+    home: { ...en.home, ...file.home },
+    studio: { ...en.studio, ...file.studio },
     sections: { ...en.sections, ...file.sections },
     services: { ...en.services, ...file.services },
     journal: { ...en.journal, ...file.journal },
