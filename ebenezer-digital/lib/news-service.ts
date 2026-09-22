@@ -134,6 +134,7 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
 
   const cached = peekLiveNewsCache();
   const cms = await db.getNewsArticles(true).catch(() => []);
+  const seedSlugs = new Set(WORLD_NEWS.map((s) => s.slug));
   const byKey = new Map<string, PublicNewsItem>();
 
   const put = (item: PublicNewsItem, force = false) => {
@@ -150,11 +151,15 @@ export async function listPublicNews(): Promise<PublicNewsItem[]> {
     }
   };
 
-  for (const c of cms) put(recordToPublic(c), true);
   for (const l of cached) put(l);
   for (const a of listArchivedNewsRecent(120)) {
-    if (a.origin === "seed") continue; // do not revive stale desk seed via archive
+    if (a.origin === "seed" || seedSlugs.has(a.slug)) continue;
     put(archiveToPublic(a));
+  }
+  const hasRealNews = byKey.size > 0;
+  for (const c of cms) {
+    if (hasRealNews && seedSlugs.has(c.slug)) continue;
+    put(recordToPublic(c), true);
   }
 
   // Seed is demo/fallback only — never dominate a desk that has real CMS/wire/archive.

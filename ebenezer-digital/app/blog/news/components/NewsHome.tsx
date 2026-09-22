@@ -78,11 +78,7 @@ export function NewsHome() {
     // Prefer slug — live wire briefly used a broken shared id ("live-story").
     const keyOf = (a: NewsArticle) => a.slug || a.id;
     const used = new Set<string>();
-    const heroLead =
-      rotated.find((a) => a.pinned) ||
-      rotated.find((a) => a.featured) ||
-      rotated.find((a) => a.breaking) ||
-      rotated[0];
+    const heroLead = rotated[0];
     if (heroLead) used.add(keyOf(heroLead));
 
     const take = (count: number, list = rotated, pred?: (a: NewsArticle) => boolean) => {
