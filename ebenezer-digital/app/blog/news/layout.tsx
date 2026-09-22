@@ -5,8 +5,7 @@ import { NewsChrome } from "./components/NewsChrome";
 import { JOURNAL_URL, NEWS_URL, pageMetadata, articleLanguageAlternates } from "@/lib/site-url";
 import { listPublicNewsForHome, latestNewsPublishedAt } from "@/lib/news-service";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 60;
 
 const base = pageMetadata({
   title: "Ebenezer News | What is happening now",
