@@ -39,6 +39,20 @@ function toSaved(row: {
   };
 }
 
+/** One saved story by public slug. Null if the library is off or the slug is unknown. */
+export async function getNewsLibraryBySlug(slug: string): Promise<SavedNews | null> {
+  if (!slug || !prismaEnabled()) return null;
+  const prisma = getPrisma();
+  if (!prisma) return null;
+  try {
+    const row = await prisma.newsArticle.findUnique({ where: { slug } });
+    return row ? toSaved(row) : null;
+  } catch (error) {
+    console.error("News library slug lookup failed", error);
+    return null;
+  }
+}
+
 /** Persist stories. Never deletes. No-op if DATABASE_URL is unset. */
 export async function upsertNewsLibrary(items: SavedNews[]): Promise<number> {
   const prisma = getPrisma();

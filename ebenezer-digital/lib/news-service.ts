@@ -18,7 +18,7 @@ import {
   listArchivedNewsRecent,
   listArchivedNewsAll,
 } from "@/lib/news-sitemap-archive";
-import { searchNewsLibrary } from "@/lib/news-library";
+import { getNewsLibraryBySlug, searchNewsLibrary } from "@/lib/news-library";
 
 export type PublicNewsItem = NewsArticle & {
   origin: "seed" | "cms" | "live";
@@ -236,6 +236,8 @@ export const getPublicNewsBySlug = cache(async (slug: string): Promise<PublicNew
   if (live) return live;
   const archived = getArchivedNewsBySlug(slug);
   if (archived) return archived as PublicNewsItem;
+  const saved = await getNewsLibraryBySlug(slug);
+  if (saved) return archiveToPublic(saved);
   const seed = WORLD_NEWS.find((n) => n.slug === slug);
   if (seed) return seedToPublic(seed);
 

@@ -26,7 +26,7 @@ type CommandCenterData = {
     cap?: number;
     atCap?: boolean;
     windowDays?: number;
-    archiveDays?: number;
+    archiveDays?: number | null;
     oldest: string | null;
     newest: string | null;
     ok: boolean;
@@ -185,7 +185,7 @@ export default function CommandCenterPage() {
                 />
                 <Item label="Oldest in Google XML" value={data.newsSitemap.oldest || "—"} />
                 <Item label="Newest in Google XML" value={data.newsSitemap.newest || "—"} />
-                <Item label="Window" value="7 days in sitemap · 30 days on server" />
+                <Item label="Window" value="7 days in sitemap · pages stay online" />
               </dl>
             </section>
           ) : null}

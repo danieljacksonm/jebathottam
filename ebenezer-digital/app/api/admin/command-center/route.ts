@@ -64,7 +64,7 @@ async function newsSitemapStats() {
       capPerFile: NEWS_GOOGLE_NEWS_MAX_URLS,
       atCap: chunkFiles > 0 && googleCount >= NEWS_GOOGLE_NEWS_MAX_URLS * chunkFiles,
       windowDays: 7,
-      archiveDays: 30,
+      archiveDays: null,
       oldest: dates[0] || null,
       newest: dates.at(-1) || null,
       ok: standard.ok && google.ok,

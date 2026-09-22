@@ -27,8 +27,11 @@ export type ArchivedNewsItem = {
 const DATA_DIR = path.join(process.cwd(), "data");
 const ARCHIVE_FILE = path.join(DATA_DIR, "news-sitemap-archive.json");
 
-/** Keep stories on disk / resolvable for at least this long (desk + article URLs). */
-export const NEWS_ARCHIVE_RETENTION_MS = 30 * 24 * 60 * 60 * 1000;
+/**
+ * Article pages are kept permanently.
+ * Age only controls the sitemap window (NEWS_SITEMAP_WINDOW_MS), not whether the URL stays up.
+ */
+export const NEWS_ARCHIVE_RETENTION_MS = Number.POSITIVE_INFINITY;
 
 /** Sitemap / Google News XML includes every story published in this window. */
 export const NEWS_SITEMAP_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
@@ -46,7 +49,7 @@ export const NEWS_GOOGLE_NEWS_MAX_URLS = 1000;
 /** Absolute soft max for standard host sitemap entries from the week window. */
 export const NEWS_SITEMAP_SOFT_MAX = 5000;
 
-/** @deprecated Alias — archive retention is now 30 days. */
+/** @deprecated Alias — article pages are kept permanently. */
 export const NEWS_SITEMAP_RETENTION_MS = NEWS_ARCHIVE_RETENTION_MS;
 
 /** Disk writes at most this often — crawlers were triggering sync rewrite storms. */
@@ -228,7 +231,7 @@ function mergeArchive(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
 }
 
 /**
- * Remember current news so items stay on disk for ≥ 30 days and in sitemaps for ≥ 7 days.
+ * Remember current news permanently. Sitemap inclusion is only the last 7 days.
  * Throttled + deferred — never sync-write on the request hot path.
  */
 export function rememberNewsForSitemap(current: ArchivedNewsItem[]): ArchivedNewsItem[] {
