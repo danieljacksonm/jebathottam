@@ -129,12 +129,7 @@ export function NewsProvider({
           const items = Array.isArray(data.items) ? data.items : [];
           setHasMore(Boolean(data.hasMore));
           if (items.length) {
-            setArticles((prev) => {
-              const incoming = latestStamp(items);
-              const current = latestStamp(prev);
-              if (stampMs(incoming) < stampMs(current) && prev.length) return prev;
-              return items;
-            });
+            setArticles(items);
             setUpdatedAt(latestStamp(items));
             try {
               localStorage.setItem(CACHE_KEY, JSON.stringify({ items, updatedAt: latestStamp(items) }));

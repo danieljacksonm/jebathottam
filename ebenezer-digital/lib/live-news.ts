@@ -133,9 +133,22 @@ function hydrateFromDisk(): void {
   if (disk) cache = disk;
 }
 
+/** Cron may have written a newer snapshot from another worker. */
+function reloadDiskIfNewer(): void {
+  try {
+    if (!fs.existsSync(DISK_FILE)) return;
+    const mtime = fs.statSync(DISK_FILE).mtimeMs;
+    if (cache && mtime <= cache.at + 1000) return;
+    const disk = readDiskCache();
+    if (disk && (!cache || disk.at > cache.at)) cache = disk;
+  } catch {
+    /* disk best-effort */
+  }
+}
+
 async function fetchText(url: string): Promise<string> {
   const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), 2000);
+  const t = setTimeout(() => ctrl.abort(), 20_000);
   try {
     const res = await fetch(url, {
       signal: ctrl.signal,
@@ -206,14 +219,27 @@ async function runWireFetch(): Promise<LiveNewsItem[]> {
         if (!byKey.has(key)) byKey.set(key, item);
       };
 
-      for (const feed of RSS_FEEDS) {
-        try {
-          const items = await fetchRssFeed(feed);
-          items.forEach(push);
-        } catch {
-          /* feed best-effort */
-        }
+      const previous = cache?.items || [];
+      const failedSources = new Set<string>();
+      const results = await Promise.all(
+        RSS_FEEDS.map(async (feed) => {
+          try {
+            const items = await fetchRssFeed(feed);
+            return { source: feed.source, items, ok: items.length > 0 };
+          } catch {
+            return { source: feed.source, items: [] as LiveNewsItem[], ok: false };
+          }
+        })
+      );
+      for (const result of results) {
+        if (result.ok) result.items.forEach(push);
+        else failedSources.add(result.source);
         await yieldEventLoop();
+      }
+      if (failedSources.size) {
+        for (const item of previous) {
+          if (failedSources.has(item.sourceLabel)) push(item);
+        }
       }
 
       const items = Array.from(byKey.values()).sort(
@@ -245,8 +271,8 @@ export async function fetchLiveNews(): Promise<LiveNewsItem[]> {
 }
 
 /**
- * Explicit refresh for admin/cron only — does not require LIVE_NEWS_INPROCESS.
- * Still uses the same bounded parser; do not call from page renders.
+ * Explicit wire refresh. Does not require LIVE_NEWS_INPROCESS.
+ * Homepage loads call this when the snapshot is older than a couple of minutes.
  */
 export async function refreshLiveNewsWire(): Promise<{ items: LiveNewsItem[]; fetchedAt: string }> {
   hydrateFromDisk();
@@ -260,7 +286,17 @@ export async function refreshLiveNewsWire(): Promise<{ items: LiveNewsItem[]; fe
 /** Return cached wire without triggering a refresh. Hydrates from disk once. */
 export function peekLiveNewsCache(): LiveNewsItem[] {
   hydrateFromDisk();
+  reloadDiskIfNewer();
   return cache?.items || [];
+}
+
+/** True when this call pulled the feeds. Page refresh uses this so the desk is not stuck on an old snapshot. */
+export async function ensureLiveNewsFresh(maxAgeMs = 2 * 60 * 1000): Promise<boolean> {
+  hydrateFromDisk();
+  reloadDiskIfNewer();
+  if (cache && Date.now() - cache.at < maxAgeMs && cache.items.length >= 8) return false;
+  await refreshLiveNewsWire();
+  return true;
 }
 
 /**

@@ -5,7 +5,7 @@ import {
   type NewsArticle,
   type NewsRegion,
 } from "@/app/blog/news/data";
-import { getLiveNewsBySlug, peekLiveNewsCache } from "@/lib/live-news";
+import { ensureLiveNewsFresh, getLiveNewsBySlug, peekLiveNewsCache } from "@/lib/live-news";
 import { storyFingerprint, photoForStory, safeNewsCover } from "@/lib/news-photos";
 import { originForKind, siteKindFromHost, NEWS_URL } from "@/lib/site-url";
 import { inferNewsSourceType, newsPublicUrl, legacySlugFromSourceUrl, isLegacySourceDomainSlug } from "@/lib/news-url";
@@ -124,9 +124,11 @@ function archiveToPublic(n: {
 /**
  * Latest published stories for the desk.
  * Priority: CMS → live wire (memory/disk) → archive retention → seed only if empty.
- * Never starts RSS from a page request.
+ * If the wire snapshot is older than a couple of minutes, this pulls the feeds first.
  */
 export async function listPublicNews(): Promise<PublicNewsItem[]> {
+  const refreshed = await ensureLiveNewsFresh();
+  if (refreshed) listPublicMemo = null;
   const now = Date.now();
   if (listPublicMemo && now - listPublicMemo.at < LIST_PUBLIC_TTL_MS) {
     return listPublicMemo.data;
