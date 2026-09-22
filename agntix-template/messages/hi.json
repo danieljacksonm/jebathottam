@@ -124,6 +124,27 @@
     "secure": "सुरक्षित बुकिंग",
     "trusted": "हज़ारों का विश्वास"
   },
+  "platform": {
+    "heroEyebrow": "Canaan Travel Hub",
+    "heroTitle": "आपकी यात्रा यहीं शुरू होती है।",
+    "heroSub": "गंतव्य, पैकेज, कॉर्पोरेट यात्रा और कस्टम ट्रिप — भरोसेमंद मानवीय योजना के साथ।",
+    "ctaDestinations": "गंतव्य देखें",
+    "ctaPlan": "यात्रा योजना बनाएं",
+    "featuredDestinations": "विशेष गंतव्य",
+    "featuredPackages": "विशेष पैकेज",
+    "whyTitle": "क्यों Canaan",
+    "whyBody": "पारदर्शी पैकेज, मानवीय सहायता, स्थानीय ज्ञान और कॉर्पोरेट समन्वय।",
+    "corporateTitle": "कॉर्पोरेट यात्रा",
+    "corporateBody": "व्यापार यात्रा, रिट्रीट, टीम आउटिंग और समन्वित समूह यात्रा।",
+    "corporateCta": "कॉर्पोरेट यात्रा योजना",
+    "customTitle": "आप कहाँ जाना चाहते हैं?",
+    "customBody": "हम आपकी यात्रा योजना में मदद करेंगे — गंतव्य, तिथियाँ, शैली और बजट।",
+    "availableNow": "अभी उपलब्ध",
+    "requestEnquiry": "अनुरोध / पूछताछ",
+    "comingSoon": "जल्द आ रहा है",
+    "perPerson": "प्रति व्यक्ति",
+    "from": "से"
+  },
   "destinationsSection": {
     "eyebrow": "गंतव्य",
     "title": "कोडाइकनाल",

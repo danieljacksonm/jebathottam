@@ -4,8 +4,8 @@
     "description": "Curated Kodaikanal packages and worldwide tourism support — flights, hotels, visas and trip planning with Canaan Travel Hub."
   },
   "seo": {
-    "homeTitle": "Canaan Travel Hub | Kodaikanal Packages & Worldwide Travel",
-    "homeDescription": "Curated Kodaikanal packages and worldwide tourism support — flights, hotels, visas and trip planning with Canaan Travel Hub.",
+    "homeTitle": "Canaan Travel Hub | Worldwide Destinations & Travel Planning",
+    "homeDescription": "Explore 80+ destinations worldwide with detailed place guides, curated packages, and human trip planning — India, Asia, Europe, and beyond.",
     "kodaiTitle": "Kodaikanal Tour Packages & Travel Guide",
     "kodaiDescription": "Plan a calm Kodaikanal journey — sightseeing, honeymoon and family packages, lake and pine-forest days, and a clear itinerary with Canaan Travel Hub.",
     "destinationsTitle": "Destinations | Canaan Travel Hub",
@@ -439,6 +439,27 @@
   "video": {
     "title": "Kodaikanal journey film",
     "close": "Close"
+  },
+  "platform": {
+    "heroEyebrow": "Canaan Travel Hub",
+    "heroTitle": "Your journey starts here.",
+    "heroSub": "Discover destinations, curated packages, corporate travel, and custom trips — with human planning you can trust.",
+    "ctaDestinations": "Explore Destinations",
+    "ctaPlan": "Plan Your Trip",
+    "featuredDestinations": "Featured destinations",
+    "featuredPackages": "Featured packages",
+    "whyTitle": "Why travel with Canaan",
+    "whyBody": "Transparent packages, human assistance, local knowledge, and corporate coordination — without fake reviews or invented inventory.",
+    "corporateTitle": "Corporate travel",
+    "corporateBody": "Business trips, retreats, team outings, conferences, transfers, and coordinated group travel.",
+    "corporateCta": "Plan corporate travel",
+    "customTitle": "Tell us where you want to go.",
+    "customBody": "We'll help you plan the journey — destinations, dates, style, and budget.",
+    "availableNow": "Available now",
+    "requestEnquiry": "Request / Enquiry",
+    "comingSoon": "Coming soon",
+    "perPerson": "per person",
+    "from": "From"
   },
   "destinationsSection": {
     "eyebrow": "Destination",

@@ -1,48 +1,36 @@
-import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { getFeaturedDestinations } from "@/data/destinations";
 
-const HERO_PANELS = [
-  {
-    src: "/images/marketing/kodai-banner.jpg",
-    alt: "Kodaikanal hills with Canaan Travel Hub",
-  },
-  {
-    src: "/images/marketing/darjeeling-banner.jpg",
-    alt: "Darjeeling tea hills and Himalayan views",
-  },
-  {
-    src: "/images/goa/goa-hero.jpg",
-    alt: "Goa beaches and coastal adventure",
-  },
-] as const;
+const BANNER = {
+  src: "/images/travel/d/kodaikanal.jpg",
+  alt: "Kodaikanal lake and hills",
+};
 
 export async function GlobalHero() {
   const t = await getTranslations("platform");
+  const locale = await getLocale();
+  const featured = await getFeaturedDestinations(locale, 1);
+  const banner = featured[0]?.image
+    ? { src: featured[0].image, alt: featured[0].name }
+    : BANNER;
 
   return (
     <section className="relative isolate min-h-[88vh] overflow-hidden bg-[#020b16]">
-      <div className="absolute inset-0 grid grid-cols-1 md:grid-cols-3">
-        {HERO_PANELS.map((panel, index) => (
-          <div
-            key={panel.src}
-            className={`relative ${index === 0 ? "block" : "hidden md:block"}`}
-          >
-            <Image
-              src={panel.src}
-              alt={panel.alt}
-              fill
-              priority={index === 0}
-              className="object-cover object-center opacity-50"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-          </div>
-        ))}
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-[#020b16]/60 via-[#020b16]/50 to-[#020b16]" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(201,162,39,0.16),transparent_55%)]" />
+      {/* Plain img — avoids Next optimizer quirks that can hide the banner */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={banner.src}
+        alt={banner.alt}
+        width={1920}
+        height={1440}
+        fetchPriority="high"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover object-[center_40%]"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020b16]/80 via-[#020b16]/15 to-transparent" />
 
-      <div className="relative mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-end px-5 pb-20 pt-36 md:px-8 md:pb-28">
+      <div className="relative z-10 mx-auto flex min-h-[88vh] max-w-7xl flex-col justify-end px-5 pb-20 pt-36 md:px-8 md:pb-28">
         <p className="text-[0.72rem] uppercase tracking-[0.32em] text-gold">
           {t("heroEyebrow")}
         </p>

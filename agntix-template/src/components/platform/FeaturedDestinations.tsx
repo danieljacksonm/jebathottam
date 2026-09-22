@@ -33,8 +33,10 @@ export async function FeaturedDestinations() {
                       src={dest.image}
                       alt={dest.name}
                       fill
+                      quality={75}
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
+                      unoptimized={dest.image.startsWith("http")}
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-7">

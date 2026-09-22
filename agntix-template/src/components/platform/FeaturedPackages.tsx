@@ -28,11 +28,12 @@ export async function FeaturedPackages() {
         <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {packages.map((pkg) => (
             <article key={pkg.id} className="card-surface flex h-full flex-col overflow-hidden">
-              <Link href={`/packages/${pkg.id}`} className="relative aspect-[16/10] block">
+              <Link href={`/packages/${pkg.id}`} className="relative block aspect-[16/10]">
                 <Image
                   src={pkg.image}
                   alt={pkg.title}
                   fill
+                  quality={75}
                   className="object-cover transition-transform duration-700 hover:scale-[1.03]"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />

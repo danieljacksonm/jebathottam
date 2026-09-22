@@ -28,6 +28,8 @@ export type LocalizedPlace = {
   image: string | null;
   destinationSlug?: string;
   destinationName?: string;
+  destinationImage?: string;
+  destinationId?: string;
 };
 
 function pickLocale(en: string, ta: string, hi: string, locale: string) {
@@ -76,6 +78,32 @@ export async function getFeaturedDestinations(locale: string, limit = 6) {
   return rows
     .map((row) => localizeDestination(row, locale))
     .filter(Boolean) as LocalizedDestination[];
+}
+
+const FALLBACK_HERO = "/images/darjeeling/hero/darjeeling-hero.jpg";
+
+/** Tourism hero for site-wide pages (not Kodaikanal-specific). */
+export async function getTravelHubHeroImage() {
+  const row = await prisma.destination.findFirst({
+    where: {
+      featured: true,
+      NOT: { image: { startsWith: "/images/kodai" } },
+    },
+    orderBy: [{ sortOrder: "asc" }, { nameEn: "asc" }],
+    select: { image: true },
+  });
+  return row?.image || FALLBACK_HERO;
+}
+
+export async function getDestinationHeroImage(slug?: string) {
+  if (slug) {
+    const row = await prisma.destination.findUnique({
+      where: { slug },
+      select: { image: true },
+    });
+    if (row?.image) return row.image;
+  }
+  return getTravelHubHeroImage();
 }
 
 export async function getDestination(slug: string, locale: string) {
@@ -157,9 +185,10 @@ export async function getPlace(
     summary: pickLocale(row.summaryEn, row.summaryTa, row.summaryHi, locale),
     detail: pickLocale(row.detailEn, row.detailTa, row.detailHi, locale),
     bestTime: pickLocale(row.bestTimeEn, row.bestTimeTa, row.bestTimeHi, locale),
-    image: row.image,
+    image: row.image ?? dest.image,
     destinationSlug: dest.slug,
     destinationName: pickLocale(dest.nameEn, dest.nameTa, dest.nameHi, locale),
+    destinationImage: dest.image,
     destinationId: dest.id,
   };
 }
