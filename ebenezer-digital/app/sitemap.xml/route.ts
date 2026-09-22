@@ -8,8 +8,7 @@ export const dynamic = "force-dynamic";
 
 const CACHE_HEADERS = {
   "Content-Type": "application/xml; charset=utf-8",
-  "Cache-Control": "public, max-age=0, s-maxage=600, stale-while-revalidate=86400",
-  Vary: "Accept-Encoding",
+  "Cache-Control": "public, max-age=300, s-maxage=600, stale-while-revalidate=86400",
 };
 
 const INDEX_TTL_MS = 30 * 60 * 1000;

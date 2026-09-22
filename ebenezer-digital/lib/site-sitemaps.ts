@@ -17,7 +17,6 @@ import {
   TOOLS_URL,
   NETWORK_URL,
   articleLanguageAlternates,
-  publishedLanguageAlternates,
   originForKind,
   publicUrlForInternalPath,
   type SiteKind,
@@ -90,10 +89,11 @@ function page(
     priority,
   };
   if (withLanguages) {
-    // XML sitemaps: only en + x-default (must match `<loc>`). Full locale
-    // clusters live in HTML `<link rel="alternate">` via pageMetadata.
+    // XML sitemaps: only en + x-default matching `<loc>`.
+    // Full locale clusters belong in HTML <link rel="alternate">, not here —
+    // news/.net locale URLs 301 and Search Console reports "Couldn't fetch".
     entry.alternates = {
-      languages: publishedLanguageAlternates(ip, origin, resolvedKind),
+      languages: articleLanguageAlternates(ip, resolvedKind),
     };
   }
   return entry;
