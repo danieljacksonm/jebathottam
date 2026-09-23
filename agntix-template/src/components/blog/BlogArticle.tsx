@@ -76,9 +76,10 @@ export function BlogArticle({
           src={image}
           alt={imageAlt}
           fill
-          quality={90}
+          quality={75}
           className="object-cover"
           sizes="(max-width: 1200px) 100vw, 1200px"
+          unoptimized={image.startsWith("http")}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#04162B]/50 to-transparent" />
       </motion.div>

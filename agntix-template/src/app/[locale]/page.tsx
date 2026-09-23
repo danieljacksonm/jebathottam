@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { GlobalHero } from "@/components/platform/GlobalHero";
+import { GlobalHero, HOME_HERO_IMAGE } from "@/components/platform/GlobalHero";
 import { FeaturedDestinations } from "@/components/platform/FeaturedDestinations";
 import { FeaturedPackages } from "@/components/platform/FeaturedPackages";
 import { CorporateStrip } from "@/components/platform/CorporateStrip";
@@ -8,7 +8,6 @@ import { CustomTripCTA } from "@/components/platform/CustomTripCTA";
 import { ExperienceStyles } from "@/components/platform/ExperienceStyles";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { LazySection } from "@/components/cinematic/LazySection";
-import { getTravelHubHeroImage } from "@/data/destinations";
 import { pageMetadata } from "@/lib/seo";
 
 const WhyCanaan = dynamic(() =>
@@ -25,16 +24,26 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "seo" });
-  const heroImage = await getTravelHubHeroImage();
   return pageMetadata({
     locale,
     path: "/",
     title: t("homeTitle"),
     description: t("homeDescription"),
-    image: heroImage,
-    imageAlt: "Canaan Travel Hub — destinations and journeys",
+    image: HOME_HERO_IMAGE,
+    imageAlt: "Canaan Travel Hub — journeys across India and beyond",
     absoluteTitle: true,
   });
+}
+
+async function TrustStrip() {
+  const t = await getTranslations("platform");
+  return (
+    <section className="border-b border-[var(--line)] bg-[#04101f]/80 px-5 py-8 md:px-8">
+      <p className="mx-auto max-w-3xl text-center text-sm leading-relaxed text-soft-gray md:text-base">
+        {t("trustLine")}
+      </p>
+    </section>
+  );
 }
 
 export default async function HomePage({
@@ -48,6 +57,7 @@ export default async function HomePage({
   return (
     <>
       <GlobalHero />
+      <TrustStrip />
       <FeaturedDestinations />
       <FeaturedPackages />
       <LazySection>
@@ -58,10 +68,10 @@ export default async function HomePage({
       <LazySection>
         <HowItWorksSection />
       </LazySection>
-      <CustomTripCTA />
       <LazySection minHeight="40vh">
         <DigitalStrip />
       </LazySection>
+      <CustomTripCTA />
     </>
   );
 }

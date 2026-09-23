@@ -262,4 +262,490 @@ export const packageDetails: Record<PackageId, PackageDetails> = {
       },
     ],
   },
+  "darjeeling-3n4d-mimbusty": {
+    suitableFor: {
+      en: "Families and friend groups (reference pricing for 7 guests — ask for your group size)",
+      ta: "குடும்பங்கள் மற்றும் நண்பர் குழுக்கள் (7 பேர் குறிப்பு விலை — உங்கள் குழு அளவுக்கு கேளுங்கள்)",
+      hi: "परिवार और मित्र समूह (7 अतिथि संदर्भ कीमत — अपना समूह आकार पूछें)",
+    },
+    startingLocation: {
+      en: "NJP (New Jalpaiguri) — pickup and drop",
+      ta: "NJP (New Jalpaiguri) — பிக்அப் மற்றும் டிராப்",
+      hi: "NJP (New Jalpaiguri) — पिकअप और ड्रॉप",
+    },
+    destination: {
+      en: "Darjeeling",
+      ta: "டார்ஜிலிங்",
+      hi: "दार्जिलिंग",
+    },
+    hotelCategory: {
+      en: "Homestay / hotel as per night — Dawaipani, Darjeeling town, Mimbusty (Kanchenjunga view)",
+      ta: "இரவுப்படி ஹோம்ஸ்டே / ஹோட்டல் — Dawaipani, டார்ஜிலிங் நகரம், Mimbusty",
+      hi: "रात के अनुसार होमस्टे / होटल — Dawaipani, दार्जिलिंग शहर, Mimbusty",
+    },
+    transportSummary: {
+      en: "NJP to NJP sightseeing vehicle — Sumo / Bolero / Innova as available",
+      ta: "NJP to NJP சுற்றுலா வாகனம் — Sumo / Bolero / Innova கிடைக்கும்படி",
+      hi: "NJP to NJP साइटसीइंग वाहन — Sumo / Bolero / Innova उपलब्धता अनुसार",
+    },
+    mealPlan: {
+      en: "Meals as listed each day (arrival day includes lunch, dinner, snacks & breakfast; sightseeing day dinner & breakfast; transfer days as listed)",
+      ta: "ஒவ்வொரு நாளும் பட்டியலிடப்பட்ட உணவுகள்",
+      hi: "प्रत्येक दिन सूचीबद्ध भोजन",
+    },
+    pricingAssumptions: {
+      en: [
+        "₹6,550 per person reference price from Canaan’s Darjeeling tour programme (7-guest group)",
+        "Vehicle type depends on availability (Sumo / Bolero / Innova)",
+        "Confirm dates, pax count, and stay preferences before paying any advance",
+      ],
+      ta: [
+        "₹6,550 / நபர் — Canaan டார்ஜிலிங் திட்ட குறிப்பு (7 பேர்)",
+        "வாகன வகை கிடைப்பின்படி",
+        "முன்பணத்திற்கு முன் தேதிகள் மற்றும் பயணிகள் எண்ணிக்கையை உறுதி செய்யுங்கள்",
+      ],
+      hi: [
+        "₹6,550 प्रति व्यक्ति — Canaan दार्जिलिंग कार्यक्रम संदर्भ (7 अतिथि)",
+        "वाहन प्रकार उपलब्धता अनुसार",
+        "अग्रिम भुगतान से पहले तिथियाँ और यात्री संख्या पुष्टि करें",
+      ],
+    },
+    inclusions: {
+      en: [
+        "3 nights stay as per itinerary",
+        "Meals listed for each day",
+        "NJP to NJP sightseeing transport",
+        "Dedicated tour vehicle as available",
+      ],
+      ta: [
+        "திட்டப்படி 3 இரவு தங்கல்",
+        "தினசரி பட்டியலிடப்பட்ட உணவுகள்",
+        "NJP to NJP சுற்றுலா போக்குவரத்து",
+        "கிடைக்கும்படி அர்ப்பணிக்கப்பட்ட வாகனம்",
+      ],
+      hi: [
+        "इटिनरेरी के अनुसार 3 रात ठहराव",
+        "प्रत्येक दिन सूचीबद्ध भोजन",
+        "NJP to NJP साइटसीइंग परिवहन",
+        "उपलब्ध समर्पित टूर वाहन",
+      ],
+    },
+    exclusions: {
+      en: [
+        "Bonfire and BBQ",
+        "Vehicle use outside the itinerary",
+        "Syndicate parking costs (if any)",
+        "Personal expenses and tips",
+      ],
+      ta: [
+        "கேம்ப்ஃபயர் மற்றும் BBQ",
+        "திட்டத்திற்கு வெளியே வாகன பயன்பாடு",
+        "Syndicate பார்க்கிங் செலவுகள் (இருந்தால்)",
+        "தனிப்பட்ட செலவுகள் மற்றும் டிப்ஸ்",
+      ],
+      hi: [
+        "कैम्पफ़ायर और BBQ",
+        "इटिनरेरी से बाहर वाहन उपयोग",
+        "Syndicate पार्किंग लागत (यदि कोई)",
+        "व्यक्तिगत खर्च और टिप",
+      ],
+    },
+    accommodationNote: {
+      en: "Night 1 Dawaipani homestay (bonfire / BBQ facilities available as paid extras). Night 2 Darjeeling town hotel. Night 3 Mimbusty Kanchenjunga-view stay.",
+      ta: "இரவு 1 Dawaipani ஹோம்ஸ்டே. இரவு 2 டார்ஜிலிங் நகர ஹோட்டல். இரவு 3 Mimbusty கஞ்சன்ஜங்கா தங்கல்.",
+      hi: "रात 1 Dawaipani होमस्टे। रात 2 दार्जिलिंग शहर होटल। रात 3 Mimbusty कंचनजंगा ठहराव।",
+    },
+    transportDetails: {
+      en: [
+        "NJP pickup and drop",
+        "Sumo / Bolero / Innova whichever is available",
+      ],
+      ta: ["NJP பிக்அப் மற்றும் டிராப்", "Sumo / Bolero / Innova கிடைக்கும்படி"],
+      hi: ["NJP पिकअप और ड्रॉप", "Sumo / Bolero / Innova उपलब्धता अनुसार"],
+    },
+    cancellationPolicy: OWNER_TODO_CANCEL,
+    paymentTerms: OWNER_TODO_PAY,
+    itinerary: [
+      {
+        day: 1,
+        title: {
+          en: "NJP to Dawaipani",
+          ta: "NJP to Dawaipani",
+          hi: "NJP से Dawaipani",
+        },
+        parts: [
+          {
+            label: { en: "Route", ta: "பாதை", hi: "मार्ग" },
+            detail: {
+              en: "NJP to Dawaipani. Visit Lovers’ viewpoint, Peshok tea garden, Gumbadara viewpoint, Lamhatta pine forest. Reach homestay; leisure evening (bonfire / BBQ facilities available as extras).",
+              ta: "NJP to Dawaipani — Lovers’ viewpoint, Peshok தேயிலை தோட்டம், Gumbadara, Lamhatta pine forest. ஹோம்ஸ்டே அடைதல்.",
+              hi: "NJP से Dawaipani — Lovers’ viewpoint, Peshok चाय बागान, Gumbadara, Lamhatta पाइन फ़ॉरेस्ट। होमस्टे पहुँच।",
+            },
+          },
+          {
+            label: { en: "Meals", ta: "உணவு", hi: "भोजन" },
+            detail: {
+              en: "Lunch, dinner, snacks & breakfast included.",
+              ta: "மதியம், இரவு, சிற்றுண்டி & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              hi: "दोपहर, रात्रि, स्नैक्स और नाश्ता शामिल।",
+            },
+          },
+        ],
+        overnight: {
+          en: "Overnight at Dawaipani",
+          ta: "Dawaipani-இல் இரவு தங்கல்",
+          hi: "Dawaipani में रात्रि ठहराव",
+        },
+      },
+      {
+        day: 2,
+        title: {
+          en: "Darjeeling sightseeing",
+          ta: "டார்ஜிலிங் சுற்றுலா",
+          hi: "दार्जिलिंग साइटसीइंग",
+        },
+        parts: [
+          {
+            label: { en: "Sights", ta: "காட்சிகள்", hi: "स्थल" },
+            detail: {
+              en: "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Mountaineering Institute and Museum, Happy Valley Tea Estate, Japanese Temple, Peace Pagoda, Tibetan Refugee Camp (if open). Mall Road and local market by walk.",
+              ta: "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Happy Valley Tea Estate, Peace Pagoda, Mall Road.",
+              hi: "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Happy Valley Tea Estate, Peace Pagoda, Mall Road।",
+            },
+          },
+          {
+            label: { en: "Meals", ta: "உணவு", hi: "भोजन" },
+            detail: {
+              en: "Dinner & breakfast included.",
+              ta: "இரவு & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              hi: "रात्रि भोजन और नाश्ता शामिल।",
+            },
+          },
+        ],
+        overnight: {
+          en: "Overnight in Darjeeling town",
+          ta: "டார்ஜிலிங் நகரத்தில் இரவு தங்கல்",
+          hi: "दार्जिलिंग शहर में रात्रि ठहराव",
+        },
+      },
+      {
+        day: 3,
+        title: {
+          en: "Darjeeling to Mimbusty",
+          ta: "டார்ஜிலிங் to Mimbusty",
+          hi: "दार्जिलिंग से Mimbusty",
+        },
+        parts: [
+          {
+            label: { en: "Route", ta: "பாதை", hi: "मार्ग" },
+            detail: {
+              en: "Transfer to Mimbusty (Kanchenjunga view stay). Visit Lepchajagat pine forest and Majhidhura (Mini Pehelgam). Leisure evening (bonfire / BBQ facilities available as extras).",
+              ta: "Mimbusty (கஞ்சன்ஜங்கா காட்சி) — Lepchajagat pine forest, Majhidhura.",
+              hi: "Mimbusty (कंचनजंगा व्यू) — Lepchajagat पाइन फ़ॉरेस्ट, Majhidhura।",
+            },
+          },
+          {
+            label: { en: "Meals", ta: "உணவு", hi: "भोजन" },
+            detail: {
+              en: "Lunch, snacks, dinner and breakfast included.",
+              ta: "மதியம், சிற்றுண்டி, இரவு மற்றும் காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              hi: "दोपहर, स्नैक्स, रात्रि भोजन और नाश्ता शामिल।",
+            },
+          },
+        ],
+        overnight: {
+          en: "Overnight at Mimbusty",
+          ta: "Mimbusty-இல் இரவு தங்கல்",
+          hi: "Mimbusty में रात्रि ठहराव",
+        },
+      },
+      {
+        day: 4,
+        title: {
+          en: "Return to NJP via Mirik",
+          ta: "Mirik வழியாக NJP திரும்புதல்",
+          hi: "Mirik से NJP वापसी",
+        },
+        parts: [
+          {
+            label: { en: "Route", ta: "பாதை", hi: "मार्ग" },
+            detail: {
+              en: "Simana viewpoint, Nepal border market / Pashupati Fatak, Gopaldhara Tea Estate, Mirik Lake and pine forest. Drop at NJP.",
+              ta: "Simana viewpoint, நேபாள எல்லை சந்தை, Gopaldhara Tea Estate, Mirik Lake. NJP டிராப்.",
+              hi: "Simana viewpoint, नेपाल बॉर्डर मार्केट, Gopaldhara Tea Estate, Mirik Lake। NJP ड्रॉप।",
+            },
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: {
+          en: "Where does the tour start and end?",
+          ta: "சுற்றுலா எங்கு தொடங்கி முடியும்?",
+          hi: "टूर कहाँ शुरू और खत्म होता है?",
+        },
+        answer: {
+          en: "NJP (New Jalpaiguri) to NJP — pickup and drop are included in the programme.",
+          ta: "NJP to NJP — பிக்அப் மற்றும் டிராப் சேர்க்கப்பட்டுள்ளது.",
+          hi: "NJP to NJP — पिकअप और ड्रॉप शामिल।",
+        },
+      },
+      {
+        question: {
+          en: "What is excluded?",
+          ta: "என்ன விலக்கப்பட்டுள்ளது?",
+          hi: "क्या शामिल नहीं है?",
+        },
+        answer: {
+          en: "Bonfire, BBQ, vehicle use outside the itinerary, and syndicate parking (if any).",
+          ta: "கேம்ப்ஃபயர், BBQ, திட்டத்திற்கு வெளியே வாகனம், syndicate பார்க்கிங் (இருந்தால்).",
+          hi: "कैम्पफ़ायर, BBQ, इटिनरेरी से बाहर वाहन, syndicate पार्किंग (यदि कोई)।",
+        },
+      },
+    ],
+  },
+  "darjeeling-3n4d-tabakoshi": {
+    suitableFor: {
+      en: "Families and friend groups (reference pricing for 7 guests — ask for your group size)",
+      ta: "குடும்பங்கள் மற்றும் நண்பர் குழுக்கள் (7 பேர் குறிப்பு விலை)",
+      hi: "परिवार और मित्र समूह (7 अतिथि संदर्भ कीमत)",
+    },
+    startingLocation: {
+      en: "NJP (New Jalpaiguri) — pickup and drop",
+      ta: "NJP (New Jalpaiguri) — பிக்அப் மற்றும் டிராப்",
+      hi: "NJP (New Jalpaiguri) — पिकअप और ड्रॉप",
+    },
+    destination: {
+      en: "Darjeeling",
+      ta: "டார்ஜிலிங்",
+      hi: "दार्जिलिंग",
+    },
+    hotelCategory: {
+      en: "Homestay / hotel as per night — Dawaipani, Darjeeling town, Tabakoshi riverside",
+      ta: "இரவுப்படி ஹோம்ஸ்டே / ஹோட்டல் — Dawaipani, டார்ஜிலிங் நகரம், Tabakoshi நதிக்கரை",
+      hi: "रात के अनुसार होमस्टे / होटल — Dawaipani, दार्जिलिंग शहर, Tabakoshi रिवरसाइड",
+    },
+    transportSummary: {
+      en: "NJP to NJP sightseeing vehicle — Sumo / Bolero / Innova as available",
+      ta: "NJP to NJP சுற்றுலா வாகனம் — Sumo / Bolero / Innova கிடைக்கும்படி",
+      hi: "NJP to NJP साइटसीइंग वाहन — Sumo / Bolero / Innova उपलब्धता अनुसार",
+    },
+    mealPlan: {
+      en: "Meals as listed each day in the itinerary",
+      ta: "திட்டத்தில் பட்டியலிடப்பட்ட உணவுகள்",
+      hi: "इटिनरेरी में सूचीबद्ध भोजन",
+    },
+    pricingAssumptions: {
+      en: [
+        "₹6,550 per person reference price from Canaan’s Darjeeling tour programme (7-guest group)",
+        "Vehicle type depends on availability (Sumo / Bolero / Innova)",
+        "Confirm dates, pax count, and stay preferences before paying any advance",
+      ],
+      ta: [
+        "₹6,550 / நபர் — Canaan டார்ஜிலிங் திட்ட குறிப்பு (7 பேர்)",
+        "வாகன வகை கிடைப்பின்படி",
+        "முன்பணத்திற்கு முன் தேதிகளை உறுதி செய்யுங்கள்",
+      ],
+      hi: [
+        "₹6,550 प्रति व्यक्ति — Canaan दार्जिलिंग कार्यक्रम संदर्भ (7 अतिथि)",
+        "वाहन प्रकार उपलब्धता अनुसार",
+        "अग्रिम भुगतान से पहले तिथियाँ पुष्टि करें",
+      ],
+    },
+    inclusions: {
+      en: [
+        "3 nights stay as per itinerary",
+        "Meals listed for each day",
+        "NJP to NJP sightseeing transport",
+        "Dedicated tour vehicle as available",
+      ],
+      ta: [
+        "திட்டப்படி 3 இரவு தங்கல்",
+        "தினசரி பட்டியலிடப்பட்ட உணவுகள்",
+        "NJP to NJP சுற்றுலா போக்குவரத்து",
+        "கிடைக்கும்படி அர்ப்பணிக்கப்பட்ட வாகனம்",
+      ],
+      hi: [
+        "इटिनरेरी के अनुसार 3 रात ठहराव",
+        "प्रत्येक दिन सूचीबद्ध भोजन",
+        "NJP to NJP साइटसीइंग परिवहन",
+        "उपलब्ध समर्पित टूर वाहन",
+      ],
+    },
+    exclusions: {
+      en: [
+        "Bonfire and BBQ",
+        "Vehicle use outside the itinerary",
+        "Syndicate parking costs (if any)",
+        "Personal expenses and tips",
+      ],
+      ta: [
+        "கேம்ப்ஃபயர் மற்றும் BBQ",
+        "திட்டத்திற்கு வெளியே வாகன பயன்பாடு",
+        "Syndicate பார்க்கிங் செலவுகள் (இருந்தால்)",
+        "தனிப்பட்ட செலவுகள் மற்றும் டிப்ஸ்",
+      ],
+      hi: [
+        "कैम्पफ़ायर और BBQ",
+        "इटिनरेरी से बाहर वाहन उपयोग",
+        "Syndicate पार्किंग लागत (यदि कोई)",
+        "व्यक्तिगत खर्च और टिप",
+      ],
+    },
+    accommodationNote: {
+      en: "Night 1 Dawaipani homestay. Night 2 Darjeeling town hotel. Night 3 Tabakoshi mountain riverside stay.",
+      ta: "இரவு 1 Dawaipani. இரவு 2 டார்ஜிலிங் நகரம். இரவு 3 Tabakoshi நதிக்கரை.",
+      hi: "रात 1 Dawaipani। रात 2 दार्जिलिंग शहर। रात 3 Tabakoshi रिवरसाइड।",
+    },
+    transportDetails: {
+      en: [
+        "NJP pickup and drop",
+        "Sumo / Bolero / Innova whichever is available",
+      ],
+      ta: ["NJP பிக்அப் மற்றும் டிராப்", "Sumo / Bolero / Innova கிடைக்கும்படி"],
+      hi: ["NJP पिकअप और ड्रॉप", "Sumo / Bolero / Innova उपलब्धता अनुसार"],
+    },
+    cancellationPolicy: OWNER_TODO_CANCEL,
+    paymentTerms: OWNER_TODO_PAY,
+    itinerary: [
+      {
+        day: 1,
+        title: {
+          en: "NJP to Dawaipani",
+          ta: "NJP to Dawaipani",
+          hi: "NJP से Dawaipani",
+        },
+        parts: [
+          {
+            label: { en: "Route", ta: "பாதை", hi: "मार्ग" },
+            detail: {
+              en: "NJP to Dawaipani. Visit Lovers’ viewpoint, Peshok tea garden, Gumbadara viewpoint, Lamhatta pine forest. Reach homestay; leisure evening.",
+              ta: "NJP to Dawaipani — Lovers’ viewpoint, Peshok, Gumbadara, Lamhatta. ஹோம்ஸ்டே அடைதல்.",
+              hi: "NJP से Dawaipani — Lovers’ viewpoint, Peshok, Gumbadara, Lamhatta। होमस्टे पहुँच।",
+            },
+          },
+          {
+            label: { en: "Meals", ta: "உணவு", hi: "भोजन" },
+            detail: {
+              en: "Lunch, dinner, snacks & breakfast included.",
+              ta: "மதியம், இரவு, சிற்றுண்டி & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              hi: "दोपहर, रात्रि, स्नैक्स और नाश्ता शामिल।",
+            },
+          },
+        ],
+        overnight: {
+          en: "Overnight at Dawaipani",
+          ta: "Dawaipani-இல் இரவு தங்கல்",
+          hi: "Dawaipani में रात्रि ठहराव",
+        },
+      },
+      {
+        day: 2,
+        title: {
+          en: "Darjeeling sightseeing",
+          ta: "டார்ஜிலிங் சுற்றுலா",
+          hi: "दार्जिलिंग साइटसीइंग",
+        },
+        parts: [
+          {
+            label: { en: "Sights", ta: "காட்சிகள்", hi: "स्थल" },
+            detail: {
+              en: "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Mountaineering Institute and Museum, Happy Valley Tea Estate, Japanese Temple, Peace Pagoda, Tibetan Refugee Camp (if open). Mall Road walk.",
+              ta: "Batasia Loop, Ghoom Monastery, Zoological Park, Happy Valley, Peace Pagoda, Mall Road.",
+              hi: "Batasia Loop, Ghoom Monastery, Zoological Park, Happy Valley, Peace Pagoda, Mall Road।",
+            },
+          },
+          {
+            label: { en: "Meals", ta: "உணவு", hi: "भोजन" },
+            detail: {
+              en: "Dinner & breakfast included.",
+              ta: "இரவு & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              hi: "रात्रि भोजन और नाश्ता शामिल।",
+            },
+          },
+        ],
+        overnight: {
+          en: "Overnight in Darjeeling town",
+          ta: "டார்ஜிலிங் நகரத்தில் இரவு தங்கல்",
+          hi: "दार्जिलिंग शहर में रात्रि ठहराव",
+        },
+      },
+      {
+        day: 3,
+        title: {
+          en: "Darjeeling to Tabakoshi",
+          ta: "டார்ஜிலிங் to Tabakoshi",
+          hi: "दार्जिलिंग से Tabakoshi",
+        },
+        parts: [
+          {
+            label: { en: "Route", ta: "பாதை", hi: "मार्ग" },
+            detail: {
+              en: "Transfer to Tabakoshi (mountain riverside stay). Visit Lepchajagat pine forest, Simana viewpoint, Nepal border market / Pashupati Fatak. Leisure evening.",
+              ta: "Tabakoshi நதிக்கரை தங்கல் — Lepchajagat, Simana, நேபாள எல்லை சந்தை.",
+              hi: "Tabakoshi रिवरसाइड ठहराव — Lepchajagat, Simana, नेपाल बॉर्डर मार्केट।",
+            },
+          },
+          {
+            label: { en: "Meals", ta: "உணவு", hi: "भोजन" },
+            detail: {
+              en: "Lunch, snacks, dinner and breakfast included.",
+              ta: "மதியம், சிற்றுண்டி, இரவு மற்றும் காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              hi: "दोपहर, स्नैक्स, रात्रि भोजन और नाश्ता शामिल।",
+            },
+          },
+        ],
+        overnight: {
+          en: "Overnight at Tabakoshi",
+          ta: "Tabakoshi-இல் இரவு தங்கல்",
+          hi: "Tabakoshi में रात्रि ठहराव",
+        },
+      },
+      {
+        day: 4,
+        title: {
+          en: "Return to NJP via Mirik",
+          ta: "Mirik வழியாக NJP திரும்புதல்",
+          hi: "Mirik से NJP वापसी",
+        },
+        parts: [
+          {
+            label: { en: "Route", ta: "பாதை", hi: "मार्ग" },
+            detail: {
+              en: "Gopaldhara Tea Estate, Mirik Lake and pine forest. Drop at NJP.",
+              ta: "Gopaldhara Tea Estate, Mirik Lake. NJP டிராப்.",
+              hi: "Gopaldhara Tea Estate, Mirik Lake। NJP ड्रॉप।",
+            },
+          },
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: {
+          en: "How is this different from the Mimbusty package?",
+          ta: "Mimbusty பேக்கேஜிலிருந்து எப்படி வேறுபடும்?",
+          hi: "यह Mimbusty पैकेज से कैसे अलग है?",
+        },
+        answer: {
+          en: "Night 3 is at Tabakoshi riverside instead of Mimbusty Kanchenjunga-view stay. Day 3 also includes Simana viewpoint and the Nepal border market route.",
+          ta: "3வது இரவு Tabakoshi நதிக்கரையில் — Mimbusty கஞ்சன்ஜங்கா தங்கலுக்குப் பதிலாக. நாள் 3-இல் Simana மற்றும் நேபாள எல்லை சந்தை.",
+          hi: "रात 3 Tabakoshi रिवरसाइड पर है — Mimbusty कंचनजंगा ठहराव के बजाय। दिन 3 में Simana और नेपाल बॉर्डर मार्केट।",
+        },
+      },
+      {
+        question: {
+          en: "What is the starting price?",
+          ta: "தொடக்க விலை என்ன?",
+          hi: "शुरुआती कीमत क्या है?",
+        },
+        answer: {
+          en: "₹6,550 per person from Canaan’s Darjeeling tour programme (7-guest reference). Ask for your dates and group size.",
+          ta: "₹6,550 / நபர் (7 பேர் குறிப்பு). உங்கள் தேதிகளுக்கு கேளுங்கள்.",
+          hi: "₹6,550 प्रति व्यक्ति (7 अतिथि संदर्भ)। अपनी तिथियाँ पूछें।",
+        },
+      },
+    ],
+  },
 };

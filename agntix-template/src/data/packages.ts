@@ -10,7 +10,10 @@ import {
   type PackageDetails,
 } from "@/data/package-details";
 
-export type PackageId = "kodai-1n2d";
+export type PackageId =
+  | "kodai-1n2d"
+  | "darjeeling-3n4d-mimbusty"
+  | "darjeeling-3n4d-tabakoshi";
 
 /** Old marketing package IDs — redirect to the verified flyer package. */
 export const LEGACY_PACKAGE_REDIRECTS: Record<string, PackageId> = {
@@ -34,6 +37,7 @@ export type PackageTierRow = {
 
 export type PackageRow = {
   id: PackageId;
+  destinationSlug: string;
   nights: number;
   days: number;
   priceFrom: number;
@@ -87,6 +91,7 @@ export type LocalizedPackageDetails = {
 
 export type LocalizedPackage = {
   id: PackageId;
+  destinationSlug: string;
   nights: number;
   days: number;
   priceFrom: number;
@@ -155,6 +160,7 @@ export function localizePackage(
   const details = packageDetails[row.id];
   return {
     id: row.id,
+    destinationSlug: row.destinationSlug,
     nights: row.nights,
     days: row.days,
     priceFrom: row.priceFrom,
@@ -199,6 +205,7 @@ export function getLocalizedPackage(id: string, locale: string) {
 /** Legacy shape used by existing components */
 export type TravelPackage = {
   id: PackageId;
+  destinationSlug: string;
   nights: number;
   days: number;
   priceFrom: number;
@@ -211,6 +218,7 @@ export type TravelPackage = {
 
 export const packages: TravelPackage[] = packageRows.map((row) => ({
   id: row.id,
+  destinationSlug: row.destinationSlug,
   nights: row.nights,
   days: row.days,
   priceFrom: row.priceFrom,
@@ -220,6 +228,12 @@ export const packages: TravelPackage[] = packageRows.map((row) => ({
   featured: row.featured,
   highlights: row.highlights.en,
 }));
+
+export function getPackagesForDestination(destinationSlug: string, locale: string) {
+  return getLocalizedPackages(locale).filter(
+    (pkg) => pkg.destinationSlug === destinationSlug,
+  );
+}
 
 export const packageCopy: Record<
   PackageId,

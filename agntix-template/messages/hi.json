@@ -10,8 +10,8 @@
     "kodaiDescription": "शांत कोडाइकनाल यात्रा — साइटसीइंग, हनीमून और फैमिली पैकेज, झील और पाइन फ़ॉरेस्ट के दिन।",
     "destinationsTitle": "गंतव्य | कोडाइकनाल",
     "destinationsDescription": "कनान का टूर गंतव्य अभी कोडाइकनाल है — कोहरा, चीड़, पूरे हिल-स्टेशन पैकेज।",
-    "packagesTitle": "कोडाइकनाल ट्रैवल पैकेज",
-    "packagesDescription": "कपल, परिवार, लक्ज़री ठहराव, एडवेंचर और पूरे सर्किट के लिए कनान पैकेज।",
+    "packagesTitle": "ट्रैवल पैकेज | Canaan Travel Hub",
+    "packagesDescription": "कोडाइकनाल, दार्जिलिंग और अन्य स्थलों के सत्यापित पैकेज — Canaan Travel Hub.",
     "toursTitle": "कोडाइकनाल साइटसीइंग टूर",
     "toursDescription": "झील, पाइन जंगल, गाँव, जलप्रपात — बिना भागदौड़ के पहाड़ी दिन।",
     "servicesTitle": "डिजिटल पर्यटन सेवाएँ",
@@ -79,8 +79,9 @@
     "kodaikanal": "कोडाइकनाल",
     "packages": "पैकेज",
     "destinations": "गंतव्य",
+    "corporate": "कॉर्पोरेट यात्रा",
     "tours": "टूर्स",
-    "services": "डिजिटल सेवाएँ",
+    "services": "यात्रा सेवाएँ",
     "flights": "फ़्लाइट",
     "hotels": "होटल",
     "visa": "वीज़ा",
@@ -143,7 +144,10 @@
     "requestEnquiry": "अनुरोध / पूछताछ",
     "comingSoon": "जल्द आ रहा है",
     "perPerson": "प्रति व्यक्ति",
-    "from": "से"
+    "from": "से",
+    "trustLine": "भरोसेमंद मानवीय योजना — प्रकाशित पैकेज, कस्टम पूछताछ।",
+    "servicesTitle": "यात्रा सेवाएँ",
+    "servicesBody": "फ़्लाइट, होटल और वीज़ा सहायता।"
   },
   "destinationsSection": {
     "eyebrow": "गंतव्य",

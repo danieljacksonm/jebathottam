@@ -72,8 +72,10 @@ export function BlogGrid({
                   src={post.image}
                   alt={post.title}
                   fill
+                  quality={75}
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                   sizes="(max-width: 768px) 100vw, 33vw"
+                  unoptimized={post.image.startsWith("http")}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#04162B] via-transparent to-transparent opacity-80" />
                 <div className="absolute left-4 top-4 flex flex-wrap gap-2">

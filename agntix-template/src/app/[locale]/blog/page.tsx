@@ -4,8 +4,8 @@ import {
   getBlogContinentOptions,
   getBlogCount,
   getBlogDestinationOptions,
+  getBlogHeroImage,
   getLocalizedBlogs,
-  KODAI_BLOG_IMAGE,
 } from "@/data/blog";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
@@ -24,12 +24,13 @@ export async function generateMetadata({
   const { locale } = await params;
   const seo = await getTranslations({ locale, namespace: "seo" });
   const blog = await getTranslations({ locale, namespace: "blog" });
+  const heroImage = await getBlogHeroImage();
   return pageMetadata({
     locale,
     path: "/blog",
     title: seo("blogTitle"),
     description: seo("blogDescription"),
-    image: KODAI_BLOG_IMAGE,
+    image: heroImage,
     imageAlt: blog("listImageAlt"),
   });
 }
@@ -53,6 +54,7 @@ export default async function BlogPage({
   const page = Math.max(1, Number(pageRaw) || 1);
   const filters = { destination, continent };
   const total = await getBlogCount(filters);
+  const heroImage = await getBlogHeroImage(filters);
   const posts = await getLocalizedBlogs(loc, {
     ...filters,
     take: PAGE_SIZE,
@@ -117,7 +119,7 @@ export default async function BlogPage({
             ? t("filteredSubtitle", { destination: filterLabel })
             : t("subtitle")
         }
-        image={KODAI_BLOG_IMAGE}
+        image={heroImage}
         imageAlt={t("heroImageAlt")}
         tone="forest"
       />

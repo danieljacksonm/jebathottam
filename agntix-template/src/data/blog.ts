@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import { getDestinationHeroImage, getTravelHubHeroImage } from "@/data/destinations";
 import { prisma } from "@/lib/prisma";
 
 export type LocalizedBlog = {
@@ -42,6 +43,24 @@ function parseBody(raw: string) {
   }
 }
 
+function isWeakBlogImage(image: string | null | undefined) {
+  if (!image) return true;
+  return (
+    image.includes("/images/kodai/") ||
+    image.includes("loremflickr") ||
+    image.includes("unsplash.com")
+  );
+}
+
+function resolveBlogImage(row: BlogWithDestination) {
+  if (!isWeakBlogImage(row.image)) return row.image;
+  if (row.place?.image && !isWeakBlogImage(row.place.image)) return row.place.image;
+  if (row.destination?.image && !isWeakBlogImage(row.destination.image)) {
+    return row.destination.image;
+  }
+  return "/images/travel/d/darjeeling.jpg";
+}
+
 function localizeBlogRow(
   row: BlogWithDestination | null,
   locale: string,
@@ -52,7 +71,7 @@ function localizeBlogRow(
     slug: row.slug,
     date: row.date,
     readMinutes: row.readMinutes,
-    image: row.image,
+    image: resolveBlogImage(row),
     destinationSlug: row.destination?.slug ?? null,
     destinationName: row.destination
       ? pickLocale(
@@ -90,6 +109,7 @@ const blogInclude = {
       nameTa: true,
       nameHi: true,
       continent: true,
+      image: true,
     },
   },
   place: {
@@ -98,6 +118,7 @@ const blogInclude = {
       nameEn: true,
       nameTa: true,
       nameHi: true,
+      image: true,
     },
   },
 } as const;
@@ -107,6 +128,24 @@ type BlogWithDestination = Prisma.BlogPostGetPayload<{
 }>;
 
 export const KODAI_BLOG_IMAGE = "/images/marketing/kodai-banner.jpg";
+
+export async function getBlogHeroImage(filters?: {
+  destination?: string;
+  continent?: string;
+}) {
+  if (filters?.destination) {
+    return getDestinationHeroImage(filters.destination);
+  }
+  if (filters?.continent) {
+    const row = await prisma.destination.findFirst({
+      where: { continent: filters.continent },
+      orderBy: [{ sortOrder: "asc" }, { nameEn: "asc" }],
+      select: { image: true },
+    });
+    if (row?.image) return row.image;
+  }
+  return getTravelHubHeroImage();
+}
 
 export async function getLocalizedBlogs(
   locale: string,
@@ -192,17 +231,29 @@ export async function getBlogDestinationOptions(locale: string) {
 }
 
 export async function getBlogContinentOptions() {
-  const rows = await prisma.destination.findMany({
-    select: { continent: true },
-    distinct: ["continent"],
-    orderBy: { continent: "asc" },
+  const rows = await prisma.blogPost.groupBy({
+    by: ["destinationId"],
+    _count: { _all: true },
+    where: { destinationId: { not: null } },
   });
-  const options = [];
+  if (rows.length === 0) return [];
+
+  const destIds = rows.map((r) => r.destinationId!).filter(Boolean);
+  const destinations = await prisma.destination.findMany({
+    where: { id: { in: destIds } },
+    select: { id: true, continent: true },
+  });
+  const destContinent = new Map(destinations.map((d) => [d.id, d.continent]));
+  const totals = new Map<string, number>();
+
   for (const row of rows) {
-    const count = await getBlogCount({ continent: row.continent });
-    if (count > 0) {
-      options.push({ continent: row.continent, count });
-    }
+    if (!row.destinationId) continue;
+    const continent = destContinent.get(row.destinationId);
+    if (!continent) continue;
+    totals.set(continent, (totals.get(continent) ?? 0) + row._count._all);
   }
-  return options;
+
+  return [...totals.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([continent, count]) => ({ continent, count }));
 }

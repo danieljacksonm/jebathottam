@@ -27,6 +27,27 @@ Open [http://localhost:3000](http://localhost:3000) (redirects to `/en`).
 | `npm run start` | Run production server |
 | `npm run lint` | ESLint |
 
+## Tourism images (unique + fast)
+
+Remote Wikimedia URLs are slow on a VPS. Build the catalogue locally, apply to SQLite, then self-host:
+
+```powershell
+cd D:\Daniel\testing\agntix-template
+npm run images:apply
+npm run images:download
+```
+
+Full rebuild from Commons (slow, only if catalog is missing):
+
+```powershell
+cd D:\Daniel\testing\agntix-template
+npm run images:all
+```
+
+`DATABASE_URL` in `.env` must be `file:./data/content.db` (Prisma resolves that to `prisma/data/content.db`).
+
+Copy `prisma/data/content.db` (or your `DATABASE_URL` path) and `public/images/travel/` to the VPS, then restart PM2.
+
 ## VPS deploy
 
 Pages read destinations and blogs from SQLite at runtime. That file is not in git, so a pull alone does not update the catalogue. After the new code is on the server (`/home/dani/agntix-template`):

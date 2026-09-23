@@ -80,7 +80,7 @@ export async function getFeaturedDestinations(locale: string, limit = 6) {
     .filter(Boolean) as LocalizedDestination[];
 }
 
-const FALLBACK_HERO = "/images/darjeeling/hero/darjeeling-hero.jpg";
+const FALLBACK_HERO = "/images/travel/d/darjeeling.jpg";
 
 /** Tourism hero for site-wide pages (not Kodaikanal-specific). */
 export async function getTravelHubHeroImage() {

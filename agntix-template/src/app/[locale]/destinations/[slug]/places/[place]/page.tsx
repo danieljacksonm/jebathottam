@@ -79,7 +79,7 @@ export default async function PlaceDetailPage({
         eyebrow={place.destinationName ?? resolved.slug}
         title={place.name}
         subtitle={place.summary}
-        image={place.image ?? "/images/kodai/hero.webp"}
+        image={place.image ?? place.destinationImage}
         imageAlt={place.name}
         tone="mist"
       />

@@ -7,7 +7,7 @@ import { GeoAnswer } from "@/components/seo/GeoAnswer";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { pageMetadata } from "@/lib/seo";
 
-const HERO = "/images/kodai/mannavanur.webp";
+const HERO = "/images/marketing/home-hero.jpg";
 
 export async function generateMetadata({
   params,
@@ -22,7 +22,7 @@ export async function generateMetadata({
     title: t("packagesTitle"),
     description: t("packagesDescription"),
     image: HERO,
-    imageAlt: "Kodaikanal valley meadows for holiday packages",
+    imageAlt: "Travel packages across India destinations with Canaan Travel Hub",
   });
 }
 
@@ -43,7 +43,7 @@ export default async function PackagesPage({
         title={t("title")}
         subtitle={t("subtitle")}
         image={HERO}
-        imageAlt="Open meadows near Mannavanur, Kodaikanal"
+        imageAlt="Mountain travel landscape for Canaan Travel Hub packages"
         tone="mist"
       />
       <Breadcrumbs

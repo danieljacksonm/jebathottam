@@ -2,12 +2,28 @@ import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getFeaturedDestinations } from "@/data/destinations";
-import { formatInr } from "@/data/packages";
+import { formatInr, packageRows } from "@/data/packages";
+
+const PACKAGE_DESTINATION_PRIORITY = ["kodaikanal", "darjeeling"];
 
 export async function FeaturedDestinations() {
   const t = await getTranslations("platform");
   const locale = await getLocale();
-  const list = await getFeaturedDestinations(locale, 6);
+  const raw = await getFeaturedDestinations(locale, 12);
+  const withPackages = new Set(packageRows.map((p) => p.destinationSlug));
+
+  const list = [...raw]
+    .sort((a, b) => {
+      const ai = PACKAGE_DESTINATION_PRIORITY.indexOf(a.slug);
+      const bi = PACKAGE_DESTINATION_PRIORITY.indexOf(b.slug);
+      const aRank = ai === -1 ? 100 : ai;
+      const bRank = bi === -1 ? 100 : bi;
+      if (aRank !== bRank) return aRank - bRank;
+      const aPkg = withPackages.has(a.slug) ? 0 : 1;
+      const bPkg = withPackages.has(b.slug) ? 0 : 1;
+      return aPkg - bPkg;
+    })
+    .slice(0, 6);
 
   return (
     <section className="section-pad">
@@ -22,6 +38,7 @@ export async function FeaturedDestinations() {
           {list.map((dest) => {
             const hasPrice =
               typeof dest.priceFrom === "number" && dest.priceFrom > 0;
+            const hasPackages = withPackages.has(dest.slug);
             return (
               <article key={dest.slug} className="lux-card overflow-hidden">
                 <Link
@@ -43,7 +60,9 @@ export async function FeaturedDestinations() {
                     <p className="text-[0.65rem] uppercase tracking-[0.2em] text-gold">
                       {dest.status === "coming_soon"
                         ? t("comingSoon")
-                        : `${dest.country} · ${dest.continent}`}
+                        : hasPackages
+                          ? `${dest.country} · Packages`
+                          : `${dest.country} · ${dest.continent}`}
                     </p>
                     <h3 className="mt-3 font-display text-3xl text-white">
                       {dest.name}
@@ -61,6 +80,11 @@ export async function FeaturedDestinations() {
               </article>
             );
           })}
+        </div>
+        <div className="mt-10 text-center">
+          <Link href="/destinations" className="btn-ghost">
+            View all destinations
+          </Link>
         </div>
       </div>
     </section>

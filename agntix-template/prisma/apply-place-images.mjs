@@ -63,9 +63,40 @@ if (chunk.length) {
   updated += chunk.length;
 }
 
+let backfilled = 0;
+const missing = await prisma.blogPost.findMany({
+  where: {
+    OR: [
+      { image: { startsWith: "/images/kodai/" } },
+      { image: { contains: "loremflickr" } },
+      { image: "" },
+    ],
+  },
+  select: {
+    id: true,
+    place: { select: { image: true } },
+    destination: { select: { image: true } },
+  },
+});
+const bf = [];
+for (const blog of missing) {
+  const photo = blog.place?.image || blog.destination?.image;
+  if (!photo) continue;
+  bf.push(
+    prisma.blogPost.update({ where: { id: blog.id }, data: { image: photo } }),
+  );
+  backfilled++;
+  if (bf.length >= 50) {
+    await Promise.all(bf);
+    bf.length = 0;
+  }
+}
+if (bf.length) await Promise.all(bf);
+
 console.log("\n", {
   destinations: Object.keys(catalog.destinations).length,
   places: Object.keys(catalog.places).length,
   blogsUpdated: updated,
+  blogsBackfilledFromPlace: backfilled,
 });
 await prisma.$disconnect();

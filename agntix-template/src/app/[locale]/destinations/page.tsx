@@ -4,11 +4,13 @@ import { Link } from "@/i18n/navigation";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { getContinents, getDestinationsByContinent } from "@/data/destinations";
+import {
+  getContinents,
+  getDestinationsByContinent,
+  getTravelHubHeroImage,
+} from "@/data/destinations";
 import { formatInr } from "@/data/packages";
 import { pageMetadata } from "@/lib/seo";
-
-const HERO = "/images/kodai/hero.webp";
 
 export async function generateMetadata({
   params,
@@ -17,12 +19,13 @@ export async function generateMetadata({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "seo" });
+  const heroImage = await getTravelHubHeroImage();
   return pageMetadata({
     locale,
     path: "/destinations",
     title: t("destinationsTitle"),
     description: t("destinationsDescription"),
-    image: HERO,
+    image: heroImage,
     imageAlt: "Worldwide destinations with Canaan Travel Hub",
   });
 }
@@ -38,6 +41,7 @@ export default async function DestinationsPage({
   const nav = await getTranslations("nav");
   const pkgT = await getTranslations("packages");
   const continents = await getContinents();
+  const heroImage = await getTravelHubHeroImage();
 
   const grouped = await Promise.all(
     continents.map(async (continent) => ({
@@ -52,7 +56,7 @@ export default async function DestinationsPage({
         eyebrow={nav("destinations")}
         title={t("destinationsTitle")}
         subtitle={t("destinationsDescription")}
-        image={HERO}
+        image={heroImage}
         imageAlt="Worldwide travel destinations"
         tone="mist"
       />
@@ -77,8 +81,10 @@ export default async function DestinationsPage({
                         src={dest.image}
                         alt={dest.name}
                         fill
+                        quality={75}
                         className="object-cover"
                         sizes="(max-width: 768px) 100vw, 33vw"
+                        unoptimized={dest.image.startsWith("http")}
                       />
                       {dest.featured ? (
                         <span className="absolute left-3 top-3 rounded-full bg-gold px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-navy">

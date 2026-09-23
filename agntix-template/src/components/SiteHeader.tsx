@@ -10,8 +10,9 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const links = [
   { href: "/", key: "home" as const },
-  { href: "/kodaikanal", key: "kodaikanal" as const },
+  { href: "/destinations", key: "destinations" as const },
   { href: "/packages", key: "packages" as const },
+  { href: "/corporate-travel", key: "corporate" as const },
   { href: "/services", key: "services" as const },
   { href: "/blog", key: "blog" as const },
   { href: "/about", key: "about" as const },

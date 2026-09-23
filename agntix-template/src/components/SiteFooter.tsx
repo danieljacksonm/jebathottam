@@ -44,8 +44,9 @@ export async function SiteFooter() {
             {(
               [
                 ["/", "home"],
-                ["/kodaikanal", "kodaikanal"],
+                ["/destinations", "destinations"],
                 ["/packages", "packages"],
+                ["/corporate-travel", "corporate"],
                 ["/blog", "blog"],
               ] as const
             ).map(([href, key]) => (

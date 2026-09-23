@@ -32,9 +32,10 @@ export function CinematicPageHero({
           alt={imageAlt || title}
           fill
           priority={priority}
-          quality={90}
+          quality={75}
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 1600px"
+          unoptimized={image.startsWith("http")}
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/55 to-navy/25" />

@@ -1,9 +1,10 @@
 {
   "table": "packages",
-  "version": 2,
+  "version": 3,
   "rows": [
     {
       "id": "kodai-1n2d",
+      "destinationSlug": "kodaikanal",
       "nights": 1,
       "days": 2,
       "priceFrom": 1799,
@@ -135,6 +136,204 @@
         "en": "Custom packages available for larger groups. Contact us for special group rates.",
         "ta": "பெரிய குழுக்களுக்கு தனிப்பயன் பேக்கேஜ்கள் கிடைக்கும். சிறப்பு குழு விலைக்கு தொடர்பு கொள்ளுங்கள்.",
         "hi": "बड़े समूहों के लिए कस्टम पैकेज उपलब्ध। विशेष समूह दरों के लिए संपर्क करें।"
+      }
+    },
+    {
+      "id": "darjeeling-3n4d-mimbusty",
+      "destinationSlug": "darjeeling",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 6550,
+      "currency": "INR",
+      "category": "complete",
+      "featured": true,
+      "published": true,
+      "image": "/images/packages/darjeeling-3n4d.jpg",
+      "tagline": {
+        "en": "NJP to NJP — tea hills, town sights & Kanchenjunga stay",
+        "ta": "NJP முதல் NJP — தேயிலை மலைகள், நகரக் காட்சிகள் & கஞ்சன்ஜங்கா தங்கல்",
+        "hi": "NJP से NJP — चाय पहाड़ियाँ, शहर दर्शनीय स्थल और कंचनजंगा ठहराव"
+      },
+      "highlights": {
+        "en": [
+          "3 nights / 4 days from NJP",
+          "Dawaipani + Mimbusty (Kanchenjunga view) stays",
+          "Full Darjeeling town sightseeing day",
+          "Return via Mirik Lake & tea estates",
+          "Dedicated Sumo / Bolero / Innova (as available)"
+        ],
+        "ta": [
+          "NJP இருந்து 3 இரவு / 4 நாள்",
+          "Dawaipani + Mimbusty (கஞ்சன்ஜங்கா காட்சி) தங்கல்",
+          "முழு டார்ஜிலிங் நகர சுற்றுலா",
+          "Mirik ஏரி & தேயிலை தோட்டங்கள் வழியாக திரும்புதல்",
+          "Sumo / Bolero / Innova (கிடைக்கும்படி)"
+        ],
+        "hi": [
+          "NJP से 3 रात / 4 दिन",
+          "Dawaipani + Mimbusty (कंचनजंगा व्यू) ठहराव",
+          "पूर्ण दार्जिलिंग शहर साइटसीइंग",
+          "Mirik झील और चाय बागानों से वापसी",
+          "Sumo / Bolero / Innova (उपलब्धता अनुसार)"
+        ]
+      },
+      "title": {
+        "en": "Darjeeling 3N/4D — Dawaipani & Mimbusty",
+        "ta": "டார்ஜிலிங் 3 இரவு/4 நாள் — Dawaipani & Mimbusty",
+        "hi": "दार्जिलिंग 3N/4D — Dawaipani और Mimbusty"
+      },
+      "blurb": {
+        "en": "Verified Canaan 3 Night / 4 Day Darjeeling circuit from NJP — Dawaipani arrival, Darjeeling sightseeing, Mimbusty Kanchenjunga-view stay, Mirik return. From ₹6,550 per person.",
+        "ta": "Canaan உறுதிப்படுத்திய 3 இரவு / 4 நாள் டார்ஜிலிங் சுற்று — NJP முதல் Dawaipani, நகர சுற்றுலா, Mimbusty கஞ்சன்ஜங்கா தங்கல், Mirik வழியாக திரும்புதல். ஒரு நபருக்கு ₹6,550 முதல்.",
+        "hi": "Canaan सत्यापित 3 रात / 4 दिन दार्जिलिंग सर्किट — NJP से Dawaipani, शहर साइटसीइंग, Mimbusty कंचनजंगा ठहराव, Mirik से वापसी। ₹6,550 प्रति व्यक्ति से।"
+      },
+      "body": {
+        "en": "This is Canaan’s Darjeeling tour programme (3 Night / 4 Days, NJP to NJP). Day 1: NJP to Dawaipani with lovers’ viewpoint, Peshok tea garden, Gumbadara, and Lamhatta pine forest. Day 2: Darjeeling sightseeing including Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Happy Valley Tea Estate, Peace Pagoda, and Mall Road. Day 3: Transfer to Mimbusty (Kanchenjunga view stay) via Lepchajagat. Day 4: Return to NJP via Mirik Lake and tea estates. Vehicle: Sumo / Bolero / Innova as available.",
+        "ta": "Canaan டார்ஜிலிங் சுற்றுலா (3 இரவு / 4 நாள், NJP to NJP). நாள் 1: NJP to Dawaipani. நாள் 2: டார்ஜிலிங் சுற்றுலா. நாள் 3: Mimbusty (கஞ்சன்ஜங்கா காட்சி). நாள் 4: Mirik வழியாக NJP. வாகனம்: Sumo / Bolero / Innova.",
+        "hi": "Canaan दार्जिलिंग टूर (3 रात / 4 दिन, NJP to NJP)। दिन 1: NJP से Dawaipani। दिन 2: दार्जिलिंग साइटसीइंग। दिन 3: Mimbusty (कंचनजंगा व्यू)। दिन 4: Mirik से NJP। वाहन: Sumo / Bolero / Innova।"
+      },
+      "sharedInclusions": {
+        "en": [
+          "3 nights stay (Dawaipani, Darjeeling town, Mimbusty)",
+          "Meals as listed per day in the itinerary",
+          "NJP to NJP sightseeing transport",
+          "Dedicated tour vehicle (Sumo / Bolero / Innova as available)"
+        ],
+        "ta": [
+          "3 இரவு தங்கல் (Dawaipani, டார்ஜிலிங் நகரம், Mimbusty)",
+          "தினசரி பட்டியலிடப்பட்ட உணவுகள்",
+          "NJP to NJP சுற்றுலா போக்குவரத்து",
+          "அர்ப்பணிக்கப்பட்ட வாகனம்"
+        ],
+        "hi": [
+          "3 रात ठहराव (Dawaipani, दार्जिलिंग शहर, Mimbusty)",
+          "इटिनरेरी के अनुसार भोजन",
+          "NJP to NJP साइटसीइंग परिवहन",
+          "समर्पित टूर वाहन"
+        ]
+      },
+      "tiers": [
+        {
+          "id": "7-pax",
+          "pax": 7,
+          "bestValue": true,
+          "pricePerPerson": 6550,
+          "currency": "INR",
+          "roomType": {
+            "en": "Shared group stay (as per itinerary hotels / homestays)",
+            "ta": "குழு தங்கல் (திட்டப்படி ஹோட்டல் / ஹோம்ஸ்டே)",
+            "hi": "समूह ठहराव (इटिनरेरी होटल / होमस्टे)"
+          },
+          "label": {
+            "en": "Group package (7 pax reference)",
+            "ta": "குழு பேக்கேஜ் (7 பேர் குறிப்பு)",
+            "hi": "समूह पैकेज (7 अतिथि संदर्भ)"
+          }
+        }
+      ],
+      "groupNote": {
+        "en": "Reference pricing from Canaan’s Darjeeling tour programme for a 7-guest group. Ask for your travel dates and group size — rates may vary by season and vehicle.",
+        "ta": "7 பேர் குழுவுக்கான Canaan டார்ஜிலிங் திட்ட விலை குறிப்பு. உங்கள் தேதிகள் மற்றும் குழு அளவுக்கு கேளுங்கள் — பருவம் மற்றும் வாகனத்தின்படி மாறலாம்.",
+        "hi": "7 अतिथि समूह के लिए Canaan दार्जिलिंग कार्यक्रम की संदर्भ कीमत। अपनी तिथियाँ और समूह आकार पूछें — सीजन और वाहन से बदल सकती है।"
+      }
+    },
+    {
+      "id": "darjeeling-3n4d-tabakoshi",
+      "destinationSlug": "darjeeling",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 6550,
+      "currency": "INR",
+      "category": "complete",
+      "featured": true,
+      "published": true,
+      "image": "/images/travel/p/darjeeling/mirik-lake.jpg",
+      "tagline": {
+        "en": "NJP to NJP — Dawaipani, town sights & riverside Tabakoshi",
+        "ta": "NJP முதல் NJP — Dawaipani, நகரக் காட்சிகள் & Tabakoshi நதிக்கரை",
+        "hi": "NJP से NJP — Dawaipani, शहर दर्शनीय स्थल और Tabakoshi नदी किनारा"
+      },
+      "highlights": {
+        "en": [
+          "3 nights / 4 days from NJP",
+          "Dawaipani + Tabakoshi riverside stay",
+          "Full Darjeeling town sightseeing day",
+          "Nepal border market / Simana viewpoint options",
+          "Return via Mirik Lake & Gopaldhara Tea Estate"
+        ],
+        "ta": [
+          "NJP இருந்து 3 இரவு / 4 நாள்",
+          "Dawaipani + Tabakoshi நதிக்கரை தங்கல்",
+          "முழு டார்ஜிலிங் நகர சுற்றுலா",
+          "நேபாள எல்லை சந்தை / Simana காட்சி விருப்பங்கள்",
+          "Mirik ஏரி & Gopaldhara தேயிலை தோட்டம் வழியாக திரும்புதல்"
+        ],
+        "hi": [
+          "NJP से 3 रात / 4 दिन",
+          "Dawaipani + Tabakoshi रिवरसाइड ठहराव",
+          "पूर्ण दार्जिलिंग शहर साइटसीइंग",
+          "नेपाल बॉर्डर मार्केट / Simana व्यू पॉइंट विकल्प",
+          "Mirik झील और Gopaldhara चाय बागान से वापसी"
+        ]
+      },
+      "title": {
+        "en": "Darjeeling 3N/4D — Dawaipani & Tabakoshi",
+        "ta": "டார்ஜிலிங் 3 இரவு/4 நாள் — Dawaipani & Tabakoshi",
+        "hi": "दार्जिलिंग 3N/4D — Dawaipani और Tabakoshi"
+      },
+      "blurb": {
+        "en": "Verified Canaan 3 Night / 4 Day Darjeeling circuit from NJP — Dawaipani arrival, Darjeeling sightseeing, Tabakoshi mountain riverside stay, Mirik return. From ₹6,550 per person.",
+        "ta": "Canaan உறுதிப்படுத்திய 3 இரவு / 4 நாள் டார்ஜிலிங் சுற்று — NJP முதல் Dawaipani, நகர சுற்றுலா, Tabakoshi நதிக்கரை தங்கல், Mirik வழியாக திரும்புதல். ஒரு நபருக்கு ₹6,550 முதல்.",
+        "hi": "Canaan सत्यापित 3 रात / 4 दिन दार्जिलिंग सर्किट — NJP से Dawaipani, शहर साइटसीइंग, Tabakoshi रिवरसाइड ठहराव, Mirik से वापसी। ₹6,550 प्रति व्यक्ति से।"
+      },
+      "body": {
+        "en": "This is Canaan’s Darjeeling tour programme (3 Night / 4 Days, NJP to NJP) with a Tabakoshi riverside night. Day 1: NJP to Dawaipani with lovers’ viewpoint, Peshok tea garden, Gumbadara, and Lamhatta pine forest. Day 2: Darjeeling sightseeing including Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Happy Valley Tea Estate, Peace Pagoda, and Mall Road. Day 3: Transfer to Tabakoshi via Lepchajagat, Simana viewpoint, and Nepal border market / Pashupati Fatak. Day 4: Return to NJP via Gopaldhara Tea Estate, Mirik Lake, and pine forest. Vehicle: Sumo / Bolero / Innova as available.",
+        "ta": "Canaan டார்ஜிலிங் சுற்றுலா (3 இரவு / 4 நாள்) Tabakoshi நதிக்கரை இரவுடன். நாள் 1: Dawaipani. நாள் 2: நகர சுற்றுலா. நாள் 3: Tabakoshi. நாள் 4: Mirik வழியாக NJP.",
+        "hi": "Canaan दार्जिलिंग टूर (3 रात / 4 दिन) Tabakoshi रिवरसाइड रात के साथ। दिन 1: Dawaipani। दिन 2: शहर साइटसीइंग। दिन 3: Tabakoshi। दिन 4: Mirik से NJP।"
+      },
+      "sharedInclusions": {
+        "en": [
+          "3 nights stay (Dawaipani, Darjeeling town, Tabakoshi)",
+          "Meals as listed per day in the itinerary",
+          "NJP to NJP sightseeing transport",
+          "Dedicated tour vehicle (Sumo / Bolero / Innova as available)"
+        ],
+        "ta": [
+          "3 இரவு தங்கல் (Dawaipani, டார்ஜிலிங் நகரம், Tabakoshi)",
+          "தினசரி பட்டியலிடப்பட்ட உணவுகள்",
+          "NJP to NJP சுற்றுலா போக்குவரத்து",
+          "அர்ப்பணிக்கப்பட்ட வாகனம்"
+        ],
+        "hi": [
+          "3 रात ठहराव (Dawaipani, दार्जिलिंग शहर, Tabakoshi)",
+          "इटिनरेरी के अनुसार भोजन",
+          "NJP to NJP साइटसीइंग परिवहन",
+          "समर्पित टूर वाहन"
+        ]
+      },
+      "tiers": [
+        {
+          "id": "7-pax",
+          "pax": 7,
+          "bestValue": true,
+          "pricePerPerson": 6550,
+          "currency": "INR",
+          "roomType": {
+            "en": "Shared group stay (as per itinerary hotels / homestays)",
+            "ta": "குழு தங்கல் (திட்டப்படி ஹோட்டல் / ஹோம்ஸ்டே)",
+            "hi": "समूह ठहराव (इटिनरेरी होटल / होमस्टे)"
+          },
+          "label": {
+            "en": "Group package (7 pax reference)",
+            "ta": "குழு பேக்கேஜ் (7 பேர் குறிப்பு)",
+            "hi": "समूह पैकेज (7 अतिथि संदर्भ)"
+          }
+        }
+      ],
+      "groupNote": {
+        "en": "Reference pricing from Canaan’s Darjeeling tour programme for a 7-guest group. Ask for your travel dates and group size — rates may vary by season and vehicle. Bonfire / BBQ and off-itinerary vehicle use are excluded.",
+        "ta": "7 பேர் குழுவுக்கான Canaan டார்ஜிலிங் திட்ட விலை குறிப்பு. கேம்ப்ஃபயர் / BBQ மற்றும் திட்டத்திற்கு வெளியே வாகன பயன்பாடு விலக்கப்பட்டுள்ளது.",
+        "hi": "7 अतिथि समूह के लिए Canaan दार्जिलिंग कार्यक्रम की संदर्भ कीमत। कैम्पफ़ायर / BBQ और इटिनरेरी से बाहर वाहन उपयोग शामिल नहीं।"
       }
     }
   ]

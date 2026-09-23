@@ -33,21 +33,34 @@ export async function FeaturedPackages() {
                   src={pkg.image}
                   alt={pkg.title}
                   fill
-                  quality={75}
+                  quality={80}
                   className="object-cover transition-transform duration-700 hover:scale-[1.03]"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </Link>
               <div className="flex flex-1 flex-col p-6">
-                <p className="text-[0.62rem] uppercase tracking-[0.16em] text-mist/70">
-                  {pkg.days}D / {pkg.nights}N
+                <p className="text-[0.62rem] uppercase tracking-[0.16em] text-gold/80">
+                  {pkg.details.destination} · {pkg.days}D / {pkg.nights}N
                 </p>
                 <h3 className="mt-2 font-display text-2xl text-cream">{pkg.title}</h3>
                 <p className="mt-3 line-clamp-3 text-sm text-soft-gray">{pkg.blurb}</p>
-                <p className="mt-auto pt-6 text-gold-bright">
-                  {t("from")} {formatInr(pkg.priceFrom)}{" "}
-                  <span className="text-mist/70">{t("perPerson")}</span>
-                </p>
+                <ul className="mt-4 space-y-1.5 text-sm text-mist/80">
+                  {pkg.highlights.slice(0, 3).map((item) => (
+                    <li key={item}>· {item}</li>
+                  ))}
+                </ul>
+                <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-6">
+                  <p className="text-gold-bright">
+                    {t("from")} {formatInr(pkg.priceFrom)}{" "}
+                    <span className="text-mist/70">{t("perPerson")}</span>
+                  </p>
+                  <Link
+                    href={`/enquire?package=${pkg.id}`}
+                    className="text-[0.68rem] uppercase tracking-[0.14em] text-white/70 hover:text-gold"
+                  >
+                    Enquire →
+                  </Link>
+                </div>
               </div>
             </article>
           ))}

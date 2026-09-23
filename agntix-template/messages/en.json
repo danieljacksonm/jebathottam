@@ -10,8 +10,8 @@
     "kodaiDescription": "Plan a calm Kodaikanal journey — sightseeing, honeymoon and family packages, lake and pine-forest days, and a clear itinerary with Canaan Travel Hub.",
     "destinationsTitle": "Destinations | Canaan Travel Hub",
     "destinationsDescription": "Explore worldwide destinations with Canaan — India hill stations, Asia, Europe, the Americas, Africa, and Oceania. Published packages where verified; custom planning everywhere else.",
-    "packagesTitle": "Kodaikanal Travel Packages",
-    "packagesDescription": "Browse Canaan’s Kodaikanal tour packages for couples, families, luxury stays, adventure days, and complete circuits.",
+    "packagesTitle": "Travel Packages | Canaan Travel Hub",
+    "packagesDescription": "Browse published packages for Kodaikanal, Darjeeling, and more — verified prices and itineraries from Canaan Travel Hub.",
     "toursTitle": "Kodaikanal Sightseeing Tours",
     "toursDescription": "Kodaikanal sightseeing and tour packages — lake, pine forest, villages, waterfalls, and unhurried highland days.",
     "servicesTitle": "Worldwide Digital Tourism Services",
@@ -79,8 +79,9 @@
     "kodaikanal": "Kodaikanal",
     "packages": "Packages",
     "destinations": "Destinations",
+    "corporate": "Corporate Travel",
     "tours": "Tours",
-    "services": "Digital Services",
+    "services": "Travel Services",
     "flights": "Flights",
     "hotels": "Hotels",
     "visa": "Visa",
@@ -148,10 +149,10 @@
     "insurance": "Travel Insurance"
   },
   "packages": {
-    "eyebrow": "Our main offering",
-    "title": "Kodaikanal packages",
-    "subtitle": "Verified Kodaikanal 1 Night / 2 Days package — priced for 2, 4, or 6 guests. Custom rates for larger groups.",
-    "geoSummary": "Canaan Travel Hub offers a Kodaikanal 1 Night / 2 Days package from INR 1,799 per person (6 guests), INR 1,999 (4 guests), or INR 2,999 (2 guests). Includes stay, breakfast, dinner, valley tour, and complimentary campfire. Custom packages available for larger groups.",
+    "eyebrow": "Featured destinations",
+    "title": "Travel packages",
+    "subtitle": "Published packages for Kodaikanal and Darjeeling — clear prices, day-by-day itineraries, and enquiry for custom trips.",
+    "geoSummary": "Canaan Travel Hub publishes verified packages for Kodaikanal (1N/2D from INR 1,799 pp for 6 guests) and Darjeeling (3N/4D from INR 6,550 pp, NJP–NJP). Custom planning available for other destinations.",
     "from": "From",
     "perPerson": "per person",
     "days": "{count} Days",
@@ -191,7 +192,7 @@
     "packageFaq": "Package FAQ",
     "luxuryEyebrow": "When you are ready",
     "luxuryTitle": "Stay in the story.",
-    "luxuryBody": "Luxury Kodaikanal packages — offered only after the journey has touched you."
+    "luxuryBody": "Curated packages with transparent pricing — enquire when you are ready."
   },
   "testimonials": {
     "eyebrow": "Happy travellers",
@@ -418,7 +419,7 @@
   },
   "footer": {
     "tagline": "Cross Borders. Discover Blessings.",
-    "about": "Kodaikanal packages with local care — plus flights, hotels, visas and tourism support worldwide.",
+    "about": "Thoughtfully planned journeys across India and beyond — published packages where verified, human planning for custom trips, plus flights, hotels, and visa support.",
     "rights": "© {year} Canaan Travel Hub. All rights reserved.",
     "contact": "Contact",
     "privacy": "Privacy Policy",
@@ -429,7 +430,7 @@
     "explore": "Explore",
     "services": "Digital services",
     "support": "Support",
-    "note": "Kodaikanal packages · Worldwide travel support"
+    "note": "India & worldwide travel · Published packages · Human planning"
   },
   "common": {
     "learnMore": "Learn more",
@@ -442,24 +443,27 @@
   },
   "platform": {
     "heroEyebrow": "Canaan Travel Hub",
-    "heroTitle": "Your journey starts here.",
-    "heroSub": "Discover destinations, curated packages, corporate travel, and custom trips — with human planning you can trust.",
+    "heroTitle": "Your next journey starts here.",
+    "heroSub": "Thoughtfully planned journeys across India and beyond — from hill stations and heritage cities to custom international escapes.",
     "ctaDestinations": "Explore Destinations",
-    "ctaPlan": "Plan Your Trip",
-    "featuredDestinations": "Featured destinations",
-    "featuredPackages": "Featured packages",
+    "ctaPlan": "Plan My Trip",
+    "featuredDestinations": "Explore destinations",
+    "featuredPackages": "Featured travel packages",
     "whyTitle": "Why travel with Canaan",
     "whyBody": "Transparent packages, human assistance, local knowledge, and corporate coordination — without fake reviews or invented inventory.",
     "corporateTitle": "Corporate travel",
     "corporateBody": "Business trips, retreats, team outings, conferences, transfers, and coordinated group travel.",
-    "corporateCta": "Plan corporate travel",
+    "corporateCta": "Talk to our travel team",
     "customTitle": "Tell us where you want to go.",
     "customBody": "We'll help you plan the journey — destinations, dates, style, and budget.",
     "availableNow": "Available now",
     "requestEnquiry": "Request / Enquiry",
     "comingSoon": "Coming soon",
     "perPerson": "per person",
-    "from": "From"
+    "from": "From",
+    "trustLine": "Human planning you can trust — packages when published, enquiry when custom.",
+    "servicesTitle": "Travel services",
+    "servicesBody": "Flights, hotels, and visa support for journeys that need more than a package page."
   },
   "destinationsSection": {
     "eyebrow": "Destination",
@@ -483,8 +487,8 @@
         "body": "Every detail arranged before you ask — stays, transfers, pacing."
       },
       "specialists": {
-        "title": "Kodai specialists",
-        "body": "One destination, deeply known. Roads, seasons, hidden quiet."
+        "title": "Destination specialists",
+        "body": "Hill stations and beyond — published packages where verified, custom planning everywhere else."
       },
       "trusted": {
         "title": "Trusted care",
@@ -533,11 +537,11 @@
     "lakeLine": "Where the mountains meet the sky.",
     "dolphinHeadline": "Look how far the world goes.",
     "nightHeadline": "Stay until the stars arrive.",
-    "packagesLead": "You've seen Kodaikanal.",
-    "packagesLead2": "Now experience it.",
-    "ctaTitle": "Your Kodaikanal story starts here.",
+    "packagesLead": "Choose your destination.",
+    "packagesLead2": "Then choose your journey.",
+    "ctaTitle": "Your next journey starts here.",
     "ctaButton": "Plan my journey",
-    "farewell": "See you in the mountains."
+    "farewell": "See you on the road."
   },
   "legal": {
     "privacyEyebrow": "Legal",

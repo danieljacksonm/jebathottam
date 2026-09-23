@@ -56,6 +56,8 @@ export const PACKAGE_IMAGES: Record<string, string> = {
   "kodai-luxury": REAL_KODAI.kodaiLakeBoats,
   "kodai-adventure": REAL_KODAI.kodaiLakeBoats,
   "kodai-complete": REAL_KODAI.kodaiLakeBoats,
+  "darjeeling-3n4d-mimbusty": "/images/packages/darjeeling-3n4d.jpg",
+  "darjeeling-3n4d-tabakoshi": "/images/travel/p/darjeeling/mirik-lake.jpg",
 };
 
 /** Deterministic local scene for content rows keyed by slug/id. */
