@@ -42,14 +42,21 @@ cp -a .next/static .next/standalone/.next/static
 echo
 echo "Ready. Start from the app root so enquiries stay in data/:"
 echo "  cd $APP_DIR"
-echo "  DATABASE_URL=\"$DATABASE_URL\" NODE_ENV=production PORT=3000 node .next/standalone/server.js"
+echo "  DATABASE_URL=\"$DATABASE_URL\" NODE_ENV=production PORT=3003 node .next/standalone/server.js"
 echo
-if command -v systemctl >/dev/null 2>&1 && systemctl is-active --quiet canaan-travel-hub; then
-  echo "Restarting canaan-travel-hub…"
-  sudo systemctl restart canaan-travel-hub
+# Live PM2 name is canaan-travel (see repo ecosystem.config.js). Older names kept as fallback.
+if command -v pm2 >/dev/null 2>&1 && pm2 describe canaan-travel >/dev/null 2>&1; then
+  echo "Restarting pm2 process canaan-travel…"
+  pm2 restart canaan-travel --update-env
+  pm2 save
 elif command -v pm2 >/dev/null 2>&1 && pm2 describe canaan-travel-hub >/dev/null 2>&1; then
   echo "Restarting pm2 process canaan-travel-hub…"
-  pm2 restart canaan-travel-hub
+  pm2 restart canaan-travel-hub --update-env
+  pm2 save
+elif command -v systemctl >/dev/null 2>&1 && systemctl is-active --quiet canaan-travel-hub; then
+  echo "Restarting canaan-travel-hub…"
+  sudo systemctl restart canaan-travel-hub
 else
-  echo "No running canaan-travel-hub service found. Restart Node yourself after the build."
+  echo "No running canaan-travel process found. Restart Node yourself after the build:"
+  echo "  pm2 restart canaan-travel --update-env && pm2 save"
 fi
