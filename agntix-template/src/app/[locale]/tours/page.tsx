@@ -1,8 +1,9 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
-import { LuxuryPackages } from "@/components/cinematic/LuxuryPackages";
+import { PackageListing } from "@/components/packages/PackageListing";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { SERVICE_IMAGES_REGISTRY } from "@/data/image-registry";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -17,6 +18,8 @@ export async function generateMetadata({
     path: "/tours",
     title: t("toursTitle"),
     description: t("toursDescription"),
+    image: SERVICE_IMAGES_REGISTRY.tours.src,
+    imageAlt: SERVICE_IMAGES_REGISTRY.tours.alt,
   });
 }
 
@@ -36,8 +39,8 @@ export default async function ToursPage({
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image="/images/kodai/mannavanur.webp"
-        imageAlt="Scenic mountain road for Kodaikanal sightseeing tours"
+        image={SERVICE_IMAGES_REGISTRY.tours.src}
+        imageAlt={SERVICE_IMAGES_REGISTRY.tours.alt}
         tone="mist"
       />
       <Breadcrumbs
@@ -47,7 +50,7 @@ export default async function ToursPage({
           { name: nav("tours") },
         ]}
       />
-      <LuxuryPackages hideIntro />
+      <PackageListing hideIntro />
     </PageAtmosphere>
   );
 }

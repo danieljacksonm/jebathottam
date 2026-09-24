@@ -120,28 +120,59 @@ export function organizationJsonLd() {
     inLanguage: ["en", "ta", "hi"],
     sameAs: [BUSINESS.facebook],
     areaServed: [
-      {
-        "@type": "TouristDestination",
-        name: "Kodaikanal",
-      },
-      {
-        "@type": "Country",
-        name: "Worldwide",
-      },
+      { "@type": "TouristDestination", name: "Kodaikanal" },
+      { "@type": "TouristDestination", name: "Darjeeling" },
+      { "@type": "Country", name: "India" },
+      { "@type": "AdministrativeArea", name: "Worldwide destinations on enquiry" },
     ],
     makesOffer: [
       {
         "@type": "Offer",
         itemOffered: {
           "@type": "TouristTrip",
-          name: "Kodaikanal tour packages",
+          name: "Verified travel packages (Kodaikanal, Darjeeling)",
         },
       },
       {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "Worldwide digital tourism services",
+          name: "Flight booking assistance",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Train ticket assistance",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Hotel booking assistance",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Visa assistance",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Travel consulting and custom trip planning",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Corporate travel coordination",
         },
       },
     ],

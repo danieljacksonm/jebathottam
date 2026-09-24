@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { HOME_IMAGES } from "@/data/image-registry";
 
 /** Licensed Unsplash mountain landscape — homepage only (not a destination package banner). */
-export const HOME_HERO_IMAGE = "/images/marketing/home-hero.jpg";
+export const HOME_HERO_IMAGE = HOME_IMAGES.hero.src;
 
 export async function GlobalHero() {
   const t = await getTranslations("platform");
@@ -12,7 +13,7 @@ export async function GlobalHero() {
     <section className="relative isolate min-h-[78vh] overflow-hidden bg-[#061018] md:min-h-[88vh]">
       <Image
         src={HOME_HERO_IMAGE}
-        alt="Mountain peaks above clouds — journeys across India and beyond"
+        alt={HOME_IMAGES.hero.alt}
         fill
         priority
         quality={90}

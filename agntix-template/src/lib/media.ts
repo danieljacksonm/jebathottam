@@ -42,10 +42,12 @@ export const LOCAL_SCENES = {
 export const LOCAL_SCENE_LIST = Object.values(LOCAL_SCENES);
 
 export const SERVICE_IMAGES = {
-  flights: REAL_KODAI.seaOfClouds,
-  hotels: REAL_KODAI.mistyValleyHomes,
-  visa: REAL_KODAI.hillTown,
-  tours: REAL_KODAI.kodaiLakeBoats,
+  flights: "/images/travel/d/singapore.jpg",
+  hotels: "/images/travel/d/udaipur-city.jpg",
+  visa: "/images/travel/d/dubai.jpg",
+  tours: "/images/travel/d/rajasthan.jpg",
+  trains: "/images/travel/d/darjeeling.jpg",
+  consulting: "/images/travel/d/maldives.jpg",
 } as const;
 
 export const PACKAGE_IMAGES: Record<string, string> = {

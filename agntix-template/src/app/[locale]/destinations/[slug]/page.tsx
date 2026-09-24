@@ -265,17 +265,15 @@ export default async function DestinationDetailPage({
       ) : null}
 
       <section className="border-t border-[var(--line)] bg-[#04101f]/70 px-5 py-16 md:px-8">
-        <div className="mx-auto flex max-w-4xl flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h2 className="font-display text-3xl text-cream">
-              Plan a {dest.name} trip
-            </h2>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-soft-gray">
-              Share dates, travellers, and preferences — we respond with a clear
-              plan based on published packages or a custom enquiry.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
+        <div className="mx-auto max-w-4xl">
+          <h2 className="font-display text-3xl text-cream">
+            Plan a {dest.name} trip
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-soft-gray">
+            Share dates, travellers, and preferences — we respond with a clear
+            plan based on published packages or a custom enquiry.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href={`/plan-your-trip?destination=${dest.slug}`}
               className="btn-gold"
@@ -284,6 +282,18 @@ export default async function DestinationDetailPage({
             </Link>
             <Link href="/enquire" className="btn-ghost">
               Enquire
+            </Link>
+            <Link href="/flights" className="btn-ghost">
+              {nav("flights")}
+            </Link>
+            <Link href="/services/train-tickets" className="btn-ghost">
+              {nav("trains")}
+            </Link>
+            <Link href="/hotels" className="btn-ghost">
+              {nav("hotels")}
+            </Link>
+            <Link href="/services/travel-consulting" className="btn-ghost">
+              {nav("consulting")}
             </Link>
           </div>
         </div>

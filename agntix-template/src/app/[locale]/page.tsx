@@ -6,15 +6,14 @@ import { FeaturedPackages } from "@/components/platform/FeaturedPackages";
 import { CorporateStrip } from "@/components/platform/CorporateStrip";
 import { CustomTripCTA } from "@/components/platform/CustomTripCTA";
 import { ExperienceStyles } from "@/components/platform/ExperienceStyles";
+import { TravelServicesStrip } from "@/components/platform/TravelServicesStrip";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { LazySection } from "@/components/cinematic/LazySection";
+import { HomeGeoSummary } from "@/components/seo/HomeGeoSummary";
 import { pageMetadata } from "@/lib/seo";
 
 const WhyCanaan = dynamic(() =>
   import("@/components/cinematic/WhyCanaan").then((m) => m.WhyCanaan),
-);
-const DigitalStrip = dynamic(() =>
-  import("@/components/cinematic/DigitalStrip").then((m) => m.DigitalStrip),
 );
 
 export async function generateMetadata({
@@ -58,18 +57,17 @@ export default async function HomePage({
     <>
       <GlobalHero />
       <TrustStrip />
+      <HomeGeoSummary />
       <FeaturedDestinations />
       <FeaturedPackages />
       <LazySection>
         <WhyCanaan />
       </LazySection>
       <ExperienceStyles />
+      <TravelServicesStrip />
       <CorporateStrip />
       <LazySection>
         <HowItWorksSection />
-      </LazySection>
-      <LazySection minHeight="40vh">
-        <DigitalStrip />
       </LazySection>
       <CustomTripCTA />
     </>

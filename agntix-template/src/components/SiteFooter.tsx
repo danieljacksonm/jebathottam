@@ -68,8 +68,10 @@ export async function SiteFooter() {
               [
                 ["/services", "services"],
                 ["/flights", "flights"],
+                ["/services/train-tickets", "trains"],
                 ["/hotels", "hotels"],
                 ["/visa", "visa"],
+                ["/services/travel-consulting", "consulting"],
               ] as const
             ).map(([href, key]) => (
               <li key={href}>

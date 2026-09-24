@@ -2,8 +2,8 @@ import Image from "next/image";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { GeoAnswer } from "@/components/seo/GeoAnswer";
-import { services } from "@/data/services";
-import { SERVICE_IMAGES } from "@/lib/media";
+import { travelServices } from "@/data/services";
+import { SERVICE_IMAGES_REGISTRY } from "@/data/image-registry";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -21,6 +21,8 @@ export async function generateMetadata({
     path: "/services",
     title: t("servicesTitle"),
     description: t("servicesDescription"),
+    image: SERVICE_IMAGES_REGISTRY.consulting.src,
+    imageAlt: SERVICE_IMAGES_REGISTRY.consulting.alt,
   });
 }
 
@@ -38,7 +40,10 @@ export default async function ServicesPage({
     flights: nav("flights"),
     hotels: nav("hotels"),
     visa: nav("visa"),
+    trains: nav("trains"),
+    consulting: nav("consulting"),
     tours: nav("tours"),
+    corporate: nav("corporate"),
   };
 
   return (
@@ -47,8 +52,8 @@ export default async function ServicesPage({
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image={SERVICE_IMAGES.flights}
-        imageAlt="Travel support services around a Kodaikanal journey"
+        image={SERVICE_IMAGES_REGISTRY.consulting.src}
+        imageAlt={SERVICE_IMAGES_REGISTRY.consulting.alt}
         tone="mist"
       />
       <Breadcrumbs
@@ -61,12 +66,12 @@ export default async function ServicesPage({
 
       <GeoAnswer>{t("geoSummary")}</GeoAnswer>
 
-      <section className="mx-auto grid max-w-7xl gap-5 px-5 py-16 sm:grid-cols-2 lg:grid-cols-2 md:px-8 md:py-24">
-        {services.map((service) => (
+      <section className="mx-auto grid max-w-7xl gap-5 px-5 py-16 sm:grid-cols-2 lg:grid-cols-3 md:px-8 md:py-24">
+        {travelServices.map((service) => (
           <Link
             key={service.slug}
             href={service.href}
-            className="lux-card relative aspect-[5/4] block"
+            className="lux-card relative aspect-[5/4] block overflow-hidden"
           >
             <Image
               src={service.image}
@@ -80,16 +85,17 @@ export default async function ServicesPage({
               <h2 className="font-display text-3xl text-white">
                 {labels[service.slug] || service.slug}
               </h2>
+              <p className="mt-2 text-sm text-mist/90">{service.blurb}</p>
             </div>
           </Link>
         ))}
       </section>
 
-      <div className="pb-24 text-center">
+      <section className="mx-auto max-w-3xl px-5 pb-20 text-center md:px-8">
         <Link href="/enquire" className="btn-gold">
           {t("cta")}
         </Link>
-      </div>
+      </section>
     </PageAtmosphere>
   );
 }

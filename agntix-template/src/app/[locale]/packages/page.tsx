@@ -1,13 +1,14 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
-import { LuxuryPackages } from "@/components/cinematic/LuxuryPackages";
+import { PackageListing } from "@/components/packages/PackageListing";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { GeoAnswer } from "@/components/seo/GeoAnswer";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
+import { HOME_IMAGES } from "@/data/image-registry";
 import { pageMetadata } from "@/lib/seo";
 
-const HERO = "/images/marketing/home-hero.jpg";
+const HERO = HOME_IMAGES.hero.src;
 
 export async function generateMetadata({
   params,
@@ -43,7 +44,7 @@ export default async function PackagesPage({
         title={t("title")}
         subtitle={t("subtitle")}
         image={HERO}
-        imageAlt="Mountain travel landscape for Canaan Travel Hub packages"
+        imageAlt={HOME_IMAGES.hero.alt}
         tone="mist"
       />
       <Breadcrumbs
@@ -54,7 +55,7 @@ export default async function PackagesPage({
         ]}
       />
       <GeoAnswer>{t("geoSummary")}</GeoAnswer>
-      <LuxuryPackages hideIntro />
+      <PackageListing hideIntro />
       <HowItWorksSection />
     </PageAtmosphere>
   );

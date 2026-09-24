@@ -1,28 +1,5 @@
 # Canaan Travel Hub
 
-> Kodaikanal tour packages and digital travel services from Tamil Nadu, India.
+> See the live route /llms.txt for the current summary. This static file mirrors the route content for crawlers that prefer a public path.
 
-## What we offer
-
-- **Kodaikanal packages**: Escape, Family, Honeymoon, Luxury, Adventure, and Complete hill-station itineraries (2–6 nights, from INR 12,999).
-- **Digital travel services**: Flight booking assistance, hotel stays, visa guidance, and custom tour planning around your Kodai trip.
-- **Languages**: English, Tamil (ta), Hindi (hi) at https://canaantravelhub.com/en, /ta, /hi.
-
-## Key pages
-
-- Home: https://canaantravelhub.com/en
-- Packages: https://canaantravelhub.com/en/packages
-- Kodaikanal guide: https://canaantravelhub.com/en/kodaikanal
-- Digital services: https://canaantravelhub.com/en/services
-- Blog (113+ guides): https://canaantravelhub.com/en/blog
-- Enquire: https://canaantravelhub.com/en/enquire
-
-## Contact
-
-- Phone / WhatsApp: +91 70927 71754
-- Email: managingdirector@canaantravelhub.com
-- Website: https://canaantravelhub.com
-
-## Sitemap
-
-https://canaantravelhub.com/sitemap.xml
+Redirect note: Prefer https://canaantravelhub.com/llms.txt (Next.js route).

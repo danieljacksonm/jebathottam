@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import type Lenis from "lenis";
+import { usePathname } from "@/i18n/navigation";
 import { afterFirstPaint, isMobileLite } from "@/lib/perf";
 
 declare global {
@@ -10,10 +11,17 @@ declare global {
   }
 }
 
-/** Desktop-only Lenis, started after first paint to protect LCP. */
+/** Enable Lenis only on heavy cinematic routes — not sitewide (protects LCP). */
+const SMOOTH_PATHS = ["/kodaikanal"];
+
 export function SmoothScroll() {
+  const pathname = usePathname();
+  const enabled = SMOOTH_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`),
+  );
+
   useEffect(() => {
-    if (isMobileLite()) return;
+    if (!enabled || isMobileLite()) return;
 
     let destroyed = false;
     let cleanup: (() => void) | null = null;
@@ -65,7 +73,7 @@ export function SmoothScroll() {
       stop();
       cleanup?.();
     };
-  }, []);
+  }, [enabled]);
 
   return null;
 }

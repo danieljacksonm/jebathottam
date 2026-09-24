@@ -12,6 +12,8 @@ const staticPaths = [
   "/packages",
   "/tours",
   "/services",
+  "/services/train-tickets",
+  "/services/travel-consulting",
   "/corporate-travel",
   "/hotels",
   "/flights",
