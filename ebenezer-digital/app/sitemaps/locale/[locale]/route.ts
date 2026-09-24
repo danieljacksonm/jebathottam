@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sitemapForKind } from "@/lib/site-sitemaps";
-import { buildUrlsetXml } from "@/lib/sitemap-xml";
+import { buildUrlsetXml, EMPTY_URLSET_XML, xmlSitemapHeaders } from "@/lib/sitemap-xml";
 import { getPublishedLocales, isSeoLocale } from "@/lib/i18n/published-locales";
-import { originForKind, siteKindFromHost } from "@/lib/site-url";
+import { originForKind, siteKindFromRequestHeaders } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
-const CACHE_HEADERS = {
-  "Content-Type": "application/xml; charset=utf-8",
-  "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-};
+const CACHE_HEADERS = xmlSitemapHeaders("public, s-maxage=3600, stale-while-revalidate=86400");
 
 function localizeEntryUrl(url: string, locale: string, origin: string): string {
   if (locale === "en") return url;
@@ -25,18 +22,26 @@ function localizeEntryUrl(url: string, locale: string, origin: string): string {
   }
 }
 
-/** Per-locale sitemap: /sitemaps/locale/{locale} */
+/**
+ * Per-locale sitemap: /sitemaps/locale/{locale}
+ * Not listed in the host index by default. News/network are English-only — never emit
+ * locale-prefixed locs that would 301.
+ */
 export async function GET(
   request: NextRequest,
   { params }: { params: { locale: string } }
 ) {
   const locale = params.locale?.toLowerCase();
   if (!locale || !isSeoLocale(locale) || !getPublishedLocales().includes(locale as never)) {
-    return new NextResponse("Not found", { status: 404 });
+    return new NextResponse(EMPTY_URLSET_XML, { status: 200, headers: CACHE_HEADERS });
   }
 
   try {
-    const kind = siteKindFromHost(request.headers.get("host"));
+    const kind = siteKindFromRequestHeaders(request.headers);
+    if (kind === "news" || kind === "network") {
+      return new NextResponse(EMPTY_URLSET_XML, { status: 200, headers: CACHE_HEADERS });
+    }
+
     const origin = originForKind(kind);
     const base = await sitemapForKind(kind);
     const entries = base.map((entry) => {
@@ -57,9 +62,6 @@ export async function GET(
     });
   } catch (error) {
     console.error("Locale sitemap failed", error);
-    return new NextResponse(
-      `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>`,
-      { status: 500, headers: { "Content-Type": "application/xml; charset=utf-8" } }
-    );
+    return new NextResponse(EMPTY_URLSET_XML, { status: 200, headers: CACHE_HEADERS });
   }
 }

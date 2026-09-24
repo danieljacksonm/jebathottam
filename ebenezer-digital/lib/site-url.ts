@@ -93,6 +93,27 @@ function hostName(host?: string | null): string {
   return (host || "").toLowerCase().split(":")[0];
 }
 
+/**
+ * Prefer public host when behind nginx/CDN.
+ * Sitemap/robots must use the same host Google requested, not an internal Host.
+ */
+export function requestHostFromHeaders(
+  headers: Headers | { get(name: string): string | null }
+): string | null {
+  const forwarded = headers.get("x-forwarded-host") || headers.get("x-original-host");
+  if (forwarded) {
+    const first = forwarded.split(",")[0]?.trim();
+    if (first) return first;
+  }
+  return headers.get("host");
+}
+
+export function siteKindFromRequestHeaders(
+  headers: Headers | { get(name: string): string | null }
+): SiteKind {
+  return siteKindFromHost(requestHostFromHeaders(headers));
+}
+
 export function siteKindFromHost(host?: string | null): SiteKind {
   const h = hostName(host);
   if (h === "ai.ebenezerdigital.com" || h === "www.ai.ebenezerdigital.com") return "ai";

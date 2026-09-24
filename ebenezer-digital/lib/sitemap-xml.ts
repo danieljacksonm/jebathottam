@@ -91,3 +91,15 @@ ${body}
 }
 
 export const SITEMAP_CHUNK_SIZE = 900;
+
+/** Valid empty urlset — use instead of 404/500 so Search Console can fetch. */
+export const EMPTY_URLSET_XML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>
+`;
+
+export function xmlSitemapHeaders(cacheControl: string): Record<string, string> {
+  return {
+    "Content-Type": "application/xml; charset=utf-8",
+    "Cache-Control": cacheControl,
+  };
+}

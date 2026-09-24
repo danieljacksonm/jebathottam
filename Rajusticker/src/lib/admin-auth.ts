@@ -12,8 +12,8 @@ export function expectedPassword() {
 }
 
 export function passwordMatches(input: string) {
-  const expected = expectedPassword();
-  const a = Buffer.from(input);
+  const expected = expectedPassword().trim().replace(/^"|"$/g, "");
+  const a = Buffer.from(input.trim());
   const b = Buffer.from(expected);
   if (a.length !== b.length) return false;
   return timingSafeEqual(a, b);
@@ -60,7 +60,7 @@ export function staffCookie() {
     options: {
       httpOnly: true,
       sameSite: "lax" as const,
-      secure: process.env.NODE_ENV === "production",
+      secure: (process.env.NEXT_PUBLIC_SITE_URL || "").startsWith("https://"),
       path: "/",
       maxAge: 60 * 60 * 12,
     },

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
-import { originForKind, siteKindFromHost } from "@/lib/site-url";
+import { originForKind, requestHostFromHeaders, siteKindFromHost } from "@/lib/site-url";
 
 /** AI crawlers explicitly allowed (in addition to *). */
 const AI_AGENTS = [
@@ -14,7 +14,7 @@ const AI_AGENTS = [
 ];
 
 export default function robots(): MetadataRoute.Robots {
-  const kind = siteKindFromHost(headers().get("host"));
+  const kind = siteKindFromHost(requestHostFromHeaders(headers()));
   const base = originForKind(kind);
 
   const sitemaps =

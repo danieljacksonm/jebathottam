@@ -48,6 +48,9 @@ export function factorySitemapEntries(
 }
 
 export function factorySitemapLocsForKind(kind: SiteKind): string[] {
+  // Opt-in only. Default off so Google is not asked to fetch ~112 factory chunks (~100k URLs).
+  // Set EBEN_FACTORY_SITEMAPS=1 when factory content is intentionally published for crawl.
+  if (process.env.EBEN_FACTORY_SITEMAPS !== "1") return [];
   const channel = channelForSiteKind(kind);
   if (!channel) return [];
   return factoryChunkSitemapLocs(originForKind(kind), channel);

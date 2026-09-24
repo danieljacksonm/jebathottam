@@ -5,7 +5,11 @@ const ALL_PUBLISHED: SeoLocale[] = [...SEO_LOCALES];
 
 /** Parse comma-separated locale list from env (server + client). Use `all` for every SEO locale. */
 function parsePublishedEnv(raw?: string | null): SeoLocale[] {
-  if (!raw?.trim() || raw.trim().toLowerCase() === "all") return ALL_PUBLISHED;
+  if (!raw?.trim()) {
+    // Real studio translations today: en + ta + hi. Do not advertise ~70 soft shells by default.
+    return parsePublishedEnv("en,ta,hi");
+  }
+  if (raw.trim().toLowerCase() === "all") return ALL_PUBLISHED;
   const set = new Set<SeoLocale>();
   for (const part of raw.split(",")) {
     const code = part.trim().toLowerCase();
@@ -22,7 +26,7 @@ export function getPublishedLocales(): readonly SeoLocale[] {
   const raw =
     process.env.NEXT_PUBLIC_EBEN_I18N_PUBLISHED_LOCALES ||
     process.env.EBEN_I18N_PUBLISHED_LOCALES ||
-    "all";
+    "en,ta,hi";
   return parsePublishedEnv(raw);
 }
 

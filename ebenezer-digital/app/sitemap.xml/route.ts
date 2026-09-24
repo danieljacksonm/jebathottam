@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sitemapForKind } from "@/lib/site-sitemaps";
 import { SITEMAP_CHUNK_SIZE, buildSitemapIndexXml } from "@/lib/sitemap-xml";
-import { originForKind, siteKindFromHost, type SiteKind } from "@/lib/site-url";
+import {
+  originForKind,
+  siteKindFromRequestHeaders,
+  type SiteKind,
+} from "@/lib/site-url";
 import { factorySitemapLocsForKind } from "@/lib/content-factory/sitemap";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +15,7 @@ const CACHE_HEADERS = {
   "Cache-Control": "public, max-age=300, s-maxage=600, stale-while-revalidate=86400",
 };
 
-const INDEX_TTL_MS = 30 * 60 * 1000;
+const INDEX_TTL_MS = 10 * 60 * 1000;
 
 type IndexCache = { at: number; xml: string; chunks: number };
 
@@ -52,10 +56,11 @@ async function refreshIndex(kind: SiteKind): Promise<void> {
 /**
  * Host sitemap index. Returns immediately so Google Search Console can fetch it.
  * Page lists are filled in the background; locale clone sitemaps are not listed
- * (those URLs redirect and made Search Console report "Couldn't fetch").
+ * (those URLs 301 and made Search Console report "Couldn't fetch").
+ * Factory child locs are opt-in via EBEN_FACTORY_SITEMAPS=1.
  */
 export async function GET(request: NextRequest) {
-  const kind = siteKindFromHost(request.headers.get("host"));
+  const kind = siteKindFromRequestHeaders(request.headers);
   const hit = indexCache.get(kind);
   if (hit && Date.now() - hit.at < INDEX_TTL_MS) {
     return xmlResponse(hit.xml);
