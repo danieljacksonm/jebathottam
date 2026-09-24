@@ -1,32 +1,37 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useId, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Menu, X } from "lucide-react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
-const links = [
+const centerLinks = [
   { href: "/", key: "home" as const },
   { href: "/destinations", key: "destinations" as const },
   { href: "/packages", key: "packages" as const },
-  { href: "/services", key: "services" as const },
   { href: "/corporate-travel", key: "corporate" as const },
+  { href: "/services", key: "services" as const },
   { href: "/blog", key: "blog" as const },
+] as const;
+
+const rightLinks = [
   { href: "/about", key: "about" as const },
   { href: "/contact", key: "contact" as const },
-];
+] as const;
+
+const mobileLinks = [...centerLinks, ...rightLinks];
 
 export function SiteHeader() {
   const t = useTranslations("nav");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuId = useId();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -39,42 +44,47 @@ export function SiteHeader() {
     };
   }, [open]);
 
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   return (
     <header
       className={`site-header fixed inset-x-0 top-0 z-50 ${
         scrolled || open ? "is-scrolled" : ""
       }`}
     >
-      <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between gap-4 px-5 md:h-20 md:px-8">
-        <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+      <div className="site-header__bar">
+        <Link
+          href="/"
+          className="site-header__brand"
+          onClick={() => setOpen(false)}
+        >
           <Image
             src="/brand/canaan-logo.jpeg"
             alt="Canaan Travel Hub"
-            width={48}
-            height={48}
-            className="h-11 w-11 rounded-full object-cover ring-1 ring-gold/50"
+            width={40}
+            height={40}
+            className="site-header__logo"
             priority
           />
-          <span className="leading-none">
-            <span className="font-script block text-[1.7rem] text-gold-bright">
-              {t("brand")}
-            </span>
-            <span className="mt-0.5 block text-[0.58rem] font-medium uppercase tracking-[0.32em] text-mist">
-              {t("brandSub")}
-            </span>
+          <span className="site-header__wordmark">
+            <span className="site-header__name">{t("brand")}</span>
+            <span className="site-header__sub">{t("brandSub")}</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 xl:flex" aria-label="Primary">
-          {links.map((link) => {
-            const active = pathname === link.href;
+        <nav className="site-header__nav" aria-label="Primary">
+          {centerLinks.map((link) => {
+            const active =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname === link.href || pathname.startsWith(`${link.href}/`);
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-[0.68rem] uppercase tracking-[0.18em] transition-colors ${
-                  active ? "text-gold-bright" : "text-white/70 hover:text-gold"
-                }`}
+                className={`site-header__link ${active ? "is-active" : ""}`}
               >
                 {t(link.key)}
               </Link>
@@ -82,53 +92,72 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <LanguageSwitcher />
-          <Link href="/plan-your-trip" className="btn-gold !px-5 !py-2.5 text-[0.66rem]" data-cursor="book">
-            {t("planTrip")}
-          </Link>
-        </div>
-
-        <button
-          type="button"
-          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-full border border-[var(--line)] p-2 text-white xl:hidden"
-          aria-label={open ? "Close menu" : "Open menu"}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? <X size={18} /> : <Menu size={18} />}
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 top-[4.5rem] z-40 overflow-y-auto bg-navy/96 px-6 py-8 backdrop-blur-xl xl:hidden"
-          >
-            <nav className="mx-auto flex max-w-md flex-col gap-5" aria-label="Mobile">
-              {links.map((link) => (
+        <div className="site-header__actions">
+          <nav className="site-header__utility" aria-label="Company">
+            {rightLinks.map((link) => {
+              const active = pathname === link.href;
+              return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="border-b border-[var(--line)] pb-4 text-lg uppercase tracking-[0.16em] text-white/90"
-                  onClick={() => setOpen(false)}
+                  className={`site-header__link ${active ? "is-active" : ""}`}
                 >
                   {t(link.key)}
                 </Link>
-              ))}
-              <Link href="/plan-your-trip" className="btn-gold mt-4 w-full" onClick={() => setOpen(false)}>
-                {t("planTrip")}
-              </Link>
-              <LanguageSwitcher />
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              );
+            })}
+          </nav>
+          <div className="site-header__tools">
+            <LanguageSwitcher />
+            <Link
+              href="/plan-your-trip"
+              className="btn-gold site-header__cta"
+              data-cursor="book"
+            >
+              {t("planTrip")}
+            </Link>
+          </div>
+          <button
+            type="button"
+            className="site-header__menu-btn"
+            aria-label={open ? t("closeMenu") : t("openMenu")}
+            aria-expanded={open}
+            aria-controls={menuId}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </div>
+      </div>
+
+      <div
+        id={menuId}
+        className={`site-header__drawer ${open ? "is-open" : ""}`}
+        hidden={!open}
+      >
+        <nav className="site-header__drawer-nav" aria-label="Mobile">
+          {mobileLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="site-header__drawer-link"
+              onClick={() => setOpen(false)}
+            >
+              {t(link.key)}
+            </Link>
+          ))}
+          <Link
+            href="/plan-your-trip"
+            className="btn-gold mt-4 w-full"
+            onClick={() => setOpen(false)}
+          >
+            {t("planTrip")}
+          </Link>
+          <div className="mt-4">
+            <LanguageSwitcher />
+          </div>
+        </nav>
+      </div>
     </header>
   );
 }

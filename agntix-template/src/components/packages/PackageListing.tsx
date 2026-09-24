@@ -44,6 +44,7 @@ export async function PackageListing({ hideIntro = false }: { hideIntro?: boolea
   const locale = await getLocale();
   const t = await getTranslations("packages");
   const j = await getTranslations("journey");
+  const platform = await getTranslations("platform");
   const list = getLocalizedPackages(locale);
   const groups = groupByDestination(list);
 
@@ -85,7 +86,7 @@ export async function PackageListing({ hideIntro = false }: { hideIntro?: boolea
                   href={`/destinations/${group.slug}`}
                   className="text-sm text-gold hover:text-gold-bright"
                 >
-                  Explore destination →
+                  {platform("exploreDestination")} →
                 </Link>
               </div>
 

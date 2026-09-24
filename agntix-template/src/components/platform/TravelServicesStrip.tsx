@@ -3,10 +3,10 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { travelServices } from "@/data/services";
 
-/** Homepage strip — clear travel-business services (not “digital agency”). */
 export async function TravelServicesStrip() {
   const t = await getTranslations("platform");
   const nav = await getTranslations("nav");
+  const svc = await getTranslations("serviceBlurbs");
 
   const labels: Record<string, string> = {
     flights: nav("flights"),
@@ -34,7 +34,7 @@ export async function TravelServicesStrip() {
             <Link
               key={service.slug}
               href={service.href}
-              className="lux-card group relative aspect-[5/3] overflow-hidden"
+              className="group relative aspect-[5/3] overflow-hidden border border-[var(--line)]"
             >
               <Image
                 src={service.image}
@@ -48,7 +48,9 @@ export async function TravelServicesStrip() {
                 <h3 className="font-display text-2xl text-white">
                   {labels[service.slug] ?? service.slug}
                 </h3>
-                <p className="mt-2 text-sm text-mist/90">{service.blurb}</p>
+                <p className="mt-2 text-sm text-mist/90">
+                  {svc(service.slug as "flights" | "trains" | "hotels" | "visa" | "consulting" | "corporate" | "tours")}
+                </p>
               </div>
             </Link>
           ))}

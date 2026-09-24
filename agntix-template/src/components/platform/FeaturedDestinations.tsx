@@ -2,6 +2,7 @@ import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getFeaturedDestinations } from "@/data/destinations";
+import { destinationCardImage } from "@/data/image-registry";
 import { formatInr, packageRows } from "@/data/packages";
 
 const PACKAGE_DESTINATION_PRIORITY = ["kodaikanal", "darjeeling"];
@@ -39,21 +40,22 @@ export async function FeaturedDestinations() {
             const hasPrice =
               typeof dest.priceFrom === "number" && dest.priceFrom > 0;
             const hasPackages = withPackages.has(dest.slug);
+            const card = destinationCardImage(dest.slug, dest.image);
             return (
-              <article key={dest.slug} className="lux-card overflow-hidden">
+              <article key={dest.slug} className="overflow-hidden border border-[var(--line)] bg-[#04101f]/40">
                 <Link
                   href={`/destinations/${dest.slug}`}
                   className="flex h-full flex-col"
                 >
                   <div className="relative aspect-[16/11]">
                     <Image
-                      src={dest.image}
-                      alt={dest.name}
+                      src={card.src}
+                      alt={card.alt || dest.name}
                       fill
                       quality={75}
                       className="object-cover"
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      unoptimized={dest.image.startsWith("http")}
+                      unoptimized={card.src.startsWith("http")}
                     />
                   </div>
                   <div className="flex flex-1 flex-col p-7">
@@ -61,7 +63,7 @@ export async function FeaturedDestinations() {
                       {dest.status === "coming_soon"
                         ? t("comingSoon")
                         : hasPackages
-                          ? `${dest.country} · Packages`
+                          ? t("packagesAvailable", { country: dest.country })
                           : `${dest.country} · ${dest.continent}`}
                     </p>
                     <h3 className="mt-3 font-display text-3xl text-white">
@@ -83,7 +85,7 @@ export async function FeaturedDestinations() {
         </div>
         <div className="mt-10 text-center">
           <Link href="/destinations" className="btn-ghost">
-            View all destinations
+            {t("viewAllDestinations")}
           </Link>
         </div>
       </div>

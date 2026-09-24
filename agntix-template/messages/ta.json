@@ -99,7 +99,9 @@
     "brandSub": "Travel Hub",
     "planTrip": "என் பயணத்தைத் திட்டமிடு",
     "trains": "ரயில் டிக்கெட்",
-    "consulting": "பயண ஆலோசனை"
+    "consulting": "பயண ஆலோசனை",
+    "openMenu": "மெனுவைத் திற",
+    "closeMenu": "மெனுவை மூடு"
   },
   "hero": {
     "place": "கொடைக்கானல் · மலைகளின் இளவரசி",
@@ -154,7 +156,16 @@
     "trustLine": "நம்பகமான மனித திட்டமிடல் — வெளியிடப்பட்ட பேக்கேஜ்கள், தனிப்பயன் விசாரணை.",
     "servicesTitle": "பயண சேவைகள்",
     "servicesBody": "விமானம், ஹோட்டல் மற்றும் விசா ஆதரவு.",
-    "viewAllServices": "அனைத்து சேவைகளும்"
+    "viewAllServices": "அனைத்து சேவைகளும்",
+    "viewAllDestinations": "அனைத்து இடங்களும்",
+    "viewAllPackages": "அனைத்து பேக்கேஜ்கள்",
+    "viewAllGuides": "அனைத்து வழிகாட்டிகளும்",
+    "enquireNow": "விசாரிக்குங்கள்",
+    "packagesAvailable": "{country} · Packages",
+    "guidesEyebrow": "பயண வழிகாட்டிகள்",
+    "guidesTitle": "பயணக் கதைகள் & குறிப்புகள்",
+    "guidesBody": "Destination guides, itineraries, and practical travel advice — connected to packages and travel services when you are ready to plan.",
+    "exploreDestination": "இடத்தை ஆராயுங்கள்"
   },
   "destinationsSection": {
     "eyebrow": "இடம்",
@@ -375,7 +386,12 @@
     "viewAllGuides": "View all {destination} guides",
     "recentGuides": "Recent guides",
     "heroImageAlt": "Worldwide travel guides from Canaan Travel Hub",
-    "listImageAlt": "Canaan travel stories and destination guides"
+    "listImageAlt": "Canaan travel stories and destination guides",
+    "prev": "முன்",
+    "next": "அடுத்து",
+    "pageLabel": "Page {page} / {total}",
+    "featured": "சிறப்பு வழிகாட்டி",
+    "latest": "சமீபத்திய வழிகாட்டிகள்"
   },
   "film": {
     "frameEyebrow": "உங்கள் நாளின் திரைப்படத்தில்",
@@ -462,17 +478,20 @@
     "privacy": "தனியுரிமைக் கொள்கை",
     "terms": "சேவை விதிமுறைகள்",
     "explore": "ஆராயுங்கள்",
-    "services": "சேவைகள்",
+    "services": "பயண சேவைகள்",
     "support": "ஆதரவு",
     "note": "கொடை பேக்கேஜ்கள் · உலகளாவிய ஆதரவு",
     "policies": "கொள்கைகள்",
     "cancellation": "ரத்து & பணத்திரும்பல்",
-    "childPricing": "குழந்தை விலை"
+    "childPricing": "குழந்தை விலை",
+    "company": "நிறுவனம்"
   },
   "common": {
     "learnMore": "மேலும் அறிய",
     "backHome": "முகப்புக்கு",
-    "perPerson": "ஒருவருக்கு"
+    "perPerson": "ஒருவருக்கு",
+    "step": "படி {n}",
+    "related": "தொடர்புடையவை"
   },
   "video": {
     "title": "கொடைக்கானல் பயணத் திரைப்படம்",
@@ -731,5 +750,14 @@
     "ctaTitle": "Start your custom plan",
     "ctaBody": "Share a few details and we will respond with a clear next step.",
     "cta": "Plan my trip"
+  },
+  "serviceBlurbs": {
+    "flights": "Domestic and international flight assistance on enquiry.",
+    "trains": "Train search and ticket booking assistance — not Indian Railways.",
+    "hotels": "Hotel and stay booking help for leisure and corporate trips.",
+    "visa": "Document guidance and application support — no approval guarantees.",
+    "consulting": "Custom itineraries shaped around dates, budget, and travel style.",
+    "corporate": "Business trips, retreats, and coordinated group travel.",
+    "tours": "Published packages and custom day plans."
   }
 }

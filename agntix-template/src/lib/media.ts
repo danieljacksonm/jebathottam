@@ -42,11 +42,11 @@ export const LOCAL_SCENES = {
 export const LOCAL_SCENE_LIST = Object.values(LOCAL_SCENES);
 
 export const SERVICE_IMAGES = {
-  flights: "/images/travel/d/singapore.jpg",
+  flights: "/images/travel/d/tokyo.jpg",
   hotels: "/images/travel/d/udaipur-city.jpg",
   visa: "/images/travel/d/dubai.jpg",
   tours: "/images/travel/d/rajasthan.jpg",
-  trains: "/images/travel/d/darjeeling.jpg",
+  trains: "/images/travel/p/darjeeling/batasia-loop.jpg",
   consulting: "/images/travel/d/maldives.jpg",
 } as const;
 

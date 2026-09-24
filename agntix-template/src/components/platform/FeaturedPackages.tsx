@@ -21,13 +21,16 @@ export async function FeaturedPackages() {
             </h2>
           </div>
           <Link href="/packages" className="text-sm text-gold hover:text-gold-bright">
-            View all →
+            {t("viewAllPackages")}
           </Link>
         </div>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {packages.map((pkg) => (
-            <article key={pkg.id} className="card-surface flex h-full flex-col overflow-hidden">
+            <article
+              key={pkg.id}
+              className="flex h-full flex-col overflow-hidden border border-[var(--line)] bg-[#04101f]/40"
+            >
               <Link href={`/packages/${pkg.id}`} className="relative block aspect-[16/10]">
                 <Image
                   src={pkg.image}
@@ -58,7 +61,7 @@ export async function FeaturedPackages() {
                     href={`/enquire?package=${pkg.id}`}
                     className="text-[0.68rem] uppercase tracking-[0.14em] text-white/70 hover:text-gold"
                   >
-                    Enquire →
+                    {t("enquireNow")}
                   </Link>
                 </div>
               </div>

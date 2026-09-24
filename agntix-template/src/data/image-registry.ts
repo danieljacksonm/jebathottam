@@ -54,8 +54,8 @@ export const DESTINATION_IMAGES: Record<
       purpose: "hero",
     },
     card: {
-      src: "/images/travel/d/kerala.jpg",
-      alt: "Kerala waterways",
+      src: "/images/travel/p/kerala/alleppey.jpg",
+      alt: "Alleppey backwaters in Kerala",
       purpose: "card",
     },
   },
@@ -66,8 +66,8 @@ export const DESTINATION_IMAGES: Record<
       purpose: "hero",
     },
     card: {
-      src: "/images/travel/d/goa.jpg",
-      alt: "Goa beach landscape",
+      src: "/images/travel/p/goa/calangute.jpg",
+      alt: "Calangute beach in Goa",
       purpose: "card",
     },
   },
@@ -78,8 +78,8 @@ export const DESTINATION_IMAGES: Record<
       purpose: "hero",
     },
     card: {
-      src: "/images/travel/d/rajasthan.jpg",
-      alt: "Rajasthan heritage landscape",
+      src: "/images/travel/d/jaipur-city.jpg",
+      alt: "Jaipur cityscape in Rajasthan",
       purpose: "card",
     },
   },
@@ -102,8 +102,8 @@ export const DESTINATION_IMAGES: Record<
       purpose: "hero",
     },
     card: {
-      src: "/images/travel/d/ooty.jpg",
-      alt: "Ooty highland scenery",
+      src: "/images/travel/p/ooty/ooty-lake.jpg",
+      alt: "Ooty Lake in the Nilgiris",
       purpose: "card",
     },
   },
@@ -114,8 +114,8 @@ export const DESTINATION_IMAGES: Record<
       purpose: "hero",
     },
     card: {
-      src: "/images/travel/d/singapore.jpg",
-      alt: "Singapore cityscape",
+      src: "/images/travel/p/singapore/marina-bay-sands.jpg",
+      alt: "Marina Bay Sands, Singapore",
       purpose: "card",
     },
   },
@@ -139,44 +139,55 @@ export const PACKAGE_IMAGES_REGISTRY: Record<string, ImageAsset> = {
   },
 };
 
-/** Service heroes — destination-neutral travel photography (not the home hero). */
+/** Service heroes — each service uses a distinct photo (never the homepage hero). */
 export const SERVICE_IMAGES_REGISTRY = {
   flights: {
-    src: "/images/travel/d/singapore.jpg",
-    alt: "City skyline for flight booking assistance",
+    src: "/images/travel/d/tokyo.jpg",
+    alt: "Tokyo skyline for flight booking assistance",
     purpose: "service",
   },
   hotels: {
     src: "/images/travel/d/udaipur-city.jpg",
-    alt: "Heritage lakeside city for hotel booking assistance",
+    alt: "Udaipur lakeside city for hotel booking assistance",
     purpose: "service",
   },
   visa: {
     src: "/images/travel/d/dubai.jpg",
-    alt: "International skyline for visa assistance",
+    alt: "Dubai skyline for visa assistance",
     purpose: "service",
   },
   tours: {
     src: "/images/travel/d/rajasthan.jpg",
-    alt: "Heritage landscape for tour planning",
+    alt: "Rajasthan heritage landscape for tour planning",
     purpose: "service",
   },
   trains: {
-    src: "/images/travel/d/darjeeling.jpg",
-    alt: "Hill destination for train ticket assistance",
+    src: "/images/travel/p/darjeeling/batasia-loop.jpg",
+    alt: "Mountain railway loop for train ticket assistance",
     purpose: "service",
   },
   consulting: {
     src: "/images/travel/d/maldives.jpg",
-    alt: "Coastal destination for custom travel consulting",
+    alt: "Maldives coastline for custom travel consulting",
     purpose: "service",
   },
   corporate: {
-    src: "/images/travel/d/singapore.jpg",
-    alt: "Business cityscape for corporate travel",
+    src: "/images/travel/d/london.jpg",
+    alt: "London cityscape for corporate travel",
     purpose: "service",
   },
 } as const satisfies Record<string, ImageAsset>;
+
+export function destinationCardImage(slug: string, fallback: string): ImageAsset {
+  const entry = DESTINATION_IMAGES[slug];
+  if (entry?.card) return entry.card;
+  if (entry?.hero) return entry.hero;
+  return {
+    src: fallback,
+    alt: "Travel destination with Canaan Travel Hub",
+    purpose: "card",
+  };
+}
 
 export function destinationHero(slug: string): ImageAsset {
   return (

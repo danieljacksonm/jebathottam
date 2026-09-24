@@ -7,6 +7,7 @@ import { CorporateStrip } from "@/components/platform/CorporateStrip";
 import { CustomTripCTA } from "@/components/platform/CustomTripCTA";
 import { ExperienceStyles } from "@/components/platform/ExperienceStyles";
 import { TravelServicesStrip } from "@/components/platform/TravelServicesStrip";
+import { TravelGuidesStrip } from "@/components/platform/TravelGuidesStrip";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { LazySection } from "@/components/cinematic/LazySection";
 import { HomeGeoSummary } from "@/components/seo/HomeGeoSummary";
@@ -60,11 +61,12 @@ export default async function HomePage({
       <HomeGeoSummary />
       <FeaturedDestinations />
       <FeaturedPackages />
+      <TravelServicesStrip />
+      <ExperienceStyles />
       <LazySection>
         <WhyCanaan />
       </LazySection>
-      <ExperienceStyles />
-      <TravelServicesStrip />
+      <TravelGuidesStrip />
       <CorporateStrip />
       <LazySection>
         <HowItWorksSection />

@@ -99,7 +99,9 @@
     "brand": "Canaan",
     "brandSub": "Travel Hub",
     "trains": "Train Tickets",
-    "consulting": "Travel Consulting"
+    "consulting": "Travel Consulting",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "hero": {
     "place": "Kodaikanal · Princess of the Hills",
@@ -132,11 +134,11 @@
   },
   "digital": {
     "eyebrow": "Also available",
-    "title": "Digital tourism services",
-    "subtitle": "After packages, use Canaan for flights, hotels, visas, and travel support around your Kodaikanal journey.",
+    "title": "Travel services",
+    "subtitle": "Flights, trains, hotels, visas, and custom planning around your journey.",
     "support": "Digital service",
     "insurance": "Travel insurance",
-    "cta": "View digital services"
+    "cta": "View travel services"
   },
   "trust": {
     "handpicked": "Handpicked Experiences",
@@ -342,8 +344,8 @@
   },
   "blog": {
     "eyebrow": "Journal",
-    "title": "Worldwide tourism guides",
-    "subtitle": "Every major place gets 50 detailed, SEO-ready guides — unique images, verified pacing advice, and Canaan enquiry support. No invented package prices.",
+    "title": "Travel stories & guides",
+    "subtitle": "Destination guides, itineraries, and practical planning notes for journeys Canaan can support.",
     "filteredTitle": "{destination} travel guides",
     "filteredSubtitle": "Verified notes and itineraries for {destination} — filter, read, and enquire when you are ready.",
     "read": "{count} min read",
@@ -356,7 +358,12 @@
     "viewAllGuides": "View all {destination} guides",
     "recentGuides": "Recent guides",
     "heroImageAlt": "Worldwide travel guides from Canaan Travel Hub",
-    "listImageAlt": "Canaan travel stories and destination guides"
+    "listImageAlt": "Canaan travel stories and destination guides",
+    "prev": "Previous",
+    "next": "Next",
+    "pageLabel": "Page {page} / {total}",
+    "featured": "Featured guide",
+    "latest": "Latest guides"
   },
   "film": {
     "frameEyebrow": "In the film of your day",
@@ -439,7 +446,7 @@
     "eyebrow": "Our house",
     "title": "Canaan Travel Hub",
     "subtitle": "Cross Borders. Discover Blessings.",
-    "body": "Canaan Travel Hub crafts curated Kodaikanal tour packages and provides digital tourism services — flights, hotels, visas and trip planning — for travellers worldwide.",
+    "body": "Canaan Travel Hub plans journeys across India and beyond — verified packages for Kodaikanal and Darjeeling, plus flights, trains, hotels, visa assistance, corporate travel, and custom trip planning.",
     "valuesTitle": "What we hold",
     "values": {
       "care": {
@@ -497,7 +504,7 @@
   },
   "footer": {
     "tagline": "Cross Borders. Discover Blessings.",
-    "about": "Thoughtfully planned journeys across India and beyond — published packages where verified, human planning for custom trips, plus flights, trains, hotels, and visa support.",
+    "about": "Thoughtfully planned journeys across India and beyond — published packages where verified, plus flights, trains, hotels, visa assistance, and custom travel consulting.",
     "rights": "© {year} Canaan Travel Hub. All rights reserved.",
     "contact": "Contact",
     "privacy": "Privacy Policy",
@@ -506,14 +513,17 @@
     "cancellation": "Cancellation & Refund",
     "childPricing": "Child Pricing",
     "explore": "Explore",
-    "services": "Travel services",
+    "services": "Travel Services",
     "support": "Support",
-    "note": "Packages · Flights · Trains · Hotels · Visa · Custom planning"
+    "note": "Packages · Flights · Trains · Hotels · Visa · Consulting",
+    "company": "Company"
   },
   "common": {
     "learnMore": "Learn more",
     "backHome": "Back home",
-    "perPerson": "per person"
+    "perPerson": "per person",
+    "step": "Step {n}",
+    "related": "Related"
   },
   "video": {
     "title": "Kodaikanal journey film",
@@ -542,7 +552,16 @@
     "trustLine": "Human planning you can trust — published packages where verified, enquiry when custom. No invented reviews or fake inventory.",
     "servicesTitle": "Travel services",
     "servicesBody": "Flights, trains, hotels, visa assistance, and custom trip planning — enquire for clear next steps.",
-    "viewAllServices": "View all services"
+    "viewAllServices": "View all services",
+    "viewAllDestinations": "View all destinations",
+    "viewAllPackages": "View all packages",
+    "viewAllGuides": "View all guides",
+    "enquireNow": "Enquire now",
+    "packagesAvailable": "{country} · Packages",
+    "guidesEyebrow": "Travel guides",
+    "guidesTitle": "Travel stories & planning notes",
+    "guidesBody": "Destination guides, itineraries, and practical travel advice — connected to packages and travel services when you are ready to plan.",
+    "exploreDestination": "Explore destination"
   },
   "destinationsSection": {
     "eyebrow": "Destination",
@@ -588,10 +607,10 @@
     "timelineEyebrow": "Travel story",
     "timelineTitle": "A day written in mist.",
     "digitalEyebrow": "Also available",
-    "digitalTitle": "Digital tourism services",
-    "digitalBody": "Flights, hotels and visas for journeys worldwide — alongside our Kodaikanal packages.",
+    "digitalTitle": "Travel services",
+    "digitalBody": "Flights, trains, hotels and visas — alongside published packages.",
     "digitalCta": "View services",
-    "digitalSoft": "Questions about Kodai packages or digital services?",
+    "digitalSoft": "Questions about packages or travel services?",
     "digitalWhatsapp": "WhatsApp us",
     "digitalEnquire": "Enquire online",
     "heroEyebrow": "Canaan Travel Hub · Kodaikanal",
@@ -731,5 +750,14 @@
     "ctaTitle": "Start your custom plan",
     "ctaBody": "Share a few details and we will respond with a clear next step.",
     "cta": "Plan my trip"
+  },
+  "serviceBlurbs": {
+    "flights": "Domestic and international flight assistance on enquiry.",
+    "trains": "Train search and ticket booking assistance — not Indian Railways.",
+    "hotels": "Hotel and stay booking help for leisure and corporate trips.",
+    "visa": "Document guidance and application support — no approval guarantees.",
+    "consulting": "Custom itineraries shaped around dates, budget, and travel style.",
+    "corporate": "Business trips, retreats, and coordinated group travel.",
+    "tours": "Published packages and custom day plans."
   }
 }

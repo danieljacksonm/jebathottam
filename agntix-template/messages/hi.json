@@ -99,7 +99,9 @@
     "brandSub": "Travel Hub",
     "planTrip": "मेरी यात्रा प्लान करें",
     "trains": "ट्रेन टिकट",
-    "consulting": "यात्रा परामर्श"
+    "consulting": "यात्रा परामर्श",
+    "openMenu": "मेनू खोलें",
+    "closeMenu": "मेनू बंद करें"
   },
   "hero": {
     "place": "कोडाइकनाल · पहाड़ियों की राजकुमारी",
@@ -154,7 +156,16 @@
     "trustLine": "भरोसेमंद मानवीय योजना — प्रकाशित पैकेज, कस्टम पूछताछ।",
     "servicesTitle": "यात्रा सेवाएँ",
     "servicesBody": "फ़्लाइट, होटल और वीज़ा सहायता।",
-    "viewAllServices": "सभी सेवाएँ देखें"
+    "viewAllServices": "सभी सेवाएँ देखें",
+    "viewAllDestinations": "सभी गंतव्य देखें",
+    "viewAllPackages": "सभी पैकेज देखें",
+    "viewAllGuides": "सभी गाइड देखें",
+    "enquireNow": "पूछताछ करें",
+    "packagesAvailable": "{country} · Packages",
+    "guidesEyebrow": "ट्रैवल गाइड",
+    "guidesTitle": "यात्रा कहानियाँ और गाइड",
+    "guidesBody": "Destination guides, itineraries, and practical travel advice — connected to packages and travel services when you are ready to plan.",
+    "exploreDestination": "गंतव्य देखें"
   },
   "destinationsSection": {
     "eyebrow": "गंतव्य",
@@ -375,7 +386,12 @@
     "viewAllGuides": "View all {destination} guides",
     "recentGuides": "Recent guides",
     "heroImageAlt": "Worldwide travel guides from Canaan Travel Hub",
-    "listImageAlt": "Canaan travel stories and destination guides"
+    "listImageAlt": "Canaan travel stories and destination guides",
+    "prev": "पिछला",
+    "next": "अगला",
+    "pageLabel": "Page {page} / {total}",
+    "featured": "विशेष गाइड",
+    "latest": "नवीनतम गाइड"
   },
   "film": {
     "frameEyebrow": "आपके दिन की फ़िल्म में",
@@ -462,17 +478,20 @@
     "privacy": "गोपनीयता नीति",
     "terms": "सेवा की शर्तें",
     "explore": "खोजें",
-    "services": "सेवाएँ",
+    "services": "ट्रैवल सेवाएँ",
     "support": "सहायता",
     "note": "कोडई पैकेज · वैश्विक सहायता",
     "policies": "नीतियाँ",
     "cancellation": "रद्दीकरण और रिफंड",
-    "childPricing": "बाल मूल्य"
+    "childPricing": "बाल मूल्य",
+    "company": "कंपनी"
   },
   "common": {
     "learnMore": "और जानें",
     "backHome": "होम पर",
-    "perPerson": "प्रति व्यक्ति"
+    "perPerson": "प्रति व्यक्ति",
+    "step": "चरण {n}",
+    "related": "संबंधित"
   },
   "video": {
     "title": "कोडाइकनाल यात्रा फ़िल्म",
@@ -731,5 +750,14 @@
     "ctaTitle": "Start your custom plan",
     "ctaBody": "Share a few details and we will respond with a clear next step.",
     "cta": "Plan my trip"
+  },
+  "serviceBlurbs": {
+    "flights": "Domestic and international flight assistance on enquiry.",
+    "trains": "Train search and ticket booking assistance — not Indian Railways.",
+    "hotels": "Hotel and stay booking help for leisure and corporate trips.",
+    "visa": "Document guidance and application support — no approval guarantees.",
+    "consulting": "Custom itineraries shaped around dates, budget, and travel style.",
+    "corporate": "Business trips, retreats, and coordinated group travel.",
+    "tours": "Published packages and custom day plans."
   }
 }

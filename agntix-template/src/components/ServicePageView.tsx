@@ -75,6 +75,7 @@ export async function ServicePageView({
   setRequestLocale(locale);
   const t = await getTranslations(namespace);
   const nav = await getTranslations("nav");
+  const common = await getTranslations("common");
   const asset = SERVICE_IMAGES_REGISTRY[imageByNamespace[namespace]];
 
   const howKeys = ["how1", "how2", "how3"] as const;
@@ -112,7 +113,7 @@ export async function ServicePageView({
           {howKeys.map((key, i) => (
             <article key={key} className="lux-card p-6">
               <p className="text-[0.62rem] uppercase tracking-[0.16em] text-gold">
-                Step {i + 1}
+                {common("step", { n: i + 1 })}
               </p>
               <h3 className="mt-3 font-display text-xl text-white">
                 {t(`${key}Title`)}
@@ -143,7 +144,7 @@ export async function ServicePageView({
 
       <section className="mx-auto max-w-7xl px-5 pb-10 md:px-8">
         <p className="text-[0.68rem] uppercase tracking-[0.18em] text-gold">
-          Related
+          {common("related")}
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           {relatedLinks[namespace].map((link) => (

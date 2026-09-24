@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import {
@@ -84,7 +85,10 @@ export default async function BlogPage({
     })),
   ];
 
-  const cards = posts.map((post) => ({
+  const featured = page === 1 && !filterLabel ? posts[0] : null;
+  const gridPosts = featured ? posts.slice(1) : posts;
+
+  const cards = gridPosts.map((post) => ({
     slug: post.slug,
     date: post.date,
     readMinutes: post.readMinutes,
@@ -130,6 +134,49 @@ export default async function BlogPage({
           { name: nav("blog") },
         ]}
       />
+
+      {featured ? (
+        <section className="mx-auto max-w-7xl px-5 pt-10 md:px-8">
+          <p className="text-[0.68rem] uppercase tracking-[0.2em] text-gold">
+            {t("featured")}
+          </p>
+          <Link
+            href={`/blog/${featured.slug}`}
+            className="group mt-5 grid overflow-hidden border border-[var(--line)] lg:grid-cols-[1.4fr_1fr]"
+          >
+            <div className="relative min-h-[16rem] lg:min-h-[22rem]">
+              <Image
+                src={featured.image}
+                alt={featured.title}
+                fill
+                priority
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+                unoptimized={featured.image.startsWith("http")}
+              />
+            </div>
+            <div className="flex flex-col justify-center bg-[#04101f]/55 p-7 md:p-10">
+              <p className="text-[0.62rem] uppercase tracking-[0.14em] text-mist">
+                {featured.destinationName ?? t("eyebrow")} ·{" "}
+                {t("read", { count: featured.readMinutes })}
+              </p>
+              <h2 className="mt-3 font-display text-3xl text-cream md:text-4xl">
+                {featured.title}
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-soft-gray">
+                {featured.excerpt}
+              </p>
+              <span className="mt-6 text-xs uppercase tracking-[0.14em] text-gold">
+                {t("readMore")} →
+              </span>
+            </div>
+          </Link>
+          <p className="mt-12 text-[0.68rem] uppercase tracking-[0.2em] text-gold">
+            {t("latest")}
+          </p>
+        </section>
+      ) : null}
+
       <BlogFilterChips options={filterOptions} />
       <BlogGrid
         posts={cards}
@@ -148,18 +195,18 @@ export default async function BlogPage({
               href={`/blog?${queryBase}${queryBase ? "&" : ""}page=${page - 1}`}
               className="border border-[var(--line)] px-4 py-2 text-xs uppercase tracking-[0.14em] text-mist hover:border-gold/40"
             >
-              Previous
+              {t("prev")}
             </Link>
           ) : null}
           <span className="text-xs uppercase tracking-[0.14em] text-soft-gray">
-            Page {page} / {totalPages}
+            {t("pageLabel", { page, total: totalPages })}
           </span>
           {page < totalPages ? (
             <Link
               href={`/blog?${queryBase}${queryBase ? "&" : ""}page=${page + 1}`}
               className="border border-[var(--line)] px-4 py-2 text-xs uppercase tracking-[0.14em] text-mist hover:border-gold/40"
             >
-              Next
+              {t("next")}
             </Link>
           ) : null}
         </div>
