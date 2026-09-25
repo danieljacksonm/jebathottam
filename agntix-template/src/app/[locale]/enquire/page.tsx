@@ -4,6 +4,7 @@ import { EnquireForm } from "@/components/EnquireForm";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { getLocalizedPackagesAsync } from "@/data/packages";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -29,8 +30,11 @@ export default async function EnquirePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("enquirePage");
-
   const nav = await getTranslations("nav");
+  const packages = (await getLocalizedPackagesAsync(locale)).map((pkg) => ({
+    id: pkg.id,
+    label: pkg.title,
+  }));
 
   return (
     <PageAtmosphere>
@@ -53,9 +57,11 @@ export default async function EnquirePage({
       <section className="mx-auto max-w-3xl px-5 py-16 md:px-8 md:py-20">
         <div className="glass-panel rounded-3xl p-6 md:p-10">
           <Suspense
-            fallback={<div className="h-64 animate-pulse rounded-2xl bg-navy-mid/40" />}
+            fallback={
+              <div className="h-64 animate-pulse rounded-2xl bg-navy-mid/40" />
+            }
           >
-            <EnquireForm />
+            <EnquireForm packages={packages} />
           </Suspense>
         </div>
       </section>

@@ -185,7 +185,7 @@ export default async function DestinationDetailPage({
                     ) : null}
                     <p className="mt-5 text-gold-bright">
                       {isEnquiryPriced(pkg)
-                        ? formatPackagePrice(pkg, "Request a quote")
+                        ? formatPackagePrice(pkg)
                         : `From ${formatInr(pkg.priceFrom)} per person`}
                     </p>
                   </div>

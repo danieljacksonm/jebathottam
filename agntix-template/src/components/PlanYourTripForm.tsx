@@ -20,10 +20,31 @@ const NEED_OPTS = [
 
 type Step = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
-export function PlanYourTripForm() {
+type PackageOption = {
+  id: string;
+  title: string;
+  days: number;
+  nights: number;
+};
+
+export function PlanYourTripForm({
+  packages: packagesProp,
+}: {
+  packages?: PackageOption[];
+}) {
   const t = useTranslations("planTrip");
   const locale = useLocale() as Locale;
-  const packages = useMemo(() => getLocalizedPackages(locale), [locale]);
+  const packages = useMemo(
+    () =>
+      packagesProp ??
+      getLocalizedPackages(locale).map((pkg) => ({
+        id: pkg.id,
+        title: pkg.title,
+        days: pkg.days,
+        nights: pkg.nights,
+      })),
+    [locale, packagesProp],
+  );
 
   const [step, setStep] = useState<Step>(0);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(

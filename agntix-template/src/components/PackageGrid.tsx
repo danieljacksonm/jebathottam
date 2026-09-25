@@ -8,6 +8,7 @@ import {
   formatPackagePrice,
   getLocalizedPackages,
   isEnquiryPriced,
+  type LocalizedPackage,
 } from "@/data/packages";
 import { Reveal } from "./Reveal";
 
@@ -15,16 +16,18 @@ type Props = {
   limit?: number;
   showHeader?: boolean;
   featuredOnly?: boolean;
+  packages?: LocalizedPackage[];
 };
 
 export function PackageGrid({
   limit,
   showHeader = true,
   featuredOnly = false,
+  packages: packagesProp,
 }: Props) {
   const t = useTranslations("packages");
   const locale = useLocale();
-  let list = getLocalizedPackages(locale);
+  let list = packagesProp ?? getLocalizedPackages(locale);
   if (featuredOnly) list = list.filter((p) => p.featured);
   if (typeof limit === "number") list = list.slice(0, limit);
 

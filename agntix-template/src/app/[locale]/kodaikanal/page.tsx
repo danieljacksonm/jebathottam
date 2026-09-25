@@ -9,6 +9,7 @@ import { GalleryMasonry } from "@/components/cinematic/GalleryMasonry";
 import { KodaiGuide } from "@/components/KodaiGuide";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { getLocalizedPackagesAsync } from "@/data/packages";
 import { pageMetadata, touristAttractionJsonLd } from "@/lib/seo";
 
 const HERO = "/images/kodai/hero.webp";
@@ -39,6 +40,9 @@ export default async function KodaikanalPage({
   setRequestLocale(locale);
   const t = await getTranslations("kodaikanalPage");
   const nav = await getTranslations("nav");
+  const packages = (await getLocalizedPackagesAsync(locale)).filter(
+    (pkg) => pkg.destinationSlug === "kodaikanal",
+  );
 
   return (
     <PageAtmosphere>
@@ -71,7 +75,7 @@ export default async function KodaikanalPage({
       <KodaiGuide locale={locale} />
       <ImmersiveExperiences pinned={false} />
       <InteractiveMap />
-      <PackageGrid showHeader />
+      <PackageGrid showHeader packages={packages} />
       <GalleryMasonry />
     </PageAtmosphere>
   );

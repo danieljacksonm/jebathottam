@@ -10,10 +10,33 @@ const serviceOptions = [
   { id: "flights", label: { en: "Flights", ta: "விமானம்", hi: "फ़्लाइट" } },
   { id: "hotels", label: { en: "Hotels", ta: "ஹோட்டல்", hi: "होटल" } },
   { id: "visa", label: { en: "Visa", ta: "விசா", hi: "वीज़ा" } },
-  { id: "tours", label: { en: "Tours", ta: "சுற்றுலா", hi: "टूर्स" } },
+  { id: "trains", label: { en: "Train tickets", ta: "ரயில் டிக்கெட்", hi: "ट्रेन टिकट" } },
+  {
+    id: "consulting",
+    label: {
+      en: "Travel consulting",
+      ta: "பயண ஆலோசனை",
+      hi: "यात्रा परामर्श",
+    },
+  },
+  { id: "tours", label: { en: "Custom tours", ta: "தனிப்பயன் சுற்றுலா", hi: "कस्टम टूर" } },
+  {
+    id: "corporate",
+    label: {
+      en: "Corporate travel",
+      ta: "கார்ப்பரேட் பயணம்",
+      hi: "कॉर्पोरेट यात्रा",
+    },
+  },
 ];
 
-export function EnquireForm() {
+type PackageOption = { id: string; label: string };
+
+export function EnquireForm({
+  packages: packagesProp,
+}: {
+  packages?: PackageOption[];
+}) {
   const t = useTranslations("enquirePage");
   const locale = useLocale() as Locale;
   const searchParams = useSearchParams();
@@ -30,16 +53,17 @@ export function EnquireForm() {
 
   const packageOptions = useMemo(
     () => [
-      ...getLocalizedPackages(locale).map((pkg) => ({
-        id: pkg.id,
-        label: pkg.title,
-      })),
+      ...(packagesProp ??
+        getLocalizedPackages(locale).map((pkg) => ({
+          id: pkg.id,
+          label: pkg.title,
+        }))),
       ...serviceOptions.map((s) => ({
         id: s.id,
         label: s.label[locale],
       })),
     ],
-    [locale],
+    [locale, packagesProp],
   );
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {

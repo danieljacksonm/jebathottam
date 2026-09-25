@@ -65,6 +65,13 @@ export async function POST(request: Request) {
       ...packageRows.map((p) => String(p.id)),
       ...Object.keys(LEGACY_PACKAGE_REDIRECTS),
       ...services.map((s) => String(s.slug)),
+      "trains",
+      "consulting",
+      "corporate",
+      "tours",
+      "flights",
+      "hotels",
+      "visa",
     ]);
 
     let packageId = sanitizeSingleLine(body.packageId ?? "");

@@ -3,6 +3,7 @@ import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { PlanYourTripForm } from "@/components/PlanYourTripForm";
+import { getLocalizedPackagesAsync } from "@/data/packages";
 import { pageMetadata } from "@/lib/seo";
 import { HERO_OG } from "@/lib/media";
 import { whatsappUrl } from "@/lib/whatsapp";
@@ -33,6 +34,12 @@ export default async function PlanYourTripPage({
   setRequestLocale(locale);
   const t = await getTranslations("planTrip");
   const nav = await getTranslations("nav");
+  const packages = (await getLocalizedPackagesAsync(locale)).map((pkg) => ({
+    id: pkg.id,
+    title: pkg.title,
+    days: pkg.days,
+    nights: pkg.nights,
+  }));
 
   return (
     <PageAtmosphere>
@@ -52,7 +59,7 @@ export default async function PlanYourTripPage({
         ]}
       />
       <section className="mx-auto grid max-w-7xl gap-12 px-5 py-16 md:grid-cols-[1fr_0.85fr] md:px-8 md:py-24">
-        <PlanYourTripForm />
+        <PlanYourTripForm packages={packages} />
         <aside className="h-fit space-y-6 rounded-3xl border border-[var(--line)] bg-navy-mid/35 p-7 md:sticky md:top-28">
           <h2 className="font-display text-2xl text-cream">{t("asideTitle")}</h2>
           <p className="text-sm leading-relaxed text-soft-gray">{t("asideBody")}</p>
