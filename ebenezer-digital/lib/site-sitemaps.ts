@@ -189,9 +189,9 @@ async function discoverSitemap(): Promise<MetadataRoute.Sitemap> {
 }
 
 async function infoSitemap(): Promise<MetadataRoute.Sitemap> {
+  // Do not list /blog — middleware 301s it to journal.ebenezerdigital.info (cross-host).
   const pages: MetadataRoute.Sitemap = [
     page(INFO_URL, "", "daily", 1, undefined, true),
-    page(INFO_URL, "/blog", "daily", 0.9, undefined, true, "info", "/info/blog"),
     page(INFO_URL, "/guides", "weekly", 0.8, undefined, true, "info", "/info/guides"),
     page(INFO_URL, "/about", "monthly", 0.7, undefined, true),
     page(INFO_URL, "/contact", "monthly", 0.5, undefined, true),
@@ -490,14 +490,7 @@ export async function sitemapForKind(kind: SiteKind): Promise<MetadataRoute.Site
   else if (kind === "network") pages = networkSitemap();
   else pages = await studioSitemap();
 
-  const origin = originForKind(kind);
-  pages.push({
-    url: `${origin}/sitemap.html`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.25,
-  });
-
+  // Do not append /sitemap.html — it duplicates /sitemap (canonical → /sitemap).
   sitemapMem.set(kind, { at: Date.now(), pages });
   return pages;
 }

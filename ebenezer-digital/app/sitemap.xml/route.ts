@@ -16,6 +16,8 @@ const CACHE_HEADERS = {
 };
 
 const INDEX_TTL_MS = 10 * 60 * 1000;
+/** Cold miss: wait for a real entry list so Google never sees an empty child. */
+const COLD_WAIT_MS = 12_000;
 
 type IndexCache = { at: number; xml: string; chunks: number };
 
@@ -35,29 +37,40 @@ function xmlResponse(body: string, status = 200) {
   return new NextResponse(body, { status, headers: CACHE_HEADERS });
 }
 
-async function refreshIndex(kind: SiteKind): Promise<void> {
-  if (refreshing.has(kind)) return;
+async function refreshIndex(kind: SiteKind): Promise<IndexCache | null> {
+  if (refreshing.has(kind)) {
+    // Wait briefly for the in-flight refresh to populate cache.
+    const started = Date.now();
+    while (refreshing.has(kind) && Date.now() - started < COLD_WAIT_MS) {
+      await new Promise((r) => setTimeout(r, 50));
+      const hit = indexCache.get(kind);
+      if (hit) return hit;
+    }
+    return indexCache.get(kind) || null;
+  }
   refreshing.add(kind);
   try {
     const entries = await sitemapForKind(kind);
-    const chunks = Math.max(1, Math.ceil(entries.length / SITEMAP_CHUNK_SIZE));
-    indexCache.set(kind, {
+    const chunks = Math.max(1, Math.ceil(Math.max(entries.length, 1) / SITEMAP_CHUNK_SIZE));
+    const next: IndexCache = {
       at: Date.now(),
       chunks,
       xml: buildSitemapIndexXml(locsFor(kind, chunks)),
-    });
+    };
+    indexCache.set(kind, next);
+    return next;
   } catch (error) {
     console.error("Sitemap index refresh failed", error);
+    return indexCache.get(kind) || null;
   } finally {
     refreshing.delete(kind);
   }
 }
 
 /**
- * Host sitemap index. Returns immediately so Google Search Console can fetch it.
- * Page lists are filled in the background; locale clone sitemaps are not listed
- * (those URLs 301 and made Search Console report "Couldn't fetch").
- * Factory child locs are opt-in via EBEN_FACTORY_SITEMAPS=1.
+ * Host sitemap index.
+ * Cold responses wait for a real page list so Search Console does not parse an empty child.
+ * Locale clone sitemaps are not listed. Factory locs are opt-in (EBEN_FACTORY_SITEMAPS=1).
  */
 export async function GET(request: NextRequest) {
   const kind = siteKindFromRequestHeaders(request.headers);
@@ -71,11 +84,14 @@ export async function GET(request: NextRequest) {
     return xmlResponse(hit.xml);
   }
 
-  const pending = refreshIndex(kind);
   const fresh = await Promise.race([
-    pending.then(() => indexCache.get(kind)?.xml || null),
-    new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000)),
+    refreshIndex(kind),
+    new Promise<null>((resolve) => setTimeout(() => resolve(null), COLD_WAIT_MS)),
   ]);
 
-  return xmlResponse(fresh || buildSitemapIndexXml(locsFor(kind, 1)));
+  if (fresh?.xml) return xmlResponse(fresh.xml);
+
+  // Last resort: still advertise chunk 0 only after we know refresh failed —
+  // child route will 503 (not empty 200) if the list is unavailable.
+  return xmlResponse(buildSitemapIndexXml(locsFor(kind, 1)));
 }

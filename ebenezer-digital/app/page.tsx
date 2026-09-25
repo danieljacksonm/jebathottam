@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Hero from "./sections/Hero";
 import Services from "./sections/Services";
 import Portfolio from "./sections/Portfolio";
@@ -8,12 +9,15 @@ import { loadMessages } from "@/lib/i18n/load-messages";
 import { SERVICE_LANDINGS } from "@/lib/services-catalog";
 import { getLocalizedService } from "@/lib/i18n/localize-service";
 
-export const metadata = pageMetadata({
-  title: "Ebenezer Digital Services | Reliable Digital & Web Services for Your Business",
-  description:
-    "Professional web development, e-commerce, automation, and digital support. Clear communication and on-time delivery.",
-  path: "/",
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = resolveRequestLocale();
+  const messages = loadMessages(locale);
+  return pageMetadata({
+    title: messages.home.metaTitle,
+    description: messages.home.metaDescription,
+    path: "/",
+  });
+}
 
 export default function Home() {
   const locale = resolveRequestLocale();

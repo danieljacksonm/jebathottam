@@ -9,6 +9,7 @@ import GlobalStyles from "./components/GlobalStyles";
 import { Analytics } from "@/components/Analytics";
 import { RootJsonLd } from "@/components/RootJsonLd";
 import { rootMetadataForKind, siteKindFromHost, type SiteKind } from "@/lib/site-url";
+import { loadMessages } from "@/lib/i18n/load-messages";
 
 const syne = Syne({
   subsets: ["latin"],
@@ -32,8 +33,29 @@ const sourceSerif = Source_Serif_4({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const kind = siteKindFromHost(headers().get("host"));
-  return rootMetadataForKind(kind);
+  const h = headers();
+  const kind = siteKindFromHost(h.get("x-forwarded-host") || h.get("host"));
+  const locale = (h.get("x-eben-locale") || "en") as import("@/lib/site-url").SeoLocale;
+  const base = rootMetadataForKind(kind);
+  if (kind !== "studio") return base;
+
+  const messages = loadMessages(locale);
+  return {
+    ...base,
+    title: messages.home.metaTitle,
+    description: messages.home.metaDescription,
+    openGraph: {
+      ...base.openGraph,
+      title: messages.home.metaTitle,
+      description: messages.home.metaDescription,
+      locale: locale === "ta" ? "ta_IN" : locale === "hi" ? "hi_IN" : "en_US",
+    },
+    twitter: {
+      ...base.twitter,
+      title: messages.home.metaTitle,
+      description: messages.home.metaDescription,
+    },
+  };
 }
 
 export default async function RootLayout({

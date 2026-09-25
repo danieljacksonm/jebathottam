@@ -5,14 +5,20 @@
     "journal": "जर्नल",
     "news": "समाचार",
     "store": "स्टोर",
-    "tools": "उपकरण&amp;nbsp;",
+    "tools": "उपकरण",
     "network": "टूल्स नेटवर्क",
-    "saas": "Mausi",
-    "contact": "संपर्क करें",
-    "search": "खोज",
-    "subscribe": "सदस्यता लें",
-    "readMore": "और अधिक पढ़ें",
-    "language": "भाषा"
+  "saas": "SaaS",
+  "ai": "AI",
+  "contact": "संपर्क करें",
+  "search": "खोज",
+  "subscribe": "सदस्यता लें",
+  "readMore": "और अधिक पढ़ें",
+  "language": "भाषा"
+  },
+  "home": {
+    "metaTitle": "Ebenezer Digital Services | आपके व्यवसाय के लिए विश्वसनीय डिजिटल और वेब सेवाएँ",
+    "metaDescription": "पेशेवर वेब विकास, ई-कॉमर्स, ऑटोमेशन और डिजिटल सहायता। स्पष्ट संवाद और समय पर डिलीवरी।",
+    "kicker": "Ebenezer Digital Services"
   },
   "sections": {
     "services": "सेवाएं",

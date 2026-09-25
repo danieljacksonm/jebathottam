@@ -1,4 +1,6 @@
 export type HomeMessages = {
+  metaTitle: string;
+  metaDescription: string;
   kicker: string;
   build: string;
   digital: string;
@@ -155,6 +157,9 @@ export type StudioSiteCopy = {
 };
 
 export const EN_HOME: HomeMessages = {
+  metaTitle: "Ebenezer Digital Services | Reliable Digital & Web Services for Your Business",
+  metaDescription:
+    "Professional web development, e-commerce, automation, and digital support. Clear communication and on-time delivery.",
   kicker: "Ebenezer Digital Services",
   build: "BUILD",
   digital: "DIGITAL",
