@@ -1,6 +1,6 @@
 {
   "table": "packages",
-  "version": 3,
+  "version": 4,
   "rows": [
     {
       "id": "kodai-1n2d",
@@ -136,7 +136,8 @@
         "en": "Custom packages available for larger groups. Contact us for special group rates.",
         "ta": "பெரிய குழுக்களுக்கு தனிப்பயன் பேக்கேஜ்கள் கிடைக்கும். சிறப்பு குழு விலைக்கு தொடர்பு கொள்ளுங்கள்.",
         "hi": "बड़े समूहों के लिए कस्टम पैकेज उपलब्ध। विशेष समूह दरों के लिए संपर्क करें।"
-      }
+      },
+      "pricingMode": "confirmed"
     },
     {
       "id": "darjeeling-3n4d-mimbusty",
@@ -148,7 +149,7 @@
       "category": "complete",
       "featured": true,
       "published": true,
-      "image": "/images/packages/darjeeling-3n4d.jpg",
+      "image": "/images/travel/p/darjeeling/tiger-hill.jpg",
       "tagline": {
         "en": "NJP to NJP — tea hills, town sights & Kanchenjunga stay",
         "ta": "NJP முதல் NJP — தேயிலை மலைகள், நகரக் காட்சிகள் & கஞ்சன்ஜங்கா தங்கல்",
@@ -235,7 +236,8 @@
         "en": "Reference pricing from Canaan’s Darjeeling tour programme for a 7-guest group. Ask for your travel dates and group size — rates may vary by season and vehicle.",
         "ta": "7 பேர் குழுவுக்கான Canaan டார்ஜிலிங் திட்ட விலை குறிப்பு. உங்கள் தேதிகள் மற்றும் குழு அளவுக்கு கேளுங்கள் — பருவம் மற்றும் வாகனத்தின்படி மாறலாம்.",
         "hi": "7 अतिथि समूह के लिए Canaan दार्जिलिंग कार्यक्रम की संदर्भ कीमत। अपनी तिथियाँ और समूह आकार पूछें — सीजन और वाहन से बदल सकती है।"
-      }
+      },
+      "pricingMode": "confirmed"
     },
     {
       "id": "darjeeling-3n4d-tabakoshi",
@@ -334,6 +336,399 @@
         "en": "Reference pricing from Canaan’s Darjeeling tour programme for a 7-guest group. Ask for your travel dates and group size — rates may vary by season and vehicle. Bonfire / BBQ and off-itinerary vehicle use are excluded.",
         "ta": "7 பேர் குழுவுக்கான Canaan டார்ஜிலிங் திட்ட விலை குறிப்பு. கேம்ப்ஃபயர் / BBQ மற்றும் திட்டத்திற்கு வெளியே வாகன பயன்பாடு விலக்கப்பட்டுள்ளது.",
         "hi": "7 अतिथि समूह के लिए Canaan दार्जिलिंग कार्यक्रम की संदर्भ कीमत। कैम्पफ़ायर / BBQ और इटिनरेरी से बाहर वाहन उपयोग शामिल नहीं।"
+      },
+      "pricingMode": "confirmed"
+    },
+    {
+      "id": "kodai-3n4d-family",
+      "destinationSlug": "kodaikanal",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 0,
+      "currency": "INR",
+      "category": "family",
+      "featured": true,
+      "published": true,
+      "pricingMode": "enquiry",
+      "image": "/images/travel/p/kodaikanal/pine-forest.jpg",
+      "tagline": {
+        "en": "Family hill holiday — lake, pines & valley vistas",
+        "ta": "குடும்ப மலை விடுமுறை",
+        "hi": "पारिवारिक पहाड़ी छुट्टी"
+      },
+      "highlights": {
+        "en": [
+          "3 nights / 4 days in Kodaikanal",
+          "Lake & valley sightseeing framework",
+          "Family-paced itinerary",
+          "Meal & stay options on enquiry",
+          "Custom stays by budget"
+        ],
+        "ta": [
+          "கொடைக்கானல் 3 இரவு / 4 நாள்",
+          "ஏரி & பள்ளத்தாக்கு சுற்றுலா",
+          "குடும்ப வேகம்",
+          "விசாரணையில் உணவு & தங்கல்",
+          "பட்ஜெட் படி தங்கல்"
+        ],
+        "hi": [
+          "कोडाइकनाल 3 रात / 4 दिन",
+          "झील और घाटी साइटसीइंग",
+          "पारिवारिक गति",
+          "पूछताछ पर भोजन व ठहराव",
+          "बजट के अनुसार ठहराव"
+        ]
+      },
+      "title": {
+        "en": "Kodaikanal Family Scenic Stay",
+        "ta": "கொடைக்கானல் குடும்ப சுற்றுலா",
+        "hi": "कोडाइकनाल पारिवारिक यात्रा"
+      },
+      "blurb": {
+        "en": "A longer Kodai stay shaped around families — pacing, stays, and sightseeing confirmed after you share dates and guest count.",
+        "ta": "குடும்பங்களுக்கான நீண்ட கொடைத் தங்கல் — தேதிகளுக்குப் பிறகு உறுதி.",
+        "hi": "पारिवारिक कोडाई ठहराव — तिथियों के बाद पुष्टि।"
+      },
+      "body": {
+        "en": "This enquiry package outlines a four-day Kodaikanal framework: arrival and lake orientation, classic valley viewpoints, pine forest time, and a flexible final morning. Hotels, vehicle type, and meal plans are confirmed only after your enquiry — we do not publish unverified rates here.",
+        "ta": "நான்கு நாள் கொடைக்கானல் கட்டமைப்பு — விசாரணைக்குப் பிறகு உறுதி.",
+        "hi": "चार दिवसीय कोडाइकनाल ढांचा — पूछताछ के बाद पुष्टि।"
+      }
+    },
+    {
+      "id": "goa-3n4d-beach",
+      "destinationSlug": "goa",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 0,
+      "currency": "INR",
+      "category": "escape",
+      "featured": true,
+      "published": true,
+      "pricingMode": "enquiry",
+      "image": "/images/travel/p/goa/calangute.jpg",
+      "tagline": {
+        "en": "Beach days with heritage options — customise North or South",
+        "ta": "கடற்கரை நாட்கள் — வடக்கு/தெற்கு தனிப்பயன்",
+        "hi": "समुद्र तट दिन — उत्तर/दक्षिण कस्टम"
+      },
+      "highlights": {
+        "en": [
+          "3 nights / 4 days Goa framework",
+          "Beach time + optional fort/heritage",
+          "Family or couple pacing",
+          "Flights/trains on request",
+          "Quote after dates & stay style"
+        ],
+        "ta": [
+          "கோவா 3 இரவு / 4 நாள்",
+          "கடற்கரை + கோட்டை/பாரம்பரியம்",
+          "குடும்பம் அல்லது ஜோடி",
+          "விமானம்/ரயில் கோரிக்கை",
+          "தேதிக்குப் பிறகு மேற்கோள்"
+        ],
+        "hi": [
+          "गोवा 3 रात / 4 दिन",
+          "समुद्र + किला/हेरिटेज",
+          "परिवार या जोड़े",
+          "उड़ान/ट्रेन अनुरोध",
+          "तिथियों के बाद कोट"
+        ]
+      },
+      "title": {
+        "en": "Goa Beach & Leisure Escape",
+        "ta": "கோவா கடற்கரை விடுமுறை",
+        "hi": "गोवा बीच अवकाश"
+      },
+      "blurb": {
+        "en": "Plan a Goa stay around beaches, optional heritage stops, and the pace you want — pricing shared after we confirm dates and accommodation style.",
+        "ta": "கடற்கரை மற்றும் பாரம்பரியத்துடன் கோவா — விலை விசாரணைக்குப் பிறகு.",
+        "hi": "गोवा बीच व हेरिटेज — कीमत पूछताछ के बाद।"
+      },
+      "body": {
+        "en": "An enquiry-led Goa itinerary covering arrival, beach days, and optional fort or market visits. Exact beaches (North vs South), hotel category, and transfers are tailored — never invented as fixed inventory.",
+        "ta": "விசாரணை அடிப்படையிலான கோவா திட்டம்.",
+        "hi": "पूछताछ-आधारित गोवा योजना।"
+      }
+    },
+    {
+      "id": "bali-4n5d-couple",
+      "destinationSlug": "bali",
+      "nights": 4,
+      "days": 5,
+      "priceFrom": 0,
+      "currency": "INR",
+      "category": "honeymoon",
+      "featured": true,
+      "published": true,
+      "pricingMode": "enquiry",
+      "image": "/images/travel/p/bali/tegallalang.jpg",
+      "tagline": {
+        "en": "Ubud culture & coastal evenings — couple-paced Bali",
+        "ta": "உபுட் கலாச்சாரம் & கடற்கரை — ஜோடி பாலி",
+        "hi": "उबुद संस्कृति और समुद्र — कपल बाली"
+      },
+      "highlights": {
+        "en": [
+          "4 nights / 5 days Bali outline",
+          "Ubud culture + beach balance",
+          "Couple / honeymoon friendly",
+          "Visa & flight guidance on request",
+          "Custom quote — no fake rates"
+        ],
+        "ta": [
+          "பாலி 4 இரவு / 5 நாள்",
+          "உபுட் + கடற்கரை",
+          "ஜோடி / தேனிலவு",
+          "விசா & விமான வழிகாட்டல்",
+          "தனிப்பயன் மேற்கோள்"
+        ],
+        "hi": [
+          "बाली 4 रात / 5 दिन",
+          "उबुद + बीच",
+          "जोड़े / हनीमून",
+          "वीज़ा व उड़ान मार्गदर्शन",
+          "कस्टम कोट"
+        ]
+      },
+      "title": {
+        "en": "Bali Couple Culture & Beach",
+        "ta": "பாலி ஜோடி கலாச்சாரம் & கடற்கரை",
+        "hi": "बाली कपल संस्कृति और बीच"
+      },
+      "blurb": {
+        "en": "A five-day Bali outline balancing Ubud-side culture with coastal time. Flights, visas, and stays are planned after your enquiry.",
+        "ta": "ஐந்து நாள் பாலி கட்டமைப்பு — விசாரணைக்குப் பிறகு.",
+        "hi": "पाँच दिवसीय बाली — पूछताछ के बाद।"
+      },
+      "body": {
+        "en": "International trip planning requires verified flight, visa, and hotel quotes. This package describes a credible couple itinerary shape — rice terraces / temple culture near Ubud and beach recovery days — with all commercial details confirmed only after you enquire.",
+        "ta": "சர்வதேச திட்டத்திற்கு சரிபார்க்கப்பட்ட மேற்கோள்கள் தேவை.",
+        "hi": "अंतरराष्ट्रीय योजना के लिए सत्यापित कोट आवश्यक।"
+      }
+    },
+    {
+      "id": "madurai-2n3d-temple",
+      "destinationSlug": "madurai",
+      "nights": 2,
+      "days": 3,
+      "priceFrom": 0,
+      "currency": "INR",
+      "category": "complete",
+      "featured": false,
+      "published": true,
+      "pricingMode": "enquiry",
+      "image": "/images/travel/p/madurai/meenakshi-temple.jpg",
+      "tagline": {
+        "en": "Meenakshi temple heritage with paced city exploration",
+        "ta": "மீனாட்சி கோயில் பாரம்பரியம்",
+        "hi": "मीनाक्षी मंदिर हेरिटेज"
+      },
+      "highlights": {
+        "en": [
+          "2 nights / 3 days Madurai",
+          "Meenakshi Temple visit planning",
+          "Heritage & local food focus",
+          "Optional Rameswaram add-on",
+          "Quote by travel dates"
+        ],
+        "ta": [
+          "மதுரை 2 இரவு / 3 நாள்",
+          "மீனாட்சி கோயில்",
+          "பாரம்பரியம் & உணவு",
+          "ராமேஸ்வரம் விருப்பம்",
+          "தேதிக்கு மேற்கோள்"
+        ],
+        "hi": [
+          "मदुरै 2 रात / 3 दिन",
+          "मीनाक्षी मंदिर",
+          "हेरिटेज व भोजन",
+          "रामेश्वरम विकल्प",
+          "तिथि पर कोट"
+        ]
+      },
+      "title": {
+        "en": "Madurai Temple & Heritage",
+        "ta": "மதுரை கோயில் & பாரம்பரியம்",
+        "hi": "मदुरै मंदिर और हेरिटेज"
+      },
+      "blurb": {
+        "en": "A short Madurai stay centred on Meenakshi Temple etiquette, heritage streets, and local food — with optional temple-circuit extensions on request.",
+        "ta": "மீனாட்சி மைய மதுரை தங்கல் — விருப்ப நீட்டிப்புகள்.",
+        "hi": "मीनाक्षी-केंद्रित मदुरै ठहराव।"
+      },
+      "body": {
+        "en": "Pilgrimage and heritage trips benefit from clear timing around temple hours and dress codes. This enquiry package outlines a respectful three-day Madurai plan; hotels and transport are confirmed after you share dates and preferences.",
+        "ta": "கோயில் நேரங்களுடன் மூன்று நாள் திட்டம்.",
+        "hi": "मंदिर समयों के साथ तीन दिवसीय योजना।"
+      }
+    },
+    {
+      "id": "delhi-agra-3n4d",
+      "destinationSlug": "delhi",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 0,
+      "currency": "INR",
+      "category": "complete",
+      "featured": true,
+      "published": true,
+      "pricingMode": "enquiry",
+      "image": "/images/travel/d/agra-taj-mahal.jpg",
+      "tagline": {
+        "en": "Delhi heritage day + Agra Taj circuit — classic North India",
+        "ta": "டெல்லி பாரம்பரியம் + ஆக்ரா தாஜ்",
+        "hi": "दिल्ली हेरिटेज + आगरा ताज"
+      },
+      "highlights": {
+        "en": [
+          "3 nights / 4 days Delhi–Agra outline",
+          "India Gate / Old Delhi options",
+          "Taj Mahal circuit day",
+          "Train or road between cities",
+          "Custom quote — verified after enquiry"
+        ],
+        "ta": [
+          "டெல்லி–ஆக்ரா 3 இரவு / 4 நாள்",
+          "இந்தியா கேட் / பழைய டெல்லி",
+          "தாஜ் மகால் நாள்",
+          "ரயில் அல்லது சாலை",
+          "விசாரணைக்குப் பிறகு மேற்கோள்"
+        ],
+        "hi": [
+          "दिल्ली–आगरा 3 रात / 4 दिन",
+          "इंडिया गेट / पुरानी दिल्ली",
+          "ताज महल दिन",
+          "ट्रेन या सड़क",
+          "पूछताछ के बाद कोट"
+        ]
+      },
+      "title": {
+        "en": "Delhi Heritage & Agra",
+        "ta": "டெல்லி பாரம்பரியம் & ஆக்ரா",
+        "hi": "दिल्ली हेरिटेज और आगरा"
+      },
+      "blurb": {
+        "en": "Classic North India shape: Delhi city heritage plus a dedicated Agra day for the Taj. Transport mode and hotel category confirmed after enquiry.",
+        "ta": "டெல்லி + ஆக்ரா தாஜ் — விசாரணைக்குப் பிறகு உறுதி.",
+        "hi": "दिल्ली + आगरा ताज — पूछताछ के बाद।"
+      },
+      "body": {
+        "en": "We outline a four-day Delhi and Agra framework without inventing ticket prices or hotel names. Share travel dates, preferred pace, and whether you want train or private transfer — Canaan returns a verified quote.",
+        "ta": "விலைகளை கண்டுபிடிக்காமல் கட்டமைப்பு.",
+        "hi": "कीमतें गढ़े बिना ढांचा।"
+      }
+    },
+    {
+      "id": "ooty-2n3d-escape",
+      "destinationSlug": "ooty",
+      "nights": 2,
+      "days": 3,
+      "priceFrom": 0,
+      "currency": "INR",
+      "category": "escape",
+      "featured": false,
+      "published": true,
+      "pricingMode": "enquiry",
+      "image": "/images/travel/p/ooty/ooty-lake.jpg",
+      "tagline": {
+        "en": "Nilgiri weekend — lake, gardens & misty viewpoints",
+        "ta": "நீலகிரி வார இறுதி",
+        "hi": "नीलगिरी वीकेंड"
+      },
+      "highlights": {
+        "en": [
+          "2 nights / 3 days Ooty",
+          "Lake & botanical garden options",
+          "Viewpoint morning pacing",
+          "Family or couple friendly",
+          "Enquiry-based pricing"
+        ],
+        "ta": [
+          "ஊட்டி 2 இரவு / 3 நாள்",
+          "ஏரி & தோட்டம்",
+          "காட்சி முனை",
+          "குடும்பம்/ஜோடி",
+          "விசாரணை விலை"
+        ],
+        "hi": [
+          "ऊटी 2 रात / 3 दिन",
+          "झील व गार्डन",
+          "व्यू पॉइंट",
+          "परिवार/जोड़े",
+          "पूछताछ मूल्य"
+        ]
+      },
+      "title": {
+        "en": "Ooty Weekend Hill Escape",
+        "ta": "ஊட்டி வார இறுதி மலை விடுமுறை",
+        "hi": "ऊटी वीकेंड पहाड़ी छुट्टी"
+      },
+      "blurb": {
+        "en": "A short Nilgiri break with lake time and classic garden/viewpoint stops — shaped after you share dates and stay preference.",
+        "ta": "குறுகிய நீலகிரி இடைவேளை — தேதிக்குப் பிறகு.",
+        "hi": "छोटा नीलगिरी ब्रेक — तिथियों के बाद।"
+      },
+      "body": {
+        "en": "Ooty weekends fill quickly in peak season. This enquiry package describes a three-day hill outline; we confirm lodging and sightseeing vehicle only after checking your dates.",
+        "ta": "உச்ச காலத்தில் விரைவில் நிரம்பும் — விசாரணை அவசியம்.",
+        "hi": "पीक सीजन में जल्दी भरता है — पूछताछ आवश्यक।"
+      }
+    },
+    {
+      "id": "darjeeling-tea-experience",
+      "destinationSlug": "darjeeling",
+      "nights": 3,
+      "days": 4,
+      "priceFrom": 0,
+      "currency": "INR",
+      "category": "adventure",
+      "featured": false,
+      "published": true,
+      "pricingMode": "enquiry",
+      "image": "/images/travel/p/darjeeling/happy-valley-tea.jpg",
+      "tagline": {
+        "en": "Tea estates, Toy Train options & Himalayan viewpoints",
+        "ta": "தேயிலை தோட்டங்கள் & இமயக் காட்சிகள்",
+        "hi": "चाय बागान और हिमालय दृश्य"
+      },
+      "highlights": {
+        "en": [
+          "Tea estate oriented Darjeeling stay",
+          "Tiger Hill / Mall Road options",
+          "Toy Train segment on request",
+          "NJP transfer planning",
+          "Quote after group size & dates"
+        ],
+        "ta": [
+          "தேயிலை தோட்ட டார்ஜீலிங்",
+          "டைகர் ஹில் / மால் ரோடு",
+          "டாய் ட்ரெய்ன் விருப்பம்",
+          "NJP பரிமாற்றம்",
+          "குழு அளவுக்கு மேற்கோள்"
+        ],
+        "hi": [
+          "चाय बागान दार्जिलिंग",
+          "टाइगर हिल / मॉल रोड",
+          "टॉय ट्रेन विकल्प",
+          "NJP ट्रांसफर",
+          "समूह आकार पर कोट"
+        ]
+      },
+      "title": {
+        "en": "Darjeeling Tea & Himalayan Views",
+        "ta": "டார்ஜீலிங் தேயிலை & இமயக் காட்சிகள்",
+        "hi": "दार्जिलिंग चाय और हिमालय दृश्य"
+      },
+      "blurb": {
+        "en": "An enquiry package for travellers who want tea-country pacing plus classic Darjeeling viewpoints — distinct from our published NJP–NJP tour rates.",
+        "ta": "தேயிலை நாடு வேகம் — வெளியிடப்பட்ட NJP விலையிலிருந்து வேறு.",
+        "hi": "चाय देश गति — प्रकाशित NJP दरों से अलग।"
+      },
+      "body": {
+        "en": "Use this when you want a tea-estate emphasis rather than the fixed published Mimbusty/Tabakoshi programmes. Sightseeing order and stay category are confirmed after enquiry; Toy Train seats depend on IRCTC availability.",
+        "ta": "தேயிலை முக்கியத்துவம் — விசாரணைக்குப் பிறகு உறுதி.",
+        "hi": "चाय जोर — पूछताछ के बाद पुष्टि।"
       }
     }
   ]

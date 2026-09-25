@@ -17,6 +17,11 @@ export type LocalizedBlog = {
   title: string;
   excerpt: string;
   body: string[];
+  seoTitle: string;
+  seoDescription: string;
+  ogImage: string | null;
+  canonicalUrl: string | null;
+  author: string;
 };
 
 function pickLocale(en: string, ta: string, hi: string, locale: string) {
@@ -98,6 +103,21 @@ function localizeBlogRow(
     body: parseBody(
       pickLocale(row.bodyEn, row.bodyTa, row.bodyHi, locale),
     ),
+    seoTitle: pickLocale(
+      row.seoTitleEn,
+      row.seoTitleTa,
+      row.seoTitleHi,
+      locale,
+    ),
+    seoDescription: pickLocale(
+      row.seoDescriptionEn,
+      row.seoDescriptionTa,
+      row.seoDescriptionHi,
+      locale,
+    ),
+    ogImage: row.ogImage,
+    canonicalUrl: row.canonicalUrl,
+    author: pickLocale(row.authorEn, row.authorTa, row.authorHi, locale),
   };
 }
 
@@ -127,7 +147,24 @@ type BlogWithDestination = Prisma.BlogPostGetPayload<{
   include: typeof blogInclude;
 }>;
 
-export const KODAI_BLOG_IMAGE = "/images/marketing/kodai-banner.jpg";
+function publishedWhere(filters?: {
+  destination?: string;
+  continent?: string;
+  place?: string;
+}): Prisma.BlogPostWhereInput {
+  return {
+    status: "published",
+    ...(filters?.destination
+      ? { destination: { slug: filters.destination } }
+      : {}),
+    ...(filters?.continent
+      ? { destination: { continent: filters.continent } }
+      : {}),
+    ...(filters?.place ? { place: { slug: filters.place } } : {}),
+  };
+}
+
+export const KODAI_BLOG_IMAGE = "/images/travel/d/kodaikanal.jpg";
 
 export async function getBlogHeroImage(filters?: {
   destination?: string;
@@ -155,20 +192,18 @@ export async function getLocalizedBlogs(
     place?: string;
     take?: number;
     skip?: number;
+    featured?: boolean;
   },
 ) {
   const rows = await prisma.blogPost.findMany({
     where: {
-      ...(filters?.destination
-        ? { destination: { slug: filters.destination } }
+      ...publishedWhere(filters),
+      ...(typeof filters?.featured === "boolean"
+        ? { featured: filters.featured }
         : {}),
-      ...(filters?.continent
-        ? { destination: { continent: filters.continent } }
-        : {}),
-      ...(filters?.place ? { place: { slug: filters.place } } : {}),
     },
     include: blogInclude,
-    orderBy: [{ date: "desc" }, { titleEn: "asc" }],
+    orderBy: [{ featured: "desc" }, { date: "desc" }, { titleEn: "asc" }],
     ...(typeof filters?.take === "number" ? { take: filters.take } : {}),
     ...(typeof filters?.skip === "number" ? { skip: filters.skip } : {}),
   });
@@ -178,8 +213,8 @@ export async function getLocalizedBlogs(
 }
 
 export async function getLocalizedBlog(slug: string, locale: string) {
-  const row = await prisma.blogPost.findUnique({
-    where: { slug },
+  const row = await prisma.blogPost.findFirst({
+    where: { slug, status: "published" },
     include: blogInclude,
   });
   return localizeBlogRow(row, locale);
@@ -188,6 +223,7 @@ export async function getLocalizedBlog(slug: string, locale: string) {
 /** Prebuild a capped set for SSG; remaining posts render on demand. */
 export async function getAllBlogSlugs(limit = 300) {
   const rows = await prisma.blogPost.findMany({
+    where: { status: "published" },
     select: { slug: true },
     orderBy: [{ date: "desc" }],
     take: limit,
@@ -201,15 +237,7 @@ export async function getBlogCount(filters?: {
   place?: string;
 }) {
   return prisma.blogPost.count({
-    where: {
-      ...(filters?.destination
-        ? { destination: { slug: filters.destination } }
-        : {}),
-      ...(filters?.continent
-        ? { destination: { continent: filters.continent } }
-        : {}),
-      ...(filters?.place ? { place: { slug: filters.place } } : {}),
-    },
+    where: publishedWhere(filters),
   });
 }
 
@@ -217,7 +245,7 @@ export async function getBlogDestinationOptions(locale: string) {
   const rows = await prisma.destination.findMany({
     orderBy: [{ sortOrder: "asc" }, { nameEn: "asc" }],
     include: {
-      _count: { select: { blogs: true } },
+      _count: { select: { blogs: { where: { status: "published" } } } },
     },
   });
   return rows
@@ -234,7 +262,7 @@ export async function getBlogContinentOptions() {
   const rows = await prisma.blogPost.groupBy({
     by: ["destinationId"],
     _count: { _all: true },
-    where: { destinationId: { not: null } },
+    where: { destinationId: { not: null }, status: "published" },
   });
   if (rows.length === 0) return [];
 

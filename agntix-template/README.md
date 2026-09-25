@@ -26,7 +26,22 @@ Open [http://localhost:3000](http://localhost:3000) (redirects to `/en`).
 | `npm run build` | Production build |
 | `npm run start` | Run production server |
 | `npm run lint` | ESLint |
+| `npm run db:sync-packages` | Sync packages.json → Prisma TravelPackage |
+| `npm run db:seed-guides` | Upsert featured editorial guides |
+| `npm run db:translate-guides` | Apply Tamil/Hindi bodies for featured guides |
 
+## Admin CMS
+
+Protected at `/admin` (not locale-prefixed). Set a strong secret locally and on the VPS:
+
+```bash
+# .env (never commit the real value)
+ADMIN_PASSWORD=your-long-random-secret
+```
+
+Then open `/admin/login` to manage destinations, packages, blogs, and media.
+
+On the VPS, put `ADMIN_PASSWORD` in `.env` or `.env.production.local` so deploys do not wipe it. If it is missing, `/admin` login returns unavailable.
 ## Tourism images (unique + fast)
 
 Remote Wikimedia URLs are slow on a VPS. Build the catalogue locally, apply to SQLite, then self-host:

@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { getAllBlogSlugs } from "@/data/blog";
 import { getAllPlaceParams, getDestinationSlugs } from "@/data/destinations";
-import { packageRows } from "@/data/packages";
+import { getPackageRows } from "@/data/packages";
 import { SITE_URL, absoluteUrl, localizedPath } from "@/lib/seo";
 
 const staticPaths = [
@@ -43,10 +43,11 @@ function hreflangAlternates(path: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
-  const [blogSlugs, destinationSlugs, places] = await Promise.all([
+  const [blogSlugs, destinationSlugs, places, packageRows] = await Promise.all([
     getAllBlogSlugs(8000),
     getDestinationSlugs(),
     getAllPlaceParams(),
+    getPackageRows(),
   ]);
 
   for (const locale of routing.locales) {

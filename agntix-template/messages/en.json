@@ -159,13 +159,16 @@
   "packages": {
     "eyebrow": "Featured destinations",
     "title": "Travel packages",
-    "subtitle": "Published packages for Kodaikanal and Darjeeling — clear prices, day-by-day itineraries, and enquiry for custom trips.",
-    "geoSummary": "Canaan Travel Hub publishes verified packages for Kodaikanal (1N/2D from INR 1,799 pp for 6 guests) and Darjeeling (3N/4D from INR 6,550 pp, NJP–NJP). Custom planning available for other destinations.",
+    "subtitle": "Verified packages for Kodaikanal and Darjeeling, plus enquiry-based itineraries for Goa, Bali, Madurai, Delhi–Agra, Ooty, and more.",
+    "geoSummary": "Canaan Travel Hub publishes verified packages for Kodaikanal (1N/2D from INR 1,799 pp for 6 guests) and Darjeeling (3N/4D from INR 6,550 pp, NJP–NJP). Additional destinations use request-a-quote pricing until rates are verified for your dates.",
     "from": "From",
     "perPerson": "per person",
     "days": "{count} Days",
     "nights": "{count} Nights",
     "enquire": "Enquire now",
+    "requestQuote": "Request a quote",
+    "pricing": "Pricing",
+    "exploreDestination": "Explore destination →",
     "viewAll": "View all packages",
     "viewPackage": "View Package",
     "reviews": "{count} reviews",
@@ -177,6 +180,7 @@
     "bestValue": "Best Value",
     "requestTier": "Request this tier",
     "fromNote": "Lowest published rate · 6 PAX Family Unit",
+    "enquireNote": "Pricing confirmed after your enquiry — no catalogue rate published for this itinerary.",
     "durationValue": "{days} days / {nights} night",
     "quickFacts": "Quick facts",
     "duration": "Duration (days / nights)",
@@ -200,7 +204,7 @@
     "packageFaq": "Package FAQ",
     "luxuryEyebrow": "When you are ready",
     "luxuryTitle": "Stay in the story.",
-    "luxuryBody": "Curated packages with transparent pricing — enquire when you are ready."
+    "luxuryBody": "Published rates where verified — request a quote for enquiry itineraries."
   },
   "testimonials": {
     "eyebrow": "Happy travellers",

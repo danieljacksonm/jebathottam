@@ -26,9 +26,9 @@ export async function generateMetadata({
   return pageMetadata({
     locale,
     path: `/blog/${post.slug}`,
-    title: post.title,
-    description: post.excerpt,
-    image: post.image,
+    title: post.seoTitle || post.title,
+    description: post.seoDescription || post.excerpt,
+    image: post.ogImage || post.image,
     imageAlt: post.title,
     type: "article",
     publishedTime: post.date,

@@ -50,6 +50,7 @@ export const SERVICE_IMAGES = {
   consulting: "/images/travel/d/maldives.jpg",
 } as const;
 
+/** Destination photography only — never user flyer/banner assets under /images/packages/. */
 export const PACKAGE_IMAGES: Record<string, string> = {
   "kodai-1n2d": REAL_KODAI.kodaiLakeBoats,
   "kodai-escape": REAL_KODAI.kodaiLakeBoats,
@@ -58,8 +59,15 @@ export const PACKAGE_IMAGES: Record<string, string> = {
   "kodai-luxury": REAL_KODAI.kodaiLakeBoats,
   "kodai-adventure": REAL_KODAI.kodaiLakeBoats,
   "kodai-complete": REAL_KODAI.kodaiLakeBoats,
-  "darjeeling-3n4d-mimbusty": "/images/packages/darjeeling-3n4d.jpg",
+  "kodai-3n4d-family": "/images/travel/p/kodaikanal/pine-forest.jpg",
+  "darjeeling-3n4d-mimbusty": "/images/travel/p/darjeeling/tiger-hill.jpg",
   "darjeeling-3n4d-tabakoshi": "/images/travel/p/darjeeling/mirik-lake.jpg",
+  "darjeeling-tea-experience": "/images/travel/p/darjeeling/happy-valley-tea.jpg",
+  "goa-3n4d-beach": "/images/travel/p/goa/calangute.jpg",
+  "bali-4n5d-couple": "/images/travel/p/bali/tegallalang.jpg",
+  "madurai-2n3d-temple": "/images/travel/p/madurai/meenakshi-temple.jpg",
+  "delhi-agra-3n4d": "/images/travel/d/agra-taj-mahal.jpg",
+  "ooty-2n3d-escape": "/images/travel/p/ooty/ooty-lake.jpg",
 };
 
 /** Deterministic local scene for content rows keyed by slug/id. */

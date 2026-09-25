@@ -127,14 +127,49 @@ export const PACKAGE_IMAGES_REGISTRY: Record<string, ImageAsset> = {
     alt: "Kodaikanal 1 Night / 2 Days package — lake and hills",
     purpose: "hero",
   },
+  "kodai-3n4d-family": {
+    src: "/images/travel/p/kodaikanal/pine-forest.jpg",
+    alt: "Kodaikanal pine forest for family scenic stay package",
+    purpose: "hero",
+  },
   "darjeeling-3n4d-mimbusty": {
-    src: "/images/packages/darjeeling-3n4d.jpg",
-    alt: "Darjeeling 3N/4D Mimbusty stay package",
+    src: "/images/travel/p/darjeeling/tiger-hill.jpg",
+    alt: "Tiger Hill sunrise ridge for Darjeeling Mimbusty package",
     purpose: "hero",
   },
   "darjeeling-3n4d-tabakoshi": {
     src: "/images/travel/p/darjeeling/mirik-lake.jpg",
-    alt: "Darjeeling 3N/4D Tabakoshi stay — Mirik Lake",
+    alt: "Mirik Lake for Darjeeling Tabakoshi package",
+    purpose: "hero",
+  },
+  "darjeeling-tea-experience": {
+    src: "/images/travel/p/darjeeling/happy-valley-tea.jpg",
+    alt: "Happy Valley tea estate for Darjeeling tea experience",
+    purpose: "hero",
+  },
+  "goa-3n4d-beach": {
+    src: "/images/travel/p/goa/calangute.jpg",
+    alt: "Calangute beach for Goa leisure package",
+    purpose: "hero",
+  },
+  "bali-4n5d-couple": {
+    src: "/images/travel/p/bali/tegallalang.jpg",
+    alt: "Tegallalang rice terraces for Bali couple package",
+    purpose: "hero",
+  },
+  "madurai-2n3d-temple": {
+    src: "/images/travel/p/madurai/meenakshi-temple.jpg",
+    alt: "Meenakshi Temple for Madurai heritage package",
+    purpose: "hero",
+  },
+  "delhi-agra-3n4d": {
+    src: "/images/travel/d/agra-taj-mahal.jpg",
+    alt: "Taj Mahal for Delhi and Agra heritage package",
+    purpose: "hero",
+  },
+  "ooty-2n3d-escape": {
+    src: "/images/travel/p/ooty/ooty-lake.jpg",
+    alt: "Ooty Lake for Nilgiri weekend package",
     purpose: "hero",
   },
 };

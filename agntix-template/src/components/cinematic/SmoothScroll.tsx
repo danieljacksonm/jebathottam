@@ -11,8 +11,15 @@ declare global {
   }
 }
 
-/** Enable Lenis only on heavy cinematic routes — not sitewide (protects LCP). */
-const SMOOTH_PATHS = ["/kodaikanal"];
+/** Enable Lenis on cinematic marketing surfaces (not every admin/util page). */
+const SMOOTH_PATHS = [
+  "/",
+  "/kodaikanal",
+  "/packages",
+  "/destinations",
+  "/tours",
+  "/blog",
+];
 
 export function SmoothScroll() {
   const pathname = usePathname();

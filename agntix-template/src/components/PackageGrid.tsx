@@ -5,7 +5,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   formatInr,
+  formatPackagePrice,
   getLocalizedPackages,
+  isEnquiryPriced,
 } from "@/data/packages";
 import { Reveal } from "./Reveal";
 
@@ -96,12 +98,14 @@ export function PackageGrid({
                     <div className="mt-5 flex items-center justify-between gap-3 border-t border-[var(--line)] pt-5">
                       <div>
                         <p className="text-[0.62rem] uppercase tracking-[0.14em] text-mist/60">
-                          {t("from")}
+                          {isEnquiryPriced(pkg) ? t("pricing") : t("from")}
                         </p>
                         <p className="font-display text-2xl text-gold-bright">
-                          {formatInr(pkg.priceFrom)}
+                          {formatPackagePrice(pkg, t("requestQuote"))}
                         </p>
-                        <p className="text-xs text-mist/55">{t("perPerson")}</p>
+                        {!isEnquiryPriced(pkg) ? (
+                          <p className="text-xs text-mist/55">{t("perPerson")}</p>
+                        ) : null}
                       </div>
                       <Link
                         href={`/packages/${pkg.id}`}

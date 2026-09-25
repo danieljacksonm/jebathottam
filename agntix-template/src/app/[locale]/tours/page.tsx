@@ -1,9 +1,10 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
-import { PackageListing } from "@/components/packages/PackageListing";
+import { LuxuryPackages } from "@/components/cinematic/LuxuryPackages";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { SERVICE_IMAGES_REGISTRY } from "@/data/image-registry";
+import { getLocalizedPackagesAsync } from "@/data/packages";
 import { pageMetadata } from "@/lib/seo";
 
 export async function generateMetadata({
@@ -32,6 +33,7 @@ export default async function ToursPage({
   setRequestLocale(locale);
   const t = await getTranslations("toursPage");
   const nav = await getTranslations("nav");
+  const packages = await getLocalizedPackagesAsync(locale);
 
   return (
     <PageAtmosphere>
@@ -50,7 +52,7 @@ export default async function ToursPage({
           { name: nav("tours") },
         ]}
       />
-      <PackageListing hideIntro />
+      <LuxuryPackages hideIntro packages={packages} />
     </PageAtmosphere>
   );
 }

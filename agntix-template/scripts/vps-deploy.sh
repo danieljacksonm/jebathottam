@@ -30,6 +30,15 @@ echo "Seeding catalogue (skips blogs that already exist)…"
 ./node_modules/.bin/prisma db push
 node prisma/seed.mjs
 
+echo "Syncing travel packages + featured editorial guides…"
+npx --yes tsx prisma/sync-packages.ts || true
+node prisma/seed-editorial-guides.mjs || true
+node prisma/translate-editorial-guides.mjs || true
+
+if [[ -f "$APP_DIR/.env" ]] && ! grep -q '^ADMIN_PASSWORD=' "$APP_DIR/.env"; then
+  echo "WARNING: ADMIN_PASSWORD is not set — /admin login will be unavailable until you add it to .env"
+fi
+
 echo "Building standalone server…"
 ./node_modules/.bin/next build --webpack
 

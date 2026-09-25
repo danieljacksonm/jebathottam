@@ -15,7 +15,11 @@
     "images:fill": "node prisma/fill-image-gaps.mjs",
     "images:apply": "node prisma/apply-place-images.mjs",
     "images:download": "node prisma/download-travel-images.mjs --backfill-blogs",
-    "images:all": "npm run images:catalog && npm run images:fill && npm run images:apply && npm run images:download"
+    "images:all": "npm run images:catalog && npm run images:fill && npm run images:apply && npm run images:download",
+    "images:audit": "node scripts/audit-images.mjs",
+    "db:sync-packages": "npx tsx prisma/sync-packages.ts",
+    "db:seed-guides": "node prisma/seed-editorial-guides.mjs",
+    "db:translate-guides": "node prisma/translate-editorial-guides.mjs"
   },
   "prisma": {
     "seed": "node prisma/seed.mjs"

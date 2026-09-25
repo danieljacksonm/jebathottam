@@ -6,16 +6,14 @@ import {
   type LocalizedStringList,
 } from "@/lib/content/types";
 import {
-  packageDetails,
+  packageDetails as staticPackageDetails,
   type PackageDetails,
 } from "@/data/package-details";
+import { prisma } from "@/lib/prisma";
 
-export type PackageId =
-  | "kodai-1n2d"
-  | "darjeeling-3n4d-mimbusty"
-  | "darjeeling-3n4d-tabakoshi";
+export type PackageId = string;
 
-/** Old marketing package IDs — redirect to the verified flyer package. */
+/** Old marketing package IDs — redirect to the verified Kodai package. */
 export const LEGACY_PACKAGE_REDIRECTS: Record<string, PackageId> = {
   "kodai-escape": "kodai-1n2d",
   "kodai-family": "kodai-1n2d",
@@ -35,6 +33,8 @@ export type PackageTierRow = {
   label: LocalizedString;
 };
 
+export type PackagePricingMode = "confirmed" | "enquiry";
+
 export type PackageRow = {
   id: PackageId;
   destinationSlug: string;
@@ -43,9 +43,16 @@ export type PackageRow = {
   priceFrom: number;
   currency: "INR";
   image: string;
-  category: "escape" | "family" | "honeymoon" | "luxury" | "adventure" | "complete";
+  category:
+    | "escape"
+    | "family"
+    | "honeymoon"
+    | "luxury"
+    | "adventure"
+    | "complete";
   featured?: boolean;
   published?: boolean;
+  pricingMode?: PackagePricingMode;
   tagline?: LocalizedString;
   highlights: LocalizedStringList;
   title: LocalizedString;
@@ -54,6 +61,8 @@ export type PackageRow = {
   sharedInclusions?: LocalizedStringList;
   tiers?: PackageTierRow[];
   groupNote?: LocalizedString;
+  /** When present (from Prisma), used instead of static packageDetails. */
+  details?: PackageDetails;
 };
 
 export type LocalizedTier = {
@@ -99,6 +108,7 @@ export type LocalizedPackage = {
   image: string;
   category: PackageRow["category"];
   featured?: boolean;
+  pricingMode: PackagePricingMode;
   tagline?: string;
   highlights: string[];
   title: string;
@@ -110,11 +120,92 @@ export type LocalizedPackage = {
   details: LocalizedPackageDetails;
 };
 
-const table = packagesTable as ContentTable<PackageRow>;
-export const packageRows = table.rows.filter((row) => row.published !== false);
+export function isEnquiryPriced(pkg: {
+  pricingMode?: PackagePricingMode;
+  priceFrom: number;
+}) {
+  return pkg.pricingMode === "enquiry" || pkg.priceFrom <= 0;
+}
 
-export function getPackageRow(id: string) {
-  return packageRows.find((p) => p.id === id);
+const jsonTable = packagesTable as ContentTable<PackageRow>;
+
+function parseJson<T>(raw: string, fallback: T): T {
+  try {
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+function dbToRow(row: {
+  slug: string;
+  destinationSlug: string;
+  nights: number;
+  days: number;
+  priceFrom: number;
+  currency: string;
+  image: string;
+  category: string;
+  featured: boolean;
+  published: boolean;
+  pricingMode: string;
+  titleJson: string;
+  blurbJson: string;
+  bodyJson: string;
+  taglineJson: string;
+  highlightsJson: string;
+  sharedInclusionsJson: string;
+  tiersJson: string;
+  groupNoteJson: string;
+  detailsJson: string;
+}): PackageRow {
+  const emptyLoc = { en: "", ta: "", hi: "" };
+  const emptyList = { en: [] as string[], ta: [] as string[], hi: [] as string[] };
+  return {
+    id: row.slug,
+    destinationSlug: row.destinationSlug,
+    nights: row.nights,
+    days: row.days,
+    priceFrom: row.priceFrom,
+    currency: (row.currency as "INR") || "INR",
+    image: row.image,
+    category: row.category as PackageRow["category"],
+    featured: row.featured,
+    published: row.published,
+    pricingMode: row.pricingMode as PackagePricingMode,
+    title: parseJson(row.titleJson, emptyLoc),
+    blurb: parseJson(row.blurbJson, emptyLoc),
+    body: parseJson(row.bodyJson, emptyLoc),
+    tagline: parseJson(row.taglineJson, emptyLoc),
+    highlights: parseJson(row.highlightsJson, emptyList),
+    sharedInclusions: parseJson(row.sharedInclusionsJson, emptyList),
+    tiers: parseJson(row.tiersJson, []),
+    groupNote: parseJson(row.groupNoteJson, emptyLoc),
+    details: parseJson(row.detailsJson, staticPackageDetails[row.slug]),
+  };
+}
+
+/** JSON fallback (used when DB has no packages yet, and for sync client helpers). */
+export const packageRows: PackageRow[] = jsonTable.rows.filter(
+  (row) => row.published !== false,
+);
+
+export async function getPackageRows(): Promise<PackageRow[]> {
+  try {
+    const rows = await prisma.travelPackage.findMany({
+      where: { published: true },
+      orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+    });
+    if (rows.length > 0) return rows.map(dbToRow);
+  } catch {
+    // Prisma model missing / DB unavailable during early boot
+  }
+  return packageRows;
+}
+
+export async function getPackageRow(id: string) {
+  const rows = await getPackageRows();
+  return rows.find((p) => p.id === id);
 }
 
 function localizeDetails(
@@ -157,7 +248,13 @@ export function localizePackage(
   row: PackageRow,
   locale: string,
 ): LocalizedPackage {
-  const details = packageDetails[row.id];
+  const details =
+    row.details ??
+    staticPackageDetails[row.id] ??
+    null;
+  if (!details) {
+    throw new Error(`Missing package details for ${row.id}`);
+  }
   return {
     id: row.id,
     destinationSlug: row.destinationSlug,
@@ -168,6 +265,8 @@ export function localizePackage(
     image: row.image,
     category: row.category,
     featured: row.featured,
+    pricingMode:
+      row.pricingMode ?? (row.priceFrom > 0 ? "confirmed" : "enquiry"),
     tagline: row.tagline ? pickLocalized(row.tagline, locale) : undefined,
     highlights: pickLocalized(row.highlights, locale),
     title: pickLocalized(row.title, locale),
@@ -192,17 +291,28 @@ export function localizePackage(
   };
 }
 
+/** Sync helper for client components — prefers JSON snapshot. */
 export function getLocalizedPackages(locale: string) {
   return packageRows.map((row) => localizePackage(row, locale));
 }
 
 export function getLocalizedPackage(id: string, locale: string) {
-  const row = getPackageRow(id);
+  const row = packageRows.find((p) => p.id === id);
   if (!row) return undefined;
   return localizePackage(row, locale);
 }
 
-/** Legacy shape used by existing components */
+export async function getLocalizedPackagesAsync(locale: string) {
+  const rows = await getPackageRows();
+  return rows.map((row) => localizePackage(row, locale));
+}
+
+export async function getLocalizedPackageAsync(id: string, locale: string) {
+  const row = await getPackageRow(id);
+  if (!row) return undefined;
+  return localizePackage(row, locale);
+}
+
 export type TravelPackage = {
   id: PackageId;
   destinationSlug: string;
@@ -229,28 +339,22 @@ export const packages: TravelPackage[] = packageRows.map((row) => ({
   highlights: row.highlights.en,
 }));
 
-export function getPackagesForDestination(destinationSlug: string, locale: string) {
+export function getPackagesForDestination(
+  destinationSlug: string,
+  locale: string,
+) {
   return getLocalizedPackages(locale).filter(
     (pkg) => pkg.destinationSlug === destinationSlug,
   );
 }
 
-export const packageCopy: Record<
-  PackageId,
-  {
-    title: LocalizedString;
-    blurb: LocalizedString;
-    body: LocalizedString;
-  }
-> = Object.fromEntries(
-  packageRows.map((row) => [
-    row.id,
-    { title: row.title, blurb: row.blurb, body: row.body },
-  ]),
-) as Record<
-  PackageId,
-  { title: LocalizedString; blurb: LocalizedString; body: LocalizedString }
->;
+export async function getPackagesForDestinationAsync(
+  destinationSlug: string,
+  locale: string,
+) {
+  const list = await getLocalizedPackagesAsync(locale);
+  return list.filter((pkg) => pkg.destinationSlug === destinationSlug);
+}
 
 export function formatInr(amount: number) {
   return new Intl.NumberFormat("en-IN", {
@@ -260,6 +364,39 @@ export function formatInr(amount: number) {
   }).format(amount);
 }
 
+export function formatPackagePrice(
+  pkg: { priceFrom: number; pricingMode?: PackagePricingMode },
+  enquireLabel = "Request a quote",
+) {
+  if (isEnquiryPriced(pkg)) return enquireLabel;
+  return formatInr(pkg.priceFrom);
+}
+
 export function getPackage(id: string) {
   return packages.find((p) => p.id === id);
+}
+
+/** Persist admin edits back to packages.json so client sync helpers stay aligned. */
+export function packageRowToJson(row: PackageRow) {
+  return {
+    id: row.id,
+    destinationSlug: row.destinationSlug,
+    nights: row.nights,
+    days: row.days,
+    priceFrom: row.priceFrom,
+    currency: row.currency,
+    category: row.category,
+    featured: row.featured,
+    published: row.published !== false,
+    pricingMode: row.pricingMode,
+    image: row.image,
+    tagline: row.tagline,
+    highlights: row.highlights,
+    title: row.title,
+    blurb: row.blurb,
+    body: row.body,
+    sharedInclusions: row.sharedInclusions,
+    tiers: row.tiers,
+    groupNote: row.groupNote,
+  };
 }

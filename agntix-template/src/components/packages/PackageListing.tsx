@@ -2,17 +2,31 @@ import Image from "next/image";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import {
-  formatInr,
-  getLocalizedPackages,
+  formatPackagePrice,
+  getLocalizedPackagesAsync,
+  isEnquiryPriced,
   type LocalizedPackage,
 } from "@/data/packages";
 
-const DESTINATION_ORDER = ["kodaikanal", "darjeeling"] as const;
+const DESTINATION_ORDER = [
+  "kodaikanal",
+  "darjeeling",
+  "goa",
+  "ooty",
+  "madurai",
+  "delhi",
+  "bali",
+] as const;
 
 function destinationLabel(slug: string, locale: string, fallback: string) {
   const labels: Record<string, Record<string, string>> = {
     kodaikanal: { en: "Kodaikanal", ta: "கொடைக்கானல்", hi: "कोडाइकनाल" },
     darjeeling: { en: "Darjeeling", ta: "டார்ஜீலிங்", hi: "दार्जिलिंग" },
+    goa: { en: "Goa", ta: "கோவா", hi: "गोवा" },
+    ooty: { en: "Ooty", ta: "ஊட்டி", hi: "ऊटी" },
+    madurai: { en: "Madurai", ta: "மதுரை", hi: "मदुरै" },
+    delhi: { en: "Delhi", ta: "டெல்லி", hi: "दिल्ली" },
+    bali: { en: "Bali", ta: "பாலி", hi: "बाली" },
   };
   return labels[slug]?.[locale] ?? labels[slug]?.en ?? fallback;
 }
@@ -45,7 +59,7 @@ export async function PackageListing({ hideIntro = false }: { hideIntro?: boolea
   const t = await getTranslations("packages");
   const j = await getTranslations("journey");
   const platform = await getTranslations("platform");
-  const list = getLocalizedPackages(locale);
+  const list = await getLocalizedPackagesAsync(locale);
   const groups = groupByDestination(list);
 
   return (
@@ -120,10 +134,10 @@ export async function PackageListing({ hideIntro = false }: { hideIntro?: boolea
                       <div className="mt-6 flex items-end justify-between border-t border-[var(--line)] pt-5">
                         <div>
                           <p className="text-[0.62rem] uppercase tracking-[0.16em] text-mist">
-                            {t("from")}
+                            {isEnquiryPriced(pkg) ? t("pricing") : t("from")}
                           </p>
-                          <p className="font-display text-3xl text-gold-bright">
-                            {formatInr(pkg.priceFrom)}
+                          <p className="font-display text-2xl text-gold-bright md:text-3xl">
+                            {formatPackagePrice(pkg, t("requestQuote"))}
                           </p>
                         </div>
                         <Link

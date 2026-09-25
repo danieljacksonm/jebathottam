@@ -29,6 +29,7 @@ model Destination {
   sortOrder Int      @default(0)
   blogs     BlogPost[]
   places    TouristPlace[]
+  packages  TravelPackage[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -58,31 +59,83 @@ model TouristPlace {
 }
 
 model BlogPost {
-  id            String       @id @default(cuid())
-  slug          String       @unique
-  destinationId String?
-  destination   Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
-  placeId       String?
-  place         TouristPlace? @relation(fields: [placeId], references: [id], onDelete: SetNull)
-  date          String
-  readMinutes   Int
-  image         String
-  tagsEn        String
-  tagsTa        String
-  tagsHi        String
-  titleEn       String
-  titleTa       String
-  titleHi       String
-  excerptEn     String
-  excerptTa     String
-  excerptHi     String
-  bodyEn        String
-  bodyTa        String
-  bodyHi        String
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  destinationId   String?
+  destination     Destination?  @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  placeId         String?
+  place           TouristPlace? @relation(fields: [placeId], references: [id], onDelete: SetNull)
+  status          String        @default("published") // draft | published | archived
+  featured        Boolean       @default(false)
+  publishedAt     DateTime?
+  authorEn        String        @default("Canaan Travel Hub")
+  authorTa        String        @default("கானான் டிராவல் ஹப்")
+  authorHi        String        @default("कानान ट्रैवल हब")
+  seoTitleEn      String        @default("")
+  seoTitleTa      String        @default("")
+  seoTitleHi      String        @default("")
+  seoDescriptionEn String       @default("")
+  seoDescriptionTa String       @default("")
+  seoDescriptionHi String       @default("")
+  ogImage         String?
+  canonicalUrl    String?
+  date            String
+  readMinutes     Int
+  image           String
+  tagsEn          String
+  tagsTa          String
+  tagsHi          String
+  titleEn         String
+  titleTa         String
+  titleHi         String
+  excerptEn       String
+  excerptTa       String
+  excerptHi       String
+  bodyEn          String
+  bodyTa          String
+  bodyHi          String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@index([destinationId])
   @@index([placeId])
   @@index([date])
+  @@index([status])
+  @@index([featured])
+}
+
+model TravelPackage {
+  id               String       @id @default(cuid())
+  slug             String       @unique
+  destinationSlug  String
+  destinationId    String?
+  destination      Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+  nights           Int
+  days             Int
+  priceFrom        Int          @default(0)
+  currency         String       @default("INR")
+  image            String
+  category         String       @default("escape")
+  featured         Boolean      @default(false)
+  published        Boolean      @default(true)
+  pricingMode      String       @default("enquiry") // confirmed | enquiry
+  sortOrder        Int          @default(0)
+  titleJson        String
+  blurbJson        String
+  bodyJson         String
+  taglineJson      String       @default("{}")
+  highlightsJson   String
+  sharedInclusionsJson String   @default("{}")
+  tiersJson        String       @default("[]")
+  groupNoteJson    String       @default("{}")
+  detailsJson      String
+  seoTitleEn       String       @default("")
+  seoDescriptionEn String       @default("")
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@index([destinationSlug])
+  @@index([published])
+  @@index([featured])
+  @@index([sortOrder])
 }

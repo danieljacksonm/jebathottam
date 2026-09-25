@@ -1,5 +1,5 @@
-import type { PackageId } from "@/data/packages";
 import type { LocalizedString, LocalizedStringList } from "@/lib/content/types";
+import { enquiryPackageDetails } from "@/data/package-details-enquiry";
 
 export type DayPart = {
   label: LocalizedString;
@@ -43,7 +43,7 @@ const OWNER_TODO_PAY: LocalizedString = {
   hi: "पैकेज पुष्टि पर भुगतान अनुसूची साझा होती है। असत्यापित खातों में धन न भेजें।",
 };
 
-export const packageDetails: Record<PackageId, PackageDetails> = {
+const publishedPackageDetails: Record<string, PackageDetails> = {
   "kodai-1n2d": {
     suitableFor: {
       en: "Couples, friends, and families (2, 4, or 6 guests — custom for larger groups)",
@@ -748,4 +748,9 @@ export const packageDetails: Record<PackageId, PackageDetails> = {
       },
     ],
   },
+};
+
+export const packageDetails: Record<string, PackageDetails> = {
+  ...publishedPackageDetails,
+  ...enquiryPackageDetails,
 };

@@ -1,0 +1,2408 @@
+{
+  "kodai-1n2d": {
+    "suitableFor": {
+      "en": "Couples, friends, and families (2, 4, or 6 guests — custom for larger groups)",
+      "ta": "ஜோடிகள், நண்பர்கள் மற்றும் குடும்பங்கள் (2, 4 அல்லது 6 — பெரிய குழுக்களுக்கு தனிப்பயன்)",
+      "hi": "जोड़े, मित्र और परिवार (2, 4 या 6 अतिथि — बड़े समूहों के लिए कस्टम)"
+    },
+    "startingLocation": {
+      "en": "Kodaikanal (pickup / meeting point confirmed after enquiry)",
+      "ta": "கொடைக்கானல் (பிக்அப் விசாரணைக்குப் பிறகு உறுதி)",
+      "hi": "कोडाइकनाल (पिकअप पूछताछ के बाद पुष्टि)"
+    },
+    "destination": {
+      "en": "Kodaikanal",
+      "ta": "கொடைக்கானல்",
+      "hi": "कोडाइकनाल"
+    },
+    "hotelCategory": {
+      "en": "As per selected tier — Double Room, Junior Suite, or Family Unit",
+      "ta": "தேர்ந்த அடுக்குப்படி — டபுள் அறை, ஜூனியர் சூட் அல்லது குடும்ப யூனிட்",
+      "hi": "चयनित टियर के अनुसार — डबल रूम, जूनियर स्वीट या फ़ैमिली यूनिट"
+    },
+    "transportSummary": {
+      "en": "Local sightseeing includes Valley Tour (1 day) as listed on the package",
+      "ta": "உள்ளூர் சுற்றுலாவில் Valley Tour (1 நாள்) சேர்க்கப்பட்டுள்ளது",
+      "hi": "स्थानीय साइटसीइंग में Valley Tour (1 दिन) शामिल"
+    },
+    "mealPlan": {
+      "en": "Breakfast (1 day) and Dinner (1 day) included",
+      "ta": "காலை உணவு (1 நாள்) மற்றும் இரவு உணவு (1 நாள்) சேர்க்கப்பட்டுள்ளது",
+      "hi": "नाश्ता (1 दिन) और रात्रि भोजन (1 दिन) शामिल"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Prices are per person as published for each pax tier",
+        "2 PAX: ₹2,999/person · 4 PAX: ₹1,999/person · 6 PAX: ₹1,799/person",
+        "Larger groups: custom quote — contact Canaan for special rates",
+        "Final confirmation may note seasonal or availability adjustments if any"
+      ],
+      "ta": [
+        "விலைகள் ஒவ்வொரு PAX அடுக்கிற்கும் ஒரு நபருக்கு",
+        "2 PAX: ₹2,999 · 4 PAX: ₹1,999 · 6 PAX: ₹1,799",
+        "பெரிய குழுக்கள்: தனிப்பயன் மேற்கோள்",
+        "இறுதி உறுதிப்படுத்தலில் பருவ/கிடைப்பு மாற்றங்கள் இருந்தால் குறிப்பிடப்படும்"
+      ],
+      "hi": [
+        "कीमतें प्रत्येक PAX टियर के लिए प्रति व्यक्ति",
+        "2 PAX: ₹2,999 · 4 PAX: ₹1,999 · 6 PAX: ₹1,799",
+        "बड़े समूह: कस्टम कोटेशन",
+        "अंतिम पुष्टि में सीजन/उपलब्धता बदलाव हो तो लिखा जाएगा"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "1 Night Stay (room type as per selected pax package)",
+        "Breakfast (1 Day)",
+        "Dinner (1 Day)",
+        "Valley Tour (1 Day)",
+        "Complimentary Campfire"
+      ],
+      "ta": [
+        "1 இரவு தங்கல் (PAX பேக்கேஜ் அறை வகை)",
+        "காலை உணவு (1 நாள்)",
+        "இரவு உணவு (1 நாள்)",
+        "Valley Tour (1 நாள்)",
+        "இலவச கேம்ப்ஃபயர்"
+      ],
+      "hi": [
+        "1 रात ठहराव (चयनित PAX पैकेज का कमरा)",
+        "नाश्ता (1 दिन)",
+        "रात्रि भोजन (1 दिन)",
+        "Valley Tour (1 दिन)",
+        "मुफ़्त कैम्पफ़ायर"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Items not listed on this package",
+        "Personal expenses and tips",
+        "Long-distance travel to Kodaikanal (flights/trains available as digital support)"
+      ],
+      "ta": [
+        "இந்த பேக்கேஜில் பட்டியலிடப்படாதவை",
+        "தனிப்பட்ட செலவுகள் மற்றும் டிப்ஸ்",
+        "கொடைக்கானலுக்கு தொலைதூர பயணம் (டிஜிட்டல் ஆதரவாக விமானம்/ரயில்)"
+      ],
+      "hi": [
+        "इस पैकेज में सूचीबद्ध न हुई वस्तुएँ",
+        "व्यक्तिगत खर्च और टिप",
+        "कोडाइकनाल तक लंबी दूरी की यात्रा (डिजिटल सहायता के रूप में उड़ान/ट्रेन)"
+      ]
+    },
+    "accommodationNote": {
+      "en": "Stay type is fixed by tier: Double Room (2 adults), Junior Suite (4 adults), or Family Unit (6 guests). Exact property is confirmed at booking based on availability.",
+      "ta": "தங்கல் வகை அடுக்கால் நிர்ணயம்: டபுள் அறை (2), ஜூனியர் சூட் (4), அல்லது குடும்ப யூனிட் (6). சரியான சொத்து முன்பதிவில் கிடைப்பின்படி உறுதி.",
+      "hi": "ठहराव प्रकार टियर से तय: डबल रूम (2), जूनियर स्वीट (4), या फ़ैमिली यूनिट (6)। सटीक प्रॉपर्टी बुकिंग पर उपलब्धता के अनुसार पुष्टि।"
+    },
+    "transportDetails": {
+      "en": [
+        "Valley Tour (1 day) is included for local sightseeing",
+        "Pickup and meeting points inside Kodaikanal are confirmed after enquiry"
+      ],
+      "ta": [
+        "உள்ளூர் சுற்றுலாவுக்கு Valley Tour (1 நாள்) சேர்க்கப்பட்டுள்ளது",
+        "கொடைக்கானலுக்குள் பிக்அப்/சந்திப்பு விசாரணைக்குப் பிறகு உறுதி"
+      ],
+      "hi": [
+        "स्थानीय साइटसीइंग के लिए Valley Tour (1 दिन) शामिल",
+        "कोडाइकनाल के अंदर पिकअप/मीटिंग पॉइंट पूछताछ के बाद तय"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask Canaan before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared when you confirm the package. Do not transfer funds to unverified accounts.",
+      "ta": "பேக்கேஜ் உறுதிப்படுத்தும்போது பணம் செலுத்தும் அட்டவணை பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "पैकेज पुष्टि पर भुगतान अनुसूची साझा होती है। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrival, stay & valley tour",
+          "ta": "வரவு, தங்கல் & valley tour",
+          "hi": "आगमन, ठहराव और वैली टूर"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Arrival",
+              "ta": "வரவு",
+              "hi": "आगमन"
+            },
+            "detail": {
+              "en": "Check in to your selected room type (Double Room, Junior Suite, or Family Unit).",
+              "ta": "தேர்ந்த அறை வகையில் செக்-இன்.",
+              "hi": "चयनित कमरे में चेक-इन।"
+            }
+          },
+          {
+            "label": {
+              "en": "Day",
+              "ta": "நாள்",
+              "hi": "दिन"
+            },
+            "detail": {
+              "en": "Valley Tour (1 day) for local sightseeing.",
+              "ta": "உள்ளூர் சுற்றுலாவுக்கு Valley Tour (1 நாள்).",
+              "hi": "स्थानीय साइटसीइंग के लिए Valley Tour (1 दिन)।"
+            }
+          },
+          {
+            "label": {
+              "en": "Evening",
+              "ta": "மாலை",
+              "hi": "शाम"
+            },
+            "detail": {
+              "en": "Dinner included. Complimentary campfire.",
+              "ta": "இரவு உணவு சேர்க்கப்பட்டுள்ளது. இலவச கேம்ப்ஃபயர்.",
+              "hi": "रात्रि भोजन शामिल। मुफ़्त कैम्पफ़ायर।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Kodaikanal (1 night stay)",
+          "ta": "கொடைக்கானலில் 1 இரவு தங்கல்",
+          "hi": "कोडाइकनाल में 1 रात ठहराव"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Breakfast & departure",
+          "ta": "காலை உணவு & புறப்பாடு",
+          "hi": "नाश्ता और प्रस्थान"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Morning",
+              "ta": "காலை",
+              "hi": "सुबह"
+            },
+            "detail": {
+              "en": "Breakfast (1 day) included.",
+              "ta": "காலை உணவு (1 நாள்) சேர்க்கப்பட்டுள்ளது.",
+              "hi": "नाश्ता (1 दिन) शामिल।"
+            }
+          },
+          {
+            "label": {
+              "en": "Checkout",
+              "ta": "செக்அவுட்",
+              "hi": "चेकआउट"
+            },
+            "detail": {
+              "en": "Checkout after breakfast. Ask Canaan about longer custom stays or digital flight/hotel help.",
+              "ta": "காலை உணவுக்குப் பிறகு செக்அவுட். நீண்ட தனிப்பயன் தங்கல் அல்லது டிஜிட்டல் விமான/ஹோட்டல் உதவி கேளுங்கள்.",
+              "hi": "नाश्ते के बाद चेकआउट। लंबा कस्टम ठहराव या डिजिटल उड़ान/होटल मदद पूछें।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "What is included in every tier?",
+          "ta": "ஒவ்வொரு அடுக்கிலும் என்ன சேர்க்கப்பட்டுள்ளது?",
+          "hi": "हर टियर में क्या शामिल है?"
+        },
+        "answer": {
+          "en": "1 night stay, breakfast (1 day), dinner (1 day), valley tour (1 day), and a complimentary campfire. Room type changes by pax package.",
+          "ta": "1 இரவு தங்கல், காலை உணவு (1 நாள்), இரவு உணவு (1 நாள்), valley tour (1 நாள்), இலவச கேம்ப்ஃபயர். அறை வகை PAX பேக்கேஜ் அடிப்படையில் மாறும்.",
+          "hi": "1 रात ठहराव, नाश्ता (1 दिन), रात्रि भोजन (1 दिन), वैली टूर (1 दिन) और मुफ़्त कैम्पफ़ायर। कमरा प्रकार PAX पैकेज से बदलता है।"
+        }
+      },
+      {
+        "question": {
+          "en": "Can we book for more than 6 guests?",
+          "ta": "6 பேருக்கு மேல் முன்பதிவு செய்யலாமா?",
+          "hi": "क्या 6 से अधिक अतिथियों के लिए बुक कर सकते हैं?"
+        },
+        "answer": {
+          "en": "Yes. Custom packages are available for larger groups — contact Canaan for special group rates.",
+          "ta": "ஆம். பெரிய குழுக்களுக்கு தனிப்பயன் பேக்கேஜ்கள் — சிறப்பு விலைக்கு Canaan-ஐ தொடர்பு கொள்ளுங்கள்.",
+          "hi": "हाँ। बड़े समूहों के लिए कस्टम पैकेज — विशेष दरों के लिए Canaan से संपर्क करें।"
+        }
+      },
+      {
+        "question": {
+          "en": "Which price applies to my group?",
+          "ta": "எங்கள் குழுவுக்கு எந்த விலை?",
+          "hi": "हमारे समूह पर कौन सी कीमत लागू?"
+        },
+        "answer": {
+          "en": "2 adults in a Double Room: ₹2,999 per person. 4 adults in a Junior Suite: ₹1,999 per person. 6 guests in a Family Unit: ₹1,799 per person.",
+          "ta": "2 பெரியவர்கள் டபுள் அறை: ₹2,999/நபர். 4 பெரியவர்கள் ஜூனியர் சூட்: ₹1,999/நபர். 6 விருந்தினர்கள் குடும்ப யூனிட்: ₹1,799/நபர்.",
+          "hi": "डबल रूम में 2 वयस्क: ₹2,999 प्रति व्यक्ति। जूनियर स्वीट में 4 वयस्क: ₹1,999। फ़ैमिली यूनिट में 6 अतिथि: ₹1,799।"
+        }
+      }
+    ]
+  },
+  "darjeeling-3n4d-mimbusty": {
+    "suitableFor": {
+      "en": "Families and friend groups (reference pricing for 7 guests — ask for your group size)",
+      "ta": "குடும்பங்கள் மற்றும் நண்பர் குழுக்கள் (7 பேர் குறிப்பு விலை — உங்கள் குழு அளவுக்கு கேளுங்கள்)",
+      "hi": "परिवार और मित्र समूह (7 अतिथि संदर्भ कीमत — अपना समूह आकार पूछें)"
+    },
+    "startingLocation": {
+      "en": "NJP (New Jalpaiguri) — pickup and drop",
+      "ta": "NJP (New Jalpaiguri) — பிக்அப் மற்றும் டிராப்",
+      "hi": "NJP (New Jalpaiguri) — पिकअप और ड्रॉप"
+    },
+    "destination": {
+      "en": "Darjeeling",
+      "ta": "டார்ஜிலிங்",
+      "hi": "दार्जिलिंग"
+    },
+    "hotelCategory": {
+      "en": "Homestay / hotel as per night — Dawaipani, Darjeeling town, Mimbusty (Kanchenjunga view)",
+      "ta": "இரவுப்படி ஹோம்ஸ்டே / ஹோட்டல் — Dawaipani, டார்ஜிலிங் நகரம், Mimbusty",
+      "hi": "रात के अनुसार होमस्टे / होटल — Dawaipani, दार्जिलिंग शहर, Mimbusty"
+    },
+    "transportSummary": {
+      "en": "NJP to NJP sightseeing vehicle — Sumo / Bolero / Innova as available",
+      "ta": "NJP to NJP சுற்றுலா வாகனம் — Sumo / Bolero / Innova கிடைக்கும்படி",
+      "hi": "NJP to NJP साइटसीइंग वाहन — Sumo / Bolero / Innova उपलब्धता अनुसार"
+    },
+    "mealPlan": {
+      "en": "Meals as listed each day (arrival day includes lunch, dinner, snacks & breakfast; sightseeing day dinner & breakfast; transfer days as listed)",
+      "ta": "ஒவ்வொரு நாளும் பட்டியலிடப்பட்ட உணவுகள்",
+      "hi": "प्रत्येक दिन सूचीबद्ध भोजन"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "₹6,550 per person reference price from Canaan’s Darjeeling tour programme (7-guest group)",
+        "Vehicle type depends on availability (Sumo / Bolero / Innova)",
+        "Confirm dates, pax count, and stay preferences before paying any advance"
+      ],
+      "ta": [
+        "₹6,550 / நபர் — Canaan டார்ஜிலிங் திட்ட குறிப்பு (7 பேர்)",
+        "வாகன வகை கிடைப்பின்படி",
+        "முன்பணத்திற்கு முன் தேதிகள் மற்றும் பயணிகள் எண்ணிக்கையை உறுதி செய்யுங்கள்"
+      ],
+      "hi": [
+        "₹6,550 प्रति व्यक्ति — Canaan दार्जिलिंग कार्यक्रम संदर्भ (7 अतिथि)",
+        "वाहन प्रकार उपलब्धता अनुसार",
+        "अग्रिम भुगतान से पहले तिथियाँ और यात्री संख्या पुष्टि करें"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "3 nights stay as per itinerary",
+        "Meals listed for each day",
+        "NJP to NJP sightseeing transport",
+        "Dedicated tour vehicle as available"
+      ],
+      "ta": [
+        "திட்டப்படி 3 இரவு தங்கல்",
+        "தினசரி பட்டியலிடப்பட்ட உணவுகள்",
+        "NJP to NJP சுற்றுலா போக்குவரத்து",
+        "கிடைக்கும்படி அர்ப்பணிக்கப்பட்ட வாகனம்"
+      ],
+      "hi": [
+        "इटिनरेरी के अनुसार 3 रात ठहराव",
+        "प्रत्येक दिन सूचीबद्ध भोजन",
+        "NJP to NJP साइटसीइंग परिवहन",
+        "उपलब्ध समर्पित टूर वाहन"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Bonfire and BBQ",
+        "Vehicle use outside the itinerary",
+        "Syndicate parking costs (if any)",
+        "Personal expenses and tips"
+      ],
+      "ta": [
+        "கேம்ப்ஃபயர் மற்றும் BBQ",
+        "திட்டத்திற்கு வெளியே வாகன பயன்பாடு",
+        "Syndicate பார்க்கிங் செலவுகள் (இருந்தால்)",
+        "தனிப்பட்ட செலவுகள் மற்றும் டிப்ஸ்"
+      ],
+      "hi": [
+        "कैम्पफ़ायर और BBQ",
+        "इटिनरेरी से बाहर वाहन उपयोग",
+        "Syndicate पार्किंग लागत (यदि कोई)",
+        "व्यक्तिगत खर्च और टिप"
+      ]
+    },
+    "accommodationNote": {
+      "en": "Night 1 Dawaipani homestay (bonfire / BBQ facilities available as paid extras). Night 2 Darjeeling town hotel. Night 3 Mimbusty Kanchenjunga-view stay.",
+      "ta": "இரவு 1 Dawaipani ஹோம்ஸ்டே. இரவு 2 டார்ஜிலிங் நகர ஹோட்டல். இரவு 3 Mimbusty கஞ்சன்ஜங்கா தங்கல்.",
+      "hi": "रात 1 Dawaipani होमस्टे। रात 2 दार्जिलिंग शहर होटल। रात 3 Mimbusty कंचनजंगा ठहराव।"
+    },
+    "transportDetails": {
+      "en": [
+        "NJP pickup and drop",
+        "Sumo / Bolero / Innova whichever is available"
+      ],
+      "ta": [
+        "NJP பிக்அப் மற்றும் டிராப்",
+        "Sumo / Bolero / Innova கிடைக்கும்படி"
+      ],
+      "hi": [
+        "NJP पिकअप और ड्रॉप",
+        "Sumo / Bolero / Innova उपलब्धता अनुसार"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask Canaan before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared when you confirm the package. Do not transfer funds to unverified accounts.",
+      "ta": "பேக்கேஜ் உறுதிப்படுத்தும்போது பணம் செலுத்தும் அட்டவணை பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "पैकेज पुष्टि पर भुगतान अनुसूची साझा होती है। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "NJP to Dawaipani",
+          "ta": "NJP to Dawaipani",
+          "hi": "NJP से Dawaipani"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Route",
+              "ta": "பாதை",
+              "hi": "मार्ग"
+            },
+            "detail": {
+              "en": "NJP to Dawaipani. Visit Lovers’ viewpoint, Peshok tea garden, Gumbadara viewpoint, Lamhatta pine forest. Reach homestay; leisure evening (bonfire / BBQ facilities available as extras).",
+              "ta": "NJP to Dawaipani — Lovers’ viewpoint, Peshok தேயிலை தோட்டம், Gumbadara, Lamhatta pine forest. ஹோம்ஸ்டே அடைதல்.",
+              "hi": "NJP से Dawaipani — Lovers’ viewpoint, Peshok चाय बागान, Gumbadara, Lamhatta पाइन फ़ॉरेस्ट। होमस्टे पहुँच।"
+            }
+          },
+          {
+            "label": {
+              "en": "Meals",
+              "ta": "உணவு",
+              "hi": "भोजन"
+            },
+            "detail": {
+              "en": "Lunch, dinner, snacks & breakfast included.",
+              "ta": "மதியம், இரவு, சிற்றுண்டி & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              "hi": "दोपहर, रात्रि, स्नैक्स और नाश्ता शामिल।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight at Dawaipani",
+          "ta": "Dawaipani-இல் இரவு தங்கல்",
+          "hi": "Dawaipani में रात्रि ठहराव"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Darjeeling sightseeing",
+          "ta": "டார்ஜிலிங் சுற்றுலா",
+          "hi": "दार्जिलिंग साइटसीइंग"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Sights",
+              "ta": "காட்சிகள்",
+              "hi": "स्थल"
+            },
+            "detail": {
+              "en": "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Mountaineering Institute and Museum, Happy Valley Tea Estate, Japanese Temple, Peace Pagoda, Tibetan Refugee Camp (if open). Mall Road and local market by walk.",
+              "ta": "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Happy Valley Tea Estate, Peace Pagoda, Mall Road.",
+              "hi": "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Happy Valley Tea Estate, Peace Pagoda, Mall Road।"
+            }
+          },
+          {
+            "label": {
+              "en": "Meals",
+              "ta": "உணவு",
+              "hi": "भोजन"
+            },
+            "detail": {
+              "en": "Dinner & breakfast included.",
+              "ta": "இரவு & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              "hi": "रात्रि भोजन और नाश्ता शामिल।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Darjeeling town",
+          "ta": "டார்ஜிலிங் நகரத்தில் இரவு தங்கல்",
+          "hi": "दार्जिलिंग शहर में रात्रि ठहराव"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Darjeeling to Mimbusty",
+          "ta": "டார்ஜிலிங் to Mimbusty",
+          "hi": "दार्जिलिंग से Mimbusty"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Route",
+              "ta": "பாதை",
+              "hi": "मार्ग"
+            },
+            "detail": {
+              "en": "Transfer to Mimbusty (Kanchenjunga view stay). Visit Lepchajagat pine forest and Majhidhura (Mini Pehelgam). Leisure evening (bonfire / BBQ facilities available as extras).",
+              "ta": "Mimbusty (கஞ்சன்ஜங்கா காட்சி) — Lepchajagat pine forest, Majhidhura.",
+              "hi": "Mimbusty (कंचनजंगा व्यू) — Lepchajagat पाइन फ़ॉरेस्ट, Majhidhura।"
+            }
+          },
+          {
+            "label": {
+              "en": "Meals",
+              "ta": "உணவு",
+              "hi": "भोजन"
+            },
+            "detail": {
+              "en": "Lunch, snacks, dinner and breakfast included.",
+              "ta": "மதியம், சிற்றுண்டி, இரவு மற்றும் காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              "hi": "दोपहर, स्नैक्स, रात्रि भोजन और नाश्ता शामिल।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight at Mimbusty",
+          "ta": "Mimbusty-இல் இரவு தங்கல்",
+          "hi": "Mimbusty में रात्रि ठहराव"
+        }
+      },
+      {
+        "day": 4,
+        "title": {
+          "en": "Return to NJP via Mirik",
+          "ta": "Mirik வழியாக NJP திரும்புதல்",
+          "hi": "Mirik से NJP वापसी"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Route",
+              "ta": "பாதை",
+              "hi": "मार्ग"
+            },
+            "detail": {
+              "en": "Simana viewpoint, Nepal border market / Pashupati Fatak, Gopaldhara Tea Estate, Mirik Lake and pine forest. Drop at NJP.",
+              "ta": "Simana viewpoint, நேபாள எல்லை சந்தை, Gopaldhara Tea Estate, Mirik Lake. NJP டிராப்.",
+              "hi": "Simana viewpoint, नेपाल बॉर्डर मार्केट, Gopaldhara Tea Estate, Mirik Lake। NJP ड्रॉप।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "Where does the tour start and end?",
+          "ta": "சுற்றுலா எங்கு தொடங்கி முடியும்?",
+          "hi": "टूर कहाँ शुरू और खत्म होता है?"
+        },
+        "answer": {
+          "en": "NJP (New Jalpaiguri) to NJP — pickup and drop are included in the programme.",
+          "ta": "NJP to NJP — பிக்அப் மற்றும் டிராப் சேர்க்கப்பட்டுள்ளது.",
+          "hi": "NJP to NJP — पिकअप और ड्रॉप शामिल।"
+        }
+      },
+      {
+        "question": {
+          "en": "What is excluded?",
+          "ta": "என்ன விலக்கப்பட்டுள்ளது?",
+          "hi": "क्या शामिल नहीं है?"
+        },
+        "answer": {
+          "en": "Bonfire, BBQ, vehicle use outside the itinerary, and syndicate parking (if any).",
+          "ta": "கேம்ப்ஃபயர், BBQ, திட்டத்திற்கு வெளியே வாகனம், syndicate பார்க்கிங் (இருந்தால்).",
+          "hi": "कैम्पफ़ायर, BBQ, इटिनरेरी से बाहर वाहन, syndicate पार्किंग (यदि कोई)।"
+        }
+      }
+    ]
+  },
+  "darjeeling-3n4d-tabakoshi": {
+    "suitableFor": {
+      "en": "Families and friend groups (reference pricing for 7 guests — ask for your group size)",
+      "ta": "குடும்பங்கள் மற்றும் நண்பர் குழுக்கள் (7 பேர் குறிப்பு விலை)",
+      "hi": "परिवार और मित्र समूह (7 अतिथि संदर्भ कीमत)"
+    },
+    "startingLocation": {
+      "en": "NJP (New Jalpaiguri) — pickup and drop",
+      "ta": "NJP (New Jalpaiguri) — பிக்அப் மற்றும் டிராப்",
+      "hi": "NJP (New Jalpaiguri) — पिकअप और ड्रॉप"
+    },
+    "destination": {
+      "en": "Darjeeling",
+      "ta": "டார்ஜிலிங்",
+      "hi": "दार्जिलिंग"
+    },
+    "hotelCategory": {
+      "en": "Homestay / hotel as per night — Dawaipani, Darjeeling town, Tabakoshi riverside",
+      "ta": "இரவுப்படி ஹோம்ஸ்டே / ஹோட்டல் — Dawaipani, டார்ஜிலிங் நகரம், Tabakoshi நதிக்கரை",
+      "hi": "रात के अनुसार होमस्टे / होटल — Dawaipani, दार्जिलिंग शहर, Tabakoshi रिवरसाइड"
+    },
+    "transportSummary": {
+      "en": "NJP to NJP sightseeing vehicle — Sumo / Bolero / Innova as available",
+      "ta": "NJP to NJP சுற்றுலா வாகனம் — Sumo / Bolero / Innova கிடைக்கும்படி",
+      "hi": "NJP to NJP साइटसीइंग वाहन — Sumo / Bolero / Innova उपलब्धता अनुसार"
+    },
+    "mealPlan": {
+      "en": "Meals as listed each day in the itinerary",
+      "ta": "திட்டத்தில் பட்டியலிடப்பட்ட உணவுகள்",
+      "hi": "इटिनरेरी में सूचीबद्ध भोजन"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "₹6,550 per person reference price from Canaan’s Darjeeling tour programme (7-guest group)",
+        "Vehicle type depends on availability (Sumo / Bolero / Innova)",
+        "Confirm dates, pax count, and stay preferences before paying any advance"
+      ],
+      "ta": [
+        "₹6,550 / நபர் — Canaan டார்ஜிலிங் திட்ட குறிப்பு (7 பேர்)",
+        "வாகன வகை கிடைப்பின்படி",
+        "முன்பணத்திற்கு முன் தேதிகளை உறுதி செய்யுங்கள்"
+      ],
+      "hi": [
+        "₹6,550 प्रति व्यक्ति — Canaan दार्जिलिंग कार्यक्रम संदर्भ (7 अतिथि)",
+        "वाहन प्रकार उपलब्धता अनुसार",
+        "अग्रिम भुगतान से पहले तिथियाँ पुष्टि करें"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "3 nights stay as per itinerary",
+        "Meals listed for each day",
+        "NJP to NJP sightseeing transport",
+        "Dedicated tour vehicle as available"
+      ],
+      "ta": [
+        "திட்டப்படி 3 இரவு தங்கல்",
+        "தினசரி பட்டியலிடப்பட்ட உணவுகள்",
+        "NJP to NJP சுற்றுலா போக்குவரத்து",
+        "கிடைக்கும்படி அர்ப்பணிக்கப்பட்ட வாகனம்"
+      ],
+      "hi": [
+        "इटिनरेरी के अनुसार 3 रात ठहराव",
+        "प्रत्येक दिन सूचीबद्ध भोजन",
+        "NJP to NJP साइटसीइंग परिवहन",
+        "उपलब्ध समर्पित टूर वाहन"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Bonfire and BBQ",
+        "Vehicle use outside the itinerary",
+        "Syndicate parking costs (if any)",
+        "Personal expenses and tips"
+      ],
+      "ta": [
+        "கேம்ப்ஃபயர் மற்றும் BBQ",
+        "திட்டத்திற்கு வெளியே வாகன பயன்பாடு",
+        "Syndicate பார்க்கிங் செலவுகள் (இருந்தால்)",
+        "தனிப்பட்ட செலவுகள் மற்றும் டிப்ஸ்"
+      ],
+      "hi": [
+        "कैम्पफ़ायर और BBQ",
+        "इटिनरेरी से बाहर वाहन उपयोग",
+        "Syndicate पार्किंग लागत (यदि कोई)",
+        "व्यक्तिगत खर्च और टिप"
+      ]
+    },
+    "accommodationNote": {
+      "en": "Night 1 Dawaipani homestay. Night 2 Darjeeling town hotel. Night 3 Tabakoshi mountain riverside stay.",
+      "ta": "இரவு 1 Dawaipani. இரவு 2 டார்ஜிலிங் நகரம். இரவு 3 Tabakoshi நதிக்கரை.",
+      "hi": "रात 1 Dawaipani। रात 2 दार्जिलिंग शहर। रात 3 Tabakoshi रिवरसाइड।"
+    },
+    "transportDetails": {
+      "en": [
+        "NJP pickup and drop",
+        "Sumo / Bolero / Innova whichever is available"
+      ],
+      "ta": [
+        "NJP பிக்அப் மற்றும் டிராப்",
+        "Sumo / Bolero / Innova கிடைக்கும்படி"
+      ],
+      "hi": [
+        "NJP पिकअप और ड्रॉप",
+        "Sumo / Bolero / Innova उपलब्धता अनुसार"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask Canaan before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared when you confirm the package. Do not transfer funds to unverified accounts.",
+      "ta": "பேக்கேஜ் உறுதிப்படுத்தும்போது பணம் செலுத்தும் அட்டவணை பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "पैकेज पुष्टि पर भुगतान अनुसूची साझा होती है। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "NJP to Dawaipani",
+          "ta": "NJP to Dawaipani",
+          "hi": "NJP से Dawaipani"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Route",
+              "ta": "பாதை",
+              "hi": "मार्ग"
+            },
+            "detail": {
+              "en": "NJP to Dawaipani. Visit Lovers’ viewpoint, Peshok tea garden, Gumbadara viewpoint, Lamhatta pine forest. Reach homestay; leisure evening.",
+              "ta": "NJP to Dawaipani — Lovers’ viewpoint, Peshok, Gumbadara, Lamhatta. ஹோம்ஸ்டே அடைதல்.",
+              "hi": "NJP से Dawaipani — Lovers’ viewpoint, Peshok, Gumbadara, Lamhatta। होमस्टे पहुँच।"
+            }
+          },
+          {
+            "label": {
+              "en": "Meals",
+              "ta": "உணவு",
+              "hi": "भोजन"
+            },
+            "detail": {
+              "en": "Lunch, dinner, snacks & breakfast included.",
+              "ta": "மதியம், இரவு, சிற்றுண்டி & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              "hi": "दोपहर, रात्रि, स्नैक्स और नाश्ता शामिल।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight at Dawaipani",
+          "ta": "Dawaipani-இல் இரவு தங்கல்",
+          "hi": "Dawaipani में रात्रि ठहराव"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Darjeeling sightseeing",
+          "ta": "டார்ஜிலிங் சுற்றுலா",
+          "hi": "दार्जिलिंग साइटसीइंग"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Sights",
+              "ta": "காட்சிகள்",
+              "hi": "स्थल"
+            },
+            "detail": {
+              "en": "Batasia Loop, Ghoom Monastery, Himalayan Zoological Park, Mountaineering Institute and Museum, Happy Valley Tea Estate, Japanese Temple, Peace Pagoda, Tibetan Refugee Camp (if open). Mall Road walk.",
+              "ta": "Batasia Loop, Ghoom Monastery, Zoological Park, Happy Valley, Peace Pagoda, Mall Road.",
+              "hi": "Batasia Loop, Ghoom Monastery, Zoological Park, Happy Valley, Peace Pagoda, Mall Road।"
+            }
+          },
+          {
+            "label": {
+              "en": "Meals",
+              "ta": "உணவு",
+              "hi": "भोजन"
+            },
+            "detail": {
+              "en": "Dinner & breakfast included.",
+              "ta": "இரவு & காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              "hi": "रात्रि भोजन और नाश्ता शामिल।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Darjeeling town",
+          "ta": "டார்ஜிலிங் நகரத்தில் இரவு தங்கல்",
+          "hi": "दार्जिलिंग शहर में रात्रि ठहराव"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Darjeeling to Tabakoshi",
+          "ta": "டார்ஜிலிங் to Tabakoshi",
+          "hi": "दार्जिलिंग से Tabakoshi"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Route",
+              "ta": "பாதை",
+              "hi": "मार्ग"
+            },
+            "detail": {
+              "en": "Transfer to Tabakoshi (mountain riverside stay). Visit Lepchajagat pine forest, Simana viewpoint, Nepal border market / Pashupati Fatak. Leisure evening.",
+              "ta": "Tabakoshi நதிக்கரை தங்கல் — Lepchajagat, Simana, நேபாள எல்லை சந்தை.",
+              "hi": "Tabakoshi रिवरसाइड ठहराव — Lepchajagat, Simana, नेपाल बॉर्डर मार्केट।"
+            }
+          },
+          {
+            "label": {
+              "en": "Meals",
+              "ta": "உணவு",
+              "hi": "भोजन"
+            },
+            "detail": {
+              "en": "Lunch, snacks, dinner and breakfast included.",
+              "ta": "மதியம், சிற்றுண்டி, இரவு மற்றும் காலை உணவு சேர்க்கப்பட்டுள்ளது.",
+              "hi": "दोपहर, स्नैक्स, रात्रि भोजन और नाश्ता शामिल।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight at Tabakoshi",
+          "ta": "Tabakoshi-இல் இரவு தங்கல்",
+          "hi": "Tabakoshi में रात्रि ठहराव"
+        }
+      },
+      {
+        "day": 4,
+        "title": {
+          "en": "Return to NJP via Mirik",
+          "ta": "Mirik வழியாக NJP திரும்புதல்",
+          "hi": "Mirik से NJP वापसी"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Route",
+              "ta": "பாதை",
+              "hi": "मार्ग"
+            },
+            "detail": {
+              "en": "Gopaldhara Tea Estate, Mirik Lake and pine forest. Drop at NJP.",
+              "ta": "Gopaldhara Tea Estate, Mirik Lake. NJP டிராப்.",
+              "hi": "Gopaldhara Tea Estate, Mirik Lake। NJP ड्रॉप।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "How is this different from the Mimbusty package?",
+          "ta": "Mimbusty பேக்கேஜிலிருந்து எப்படி வேறுபடும்?",
+          "hi": "यह Mimbusty पैकेज से कैसे अलग है?"
+        },
+        "answer": {
+          "en": "Night 3 is at Tabakoshi riverside instead of Mimbusty Kanchenjunga-view stay. Day 3 also includes Simana viewpoint and the Nepal border market route.",
+          "ta": "3வது இரவு Tabakoshi நதிக்கரையில் — Mimbusty கஞ்சன்ஜங்கா தங்கலுக்குப் பதிலாக. நாள் 3-இல் Simana மற்றும் நேபாள எல்லை சந்தை.",
+          "hi": "रात 3 Tabakoshi रिवरसाइड पर है — Mimbusty कंचनजंगा ठहराव के बजाय। दिन 3 में Simana और नेपाल बॉर्डर मार्केट।"
+        }
+      },
+      {
+        "question": {
+          "en": "What is the starting price?",
+          "ta": "தொடக்க விலை என்ன?",
+          "hi": "शुरुआती कीमत क्या है?"
+        },
+        "answer": {
+          "en": "₹6,550 per person from Canaan’s Darjeeling tour programme (7-guest reference). Ask for your dates and group size.",
+          "ta": "₹6,550 / நபர் (7 பேர் குறிப்பு). உங்கள் தேதிகளுக்கு கேளுங்கள்.",
+          "hi": "₹6,550 प्रति व्यक्ति (7 अतिथि संदर्भ)। अपनी तिथियाँ पूछें।"
+        }
+      }
+    ]
+  },
+  "kodai-3n4d-family": {
+    "suitableFor": {
+      "en": "Families and friend groups wanting a paced 4-day Kodaikanal stay",
+      "ta": "4 நாள் கொடைக்கானல் தங்கலை விரும்பும் குடும்பங்கள்",
+      "hi": "4 दिवसीय कोडाइकनाल ठहराव चाहने वाले परिवार"
+    },
+    "startingLocation": {
+      "en": "Kodai Road / Madurai / Coimbatore (as planned after enquiry)",
+      "ta": "கொடை ரோடு / மதுரை / கோயம்புத்தூர் (விசாரணைக்குப் பிறகு)",
+      "hi": "कोडई रोड / मदुरै / कोयंबटूर (पूछताछ के बाद)"
+    },
+    "destination": {
+      "en": "Kodaikanal",
+      "ta": "கொடைக்கானல்",
+      "hi": "कोडाइकनाल"
+    },
+    "hotelCategory": {
+      "en": "Confirmed after enquiry (budget to premium)",
+      "ta": "விசாரணைக்குப் பிறகு உறுதி (பட்ஜெட் முதல் பிரீமியம்)",
+      "hi": "पूछताछ के बाद पुष्टि (बजट से प्रीमियम)"
+    },
+    "transportSummary": {
+      "en": "Private vehicle options sized to your group — confirmed in quote",
+      "ta": "குழு அளவுக்கு தனியார் வாகனம் — மேற்கோளில் உறுதி",
+      "hi": "समूह के अनुसार निजी वाहन — कोट में पुष्टि"
+    },
+    "mealPlan": {
+      "en": "Meal plan selected after enquiry (often breakfast + dinner)",
+      "ta": "விசாரணைக்குப் பிறகு உணவுத் திட்டம்",
+      "hi": "पूछताछ के बाद भोजन योजना"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Pricing is enquiry-based — not a published catalogue rate",
+        "Quote depends on travel dates, group size, and stay category",
+        "No fake “from” price is shown until Canaan verifies options"
+      ],
+      "ta": [
+        "விலை விசாரணை அடிப்படை — வெளியிடப்பட்ட விலை அல்ல",
+        "தேதிகள், குழு அளவு, தங்கல் வகையைப் பொறுத்தது",
+        "சரிபார்ப்புக்கு முன் போலி விலை காட்டப்படாது"
+      ],
+      "hi": [
+        "मूल्य पूछताछ-आधारित है — प्रकाशित कैटलॉग दर नहीं",
+        "तिथियाँ, समूह आकार और ठहराव श्रेणी पर निर्भर",
+        "सत्यापन से पहले नकली “from” कीमत नहीं दिखती"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "Stay for 3 nights (category confirmed in quote)",
+        "Sightseeing framework for lake, valley, and pine areas",
+        "Trip coordination by Canaan Travel Hub"
+      ],
+      "ta": [
+        "3 இரவு தங்கல் (வகை மேற்கோளில்)",
+        "ஏரி, பள்ளத்தாக்கு, பைன் சுற்றுலா கட்டமைப்பு",
+        "Canaan Travel Hub ஒருங்கிணைப்பு"
+      ],
+      "hi": [
+        "3 रात ठहराव (श्रेणी कोट में)",
+        "झील, घाटी, पाइन साइटसीइंग ढांचा",
+        "Canaan Travel Hub समन्वय"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Airfare / train tickets unless added in quote",
+        "Personal expenses and optional activities",
+        "Anything not listed in your confirmed quote"
+      ],
+      "ta": [
+        "விமானம் / ரயில் (மேற்கோளில் சேர்க்காவிட்டால்)",
+        "தனிப்பட்ட செலவுகள்",
+        "உறுதிப்படுத்திய மேற்கோளில் இல்லாதவை"
+      ],
+      "hi": [
+        "हवाई / ट्रेन (कोट में न जोड़ा हो तो)",
+        "व्यक्तिगत खर्च",
+        "पुष्टि कोट में न हो तो कुछ भी"
+      ]
+    },
+    "accommodationNote": {
+      "en": "We match stay style to your budget after checking availability for your dates — no hotel names are promised until confirmed.",
+      "ta": "தேதிகளுக்கு கிடைக்கும் தன்மைக்குப் பிறகு தங்கல் — உறுதிக்கு முன் ஹோட்டல் பெயர் வாக்குறுதி இல்லை.",
+      "hi": "तिथियों की उपलब्धता के बाद ठहराव — पुष्टि से पहले होटल नाम वादा नहीं।"
+    },
+    "transportDetails": {
+      "en": [
+        "Pickup point confirmed after enquiry",
+        "Local sightseeing vehicle sized to guest count"
+      ],
+      "ta": [
+        "பிக்அப் விசாரணைக்குப் பிறகு",
+        "சுற்றுலா வாகனம் விருந்தினர் எண்ணிக்கைக்கு"
+      ],
+      "hi": [
+        "पिकअप पूछताछ के बाद",
+        "साइटसीइंग वाहन अतिथि संख्या के अनुसार"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared only when you confirm the trip. Do not transfer funds to unverified accounts.",
+      "ta": "பயணம் உறுதிப்படுத்தும்போது மட்டுமே பணம் செலுத்தும் விவரங்கள் பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "यात्रा पुष्टि पर ही भुगतान विवरण साझा होते हैं। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrive & lake orientation",
+          "ta": "வருகை & ஏரி அறிமுகம்",
+          "hi": "आगमन और झील परिचय"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Transfer to Kodaikanal, check-in, gentle lake-side evening.",
+              "ta": "கொடைக்கானல் பரிமாற்றம், செக்-இன், மென்மையான ஏரி மாலை.",
+              "hi": "कोडाइकनाल ट्रांसफर, चेक-इन, हल्की झील शाम।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Kodaikanal",
+          "ta": "கொடைக்கானலில் இரவு",
+          "hi": "कोडाइकनाल में रात्रि"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Valley viewpoints",
+          "ta": "பள்ளத்தாக்கு காட்சிகள்",
+          "hi": "घाटी व्यू पॉइंट"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Classic valley tour stops paced for families (exact list confirmed in quote).",
+              "ta": "குடும்ப வேகத்தில் பள்ளத்தாக்கு சுற்றுலா (பட்டியல் மேற்கோளில்).",
+              "hi": "पारिवारिक गति से घाटी टूर (सूची कोट में)।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Kodaikanal",
+          "ta": "கொடைக்கானலில் இரவு",
+          "hi": "कोडाइकनाल में रात्रि"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Pines & open views",
+          "ta": "பைன் & திறந்த காட்சிகள்",
+          "hi": "पाइन और खुले दृश्य"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Pine forest walks and viewpoint time; optional quieter stops for children.",
+              "ta": "பைன் நடை மற்றும் காட்சி நேரம்; குழந்தைகளுக்கு அமைதியான நிறுத்தங்கள்.",
+              "hi": "पाइन वॉक और व्यू समय; बच्चों के लिए शांत स्टॉप।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Kodaikanal",
+          "ta": "கொடைக்கானலில் இரவு",
+          "hi": "कोडाइकनाल में रात्रि"
+        }
+      },
+      {
+        "day": 4,
+        "title": {
+          "en": "Morning leisure & departure",
+          "ta": "காலை ஓய்வு & புறப்பாடு",
+          "hi": "सुबह फुरसत और प्रस्थान"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Checkout and transfer as planned in your confirmed quote.",
+              "ta": "செக்அவுட் மற்றும் உறுதிப்படுத்திய மேற்கோள் படி பரிமாற்றம்.",
+              "hi": "चेकआउट और पुष्टि कोट के अनुसार ट्रांसफर।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "Why is there no starting price?",
+          "ta": "தொடக்க விலை ஏன் இல்லை?",
+          "hi": "शुरुआती कीमत क्यों नहीं?"
+        },
+        "answer": {
+          "en": "Stay and vehicle rates change by season and group size. Canaan shares a verified quote after your enquiry — we do not invent catalogue prices.",
+          "ta": "பருவம் மற்றும் குழு அளவால் விலை மாறும். விசாரணைக்குப் பிறகு சரிபார்க்கப்பட்ட மேற்கோள்.",
+          "hi": "सीजन और समूह आकार से दरें बदलती हैं। पूछताछ के बाद सत्यापित कोट।"
+        }
+      }
+    ]
+  },
+  "goa-3n4d-beach": {
+    "suitableFor": {
+      "en": "Families and couples wanting a Goa beach-led stay",
+      "ta": "கோவா கடற்கரை தங்கலை விரும்பும் குடும்பங்கள் / ஜோடிகள்",
+      "hi": "गोवा बीच ठहराव चाहने वाले परिवार / जोड़े"
+    },
+    "startingLocation": {
+      "en": "Goa airport / railway (as planned)",
+      "ta": "கோவா விமான நிலையம் / ரயில்",
+      "hi": "गोवा एयरपोर्ट / रेलवे"
+    },
+    "destination": {
+      "en": "Goa",
+      "ta": "கோவா",
+      "hi": "गोवा"
+    },
+    "hotelCategory": {
+      "en": "Beach-area stay category confirmed after enquiry",
+      "ta": "கடற்கரை பகுதி தங்கல் — விசாரணைக்குப் பிறகு",
+      "hi": "बीच-एरिया ठहराव — पूछताछ के बाद"
+    },
+    "transportSummary": {
+      "en": "Airport transfers and local hops optional in quote",
+      "ta": "விமான நிலைய பரிமாற்றம் மற்றும் உள்ளூர் பயணம் விருப்பம்",
+      "hi": "एयरपोर्ट ट्रांसफर और लोकल यात्राएँ वैकल्पिक"
+    },
+    "mealPlan": {
+      "en": "Usually breakfast; other meals as preferred",
+      "ta": "பொதுவாக காலை உணவு; மற்றவை விருப்பம்",
+      "hi": "आमतौर पर नाश्ता; अन्य भोजन पसंद अनुसार"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Pricing is enquiry-based — not a published catalogue rate",
+        "Quote depends on travel dates, group size, and stay category",
+        "No fake “from” price is shown until Canaan verifies options"
+      ],
+      "ta": [
+        "விலை விசாரணை அடிப்படை — வெளியிடப்பட்ட விலை அல்ல",
+        "தேதிகள், குழு அளவு, தங்கல் வகையைப் பொறுத்தது",
+        "சரிபார்ப்புக்கு முன் போலி விலை காட்டப்படாது"
+      ],
+      "hi": [
+        "मूल्य पूछताछ-आधारित है — प्रकाशित कैटलॉग दर नहीं",
+        "तिथियाँ, समूह आकार और ठहराव श्रेणी पर निर्भर",
+        "सत्यापन से पहले नकली “from” कीमत नहीं दिखती"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "3 nights stay framework (area confirmed in quote)",
+        "Suggested beach / leisure pacing",
+        "Optional fort or market stops on request"
+      ],
+      "ta": [
+        "3 இரவு தங்கல் கட்டமைப்பு",
+        "கடற்கரை / ஓய்வு வேகம்",
+        "கோட்டை அல்லது சந்தை விருப்பம்"
+      ],
+      "hi": [
+        "3 रात ठहराव ढांचा",
+        "बीच / फुरसत गति",
+        "किला या बाज़ार विकल्प"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Flights unless added",
+        "Water sports and personal expenses",
+        "Items not in your confirmed quote"
+      ],
+      "ta": [
+        "விமானம் (சேர்க்காவிட்டால்)",
+        "நீர் விளையாட்டுகள்",
+        "மேற்கோளில் இல்லாதவை"
+      ],
+      "hi": [
+        "उड़ानें (न जोड़ी हों तो)",
+        "वाटर स्पोर्ट्स",
+        "कोट में न हो तो"
+      ]
+    },
+    "accommodationNote": {
+      "en": "North vs South Goa stay is chosen with you — we do not force a generic hotel list.",
+      "ta": "வடக்கு / தெற்கு கோவா தங்கல் உங்களுடன் தேர்வு.",
+      "hi": "उत्तर / दक्षिण गोवा ठहराव आपके साथ चुना जाता है।"
+    },
+    "transportDetails": {
+      "en": [
+        "Arrival transfer options",
+        "Day hops as required"
+      ],
+      "ta": [
+        "வருகை பரிமாற்றம்",
+        "நாள் பயணங்கள் தேவைக்கு"
+      ],
+      "hi": [
+        "आगमन ट्रांसफर",
+        "दिन की यात्राएँ आवश्यकतानुसार"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared only when you confirm the trip. Do not transfer funds to unverified accounts.",
+      "ta": "பயணம் உறுதிப்படுத்தும்போது மட்டுமே பணம் செலுத்தும் விவரங்கள் பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "यात्रा पुष्टि पर ही भुगतान विवरण साझा होते हैं। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrive & beach evening",
+          "ta": "வருகை & கடற்கரை மாலை",
+          "hi": "आगमन और बीच शाम"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Check-in near your preferred beach belt; easy first evening.",
+              "ta": "விருப்ப கடற்கரை பகுதியில் செக்-இன்.",
+              "hi": "पसंदीदा बीच बेल्ट में चेक-इन।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Goa",
+          "ta": "கோவாவில் இரவு",
+          "hi": "गोवा में रात्रि"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Beach day + optional heritage",
+          "ta": "கடற்கரை நாள் + பாரம்பரியம்",
+          "hi": "बीच दिन + हेरिटेज"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Morning beach time; optional fort or chapel visit if you want culture balance.",
+              "ta": "காலை கடற்கரை; விருப்ப கோட்டை / தேவாலயம்.",
+              "hi": "सुबह बीच; वैकल्पिक किला / चैपल।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Goa",
+          "ta": "கோவாவில் இரவு",
+          "hi": "गोवा में रात्रि"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Leisure or market stroll",
+          "ta": "ஓய்வு அல்லது சந்தை",
+          "hi": "फुरसत या बाज़ार"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Free pacing — spa, markets, or a quieter beach stretch.",
+              "ta": "சுதந்திர வேகம் — சந்தை அல்லது அமைதியான கடற்கரை.",
+              "hi": "मुक्त गति — बाज़ार या शांत बीच।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Goa",
+          "ta": "கோவாவில் இரவு",
+          "hi": "गोवा में रात्रि"
+        }
+      },
+      {
+        "day": 4,
+        "title": {
+          "en": "Departure",
+          "ta": "புறப்பாடு",
+          "hi": "प्रस्थान"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Checkout and transfer to airport/station as quoted.",
+              "ta": "செக்அவுட் மற்றும் மேற்கோள் படி பரிமாற்றம்.",
+              "hi": "चेकआउट और कोट के अनुसार ट्रांसफर।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "North Goa or South Goa?",
+          "ta": "வடக்கு கோவாவா தெற்கு கோவாவா?",
+          "hi": "उत्तर गोवा या दक्षिण गोवा?"
+        },
+        "answer": {
+          "en": "We help you choose after hearing whether you want busier beach belts or quieter stretches — the package is not locked to one strip.",
+          "ta": "பிஸியான அல்லது அமைதியான கடற்கரை தேர்வுக்கு உதவுகிறோம்.",
+          "hi": "व्यस्त या शांत बीच चुनने में मदद करते हैं।"
+        }
+      }
+    ]
+  },
+  "bali-4n5d-couple": {
+    "suitableFor": {
+      "en": "Couples and honeymoon travellers (first Bali trip friendly)",
+      "ta": "ஜோடிகள் மற்றும் தேனிலவு பயணிகள்",
+      "hi": "जोड़े और हनीमून यात्री"
+    },
+    "startingLocation": {
+      "en": "Denpasar (DPS) — flights planned after enquiry",
+      "ta": "டென்பசர் (DPS) — விமானம் விசாரணைக்குப் பிறகு",
+      "hi": "डेनपासर (DPS) — उड़ान पूछताछ के बाद"
+    },
+    "destination": {
+      "en": "Bali, Indonesia",
+      "ta": "பாலி, இந்தோனேசியா",
+      "hi": "बाली, इंडोनेशिया"
+    },
+    "hotelCategory": {
+      "en": "Ubud + coastal split or single-base — confirmed in quote",
+      "ta": "உபுட் + கடற்கரை பிரிவு அல்லது ஒரே தளம்",
+      "hi": "उबुद + तटीय विभाजन या एक बेस"
+    },
+    "transportSummary": {
+      "en": "Private transfers between areas as quoted",
+      "ta": "பகுதிகளுக்கு இடையே தனியார் பரிமாற்றம்",
+      "hi": "क्षेत्रों के बीच निजी ट्रांसफर"
+    },
+    "mealPlan": {
+      "en": "Breakfast commonly included; dinners as preferred",
+      "ta": "பொதுவாக காலை உணவு; இரவு உணவு விருப்பம்",
+      "hi": "आमतौर पर नाश्ता; रात्रि भोजन पसंद अनुसार"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Pricing is enquiry-based — not a published catalogue rate",
+        "Quote depends on travel dates, group size, and stay category",
+        "No fake “from” price is shown until Canaan verifies options"
+      ],
+      "ta": [
+        "விலை விசாரணை அடிப்படை — வெளியிடப்பட்ட விலை அல்ல",
+        "தேதிகள், குழு அளவு, தங்கல் வகையைப் பொறுத்தது",
+        "சரிபார்ப்புக்கு முன் போலி விலை காட்டப்படாது"
+      ],
+      "hi": [
+        "मूल्य पूछताछ-आधारित है — प्रकाशित कैटलॉग दर नहीं",
+        "तिथियाँ, समूह आकार और ठहराव श्रेणी पर निर्भर",
+        "सत्यापन से पहले नकली “from” कीमत नहीं दिखती"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "4-night stay framework",
+        "Suggested Ubud culture + beach balance",
+        "Visa and flight guidance on request"
+      ],
+      "ta": [
+        "4 இரவு தங்கல்",
+        "உபுட் + கடற்கரை சமநிலை",
+        "விசா & விமான வழிகாட்டல்"
+      ],
+      "hi": [
+        "4 रात ठहराव",
+        "उबुद + बीच संतुलन",
+        "वीज़ा व उड़ान मार्गदर्शन"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "International airfare until added to quote",
+        "Visa fees paid to authorities",
+        "Optional activities (rafting, boat days) unless quoted"
+      ],
+      "ta": [
+        "சர்வதேச விமானம்",
+        "விசா கட்டணம்",
+        "விருப்ப செயல்பாடுகள்"
+      ],
+      "hi": [
+        "अंतरराष्ट्रीय उड़ान",
+        "वीज़ा शुल्क",
+        "वैकल्पिक गतिविधियाँ"
+      ]
+    },
+    "accommodationNote": {
+      "en": "International hotels are quoted only after checking live availability for your dates.",
+      "ta": "உங்கள் தேதிகளுக்கு நேரடி கிடைக்கும் தன்மைக்குப் பிறகு ஹோட்டல் மேற்கோள்.",
+      "hi": "आपकी तिथियों की लाइव उपलब्धता के बाद होटल कोट।"
+    },
+    "transportDetails": {
+      "en": [
+        "Airport arrival transfer options",
+        "Inter-area private car as needed"
+      ],
+      "ta": [
+        "விமான நிலைய பரிமாற்றம்",
+        "பகுதிகளுக்கு இடையே கார்"
+      ],
+      "hi": [
+        "एयरपोर्ट ट्रांसफर",
+        "क्षेत्रों के बीच कार"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared only when you confirm the trip. Do not transfer funds to unverified accounts.",
+      "ta": "பயணம் உறுதிப்படுத்தும்போது மட்டுமே பணம் செலுத்தும் விவரங்கள் பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "यात्रा पुष्टि पर ही भुगतान विवरण साझा होते हैं। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrive & settle",
+          "ta": "வருகை & அமைதல்",
+          "hi": "आगमन और सेटल"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Airport meet (if quoted), transfer to first base, easy evening.",
+              "ta": "விமான நிலைய சந்திப்பு (மேற்கோள் இருந்தால்), முதல் தளம்.",
+              "hi": "एयरपोर्ट मिलन (यदि कोट में), पहला बेस।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Bali",
+          "ta": "பாலியில் இரவு",
+          "hi": "बाली में रात्रि"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Ubud culture day",
+          "ta": "உபுட் கலாச்சார நாள்",
+          "hi": "उबुद संस्कृति दिन"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Rice terrace / temple culture pacing suitable for couples (exact sites in quote).",
+              "ta": "நெல் வயல் / கோயில் கலாச்சாரம் (தளங்கள் மேற்கோளில்).",
+              "hi": "राइस टेरेस / मंदिर संस्कृति (साइट कोट में)।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Bali",
+          "ta": "பாலியில் இரவு",
+          "hi": "बाली में रात्रि"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Coastal transfer & beach time",
+          "ta": "கடற்கரை பரிமாற்றம் & நேரம்",
+          "hi": "तटीय ट्रांसफर और बीच"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Move toward a coastal base if split-stay; otherwise a beach day trip.",
+              "ta": "பிரிவு தங்கல் என்றால் கடற்கரை தளம்; இல்லையெனில் நாள் பயணம்.",
+              "hi": "स्प्लिट स्टे हो तो तटीय बेस; नहीं तो डे ट्रिप।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Bali",
+          "ta": "பாலியில் இரவு",
+          "hi": "बाली में रात्रि"
+        }
+      },
+      {
+        "day": 4,
+        "title": {
+          "en": "Leisure & optional sunset point",
+          "ta": "ஓய்வு & விருப்ப சூரிய அஸ்தமனம்",
+          "hi": "फुरसत और वैकल्पिक सूर्यास्त"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Spa, beach, or a well-known sunset viewpoint if you request it in the quote.",
+              "ta": "ஸ்பா, கடற்கரை அல்லது சூரிய அஸ்தமன காட்சி.",
+              "hi": "स्पॉ, बीच या सूर्यास्त व्यू।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Bali",
+          "ta": "பாலியில் இரவு",
+          "hi": "बाली में रात्रि"
+        }
+      },
+      {
+        "day": 5,
+        "title": {
+          "en": "Departure",
+          "ta": "புறப்பாடு",
+          "hi": "प्रस्थान"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Checkout and airport transfer as confirmed.",
+              "ta": "செக்அவுட் மற்றும் விமான நிலைய பரிமாற்றம்.",
+              "hi": "चेकआउट और एयरपोर्ट ट्रांसफर।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "Do you include flights and visas?",
+          "ta": "விமானம் மற்றும் விசா சேர்க்கப்படுமா?",
+          "hi": "क्या उड़ान और वीज़ा शामिल हैं?"
+        },
+        "answer": {
+          "en": "We can assist with both on request. Official visa fees and airline fares are never invented — they appear only in your verified quote.",
+          "ta": "கோரிக்கையின் பேரில் உதவலாம். அதிகாரப்பூர்வ கட்டணங்கள் மேற்கோளில் மட்டுமே.",
+          "hi": "अनुरोध पर सहायता। आधिकारिक शुल्क केवल कोट में।"
+        }
+      }
+    ]
+  },
+  "madurai-2n3d-temple": {
+    "suitableFor": {
+      "en": "Pilgrims, heritage travellers, and families",
+      "ta": "யாத்திரிகர்கள், பாரம்பரிய பயணிகள், குடும்பங்கள்",
+      "hi": "तीर्थयात्री, हेरिटेज यात्री, परिवार"
+    },
+    "startingLocation": {
+      "en": "Madurai airport / railway",
+      "ta": "மதுரை விமான நிலையம் / ரயில்",
+      "hi": "मदुरै एयरपोर्ट / रेलवे"
+    },
+    "destination": {
+      "en": "Madurai",
+      "ta": "மதுரை",
+      "hi": "मदुरै"
+    },
+    "hotelCategory": {
+      "en": "City stay near temple / central areas — confirmed after enquiry",
+      "ta": "கோயில் / நகர மைய தங்கல் — விசாரணைக்குப் பிறகு",
+      "hi": "मंदिर / सिटी सेंटर ठहराव — पूछताछ के बाद"
+    },
+    "transportSummary": {
+      "en": "Local transfers and optional day trips (e.g. Rameswaram) on request",
+      "ta": "உள்ளூர் பரிமாற்றம்; ராமேஸ்வரம் போன்ற நாள் பயணம் விருப்பம்",
+      "hi": "लोकल ट्रांसफर; रामेश्वरम जैसे डे ट्रिप वैकल्पिक"
+    },
+    "mealPlan": {
+      "en": "Breakfast common; temple-area vegetarian meals easy to arrange",
+      "ta": "காலை உணவு பொதுவானது; கோயில் பகுதி சைவம் எளிது",
+      "hi": "नाश्ता सामान्य; मंदिर क्षेत्र शाकाहारी आसान"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Pricing is enquiry-based — not a published catalogue rate",
+        "Quote depends on travel dates, group size, and stay category",
+        "No fake “from” price is shown until Canaan verifies options"
+      ],
+      "ta": [
+        "விலை விசாரணை அடிப்படை — வெளியிடப்பட்ட விலை அல்ல",
+        "தேதிகள், குழு அளவு, தங்கல் வகையைப் பொறுத்தது",
+        "சரிபார்ப்புக்கு முன் போலி விலை காட்டப்படாது"
+      ],
+      "hi": [
+        "मूल्य पूछताछ-आधारित है — प्रकाशित कैटलॉग दर नहीं",
+        "तिथियाँ, समूह आकार और ठहराव श्रेणी पर निर्भर",
+        "सत्यापन से पहले नकली “from” कीमत नहीं दिखती"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "2 nights Madurai stay framework",
+        "Meenakshi Temple visit planning notes",
+        "Optional heritage stops on request"
+      ],
+      "ta": [
+        "2 இரவு மதுரை",
+        "மீனாட்சி பார்வை திட்டம்",
+        "பாரம்பரிய நிறுத்தங்கள் விருப்பம்"
+      ],
+      "hi": [
+        "2 रात मदुरै",
+        "मीनाक्षी विजिट योजना",
+        "हेरिटेज स्टॉप वैकल्पिक"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Special darshan fees unless quoted",
+        "Personal offerings",
+        "Unquoted day trips"
+      ],
+      "ta": [
+        "சிறப்பு தரிசன கட்டணம்",
+        "தனிப்பட்ட காணிக்கை",
+        "மேற்கோள் இல்லாத நாள் பயணம்"
+      ],
+      "hi": [
+        "विशेष दर्शन शुल्क",
+        "व्यक्तिगत भेंट",
+        "बिना कोट डे ट्रिप"
+      ]
+    },
+    "accommodationNote": {
+      "en": "We prefer stays that make early temple visits practical — exact property confirmed after dates.",
+      "ta": "அதிகாலை கோயில் வருகைக்கு ஏற்ற தங்கல் — தேதிக்குப் பிறகு உறுதி.",
+      "hi": "सुबह मंदिर के लिए व्यावहारिक ठहराव — तिथियों के बाद।"
+    },
+    "transportDetails": {
+      "en": [
+        "Station/airport pickup options",
+        "In-city hops as needed"
+      ],
+      "ta": [
+        "நிலையம்/விமான நிலையம் பிக்அப்",
+        "நகர பயணங்கள்"
+      ],
+      "hi": [
+        "स्टेशन/एयरपोर्ट पिकअप",
+        "शहर यात्राएँ"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared only when you confirm the trip. Do not transfer funds to unverified accounts.",
+      "ta": "பயணம் உறுதிப்படுத்தும்போது மட்டுமே பணம் செலுத்தும் விவரங்கள் பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "यात्रा पुष्टि पर ही भुगतान विवरण साझा होते हैं। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrive & temple evening",
+          "ta": "வருகை & கோயில் மாலை",
+          "hi": "आगमन और मंदिर शाम"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Check-in; Meenakshi Temple visit with dress-code guidance.",
+              "ta": "செக்-இன்; உடை விதிகளுடன் மீனாட்சி பார்வை.",
+              "hi": "चेक-इन; ड्रेस कोड के साथ मीनाक्षी विजिट।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Madurai",
+          "ta": "மதுரையில் இரவு",
+          "hi": "मदुरै में रात्रि"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Heritage morning & local food",
+          "ta": "பாரம்பரிய காலை & உணவு",
+          "hi": "हेरिटेज सुबह और भोजन"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Palace / museum options and Madurai food stops as you prefer.",
+              "ta": "அரண்மனை / அருங்காட்சியகம் மற்றும் உணவு நிறுத்தங்கள்.",
+              "hi": "महल / संग्रहालय और भोजन स्टॉप।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Madurai",
+          "ta": "மதுரையில் இரவு",
+          "hi": "मदुरै में रात्रि"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Optional circuit or departure",
+          "ta": "விருப்ப சுற்று அல்லது புறப்பாடு",
+          "hi": "वैकल्पिक सर्किट या प्रस्थान"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Rameswaram / Kanyakumari add-on if quoted; otherwise departure.",
+              "ta": "ராமேஸ்வரம் / கன்னியாகுமரி விருப்பம்; இல்லையெனில் புறப்பாடு.",
+              "hi": "रामेश्वरम / कन्याकुमारी विकल्प; नहीं तो प्रस्थान।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "Can you add Rameswaram?",
+          "ta": "ராமேஸ்வரத்தை சேர்க்கலாமா?",
+          "hi": "क्या रामेश्वरम जोड़ सकते हैं?"
+        },
+        "answer": {
+          "en": "Yes — as an enquiry add-on with realistic travel time. We will not invent same-day miracles that ignore road distance.",
+          "ta": "ஆம் — நடைமுறை பயண நேரத்துடன் விசாரணை சேர்ப்பு. சாலை தூரத்தைப் புறக்கணித்து ஒரே நாளில் முடிக்க மாட்டோம்.",
+          "hi": "हाँ — वास्तविक यात्रा समय के साथ पूछताछ ऐड-ऑन।"
+        }
+      }
+    ]
+  },
+  "delhi-agra-3n4d": {
+    "suitableFor": {
+      "en": "First-time North India visitors, families, and heritage travellers",
+      "ta": "வட இந்தியா முதல் வருகை, குடும்பங்கள், பாரம்பரிய பயணிகள்",
+      "hi": "उत्तर भारत पहली यात्रा, परिवार, हेरिटेज यात्री"
+    },
+    "startingLocation": {
+      "en": "Delhi (airport / railway) — Agra day by train or road",
+      "ta": "டெல்லி — ஆக்ரா நாள் ரயில் அல்லது சாலை",
+      "hi": "दिल्ली — आगरा दिन ट्रेन या सड़क"
+    },
+    "destination": {
+      "en": "Delhi & Agra",
+      "ta": "டெல்லி & ஆக்ரா",
+      "hi": "दिल्ली और आगरा"
+    },
+    "hotelCategory": {
+      "en": "Delhi nights + optional Agra night — confirmed after enquiry",
+      "ta": "டெல்லி இரவுகள் + விருப்ப ஆக்ரா இரவு",
+      "hi": "दिल्ली रातें + वैकल्पिक आगरा रात"
+    },
+    "transportSummary": {
+      "en": "Intercity train or private car — chosen after enquiry",
+      "ta": "நகரங்களுக்கு இடையே ரயில் அல்லது கார்",
+      "hi": "इंटरसिटी ट्रेन या निजी कार"
+    },
+    "mealPlan": {
+      "en": "Breakfast common; other meals flexible",
+      "ta": "காலை உணவு பொதுவானது",
+      "hi": "नाश्ता सामान्य"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Pricing is enquiry-based — not a published catalogue rate",
+        "Quote depends on travel dates, group size, and stay category",
+        "No fake “from” price is shown until Canaan verifies options"
+      ],
+      "ta": [
+        "விலை விசாரணை அடிப்படை — வெளியிடப்பட்ட விலை அல்ல",
+        "தேதிகள், குழு அளவு, தங்கல் வகையைப் பொறுத்தது",
+        "சரிபார்ப்புக்கு முன் போலி விலை காட்டப்படாது"
+      ],
+      "hi": [
+        "मूल्य पूछताछ-आधारित है — प्रकाशित कैटलॉग दर नहीं",
+        "तिथियाँ, समूह आकार और ठहराव श्रेणी पर निर्भर",
+        "सत्यापन से पहले नकली “from” कीमत नहीं दिखती"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "3-night stay framework across Delhi (and Agra if split)",
+        "Suggested heritage pacing for Old Delhi / New Delhi icons",
+        "Dedicated Agra / Taj circuit day outline"
+      ],
+      "ta": [
+        "3 இரவு தங்கல் கட்டமைப்பு",
+        "டெல்லி பாரம்பரிய வேகம்",
+        "ஆக்ரா / தாஜ் நாள்"
+      ],
+      "hi": [
+        "3 रात ठहराव ढांचा",
+        "दिल्ली हेरिटेज गति",
+        "आगरा / ताज दिन"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Monument entry tickets unless quoted",
+        "Flights into Delhi unless added",
+        "Guide fees unless included in quote"
+      ],
+      "ta": [
+        "நினைவுச்சின்ன நுழைவு",
+        "டெல்லி விமானம்",
+        "வழிகாட்டி கட்டணம்"
+      ],
+      "hi": [
+        "स्मारक प्रवेश",
+        "दिल्ली उड़ान",
+        "गाइड शुल्क"
+      ]
+    },
+    "accommodationNote": {
+      "en": "Hotel areas are chosen for early Taj timing if you overnight in Agra — never promised until quoted.",
+      "ta": "ஆக்ரா இரவு இருந்தால் தாஜ் நேரத்திற்கு ஏற்ற பகுதி — மேற்கோளுக்குப் பிறகு.",
+      "hi": "आगरा रात हो तो ताज टाइमिंग के लिए एरिया — कोट के बाद।"
+    },
+    "transportDetails": {
+      "en": [
+        "Delhi local hops",
+        "Delhi–Agra train or car as quoted"
+      ],
+      "ta": [
+        "டெல்லி உள்ளூர்",
+        "டெல்லி–ஆக்ரா ரயில்/கார்"
+      ],
+      "hi": [
+        "दिल्ली लोकल",
+        "दिल्ली–आगरा ट्रेन/कार"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared only when you confirm the trip. Do not transfer funds to unverified accounts.",
+      "ta": "பயணம் உறுதிப்படுத்தும்போது மட்டுமே பணம் செலுத்தும் விவரங்கள் பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "यात्रा पुष्टि पर ही भुगतान विवरण साझा होते हैं। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrive Delhi",
+          "ta": "டெல்லி வருகை",
+          "hi": "दिल्ली आगमन"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Check-in; light orientation (India Gate / local food as energy allows).",
+              "ta": "செக்-இன்; இலகுவான அறிமுகம்.",
+              "hi": "चेक-इन; हल्का ओरिएंटेशन।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Delhi",
+          "ta": "டெல்லியில் இரவு",
+          "hi": "दिल्ली में रात्रि"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Delhi heritage day",
+          "ta": "டெல்லி பாரம்பரிய நாள்",
+          "hi": "दिल्ली हेरिटेज दिन"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Old Delhi / major monuments pacing — exact list in your quote.",
+              "ta": "பழைய டெல்லி / முக்கிய நினைவுச்சின்னங்கள்.",
+              "hi": "पुरानी दिल्ली / प्रमुख स्मारक।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Delhi",
+          "ta": "டெல்லியில் இரவு",
+          "hi": "दिल्ली में रात्रि"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Agra & Taj circuit",
+          "ta": "ஆக்ரா & தாஜ் சுற்று",
+          "hi": "आगरा और ताज सर्किट"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Early Taj visit window; Agra Fort optional; return to Delhi or overnight Agra if quoted.",
+              "ta": "அதிகாலை தாஜ்; ஆக்ரா கோட்டை விருப்பம்.",
+              "hi": "सुबह ताज; आगरा किला वैकल्पिक।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Delhi or Agra (as quoted)",
+          "ta": "டெல்லி அல்லது ஆக்ரா (மேற்கோள் படி)",
+          "hi": "दिल्ली या आगरा (कोट के अनुसार)"
+        }
+      },
+      {
+        "day": 4,
+        "title": {
+          "en": "Buffer morning & departure",
+          "ta": "காலை இடையகம் & புறப்பாடு",
+          "hi": "सुबह बफर और प्रस्थान"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Checkout and airport/station transfer.",
+              "ta": "செக்அவுட் மற்றும் பரிமாற்றம்.",
+              "hi": "चेकआउट और ट्रांसफर।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "Will you include Jaipur (Golden Triangle)?",
+          "ta": "ஜெய்ப்பூர் (கோல்டன் டிரையாங்கிள்) சேர்க்கப்படுமா?",
+          "hi": "क्या जयपुर (गोल्डन ट्रायंगल) शामिल होगा?"
+        },
+        "answer": {
+          "en": "Yes as a separate enquiry extension — a proper Jaipur day needs realistic time, so we will not squeeze it into this 4-day outline without lengthening the trip.",
+          "ta": "தனியான நீட்டிப்பாக ஆம் — நேரத்தை புறக்கணித்து பிசைய மாட்டோம்.",
+          "hi": "अलग एक्सटेंशन के रूप में हाँ — समय अनदेखा कर नहीं ठूंसेंगे।"
+        }
+      }
+    ]
+  },
+  "ooty-2n3d-escape": {
+    "suitableFor": {
+      "en": "Weekenders, families, and couples",
+      "ta": "வார இறுதி பயணிகள், குடும்பங்கள், ஜோடிகள்",
+      "hi": "वीकेंड यात्री, परिवार, जोड़े"
+    },
+    "startingLocation": {
+      "en": "Coimbatore / Ooty local — confirmed after enquiry",
+      "ta": "கோயம்புத்தூர் / ஊட்டி — விசாரணைக்குப் பிறகு",
+      "hi": "कोयंबटूर / ऊटी — पूछताछ के बाद"
+    },
+    "destination": {
+      "en": "Ooty (Udhagamandalam)",
+      "ta": "ஊட்டி",
+      "hi": "ऊटी"
+    },
+    "hotelCategory": {
+      "en": "Hill-station stay category confirmed after enquiry",
+      "ta": "மலை விடுதி வகை — விசாரணைக்குப் பிறகு",
+      "hi": "हिल-स्टेशन ठहराव — पूछताछ के बाद"
+    },
+    "transportSummary": {
+      "en": "Private vehicle for sightseeing as quoted",
+      "ta": "சுற்றுலாவுக்கு தனியார் வாகனம்",
+      "hi": "साइटसीइंग के लिए निजी वाहन"
+    },
+    "mealPlan": {
+      "en": "Breakfast common; dinner optional in quote",
+      "ta": "காலை உணவு பொதுவானது",
+      "hi": "नाश्ता सामान्य"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Pricing is enquiry-based — not a published catalogue rate",
+        "Quote depends on travel dates, group size, and stay category",
+        "No fake “from” price is shown until Canaan verifies options"
+      ],
+      "ta": [
+        "விலை விசாரணை அடிப்படை — வெளியிடப்பட்ட விலை அல்ல",
+        "தேதிகள், குழு அளவு, தங்கல் வகையைப் பொறுத்தது",
+        "சரிபார்ப்புக்கு முன் போலி விலை காட்டப்படாது"
+      ],
+      "hi": [
+        "मूल्य पूछताछ-आधारित है — प्रकाशित कैटलॉग दर नहीं",
+        "तिथियाँ, समूह आकार और ठहराव श्रेणी पर निर्भर",
+        "सत्यापन से पहले नकली “from” कीमत नहीं दिखती"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "2 nights Ooty stay framework",
+        "Lake / garden / viewpoint pacing suggestions",
+        "Trip coordination by Canaan"
+      ],
+      "ta": [
+        "2 இரவு ஊட்டி",
+        "ஏரி / தோட்டம் / காட்சி வேகம்",
+        "Canaan ஒருங்கிணைப்பு"
+      ],
+      "hi": [
+        "2 रात ऊटी",
+        "झील / गार्डन / व्यू गति",
+        "Canaan समन्वय"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Toy train tickets unless quoted",
+        "Personal shopping",
+        "Unquoted activities"
+      ],
+      "ta": [
+        "டாய் ட்ரெய்ன் (மேற்கோள் இல்லையெனில்)",
+        "ஷாப்பிங்",
+        "மேற்கோள் இல்லாதவை"
+      ],
+      "hi": [
+        "टॉय ट्रेन (बिना कोट)",
+        "शॉपिंग",
+        "बिना कोट गतिविधियाँ"
+      ]
+    },
+    "accommodationNote": {
+      "en": "Peak-season Ooty fills fast — we only confirm properties after checking your dates.",
+      "ta": "உச்ச காலத்தில் விரைவில் நிரம்பும் — தேதிக்குப் பிறகு உறுதி.",
+      "hi": "पीक सीजन में जल्दी भरता है — तिथियों के बाद पुष्टि।"
+    },
+    "transportDetails": {
+      "en": [
+        "Arrival transfer options",
+        "Local sightseeing vehicle"
+      ],
+      "ta": [
+        "வருகை பரிமாற்றம்",
+        "சுற்றுலா வாகனம்"
+      ],
+      "hi": [
+        "आगमन ट्रांसफर",
+        "साइटसीइंग वाहन"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared only when you confirm the trip. Do not transfer funds to unverified accounts.",
+      "ta": "பயணம் உறுதிப்படுத்தும்போது மட்டுமே பணம் செலுத்தும் விவரங்கள் பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "यात्रा पुष्टि पर ही भुगतान विवरण साझा होते हैं। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrive & lake evening",
+          "ta": "வருகை & ஏரி மாலை",
+          "hi": "आगमन और झील शाम"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Check-in; Ooty Lake / local stroll as energy allows.",
+              "ta": "செக்-இன்; ஊட்டி ஏரி நடை.",
+              "hi": "चेक-इन; ऊटी लेक वॉक।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Ooty",
+          "ta": "ஊட்டியில் இரவு",
+          "hi": "ऊटी में रात्रि"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Gardens & viewpoints",
+          "ta": "தோட்டங்கள் & காட்சிகள்",
+          "hi": "गार्डन और व्यू पॉइंट"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Botanical garden options and misty viewpoints — exact list in quote.",
+              "ta": "தாவரவியல் பூங்கா மற்றும் காட்சி முனைகள்.",
+              "hi": "बॉटनिकल गार्डन और व्यू पॉइंट।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Ooty",
+          "ta": "ஊட்டியில் இரவு",
+          "hi": "ऊटी में रात्रि"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Departure",
+          "ta": "புறப்பாடு",
+          "hi": "प्रस्थान"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Morning leisure and transfer as planned.",
+              "ta": "காலை ஓய்வு மற்றும் பரிமாற்றம்.",
+              "hi": "सुबह फुरसत और ट्रांसफर।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "Is the Nilgiri Mountain Railway included?",
+          "ta": "நீலகிரி மலை ரயில் சேர்க்கப்படுமா?",
+          "hi": "क्या नीलगिरी माउंटेन रेलवे शामिल है?"
+        },
+        "answer": {
+          "en": "Only if seats are available and you ask us to include them in the quote. We never invent confirmed train berths.",
+          "ta": "இருக்கை கிடைத்து மேற்கோளில் சேர்த்தால் மட்டும்.",
+          "hi": "सीट उपलब्ध हो और कोट में जोड़ने को कहें तभी।"
+        }
+      }
+    ]
+  },
+  "darjeeling-tea-experience": {
+    "suitableFor": {
+      "en": "Tea lovers and travellers who want a softer Darjeeling pace",
+      "ta": "தேயிலை ஆர்வலர்கள் மற்றும் மென்மையான டார்ஜீலிங் வேகம்",
+      "hi": "चाय प्रेमी और नरम दार्जिलिंग गति चाहने वाले"
+    },
+    "startingLocation": {
+      "en": "NJP / Bagdogra — transfers planned after enquiry",
+      "ta": "NJP / பாக்டோக்ரா — விசாரணைக்குப் பிறகு",
+      "hi": "NJP / बागडोगरा — पूछताछ के बाद"
+    },
+    "destination": {
+      "en": "Darjeeling",
+      "ta": "டார்ஜீலிங்",
+      "hi": "दार्जिलिंग"
+    },
+    "hotelCategory": {
+      "en": "Tea-country or town stay — confirmed after enquiry",
+      "ta": "தேயிலை நாடு அல்லது நகர தங்கல்",
+      "hi": "चाय देश या टाउन ठहराव"
+    },
+    "transportSummary": {
+      "en": "NJP transfers + local sightseeing vehicle as quoted",
+      "ta": "NJP பரிமாற்றம் + சுற்றுலா வாகனம்",
+      "hi": "NJP ट्रांसफर + साइटसीइंग वाहन"
+    },
+    "mealPlan": {
+      "en": "Breakfast common; other meals as preferred",
+      "ta": "காலை உணவு பொதுவானது",
+      "hi": "नाश्ता सामान्य"
+    },
+    "pricingAssumptions": {
+      "en": [
+        "Pricing is enquiry-based — not a published catalogue rate",
+        "Quote depends on travel dates, group size, and stay category",
+        "No fake “from” price is shown until Canaan verifies options"
+      ],
+      "ta": [
+        "விலை விசாரணை அடிப்படை — வெளியிடப்பட்ட விலை அல்ல",
+        "தேதிகள், குழு அளவு, தங்கல் வகையைப் பொறுத்தது",
+        "சரிபார்ப்புக்கு முன் போலி விலை காட்டப்படாது"
+      ],
+      "hi": [
+        "मूल्य पूछताछ-आधारित है — प्रकाशित कैटलॉग दर नहीं",
+        "तिथियाँ, समूह आकार और ठहराव श्रेणी पर निर्भर",
+        "सत्यापन से पहले नकली “from” कीमत नहीं दिखती"
+      ]
+    },
+    "inclusions": {
+      "en": [
+        "3-night Darjeeling framework with tea-estate emphasis",
+        "Tiger Hill / Mall Road options",
+        "Toy Train segment only if IRCTC seats can be secured"
+      ],
+      "ta": [
+        "தேயிலை முக்கியத்துவம் கொண்ட 3 இரவு",
+        "டைகர் ஹில் / மால் ரோடு",
+        "IRCTC இருக்கை இருந்தால் டாய் ட்ரெய்ன்"
+      ],
+      "hi": [
+        "चाय जोर के साथ 3 रात",
+        "टाइगर हिल / मॉल रोड",
+        "IRCTC सीट हो तो टॉय ट्रेन"
+      ]
+    },
+    "exclusions": {
+      "en": [
+        "Published Mimbusty/Tabakoshi fixed rates (separate packages)",
+        "Unconfirmed Toy Train seats",
+        "Personal shopping"
+      ],
+      "ta": [
+        "வெளியிடப்பட்ட Mimbusty/Tabakoshi விலைகள்",
+        "உறுதியற்ற டாய் ட்ரெய்ன்",
+        "ஷாப்பிங்"
+      ],
+      "hi": [
+        "प्रकाशित Mimbusty/Tabakoshi दरें",
+        "अपुष्ट टॉय ट्रेन",
+        "शॉपिंग"
+      ]
+    },
+    "accommodationNote": {
+      "en": "Distinct from our published NJP–NJP tour hotels — stay style is chosen after your enquiry.",
+      "ta": "வெளியிடப்பட்ட NJP–NJP ஹோட்டல்களிலிருந்து வேறு — விசாரணைக்குப் பிறகு.",
+      "hi": "प्रकाशित NJP–NJP होटलों से अलग — पूछताछ के बाद।"
+    },
+    "transportDetails": {
+      "en": [
+        "NJP/Bagdogra pickup options",
+        "Local Sumo/Innova class as available"
+      ],
+      "ta": [
+        "NJP/Bagdogra பிக்அப்",
+        "Sumo/Innova வகுப்பு கிடைக்கும்போது"
+      ],
+      "hi": [
+        "NJP/Bagdogra पिकअप",
+        "Sumo/Innova क्लास उपलब्धता पर"
+      ]
+    },
+    "cancellationPolicy": {
+      "en": "Cancellation and refunds follow supplier rules and Canaan’s published Cancellation & Refund Policy. Ask before you pay any advance — see /cancellation.",
+      "ta": "ரத்து மற்றும் பணத்திரும்பல் சப்ளையர் விதிகள் மற்றும் Canaan Cancellation & Refund Policy-ஐப் பின்பற்றும். முன்பணத்திற்கு முன் கேளுங்கள் — /cancellation.",
+      "hi": "रद्दीकरण और रिफंड सप्लायर नियमों और Canaan की Cancellation & Refund Policy के अनुसार होते हैं। अग्रिम भुगतान से पहले पूछें — /cancellation।"
+    },
+    "paymentTerms": {
+      "en": "Payment schedule and accepted methods are shared only when you confirm the trip. Do not transfer funds to unverified accounts.",
+      "ta": "பயணம் உறுதிப்படுத்தும்போது மட்டுமே பணம் செலுத்தும் விவரங்கள் பகிரப்படும். சரிபார்க்கப்படாத கணக்குகளுக்கு பணம் அனுப்பாதீர்கள்.",
+      "hi": "यात्रा पुष्टि पर ही भुगतान विवरण साझा होते हैं। असत्यापित खातों में धन न भेजें।"
+    },
+    "itinerary": [
+      {
+        "day": 1,
+        "title": {
+          "en": "Arrive & settle in Darjeeling",
+          "ta": "வருகை & டார்ஜீலிங் அமைதல்",
+          "hi": "आगमन और दार्जिलिंग सेटल"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Transfer from NJP/Bagdogra; Mall Road evening if timing allows.",
+              "ta": "NJP/Bagdogra பரிமாற்றம்; நேரம் இருந்தால் மால் ரோடு.",
+              "hi": "NJP/Bagdogra ट्रांसफर; समय हो तो मॉल रोड।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Darjeeling area",
+          "ta": "டார்ஜீலிங் பகுதியில் இரவு",
+          "hi": "दार्जिलिंग क्षेत्र में रात्रि"
+        }
+      },
+      {
+        "day": 2,
+        "title": {
+          "en": "Tiger Hill & town sights",
+          "ta": "டைகர் ஹில் & நகர காட்சிகள்",
+          "hi": "टाइगर हिल और टाउन साइट्स"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Sunrise viewpoint attempt (weather dependent) and classic town stops.",
+              "ta": "சூரிய உதய காட்சி (வானிலை) மற்றும் நகர நிறுத்தங்கள்.",
+              "hi": "सूर्योदय व्यू (मौसम पर) और टाउन स्टॉप।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Darjeeling area",
+          "ta": "டார்ஜீலிங் பகுதியில் இரவு",
+          "hi": "दार्जिलिंग क्षेत्र में रात्रि"
+        }
+      },
+      {
+        "day": 3,
+        "title": {
+          "en": "Tea estate day",
+          "ta": "தேயிலை தோட்ட நாள்",
+          "hi": "चाय बागान दिन"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Tea garden visit / tasting where available; quieter ridge time.",
+              "ta": "தேயிலை தோட்ட பார்வை / ருசித்தல்; அமைதியான மலை நேரம்.",
+              "hi": "चाय बागान विजिट / टेस्टिंग; शांत रिज समय।"
+            }
+          }
+        ],
+        "overnight": {
+          "en": "Overnight in Darjeeling area",
+          "ta": "டார்ஜீலிங் பகுதியில் இரவு",
+          "hi": "दार्जिलिंग क्षेत्र में रात्रि"
+        }
+      },
+      {
+        "day": 4,
+        "title": {
+          "en": "Return to NJP",
+          "ta": "NJP திரும்புதல்",
+          "hi": "NJP वापसी"
+        },
+        "parts": [
+          {
+            "label": {
+              "en": "Focus",
+              "ta": "கவனம்",
+              "hi": "फोकस"
+            },
+            "detail": {
+              "en": "Checkout and drop at NJP/Bagdogra as quoted.",
+              "ta": "செக்அவுட் மற்றும் NJP/Bagdogra டிராப்.",
+              "hi": "चेकआउट और NJP/Bagdogra ड्रॉप।"
+            }
+          }
+        ]
+      }
+    ],
+    "faqs": [
+      {
+        "question": {
+          "en": "How is this different from the published Darjeeling tours?",
+          "ta": "வெளியிடப்பட்ட டார்ஜீலிங் டூர்களிலிருந்து எப்படி வேறு?",
+          "hi": "प्रकाशित दार्जिलिंग टूर से कैसे अलग?"
+        },
+        "answer": {
+          "en": "Published Mimbusty/Tabakoshi packages have fixed starting prices and set night bases. This tea-experience outline is fully enquiry-priced and can emphasise estate time differently.",
+          "ta": "வெளியிடப்பட்டவை நிலையான விலை; இது முழு விசாரணை விலை மற்றும் தேயிலை நேர முக்கியத்துவம்.",
+          "hi": "प्रकाशित पैकेजों की तय कीमतें हैं; यह पूर्ण पूछताछ मूल्य और चाय समय जोर।"
+        }
+      }
+    ]
+  }
+}

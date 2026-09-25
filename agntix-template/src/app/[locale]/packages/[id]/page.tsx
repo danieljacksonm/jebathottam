@@ -4,9 +4,11 @@ import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import {
   formatInr,
-  getLocalizedPackage,
+  formatPackagePrice,
+  getLocalizedPackageAsync,
+  getPackageRows,
+  isEnquiryPriced,
   LEGACY_PACKAGE_REDIRECTS,
-  packageRows,
 } from "@/data/packages";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
@@ -15,8 +17,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { absoluteUrl, packageJsonLd, pageMetadata } from "@/lib/seo";
 import { whatsappUrl } from "@/lib/whatsapp";
 
-export function generateStaticParams() {
-  const live = packageRows.map((pkg) => ({ id: pkg.id }));
+export async function generateStaticParams() {
+  const rows = await getPackageRows();
+  const live = rows.map((pkg) => ({ id: pkg.id }));
   const legacy = Object.keys(LEGACY_PACKAGE_REDIRECTS).map((id) => ({ id }));
   return [...live, ...legacy];
 }
@@ -28,7 +31,7 @@ export async function generateMetadata({
 }) {
   const { locale, id } = await params;
   const resolved = LEGACY_PACKAGE_REDIRECTS[id] ?? id;
-  const pkg = getLocalizedPackage(resolved, locale);
+  const pkg = await getLocalizedPackageAsync(resolved, locale);
   if (!pkg) return {};
   return pageMetadata({
     locale,
@@ -65,7 +68,7 @@ export default async function PackageDetailPage({
   }
 
   const loc = await getLocale();
-  const pkg = getLocalizedPackage(id, loc);
+  const pkg = await getLocalizedPackageAsync(id, loc);
   if (!pkg) notFound();
 
   const t = await getTranslations("packages");
@@ -93,7 +96,7 @@ export default async function PackageDetailPage({
           name: pkg.title,
           description: pkg.blurb,
           image: pkg.image,
-          priceFrom: pkg.priceFrom,
+          priceFrom: isEnquiryPriced(pkg) ? null : pkg.priceFrom,
           url: absoluteUrl(locale, `/packages/${pkg.id}`),
         })}
       />
@@ -279,7 +282,9 @@ export default async function PackageDetailPage({
           <div>
             <h2 className="font-display text-2xl text-cream">{t("pricingTitle")}</h2>
             <p className="mt-3 font-display text-3xl text-gold-bright">
-              {t("startingFrom", { price: formatInr(pkg.priceFrom) })}
+              {isEnquiryPriced(pkg)
+                ? t("requestQuote")
+                : t("startingFrom", { price: formatInr(pkg.priceFrom) })}
             </p>
             <ul className="mt-4 space-y-2.5">
               {d.pricingAssumptions.map((item) => (
@@ -326,13 +331,19 @@ export default async function PackageDetailPage({
         <aside className="h-fit space-y-4 md:sticky md:top-28">
           <div className="rounded-3xl border border-[var(--line)] bg-navy-mid/40 p-7">
             <p className="text-[0.65rem] uppercase tracking-[0.16em] text-mist">
-              {t("from")}
+              {isEnquiryPriced(pkg) ? t("pricing") : t("from")}
             </p>
             <p className="font-display text-4xl text-gold-bright">
-              {formatInr(pkg.priceFrom)}
+              {formatPackagePrice(pkg, t("requestQuote"))}
             </p>
-            <p className="text-sm text-mist">{t("perPerson")}</p>
-            <p className="mt-2 text-xs text-mist/70">{t("fromNote")}</p>
+            {!isEnquiryPriced(pkg) ? (
+              <>
+                <p className="text-sm text-mist">{t("perPerson")}</p>
+                <p className="mt-2 text-xs text-mist/70">{t("fromNote")}</p>
+              </>
+            ) : (
+              <p className="mt-2 text-xs text-mist/70">{t("enquireNote")}</p>
+            )}
             <p className="mt-4 text-sm text-white/70">{d.suitableFor}</p>
             <Link
               href={`/enquire?package=${pkg.id}`}

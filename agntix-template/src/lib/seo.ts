@@ -227,16 +227,32 @@ export function packageJsonLd(pkg: {
   name: string;
   description: string;
   image: string;
-  priceFrom: number;
+  priceFrom: number | null;
   url: string;
 }) {
-  return {
+  const base = {
     "@context": "https://schema.org",
     "@type": ["Product", "TouristTrip"],
     name: pkg.name,
     description: pkg.description,
     image: pkg.image,
     brand: { "@type": "Brand", name: SITE_NAME },
+    url: pkg.url,
+  };
+  if (pkg.priceFrom == null || pkg.priceFrom <= 0) {
+    return {
+      ...base,
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "INR",
+        availability: "https://schema.org/PreOrder",
+        url: pkg.url,
+        description: "Request a quote — pricing confirmed after enquiry",
+      },
+    };
+  }
+  return {
+    ...base,
     offers: {
       "@type": "Offer",
       priceCurrency: "INR",

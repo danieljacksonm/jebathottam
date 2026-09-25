@@ -13,7 +13,9 @@ import {
 import { getBlogCount, getLocalizedBlogs } from "@/data/blog";
 import {
   formatInr,
-  getPackagesForDestination,
+  formatPackagePrice,
+  getPackagesForDestinationAsync,
+  isEnquiryPriced,
 } from "@/data/packages";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { absoluteUrl, destinationJsonLd, pageMetadata } from "@/lib/seo";
@@ -62,7 +64,7 @@ export default async function DestinationDetailPage({
   const nav = await getTranslations("nav");
   const blogT = await getTranslations("blog");
   const places = await getPlacesForDestination(dest.id, locale);
-  const packages = getPackagesForDestination(resolved.slug, locale);
+  const packages = await getPackagesForDestinationAsync(resolved.slug, locale);
   const blogPosts = await getLocalizedBlogs(locale, {
     destination: resolved.slug,
   });
@@ -182,7 +184,9 @@ export default async function DestinationDetailPage({
                       </ul>
                     ) : null}
                     <p className="mt-5 text-gold-bright">
-                      From {formatInr(pkg.priceFrom)} per person
+                      {isEnquiryPriced(pkg)
+                        ? formatPackagePrice(pkg, "Request a quote")
+                        : `From ${formatInr(pkg.priceFrom)} per person`}
                     </p>
                   </div>
                 </Link>

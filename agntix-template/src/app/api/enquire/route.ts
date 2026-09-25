@@ -2,7 +2,7 @@ import { mkdir, appendFile, readFile, writeFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
 import { sendEnquiryNotification } from "@/lib/mail";
-import { packageRows, LEGACY_PACKAGE_REDIRECTS } from "@/data/packages";
+import { getPackageRows, LEGACY_PACKAGE_REDIRECTS } from "@/data/packages";
 import { services } from "@/data/services";
 
 type EnquiryBody = {
@@ -60,6 +60,7 @@ export async function POST(request: Request) {
     const phone = normalizePhone(sanitizeSingleLine(body.phone ?? ""));
     const message = sanitizeSingleLine(body.message ?? "");
 
+    const packageRows = await getPackageRows();
     const allowedPackageIds = new Set<string>([
       ...packageRows.map((p) => String(p.id)),
       ...Object.keys(LEGACY_PACKAGE_REDIRECTS),
@@ -70,7 +71,11 @@ export async function POST(request: Request) {
     if (packageId && LEGACY_PACKAGE_REDIRECTS[packageId]) {
       packageId = LEGACY_PACKAGE_REDIRECTS[packageId];
     }
-    if (packageId && !allowedPackageIds.has(packageId) && !packageRows.some((p) => p.id === packageId)) {
+    if (
+      packageId &&
+      !allowedPackageIds.has(packageId) &&
+      !packageRows.some((p) => p.id === packageId)
+    ) {
       return NextResponse.json(
         { ok: false, error: "Invalid package selection" },
         { status: 400 },

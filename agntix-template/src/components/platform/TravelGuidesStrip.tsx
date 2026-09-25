@@ -8,7 +8,21 @@ export async function TravelGuidesStrip() {
   const t = await getTranslations("platform");
   const blogT = await getTranslations("blog");
   const locale = await getLocale();
-  const posts = await getLocalizedBlogs(locale, { take: 4 });
+  const featuredPosts = await getLocalizedBlogs(locale, {
+    featured: true,
+    take: 4,
+  });
+  const posts =
+    featuredPosts.length >= 4
+      ? featuredPosts
+      : [
+          ...featuredPosts,
+          ...(
+            await getLocalizedBlogs(locale, {
+              take: 4 - featuredPosts.length,
+            })
+          ).filter((p) => !featuredPosts.some((f) => f.slug === p.slug)),
+        ].slice(0, 4);
   if (!posts.length) return null;
 
   const [featured, ...rest] = posts;

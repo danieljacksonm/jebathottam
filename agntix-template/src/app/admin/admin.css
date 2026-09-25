@@ -1,0 +1,141 @@
+.admin-body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #0b1220;
+  color: #e8eef7;
+  min-height: 100vh;
+}
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0f172a;
+}
+.admin-brand {
+  color: #d4a64a;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.admin-nav {
+  display: flex;
+  gap: 1rem;
+}
+.admin-nav a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.admin-nav a:hover {
+  color: #f8fafc;
+}
+.admin-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+.admin-card {
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 0.65rem 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.admin-table a {
+  color: #93c5fd;
+}
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  background: #d4a64a;
+  color: #0b1220;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.admin-btn.secondary {
+  background: transparent;
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.admin-btn.danger {
+  background: #7f1d1d;
+  color: #fecaca;
+}
+.admin-field {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
+}
+.admin-field label {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.admin-field input,
+.admin-field textarea,
+.admin-field select {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #0b1220;
+  color: #f8fafc;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+}
+.admin-field textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.admin-muted {
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+.admin-badge {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.admin-badge.published {
+  background: rgba(34, 197, 94, 0.15);
+  color: #86efac;
+}
+.admin-badge.draft {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fde68a;
+}
+.admin-badge.archived {
+  background: rgba(148, 163, 184, 0.15);
+  color: #cbd5e1;
+}
+.admin-error {
+  color: #fca5a5;
+  margin-bottom: 0.75rem;
+}

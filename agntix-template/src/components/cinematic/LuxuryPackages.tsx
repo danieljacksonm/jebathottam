@@ -3,7 +3,12 @@
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { formatInr, getLocalizedPackages, type LocalizedPackage } from "@/data/packages";
+import {
+  formatPackagePrice,
+  getLocalizedPackages,
+  isEnquiryPriced,
+  type LocalizedPackage,
+} from "@/data/packages";
 import { useReveal } from "./motion";
 import { TiltCard } from "./TiltCard";
 import { MagneticCta } from "./MagneticCta";
@@ -11,12 +16,22 @@ import { MagneticCta } from "./MagneticCta";
 const DESTINATION_ORDER = [
   "kodaikanal",
   "darjeeling",
+  "goa",
+  "ooty",
+  "madurai",
+  "delhi",
+  "bali",
 ] as const;
 
 function destinationLabel(slug: string, locale: string, fallback: string) {
   const labels: Record<string, Record<string, string>> = {
     kodaikanal: { en: "Kodaikanal", ta: "கொடைக்கானல்", hi: "कोडाइकनाल" },
     darjeeling: { en: "Darjeeling", ta: "டார்ஜீலிங்", hi: "दार्जिलिंग" },
+    goa: { en: "Goa", ta: "கோவா", hi: "गोवा" },
+    ooty: { en: "Ooty", ta: "ஊட்டி", hi: "ऊटी" },
+    madurai: { en: "Madurai", ta: "மதுரை", hi: "मदुरै" },
+    delhi: { en: "Delhi", ta: "டெல்லி", hi: "दिल्ली" },
+    bali: { en: "Bali", ta: "பாலி", hi: "बाली" },
   };
   return labels[slug]?.[locale] ?? labels[slug]?.en ?? fallback;
 }
@@ -24,10 +39,9 @@ function destinationLabel(slug: string, locale: string, fallback: string) {
 function groupByDestination(list: LocalizedPackage[]) {
   const map = new Map<string, LocalizedPackage[]>();
   for (const pkg of list) {
-    const key = pkg.destinationSlug;
-    const bucket = map.get(key) ?? [];
+    const bucket = map.get(pkg.destinationSlug) ?? [];
     bucket.push(pkg);
-    map.set(key, bucket);
+    map.set(pkg.destinationSlug, bucket);
   }
 
   const ordered: { slug: string; packages: LocalizedPackage[] }[] = [];
@@ -44,12 +58,22 @@ function groupByDestination(list: LocalizedPackage[]) {
   return ordered;
 }
 
-export function LuxuryPackages({ hideIntro = false }: { hideIntro?: boolean }) {
+export function LuxuryPackages({
+  hideIntro = false,
+  featuredOnly = false,
+  packages: packagesProp,
+}: {
+  hideIntro?: boolean;
+  featuredOnly?: boolean;
+  packages?: LocalizedPackage[];
+}) {
   const locale = useLocale();
   const t = useTranslations("packages");
   const j = useTranslations("journey");
   const ref = useReveal([]);
-  const list = getLocalizedPackages(locale);
+  const list = (packagesProp ?? getLocalizedPackages(locale)).filter((pkg) =>
+    featuredOnly ? pkg.featured : true,
+  );
   const groups = groupByDestination(list);
 
   return (
@@ -74,13 +98,13 @@ export function LuxuryPackages({ hideIntro = false }: { hideIntro?: boolean }) {
           </div>
         )}
 
-        <div className="mt-14 space-y-16">
+        <div className={hideIntro ? "space-y-16" : "mt-14 space-y-16"}>
           {groups.map((group) => (
-            <div key={group.slug}>
+            <div key={group.slug} id={`dest-${group.slug}`}>
               <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
                 <div>
                   <p className="text-[0.68rem] uppercase tracking-[0.22em] text-gold/80">
-                    Destination
+                    {t("destination")}
                   </p>
                   <h3 className="mt-2 font-display text-3xl text-cream md:text-4xl">
                     {destinationLabel(
@@ -94,14 +118,18 @@ export function LuxuryPackages({ hideIntro = false }: { hideIntro?: boolean }) {
                   href={`/destinations/${group.slug}`}
                   className="text-sm text-gold hover:text-gold-bright"
                 >
-                  Explore destination →
+                  {t("exploreDestination")}
                 </Link>
               </div>
 
               <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {group.packages.map((pkg) => (
                   <TiltCard key={pkg.id}>
-                    <article data-reveal className="lux-card group" data-cursor="view">
+                    <article
+                      data-reveal
+                      className="lux-card group"
+                      data-cursor="view"
+                    >
                       <Link
                         href={`/packages/${pkg.id}`}
                         className="relative block aspect-[16/11] overflow-hidden"
@@ -116,7 +144,9 @@ export function LuxuryPackages({ hideIntro = false }: { hideIntro?: boolean }) {
                         <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent" />
                       </Link>
                       <div className="p-6">
-                        <h4 className="font-display text-3xl text-white">{pkg.title}</h4>
+                        <h4 className="font-display text-3xl text-white">
+                          {pkg.title}
+                        </h4>
                         <p className="mt-2 text-sm text-mist">
                           {t("days", { count: pkg.days })} ·{" "}
                           {t("nights", { count: pkg.nights })}
@@ -127,10 +157,10 @@ export function LuxuryPackages({ hideIntro = false }: { hideIntro?: boolean }) {
                         <div className="mt-6 flex items-end justify-between border-t border-[var(--line)] pt-5">
                           <div>
                             <p className="text-[0.62rem] uppercase tracking-[0.16em] text-mist">
-                              {t("from")}
+                              {isEnquiryPriced(pkg) ? t("pricing") : t("from")}
                             </p>
-                            <p className="font-display text-3xl text-gold-bright">
-                              {formatInr(pkg.priceFrom)}
+                            <p className="font-display text-2xl text-gold-bright md:text-3xl">
+                              {formatPackagePrice(pkg, t("requestQuote"))}
                             </p>
                           </div>
                           <Link

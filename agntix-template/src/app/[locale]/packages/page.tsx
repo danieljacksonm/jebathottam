@@ -1,7 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
-import { PackageListing } from "@/components/packages/PackageListing";
+import { LuxuryPackages } from "@/components/cinematic/LuxuryPackages";
+import { getLocalizedPackagesAsync } from "@/data/packages";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { GeoAnswer } from "@/components/seo/GeoAnswer";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
@@ -36,6 +37,7 @@ export default async function PackagesPage({
   setRequestLocale(locale);
   const t = await getTranslations("packages");
   const nav = await getTranslations("nav");
+  const packages = await getLocalizedPackagesAsync(locale);
 
   return (
     <PageAtmosphere>
@@ -55,7 +57,7 @@ export default async function PackagesPage({
         ]}
       />
       <GeoAnswer>{t("geoSummary")}</GeoAnswer>
-      <PackageListing hideIntro />
+      <LuxuryPackages hideIntro packages={packages} />
       <HowItWorksSection />
     </PageAtmosphere>
   );
