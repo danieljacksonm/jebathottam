@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { InfoShell } from "@/components/info/InfoShell";
+import { HostWebSiteJsonLd } from "@/components/HostWebSiteJsonLd";
 import { pageMetadata } from "@/lib/site-url";
 import "./info.css";
 
@@ -12,5 +13,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function InfoLayout({ children }: { children: ReactNode }) {
-  return <InfoShell>{children}</InfoShell>;
+  return (
+    <>
+      <HostWebSiteJsonLd kind="info" />
+      <InfoShell>{children}</InfoShell>
+    </>
+  );
 }

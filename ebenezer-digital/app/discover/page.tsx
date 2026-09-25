@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./discover.css";
 import DiscoverClient from "./DiscoverClient";
+import { HostWebSiteJsonLd } from "@/components/HostWebSiteJsonLd";
 import { pageMetadata } from "@/lib/site-url";
 
 export const metadata: Metadata = pageMetadata({
@@ -13,5 +14,10 @@ export const metadata: Metadata = pageMetadata({
 type Props = { searchParams: { q?: string } };
 
 export default function DiscoverPage({ searchParams }: Props) {
-  return <DiscoverClient initialQuery={searchParams.q || ""} />;
+  return (
+    <>
+      <HostWebSiteJsonLd kind="discover" />
+      <DiscoverClient initialQuery={searchParams.q || ""} />
+    </>
+  );
 }

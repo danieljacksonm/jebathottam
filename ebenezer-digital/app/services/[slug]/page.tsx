@@ -7,6 +7,7 @@ import { getLocalizedService } from "@/lib/i18n/localize-service";
 import { loadMessages } from "@/lib/i18n/load-messages";
 import type { SeoLocale } from "@/lib/site-url";
 import { SITE_NAV } from "@/lib/site-nav";
+import { ecosystemLinksForTopic } from "@/lib/internal-links";
 
 function requestLocale(): SeoLocale {
   return (headers().get("x-eben-locale") || "en").toLowerCase() as SeoLocale;
@@ -114,18 +115,11 @@ export default function ServiceLandingPage({ params }: { params: { slug: string 
       <section className="mt-14 border-t border-[var(--st-line)] pt-10">
         <h2 className="studio-display text-3xl">{labels.relatedLinks}</h2>
         <div className="mt-6 flex flex-wrap gap-4 text-sm">
-          <Link href={SITE_NAV.journal} className="underline hover:text-white">
-            Journal guides
-          </Link>
-          <Link href={SITE_NAV.network} className="underline hover:text-white">
-            Free tools (.net)
-          </Link>
-          <Link href={SITE_NAV.store} className="underline hover:text-white">
-            Digital products
-          </Link>
-          <Link href={SITE_NAV.saas} className="underline hover:text-white">
-            Yegova Billing SaaS
-          </Link>
+          {ecosystemLinksForTopic(`${service.title} ${service.value} ${service.forWho}`).map((link) => (
+            <Link key={link.href} href={link.href} className="underline hover:text-white">
+              {link.label}
+            </Link>
+          ))}
           {service.relatedInsights?.map((slug) => (
             <Link key={slug} href={`/insights/${slug}`} className="underline hover:text-white">
               Insight: {slug.replace(/-/g, " ")}

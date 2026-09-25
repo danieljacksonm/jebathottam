@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { CANONICAL_URLS } from "@/lib/ecosystem-urls";
-import { originForKind, siteKindFromHost } from "@/lib/site-url";
+import { originForKind, requestHostFromHeaders, siteKindFromHost } from "@/lib/site-url";
 
 type LlmsBlock = {
   title: string;
@@ -21,7 +21,7 @@ function block(origin: string, b: LlmsBlock): string {
 
 /** llms.txt — machine-readable site summary for AI crawlers (llmstxt.org convention). */
 export async function GET() {
-  const kind = siteKindFromHost(headers().get("host"));
+  const kind = siteKindFromHost(requestHostFromHeaders(headers()));
   const origin = originForKind(kind);
 
   const discovery = {

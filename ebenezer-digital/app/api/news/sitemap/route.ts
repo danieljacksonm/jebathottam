@@ -11,12 +11,13 @@ import { requestHostFromHeaders } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
-const XML_HEADERS = xmlSitemapHeaders("public, s-maxage=300, stale-while-revalidate=600");
+const CACHE = "public, s-maxage=300, stale-while-revalidate=600";
+const RETRY = { ...xmlSitemapHeaders("no-store"), "Retry-After": "60" };
 
 /**
  * Google News sitemap entrypoint.
  * ≤1000 stories → single urlset; more → sitemap index of /api/news/sitemap/0…
- * Always returns XML (never JSON) so Search Console can parse the response.
+ * Always returns XML (never JSON). Transient failure → 503 (not empty 200).
  */
 export async function GET(request: NextRequest) {
   try {
@@ -26,16 +27,19 @@ export async function GET(request: NextRequest) {
     if (items.length <= NEWS_GOOGLE_NEWS_MAX_URLS) {
       return new NextResponse(buildNewsSitemapXml(items, origin), {
         status: 200,
-        headers: XML_HEADERS,
+        headers: xmlSitemapHeaders(CACHE),
       });
     }
 
     return new NextResponse(buildNewsSitemapIndexXml(items.length, origin), {
       status: 200,
-      headers: XML_HEADERS,
+      headers: xmlSitemapHeaders(CACHE),
     });
   } catch (error) {
     console.error("News sitemap error:", error);
-    return new NextResponse(EMPTY_URLSET_XML, { status: 200, headers: XML_HEADERS });
+    return new NextResponse(EMPTY_URLSET_XML, {
+      status: 503,
+      headers: RETRY,
+    });
   }
 }

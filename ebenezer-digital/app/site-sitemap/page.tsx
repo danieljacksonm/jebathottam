@@ -3,10 +3,10 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { StudioPageShell } from "@/components/studio/StudioPageShell";
 import { htmlSitemapMetaPath, htmlSitemapSections } from "@/lib/html-sitemap";
-import { originForKind, pageMetadata, siteKindFromHost } from "@/lib/site-url";
+import { originForKind, pageMetadata, requestHostFromHeaders, siteKindFromHost } from "@/lib/site-url";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const kind = siteKindFromHost(headers().get("host"));
+  const kind = siteKindFromHost(requestHostFromHeaders(headers()));
   return pageMetadata({
     title: "Sitemap | Ebenezer Digital",
     description: "Browse all main sections, feeds, and discovery files on this site.",
@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HtmlSitemapPage() {
-  const kind = siteKindFromHost(headers().get("host"));
+  const kind = siteKindFromHost(requestHostFromHeaders(headers()));
   const origin = originForKind(kind);
   const sections = await htmlSitemapSections(kind);
 

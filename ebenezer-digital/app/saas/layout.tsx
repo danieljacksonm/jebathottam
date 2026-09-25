@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { HostWebSiteJsonLd } from "@/components/HostWebSiteJsonLd";
 import { pageMetadata } from "@/lib/site-url";
 import "./saas.css";
 
@@ -11,5 +12,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 export default function SaasLayout({ children }: { children: ReactNode }) {
-  return children;
+  return (
+    <>
+      <HostWebSiteJsonLd kind="saas" />
+      {children}
+    </>
+  );
 }

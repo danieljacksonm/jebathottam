@@ -4,6 +4,7 @@ import { Cormorant_Garamond, Outfit } from "next/font/google";
 import { pageMetadata } from "@/lib/site-url";
 import { EcosystemNav } from "@/components/EcosystemNav";
 import { EcosystemFooter } from "@/components/EcosystemFooter";
+import { HostWebSiteJsonLd } from "@/components/HostWebSiteJsonLd";
 import "./ai.css";
 
 const display = Cormorant_Garamond({
@@ -30,6 +31,7 @@ export const metadata: Metadata = pageMetadata({
 export default function AiLayout({ children }: { children: ReactNode }) {
   return (
     <div className={`${display.variable} ${ui.variable}`} data-ai-root>
+      <HostWebSiteJsonLd kind="ai" />
       <EcosystemNav active="ai" />
       {children}
       <EcosystemFooter />

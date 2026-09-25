@@ -214,7 +214,14 @@ export function ogImageForPath(path: string) {
   if (path === "/blog/news" || path.startsWith("/blog/news/")) return OG_NEWS;
   if (path === "/info" || path.startsWith("/info/")) return OG_JOURNAL;
   if (path === "/blog" || path.startsWith("/blog/")) return OG_JOURNAL;
-  if (path === "/products" || path.startsWith("/products/") || path === "/saas") return OG_STORE;
+  if (path === "/products" || path.startsWith("/products/")) return OG_STORE;
+  if (path === "/saas" || path.startsWith("/saas/")) return OG_STORE;
+  if (path === "/catalog" || path.startsWith("/catalog/")) return OG_STORE;
+  // Network / tools / AI / discover reuse studio OG until dedicated assets ship (no redesign).
+  if (path === "/network" || path.startsWith("/network/")) return OG_IMAGE;
+  if (path === "/tools" || path.startsWith("/tools/")) return OG_IMAGE;
+  if (path === "/ai" || path.startsWith("/ai/")) return OG_IMAGE;
+  if (path === "/discover" || path.startsWith("/discover/")) return OG_IMAGE;
   return OG_IMAGE;
 }
 

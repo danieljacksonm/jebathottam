@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { notFoundSurfaceForKind } from "@/lib/not-found-surface";
-import { siteKindFromHost } from "@/lib/site-url";
+import { requestHostFromHeaders, siteKindFromHost } from "@/lib/site-url";
 
 export default function NotFound() {
-  const kind = siteKindFromHost(headers().get("host"));
+  const kind = siteKindFromHost(requestHostFromHeaders(headers()));
   const surface = notFoundSurfaceForKind(kind);
   const isNetwork = surface.theme === "network";
 

@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { StudioPageShell } from "@/components/studio/StudioPageShell";
 import { legalBody, legalTitle, type LegalPage } from "@/lib/legal-content";
-import { pageMetadata, siteKindFromHost, type SiteKind } from "@/lib/site-url";
+import { pageMetadata, requestHostFromHeaders, siteKindFromHost, type SiteKind } from "@/lib/site-url";
 
 const PAGES = new Set<string>(["privacy", "terms", "affiliate-disclosure"]);
 
@@ -27,7 +27,7 @@ export async function generateMetadata({
   params: { page: string };
 }): Promise<Metadata> {
   if (!PAGES.has(params.page)) return {};
-  const kind = siteKindFromHost(headers().get("host"));
+  const kind = siteKindFromHost(requestHostFromHeaders(headers()));
   const page = params.page as LegalPage;
   return pageMetadata({
     title: legalTitle(kind, page),
@@ -38,7 +38,7 @@ export async function generateMetadata({
 
 export default function SiteLegalPage({ params }: { params: { page: string } }) {
   if (!PAGES.has(params.page)) notFound();
-  const kind = siteKindFromHost(headers().get("host"));
+  const kind = siteKindFromHost(requestHostFromHeaders(headers()));
   const page = params.page as LegalPage;
   const title = page === "privacy" ? "Privacy Policy" : page === "terms" ? "Terms of Use" : "Affiliate Disclosure";
 

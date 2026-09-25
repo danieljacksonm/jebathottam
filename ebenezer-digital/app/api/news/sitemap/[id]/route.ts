@@ -11,7 +11,8 @@ import { requestHostFromHeaders } from "@/lib/site-url";
 
 export const dynamic = "force-dynamic";
 
-const XML_HEADERS = xmlSitemapHeaders("public, s-maxage=300, stale-while-revalidate=600");
+const CACHE = "public, s-maxage=300, stale-while-revalidate=600";
+const RETRY = { ...xmlSitemapHeaders("no-store"), "Retry-After": "60" };
 
 type Props = { params: { id: string } };
 
@@ -20,13 +21,13 @@ export async function GET(request: NextRequest, { params }: Props) {
   try {
     const id = Number.parseInt(params.id, 10);
     if (!Number.isFinite(id) || id < 0) {
-      return new NextResponse(EMPTY_URLSET_XML, { status: 200, headers: XML_HEADERS });
+      return new NextResponse("Not found", { status: 404 });
     }
 
     const items = await listPublicNewsForSitemap();
     const chunks = newsSitemapChunkCount(items.length);
     if (id >= chunks) {
-      return new NextResponse(EMPTY_URLSET_XML, { status: 200, headers: XML_HEADERS });
+      return new NextResponse("Not found", { status: 404 });
     }
 
     const origin = resolveSiteOrigin(request.url, requestHostFromHeaders(request.headers));
@@ -36,9 +37,15 @@ export async function GET(request: NextRequest, { params }: Props) {
       limit: NEWS_GOOGLE_NEWS_MAX_URLS,
     });
 
-    return new NextResponse(xml, { status: 200, headers: XML_HEADERS });
+    return new NextResponse(xml, {
+      status: 200,
+      headers: xmlSitemapHeaders(CACHE),
+    });
   } catch (error) {
     console.error("News sitemap chunk error:", error);
-    return new NextResponse(EMPTY_URLSET_XML, { status: 200, headers: XML_HEADERS });
+    return new NextResponse(EMPTY_URLSET_XML, {
+      status: 503,
+      headers: RETRY,
+    });
   }
 }

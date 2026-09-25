@@ -14,6 +14,7 @@ import { STORE_PRODUCTS } from "@/app/products/data";
 import { AskAiPanel } from "@/components/AskAiPanel";
 import { SiteContactLinks } from "@/components/SiteContactLinks";
 import { SiteLegalLinks } from "@/components/SiteLegalLinks";
+import { ecosystemLinksForTopic } from "@/lib/internal-links";
 import "../journal.css";
 
 type RelatedLite = Pick<JournalPost, "id" | "title" | "slug" | "excerpt" | "coverImage" | "category" | "author" | "publishedAt">;
@@ -222,6 +223,14 @@ export function ArticleView({ slug }: { slug: string }) {
     return `/ai?prefill=${encodeURIComponent(q)}`;
   }, [post]);
 
+  const ecosystemLinks = useMemo(
+    () =>
+      ecosystemLinksForTopic(
+        `${post?.title || ""} ${post?.category || ""} ${(post?.tags || []).join(" ")}`
+      ),
+    [post]
+  );
+
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";
     if (navigator.share && post) {
@@ -403,6 +412,19 @@ export function ArticleView({ slug }: { slug: string }) {
         <p className="mt-3 max-w-2xl text-[var(--j-muted)]">
           More from Ebenezer Journal on similar topics.
         </p>
+        {ecosystemLinks.length > 0 && (
+          <div className="mt-6 flex flex-wrap gap-3 text-sm">
+            {ecosystemLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-full border border-[var(--j-line)] px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-[var(--j-muted)] hover:border-[var(--j-brand)] hover:text-[var(--j-brand)]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        )}
         <div className="mt-10 grid gap-6 sm:grid-cols-3">
           {related.map((item) => (
             <Link
