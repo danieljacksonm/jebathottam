@@ -31,6 +31,12 @@ function hostName(host: string): string {
   return host.toLowerCase().split(":")[0];
 }
 
+const LOCALE_COOKIE = {
+  path: "/",
+  maxAge: 60 * 60 * 24 * 365,
+  sameSite: "lax" as const,
+};
+
 function withSiteKind(request: NextRequest, response: NextResponse): NextResponse {
   const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || "";
   const kind = siteKindFromHost(host);
@@ -38,12 +44,40 @@ function withSiteKind(request: NextRequest, response: NextResponse): NextRespons
   return response;
 }
 
-function nextWithSiteKind(request: NextRequest): NextResponse {
+/** Stamp response + request locale. Unprefixed English paths always force `en` (URL wins over cookie). */
+function applyLocale(
+  request: NextRequest,
+  response: NextResponse,
+  locale: string,
+  requestHeaders?: Headers
+): NextResponse {
+  if (requestHeaders) {
+    requestHeaders.set("x-eben-locale", locale);
+  }
+  response.headers.set("x-eben-locale", locale);
+  response.headers.set("content-language", locale);
+  response.cookies.set("eben-locale", locale, LOCALE_COOKIE);
+  return withSiteKind(request, response);
+}
+
+function nextWithSiteKind(request: NextRequest, locale = "en"): NextResponse {
   const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || "";
   const kind = siteKindFromHost(host);
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-eben-site-kind", kind);
-  return NextResponse.next({ request: { headers: requestHeaders } });
+  requestHeaders.set("x-eben-locale", locale);
+  const res = NextResponse.next({ request: { headers: requestHeaders } });
+  return applyLocale(request, res, locale, requestHeaders);
+}
+
+function rewriteWithLocale(request: NextRequest, url: URL, locale = "en"): NextResponse {
+  const host = request.headers.get("x-forwarded-host") || request.headers.get("host") || "";
+  const kind = siteKindFromHost(host);
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-eben-site-kind", kind);
+  requestHeaders.set("x-eben-locale", locale);
+  const res = NextResponse.rewrite(url, { request: { headers: requestHeaders } });
+  return applyLocale(request, res, locale, requestHeaders);
 }
 
 function isLoginPath(pathname: string): boolean {
@@ -537,15 +571,8 @@ function localeRewrite(request: NextRequest): NextResponse | null {
 
   const url = request.nextUrl.clone();
   url.pathname = target;
-  const res = NextResponse.rewrite(url);
-  res.cookies.set("eben-locale", locale, {
-    path: "/",
-    maxAge: 60 * 60 * 24 * 365,
-    sameSite: "lax",
-  });
-  res.headers.set("x-eben-locale", locale);
-  res.headers.set("content-language", locale);
-  // Unpublished locale shells stay noindex; published locales are indexable.
+  const res = rewriteWithLocale(request, url, locale);
+  // Unpublished locale shells stay noindex (belt + suspenders — already redirected above).
   if (locale !== "en" && !publishedLocaleSet().has(locale)) {
     res.headers.set("x-robots-tag", "noindex, follow");
   }

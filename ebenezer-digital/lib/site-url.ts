@@ -226,9 +226,12 @@ export function ogImageForPath(path: string) {
 }
 
 /** Canonical public URL for an internal app path (matches sitemap `<loc>` and pretty URLs on dedicated hosts). */
-export function canonicalFor(path: string): string {
+export function canonicalFor(path: string, locale: SeoLocale = "en"): string {
   const normalized = path && path !== "/" ? path : "/";
-  return publicUrlForInternalPath(normalized, siteKindFromPath(normalized));
+  const kind = siteKindFromPath(normalized);
+  const origin = originForKind(kind);
+  const pub = publicPathForLocale(normalized, locale, kind);
+  return `${origin}${pub === "/" ? "" : pub}`;
 }
 
 export function publicUrlForInternalPath(internalPath: string, kind?: SiteKind): string {
@@ -351,17 +354,22 @@ export function pageMetadata({
   description,
   path,
   index = true,
+  locale = "en",
 }: {
   title: string;
   description: string;
   path: string;
   index?: boolean;
+  /** Self-canonical locale — never point /ta/… at English. */
+  locale?: SeoLocale;
 }): Metadata {
-  const url = canonicalFor(path);
+  const url = canonicalFor(path, locale);
   const image = ogImageForPath(path);
   const origin = originForPath(path);
   const kind = siteKindFromPath(path);
   const google = gscVerificationForKind(kind);
+  const ogLocale =
+    locale === "ta" ? "ta_IN" : locale === "hi" ? "hi_IN" : locale === "ml" ? "ml_IN" : "en_US";
   return {
     metadataBase: new URL(origin),
     title,
@@ -374,6 +382,7 @@ export function pageMetadata({
       description,
       url,
       type: "website",
+      locale: ogLocale,
       images: [image],
     },
     twitter: {

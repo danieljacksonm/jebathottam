@@ -1,9 +1,8 @@
-"use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getPublishedLocales } from "@/lib/i18n/published-locales";
 import { LOCALE_LABELS, LOCALE_SHORT } from "@/lib/i18n/locale-registry";
+import { LOCALE_META, isPublishedLocaleCode } from "@/lib/i18n/supported-locales";
 import type { SeoLocale } from "@/lib/site-url";
 
 function localeHref(pathname: string, locale: SeoLocale): string {
@@ -41,6 +40,11 @@ export function LanguageSwitcher({
       : "rounded px-2 py-0.5 text-xs font-medium bg-emerald-500/20 text-emerald-300";
   const selectClass =
     variant === "light" ? "lang-switcher-select lang-switcher-select-light" : "lang-switcher-select";
+
+  const labelFor = (loc: SeoLocale) => {
+    if (isPublishedLocaleCode(loc)) return LOCALE_META[loc].name;
+    return LOCALE_LABELS[loc] || loc.toUpperCase();
+  };
 
   return (
     <div className="lang-switcher">
@@ -82,7 +86,7 @@ export function LanguageSwitcher({
       >
         {UI_LOCALES.map((loc) => (
           <option key={loc} value={loc}>
-            {LOCALE_LABELS[loc] || loc.toUpperCase()}
+            {labelFor(loc)}
           </option>
         ))}
       </select>

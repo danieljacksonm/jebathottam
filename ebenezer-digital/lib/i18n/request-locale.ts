@@ -1,21 +1,14 @@
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 import type { SeoLocale } from "@/lib/site-url";
-import { localeFromCookieHeader } from "./locale-utils";
-import { SEO_LOCALES } from "@/lib/i18n/seo-locales";
+import { isSeoLocaleCode } from "@/lib/i18n/seo-locales";
 
-function isLocale(value: string | null | undefined): value is SeoLocale {
-  return !!value && (SEO_LOCALES as readonly string[]).includes(value);
-}
-
-/** Resolve locale from middleware header or cookie (server components / routes). */
+/**
+ * Server locale — URL wins via middleware `x-eben-locale`.
+ * Never read the language cookie here (cookie must not override /en or unprefixed English).
+ */
 export function resolveRequestLocale(): SeoLocale {
-  const h = headers();
-  const fromHeader = h.get("x-eben-locale")?.toLowerCase();
-  if (isLocale(fromHeader)) return fromHeader;
-
-  const fromCookie = cookies().get("eben-locale")?.value?.toLowerCase();
-  if (isLocale(fromCookie)) return fromCookie;
-
+  const fromHeader = headers().get("x-eben-locale")?.toLowerCase();
+  if (fromHeader && isSeoLocaleCode(fromHeader)) return fromHeader;
   return "en";
 }
 

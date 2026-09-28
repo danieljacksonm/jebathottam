@@ -8,6 +8,7 @@ import {
   type HomeMessages,
   type StudioMessages,
 } from "./page-messages";
+import { isCorruptTranslationText } from "./supported-locales";
 
 export type ServiceTranslation = {
   title: string;
@@ -62,10 +63,27 @@ const EN_SECTIONS = {
 
 let enCache: LocaleMessages | null = null;
 
+function deepHasCorrupt(value: unknown, depth = 0): boolean {
+  if (depth > 8) return false;
+  if (isCorruptTranslationText(value)) return true;
+  if (Array.isArray(value)) return value.some((v) => deepHasCorrupt(v, depth + 1));
+  if (value && typeof value === "object") {
+    return Object.values(value as Record<string, unknown>).some((v) =>
+      deepHasCorrupt(v, depth + 1)
+    );
+  }
+  return false;
+}
+
 function readJson(path: string): LocaleMessages | null {
   try {
     if (!existsSync(path)) return null;
-    return JSON.parse(readFileSync(path, "utf8")) as LocaleMessages;
+    const parsed = JSON.parse(readFileSync(path, "utf8")) as LocaleMessages;
+    if (deepHasCorrupt(parsed)) {
+      console.error(`[i18n] Corrupt translation bundle rejected: ${path}`);
+      return null;
+    }
+    return parsed;
   } catch {
     return null;
   }
@@ -94,24 +112,42 @@ export function getEnglishMessages(): LocaleMessages {
 }
 
 const cache = new Map<string, LocaleMessages>();
+const missingWarned = new Set<string>();
 
-/** Load translated messages for a locale (falls back to English for missing keys). */
+function warnMissing(key: string) {
+  if (process.env.NODE_ENV === "production") return;
+  if (missingWarned.has(key)) return;
+  missingWarned.add(key);
+  console.warn(`[i18n] missing translation: ${key}`);
+}
+
+/**
+ * Load messages for a locale.
+ * - English: master bundle
+ * - Other locales: require a real JSON file; corrupt/missing → English shell only for
+ *   non-indexable soft shells, with explicit warnings (never silent Hindi→English page fakery
+ *   for published routes — callers must check hasLocaleBundle / hasServiceTranslation).
+ */
 export function loadMessages(locale: SeoLocale): LocaleMessages {
   if (locale === "en") return getEnglishMessages();
   if (cache.has(locale)) return cache.get(locale)!;
+
   const file = readJson(join(MESSAGES_DIR, `${locale}.json`));
   const en = getEnglishMessages();
   if (!file) {
+    warnMissing(`${locale}:bundle`);
     cache.set(locale, en);
     return en;
   }
+
+  // Shallow merge for structure only — track missing top-level service keys separately.
   const merged: LocaleMessages = {
     shell: { ...en.shell, ...file.shell },
     home: { ...en.home, ...file.home },
     studio: { ...en.studio, ...file.studio },
     sections: { ...en.sections, ...file.sections },
-    services: { ...en.services, ...file.services },
-    journal: { ...en.journal, ...file.journal },
+    services: { ...file.services },
+    journal: file.journal,
   };
   cache.set(locale, merged);
   return merged;
@@ -119,5 +155,33 @@ export function loadMessages(locale: SeoLocale): LocaleMessages {
 
 export function hasLocaleBundle(locale: SeoLocale): boolean {
   if (locale === "en") return true;
-  return existsSync(join(MESSAGES_DIR, `${locale}.json`));
+  const path = join(MESSAGES_DIR, `${locale}.json`);
+  if (!existsSync(path)) return false;
+  const file = readJson(path);
+  return !!file;
+}
+
+/** True when a service slug has a complete non-English translation (no EN field fallback). */
+export function hasServiceTranslation(locale: SeoLocale, slug: string): boolean {
+  if (locale === "en") return true;
+  const messages = loadMessages(locale);
+  const t = messages.services?.[slug];
+  if (!t) {
+    warnMissing(`${locale}:services.${slug}`);
+    return false;
+  }
+  if (
+    !t.title ||
+    !t.value ||
+    !t.forWho ||
+    !t.capabilities?.length ||
+    !t.process?.length ||
+    !t.faq?.length ||
+    isCorruptTranslationText(t.title) ||
+    isCorruptTranslationText(t.value)
+  ) {
+    warnMissing(`${locale}:services.${slug}:incomplete`);
+    return false;
+  }
+  return true;
 }

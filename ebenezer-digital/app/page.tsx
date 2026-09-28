@@ -16,15 +16,16 @@ export async function generateMetadata(): Promise<Metadata> {
     title: messages.home.metaTitle,
     description: messages.home.metaDescription,
     path: "/",
+    locale,
   });
 }
 
 export default function Home() {
   const locale = resolveRequestLocale();
   const messages = loadMessages(locale);
-  const featuredServices = SERVICE_LANDINGS.slice(0, 4).map(
-    (s) => getLocalizedService(s.slug, locale)!
-  );
+  const featuredServices = SERVICE_LANDINGS.slice(0, 4)
+    .map((s) => getLocalizedService(s.slug, locale))
+    .filter((s): s is NonNullable<typeof s> => !!s);
 
   return (
     <main className="min-h-screen bg-[#070708]">

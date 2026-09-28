@@ -17,6 +17,7 @@
     "audit:news": "node scripts/audit-news-ownership.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
     "seo:validate": "node scripts/seo-validate.mjs",
+    "i18n:audit": "node scripts/audit-i18n.mjs",
     "seed:journal-pillars": "npx tsx scripts/seed-journal-pillars.ts",
     "i18n:export-en": "npx tsx scripts/export-en-i18n.ts",
     "i18n:build-world": "node scripts/build-world-i18n.mjs",

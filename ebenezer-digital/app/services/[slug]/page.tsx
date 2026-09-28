@@ -16,11 +16,19 @@ function requestLocale(): SeoLocale {
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const locale = requestLocale();
   const service = getLocalizedService(params.slug, locale);
-  if (!service) return { title: "Service | Ebenezer Digital", robots: { index: false } };
+  if (!service) {
+    return {
+      title: "Service | Ebenezer Digital",
+      robots: { index: false, follow: false },
+    };
+  }
   return pageMetadata({
     title: `${service.title} | Ebenezer Digital`,
     description: service.value,
     path: `/services/${service.slug}`,
+    locale,
+    // Incomplete translation must never be indexed under a locale URL.
+    index: locale === "en" || !!service,
   });
 }
 

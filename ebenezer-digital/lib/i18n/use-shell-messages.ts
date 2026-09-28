@@ -8,21 +8,13 @@ import { clientShellMessages } from "./client-shell";
 import { getStudioSiteCopy } from "./studio-site-copy";
 import { localePath } from "./locale-path";
 
-function localeFromCookie(): SeoLocale {
-  if (typeof document === "undefined") return "en";
-  const m = document.cookie.match(/(?:^|;\s*)eben-locale=([^;]+)/);
-  const raw = (m?.[1] || "en").toLowerCase();
-  return raw as SeoLocale;
-}
-
-/** Prefer /ta/ URL prefix, then eben-locale cookie. */
+/**
+ * Client locale — URL path only.
+ * Visiting `/` or `/services/...` is always English, even if eben-locale cookie is hi/ta.
+ */
 export function useRequestLocale(): SeoLocale {
   const pathname = usePathname() || "/";
-  return useMemo(() => {
-    const fromPath = localeFromPathname(pathname);
-    if (fromPath !== "en") return fromPath;
-    return localeFromCookie();
-  }, [pathname]);
+  return useMemo(() => localeFromPathname(pathname), [pathname]);
 }
 
 export function useShellMessages() {
