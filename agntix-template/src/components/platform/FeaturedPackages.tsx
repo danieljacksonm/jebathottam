@@ -7,6 +7,7 @@ import {
   isEnquiryPriced,
 } from "@/data/packages";
 import { FeaturedPackagesMotion } from "@/components/platform/FeaturedPackagesMotion";
+import { FeaturedPackageCard } from "@/components/platform/FeaturedPackageCard";
 
 export async function FeaturedPackages() {
   const t = await getTranslations("platform");
@@ -27,6 +28,7 @@ export async function FeaturedPackages() {
             <h2 className="mt-3 font-display text-4xl text-cream md:text-5xl">
               {t("featuredPackages")}
             </h2>
+            <p className="mt-4 max-w-xl text-soft-gray">{t("packagesIntro")}</p>
           </div>
           <Link href="/packages" className="text-sm text-gold hover:text-gold-bright">
             {t("viewAllPackages")}
@@ -36,59 +38,23 @@ export async function FeaturedPackages() {
         <FeaturedPackagesMotion>
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {packages.map((pkg) => (
-              <article
+              <FeaturedPackageCard
                 key={pkg.id}
-                data-reveal
-                className="flex h-full flex-col overflow-hidden border border-[var(--line)] bg-[#04101f]/40"
-              >
-                <Link
-                  href={`/packages/${pkg.id}`}
-                  className="relative block aspect-[16/10] overflow-hidden"
-                >
-                  <Image
-                    src={pkg.image}
-                    alt={pkg.title}
-                    fill
-                    quality={80}
-                    className="object-cover transition-transform duration-700 hover:scale-[1.03]"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                </Link>
-                <div className="flex flex-1 flex-col p-6">
-                  <p className="text-[0.62rem] uppercase tracking-[0.16em] text-gold/80">
-                    {pkg.details.destination} · {pkg.days}D / {pkg.nights}N
-                  </p>
-                  <h3 className="mt-2 font-display text-2xl text-cream">
-                    {pkg.title}
-                  </h3>
-                  <p className="mt-3 line-clamp-3 text-sm text-soft-gray">
-                    {pkg.blurb}
-                  </p>
-                  <ul className="mt-4 space-y-1.5 text-sm text-mist/80">
-                    {pkg.highlights.slice(0, 3).map((item) => (
-                      <li key={item}>· {item}</li>
-                    ))}
-                  </ul>
-                  <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-6">
-                    <p className="text-gold-bright">
-                      {isEnquiryPriced(pkg) ? (
-                        formatPackagePrice(pkg, pkgT("requestQuote"))
-                      ) : (
-                        <>
-                          {t("from")} {formatPackagePrice(pkg)}{" "}
-                          <span className="text-mist/70">{t("perPerson")}</span>
-                        </>
-                      )}
-                    </p>
-                    <Link
-                      href={`/enquire?package=${pkg.id}`}
-                      className="text-[0.68rem] uppercase tracking-[0.14em] text-white/70 hover:text-gold"
-                    >
-                      {t("enquireNow")}
-                    </Link>
-                  </div>
-                </div>
-              </article>
+                id={pkg.id}
+                title={pkg.title}
+                image={pkg.image}
+                destination={pkg.details.destination}
+                days={pkg.days}
+                nights={pkg.nights}
+                blurb={pkg.blurb}
+                priceLabel={
+                  isEnquiryPriced(pkg)
+                    ? formatPackagePrice(pkg, pkgT("requestQuote"))
+                    : `${t("from")} ${formatPackagePrice(pkg)}`
+                }
+                priceNote={isEnquiryPriced(pkg) ? null : t("perPerson")}
+                enquireLabel={t("enquireNow")}
+              />
             ))}
           </div>
         </FeaturedPackagesMotion>

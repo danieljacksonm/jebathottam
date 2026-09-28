@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
 import { getAllBlogSlugs, getLocalizedBlog } from "@/data/blog";
+import { getPackagesForDestinationAsync } from "@/data/packages";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { BlogArticle } from "@/components/blog/BlogArticle";
@@ -48,6 +49,18 @@ export default async function BlogPostPage({
 
   const t = await getTranslations("blog");
   const nav = await getTranslations("nav");
+  const pkgT = await getTranslations("packages");
+
+  const relatedPackages = post.destinationSlug
+    ? (await getPackagesForDestinationAsync(post.destinationSlug, loc))
+        .slice(0, 4)
+        .map((pkg) => ({
+          id: pkg.id,
+          title: pkg.title,
+          image: pkg.image,
+          meta: `${pkg.days}D / ${pkg.nights}N`,
+        }))
+    : [];
 
   return (
     <PageAtmosphere>
@@ -83,6 +96,33 @@ export default async function BlogPostPage({
         tags={post.tags}
         image={post.image}
         imageAlt={post.title}
+        author={post.author}
+        date={post.date}
+        readLabel={t("read", { count: post.readMinutes })}
+        destinationHref={
+          post.destinationSlug
+            ? `/destinations/${post.destinationSlug}`
+            : null
+        }
+        destinationLabel={
+          post.destinationName
+            ? t("exploreDestination", { name: post.destinationName })
+            : null
+        }
+        relatedPackages={relatedPackages}
+        relatedPackagesTitle={t("relatedPackages")}
+        enquireHref={
+          post.destinationSlug
+            ? `/enquire?destination=${post.destinationSlug}`
+            : "/enquire"
+        }
+        enquireLabel={pkgT("enquire")}
+        planHref={
+          post.destinationSlug
+            ? `/plan-your-trip?destination=${post.destinationSlug}`
+            : "/plan-your-trip"
+        }
+        planLabel={nav("planTrip")}
       />
     </PageAtmosphere>
   );

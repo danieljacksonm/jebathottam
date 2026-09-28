@@ -17,6 +17,7 @@ import {
   getPackagesForDestinationAsync,
   isEnquiryPriced,
 } from "@/data/packages";
+import { destinationHero } from "@/data/image-registry";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { absoluteUrl, destinationJsonLd, pageMetadata } from "@/lib/seo";
 import KodaikanalPage from "../../kodaikanal/page";
@@ -62,6 +63,7 @@ export default async function DestinationDetailPage({
   if (!dest) notFound();
 
   const nav = await getTranslations("nav");
+  const t = await getTranslations("destinationPage");
   const blogT = await getTranslations("blog");
   const places = await getPlacesForDestination(dest.id, locale);
   const packages = await getPackagesForDestinationAsync(resolved.slug, locale);
@@ -69,6 +71,17 @@ export default async function DestinationDetailPage({
     destination: resolved.slug,
   });
   const blogCount = await getBlogCount({ destination: resolved.slug });
+  const hero = destinationHero(resolved.slug);
+  const heroSrc = dest.image?.startsWith("/") ? dest.image : hero.src;
+
+  const leadPlaces = places.slice(0, 1);
+  const morePlaces = places.slice(1, 7);
+  const statusLabel =
+    dest.status === "coming_soon"
+      ? t("comingSoon")
+      : dest.status === "enquiry"
+        ? t("customPlanning")
+        : dest.country;
 
   return (
     <PageAtmosphere>
@@ -82,16 +95,10 @@ export default async function DestinationDetailPage({
         })}
       />
       <CinematicPageHero
-        eyebrow={
-          dest.status === "coming_soon"
-            ? "Coming soon"
-            : dest.status === "enquiry"
-              ? "Custom planning"
-              : dest.country
-        }
+        eyebrow={statusLabel}
         title={dest.name}
         subtitle={dest.tagline}
-        image={dest.image}
+        image={heroSrc}
         imageAlt={dest.name}
         tone="mist"
       />
@@ -104,128 +111,134 @@ export default async function DestinationDetailPage({
         ]}
       />
 
-      <section className="mx-auto max-w-5xl px-5 py-14 md:px-8">
-        <p className="text-base leading-relaxed text-soft-gray md:text-lg">
-          {dest.body}
-        </p>
-        <div className="mt-8 flex flex-wrap gap-4">
-          <Link
-            href={`/plan-your-trip?destination=${dest.slug}`}
-            className="btn-gold"
-          >
-            Plan this trip
-          </Link>
-          {packages.length > 0 ? (
-            <Link href="/packages" className="btn-ghost">
-              View packages
-            </Link>
-          ) : (
-            <Link href="/enquire" className="btn-ghost">
-              Enquire
-            </Link>
-          )}
-          {blogCount > 0 ? (
-            <Link
-              href={`/blog?destination=${dest.slug}`}
-              className="btn-ghost"
-            >
-              {blogT("viewAllGuides", { destination: dest.name })}
-            </Link>
-          ) : null}
-        </div>
-        {dest.priceFrom ? (
-          <p className="mt-6 text-gold-bright">
-            From {formatInr(dest.priceFrom)} per person (where published)
+      {/* Editorial intro + quick facts */}
+      <section className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-[1.4fr_0.8fr] md:px-8 md:py-20">
+        <div>
+          <p className="text-[0.7rem] uppercase tracking-[0.28em] text-gold">
+            {t("overview")}
           </p>
-        ) : null}
+          <h2 className="mt-3 font-display text-3xl text-cream md:text-4xl">
+            {t("whyVisit", { name: dest.name })}
+          </h2>
+          <p className="mt-6 text-base leading-relaxed text-soft-gray md:text-lg">
+            {dest.body}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link
+              href={`/plan-your-trip?destination=${dest.slug}`}
+              className="btn-gold"
+            >
+              {t("planThisTrip")}
+            </Link>
+            {packages.length > 0 ? (
+              <Link href="/packages" className="btn-ghost">
+                {t("viewPackages")}
+              </Link>
+            ) : (
+              <Link href="/enquire" className="btn-ghost">
+                {t("enquire")}
+              </Link>
+            )}
+          </div>
+        </div>
+        <aside className="border border-[var(--line)] bg-[#04101f]/50 p-6 md:p-8">
+          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-gold">
+            {t("quickFacts")}
+          </p>
+          <dl className="mt-6 space-y-5 text-sm">
+            <div>
+              <dt className="text-mist/70">{t("region")}</dt>
+              <dd className="mt-1 text-cream">
+                {dest.region || dest.country} · {dest.continent}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-mist/70">{t("travelStyle")}</dt>
+              <dd className="mt-1 text-cream">{t("travelStyleValue")}</dd>
+            </div>
+            {dest.priceFrom ? (
+              <div>
+                <dt className="text-mist/70">{t("from")}</dt>
+                <dd className="mt-1 text-gold-bright">
+                  {formatInr(dest.priceFrom)} {t("perPerson")}
+                </dd>
+              </div>
+            ) : (
+              <div>
+                <dt className="text-mist/70">{t("planning")}</dt>
+                <dd className="mt-1 text-cream">{t("enquiryBased")}</dd>
+              </div>
+            )}
+          </dl>
+        </aside>
       </section>
 
-      {packages.length > 0 ? (
-        <section className="mx-auto max-w-7xl px-5 pb-16 md:px-8">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <h2 className="font-display text-3xl text-cream">
-              Available packages
-            </h2>
-            <Link
-              href="/packages"
-              className="text-sm uppercase tracking-[0.12em] text-gold hover:text-gold-bright"
-            >
-              All packages →
-            </Link>
-          </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {packages.map((pkg) => (
-              <article key={pkg.id} className="lux-card overflow-hidden">
-                <Link href={`/packages/${pkg.id}`} className="block">
-                  <div className="relative aspect-[16/10]">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <p className="text-[0.62rem] uppercase tracking-[0.16em] text-mist/70">
-                      {pkg.days}D / {pkg.nights}N
-                    </p>
-                    <h3 className="mt-2 font-display text-2xl text-cream">
-                      {pkg.title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-soft-gray">
-                      {pkg.blurb}
-                    </p>
-                    {pkg.highlights.length > 0 ? (
-                      <ul className="mt-4 space-y-1 text-sm text-mist/80">
-                        {pkg.highlights.slice(0, 4).map((item) => (
-                          <li key={item}>· {item}</li>
-                        ))}
-                      </ul>
-                    ) : null}
-                    <p className="mt-5 text-gold-bright">
-                      {isEnquiryPriced(pkg)
-                        ? formatPackagePrice(pkg)
-                        : `From ${formatInr(pkg.priceFrom)} per person`}
-                    </p>
-                  </div>
-                </Link>
-              </article>
-            ))}
+      {/* Featured place — magazine lead */}
+      {leadPlaces[0] ? (
+        <section className="border-y border-[var(--line)] bg-[#04101f]/40">
+          <div className="mx-auto grid max-w-7xl lg:grid-cols-2">
+            <div className="relative min-h-[22rem] lg:min-h-[32rem]">
+              {leadPlaces[0].image ? (
+                <Image
+                  src={leadPlaces[0].image}
+                  alt={leadPlaces[0].name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              ) : null}
+            </div>
+            <div className="flex flex-col justify-center px-5 py-12 md:px-10 md:py-16">
+              <p className="text-[0.7rem] uppercase tracking-[0.28em] text-gold">
+                {t("placesToVisit")}
+              </p>
+              <h2 className="mt-3 font-display text-4xl text-cream md:text-5xl">
+                {leadPlaces[0].name}
+              </h2>
+              <p className="mt-5 text-base leading-relaxed text-soft-gray">
+                {leadPlaces[0].summary || leadPlaces[0].detail}
+              </p>
+              <Link
+                href={`/destinations/${dest.slug}/places/${leadPlaces[0].slug}`}
+                className="mt-8 text-[0.68rem] uppercase tracking-[0.16em] text-gold-bright"
+              >
+                {t("explorePlace")} →
+              </Link>
+            </div>
           </div>
         </section>
       ) : null}
 
-      {places.length > 0 ? (
-        <section className="mx-auto max-w-7xl px-5 pb-16 md:px-8">
-          <h2 className="font-display text-3xl text-cream">Top places</h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {places.map((place) => (
-              <article key={place.slug} className="lux-card overflow-hidden">
+      {morePlaces.length > 0 ? (
+        <section className="mx-auto max-w-7xl px-5 py-16 md:px-8">
+          <h2 className="font-display text-3xl text-cream md:text-4xl">
+            {t("morePlaces")}
+          </h2>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {morePlaces.map((place) => (
+              <article key={place.slug} className="group overflow-hidden border border-[var(--line)]">
                 <Link
                   href={`/destinations/${dest.slug}/places/${place.slug}`}
                   className="block"
+                  data-cursor="view"
                 >
                   {place.image ? (
-                    <div className="relative aspect-[16/10]">
+                    <div className="relative aspect-[16/10] overflow-hidden">
                       <Image
                         src={place.image}
                         alt={place.name}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-[var(--dur-slow)] group-hover:scale-[1.04]"
                         sizes="(max-width: 768px) 100vw, 33vw"
                       />
                     </div>
                   ) : null}
                   <div className="p-6">
-                    <h3 className="font-display text-xl text-white">
+                    <h3 className="font-display text-2xl text-white group-hover:text-gold-bright">
                       {place.name}
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-soft-gray">
+                    <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-soft-gray">
                       {place.summary}
-                    </p>
-                    <p className="mt-4 text-xs uppercase tracking-[0.14em] text-gold">
-                      50 guides →
                     </p>
                   </div>
                 </Link>
@@ -235,8 +248,64 @@ export default async function DestinationDetailPage({
         </section>
       ) : null}
 
+      {packages.length > 0 ? (
+        <section className="border-t border-[var(--line)] bg-[#04101f]/60 px-5 py-16 md:px-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <p className="text-[0.7rem] uppercase tracking-[0.28em] text-gold">
+                  {t("packagesEyebrow")}
+                </p>
+                <h2 className="mt-3 font-display text-3xl text-cream md:text-4xl">
+                  {t("packagesTitle", { name: dest.name })}
+                </h2>
+              </div>
+              <Link
+                href="/packages"
+                className="text-sm uppercase tracking-[0.12em] text-gold hover:text-gold-bright"
+              >
+                {t("allPackages")} →
+              </Link>
+            </div>
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              {packages.map((pkg) => (
+                <article key={pkg.id} className="lux-card overflow-hidden">
+                  <Link href={`/packages/${pkg.id}`} className="block" data-cursor="view">
+                    <div className="relative aspect-[16/10]">
+                      <Image
+                        src={pkg.image}
+                        alt={pkg.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <p className="text-[0.62rem] uppercase tracking-[0.16em] text-mist/70">
+                        {pkg.days}D / {pkg.nights}N
+                      </p>
+                      <h3 className="mt-2 font-display text-2xl text-cream">
+                        {pkg.title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-relaxed text-soft-gray">
+                        {pkg.blurb}
+                      </p>
+                      <p className="mt-5 text-gold-bright">
+                        {isEnquiryPriced(pkg)
+                          ? formatPackagePrice(pkg)
+                          : `${t("from")} ${formatInr(pkg.priceFrom)} ${t("perPerson")}`}
+                      </p>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {blogCount > 0 ? (
-        <section className="mx-auto max-w-7xl px-5 pb-20 md:px-8">
+        <section className="mx-auto max-w-7xl px-5 py-16 md:px-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <h2 className="font-display text-3xl text-cream">
               {blogT("recentGuides")}
@@ -250,7 +319,7 @@ export default async function DestinationDetailPage({
           </div>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {blogPosts.slice(0, 3).map((post) => (
-              <article key={post.slug} className="lux-card overflow-hidden">
+              <article key={post.slug} className="border border-[var(--line)] bg-[#04101f]/35">
                 <Link href={`/blog/${post.slug}`} className="block p-6">
                   <p className="text-[0.65rem] uppercase tracking-[0.14em] text-mist">
                     {post.date} · {blogT("read", { count: post.readMinutes })}
@@ -268,33 +337,22 @@ export default async function DestinationDetailPage({
         </section>
       ) : null}
 
-      <section className="border-t border-[var(--line)] bg-[#04101f]/70 px-5 py-16 md:px-8">
-        <div className="mx-auto max-w-4xl">
-          <h2 className="font-display text-3xl text-cream">
-            Plan a {dest.name} trip
+      <section className="border-t border-[var(--line)] px-5 py-20 md:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="font-script text-3xl text-gold-bright">Canaan</p>
+          <h2 className="mt-4 font-display text-4xl text-cream md:text-5xl">
+            {t("planTitle", { name: dest.name })}
           </h2>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-soft-gray">
-            Share dates, travellers, and preferences — we respond with a clear
-            plan based on published packages or a custom enquiry.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-3">
+          <p className="mt-5 text-soft-gray">{t("planBody")}</p>
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
             <Link
               href={`/plan-your-trip?destination=${dest.slug}`}
               className="btn-gold"
             >
-              Plan My Trip
+              {t("planThisTrip")}
             </Link>
             <Link href="/enquire" className="btn-ghost">
-              Enquire
-            </Link>
-            <Link href="/flights" className="btn-ghost">
-              {nav("flights")}
-            </Link>
-            <Link href="/services/train-tickets" className="btn-ghost">
-              {nav("trains")}
-            </Link>
-            <Link href="/hotels" className="btn-ghost">
-              {nav("hotels")}
+              {t("enquire")}
             </Link>
             <Link href="/services/travel-consulting" className="btn-ghost">
               {nav("consulting")}

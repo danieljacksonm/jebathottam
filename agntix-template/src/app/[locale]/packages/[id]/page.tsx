@@ -6,14 +6,18 @@ import {
   formatInr,
   formatPackagePrice,
   getLocalizedPackageAsync,
+  getLocalizedPackagesAsync,
   getPackageRows,
   isEnquiryPriced,
   LEGACY_PACKAGE_REDIRECTS,
 } from "@/data/packages";
+import { getLocalizedBlogs } from "@/data/blog";
+import { DESTINATION_IMAGES } from "@/data/image-registry";
 import { PageAtmosphere } from "@/components/film/PageAtmosphere";
 import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { MagneticCta } from "@/components/cinematic/MagneticCta";
 import { absoluteUrl, packageJsonLd, pageMetadata } from "@/lib/seo";
 import { whatsappUrl } from "@/lib/whatsapp";
 
@@ -54,6 +58,15 @@ function Fact({ label, value }: { label: string; value: string }) {
   );
 }
 
+function galleryForPackage(destinationSlug: string, hero: string): string[] {
+  const entry = DESTINATION_IMAGES[destinationSlug];
+  const out: string[] = [hero];
+  for (const src of [entry?.hero?.src, entry?.card?.src]) {
+    if (src && !out.includes(src)) out.push(src);
+  }
+  return out.slice(0, 4);
+}
+
 export default async function PackageDetailPage({
   params,
 }: {
@@ -75,6 +88,17 @@ export default async function PackageDetailPage({
   const nav = await getTranslations("nav");
   const d = pkg.details;
   const wa = whatsappUrl({ type: "package", packageName: pkg.title });
+
+  const [relatedPackages, relatedGuides] = await Promise.all([
+    getLocalizedPackagesAsync(loc).then((list) =>
+      list.filter((p) => p.destinationSlug === pkg.destinationSlug && p.id !== pkg.id).slice(0, 3),
+    ),
+    getLocalizedBlogs(loc, { destination: pkg.destinationSlug }).then((posts) =>
+      posts.slice(0, 3),
+    ),
+  ]);
+
+  const gallery = galleryForPackage(pkg.destinationSlug, pkg.image);
 
   const faqLd =
     d.faqs.length > 0
@@ -102,7 +126,7 @@ export default async function PackageDetailPage({
       />
       {faqLd ? <JsonLd data={faqLd} /> : null}
       <CinematicPageHero
-        eyebrow={`${pkg.days} Days · ${pkg.nights} Night${pkg.nights === 1 ? "" : "s"}`}
+        eyebrow={t("durationValue", { days: pkg.days, nights: pkg.nights })}
         title={pkg.title}
         subtitle={pkg.tagline ?? pkg.blurb}
         image={pkg.image}
@@ -119,20 +143,59 @@ export default async function PackageDetailPage({
       />
 
       <section className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[1.35fr_0.75fr] md:px-8 md:py-24">
-        <div className="space-y-14">
+        <div className="space-y-16">
           <div>
-            <p className="text-lg leading-relaxed text-soft-gray md:text-xl">
+            <p className="text-[0.7rem] uppercase tracking-[0.28em] text-gold">
+              {t("overview")}
+            </p>
+            <p className="mt-4 text-lg leading-relaxed text-soft-gray md:text-xl">
               {pkg.body}
             </p>
             <ul className="mt-8 space-y-3">
               {pkg.highlights.map((item) => (
                 <li key={item} className="flex gap-3 text-white/80">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 bg-gold" />
                   {item}
                 </li>
               ))}
             </ul>
+            <div className="mt-8 border border-[var(--line)] bg-[#04101f]/45 p-6">
+              <p className="text-[0.62rem] uppercase tracking-[0.16em] text-gold">
+                {t("bestFor")}
+              </p>
+              <p className="mt-2 text-cream">{d.suitableFor}</p>
+              <Link
+                href={`/destinations/${pkg.destinationSlug}`}
+                className="mt-4 inline-block text-[0.68rem] uppercase tracking-[0.14em] text-gold-bright"
+              >
+                {t("exploreDestination")}
+              </Link>
+            </div>
           </div>
+
+          {gallery.length > 1 ? (
+            <div>
+              <h2 className="font-display text-3xl text-cream">{t("gallery")}</h2>
+              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                {gallery.map((src, i) => (
+                  <div
+                    key={src}
+                    className={`relative overflow-hidden border border-[var(--line)] ${
+                      i === 0 ? "sm:col-span-2 aspect-[21/9]" : "aspect-[16/10]"
+                    }`}
+                  >
+                    <Image
+                      src={src}
+                      alt={`${pkg.title} — ${i + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes={i === 0 ? "100vw" : "(max-width: 768px) 100vw, 50vw"}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
 
           {pkg.tiers.length > 0 ? (
             <div>
@@ -142,10 +205,10 @@ export default async function PackageDetailPage({
                 {pkg.tiers.map((tier) => (
                   <article
                     key={tier.id}
-                    className="relative flex flex-col rounded-2xl border border-[var(--line)] bg-navy-mid/30 p-5"
+                    className="relative flex flex-col border border-[var(--line)] bg-[#04101f]/40 p-5"
                   >
                     {tier.bestValue ? (
-                      <span className="absolute -top-2.5 right-4 rounded-full bg-[#c41e24] px-2.5 py-0.5 text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-white">
+                      <span className="absolute -top-2.5 right-4 bg-gold px-2.5 py-0.5 text-[0.58rem] font-semibold uppercase tracking-[0.12em] text-navy">
                         {t("bestValue")}
                       </span>
                     ) : null}
@@ -156,7 +219,7 @@ export default async function PackageDetailPage({
                     <ul className="mt-4 flex-1 space-y-1.5 text-xs text-mist/80">
                       {pkg.sharedInclusions.map((inc) => (
                         <li key={inc} className="flex gap-2">
-                          <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                          <span className="mt-1.5 h-1 w-1 shrink-0 bg-gold" />
                           {inc}
                         </li>
                       ))}
@@ -177,7 +240,7 @@ export default async function PackageDetailPage({
                 ))}
               </div>
               {pkg.groupNote ? (
-                <p className="mt-6 rounded-2xl border border-gold/35 px-5 py-4 text-sm text-gold-bright">
+                <p className="mt-6 border border-gold/35 px-5 py-4 text-sm text-gold-bright">
                   ★ {pkg.groupNote}
                 </p>
               ) : null}
@@ -241,7 +304,7 @@ export default async function PackageDetailPage({
               <ul className="mt-4 space-y-2.5">
                 {d.inclusions.map((item) => (
                   <li key={item} className="flex gap-2 text-sm text-white/80">
-                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                    <span className="mt-1.5 h-1 w-1 shrink-0 bg-gold" />
                     {item}
                   </li>
                 ))}
@@ -252,7 +315,7 @@ export default async function PackageDetailPage({
               <ul className="mt-4 space-y-2.5">
                 {d.exclusions.map((item) => (
                   <li key={item} className="flex gap-2 text-sm text-white/80">
-                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/30" />
+                    <span className="mt-1.5 h-1 w-1 shrink-0 bg-white/30" />
                     {item}
                   </li>
                 ))}
@@ -260,23 +323,24 @@ export default async function PackageDetailPage({
             </div>
           </div>
 
-          <div>
-            <h2 className="font-display text-2xl text-cream">{t("accommodation")}</h2>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-soft-gray">
-              {d.accommodationNote}
-            </p>
-          </div>
-
-          <div>
-            <h2 className="font-display text-2xl text-cream">{t("transportTitle")}</h2>
-            <ul className="mt-4 space-y-2.5">
-              {d.transportDetails.map((item) => (
-                <li key={item} className="flex gap-2 text-sm text-white/80">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+          <div className="grid gap-10 md:grid-cols-2">
+            <div>
+              <h2 className="font-display text-2xl text-cream">{t("accommodation")}</h2>
+              <p className="mt-4 text-sm leading-relaxed text-soft-gray">
+                {d.accommodationNote}
+              </p>
+            </div>
+            <div>
+              <h2 className="font-display text-2xl text-cream">{t("transportTitle")}</h2>
+              <ul className="mt-4 space-y-2.5">
+                {d.transportDetails.map((item) => (
+                  <li key={item} className="flex gap-2 text-sm text-white/80">
+                    <span className="mt-1.5 h-1 w-1 shrink-0 bg-gold" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div>
@@ -289,7 +353,7 @@ export default async function PackageDetailPage({
             <ul className="mt-4 space-y-2.5">
               {d.pricingAssumptions.map((item) => (
                 <li key={item} className="flex gap-2 text-sm text-white/75">
-                  <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                  <span className="mt-1.5 h-1 w-1 shrink-0 bg-gold" />
                   {item}
                 </li>
               ))}
@@ -316,7 +380,7 @@ export default async function PackageDetailPage({
               <h2 className="font-display text-2xl text-cream">{t("packageFaq")}</h2>
               <div className="mt-6 space-y-5">
                 {d.faqs.map((f) => (
-                  <div key={f.question}>
+                  <div key={f.question} className="border-b border-[var(--line)] pb-5">
                     <h3 className="text-base text-cream">{f.question}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-soft-gray">
                       {f.answer}
@@ -329,7 +393,7 @@ export default async function PackageDetailPage({
         </div>
 
         <aside className="h-fit space-y-4 md:sticky md:top-28">
-          <div className="rounded-3xl border border-[var(--line)] bg-navy-mid/40 p-7">
+          <div className="border border-[var(--line)] bg-[#04101f]/55 p-7">
             <p className="text-[0.65rem] uppercase tracking-[0.16em] text-mist">
               {isEnquiryPriced(pkg) ? t("pricing") : t("from")}
             </p>
@@ -345,12 +409,13 @@ export default async function PackageDetailPage({
               <p className="mt-2 text-xs text-mist/70">{t("enquireNote")}</p>
             )}
             <p className="mt-4 text-sm text-white/70">{d.suitableFor}</p>
-            <Link
+            <MagneticCta
               href={`/enquire?package=${pkg.id}`}
               className="btn-gold mt-7 w-full"
             >
               {t("detailCta")}
-            </Link>
+              <span data-mag-arrow>→</span>
+            </MagneticCta>
             <Link
               href="/plan-your-trip"
               className="btn-ghost mt-3 w-full !border-[var(--line)]"
@@ -361,11 +426,11 @@ export default async function PackageDetailPage({
               href={wa}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 flex w-full items-center justify-center rounded-full border border-gold/40 px-5 py-3 text-[0.68rem] uppercase tracking-[0.16em] text-gold-bright transition hover:bg-gold/10"
+              className="mt-3 flex w-full items-center justify-center border border-gold/40 px-5 py-3 text-[0.68rem] uppercase tracking-[0.16em] text-gold-bright transition hover:bg-gold/10"
             >
               {t("whatsappCta")}
             </a>
-            <div className="relative mt-7 aspect-[16/10] overflow-hidden rounded-2xl">
+            <div className="relative mt-7 aspect-[16/10] overflow-hidden border border-[var(--line)]">
               <Image
                 src={pkg.image}
                 alt={pkg.title}
@@ -376,6 +441,74 @@ export default async function PackageDetailPage({
             </div>
           </div>
         </aside>
+      </section>
+
+      {relatedPackages.length > 0 ? (
+        <section className="border-t border-[var(--line)] bg-[#04101f]/50 px-5 py-16 md:px-8">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="font-display text-3xl text-cream">{t("relatedPackages")}</h2>
+            <div className="mt-8 grid gap-6 md:grid-cols-3">
+              {relatedPackages.map((rel) => (
+                <article key={rel.id} className="group overflow-hidden border border-[var(--line)]">
+                  <Link href={`/packages/${rel.id}`} className="block" data-cursor="view">
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <Image
+                        src={rel.image}
+                        alt={rel.title}
+                        fill
+                        className="object-cover transition-transform duration-[var(--dur-slow)] group-hover:scale-[1.04]"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
+                    <div className="p-5">
+                      <p className="text-[0.58rem] uppercase tracking-[0.14em] text-mist">
+                        {rel.days}D / {rel.nights}N
+                      </p>
+                      <h3 className="mt-2 font-display text-xl text-white group-hover:text-gold-bright">
+                        {rel.title}
+                      </h3>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {relatedGuides.length > 0 ? (
+        <section className="mx-auto max-w-7xl px-5 py-16 md:px-8">
+          <h2 className="font-display text-3xl text-cream">{t("relatedGuides")}</h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {relatedGuides.map((post) => (
+              <article key={post.slug} className="border border-[var(--line)] bg-[#04101f]/35 p-6">
+                <Link href={`/blog/${post.slug}`}>
+                  <h3 className="font-display text-xl text-white">{post.title}</h3>
+                  <p className="mt-3 line-clamp-3 text-sm text-soft-gray">{post.excerpt}</p>
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <section className="border-t border-[var(--line)] px-5 py-20 md:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="font-script text-3xl text-gold-bright">Canaan</p>
+          <h2 className="mt-4 font-display text-4xl text-cream md:text-5xl">
+            {t("finalCtaTitle")}
+          </h2>
+          <p className="mt-5 text-soft-gray">{t("finalCtaBody")}</p>
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
+            <MagneticCta href={`/enquire?package=${pkg.id}`} className="btn-gold">
+              {t("detailCta")}
+              <span data-mag-arrow>→</span>
+            </MagneticCta>
+            <Link href="/plan-your-trip" className="btn-ghost">
+              {t("customTrip")}
+            </Link>
+          </div>
+        </div>
       </section>
     </PageAtmosphere>
   );

@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { GlobalHero, HOME_HERO_IMAGE } from "@/components/platform/GlobalHero";
+import { HOME_HERO_IMAGE } from "@/components/platform/GlobalHero";
 import { FeaturedDestinations } from "@/components/platform/FeaturedDestinations";
 import { FeaturedPackages } from "@/components/platform/FeaturedPackages";
 import { CorporateStrip } from "@/components/platform/CorporateStrip";
@@ -11,10 +11,17 @@ import { TravelGuidesStrip } from "@/components/platform/TravelGuidesStrip";
 import { HowItWorksSection } from "@/components/HowItWorksSection";
 import { LazySection } from "@/components/cinematic/LazySection";
 import { HomeGeoSummary } from "@/components/seo/HomeGeoSummary";
+import { CinematicHero } from "@/components/cinematic/CinematicHero";
+import { HomeChrome } from "@/components/cinematic/HomeChrome";
 import { pageMetadata } from "@/lib/seo";
 
 const WhyCanaan = dynamic(() =>
   import("@/components/cinematic/WhyCanaan").then((m) => m.WhyCanaan),
+);
+const ImmersiveExperiences = dynamic(() =>
+  import("@/components/cinematic/ImmersiveExperiences").then(
+    (m) => m.ImmersiveExperiences,
+  ),
 );
 
 export async function generateMetadata({
@@ -35,13 +42,20 @@ export async function generateMetadata({
   });
 }
 
-async function TrustStrip() {
+async function EditorialIntro() {
   const t = await getTranslations("platform");
   return (
-    <section className="border-b border-[var(--line)] bg-[#04101f]/80 px-5 py-8 md:px-8">
-      <p className="mx-auto max-w-3xl text-center text-sm leading-relaxed text-soft-gray md:text-base">
-        {t("trustLine")}
-      </p>
+    <section className="relative border-b border-[var(--line)] px-5 py-16 md:px-8 md:py-24">
+      <div className="mx-auto max-w-3xl text-center">
+        <p className="font-script text-3xl text-gold-bright md:text-4xl">Canaan</p>
+        <h2 className="mt-4 font-display text-3xl leading-snug text-cream md:text-5xl">
+          {t("editorialTitle")}
+        </h2>
+        <p className="mt-6 text-base leading-relaxed text-soft-gray md:text-lg">
+          {t("editorialBody")}
+        </p>
+        <p className="mt-8 text-sm leading-relaxed text-mist/80">{t("trustLine")}</p>
+      </div>
     </section>
   );
 }
@@ -56,17 +70,21 @@ export default async function HomePage({
 
   return (
     <>
-      <GlobalHero />
-      <TrustStrip />
+      <CinematicHero />
+      <HomeChrome />
+      <EditorialIntro />
       <HomeGeoSummary />
       <FeaturedDestinations />
       <FeaturedPackages />
+      <LazySection>
+        <ImmersiveExperiences pinned />
+      </LazySection>
       <TravelServicesStrip />
-      <ExperienceStyles />
       <LazySection>
         <WhyCanaan />
       </LazySection>
       <TravelGuidesStrip />
+      <ExperienceStyles />
       <CorporateStrip />
       <LazySection>
         <HowItWorksSection />

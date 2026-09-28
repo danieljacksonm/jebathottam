@@ -121,10 +121,20 @@ export function DestinationEditor({
           ["region", "Region"],
           ["image", "Image URL"],
           ["taglineEn", "Tagline (EN)"],
+          ["taglineTa", "Tagline (TA)"],
+          ["taglineHi", "Tagline (HI)"],
         ] as const
       ).map(([key, label]) => (
         <div className="admin-field" key={key}>
-          <label htmlFor={key}>{label}</label>
+          <label htmlFor={key}>
+            {label}
+            {(key === "nameTa" || key === "nameHi" || key === "taglineTa" || key === "taglineHi") &&
+            !String(form[key]).trim() ? (
+              <span style={{ color: "#c45c26", marginLeft: 8, fontSize: 12 }}>
+                Translation missing
+              </span>
+            ) : null}
+          </label>
           <input
             id={key}
             value={String(form[key])}
@@ -141,7 +151,14 @@ export function DestinationEditor({
         />
       </div>
       <div className="admin-field">
-        <label htmlFor="bodyTa">Overview (TA)</label>
+        <label htmlFor="bodyTa">
+          Overview (TA)
+          {!form.bodyTa.trim() ? (
+            <span style={{ color: "#c45c26", marginLeft: 8, fontSize: 12 }}>
+              Translation missing
+            </span>
+          ) : null}
+        </label>
         <textarea
           id="bodyTa"
           value={form.bodyTa}
@@ -149,7 +166,14 @@ export function DestinationEditor({
         />
       </div>
       <div className="admin-field">
-        <label htmlFor="bodyHi">Overview (HI)</label>
+        <label htmlFor="bodyHi">
+          Overview (HI)
+          {!form.bodyHi.trim() ? (
+            <span style={{ color: "#c45c26", marginLeft: 8, fontSize: 12 }}>
+              Translation missing
+            </span>
+          ) : null}
+        </label>
         <textarea
           id="bodyHi"
           value={form.bodyHi}

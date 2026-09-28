@@ -51,9 +51,10 @@ function parseBody(raw: string) {
 function isWeakBlogImage(image: string | null | undefined) {
   if (!image) return true;
   return (
-    image.includes("/images/kodai/") ||
     image.includes("loremflickr") ||
-    image.includes("unsplash.com")
+    image.includes("unsplash.com") ||
+    image.includes("picsum.photos") ||
+    image.includes("placehold")
   );
 }
 

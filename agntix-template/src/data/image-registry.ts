@@ -119,6 +119,90 @@ export const DESTINATION_IMAGES: Record<
       purpose: "card",
     },
   },
+  bali: {
+    hero: {
+      src: "/images/travel/d/bali.jpg",
+      alt: "Bali temple and tropical landscape",
+      purpose: "hero",
+    },
+    card: {
+      src: "/images/travel/p/bali/tegallalang.jpg",
+      alt: "Tegallalang rice terraces in Bali",
+      purpose: "card",
+    },
+  },
+  madurai: {
+    hero: {
+      src: "/images/travel/d/madurai.jpg",
+      alt: "Madurai temple city",
+      purpose: "hero",
+    },
+    card: {
+      src: "/images/travel/p/madurai/meenakshi-temple.jpg",
+      alt: "Meenakshi Temple, Madurai",
+      purpose: "card",
+    },
+  },
+  delhi: {
+    hero: {
+      src: "/images/travel/d/delhi.jpg",
+      alt: "Delhi heritage skyline",
+      purpose: "hero",
+    },
+    card: {
+      src: "/images/travel/d/agra-taj-mahal.jpg",
+      alt: "Taj Mahal near Delhi–Agra circuit",
+      purpose: "card",
+    },
+  },
+  andaman: {
+    hero: {
+      src: "/images/travel/d/andaman.jpg",
+      alt: "Andaman islands coastline",
+      purpose: "hero",
+    },
+    card: {
+      src: "/images/travel/d/andaman.jpg",
+      alt: "Andaman turquoise waters",
+      purpose: "card",
+    },
+  },
+  shimla: {
+    hero: {
+      src: "/images/travel/d/shimla.jpg",
+      alt: "Shimla hill station",
+      purpose: "hero",
+    },
+    card: {
+      src: "/images/travel/d/shimla.jpg",
+      alt: "Shimla ridges and town",
+      purpose: "card",
+    },
+  },
+  leh: {
+    hero: {
+      src: "/images/travel/d/leh-ladakh.jpg",
+      alt: "Leh Ladakh high desert mountains",
+      purpose: "hero",
+    },
+    card: {
+      src: "/images/travel/d/leh-ladakh.jpg",
+      alt: "Ladakh mountain landscape",
+      purpose: "card",
+    },
+  },
+  "leh-ladakh": {
+    hero: {
+      src: "/images/travel/d/leh-ladakh.jpg",
+      alt: "Leh Ladakh high desert mountains",
+      purpose: "hero",
+    },
+    card: {
+      src: "/images/travel/d/leh-ladakh.jpg",
+      alt: "Ladakh mountain landscape",
+      purpose: "card",
+    },
+  },
 };
 
 export const PACKAGE_IMAGES_REGISTRY: Record<string, ImageAsset> = {

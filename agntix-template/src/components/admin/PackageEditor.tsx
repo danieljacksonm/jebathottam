@@ -79,6 +79,8 @@ export function PackageEditor({
     titleTa: title.ta ?? "",
     titleHi: title.hi ?? "",
     taglineEn: tagline.en ?? "",
+    taglineTa: tagline.ta ?? "",
+    taglineHi: tagline.hi ?? "",
     blurbEn: blurb.en ?? "",
     blurbTa: blurb.ta ?? "",
     blurbHi: blurb.hi ?? "",
@@ -168,6 +170,36 @@ export function PackageEditor({
           id="titleEn"
           value={form.titleEn}
           onChange={(e) => set("titleEn", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
+        <label htmlFor="titleTa">
+          Title (TA)
+          {!form.titleTa.trim() ? (
+            <span style={{ color: "#c45c26", marginLeft: 8, fontSize: 12 }}>
+              Translation missing
+            </span>
+          ) : null}
+        </label>
+        <input
+          id="titleTa"
+          value={form.titleTa}
+          onChange={(e) => set("titleTa", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
+        <label htmlFor="titleHi">
+          Title (HI)
+          {!form.titleHi.trim() ? (
+            <span style={{ color: "#c45c26", marginLeft: 8, fontSize: 12 }}>
+              Translation missing
+            </span>
+          ) : null}
+        </label>
+        <input
+          id="titleHi"
+          value={form.titleHi}
+          onChange={(e) => set("titleHi", e.target.value)}
         />
       </div>
       <div className="admin-field">
@@ -283,6 +315,22 @@ export function PackageEditor({
         />
       </div>
       <div className="admin-field">
+        <label htmlFor="taglineTa">Tagline (TA)</label>
+        <input
+          id="taglineTa"
+          value={form.taglineTa}
+          onChange={(e) => set("taglineTa", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
+        <label htmlFor="taglineHi">Tagline (HI)</label>
+        <input
+          id="taglineHi"
+          value={form.taglineHi}
+          onChange={(e) => set("taglineHi", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
         <label htmlFor="blurbEn">Blurb (EN)</label>
         <textarea
           id="blurbEn"
@@ -291,11 +339,57 @@ export function PackageEditor({
         />
       </div>
       <div className="admin-field">
+        <label htmlFor="blurbTa">
+          Blurb (TA)
+          {!form.blurbTa.trim() ? (
+            <span style={{ color: "#c45c26", marginLeft: 8, fontSize: 12 }}>
+              Translation missing
+            </span>
+          ) : null}
+        </label>
+        <textarea
+          id="blurbTa"
+          value={form.blurbTa}
+          onChange={(e) => set("blurbTa", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
+        <label htmlFor="blurbHi">
+          Blurb (HI)
+          {!form.blurbHi.trim() ? (
+            <span style={{ color: "#c45c26", marginLeft: 8, fontSize: 12 }}>
+              Translation missing
+            </span>
+          ) : null}
+        </label>
+        <textarea
+          id="blurbHi"
+          value={form.blurbHi}
+          onChange={(e) => set("blurbHi", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
         <label htmlFor="bodyEn">Body (EN)</label>
         <textarea
           id="bodyEn"
           value={form.bodyEn}
           onChange={(e) => set("bodyEn", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
+        <label htmlFor="bodyTa">Body (TA)</label>
+        <textarea
+          id="bodyTa"
+          value={form.bodyTa}
+          onChange={(e) => set("bodyTa", e.target.value)}
+        />
+      </div>
+      <div className="admin-field">
+        <label htmlFor="bodyHi">Body (HI)</label>
+        <textarea
+          id="bodyHi"
+          value={form.bodyHi}
+          onChange={(e) => set("bodyHi", e.target.value)}
         />
       </div>
       <div className="admin-field">

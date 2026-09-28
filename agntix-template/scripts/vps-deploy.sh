@@ -34,6 +34,7 @@ echo "Syncing travel packages + featured editorial guides…"
 npx --yes tsx prisma/sync-packages.ts || true
 node prisma/seed-editorial-guides.mjs || true
 node prisma/translate-editorial-guides.mjs || true
+node prisma/seed-longform-guides.mjs || true
 
 if [[ -f "$APP_DIR/.env" ]] && ! grep -q '^ADMIN_PASSWORD=' "$APP_DIR/.env"; then
   echo "WARNING: ADMIN_PASSWORD is not set — /admin login will be unavailable until you add it to .env"

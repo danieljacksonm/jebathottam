@@ -34,65 +34,72 @@ export type WhyStat = {
 
 export const cinematicExperiences: CinematicExperience[] = [
   {
-    id: "sunrise",
+    id: "kodai-lake",
     title: {
-      en: "Sunrise Viewpoints",
-      ta: "சூரிய உதய காட்சிகள்",
-      hi: "सूर्योदय व्यूपॉइंट",
+      en: "Kodaikanal Lake",
+      ta: "கொடைக்கானல் ஏரி",
+      hi: "कोडाइकनाल झील",
     },
-    image: LOCAL_SCENES["dolphins-nose"],
+    image: "/images/kodai/real/kodai-lake-boats.jpg",
   },
   {
-    id: "pine",
+    id: "darjeeling",
     title: {
-      en: "Pine Forest Walk",
-      ta: "பைன் காடு நடை",
-      hi: "पाइन जंगल सैर",
+      en: "Darjeeling Hills",
+      ta: "டார்ஜிலிங் மலைகள்",
+      hi: "दार्जिलिंग पहाड़ियाँ",
     },
-    image: LOCAL_SCENES["pine-forest"],
+    image: "/images/travel/p/darjeeling/tiger-hill.jpg",
   },
   {
-    id: "mannavanur",
-    title: { en: "Mannavanur", ta: "மன்னவனூர்", hi: "मन्नवनूर" },
-    image: LOCAL_SCENES.mannavanur,
+    id: "goa",
+    title: { en: "Goa Coast", ta: "கோவா கடற்கரை", hi: "गोवा तट" },
+    image: "/images/travel/p/goa/calangute.jpg",
   },
   {
-    id: "poombarai",
+    id: "bali",
     title: {
-      en: "Poombarai Village",
-      ta: "பூம்பராய் கிராமம்",
-      hi: "पूमबराई गाँव",
+      en: "Bali Terraces",
+      ta: "பாலி நெல் வயல்கள்",
+      hi: "बाली धान की सीढ़ियाँ",
     },
-    image: LOCAL_SCENES.poombarai,
+    image: "/images/travel/p/bali/tegallalang.jpg",
   },
   {
-    id: "boating",
-    title: { en: "Boating", ta: "படகு சவாரி", hi: "बोटिंग" },
-    image: LOCAL_SCENES["kodai-lake"],
-  },
-  {
-    id: "falls",
-    title: { en: "Waterfalls", ta: "அருவிகள்", hi: "जलप्रपात" },
-    image: LOCAL_SCENES["silver-cascade"],
-  },
-  {
-    id: "camping",
-    title: { en: "Camping", ta: "முகாம்", hi: "कैंपिंग" },
-    image: LOCAL_SCENES.camping,
-  },
-  {
-    id: "resorts",
+    id: "madurai",
     title: {
-      en: "Quiet hillside stays",
-      ta: "அமைதியான மலை தங்கல்",
-      hi: "शांत पहाड़ी ठहराव",
+      en: "Madurai Heritage",
+      ta: "மதுரை பாரம்பரியம்",
+      hi: "मदुरै विरासत",
     },
-    image: LOCAL_SCENES["dolphins-nose"],
+    image: "/images/travel/d/madurai.jpg",
   },
   {
-    id: "horse",
-    title: { en: "Horse Riding", ta: "குதிரை சவாரி", hi: "घुड़सवारी" },
-    image: LOCAL_SCENES.camping,
+    id: "delhi-agra",
+    title: {
+      en: "Delhi & Agra",
+      ta: "டெல்லி & ஆக்ரா",
+      hi: "दिल्ली और आगरा",
+    },
+    image: "/images/travel/d/agra-taj-mahal.jpg",
+  },
+  {
+    id: "kerala",
+    title: {
+      en: "Kerala Backwaters",
+      ta: "கேரள பின்நீர்",
+      hi: "केरल बैकवाटर्स",
+    },
+    image: "/images/travel/p/kerala/alleppey.jpg",
+  },
+  {
+    id: "rajasthan",
+    title: {
+      en: "Rajasthan Forts",
+      ta: "ராஜஸ்தான் கோட்டைகள்",
+      hi: "राजस्थान के किले",
+    },
+    image: "/images/travel/d/rajasthan.jpg",
   },
 ];
 

@@ -202,6 +202,12 @@
     "cancellation": "Cancellation",
     "payment": "Payment terms",
     "packageFaq": "Package FAQ",
+    "overview": "Overview",
+    "gallery": "Gallery",
+    "relatedPackages": "More packages for this destination",
+    "relatedGuides": "Related travel guides",
+    "finalCtaTitle": "Ready to request this journey?",
+    "finalCtaBody": "Share dates and travellers — we confirm what is published and what needs a custom quote.",
     "luxuryEyebrow": "When you are ready",
     "luxuryTitle": "Stay in the story.",
     "luxuryBody": "Published rates where verified — request a quote for enquiry itineraries."
@@ -227,7 +233,48 @@
     "title": "Support for the whole journey",
     "subtitle": "Flights, trains, hotels, visas, custom planning, and corporate travel — alongside published packages for destinations we verify.",
     "geoSummary": "Canaan Travel Hub offers verified packages for Kodaikanal and Darjeeling plus enquiry-based flights, train tickets, hotels, visa assistance, and custom trip planning. Contact +91 70927 71754.",
-    "cta": "Start an enquiry"
+    "cta": "Start an enquiry",
+    "intro": "Human assistance for the parts of travel that should stay clear — not a self-serve booking marketplace."
+  },
+  "serviceShared": {
+    "introTitle": "How Canaan helps",
+    "noteTitle": "What to know",
+    "point1": "Enquiry-based — no fake live inventory on the website",
+    "point2": "Clear next steps before you pay any advance",
+    "point3": "Works alongside packages or as standalone support",
+    "relatedTitle": "Other travel services"
+  },
+  "corporatePage": {
+    "eyebrow": "Corporate travel",
+    "title": "Corporate & group travel",
+    "subtitle": "Business trips, retreats, team outings, conferences, and coordinated group travel — planned on enquiry.",
+    "heroAlt": "City skyline for corporate travel planning",
+    "supportTitle": "How we support companies",
+    "supportBody": "Canaan coordinates travel on enquiry — tell us destinations, dates, and headcount. We do not invent seat inventory or hotel availability.",
+    "cta": "Talk to our travel team",
+    "noteTitle": "Clear expectations",
+    "note": "Corporate programmes are planned after enquiry. Pricing and availability are confirmed for your dates — nothing is published as fake live inventory.",
+    "topicsTitle": "What we coordinate",
+    "topics": {
+      "business": {
+        "title": "Business trips",
+        "body": "Flights, hotels, and transfers coordinated for working travellers — dates and destinations confirmed after enquiry."
+      },
+      "retreats": {
+        "title": "Team retreats & outings",
+        "body": "Group stays and day programmes shaped around your team size, budget, and preferred region."
+      },
+      "meetings": {
+        "title": "Meetings & conferences",
+        "body": "Travel support around events — lodging clusters, airport transfers, and itinerary buffers."
+      },
+      "custom": {
+        "title": "Custom corporate itineraries",
+        "body": "Multi-city or multi-destination programmes planned with Canaan — no invented inventory or fake availability."
+      }
+    },
+    "finalTitle": "Plan your next corporate journey",
+    "finalBody": "Share destinations, dates, and headcount — we respond with a clear coordination plan."
   },
   "howItWorks": {
     "eyebrow": "How it works",
@@ -367,7 +414,9 @@
     "next": "Next",
     "pageLabel": "Page {page} / {total}",
     "featured": "Featured guide",
-    "latest": "Latest guides"
+    "latest": "Latest guides",
+    "exploreDestination": "Explore {name}",
+    "relatedPackages": "Related packages"
   },
   "film": {
     "frameEyebrow": "In the film of your day",
@@ -539,6 +588,10 @@
     "heroSub": "Thoughtfully planned journeys across India and beyond — from hill stations and heritage cities to custom international escapes.",
     "ctaDestinations": "Explore Destinations",
     "ctaPlan": "Plan My Trip",
+    "editorialTitle": "Travel, planned with quiet confidence.",
+    "editorialBody": "From misty hill stations to heritage cities and overseas escapes — we publish verified packages and design custom journeys with human care.",
+    "destinationsIntro": "Places that feel distinct — each with its own light, pace, and story.",
+    "packagesIntro": "Curated stays and routes you can enquire on — clear inclusions, no invented inventory.",
     "featuredDestinations": "Explore destinations",
     "featuredPackages": "Featured travel packages",
     "whyTitle": "Why travel with Canaan",
@@ -548,6 +601,7 @@
     "corporateCta": "Talk to our travel team",
     "customTitle": "Tell us where you want to go.",
     "customBody": "We'll help you plan the journey — destinations, dates, style, and budget.",
+    "contactCta": "Contact",
     "availableNow": "Available now",
     "requestEnquiry": "Request / Enquiry",
     "comingSoon": "Coming soon",
@@ -565,7 +619,15 @@
     "guidesEyebrow": "Travel guides",
     "guidesTitle": "Travel stories & planning notes",
     "guidesBody": "Destination guides, itineraries, and practical travel advice — connected to packages and travel services when you are ready to plan.",
-    "exploreDestination": "Explore destination"
+    "exploreDestination": "Explore destination",
+    "stylesEyebrow": "How you travel",
+    "stylesTitle": "Travel styles",
+    "stylesBody": "Tell us the kind of trip you want. We plan around real destinations and packages — no fake availability.",
+    "stylesCta": "Start planning",
+    "styleFamily": "Family",
+    "styleHoneymoon": "Honeymoon",
+    "styleAdventure": "Adventure",
+    "styleCorporate": "Corporate"
   },
   "destinationsSection": {
     "eyebrow": "Destination",
@@ -575,12 +637,37 @@
     "from": "From",
     "viewAll": "View Kodaikanal"
   },
+  "destinationPage": {
+    "overview": "Overview",
+    "whyVisit": "Why {name}",
+    "planThisTrip": "Plan this trip",
+    "viewPackages": "View packages",
+    "enquire": "Enquire",
+    "quickFacts": "Quick facts",
+    "region": "Region",
+    "travelStyle": "Travel style",
+    "travelStyleValue": "Leisure · culture · custom planning",
+    "from": "From",
+    "perPerson": "per person",
+    "planning": "Planning",
+    "enquiryBased": "Enquiry-based — no invented inventory",
+    "comingSoon": "Coming soon",
+    "customPlanning": "Custom planning",
+    "placesToVisit": "Places to visit",
+    "explorePlace": "Explore place",
+    "morePlaces": "More places",
+    "packagesEyebrow": "Packages",
+    "packagesTitle": "{name} packages",
+    "allPackages": "All packages",
+    "planTitle": "Plan a {name} trip",
+    "planBody": "Share dates, travellers, and preferences — we respond with a clear plan based on published packages or a custom enquiry."
+  },
   "homeCinematic": {
     "whyKodaiEyebrow": "Why Kodaikanal",
     "whyKodaiTitle": "A place that asks you to slow down.",
     "whyKodaiBody": "Mist over pine. Quiet lakes. Roads that open only when you are ready. Canaan presents Kodaikanal as an experience — not a checklist.",
     "immersiveEyebrow": "Immersive experiences",
-    "immersiveTitle": "Drift through the hills.",
+    "immersiveTitle": "Places that stay with you.",
     "whyCanaanEyebrow": "Why Canaan",
     "whyCanaanTitle": "Premium feels effortless.",
     "whyCanaan": {
@@ -617,13 +704,14 @@
     "digitalSoft": "Questions about packages or travel services?",
     "digitalWhatsapp": "WhatsApp us",
     "digitalEnquire": "Enquire online",
-    "heroEyebrow": "Canaan Travel Hub · Kodaikanal",
-    "heroTitle": "Every Journey Begins With Wonder.",
-    "heroSub": "Discover Kodaikanal Like Never Before.",
-    "heroExplore": "Explore Experiences",
-    "heroWatch": "Watch Story",
+    "heroEyebrow": "Travel Hub · India & beyond",
+    "heroTitle": "Every journey begins with wonder.",
+    "heroSub": "Hill stations, heritage cities, beaches, and overseas escapes — planned with human care.",
+    "heroExplore": "Explore destinations",
+    "heroPlan": "Plan my trip",
+    "heroWatch": "Watch story",
     "heroScroll": "Scroll",
-    "heroStoryTitle": "Kodaikanal story"
+    "heroStoryTitle": "Canaan Travel Hub"
   },
   "journey": {
     "stages": {
