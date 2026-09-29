@@ -10,20 +10,20 @@ import { SITE_NAV } from "@/lib/site-nav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLocalePath, useShellMessages, useStudioSiteCopy } from "@/lib/i18n/use-shell-messages";
 
-const serviceLinks = [
-  { label: "Digital & Admin", href: "/services#digital" },
-  { label: "Web & Technical", href: "/services#web" },
-  { label: "Travel & Booking", href: "/services#travel" },
-  { label: "Other Services", href: "/services#other" },
-];
-
 export default function Header() {
   const pathname = usePathname() || "/";
   const t = useShellMessages();
   const copy = useStudioSiteCopy();
   const studio = copy.studio;
   const common = copy.common;
+  const contact = copy.contact;
   const lp = useLocalePath();
+  const serviceLinks = [
+    { label: contact.optData, href: lp("/services#digital") },
+    { label: contact.optWeb, href: lp("/services#web") },
+    { label: contact.optTravel, href: lp("/services#travel") },
+    { label: contact.optOther, href: lp("/services#other") },
+  ];
 
   const navLinks = [
     { label: t.services, href: lp("/services") },
