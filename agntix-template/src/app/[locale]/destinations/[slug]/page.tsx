@@ -135,7 +135,7 @@ export default async function DestinationDetailPage({
                 {t("viewPackages")}
               </Link>
             ) : (
-              <Link href="/enquire" className="btn-ghost">
+              <Link href={`/enquire?destination=${dest.slug}&source=destination`} className="btn-ghost">
                 {t("enquire")}
               </Link>
             )}
@@ -351,7 +351,7 @@ export default async function DestinationDetailPage({
             >
               {t("planThisTrip")}
             </Link>
-            <Link href="/enquire" className="btn-ghost">
+            <Link href={`/enquire?destination=${dest.slug}&source=destination`} className="btn-ghost">
               {t("enquire")}
             </Link>
             <Link href="/services/travel-consulting" className="btn-ghost">

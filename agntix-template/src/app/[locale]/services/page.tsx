@@ -160,7 +160,7 @@ export default async function ServicesPage({
         <div className="mx-auto max-w-3xl text-center">
           <p className="font-script text-3xl text-gold-bright">Canaan</p>
           <div className="mt-8">
-            <MagneticCta href="/enquire" className="btn-gold">
+            <MagneticCta href="/enquire?source=service" className="btn-gold">
               {t("cta")}
               <span data-mag-arrow>→</span>
             </MagneticCta>

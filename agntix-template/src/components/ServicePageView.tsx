@@ -152,7 +152,7 @@ export async function ServicePageView({
             {t("body")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <MagneticCta href={`/enquire?package=${enquireKey}`} className="btn-gold">
+            <MagneticCta href={`/enquire?package=${enquireKey}&service=${enquireKey}&source=service`} className="btn-gold">
               {t("cta")}
               <span data-mag-arrow>→</span>
             </MagneticCta>
@@ -285,7 +285,7 @@ export async function ServicePageView({
           </h2>
           <p className="mt-5 text-soft-gray">{t("ctaBody")}</p>
           <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <MagneticCta href={`/enquire?package=${enquireKey}`} className="btn-gold">
+            <MagneticCta href={`/enquire?package=${enquireKey}&service=${enquireKey}&source=service`} className="btn-gold">
               {t("cta")}
               <span data-mag-arrow>→</span>
             </MagneticCta>

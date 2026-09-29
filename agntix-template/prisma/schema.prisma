@@ -139,3 +139,252 @@ model TravelPackage {
   @@index([featured])
   @@index([sortOrder])
 }
+
+model DocumentSequence {
+  id        String @id
+  lastValue Int    @default(0)
+}
+
+model Customer {
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @default("")
+  phone     String    @default("")
+  whatsapp  String    @default("")
+  country   String    @default("")
+  notes     String    @default("")
+  enquiries Enquiry[]
+  quotes    Quote[]
+  invoices  Invoice[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([email])
+  @@index([phone])
+}
+
+model Enquiry {
+  id                  String            @id @default(cuid())
+  referenceNumber     String            @unique
+  customerId          String?
+  customer            Customer?         @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customerName        String
+  email               String
+  phone               String
+  whatsapp            String            @default("")
+  country             String            @default("")
+  destination         String            @default("")
+  departureLocation   String            @default("")
+  packageSlug         String            @default("")
+  service             String            @default("")
+  travelType          String            @default("")
+  travelStartDate     String            @default("")
+  travelEndDate       String            @default("")
+  flexibleDates       Boolean           @default(false)
+  adults              Int               @default(1)
+  children            Int               @default(0)
+  infants             Int               @default(0)
+  budgetRange         String            @default("")
+  currency            String            @default("INR")
+  hotelPreference     String            @default("")
+  transportPreference String            @default("")
+  specialRequirements String            @default("")
+  message             String            @default("")
+  status              String            @default("NEW")
+  priority            String            @default("NORMAL")
+  source              String            @default("Website")
+  sourcePage          String            @default("")
+  locale              String            @default("en")
+  utmSource           String            @default("")
+  utmMedium           String            @default("")
+  utmCampaign         String            @default("")
+  utmContent          String            @default("")
+  nextFollowUp        String            @default("")
+  assignedAdmin       String            @default("")
+  emailStatus         String            @default("not_sent")
+  activities          EnquiryActivity[]
+  quotes              Quote[]
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@index([email])
+}
+
+model EnquiryActivity {
+  id        String   @id @default(cuid())
+  enquiryId String
+  enquiry   Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  kind      String
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([enquiryId])
+}
+
+model Quote {
+  id                String      @id @default(cuid())
+  number            String      @unique
+  enquiryId         String?
+  enquiry           Enquiry?    @relation(fields: [enquiryId], references: [id], onDelete: SetNull)
+  customerId        String?
+  customer          Customer?   @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  status            String      @default("DRAFT")
+  customerName      String
+  email             String      @default("")
+  phone             String      @default("")
+  destination       String      @default("")
+  packageSlug       String      @default("")
+  travelStart       String      @default("")
+  travelEnd         String      @default("")
+  travellers        String      @default("")
+  itinerary         String      @default("")
+  currency          String      @default("INR")
+  discountMinor     Int         @default(0)
+  taxMinor          Int         @default(0)
+  paymentTerms      String      @default("")
+  cancellationNotes String      @default("")
+  validityDate      String      @default("")
+  notes             String      @default("")
+  items             QuoteItem[]
+  invoice           Invoice?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  @@index([status])
+}
+
+model QuoteItem {
+  id            String @id @default(cuid())
+  quoteId       String
+  quote         Quote  @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  description   String
+  quantity      Int    @default(1)
+  unitMinor     Int    @default(0)
+  discountMinor Int    @default(0)
+  taxMinor      Int    @default(0)
+  sortOrder     Int    @default(0)
+}
+
+model Invoice {
+  id              String           @id @default(cuid())
+  number          String           @unique
+  quoteId         String?          @unique
+  quote           Quote?           @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  customerId      String?
+  customer        Customer?        @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  status          String           @default("DRAFT")
+  customerName    String
+  email           String           @default("")
+  phone           String           @default("")
+  customerAddress String           @default("")
+  destination     String           @default("")
+  reference       String           @default("")
+  invoiceDate     String
+  dueDate         String           @default("")
+  travelStart     String           @default("")
+  travelEnd       String           @default("")
+  currency        String           @default("INR")
+  discountMinor   Int              @default(0)
+  companyGst      String           @default("")
+  paymentTerms    String           @default("")
+  cancellationNotes String         @default("")
+  notes           String           @default("")
+  items           InvoiceItem[]
+  payments        InvoicePayment[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([status])
+  @@index([customerName])
+}
+
+model InvoiceItem {
+  id            String  @id @default(cuid())
+  invoiceId     String
+  invoice       Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description   String
+  quantity      Int     @default(1)
+  unitMinor     Int     @default(0)
+  discountMinor Int     @default(0)
+  taxMinor      Int     @default(0)
+  sortOrder     Int     @default(0)
+}
+
+model InvoicePayment {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  amountMinor Int
+  paidOn      String
+  method      String   @default("")
+  reference   String   @default("")
+  notes       String   @default("")
+  createdAt   DateTime @default(now())
+
+  @@index([invoiceId])
+}
+
+model SocialAccount {
+  id           String   @id @default(cuid())
+  platform     String
+  accountName  String
+  externalId   String   @default("")
+  status       String   @default("NOT_CONNECTED")
+  tokenCipher  String   @default("")
+  permissions  String   @default("")
+  lastSync     String   @default("")
+  lastError    String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([platform])
+}
+
+model SocialCampaign {
+  id        String       @id @default(cuid())
+  name      String
+  notes     String       @default("")
+  posts     SocialPost[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model SocialPost {
+  id            String              @id @default(cuid())
+  campaignId    String?
+  campaign      SocialCampaign?     @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  status        String              @default("DRAFT")
+  title         String
+  masterCaption String              @default("")
+  language      String              @default("en")
+  linkUrl       String              @default("")
+  location      String              @default("")
+  callToAction  String              @default("")
+  mediaPath     String              @default("")
+  relatedType   String              @default("")
+  relatedSlug   String              @default("")
+  scheduledFor  String              @default("")
+  publishedAt   DateTime?
+  lastError     String              @default("")
+  variants      SocialPostVariant[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([status])
+  @@index([scheduledFor])
+}
+
+model SocialPostVariant {
+  id        String     @id @default(cuid())
+  postId    String
+  post      SocialPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  platform  String
+  caption   String     @default("")
+  hashtags  String     @default("")
+  status    String     @default("DRAFT")
+  lastError String     @default("")
+
+  @@unique([postId, platform])
+}

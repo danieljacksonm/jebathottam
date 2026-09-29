@@ -3,6 +3,8 @@ import Link from "next/link";
 import { isAdminAuthenticated, isAdminConfigured } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminHomePage() {
   if (!isAdminConfigured()) {
     return (
@@ -20,47 +22,99 @@ export default async function AdminHomePage() {
     redirect("/admin/login");
   }
 
-  const [blogCount, published, drafts, destinations, packages, featuredGuides] =
-    await Promise.all([
-      prisma.blogPost.count(),
-      prisma.blogPost.count({ where: { status: "published" } }),
-      prisma.blogPost.count({ where: { status: "draft" } }),
-      prisma.destination.count(),
-      prisma.travelPackage.count(),
-      prisma.blogPost.count({ where: { featured: true, status: "published" } }),
-    ]);
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  const [
+    newEnquiries,
+    todayEnquiries,
+    followUps,
+    quotes,
+    invoices,
+    outstanding,
+    blogs,
+    destinations,
+    packages,
+    scheduled,
+    recentEnquiries,
+    recentInvoices,
+  ] = await Promise.all([
+    prisma.enquiry.count({ where: { status: "NEW" } }),
+    prisma.enquiry.count({ where: { createdAt: { gte: start } } }),
+    prisma.enquiry.count({ where: { status: "FOLLOW_UP" } }),
+    prisma.quote.count(),
+    prisma.invoice.count(),
+    prisma.invoice.count({
+      where: { status: { in: ["SENT", "PARTIALLY_PAID", "OVERDUE"] } },
+    }),
+    prisma.blogPost.count({ where: { status: "published" } }),
+    prisma.destination.count(),
+    prisma.travelPackage.count(),
+    prisma.socialPost.count({ where: { status: "SCHEDULED" } }),
+    prisma.enquiry.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 6,
+    }),
+    prisma.invoice.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
+  ]);
+
+  const cards = [
+    ["New enquiries", newEnquiries, "/admin/enquiries"],
+    ["Today", todayEnquiries, "/admin/enquiries"],
+    ["Follow-ups", followUps, "/admin/enquiries"],
+    ["Quotes", quotes, "/admin/quotes"],
+    ["Invoices", invoices, "/admin/invoices"],
+    ["Open balances", outstanding, "/admin/invoices"],
+    ["Published blogs", blogs, "/admin/blogs"],
+    ["Destinations", destinations, "/admin/destinations"],
+    ["Packages", packages, "/admin/packages"],
+    ["Scheduled posts", scheduled, "/admin/social"],
+  ] as const;
 
   return (
-    <div className="admin-card">
+    <div>
       <h1>Dashboard</h1>
       <p className="admin-muted">
-        Manage destinations, packages, guides, and media without editing source
-        files.
+        Enquiries, quotes, invoices, content, and social drafts in one place.
       </p>
-      <ul className="admin-muted" style={{ lineHeight: 1.8 }}>
-        <li>Destinations: {destinations}</li>
-        <li>Packages: {packages}</li>
-        <li>
-          Blog posts: {blogCount} ({published} published · {drafts} drafts ·{" "}
-          {featuredGuides} featured guides)
-        </li>
-      </ul>
-      <div className="admin-actions">
-        <Link className="admin-btn" href="/admin/destinations">
-          Destinations
-        </Link>
-        <Link className="admin-btn" href="/admin/packages">
-          Packages
-        </Link>
-        <Link className="admin-btn" href="/admin/blogs">
-          Blogs
-        </Link>
-        <Link className="admin-btn secondary" href="/admin/media">
-          Media
-        </Link>
-        <Link className="admin-btn secondary" href="/admin/blogs/new">
-          New article
-        </Link>
+      <div className="admin-stats">
+        {cards.map(([label, value, href]) => (
+          <Link key={label} href={href} className="admin-stat">
+            <strong>{value}</strong>
+            <span className="admin-muted">{label}</span>
+          </Link>
+        ))}
+      </div>
+      <div className="admin-grid-2">
+        <section className="admin-card">
+          <h2>Recent enquiries</h2>
+          <ul className="admin-muted">
+            {recentEnquiries.length === 0 ? <li>No enquiries yet.</li> : null}
+            {recentEnquiries.map((item) => (
+              <li key={item.id}>
+                <Link href={`/admin/enquiries/${item.id}`}>
+                  {item.referenceNumber}
+                </Link>{" "}
+                — {item.customerName} · {item.status}
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section className="admin-card">
+          <h2>Recent invoices</h2>
+          <ul className="admin-muted">
+            {recentInvoices.length === 0 ? <li>No invoices yet.</li> : null}
+            {recentInvoices.map((item) => (
+              <li key={item.id}>
+                <Link href={`/admin/invoices/${item.id}`}>{item.number}</Link> —{" "}
+                {item.customerName} · {item.status}
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
     </div>
   );

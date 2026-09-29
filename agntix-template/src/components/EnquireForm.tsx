@@ -46,9 +46,12 @@ export function EnquireForm({
   const presetTravelers = searchParams.get("travelers") ?? "";
   const presetDestination = searchParams.get("destination") ?? "";
 
+  const presetService = searchParams.get("service") ?? "";
+  const presetSource = searchParams.get("source") ?? "enquire";
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">(
     "idle",
   );
+  const [reference, setReference] = useState("");
   const [formError, setFormError] = useState("");
 
   const packageOptions = useMemo(
@@ -75,13 +78,34 @@ export function EnquireForm({
       name: String(data.get("name") || "").trim(),
       email: String(data.get("email") || "").trim(),
       phone: String(data.get("phone") || "").trim(),
+      whatsapp: String(data.get("whatsapp") || "").trim(),
+      country: String(data.get("country") || "").trim(),
       website: String(data.get("website") || "").trim(),
-      travelers: String(data.get("travelers") || "").trim(),
-      dates: String(data.get("dates") || "").trim(),
+      travelers: String(data.get("adults") || "").trim(),
+      dates: String(data.get("travelStartDate") || "").trim(),
       packageId: String(data.get("packageId") || "").trim(),
+      destination: String(data.get("destination") || "").trim(),
+      departureLocation: String(data.get("departureLocation") || "").trim(),
+      travelType: String(data.get("travelType") || "").trim(),
+      travelStartDate: String(data.get("travelStartDate") || "").trim(),
+      travelEndDate: String(data.get("travelEndDate") || "").trim(),
+      flexibleDates: data.get("flexibleDates") === "on",
+      adults: Number(data.get("adults") || 1),
+      children: Number(data.get("children") || 0),
+      infants: Number(data.get("infants") || 0),
+      budget: String(data.get("budget") || "").trim(),
+      currency: String(data.get("currency") || "INR"),
+      services: data.getAll("services").map(String),
+      hotelPreference: String(data.get("hotelPreference") || "").trim(),
+      transportPreference: String(data.get("transportPreference") || "").trim(),
       message: String(data.get("message") || "").trim(),
       locale,
-      source: "enquire",
+      source: presetSource,
+      sourcePage: typeof window !== "undefined" ? window.location.pathname : "",
+      utmSource: searchParams.get("utm_source") || "",
+      utmMedium: searchParams.get("utm_medium") || "",
+      utmCampaign: searchParams.get("utm_campaign") || "",
+      utmContent: searchParams.get("utm_content") || "",
     };
 
     if (!payload.name || !payload.email || !payload.phone) {
@@ -96,7 +120,11 @@ export function EnquireForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+      const json = (await res.json().catch(() => ({}))) as {
+        referenceNumber?: string;
+      };
       if (!res.ok) throw new Error("failed");
+      setReference(json.referenceNumber || "");
       setStatus("success");
       form.reset();
     } catch {
@@ -108,6 +136,9 @@ export function EnquireForm({
     return (
       <div className="rounded-2xl border border-[var(--line)] bg-navy-mid/50 p-8 text-center md:p-12">
         <p className="font-display text-3xl text-gold-bright">{t("success")}</p>
+        {reference ? (
+          <p className="mt-4 text-soft-gray">{t("reference", { ref: reference })}</p>
+        ) : null}
       </div>
     );
   }
@@ -161,32 +192,111 @@ export function EnquireForm({
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
-            {t("travelers")}
+            {t("country")}
+          </span>
+          <input name="country" className="input-field" autoComplete="country-name" />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            WhatsApp
+          </span>
+          <input name="whatsapp" className="input-field" autoComplete="tel" />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("destination")}
           </span>
           <input
-            name="travelers"
-            type="number"
-            min={1}
+            name="destination"
             className="input-field"
-            defaultValue={presetTravelers || undefined}
+            defaultValue={presetDestination || undefined}
           />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
-            {t("dates")}
+            {t("departure")}
+          </span>
+          <input name="departureLocation" className="input-field" />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("adults")}
           </span>
           <input
-            name="dates"
+            name="adults"
+            type="number"
+            min={1}
             className="input-field"
-            placeholder="DD/MM – DD/MM"
+            defaultValue={presetTravelers || "1"}
+          />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("children")}
+          </span>
+          <input name="children" type="number" min={0} className="input-field" defaultValue={0} />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("infants")}
+          </span>
+          <input name="infants" type="number" min={0} className="input-field" defaultValue={0} />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("startDate")}
+          </span>
+          <input
+            name="travelStartDate"
+            type="date"
+            className="input-field"
             defaultValue={presetDates || undefined}
           />
         </label>
         <label className="block space-y-2">
           <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("endDate")}
+          </span>
+          <input name="travelEndDate" type="date" className="input-field" />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("travelType")}
+          </span>
+          <select name="travelType" className="input-field" defaultValue="">
+            <option value="">—</option>
+            {["honeymoon", "family", "group", "adventure", "pilgrimage", "corporate", "custom"].map(
+              (item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ),
+            )}
+          </select>
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("budget")}
+          </span>
+          <input name="budget" className="input-field" />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("hotel")}
+          </span>
+          <input name="hotelPreference" className="input-field" />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+            {t("transport")}
+          </span>
+          <input name="transportPreference" className="input-field" />
+        </label>
+        <label className="block space-y-2">
+          <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
             {t("package")}
           </span>
-          <select name="packageId" className="input-field" defaultValue={preset}>
+          <select name="packageId" className="input-field" defaultValue={preset || presetService}>
             <option value="">{t("packagePlaceholder")}</option>
             {packageOptions.map((opt) => (
               <option key={opt.id} value={opt.id}>
@@ -196,6 +306,29 @@ export function EnquireForm({
           </select>
         </label>
       </div>
+
+      <label className="flex items-center gap-2 text-sm text-mist">
+        <input type="checkbox" name="flexibleDates" />
+        {t("flexible")}
+      </label>
+      <fieldset className="space-y-2">
+        <legend className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">
+          {t("services")}
+        </legend>
+        <div className="flex flex-wrap gap-3">
+          {serviceOptions.map((service) => (
+            <label key={service.id} className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                name="services"
+                value={service.id}
+                defaultChecked={presetService === service.id}
+              />
+              {service.label[locale]}
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <label className="block space-y-2">
         <span className="text-[0.68rem] uppercase tracking-[0.16em] text-mist/70">

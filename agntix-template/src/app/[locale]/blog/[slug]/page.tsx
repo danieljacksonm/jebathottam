@@ -113,8 +113,8 @@ export default async function BlogPostPage({
         relatedPackagesTitle={t("relatedPackages")}
         enquireHref={
           post.destinationSlug
-            ? `/enquire?destination=${post.destinationSlug}`
-            : "/enquire"
+            ? `/enquire?destination=${post.destinationSlug}&source=blog`
+            : "/enquire?source=blog"
         }
         enquireLabel={pkgT("enquire")}
         planHref={

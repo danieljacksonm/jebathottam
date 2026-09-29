@@ -2,6 +2,7 @@ import { mkdir, appendFile, readFile, writeFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
 import { sendEnquiryNotification } from "@/lib/mail";
+import { saveEnquiry } from "@/lib/save-enquiry";
 import { getPackageRows, LEGACY_PACKAGE_REDIRECTS } from "@/data/packages";
 import { services } from "@/data/services";
 
@@ -9,6 +10,8 @@ type EnquiryBody = {
   name?: string;
   email?: string;
   phone?: string;
+  whatsapp?: string;
+  country?: string;
   website?: string;
   travelers?: string;
   dates?: string;
@@ -16,9 +19,28 @@ type EnquiryBody = {
   message?: string;
   locale?: string;
   source?: string;
+  sourcePage?: string;
   hotelPreference?: string;
   budget?: string;
   startCity?: string;
+  destination?: string;
+  departureLocation?: string;
+  service?: string;
+  services?: string[];
+  travelType?: string;
+  travelStartDate?: string;
+  travelEndDate?: string;
+  flexibleDates?: boolean;
+  adults?: number;
+  children?: number;
+  infants?: number;
+  currency?: string;
+  transportPreference?: string;
+  specialRequirements?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
 };
 
 function sanitizeSingleLine(value: string) {
@@ -167,7 +189,17 @@ export async function POST(request: Request) {
 
     await writeFile(rateFile, JSON.stringify(rate), "utf8");
 
-    const allowedSources = new Set(["enquire", "plan-your-trip", "contact"]);
+    const allowedSources = new Set([
+      "enquire",
+      "plan-your-trip",
+      "contact",
+      "homepage",
+      "destination",
+      "package",
+      "blog",
+      "service",
+      "corporate",
+    ]);
     const sourceRaw = sanitizeSingleLine(body.source ?? "enquire");
     const source = allowedSources.has(sourceRaw) ? sourceRaw : "enquire";
 
@@ -178,14 +210,55 @@ export async function POST(request: Request) {
     const budget = sanitizeSingleLine(body.budget ?? "").slice(0, 80);
     const startCity = sanitizeSingleLine(body.startCity ?? "").slice(0, 80);
 
-    const entry = {
-      id: crypto.randomUUID(),
-      receivedAt: new Date().toISOString(),
+    const travelers = body.travelers?.trim() || "";
+    const adultMatch = travelers.match(/(\d+)\s*adult/i);
+    const childMatch = travelers.match(/(\d+)\s*child/i);
+    const selectedServices = Array.isArray(body.services)
+      ? body.services.map((item) => sanitizeSingleLine(String(item))).filter(Boolean)
+      : [];
+    const serviceValue = sanitizeSingleLine(body.service ?? selectedServices.join(", "));
+
+    const saved = await saveEnquiry({
       name,
       email,
       phone,
-      travelers: body.travelers?.trim() || null,
-      dates: body.dates?.trim() || null,
+      whatsapp: sanitizeSingleLine(body.whatsapp ?? ""),
+      country: sanitizeSingleLine(body.country ?? ""),
+      destination: sanitizeSingleLine(body.destination ?? ""),
+      departureLocation:
+        sanitizeSingleLine(body.departureLocation ?? "") || startCity,
+      packageSlug: packageId,
+      service: serviceValue,
+      travelType: sanitizeSingleLine(body.travelType ?? ""),
+      travelStartDate: sanitizeSingleLine(body.travelStartDate ?? body.dates ?? ""),
+      travelEndDate: sanitizeSingleLine(body.travelEndDate ?? ""),
+      flexibleDates: Boolean(body.flexibleDates),
+      adults: Number(body.adults) || (adultMatch ? Number(adultMatch[1]) : 1),
+      children: Number(body.children) || (childMatch ? Number(childMatch[1]) : 0),
+      infants: Number(body.infants) || 0,
+      budgetRange: budget,
+      currency: sanitizeSingleLine(body.currency ?? "INR"),
+      hotelPreference,
+      transportPreference: sanitizeSingleLine(body.transportPreference ?? ""),
+      specialRequirements: sanitizeSingleLine(body.specialRequirements ?? ""),
+      message,
+      source,
+      sourcePage: sanitizeSingleLine(body.sourcePage ?? ""),
+      locale: body.locale || "en",
+      utmSource: sanitizeSingleLine(body.utmSource ?? ""),
+      utmMedium: sanitizeSingleLine(body.utmMedium ?? ""),
+      utmCampaign: sanitizeSingleLine(body.utmCampaign ?? ""),
+      utmContent: sanitizeSingleLine(body.utmContent ?? ""),
+    });
+
+    const entry = {
+      id: saved.referenceNumber,
+      receivedAt: saved.createdAt.toISOString(),
+      name,
+      email,
+      phone,
+      travelers: travelers || null,
+      dates: body.dates?.trim() || body.travelStartDate || null,
       packageId: packageId || null,
       message: message || null,
       locale: body.locale || "en",
@@ -201,13 +274,22 @@ export async function POST(request: Request) {
       "utf8",
     );
 
+    let emailStatus = "not_sent";
     try {
-      await sendEnquiryNotification(entry);
+      const mailed = await sendEnquiryNotification(entry);
+      emailStatus = mailed.sent ? "sent" : mailed.reason || "not_sent";
     } catch (error) {
       console.error("Enquiry email failed:", error);
+      emailStatus = "failed";
     }
 
-    return NextResponse.json({ ok: true });
+    const { prisma } = await import("@/lib/prisma");
+    await prisma.enquiry.update({
+      where: { id: saved.id },
+      data: { emailStatus },
+    });
+
+    return NextResponse.json({ ok: true, referenceNumber: saved.referenceNumber });
   } catch {
     return NextResponse.json(
       { ok: false, error: "Unable to save enquiry" },
