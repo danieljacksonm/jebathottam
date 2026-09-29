@@ -2,19 +2,17 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
 import { Play } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { HOME_IMAGES } from "@/data/image-registry";
 import { BrandFilmModal } from "@/components/film/BrandFilmModal";
-import { MagneticButton } from "./motion";
 import { MagneticCta } from "./MagneticCta";
 import { useTranslations } from "next-intl";
 
 function splitWords(text: string) {
   return text.split(" ").map((word, i) => (
     <span key={`${word}-${i}`} className="inline-block overflow-hidden pb-1 align-bottom">
-      <span data-hero-word className="inline-block translate-y-[110%] opacity-0">
+      <span data-hero-word className="inline-block" style={{ animationDelay: `${i * 35}ms` }}>
         {word}&nbsp;
       </span>
     </span>
@@ -32,66 +30,38 @@ export function CinematicHero() {
   useEffect(() => {
     const el = root.current;
     if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      el.querySelectorAll("[data-hero-word]").forEach((n) => {
-        (n as HTMLElement).style.transform = "none";
-        (n as HTMLElement).style.opacity = "1";
-      });
-      el.querySelectorAll("[data-mist-enter], [data-hero-sub], [data-hero-cta], [data-scroll-hint], [data-hero-brand]").forEach(
-        (n) => {
-          (n as HTMLElement).style.opacity = "1";
-          (n as HTMLElement).style.transform = "none";
-        },
-      );
-      return;
-    }
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(max-width: 768px)").matches) return;
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to("[data-mist-enter]", { opacity: 0, duration: 1.05, delay: 0.08 })
-        .fromTo(
-          "[data-hero-brand]",
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.55 },
-          "-=0.55",
-        )
-        .to(
-          "[data-hero-word]",
-          { y: 0, opacity: 1, duration: 0.55, stagger: 0.035 },
-          "-=0.25",
-        )
-        .fromTo(
-          "[data-hero-sub]",
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: 0.45 },
-          "-=0.2",
-        )
-        .fromTo(
-          "[data-hero-cta]",
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.4 },
-          "-=0.18",
-        )
-        .fromTo(
-          "[data-scroll-hint]",
-          { opacity: 0 },
-          { opacity: 1, duration: 0.35 },
-          "-=0.1",
-        );
+    let cancelled = false;
+    let revert: (() => void) | null = null;
 
-      gsap.to("[data-hero-bg]", {
-        yPercent: 12,
-        ease: "none",
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }, el);
+    void (async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import("gsap"),
+        import("gsap/ScrollTrigger"),
+      ]);
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
+      const ctx = gsap.context(() => {
+        gsap.to("[data-hero-bg]", {
+          yPercent: 12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }, el);
+      revert = () => ctx.revert();
+    })();
 
-    return () => ctx.revert();
+    return () => {
+      cancelled = true;
+      revert?.();
+    };
   }, []);
 
   return (
@@ -108,7 +78,7 @@ export function CinematicHero() {
             alt={HOME_IMAGES.hero.alt}
             fill
             priority
-            quality={90}
+            quality={75}
             className="object-cover object-[center_35%]"
             sizes="100vw"
           />
@@ -156,7 +126,7 @@ export function CinematicHero() {
         <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-7xl flex-col justify-end px-5 pb-28 pt-32 md:justify-center md:px-8 md:pb-24">
           <p
             data-hero-brand
-            className="mb-4 font-script text-4xl text-gold-bright opacity-0 md:text-5xl"
+            className="mb-4 font-script text-4xl text-gold-bright md:text-5xl"
           >
             Canaan
           </p>
@@ -168,11 +138,11 @@ export function CinematicHero() {
           </h1>
           <p
             data-hero-sub
-            className="mt-5 max-w-xl text-base leading-relaxed text-white/80 opacity-0 md:text-lg"
+            className="mt-5 max-w-xl text-base leading-relaxed text-white/80 md:text-lg"
           >
             {t("heroSub")}
           </p>
-          <div data-hero-cta className="mt-10 flex flex-wrap items-center gap-3 opacity-0">
+          <div data-hero-cta className="mt-10 flex flex-wrap items-center gap-3">
             <MagneticCta href="/destinations" className="btn-gold glass">
               {t("heroExplore")}
               <span data-mag-arrow>→</span>
@@ -180,19 +150,20 @@ export function CinematicHero() {
             <Link href="/plan-your-trip" className="btn-ghost">
               {t("heroPlan")}
             </Link>
-            <MagneticButton
+            <button
+              type="button"
               className="btn-ghost !border-transparent text-white/70 hover:text-gold"
               onClick={() => setVideoOpen(true)}
             >
               <Play size={14} />
               {t("heroWatch")}
-            </MagneticButton>
+            </button>
           </div>
         </div>
 
         <div
           data-scroll-hint
-          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 opacity-0"
+          className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2"
         >
           <span className="text-[0.62rem] uppercase tracking-[0.28em] text-white/60">
             {t("heroScroll")}

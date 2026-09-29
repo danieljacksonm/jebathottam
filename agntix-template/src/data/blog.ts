@@ -58,7 +58,7 @@ function isWeakBlogImage(image: string | null | undefined) {
   );
 }
 
-function resolveBlogImage(row: BlogWithDestination) {
+function resolveBlogImage(row: BlogCardRow) {
   if (!isWeakBlogImage(row.image)) return row.image;
   if (row.place?.image && !isWeakBlogImage(row.place.image)) return row.place.image;
   if (row.destination?.image && !isWeakBlogImage(row.destination.image)) {
@@ -67,10 +67,7 @@ function resolveBlogImage(row: BlogWithDestination) {
   return "/images/travel/d/darjeeling.jpg";
 }
 
-function localizeBlogRow(
-  row: BlogWithDestination | null,
-  locale: string,
-): LocalizedBlog | null {
+function localizeBlogRow(row: BlogCardRow | null, locale: string): LocalizedBlog | null {
   if (!row) return null;
   return {
     id: row.id,
@@ -102,7 +99,7 @@ function localizeBlogRow(
     title: pickLocale(row.titleEn, row.titleTa, row.titleHi, locale),
     excerpt: pickLocale(row.excerptEn, row.excerptTa, row.excerptHi, locale),
     body: parseBody(
-      pickLocale(row.bodyEn, row.bodyTa, row.bodyHi, locale),
+      pickLocale(row.bodyEn ?? "[]", row.bodyTa ?? "[]", row.bodyHi ?? "[]", locale),
     ),
     seoTitle: pickLocale(
       row.seoTitleEn,
@@ -147,6 +144,41 @@ const blogInclude = {
 type BlogWithDestination = Prisma.BlogPostGetPayload<{
   include: typeof blogInclude;
 }>;
+
+type BlogCardRow = Pick<
+  BlogWithDestination,
+  | "id"
+  | "slug"
+  | "date"
+  | "readMinutes"
+  | "image"
+  | "tagsEn"
+  | "tagsTa"
+  | "tagsHi"
+  | "titleEn"
+  | "titleTa"
+  | "titleHi"
+  | "excerptEn"
+  | "excerptTa"
+  | "excerptHi"
+  | "seoTitleEn"
+  | "seoTitleTa"
+  | "seoTitleHi"
+  | "seoDescriptionEn"
+  | "seoDescriptionTa"
+  | "seoDescriptionHi"
+  | "ogImage"
+  | "canonicalUrl"
+  | "authorEn"
+  | "authorTa"
+  | "authorHi"
+  | "destination"
+  | "place"
+> & {
+  bodyEn?: string;
+  bodyTa?: string;
+  bodyHi?: string;
+};
 
 function publishedWhere(filters?: {
   destination?: string;
@@ -203,9 +235,36 @@ export async function getLocalizedBlogs(
         ? { featured: filters.featured }
         : {}),
     },
-    include: blogInclude,
+    select: {
+      id: true,
+      slug: true,
+      date: true,
+      readMinutes: true,
+      image: true,
+      tagsEn: true,
+      tagsTa: true,
+      tagsHi: true,
+      titleEn: true,
+      titleTa: true,
+      titleHi: true,
+      excerptEn: true,
+      excerptTa: true,
+      excerptHi: true,
+      seoTitleEn: true,
+      seoTitleTa: true,
+      seoTitleHi: true,
+      seoDescriptionEn: true,
+      seoDescriptionTa: true,
+      seoDescriptionHi: true,
+      ogImage: true,
+      canonicalUrl: true,
+      authorEn: true,
+      authorTa: true,
+      authorHi: true,
+      ...blogInclude,
+    },
     orderBy: [{ featured: "desc" }, { date: "desc" }, { titleEn: "asc" }],
-    ...(typeof filters?.take === "number" ? { take: filters.take } : {}),
+    ...(typeof filters?.take === "number" ? { take: filters.take } : { take: 24 }),
     ...(typeof filters?.skip === "number" ? { skip: filters.skip } : {}),
   });
   return rows
@@ -242,7 +301,22 @@ export async function getBlogCount(filters?: {
   });
 }
 
+const filterCache = new Map<string, { at: number; value: unknown }>();
+
+function remember<T>(key: string, load: () => Promise<T>) {
+  const hit = filterCache.get(key);
+  if (hit && Date.now() - hit.at < 5 * 60 * 1000) return Promise.resolve(hit.value as T);
+  return load().then((value) => {
+    filterCache.set(key, { at: Date.now(), value });
+    return value;
+  });
+}
+
 export async function getBlogDestinationOptions(locale: string) {
+  return remember(`destinations:${locale}`, () => loadBlogDestinationOptions(locale));
+}
+
+async function loadBlogDestinationOptions(locale: string) {
   const rows = await prisma.destination.findMany({
     orderBy: [{ sortOrder: "asc" }, { nameEn: "asc" }],
     include: {
@@ -260,6 +334,10 @@ export async function getBlogDestinationOptions(locale: string) {
 }
 
 export async function getBlogContinentOptions() {
+  return remember("continents", loadBlogContinentOptions);
+}
+
+async function loadBlogContinentOptions() {
   const rows = await prisma.blogPost.groupBy({
     by: ["destinationId"],
     _count: { _all: true },

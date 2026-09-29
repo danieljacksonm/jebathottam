@@ -102,6 +102,8 @@ model BlogPost {
   @@index([date])
   @@index([status])
   @@index([featured])
+  @@index([status, destinationId])
+  @@index([status, featured, date])
 }
 
 model TravelPackage {

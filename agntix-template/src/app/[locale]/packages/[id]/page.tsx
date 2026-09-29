@@ -93,9 +93,7 @@ export default async function PackageDetailPage({
     getLocalizedPackagesAsync(loc).then((list) =>
       list.filter((p) => p.destinationSlug === pkg.destinationSlug && p.id !== pkg.id).slice(0, 3),
     ),
-    getLocalizedBlogs(loc, { destination: pkg.destinationSlug }).then((posts) =>
-      posts.slice(0, 3),
-    ),
+    getLocalizedBlogs(loc, { destination: pkg.destinationSlug, take: 3 }),
   ]);
 
   const gallery = galleryForPackage(pkg.destinationSlug, pkg.image);

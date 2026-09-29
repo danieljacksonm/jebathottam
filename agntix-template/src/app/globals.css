@@ -787,7 +787,52 @@ html[data-kodai-hour="night"] .btn-gold {
   box-shadow: 0 0 28px rgba(244, 210, 122, 0.28);
 }
 
+@keyframes canaan-mist-clear {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+@keyframes canaan-hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+[data-mist-enter] {
+  animation: canaan-mist-clear 1.05s ease 0.12s both;
+}
+[data-hero-word],
+[data-hero-brand],
+[data-hero-sub],
+[data-hero-cta],
+[data-scroll-hint] {
+  animation: canaan-hero-rise 0.55s ease both;
+}
+[data-hero-brand] { animation-delay: 0.05s; }
+[data-hero-sub] { animation-delay: 0.28s; }
+[data-hero-cta] { animation-delay: 0.4s; }
+[data-scroll-hint] { animation-delay: 0.55s; }
+
 @media (prefers-reduced-motion: reduce) {
+  [data-mist-enter] {
+    animation: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+  [data-hero-word],
+  [data-hero-brand],
+  [data-hero-sub],
+  [data-hero-cta],
+  [data-scroll-hint] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
   .plane-fly,
   .cloud-drift,
   .bird,

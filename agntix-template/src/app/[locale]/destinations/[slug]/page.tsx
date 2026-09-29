@@ -69,6 +69,7 @@ export default async function DestinationDetailPage({
   const packages = await getPackagesForDestinationAsync(resolved.slug, locale);
   const blogPosts = await getLocalizedBlogs(locale, {
     destination: resolved.slug,
+    take: 3,
   });
   const blogCount = await getBlogCount({ destination: resolved.slug });
   const hero = destinationHero(resolved.slug);
