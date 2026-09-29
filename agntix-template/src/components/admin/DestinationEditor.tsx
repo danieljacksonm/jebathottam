@@ -193,13 +193,13 @@ export function DestinationEditor({
         </select>
       </div>
       <div className="admin-field">
-        <label htmlFor="featured">
+        <label className="admin-check" htmlFor="featured">
           <input
             id="featured"
             type="checkbox"
             checked={form.featured}
             onChange={(e) => set("featured", e.target.checked)}
-          />{" "}
+          />
           Featured on homepage
         </label>
       </div>

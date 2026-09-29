@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="admin-card" style={{ maxWidth: 420, margin: "3rem auto" }}>
+    <div className="admin-card" style={{ maxWidth: 420, margin: "12vh auto 0" }}>
       <h1>Admin login</h1>
       <p className="admin-muted">Canaan Travel Hub content management</p>
       {error ? <p className="admin-error">{error}</p> : null}

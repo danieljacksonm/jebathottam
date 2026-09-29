@@ -29,7 +29,7 @@ export default async function CustomersPage({
   return (
     <div className="admin-card">
       <h1>Customers</h1>
-      <form method="get" className="admin-actions">
+      <form method="get" className="admin-toolbar">
         <input name="q" defaultValue={q} placeholder="Name, email, phone" />
         <button className="admin-btn">Search</button>
       </form>

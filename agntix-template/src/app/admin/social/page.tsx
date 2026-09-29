@@ -82,7 +82,7 @@ export default async function SocialPage({
           </tbody>
         </table>
       )}
-      <div className="admin-grid-2" style={{ marginTop: "1rem" }}>
+      <div style={{ marginTop: "1rem" }}>
         <SocialComposer />
         <div>
           <SocialAccountForm />

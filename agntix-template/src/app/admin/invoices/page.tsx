@@ -39,7 +39,7 @@ export default async function InvoicesPage({
   return (
     <div className="admin-card">
       <h1>Invoices</h1>
-      <form className="admin-actions" method="get">
+      <form className="admin-toolbar" method="get">
         <input name="q" defaultValue={q} placeholder="Number, customer, phone, destination" />
         <select name="status" defaultValue={status}>
           <option value="">All</option>

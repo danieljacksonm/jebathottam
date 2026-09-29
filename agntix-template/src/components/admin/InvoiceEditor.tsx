@@ -161,7 +161,7 @@ export function InvoiceEditor({
         <Text name="notes" label="Notes" area defaultValue={initial.notes} />
         <h3>Items</h3>
         {lines.map((line, index) => (
-          <div key={index} className="admin-grid-2">
+          <div key={index} className="admin-lines">
             <Text
               label="Description"
               defaultValue={line.description}

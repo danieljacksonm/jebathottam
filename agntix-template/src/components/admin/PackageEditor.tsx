@@ -287,22 +287,22 @@ export function PackageEditor({
         </select>
       </div>
       <div className="admin-field">
-        <label>
+        <label className="admin-check">
           <input
             type="checkbox"
             checked={form.featured}
             onChange={(e) => set("featured", e.target.checked)}
-          />{" "}
+          />
           Featured
         </label>
       </div>
       <div className="admin-field">
-        <label>
+        <label className="admin-check">
           <input
             type="checkbox"
             checked={form.published}
             onChange={(e) => set("published", e.target.checked)}
-          />{" "}
+          />
           Published
         </label>
       </div>

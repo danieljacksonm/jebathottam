@@ -253,12 +253,12 @@ export function BlogEditor({
         </select>
       </div>
       <div className="admin-field">
-        <label>
+        <label className="admin-check">
           <input
             type="checkbox"
             checked={featured}
             onChange={(e) => setFeatured(e.target.checked)}
-          />{" "}
+          />
           Featured editorial guide (homepage strip)
         </label>
       </div>

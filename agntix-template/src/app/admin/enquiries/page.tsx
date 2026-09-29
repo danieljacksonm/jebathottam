@@ -36,7 +36,7 @@ export default async function EnquiriesPage({
   return (
     <div className="admin-card">
       <h1>Enquiries</h1>
-      <form className="admin-actions" method="get">
+      <form className="admin-toolbar" method="get">
         <input name="q" defaultValue={q} placeholder="Search name, phone, reference" />
         <select name="status" defaultValue={status}>
           <option value="">All statuses</option>

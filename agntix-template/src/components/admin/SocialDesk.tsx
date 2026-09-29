@@ -56,8 +56,8 @@ export function SocialComposer() {
       <div className="admin-field">
         <label>Platforms</label>
         {platforms.map((platform) => (
-          <label key={platform} style={{ textTransform: "none", letterSpacing: 0 }}>
-            <input type="checkbox" name="platforms" value={platform} defaultChecked={platform === "facebook"} />{" "}
+          <label key={platform} className="admin-check">
+            <input type="checkbox" name="platforms" value={platform} defaultChecked={platform === "facebook"} />
             {platform}
           </label>
         ))}

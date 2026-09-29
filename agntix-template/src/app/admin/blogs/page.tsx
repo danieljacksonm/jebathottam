@@ -3,10 +3,23 @@ import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
 
-export default async function AdminBlogsPage() {
+export default async function AdminBlogsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
   if (!(await isAdminAuthenticated())) redirect("/admin/login");
+  const q = (await searchParams).q?.trim() || "";
 
   const posts = await prisma.blogPost.findMany({
+    where: q
+      ? {
+          OR: [
+            { titleEn: { contains: q } },
+            { slug: { contains: q } },
+          ],
+        }
+      : {},
     orderBy: [{ updatedAt: "desc" }],
     select: {
       id: true,
@@ -41,6 +54,12 @@ export default async function AdminBlogsPage() {
           New article
         </Link>
       </div>
+      <form className="admin-toolbar" method="get">
+        <input name="q" defaultValue={q} placeholder="Search title or slug" />
+        <button className="admin-btn" type="submit">
+          Search
+        </button>
+      </form>
       <table className="admin-table">
         <thead>
           <tr>
