@@ -1,4 +1,5 @@
 import type { SeoLocale } from "@/lib/site-url";
+import { pageChrome } from "./page-ui";
 
 /**
  * UI chrome that is actually translated (not article bodies).
@@ -525,6 +526,8 @@ export function isChromeLocale(code: string): code is ChromeLocale {
 }
 
 export function siteChrome(locale: string): SiteChrome {
+  const fromPage = pageChrome(locale);
+  if (fromPage) return fromPage;
   if (locale !== "en" && isChromeLocale(locale)) {
     return PACKS[locale as Exclude<ChromeLocale, "en">];
   }

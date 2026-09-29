@@ -3,7 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { useLocalePath } from "@/lib/i18n/use-shell-messages";
+import { useLocalePath, useRequestLocale } from "@/lib/i18n/use-shell-messages";
+import { homepageCards } from "@/lib/i18n/page-ui";
 
 type ServiceItem = {
   id: string;
@@ -100,9 +101,11 @@ const FALLBACK_SERVICES: ServiceItem[] = [
 function FeaturedServices({
   featuredServices,
   sectionsLabel,
+  linkTo,
 }: {
   featuredServices: FeaturedService[];
   sectionsLabel: string;
+  linkTo?: string;
 }) {
   const lp = useLocalePath();
 
@@ -113,7 +116,7 @@ function FeaturedServices({
         <ul className="mt-10 grid gap-6 md:grid-cols-2">
           {featuredServices.map((service) => (
             <li key={service.slug} className="border border-[var(--st-line)] p-6">
-              <Link href={lp(`/services/${service.slug}`)} className="block">
+              <Link href={lp(linkTo || `/services/${service.slug}`)} className="block">
                 <h3 className="text-xl text-white">{service.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--st-muted)]">{service.value}</p>
               </Link>
@@ -121,7 +124,7 @@ function FeaturedServices({
           ))}
         </ul>
         <Link
-          href={lp("/services")}
+          href={lp(linkTo || "/services")}
           className="mt-12 inline-block text-sm uppercase tracking-[0.16em] text-emerald-400"
         >
           {sectionsLabel} →
@@ -138,8 +141,23 @@ export default function Services({
   featuredServices?: FeaturedService[];
   sectionsLabel?: string;
 }) {
+  const locale = useRequestLocale();
+  const cards = homepageCards(locale);
   if (featuredServices?.length) {
     return <FeaturedServices featuredServices={featuredServices} sectionsLabel={sectionsLabel} />;
+  }
+  if (cards?.length) {
+    return (
+      <FeaturedServices
+        featuredServices={cards.map((card, index) => ({
+          slug: `card-${index}`,
+          title: card.title,
+          value: card.description,
+        }))}
+        sectionsLabel={sectionsLabel}
+        linkTo="/contact"
+      />
+    );
   }
 
   return <ServicesCatalog sectionsLabel={sectionsLabel} />;

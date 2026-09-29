@@ -9,6 +9,7 @@ import {
   type StudioMessages,
 } from "./page-messages";
 import { isCorruptTranslationText } from "./supported-locales";
+import { pageHome, pageUi } from "./page-ui";
 
 export type ServiceTranslation = {
   title: string;
@@ -134,21 +135,18 @@ export function loadMessages(locale: SeoLocale): LocaleMessages {
 
   const file = readJson(join(MESSAGES_DIR, `${locale}.json`));
   const en = getEnglishMessages();
-  if (!file) {
-    warnMissing(`${locale}:bundle`);
-    cache.set(locale, en);
-    return en;
-  }
-
-  // Shallow merge for structure only — track missing top-level service keys separately.
+  const ui = pageUi(locale);
+  const home = { ...en.home, ...pageHome(locale), ...file?.home };
   const merged: LocaleMessages = {
-    shell: { ...en.shell, ...file.shell },
-    home: { ...en.home, ...file.home },
-    studio: { ...en.studio, ...file.studio },
-    sections: { ...en.sections, ...file.sections },
-    services: { ...file.services },
-    journal: file.journal,
+    shell: { ...en.shell, ...ui?.shell, ...file?.shell },
+    home,
+    studio: { ...en.studio, ...ui?.studio, ...file?.studio },
+    sections: { ...en.sections, ...ui?.sections, ...file?.sections },
+    // Never copy English service pages into another language.
+    services: file?.services ? { ...file.services } : {},
+    journal: file?.journal,
   };
+  if (!file) warnMissing(`${locale}:bundle`);
   cache.set(locale, merged);
   return merged;
 }

@@ -2,6 +2,8 @@ export type HomeMessages = {
   metaTitle: string;
   metaDescription: string;
   kicker: string;
+  /** Short word before the three headline lines. English is "WE". */
+  we: string;
   build: string;
   digital: string;
   experiences: string;
@@ -70,6 +72,7 @@ export type ContactCopy = {
   stepBudget: string;
   stepMessage: string;
   stepDetails: string;
+  stepWord: string;
   optWeb: string;
   optData: string;
   optTravel: string;
@@ -161,6 +164,7 @@ export const EN_HOME: HomeMessages = {
   metaDescription:
     "Professional web development, e-commerce, automation, and digital support. Clear communication and on-time delivery.",
   kicker: "Ebenezer Digital Services",
+  we: "WE",
   build: "BUILD",
   digital: "DIGITAL",
   experiences: "EXPERIENCES.",
@@ -236,6 +240,7 @@ export const EN_SITE_PAGES: Omit<StudioSiteCopy, "home" | "studio"> = {
     stepBudget: "What's your budget?",
     stepMessage: "Tell us about it.",
     stepDetails: "How do we reach you?",
+    stepWord: "Step",
     optWeb: "Web Development",
     optData: "Data Entry & Admin",
     optTravel: "Travel & Booking",

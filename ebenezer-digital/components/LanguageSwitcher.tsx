@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { getPublishedLocales } from "@/lib/i18n/published-locales";
+import { switcherLocales } from "@/lib/i18n/page-ui";
 import { LOCALE_LABELS, LOCALE_SHORT } from "@/lib/i18n/locale-registry";
 import { LOCALE_META, isPublishedLocaleCode } from "@/lib/i18n/supported-locales";
 import type { SeoLocale } from "@/lib/site-url";
@@ -22,7 +22,7 @@ export function LanguageSwitcher({
   locales?: readonly SeoLocale[];
 }) {
   const pathname = usePathname() || "/";
-  const UI_LOCALES = locales?.length ? locales : getPublishedLocales();
+  const UI_LOCALES = locales?.length ? locales : switcherLocales();
   const current =
     (pathname.match(/^\/([a-z]{2})(\/|$)/i)?.[1]?.toLowerCase() as SeoLocale | undefined) ||
     "en";

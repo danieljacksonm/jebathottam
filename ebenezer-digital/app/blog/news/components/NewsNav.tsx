@@ -7,7 +7,7 @@ import { NEWS_NAV } from "../data";
 import { useNews } from "./NewsProvider";
 import { SITE_NAV } from "@/lib/site-nav";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { CHROME_LOCALES, siteChrome } from "@/lib/i18n/site-chrome";
+import { siteChrome } from "@/lib/i18n/site-chrome";
 import { useRequestLocale } from "@/lib/i18n/use-shell-messages";
 
 export function NewsNav() {
@@ -61,7 +61,7 @@ export function NewsNav() {
               <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
               <span className="hidden sm:inline">{refreshing ? t.updating : t.refresh}</span>
             </button>
-            <LanguageSwitcher compact variant="light" locales={CHROME_LOCALES} />
+            <LanguageSwitcher compact variant="light" />
             <button
               type="button"
               onClick={() => setSearchOpen(true)}

@@ -9,7 +9,7 @@ import { SITE_NAV } from "@/lib/site-nav";
 import { EcosystemNav } from "@/components/EcosystemNav";
 import { EcosystemFooter } from "@/components/EcosystemFooter";
 import { ChannelLogo } from "@/components/ChannelLogo";
-import { CHROME_LOCALES, siteChrome } from "@/lib/i18n/site-chrome";
+import { siteChrome } from "@/lib/i18n/site-chrome";
 import { useRequestLocale } from "@/lib/i18n/use-shell-messages";
 
 export function InfoShell({ children }: { children: React.ReactNode }) {
@@ -53,7 +53,7 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
           <ChannelLogo channel="info" href="/" variant="light" />
           <nav className="info-nav info-nav-desktop" aria-label="Main">
             {links.map((l) => renderLink(l))}
-            <LanguageSwitcher compact locales={CHROME_LOCALES} />
+            <LanguageSwitcher compact />
           </nav>
           <button
             type="button"
@@ -68,7 +68,7 @@ export function InfoShell({ children }: { children: React.ReactNode }) {
         {menuOpen && (
           <nav className="info-nav-mobile" aria-label="Mobile">
             {links.map((l) => renderLink(l, () => setMenuOpen(false)))}
-            <LanguageSwitcher compact locales={CHROME_LOCALES} />
+            <LanguageSwitcher compact />
           </nav>
         )}
       </header>

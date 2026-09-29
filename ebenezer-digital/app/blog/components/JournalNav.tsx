@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SITE_NAV, journalCategoryHref } from "@/lib/site-nav";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
-import { CHROME_LOCALES, siteChrome } from "@/lib/i18n/site-chrome";
+import { siteChrome } from "@/lib/i18n/site-chrome";
 import { useRequestLocale } from "@/lib/i18n/use-shell-messages";
 
 export function JournalNav({
@@ -94,7 +94,7 @@ export function JournalNav({
             >
               {t.news}
             </Link>
-            <LanguageSwitcher compact variant="dark" locales={CHROME_LOCALES} />
+            <LanguageSwitcher compact variant="dark" />
             <button
               type="button"
               aria-label={t.search}

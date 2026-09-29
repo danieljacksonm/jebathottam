@@ -8,11 +8,21 @@ import {
   EN_SITE_PAGES,
   type StudioSiteCopy,
 } from "./page-messages";
+import { pageStudioPatch } from "./page-ui";
 
 type Bundle = {
   home?: Partial<StudioSiteCopy["home"]>;
   studio?: Partial<StudioSiteCopy["studio"]>;
-  pages?: Partial<Omit<StudioSiteCopy, "home" | "studio">>;
+  pages?: {
+    common?: Partial<StudioSiteCopy["common"]>;
+    stats?: StudioSiteCopy["stats"];
+    contact?: Partial<StudioSiteCopy["contact"]>;
+    portfolio?: Partial<StudioSiteCopy["portfolio"]>;
+    footer?: Partial<StudioSiteCopy["footer"]>;
+    work?: Partial<StudioSiteCopy["work"]>;
+    process?: Partial<StudioSiteCopy["process"]>;
+    why?: Partial<StudioSiteCopy["why"]>;
+  };
 };
 
 const BUNDLES: Partial<Record<SeoLocale, Bundle>> = {
@@ -48,5 +58,6 @@ const EN_BASE: StudioSiteCopy = mergeCopy(
 
 export function getStudioSiteCopy(locale: SeoLocale): StudioSiteCopy {
   if (locale === "en") return EN_BASE;
-  return mergeCopy(EN_BASE, BUNDLES[locale]);
+  const withUi = mergeCopy(EN_BASE, pageStudioPatch(locale) ?? undefined);
+  return mergeCopy(withUi, BUNDLES[locale]);
 }

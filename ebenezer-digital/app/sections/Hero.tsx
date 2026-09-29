@@ -73,7 +73,7 @@ export default function Hero({ home = EN_HOME }: { home?: HomeMessages }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15 }}
         >
-          WE{" "}
+          {home.we}{" "}
           <button
             type="button"
             className="underline decoration-emerald-400/40 underline-offset-8 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"

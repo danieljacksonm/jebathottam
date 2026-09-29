@@ -522,6 +522,7 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   // (journal, news, info, store, tools, network) so the UI language can change.
   const localeOk =
     publishedLocaleSet().has(locale) ||
+    LOCALES.has(locale) ||
     (!isStudioHost(host) && chromeLocaleSet().has(locale));
   if (!localeOk) {
     const url = request.nextUrl.clone();

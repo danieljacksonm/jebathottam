@@ -22,6 +22,7 @@
     "metaTitle": "Ebenezer Digital Services | आपके व्यवसाय के लिए विश्वसनीय डिजिटल और वेब सेवाएँ",
     "metaDescription": "पेशेवर वेब विकास, ई-कॉमर्स, ऑटोमेशन और डिजिटल सहायता। स्पष्ट संवाद और समय पर डिलीवरी।",
     "kicker": "Ebenezer Digital Services",
+    "we": "हम",
     "build": "बनाते हैं",
     "digital": "डिजिटल",
     "experiences": "अनुभव।",
@@ -425,7 +426,8 @@
       "namePlaceholder": "आपका नाम",
       "emailPlaceholder": "your@email.com",
       "errorBody": "कुछ गलत हो गया। फिर कोशिश करें या हमें ईमेल करें।",
-      "contactPageIntro": "अपनी जरूरत लिखकर भेजें। हम जल्द जवाब देंगे।"
+      "contactPageIntro": "अपनी जरूरत लिखकर भेजें। हम जल्द जवाब देंगे।",
+      "stepWord": "चरण"
     },
     "portfolio": {
       "kicker": "चुना हुआ काम",

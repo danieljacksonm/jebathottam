@@ -149,7 +149,7 @@ export default function Contact() {
           ) : (
             <>
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/40">
-                Step {step + 1} / {steps.length}
+                {c.stepWord} {step + 1} / {steps.length}
               </p>
               <h3 className="mt-3 font-serif text-3xl">{steps[step].label}</h3>
               <AnimatePresence mode="wait">
