@@ -72,7 +72,7 @@
     "faq2q": "How many days do I need in Kodaikanal?",
     "faq2a": "Our published package is 1 night / 2 days. Tell Canaan if you want extra nights — custom plans are available for longer stays and larger groups.",
     "faq3q": "Are Canaan tours only for Kodaikanal?",
-    "faq3a": "Our published tour package is for Kodaikanal. We also support flights, hotels, visas and travel planning for destinations worldwide.",
+    "faq3a": "No. Published packages include Kodaikanal, Darjeeling, and other verified itineraries. Flights, trains, hotels, visas, and further destinations are planned after an enquiry.",
     "faq4q": "How do I reach Kodaikanal?",
     "faq4a": "Fly to Madurai or Coimbatore, then continue by road. Private transfers make the hill climb easier, especially with children or elders.",
     "faq5q": "Do you offer honeymoon and family packages?",
@@ -218,7 +218,7 @@
   },
   "stats": {
     "travelers": "Happy Travellers",
-    "destinations": "Kodaikanal focus",
+    "destinations": "Destinations",
     "years": "Years Experience"
   },
   "newsletter": {

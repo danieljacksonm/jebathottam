@@ -6,21 +6,29 @@ import { prisma } from "@/lib/prisma";
 export default async function AdminBlogsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; status?: string }>;
 }) {
   if (!(await isAdminAuthenticated())) redirect("/admin/login");
-  const q = (await searchParams).q?.trim() || "";
-
-  const posts = await prisma.blogPost.findMany({
-    where: q
+  const query = await searchParams;
+  const q = query.q?.trim() || "";
+  const status = query.status?.trim() || "";
+  const pageSize = 40;
+  const page = Math.max(1, Number(query.page) || 1);
+  const where = {
+    ...(status ? { status } : {}),
+    ...(q
       ? {
-          OR: [
-            { titleEn: { contains: q } },
-            { slug: { contains: q } },
-          ],
+          OR: [{ titleEn: { contains: q } }, { slug: { contains: q } }],
         }
-      : {},
+      : {}),
+  };
+
+  const [total, posts] = await Promise.all([
+    prisma.blogPost.count({ where }),
+    prisma.blogPost.findMany({
+    where,
     orderBy: [{ updatedAt: "desc" }],
+    skip: (page - 1) * pageSize,
     select: {
       id: true,
       slug: true,
@@ -30,8 +38,10 @@ export default async function AdminBlogsPage({
       readMinutes: true,
       destination: { select: { nameEn: true } },
     },
-    take: 200,
-  });
+    take: pageSize,
+    }),
+  ]);
+  const pages = Math.max(1, Math.ceil(total / pageSize));
 
   return (
     <div className="admin-card">
@@ -47,7 +57,8 @@ export default async function AdminBlogsPage({
         <div>
           <h1 style={{ margin: 0 }}>Blog posts</h1>
           <p className="admin-muted" style={{ margin: "0.35rem 0 0" }}>
-            Draft / publish / edit SEO fields
+            Showing {(page - 1) * pageSize + (posts.length ? 1 : 0)}–
+            {(page - 1) * pageSize + posts.length} of {total}
           </p>
         </div>
         <Link className="admin-btn" href="/admin/blogs/new">
@@ -56,6 +67,12 @@ export default async function AdminBlogsPage({
       </div>
       <form className="admin-toolbar" method="get">
         <input name="q" defaultValue={q} placeholder="Search title or slug" />
+        <select name="status" defaultValue={status}>
+          <option value="">All statuses</option>
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+          <option value="archived">Archived</option>
+        </select>
         <button className="admin-btn" type="submit">
           Search
         </button>
@@ -95,6 +112,24 @@ export default async function AdminBlogsPage({
           ))}
         </tbody>
       </table>
+      <div className="admin-actions">
+        {page > 1 ? (
+          <Link
+            className="admin-btn secondary"
+            href={`/admin/blogs?q=${encodeURIComponent(q)}&status=${encodeURIComponent(status)}&page=${page - 1}`}
+          >
+            Previous
+          </Link>
+        ) : null}
+        {page < pages ? (
+          <Link
+            className="admin-btn secondary"
+            href={`/admin/blogs?q=${encodeURIComponent(q)}&status=${encodeURIComponent(status)}&page=${page + 1}`}
+          >
+            Next
+          </Link>
+        ) : null}
+      </div>
     </div>
   );
 }

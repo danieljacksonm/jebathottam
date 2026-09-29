@@ -318,3 +318,7 @@ button.admin-btn.danger {
   color: #fca5a5;
   margin-bottom: 0.75rem;
 }
+.admin-body :focus-visible {
+  outline: 2px solid #d4a64a;
+  outline-offset: 2px;
+}

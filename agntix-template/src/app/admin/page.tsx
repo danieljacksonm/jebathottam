@@ -23,34 +23,42 @@ export default async function AdminHomePage() {
   }
 
   const start = new Date();
-  start.setHours(0, 0, 0, 0);
+  start.setUTCHours(0, 0, 0, 0);
+  const today = new Date().toISOString().slice(0, 10);
+  const closed = ["COMPLETED", "CANCELLED", "LOST"];
 
   const [
     newEnquiries,
     todayEnquiries,
     followUps,
-    quotes,
-    invoices,
-    outstanding,
-    blogs,
+    quotesAwaiting,
+    overdueInvoices,
+    draftBlogs,
     destinations,
     packages,
-    scheduled,
+    socialDrafts,
     recentEnquiries,
     recentInvoices,
   ] = await Promise.all([
     prisma.enquiry.count({ where: { status: "NEW" } }),
     prisma.enquiry.count({ where: { createdAt: { gte: start } } }),
-    prisma.enquiry.count({ where: { status: "FOLLOW_UP" } }),
-    prisma.quote.count(),
-    prisma.invoice.count(),
-    prisma.invoice.count({
-      where: { status: { in: ["SENT", "PARTIALLY_PAID", "OVERDUE"] } },
+    prisma.enquiry.count({
+      where: {
+        nextFollowUp: { not: "", lte: today },
+        status: { notIn: closed },
+      },
     }),
-    prisma.blogPost.count({ where: { status: "published" } }),
+    prisma.quote.count({ where: { status: "SENT" } }),
+    prisma.invoice.count({
+      where: {
+        dueDate: { not: "", lt: today },
+        status: { in: ["SENT", "PARTIALLY_PAID", "OVERDUE"] },
+      },
+    }),
+    prisma.blogPost.count({ where: { status: "draft" } }),
     prisma.destination.count(),
-    prisma.travelPackage.count(),
-    prisma.socialPost.count({ where: { status: "SCHEDULED" } }),
+    prisma.travelPackage.count({ where: { published: true } }),
+    prisma.socialPost.count({ where: { status: { in: ["DRAFT", "FAILED"] } } }),
     prisma.enquiry.findMany({
       orderBy: { createdAt: "desc" },
       take: 6,
@@ -63,22 +71,21 @@ export default async function AdminHomePage() {
 
   const cards = [
     ["New enquiries", newEnquiries, "/admin/enquiries"],
-    ["Today", todayEnquiries, "/admin/enquiries"],
-    ["Follow-ups", followUps, "/admin/enquiries"],
-    ["Quotes", quotes, "/admin/quotes"],
-    ["Invoices", invoices, "/admin/invoices"],
-    ["Open balances", outstanding, "/admin/invoices"],
-    ["Published blogs", blogs, "/admin/blogs"],
+    ["Received today (UTC)", todayEnquiries, "/admin/enquiries"],
+    ["Follow-ups due", followUps, "/admin/enquiries"],
+    ["Quotes sent", quotesAwaiting, "/admin/quotes"],
+    ["Overdue invoices", overdueInvoices, "/admin/invoices"],
+    ["Draft blogs", draftBlogs, "/admin/blogs?status=draft"],
     ["Destinations", destinations, "/admin/destinations"],
-    ["Packages", packages, "/admin/packages"],
-    ["Scheduled posts", scheduled, "/admin/social"],
+    ["Published packages", packages, "/admin/packages"],
+    ["Social drafts or failed", socialDrafts, "/admin/social"],
   ] as const;
 
   return (
     <div>
       <h1>Dashboard</h1>
       <p className="admin-muted">
-        Enquiries, quotes, invoices, content, and social drafts in one place.
+        Counts come from saved records. “Today” and due dates use the UTC calendar date.
       </p>
       <div className="admin-stats">
         {cards.map(([label, value, href]) => (
