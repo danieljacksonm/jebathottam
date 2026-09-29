@@ -14,12 +14,15 @@ function localeHref(pathname: string, locale: SeoLocale): string {
 export function LanguageSwitcher({
   compact = false,
   variant = "dark",
+  locales,
 }: {
   compact?: boolean;
   variant?: "dark" | "light";
+  /** Override the studio list. Journal, news, and info pass the chrome locales. */
+  locales?: readonly SeoLocale[];
 }) {
   const pathname = usePathname() || "/";
-  const UI_LOCALES = getPublishedLocales();
+  const UI_LOCALES = locales?.length ? locales : getPublishedLocales();
   const current =
     (pathname.match(/^\/([a-z]{2})(\/|$)/i)?.[1]?.toLowerCase() as SeoLocale | undefined) ||
     "en";

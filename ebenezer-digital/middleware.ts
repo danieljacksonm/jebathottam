@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { CANONICAL_URLS, resolveEcosystemUrl } from "@/lib/ecosystem-urls";
 import { isNewsCategorySegment, isLegacySourceDomainSlug, stripTrackingParams } from "@/lib/news-url";
 import { getPublishedLocales } from "@/lib/i18n/published-locales";
+import { CHROME_LOCALES } from "@/lib/i18n/site-chrome";
 import { SEO_LOCALES, siteKindFromHost } from "@/lib/site-url";
 
 function clean(url: string) {
@@ -25,6 +26,15 @@ const LOCALES = new Set<string>(SEO_LOCALES);
 
 function publishedLocaleSet(): Set<string> {
   return new Set<string>(getPublishedLocales());
+}
+
+function chromeLocaleSet(): Set<string> {
+  return new Set<string>(CHROME_LOCALES);
+}
+
+function isStudioHost(host: string): boolean {
+  const h = hostName(host);
+  return h === "ebenezerdigital.com" || h === "www.ebenezerdigital.com";
 }
 
 function hostName(host: string): string {
@@ -508,26 +518,15 @@ function localeRewrite(request: NextRequest): NextResponse | null {
   const foreignLocalized = foreignSectionRedirect(request, host, rest);
   if (foreignLocalized) return foreignLocalized;
 
-  // Only published locales are public. Soft /kn /pa /de /hi … → English path.
-  if (!publishedLocaleSet().has(locale)) {
+  // Studio keeps full-page locales (en, ta, hi). Other hosts may use chrome locales
+  // (journal, news, info, store, tools, network) so the UI language can change.
+  const localeOk =
+    publishedLocaleSet().has(locale) ||
+    (!isStudioHost(host) && chromeLocaleSet().has(locale));
+  if (!localeOk) {
     const url = request.nextUrl.clone();
     url.pathname = rest === "/" ? "/" : rest;
     return NextResponse.redirect(url, 301);
-  }
-
-  // News has no real translations — never index soft-duplicates (belt + suspenders).
-  if (isNewsHost(host) && locale !== "en") {
-    return absoluteRedirect(request, NEWS_URL, rest === "/" ? "/" : rest);
-  }
-
-  // .net free tools are English-only — /hi/tools/… must not hit affiliate /tools routes.
-  if (isNetworkHost(host) && locale !== "en") {
-    const internal = mapNetworkPrettyPath(rest) || (rest === "/" ? "/network" : rest);
-    return absoluteRedirect(
-      request,
-      `https://${hostName(host)}`,
-      networkPublicPathFromInternal(internal)
-    );
   }
 
   if (locale === "en") {

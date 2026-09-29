@@ -6,10 +6,14 @@ import { Menu, Search, Radio, X, RefreshCw } from "lucide-react";
 import { NEWS_NAV } from "../data";
 import { useNews } from "./NewsProvider";
 import { SITE_NAV } from "@/lib/site-nav";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { CHROME_LOCALES, siteChrome } from "@/lib/i18n/site-chrome";
+import { useRequestLocale } from "@/lib/i18n/use-shell-messages";
 
 export function NewsNav() {
   const { setSearchOpen, menuOpen, setMenuOpen, setActiveNav, activeNav, refreshNews, refreshing } = useNews();
   const [solid, setSolid] = useState(false);
+  const t = siteChrome(useRequestLocale());
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 24);
@@ -33,10 +37,10 @@ export function NewsNav() {
             className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em]"
             onClick={() => setMenuOpen(true)}
             data-cursor="OPEN"
-            aria-label="Open menu"
+            aria-label={t.openMenu}
           >
             <Menu className="h-4 w-4" />
-            <span className="hidden sm:inline">Menu</span>
+            <span className="hidden sm:inline">{t.menu}</span>
           </button>
 
           <Link href="/blog/news" className="flex flex-col items-center" data-cursor="HOME" aria-label="Ebenezer News home">
@@ -51,17 +55,18 @@ export function NewsNav() {
               type="button"
               onClick={() => void refreshNews()}
               className="inline-flex items-center gap-1.5 rounded-full border border-[var(--n-line)] px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em]"
-              aria-label="Refresh for new stories"
+              aria-label={t.refresh}
               data-cursor="OPEN"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? "animate-spin" : ""}`} />
-              <span className="hidden sm:inline">{refreshing ? "Updating" : "Refresh"}</span>
+              <span className="hidden sm:inline">{refreshing ? t.updating : t.refresh}</span>
             </button>
+            <LanguageSwitcher compact variant="light" locales={CHROME_LOCALES} />
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
               className="grid h-9 w-9 place-items-center rounded-full border border-[var(--n-line)]"
-              aria-label="Search"
+              aria-label={t.search}
               data-cursor="FIND"
             >
               <Search className="h-4 w-4" />
@@ -71,14 +76,14 @@ export function NewsNav() {
               className="hidden items-center gap-1.5 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--n-live)] sm:inline-flex"
               data-cursor="OPEN"
             >
-              <Radio className="h-3.5 w-3.5" /> Live
+              <Radio className="h-3.5 w-3.5" /> {t.live}
             </a>
             <a
               href="#subscribe"
               className="hidden border border-[var(--n-ink)] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] md:inline-flex"
               data-cursor="OPEN"
             >
-              Subscribe
+              {t.subscribe}
             </a>
           </div>
         </div>

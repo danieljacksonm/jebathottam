@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { SITE_NAV, journalCategoryHref } from "@/lib/site-nav";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
+import { CHROME_LOCALES, siteChrome } from "@/lib/i18n/site-chrome";
+import { useRequestLocale } from "@/lib/i18n/use-shell-messages";
 
 export function JournalNav({
   categories,
@@ -22,6 +24,7 @@ export function JournalNav({
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const t = siteChrome(useRequestLocale());
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 24);
@@ -89,12 +92,12 @@ export function JournalNav({
               href={SITE_NAV.news}
               className="hidden rounded-full border border-[var(--j-brand)]/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--j-brand)] transition hover:bg-[var(--j-brand)] hover:text-[#04110c] md:inline-flex"
             >
-              News
+              {t.news}
             </Link>
-            <LanguageSwitcher compact variant="dark" />
+            <LanguageSwitcher compact variant="dark" locales={CHROME_LOCALES} />
             <button
               type="button"
-              aria-label="Search"
+              aria-label={t.search}
               className="grid h-10 w-10 place-items-center rounded-full border border-[var(--j-line)] text-[var(--j-paper)] transition hover:border-[var(--j-brand)]"
               onClick={() => setSearchOpen(true)}
             >
@@ -104,13 +107,13 @@ export function JournalNav({
               href="#subscribe"
               className="hidden rounded-full bg-[var(--j-brand)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#04110c] transition hover:brightness-110 lg:inline-flex"
             >
-              Subscribe
+              {t.subscribe}
             </Link>
             <button
               type="button"
               className="grid h-10 w-10 place-items-center rounded-full border border-[var(--j-line)] text-[var(--j-paper)] lg:hidden"
               onClick={() => setMenuOpen(true)}
-              aria-label="Open menu"
+              aria-label={t.openMenu}
             >
               <Menu className="h-4 w-4" />
             </button>
@@ -121,8 +124,8 @@ export function JournalNav({
       {menuOpen && (
         <div className="fixed inset-0 z-[80] overflow-y-auto bg-[var(--j-ink)] px-6 py-8 lg:hidden">
           <div className="mb-8 flex items-center justify-between">
-            <p className="text-xs tracking-[0.3em] text-[var(--j-brand)]">Journal</p>
-            <button type="button" onClick={() => setMenuOpen(false)} aria-label="Close menu">
+            <p className="text-xs tracking-[0.3em] text-[var(--j-brand)]">{t.journal}</p>
+            <button type="button" onClick={() => setMenuOpen(false)} aria-label={t.closeMenu}>
               <X className="h-6 w-6 text-[var(--j-paper)]" />
             </button>
           </div>
@@ -131,7 +134,7 @@ export function JournalNav({
               href={SITE_NAV.news}
               className="block border-b border-[var(--j-line)] py-4 font-serif text-2xl text-[var(--j-brand)]"
             >
-              Ebenezer News
+              {t.news}
             </Link>
             {topics.map((cat) => (
               <Link
@@ -148,7 +151,7 @@ export function JournalNav({
             ))}
           </div>
           <div id="subscribe" className="mt-10">
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--j-muted)]">Newsletter</p>
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--j-muted)]">{t.newsletter}</p>
             <NewsletterSignup variant="journal" source="journal-nav-mobile" className="mt-4" />
           </div>
         </div>
@@ -158,8 +161,8 @@ export function JournalNav({
         <div className="fixed inset-0 z-[80] flex items-start justify-center bg-black/90 px-4 pt-28 backdrop-blur-md">
           <div className="w-full max-w-3xl">
             <div className="mb-8 flex items-start justify-between gap-4">
-              <h2 className="font-serif text-4xl leading-none text-[var(--j-paper)] sm:text-5xl">Search the Journal</h2>
-              <button type="button" onClick={() => setSearchOpen(false)} aria-label="Close search">
+              <h2 className="font-serif text-4xl leading-none text-[var(--j-paper)] sm:text-5xl">{t.searchJournal}</h2>
+              <button type="button" onClick={() => setSearchOpen(false)} aria-label={t.close}>
                 <X className="h-7 w-7 text-[var(--j-paper)]" />
               </button>
             </div>
@@ -170,7 +173,7 @@ export function JournalNav({
                 setQuery(e.target.value);
                 onSearch?.(e.target.value);
               }}
-              placeholder="Topics, guides, explainers…"
+              placeholder={t.searchPlaceholder}
               className="w-full border-b border-[var(--j-line)] bg-transparent pb-4 font-serif text-2xl text-[var(--j-paper)] outline-none placeholder:text-[var(--j-muted)] focus:border-[var(--j-brand)]"
             />
           </div>

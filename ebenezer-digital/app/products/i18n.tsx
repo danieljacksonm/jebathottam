@@ -406,9 +406,67 @@ const dictionaries: Record<string, Dict> = {
 
 const KEY = "ebenezer-store-locale";
 
-// Extra India locales: URL + SEO supported; UI strings fall back to English until translated.
+// India locales: real UI strings (do not copy English).
+const INDIA_STORE: Record<string, Dict> = {
+  te: {
+    products: "ఉత్పత్తులు",
+    categories: "వర్గాలు",
+    bundles: "బండిల్స్",
+    freeTool: "ఉచిత సాధనం",
+    freebies: "ఉచితం",
+    account: "ఖాతా",
+    searchPrompt: "మీరు ఏమి వెతుకుతున్నారు?",
+    searchPlaceholder: "ఉత్పత్తులు, వర్గాలు వెతకండి…",
+    noResults: "సరిపోలే ఉత్పత్తులు లేవు.",
+    heroKicker: "Ebenezer Store · డిజిటల్ ఉత్పత్తులు",
+    heroTag: "సృష్టికర్తలు మరియు వ్యాపారాల కోసం ప్రీమియం కిట్లు — వెంటనే డౌన్‌లోడ్.",
+    exploreProducts: "ఉత్పత్తులు చూడండి",
+    viewBundles: "బండిల్స్ చూడండి",
+    featured: "ఫీచర్డ్",
+    bestSellers: "ఎక్కువ అమ్మకాలు",
+    dragSwipe: "లాగండి / స్వైప్",
+    justDropped: "కొత్తవి",
+    startFree: "ఉచితంగా ప్రారంభించండి",
+    continueShopping: "షాపింగ్ కొనసాగించండి",
+    completeOrder: "ఆర్డర్ పూర్తి చేయండి",
+    buyNow: "ఇప్పుడే కొనండి",
+    getFree: "ఉచిత యాక్సెస్",
+    getStartedFree: "ఉచితంగా మొదలుపెట్టండి",
+    addToCart: "కార్ట్‌కు జోడించండి",
+  },
+  ml: {
+    products: "ഉൽപ്പന്നങ്ങൾ",
+    categories: "വിഭാഗങ്ങൾ",
+    bundles: "ബണ്ടിലുകൾ",
+    freeTool: "സൗജന്യ ഉപകരണം",
+    freebies: "സൗജന്യം",
+    account: "അക്കൗണ്ട്",
+    searchPrompt: "നിങ്ങൾ എന്താണ് തിരയുന്നത്?",
+    searchPlaceholder: "ഉൽപ്പന്നങ്ങൾ, വിഭാഗങ്ങൾ തിരയുക…",
+    noResults: "യോജിക്കുന്ന ഉൽപ്പന്നങ്ങൾ ഇല്ല.",
+    heroKicker: "Ebenezer Store · ഡിജിറ്റൽ ഉൽപ്പന്നങ്ങൾ",
+    heroTag: "സ്രഷ്ടാക്കൾക്കും ബിസിനസുകൾക്കും പ്രീമിയം കിറ്റുകൾ — ഉടൻ ഡൗൺലോഡ്.",
+    exploreProducts: "ഉൽപ്പന്നങ്ങൾ കാണുക",
+    viewBundles: "ബണ്ടിലുകൾ കാണുക",
+    featured: "തിരഞ്ഞെടുത്തവ",
+    bestSellers: "കൂടുതൽ വിറ്റവ",
+    dragSwipe: "വലിക്കുക / സ്വൈപ്പ്",
+    justDropped: "പുതിയത്",
+    startFree: "സൗജന്യമായി തുടങ്ങുക",
+    continueShopping: "ഷോപ്പിംഗ് തുടരുക",
+    completeOrder: "ഓർഡർ പൂർത്തിയാക്കുക",
+    buyNow: "ഇപ്പോൾ വാങ്ങുക",
+    getFree: "സൗജന്യ ആക്സസ്",
+    getStartedFree: "സൗജന്യമായി തുടങ്ങുക",
+    addToCart: "കാർട്ടിലേക്ക് ചേർക്കുക",
+  },
+};
+
 for (const loc of ["te", "ml", "kn", "bn", "mr", "gu", "pa", "ur"] as const) {
-  (dictionaries as Record<string, Dict>)[loc] = dictionaries.en;
+  const extra = INDIA_STORE[loc];
+  (dictionaries as Record<string, Dict>)[loc] = extra
+    ? { ...dictionaries.en, ...extra }
+    : dictionaries.en;
 }
 
 const Ctx = createContext<StoreI18nValue | null>(null);
