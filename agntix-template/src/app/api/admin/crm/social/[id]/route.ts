@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { denyUnlessAdmin } from "@/lib/admin-guard";
+import { denyUnlessRole } from "@/lib/admin-guard";
 import { publishToPlatform, type SocialPlatform } from "@/lib/social/providers";
+import { decryptSecret } from "@/lib/token-crypto";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: Params) {
-  const denied = await denyUnlessAdmin();
+  const denied = await denyUnlessRole(["ADMIN", "MARKETING"]);
   if (denied) return denied;
   const { id } = await params;
   const body = (await request.json()) as {
@@ -70,22 +71,31 @@ export async function PATCH(request: Request, { params }: Params) {
   const errors: string[] = [];
   for (const variant of post.variants) {
     const account = accounts.find((item) => item.platform === variant.platform);
-    const result = publishToPlatform({
+    let accessToken = "";
+    if (account?.tokenCipher) {
+      try {
+        accessToken = decryptSecret(account.tokenCipher);
+      } catch {
+        accessToken = "";
+      }
+    }
+    const result = await publishToPlatform({
       platform: variant.platform as SocialPlatform,
       accountName: account?.accountName || variant.platform,
       accountStatus: account?.status || "NOT_CONNECTED",
-      hasCredential: Boolean(account?.tokenCipher),
+      externalId: account?.externalId || "",
+      accessToken,
       caption: variant.caption,
       linkUrl: post.linkUrl,
       mediaPath: post.mediaPath,
     });
-    if (!result.ok) {
-      errors.push(result.error);
-      await prisma.socialPostVariant.update({
-        where: { id: variant.id },
-        data: { status: "FAILED", lastError: result.error },
-      });
-    }
+    await prisma.socialPostVariant.update({
+      where: { id: variant.id },
+      data: result.ok
+        ? { status: "PUBLISHED", lastError: "" }
+        : { status: "FAILED", lastError: result.error },
+    });
+    if (!result.ok) errors.push(result.error);
   }
 
   const failed = errors.length > 0;

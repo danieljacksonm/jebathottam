@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { denyUnlessAdmin } from "@/lib/admin-guard";
+import { denyUnlessRole } from "@/lib/admin-guard";
 import { SOCIAL_PLATFORMS } from "@/lib/social/providers";
 import { encryptSecret } from "@/lib/token-crypto";
 
 export async function POST(request: Request) {
-  const denied = await denyUnlessAdmin();
+  const denied = await denyUnlessRole(["ADMIN", "MARKETING"]);
   if (denied) return denied;
   const body = (await request.json()) as Record<string, unknown>;
   const platform = String(body.platform || "");

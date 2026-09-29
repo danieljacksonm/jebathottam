@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { denyUnlessAdmin } from "@/lib/admin-guard";
+import { denyUnlessRole } from "@/lib/admin-guard";
 import { nextDocumentNumber } from "@/lib/document-numbers";
 import { cleanLines } from "@/lib/crm";
 
 export async function POST(request: Request) {
-  const denied = await denyUnlessAdmin();
+  const denied = await denyUnlessRole(["ADMIN", "FINANCE"]);
   if (denied) return denied;
   const body = (await request.json()) as Record<string, unknown>;
   const customerName = String(body.customerName || "").trim();

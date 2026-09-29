@@ -39,8 +39,16 @@ const steps = [
   },
 ];
 
-export default async function ConnectionsPage() {
+export default async function ConnectionsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string; connected?: string }>;
+}) {
   if (!(await isAdminAuthenticated())) redirect("/admin/login");
+  const query = await searchParams;
+  const facebookReady = Boolean(process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET);
+  const linkedinReady = Boolean(process.env.LINKEDIN_CLIENT_ID && process.env.LINKEDIN_CLIENT_SECRET);
+  const youtubeReady = Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
   const accounts = await prisma.socialAccount.findMany({
     orderBy: { platform: "asc" },
   });
@@ -91,9 +99,34 @@ export default async function ConnectionsPage() {
 
       <section className="admin-card" style={{ marginTop: "1rem" }}>
         <h2>4. Social accounts</h2>
+        {query.connected ? <p>Connected {query.connected}. A post is published only after that network returns an id.</p> : null}
+        {query.error ? <p className="admin-error">{query.error}</p> : null}
         <p>
-          Saving a token marks that account CONNECTED and encrypts the token. Publishing from{" "}
-          <Link href="/admin/social">Social media</Link> still fails until that platform’s live API is switched on in the server. The failed post shows the error and stays FAILED.
+          Saving a token marks that account CONNECTED and encrypts the token. Publish now calls Facebook, Instagram, LinkedIn, or Threads. The post is marked published only when that network returns a confirmation id. YouTube stays unpublished here because a video file is required.
+        </p>
+        <p>
+          {facebookReady ? (
+            <a className="admin-btn" href="/api/admin/social/oauth/facebook">Connect Facebook</a>
+          ) : (
+            "Facebook OAuth is not configured. Set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET, then restart."
+          )}
+        </p>
+        <p>
+          {linkedinReady ? (
+            <a className="admin-btn" href="/api/admin/social/oauth/linkedin">Connect LinkedIn</a>
+          ) : (
+            "LinkedIn OAuth is not configured. Set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET, then restart."
+          )}
+        </p>
+        <p>
+          {youtubeReady ? (
+            <a className="admin-btn" href="/api/admin/social/oauth/youtube">Connect YouTube</a>
+          ) : (
+            "YouTube OAuth is not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET, then restart. A connected channel still cannot publish until a video file is uploaded in YouTube Studio."
+          )}
+        </p>
+        <p className="admin-muted">
+          Instagram uses the Facebook connection. If the Page has a professional Instagram account, that account is saved when Facebook connects. Threads still needs its own user ID and token.
         </p>
         <p>Status meanings:</p>
         <ul>
@@ -145,7 +178,7 @@ export default async function ConnectionsPage() {
           <li>Copy the account name, account ID, and access token.</li>
           <li>On Social media, use Connect account. Leave the token empty if you only want the name saved as NOT CONNECTED.</li>
           <li>Set SOCIAL_TOKEN_KEY on the server if you do not want tokens encrypted with the admin password. Restart after changing it. Old tokens cannot be read if this key changes.</li>
-          <li>Create a draft post, check the caption and image, then press Publish now. If the live API is still off, the post becomes FAILED and the reason is shown. It is not marked published.</li>
+          <li>Create a draft post, check the caption and image, then press Publish now. The post is marked published only when the network returns an id. Otherwise it stays FAILED and shows the reason. YouTube captions can be exported and uploaded in YouTube Studio.</li>
         </ol>
       </section>
     </div>

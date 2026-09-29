@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { denyUnlessRole } from "@/lib/admin-guard";
 
 function emptyLoc(en = "") {
   return { en, ta: en, hi: en };
@@ -79,9 +80,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  if (!(await isAdminAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await denyUnlessRole(["ADMIN", "EDITOR"]);
+  if (denied) return denied;
   const body = await request.json();
   const slug = String(body.slug ?? "")
     .trim()

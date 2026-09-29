@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { denyUnlessRole } from "@/lib/admin-guard";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -53,9 +54,8 @@ export async function GET(_request: Request, { params }: Params) {
 }
 
 export async function PUT(request: Request, { params }: Params) {
-  if (!(await isAdminAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await denyUnlessRole(["ADMIN", "EDITOR"]);
+  if (denied) return denied;
   const { id } = await params;
   const body = await request.json();
   const existing = await prisma.travelPackage.findUnique({ where: { id } });
@@ -181,9 +181,8 @@ export async function PUT(request: Request, { params }: Params) {
 }
 
 export async function DELETE(_request: Request, { params }: Params) {
-  if (!(await isAdminAuthenticated())) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  const denied = await denyUnlessRole(["ADMIN", "EDITOR"]);
+  if (denied) return denied;
   const { id } = await params;
   await prisma.travelPackage.delete({ where: { id } }).catch(() => null);
   try {

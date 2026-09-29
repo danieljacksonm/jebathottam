@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { denyUnlessAdmin } from "@/lib/admin-guard";
+import { denyUnlessRole } from "@/lib/admin-guard";
 import { QUOTE_STATUSES, cleanLines, createInvoiceFromQuote } from "@/lib/crm";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(request: Request, { params }: Params) {
-  const denied = await denyUnlessAdmin();
+  const denied = await denyUnlessRole(["ADMIN", "FINANCE"]);
   if (denied) return denied;
   const { id } = await params;
   const body = (await request.json()) as Record<string, unknown>;
@@ -21,6 +21,37 @@ export async function PATCH(request: Request, { params }: Params) {
   }
 
   const lines = body.items ? cleanLines(body.items) : null;
+  const previousItems = await prisma.quoteItem.findMany({
+    where: { quoteId: id },
+    orderBy: { sortOrder: "asc" },
+  });
+  const revisionCount = await prisma.quoteRevision.count({ where: { quoteId: id } });
+  await prisma.quoteRevision.create({
+    data: {
+      quoteId: id,
+      revision: revisionCount + 1,
+      status: quote.status,
+      snapshotJson: JSON.stringify({
+        status: quote.status,
+        customerName: quote.customerName,
+        email: quote.email,
+        phone: quote.phone,
+        destination: quote.destination,
+        packageSlug: quote.packageSlug,
+        travelStart: quote.travelStart,
+        travelEnd: quote.travelEnd,
+        travellers: quote.travellers,
+        itinerary: quote.itinerary,
+        currency: quote.currency,
+        discountMinor: quote.discountMinor,
+        paymentTerms: quote.paymentTerms,
+        cancellationNotes: quote.cancellationNotes,
+        validityDate: quote.validityDate,
+        notes: quote.notes,
+        items: previousItems,
+      }),
+    },
+  });
   await prisma.quote.update({
     where: { id },
     data: {

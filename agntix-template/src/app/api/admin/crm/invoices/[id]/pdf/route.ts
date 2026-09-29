@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { denyUnlessAdmin } from "@/lib/admin-guard";
+import { denyUnlessRole } from "@/lib/admin-guard";
 import { invoiceTotals } from "@/lib/crm";
 import { renderBusinessPdf } from "@/lib/pdf-document";
 
 type Params = { params: Promise<{ id: string }> };
 
 export async function GET(_request: Request, { params }: Params) {
-  const denied = await denyUnlessAdmin();
+  const denied = await denyUnlessRole(["ADMIN", "FINANCE"]);
   if (denied) return denied;
   const { id } = await params;
   const totals = await invoiceTotals(id);

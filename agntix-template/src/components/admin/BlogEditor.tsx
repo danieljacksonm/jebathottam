@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -196,6 +196,17 @@ export function BlogEditor({
     router.replace("/admin/blogs");
   }
 
+  function insertBlock(
+    setter: Dispatch<SetStateAction<string>>,
+    kind: "heading" | "paragraph",
+  ) {
+    setter((current) => {
+      const block = kind === "heading" ? "## " : "";
+      if (!current.trim()) return block;
+      return `${current.replace(/\s+$/, "")}\n\n${block}`;
+    });
+  }
+
   return (
     <div className="admin-card">
       <div
@@ -322,12 +333,21 @@ export function BlogEditor({
       </div>
       <div className="admin-field">
         <label htmlFor="bodyEn">Body paragraphs (EN)</label>
+        <div className="admin-actions">
+          <button type="button" className="admin-btn secondary" onClick={() => insertBlock(setBodyEn, "heading")}>
+            Add heading
+          </button>
+          <button type="button" className="admin-btn secondary" onClick={() => insertBlock(setBodyEn, "paragraph")}>
+            Add paragraph
+          </button>
+        </div>
         <textarea
           id="bodyEn"
           value={bodyEn}
           onChange={(e) => setBodyEn(e.target.value)}
           style={{ minHeight: 220 }}
         />
+        <p className="admin-muted">A line that starts with ## is a heading. A blank line separates paragraphs.</p>
       </div>
       <div className="admin-field">
         <label htmlFor="tagsEn">Tags (comma separated)</label>
@@ -373,6 +393,14 @@ export function BlogEditor({
       </div>
       <div className="admin-field">
         <label htmlFor="bodyTa">Body (TA)</label>
+        <div className="admin-actions">
+          <button type="button" className="admin-btn secondary" onClick={() => insertBlock(setBodyTa, "heading")}>
+            Add heading
+          </button>
+          <button type="button" className="admin-btn secondary" onClick={() => insertBlock(setBodyTa, "paragraph")}>
+            Add paragraph
+          </button>
+        </div>
         <textarea
           id="bodyTa"
           value={bodyTa}
@@ -381,6 +409,14 @@ export function BlogEditor({
       </div>
       <div className="admin-field">
         <label htmlFor="bodyHi">Body (HI)</label>
+        <div className="admin-actions">
+          <button type="button" className="admin-btn secondary" onClick={() => insertBlock(setBodyHi, "heading")}>
+            Add heading
+          </button>
+          <button type="button" className="admin-btn secondary" onClick={() => insertBlock(setBodyHi, "paragraph")}>
+            Add paragraph
+          </button>
+        </div>
         <textarea
           id="bodyHi"
           value={bodyHi}

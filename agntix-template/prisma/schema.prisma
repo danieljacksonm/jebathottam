@@ -248,11 +248,35 @@ model Quote {
   validityDate      String      @default("")
   notes             String      @default("")
   items             QuoteItem[]
+  revisions         QuoteRevision[]
   invoice           Invoice?
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 
   @@index([status])
+}
+
+model QuoteRevision {
+  id           String   @id @default(cuid())
+  quoteId      String
+  quote        Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  revision     Int
+  status       String
+  snapshotJson String
+  createdAt    DateTime @default(now())
+
+  @@index([quoteId])
+}
+
+model StaffAccount {
+  id           String   @id @default(cuid())
+  name         String
+  role         String
+  passwordHash String
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([role])
 }
 
 model QuoteItem {

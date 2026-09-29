@@ -28,7 +28,7 @@ export default async function ReportsPage() {
         <li>Open enquiries (new, follow-up, quote sent): {openEnquiries}</li>
       </ul>
       <p className="admin-muted">
-        Image duplicates and broken files are checked with `npm run images:audit`. This page does not invent missing image scores.
+        Image duplicates and broken files are checked with `npm run images:audit`. This page does not invent missing image scores. Core Web Vitals field data is not connected, so there is no Lighthouse or CrUX score here.
       </p>
     </div>
   );

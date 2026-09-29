@@ -6,31 +6,32 @@ import { useState } from "react";
 
 const groups = [
   {
-    label: "Business",
+    label: "Trip desk",
     links: [
       ["/admin", "Dashboard"],
-      ["/admin/enquiries", "Enquiries"],
-      ["/admin/customers", "Customers"],
+      ["/admin/enquiries", "Trip requests"],
       ["/admin/quotes", "Quotes"],
       ["/admin/invoices", "Invoices"],
+      ["/admin/customers", "Customers"],
     ],
   },
   {
-    label: "Content",
+    label: "Website",
     links: [
-      ["/admin/destinations", "Destinations"],
       ["/admin/packages", "Packages"],
-      ["/admin/blogs", "Blogs"],
-      ["/admin/media", "Media"],
-      ["/admin/translations", "Translations"],
+      ["/admin/destinations", "Destinations"],
+      ["/admin/blogs", "Articles"],
+      ["/admin/media", "Photos"],
+      ["/admin/translations", "Tamil & Hindi"],
     ],
   },
   {
-    label: "System",
+    label: "Settings",
     links: [
-      ["/admin/connections", "Connections"],
-      ["/admin/social", "Social media"],
-      ["/admin/reports", "Reports"],
+      ["/admin/connections", "Email & logins"],
+      ["/admin/social", "Social posts"],
+      ["/admin/staff", "Staff"],
+      ["/admin/reports", "Checks"],
     ],
   },
 ];
@@ -77,7 +78,7 @@ export function AdminChrome({ children }: { children: React.ReactNode }) {
           </div>
         ))}
         <Link href="/en" target="_blank" rel="noreferrer">
-          View site
+          View website
         </Link>
       </aside>
       <div className="admin-content">

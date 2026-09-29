@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,7 +17,7 @@ export default function AdminLoginPage() {
     const res = await fetch("/api/admin/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ password, name }),
     });
     setLoading(false);
     if (!res.ok) {
@@ -34,6 +35,16 @@ export default function AdminLoginPage() {
       <p className="admin-muted">Canaan Travel Hub content management</p>
       {error ? <p className="admin-error">{error}</p> : null}
       <form onSubmit={onSubmit}>
+        <div className="admin-field">
+          <label htmlFor="name">Staff name</label>
+          <input
+            id="name"
+            autoComplete="username"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <p className="admin-muted">Leave this blank for the owner password. Staff use the name saved on their account.</p>
+        </div>
         <div className="admin-field">
           <label htmlFor="password">Password</label>
           <input

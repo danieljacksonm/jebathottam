@@ -225,6 +225,24 @@ export function SocialPostActions({
         <button className="admin-btn" type="button" onClick={() => void act("publish")}>
           Publish now
         </button>
+        <button
+          className="admin-btn secondary"
+          type="button"
+          onClick={() => {
+            const text = captions
+              .map((variant) => `${variant.platform}\n${variant.caption}\n${variant.hashtags}`.trim())
+              .join("\n\n");
+            const blob = new Blob([text], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "social-captions.txt";
+            link.click();
+            URL.revokeObjectURL(url);
+          }}
+        >
+          Export captions
+        </button>
         <button className="admin-btn danger" type="button" onClick={() => void act("cancel")}>
           Cancel
         </button>

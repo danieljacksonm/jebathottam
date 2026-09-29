@@ -15,7 +15,11 @@ export default async function QuotePage({
   const { id } = await params;
   const quote = await prisma.quote.findUnique({
     where: { id },
-    include: { items: { orderBy: { sortOrder: "asc" } }, invoice: true },
+    include: {
+      items: { orderBy: { sortOrder: "asc" } },
+      invoice: true,
+      revisions: { orderBy: { createdAt: "desc" }, take: 20 },
+    },
   });
   if (!quote) notFound();
   return (
@@ -58,6 +62,20 @@ export default async function QuotePage({
           })),
         }}
       />
+      <section className="admin-card" style={{ marginTop: "1rem" }}>
+        <h2>Revision history</h2>
+        {quote.revisions.length === 0 ? (
+          <p className="admin-muted">No earlier version has been saved yet. The next save stores the current quote before it changes.</p>
+        ) : (
+          <ul>
+            {quote.revisions.map((revision) => (
+              <li key={revision.id}>
+                Revision {revision.revision} · {revision.status} · {revision.createdAt.toISOString().slice(0, 16).replace("T", " ")} UTC
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }
