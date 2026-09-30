@@ -1,5 +1,6 @@
 import { getPrisma, prismaEnabled } from "@/lib/prisma";
 import { loadMessages } from "@/lib/i18n/load-messages";
+import { localizedJournalArticle } from "@/lib/i18n/localize-journal";
 import type { SeoLocale } from "@/lib/site-url";
 
 export type LocalizedPage = {
@@ -27,6 +28,21 @@ export function contentKeyFor(type: string, slug: string): string {
 function staticJournalFallback(contentKey: string, locale: string): LocalizedPage | null {
   if (locale === "en") return null;
   const slug = contentKey.replace(/^journal:/, "");
+  const generated = localizedJournalArticle(slug, locale);
+  if (generated) {
+    return {
+      contentKey,
+      locale,
+      slug,
+      title: generated.title,
+      excerpt: generated.excerpt,
+      body: generated.body,
+      metaTitle: generated.title,
+      metaDescription: generated.excerpt,
+      heroImage: null,
+      status: "published",
+    };
+  }
   const j = loadMessages(locale as SeoLocale).journal?.[slug];
   if (!j) return null;
   return {

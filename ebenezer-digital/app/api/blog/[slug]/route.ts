@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { contentKeyFor, resolveLocalizedContent } from "@/lib/i18n/resolve-content";
+import { localizedJournalArticle } from "@/lib/i18n/localize-journal";
 import { localeFromCookieHeader } from "@/lib/i18n/locale-utils";
 import type { SeoLocale } from "@/lib/site-url";
 
@@ -10,6 +11,8 @@ export const dynamic = "force-dynamic";
 type Ctx = { params: { slug: string } };
 
 function resolveBlogLocale(req: Request): SeoLocale {
+  const fromQuery = new URL(req.url).searchParams.get("locale")?.toLowerCase();
+  if (fromQuery && fromQuery !== "en") return fromQuery as SeoLocale;
   const fromHeader = headers().get("x-eben-locale")?.toLowerCase();
   if (fromHeader && fromHeader !== "en") return fromHeader as SeoLocale;
   return localeFromCookieHeader(req.headers.get("cookie"));
@@ -42,16 +45,19 @@ export async function GET(req: Request, { params }: Ctx) {
           await Promise.all(post.relatedSlugs.map((s) => db.getBlogPostBySlug(s)))
         )
           .filter(Boolean)
-          .map((p) => ({
-            id: p!.id,
-            title: p!.title,
-            slug: p!.slug,
-            excerpt: p!.excerpt,
-            coverImage: p!.coverImage,
-            category: p!.category,
-            author: p!.author,
-            publishedAt: p!.publishedAt,
-          }))
+          .map((p) => {
+            const localized = locale === "en" ? null : localizedJournalArticle(p!.slug, locale);
+            return {
+              id: p!.id,
+              title: localized?.title || p!.title,
+              slug: p!.slug,
+              excerpt: localized?.excerpt || p!.excerpt,
+              coverImage: p!.coverImage,
+              category: localized?.category || p!.category,
+              author: p!.author,
+              publishedAt: p!.publishedAt,
+            };
+          })
       : [];
 
     return NextResponse.json({ post, related });

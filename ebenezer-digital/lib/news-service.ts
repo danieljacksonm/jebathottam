@@ -19,6 +19,8 @@ import {
   listArchivedNewsAll,
 } from "@/lib/news-sitemap-archive";
 import { getNewsLibraryBySlug, searchNewsLibrary } from "@/lib/news-library";
+import { localizeNewsFields } from "@/lib/i18n/localize-news";
+import { headers } from "next/headers";
 
 export type PublicNewsItem = NewsArticle & {
   origin: "seed" | "cms" | "live";
@@ -233,28 +235,33 @@ export async function listPublicNewsForSitemap(): Promise<PublicNewsItem[]> {
   return listNewsForSitemap(current) as PublicNewsItem[];
 }
 
+function localizePublicNews(item: PublicNewsItem): PublicNewsItem {
+  const locale = headers().get("x-eben-locale") || "en";
+  return localizeNewsFields(item, locale);
+}
+
 /** Request-scoped dedupe for generateMetadata + page (avoids double DB/archive work). */
 export const getPublicNewsBySlug = cache(async (slug: string): Promise<PublicNewsItem | undefined> => {
   const cms = await db.getNewsArticleBySlug(slug);
-  if (cms) return recordToPublic(cms);
+  if (cms) return localizePublicNews(recordToPublic(cms));
   const live = await getLiveNewsBySlug(slug);
-  if (live) return live;
+  if (live) return localizePublicNews(live);
   const archived = getArchivedNewsBySlug(slug);
-  if (archived) return archived as PublicNewsItem;
+  if (archived) return localizePublicNews(archived as PublicNewsItem);
   const saved = await getNewsLibraryBySlug(slug);
-  if (saved) return archiveToPublic(saved);
+  if (saved) return localizePublicNews(archiveToPublic(saved));
   const seed = WORLD_NEWS.find((n) => n.slug === slug);
-  if (seed) return seedToPublic(seed);
+  if (seed) return localizePublicNews(seedToPublic(seed));
 
   // Legacy www-source-domain slugs → archive/CMS only (never re-fetch RSS feeds)
   if (isLegacySourceDomainSlug(slug)) {
     const fromArchive = findArchivedNewsByLegacySlug(slug);
-    if (fromArchive) return fromArchive as PublicNewsItem;
+    if (fromArchive) return localizePublicNews(fromArchive as PublicNewsItem);
     const cmsAll = await db.getNewsArticles(true);
     const cmsMatch = cmsAll.find(
       (n) => n.originalUrl && legacySlugFromSourceUrl(n.originalUrl) === slug
     );
-    if (cmsMatch) return recordToPublic(cmsMatch);
+    if (cmsMatch) return localizePublicNews(recordToPublic(cmsMatch));
   }
   return undefined;
 });

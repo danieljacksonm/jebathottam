@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+import { localeFromPathname } from "@/lib/i18n/locale-utils";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -155,10 +157,13 @@ export function ArticleView({ slug }: { slug: string }) {
   const { scrollYProgress } = useScroll();
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 1.08]);
 
+  const pathname = usePathname() || "/";
+  const locale = localeFromPathname(pathname);
+
   useEffect(() => {
     let alive = true;
     Promise.all([
-      fetch(`/api/blog/${encodeURIComponent(slug)}`).then((r) => (r.ok ? r.json() : null)),
+      fetch(`/api/blog/${encodeURIComponent(slug)}?locale=${locale}`).then((r) => (r.ok ? r.json() : null)),
       fetch("/api/content").then((r) => r.json()).catch(() => ({ blogPosts: [] })),
     ])
       .then(([detail, content]) => {
@@ -193,7 +198,7 @@ export function ArticleView({ slug }: { slug: string }) {
     return () => {
       alive = false;
     };
-  }, [slug]);
+  }, [slug, locale]);
 
   useEffect(() => {
     const onScroll = () => setStickyTitle(window.scrollY > 420);

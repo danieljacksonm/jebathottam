@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { searchPublicNews } from "@/lib/news-service";
+import { localizeNewsFields } from "@/lib/i18n/localize-news";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,7 @@ export async function GET(request: NextRequest) {
       : DEFAULT_LIMIT;
     const offset = Number.isFinite(rawOffset) ? Math.max(0, Math.floor(rawOffset)) : 0;
 
+    const locale = (searchParams.get("locale") || request.headers.get("x-eben-locale") || "en").toLowerCase();
     const result = await searchPublicNews({
       q,
       region,
@@ -39,6 +41,9 @@ export async function GET(request: NextRequest) {
         ok: true,
         generatedAt: new Date().toISOString(),
         ...result,
+        items: Array.isArray(result.items)
+          ? result.items.map((item) => localizeNewsFields(item, locale))
+          : result.items,
         feeds: {
           rss: "/api/news/rss",
           ical: "/api/news/ical",

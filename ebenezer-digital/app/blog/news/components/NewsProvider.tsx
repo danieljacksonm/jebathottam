@@ -2,8 +2,14 @@
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { NewsArticle, NewsNavId } from "../data";
+import { localeFromPathname } from "@/lib/i18n/locale-utils";
 
-const CACHE_KEY = "eben-news-cache-v5";
+function newsLocaleQuery(): string {
+  const path = typeof window === "undefined" ? "/" : window.location.pathname;
+  return `locale=${localeFromPathname(path)}`;
+}
+
+const CACHE_KEY = "eben-news-cache-v6";
 const POLL_MS = 90_000;
 const PAGE = 120;
 
@@ -65,8 +71,8 @@ export function NewsProvider({
     setRefreshing(true);
     try {
       const url = since
-        ? `/api/news?limit=${PAGE}&since=${encodeURIComponent(since)}`
-        : `/api/news?limit=${PAGE}`;
+        ? `/api/news?limit=${PAGE}&since=${encodeURIComponent(since)}&${newsLocaleQuery()}`
+        : `/api/news?limit=${PAGE}&${newsLocaleQuery()}`;
       const res = await fetch(url, { cache: "no-store" });
       const data = await res.json();
       const items = Array.isArray(data.items) ? (data.items as NewsArticle[]) : [];
@@ -86,7 +92,7 @@ export function NewsProvider({
 
   const loadMore = async () => {
     const offset = articlesRef.current.length;
-    const res = await fetch(`/api/news?limit=${PAGE}&offset=${offset}`, { cache: "no-store" });
+    const res = await fetch(`/api/news?limit=${PAGE}&offset=${offset}&${newsLocaleQuery()}`, { cache: "no-store" });
     const data = await res.json();
     const items = Array.isArray(data.items) ? (data.items as NewsArticle[]) : [];
     setHasMore(Boolean(data.hasMore) && items.length > 0);
@@ -102,7 +108,8 @@ export function NewsProvider({
     let hasWarmCache = initialArticles.length > 0;
 
     try {
-      const raw = localStorage.getItem(CACHE_KEY);
+      const cacheKey = `${CACHE_KEY}-${localeFromPathname(window.location.pathname)}`;
+      const raw = localStorage.getItem(cacheKey);
       if (raw) {
         const parsed = JSON.parse(raw) as { items?: NewsArticle[]; updatedAt?: string };
         if (Array.isArray(parsed.items) && parsed.items.length) {
@@ -122,7 +129,7 @@ export function NewsProvider({
 
     const load = (first = false) => {
       if (first && initialArticles.length === 0 && !hasWarmCache) setLoading(true);
-      fetch(`/api/news?limit=${PAGE}`, { cache: "no-store" })
+      fetch(`/api/news?limit=${PAGE}&locale=${localeFromPathname(window.location.pathname)}`, { cache: "no-store" })
         .then((r) => r.json())
         .then((data) => {
           if (!alive) return;
@@ -132,7 +139,10 @@ export function NewsProvider({
             setArticles(items);
             setUpdatedAt(latestStamp(items));
             try {
-              localStorage.setItem(CACHE_KEY, JSON.stringify({ items, updatedAt: latestStamp(items) }));
+              localStorage.setItem(
+                `${CACHE_KEY}-${localeFromPathname(window.location.pathname)}`,
+                JSON.stringify({ items, updatedAt: latestStamp(items) })
+              );
             } catch {
               /* ignore */
             }

@@ -1,12 +1,24 @@
 import { db } from "@/lib/db";
 import type { JournalPost } from "@/app/blog/lib";
 import { sortEditorialFirst } from "@/lib/journal-filter";
+import { localizedJournalArticle } from "@/lib/i18n/localize-journal";
 import { getPrisma, prismaEnabled } from "@/lib/prisma";
+
+function withLocale<T extends { slug: string; title: string; excerpt: string; category: string }>(
+  post: T,
+  locale?: string
+): T {
+  if (!locale || locale === "en") return post;
+  const localized = localizedJournalArticle(post.slug, locale);
+  if (!localized) return post;
+  return { ...post, title: localized.title, excerpt: localized.excerpt, category: localized.category };
+}
 
 export async function getJournalPostsForPage(opts?: {
   q?: string;
   cat?: string;
   limit?: number;
+  locale?: string;
 }): Promise<{ posts: JournalPost[]; categories: string[] }> {
   const q = (opts?.q || "").trim().toLowerCase();
   const cat = (opts?.cat || "").trim();
@@ -37,7 +49,9 @@ export async function getJournalPostsForPage(opts?: {
     }
   }
   const seen = new Set(dbPosts.map((p) => p.slug));
-  const all = [...dbPosts, ...filePosts.filter((p) => !seen.has(p.slug))];
+  const all = [...dbPosts, ...filePosts.filter((p) => !seen.has(p.slug))].map((p) =>
+    withLocale(p, opts?.locale)
+  );
   const categories = Array.from(new Set(all.map((p) => p.category).filter(Boolean))).sort((a, b) =>
     a.localeCompare(b)
   );

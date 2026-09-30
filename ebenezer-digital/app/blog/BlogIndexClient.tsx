@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { usePathname } from "next/navigation";
+import { localeFromPathname } from "@/lib/i18n/locale-utils";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -69,6 +71,7 @@ function BlogIndexInner({
     if (query.trim()) params.set("q", query.trim());
     if (activeCategory && activeCategory !== "ALL") params.set("cat", activeCategory);
     params.set("limit", "48");
+    params.set("locale", localeFromPathname(window.location.pathname));
     fetch(`/api/blog/list?${params.toString()}`)
       .then((r) => r.json())
       .then((data) => {
