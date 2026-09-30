@@ -1,50 +1,39 @@
 "use client";
 
-import { useLayoutEffect, useRef, type RefObject } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { safeRevert } from "@/lib/gsap-safe";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef, type RefObject } from "react";
 
 export function useReveal(
   deps: unknown[] = [],
-  options?: { y?: number; stagger?: number; start?: string },
 ): RefObject<HTMLElement | null> {
   const ref = useRef<HTMLElement | null>(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    let ctx: gsap.Context | null = null;
-    const frame = window.requestAnimationFrame(() => {
-      const targets = el.querySelectorAll("[data-reveal]");
-      ctx = gsap.context(() => {
-        gsap.fromTo(
-          targets.length ? targets : el,
-          { opacity: 0, y: options?.y ?? 28 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            stagger: options?.stagger ?? 0.08,
-            scrollTrigger: {
-              trigger: el,
-              start: options?.start ?? "top 80%",
-              toggleActions: "play none none none",
-            },
-          },
-        );
-      }, el);
-    });
+    const targets = el.querySelectorAll<HTMLElement>("[data-reveal]");
+    const nodes = targets.length ? [...targets] : [el];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("is-revealed");
+          entry.target.classList.remove("will-reveal");
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px" },
+    );
 
-    return () => {
-      window.cancelAnimationFrame(frame);
-      safeRevert(ctx);
-    };
+    for (const node of nodes) {
+      const rect = node.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.92) continue;
+      node.classList.add("will-reveal");
+      observer.observe(node);
+    }
+
+    return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 

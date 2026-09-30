@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import {
   formatPackagePrice,
-  getLocalizedPackagesAsync,
+  getFeaturedPackageCards,
   isEnquiryPriced,
 } from "@/data/packages";
 import { FeaturedPackagesMotion } from "@/components/platform/FeaturedPackagesMotion";
@@ -13,9 +13,7 @@ export async function FeaturedPackages() {
   const t = await getTranslations("platform");
   const pkgT = await getTranslations("packages");
   const locale = await getLocale();
-  const packages = (await getLocalizedPackagesAsync(locale)).filter(
-    (p) => p.featured,
-  );
+  const packages = await getFeaturedPackageCards(locale);
 
   return (
     <section className="section-pad border-t border-[var(--line)] bg-[#04101f]/60">
@@ -43,7 +41,7 @@ export async function FeaturedPackages() {
                 id={pkg.id}
                 title={pkg.title}
                 image={pkg.image}
-                destination={pkg.details.destination}
+                destination={pkg.destination}
                 days={pkg.days}
                 nights={pkg.nights}
                 blurb={pkg.blurb}

@@ -7,7 +7,7 @@ import { CinematicPageHero } from "@/components/film/CinematicPageHero";
 import { BlogArticle } from "@/components/blog/BlogArticle";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { absoluteUrl, articleJsonLd, pageMetadata } from "@/lib/seo";
+import { absoluteUrl, articleJsonLd, pageMetadata, SITE_URL } from "@/lib/seo";
 
 export const dynamicParams = true;
 
@@ -24,15 +24,27 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const post = await getLocalizedBlog(slug, locale);
   if (!post) return {};
+  const path = `/blog/${post.slug}`;
+  const languages: Record<string, string> = {
+    "x-default": absoluteUrl("en", path),
+  };
+  for (const loc of post.availableLocales) {
+    languages[loc] = absoluteUrl(loc, path);
+  }
+  const translatedHere = locale === "en" || post.availableLocales.includes(locale as "en" | "ta" | "hi");
+  const ownCanonical =
+    translatedHere && post.canonicalUrl?.startsWith(SITE_URL) ? post.canonicalUrl : undefined;
   return pageMetadata({
     locale,
-    path: `/blog/${post.slug}`,
+    path,
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.excerpt,
     image: post.ogImage || post.image,
     imageAlt: post.title,
     type: "article",
     publishedTime: post.date,
+    languages,
+    canonical: translatedHere ? ownCanonical : absoluteUrl("en", path),
   });
 }
 

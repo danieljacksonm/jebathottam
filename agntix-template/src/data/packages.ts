@@ -203,6 +203,91 @@ export async function getPackageRows(): Promise<PackageRow[]> {
   return packageRows;
 }
 
+export async function getPublishedDestinationSlugs() {
+  try {
+    const rows = await prisma.travelPackage.findMany({
+      where: { published: true },
+      select: { destinationSlug: true },
+      distinct: ["destinationSlug"],
+    });
+    if (rows.length > 0) return new Set(rows.map((row) => row.destinationSlug));
+  } catch {
+    // Fall through to the JSON snapshot.
+  }
+  return new Set(packageRows.map((row) => row.destinationSlug));
+}
+
+export type FeaturedPackageCardData = {
+  id: string;
+  title: string;
+  image: string;
+  destination: string;
+  days: number;
+  nights: number;
+  blurb: string;
+  priceFrom: number;
+  pricingMode: PackagePricingMode;
+};
+
+export async function getFeaturedPackageCards(locale: string): Promise<FeaturedPackageCardData[]> {
+  const empty = { en: "", ta: "", hi: "" };
+  try {
+    const rows = await prisma.travelPackage.findMany({
+      where: { published: true, featured: true },
+      orderBy: [{ sortOrder: "asc" }, { slug: "asc" }],
+      select: {
+        slug: true,
+        destinationSlug: true,
+        nights: true,
+        days: true,
+        priceFrom: true,
+        image: true,
+        pricingMode: true,
+        titleJson: true,
+        blurbJson: true,
+      },
+    });
+    if (rows.length > 0) {
+      const dests = await prisma.destination.findMany({
+        where: { slug: { in: [...new Set(rows.map((row) => row.destinationSlug))] } },
+        select: { slug: true, nameEn: true, nameTa: true, nameHi: true },
+      });
+      const names = new Map(
+        dests.map((dest) => [
+          dest.slug,
+          locale === "ta" ? dest.nameTa || dest.nameEn : locale === "hi" ? dest.nameHi || dest.nameEn : dest.nameEn,
+        ]),
+      );
+      return rows.map((row) => ({
+        id: row.slug,
+        title: pickLocalized(parseJson(row.titleJson, empty), locale),
+        blurb: pickLocalized(parseJson(row.blurbJson, empty), locale),
+        image: row.image,
+        destination: names.get(row.destinationSlug) || row.destinationSlug,
+        days: row.days,
+        nights: row.nights,
+        priceFrom: row.priceFrom,
+        pricingMode: (row.pricingMode as PackagePricingMode) || "enquiry",
+      }));
+    }
+  } catch {
+    // Fall through to the JSON snapshot.
+  }
+  return getLocalizedPackages(locale)
+    .filter((pkg) => pkg.featured)
+    .map((pkg) => ({
+      id: pkg.id,
+      title: pkg.title,
+      image: pkg.image,
+      destination: pkg.details.destination,
+      days: pkg.days,
+      nights: pkg.nights,
+      blurb: pkg.blurb,
+      priceFrom: pkg.priceFrom,
+      pricingMode: pkg.pricingMode,
+    }));
+}
+
 export async function getPackageRow(id: string) {
   const rows = await getPackageRows();
   return rows.find((p) => p.id === id);

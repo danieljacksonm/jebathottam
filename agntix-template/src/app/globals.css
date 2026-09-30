@@ -818,6 +818,14 @@ html[data-kodai-hour="night"] .btn-gold {
 [data-hero-cta] { animation-delay: 0.4s; }
 [data-scroll-hint] { animation-delay: 0.55s; }
 
+.will-reveal {
+  opacity: 0;
+  transform: translateY(1.1rem);
+}
+.is-revealed {
+  animation: canaan-hero-rise 0.7s ease both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-mist-enter] {
     animation: none;
@@ -828,7 +836,9 @@ html[data-kodai-hour="night"] .btn-gold {
   [data-hero-brand],
   [data-hero-sub],
   [data-hero-cta],
-  [data-scroll-hint] {
+  [data-scroll-hint],
+  .will-reveal,
+  .is-revealed {
     animation: none;
     opacity: 1;
     transform: none;

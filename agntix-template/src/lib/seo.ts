@@ -38,6 +38,10 @@ type PageMetaInput = {
   publishedTime?: string;
   modifiedTime?: string;
   absoluteTitle?: boolean;
+  /** Overrides the locale URL when this page repeats another language. */
+  canonical?: string;
+  /** Overrides hreflang when some locales are not real translations. */
+  languages?: Record<string, string>;
 };
 
 export function pageMetadata({
@@ -52,16 +56,20 @@ export function pageMetadata({
   publishedTime,
   modifiedTime,
   absoluteTitle = false,
+  canonical,
+  languages,
 }: PageMetaInput): Metadata {
   const url = absoluteUrl(locale, path);
   const ogImage = image.startsWith("http") ? image : `${SITE_URL}${image}`;
+  const alreadyBranded =
+    title.includes(SITE_NAME) || /\|\s*Canaan\s*$/.test(title);
 
   return {
-    title: absoluteTitle ? { absolute: title } : title,
+    title: absoluteTitle || alreadyBranded ? { absolute: title } : title,
     description,
     alternates: {
-      canonical: url,
-      languages: languageAlternates(path),
+      canonical: canonical ?? url,
+      languages: languages ?? languageAlternates(path),
     },
     robots: noIndex
       ? { index: false, follow: false }
@@ -235,7 +243,9 @@ export function packageJsonLd(pkg: {
     "@type": ["Product", "TouristTrip"],
     name: pkg.name,
     description: pkg.description,
-    image: pkg.image,
+    image: pkg.image?.startsWith("http")
+      ? pkg.image
+      : `${SITE_URL}${pkg.image || ""}`,
     brand: { "@type": "Brand", name: SITE_NAME },
     url: pkg.url,
   };

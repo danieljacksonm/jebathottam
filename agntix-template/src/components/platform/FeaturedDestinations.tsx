@@ -3,7 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getFeaturedDestinations } from "@/data/destinations";
 import { destinationCardImage } from "@/data/image-registry";
-import { formatInr, getPackageRows } from "@/data/packages";
+import { formatInr, getPublishedDestinationSlugs } from "@/data/packages";
 import { FeaturedDestinationsMotion } from "@/components/platform/FeaturedDestinationsMotion";
 
 const PACKAGE_DESTINATION_PRIORITY = ["kodaikanal", "darjeeling"];
@@ -11,11 +11,10 @@ const PACKAGE_DESTINATION_PRIORITY = ["kodaikanal", "darjeeling"];
 export async function FeaturedDestinations() {
   const t = await getTranslations("platform");
   const locale = await getLocale();
-  const [raw, packageRows] = await Promise.all([
+  const [raw, withPackages] = await Promise.all([
     getFeaturedDestinations(locale, 12),
-    getPackageRows(),
+    getPublishedDestinationSlugs(),
   ]);
-  const withPackages = new Set(packageRows.map((p) => p.destinationSlug));
 
   const list = [...raw]
     .sort((a, b) => {

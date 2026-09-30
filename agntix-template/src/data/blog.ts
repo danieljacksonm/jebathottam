@@ -22,7 +22,16 @@ export type LocalizedBlog = {
   ogImage: string | null;
   canonicalUrl: string | null;
   author: string;
+  /** Locales whose article body is not a copy of English. English is always included. */
+  availableLocales: Array<"en" | "ta" | "hi">;
 };
+
+function hasOwnCopy(en?: string | null, other?: string | null) {
+  if (en == null || other == null) return false;
+  const left = en.trim();
+  const right = other.trim();
+  return right.length > 2 && right !== "[]" && right !== left;
+}
 
 function pickLocale(en: string, ta: string, hi: string, locale: string) {
   if (locale === "ta") return ta || en;
@@ -116,6 +125,11 @@ function localizeBlogRow(row: BlogCardRow | null, locale: string): LocalizedBlog
     ogImage: row.ogImage,
     canonicalUrl: row.canonicalUrl,
     author: pickLocale(row.authorEn, row.authorTa, row.authorHi, locale),
+    availableLocales: [
+      "en",
+      ...(hasOwnCopy(row.bodyEn, row.bodyTa) ? (["ta"] as const) : []),
+      ...(hasOwnCopy(row.bodyEn, row.bodyHi) ? (["hi"] as const) : []),
+    ],
   };
 }
 
@@ -278,6 +292,38 @@ export async function getLocalizedBlog(slug: string, locale: string) {
     include: blogInclude,
   });
   return localizeBlogRow(row, locale);
+}
+
+export type SitemapBlog = {
+  slug: string;
+  date: string;
+  ta: boolean;
+  hi: boolean;
+};
+
+/** Every published article, with flags for bodies that are not English copies. */
+export async function getSitemapBlogs(): Promise<SitemapBlog[]> {
+  const rows = await prisma.$queryRaw<
+    Array<{ slug: string; date: string; ta: number | bigint; hi: number | bigint }>
+  >`
+    SELECT slug, date,
+      CASE
+        WHEN bodyTa IS NOT NULL AND length(trim(bodyTa)) > 2 AND bodyTa != '[]' AND bodyTa != bodyEn THEN 1
+        ELSE 0
+      END AS ta,
+      CASE
+        WHEN bodyHi IS NOT NULL AND length(trim(bodyHi)) > 2 AND bodyHi != '[]' AND bodyHi != bodyEn THEN 1
+        ELSE 0
+      END AS hi
+    FROM BlogPost
+    WHERE status = 'published'
+  `;
+  return rows.map((row) => ({
+    slug: row.slug,
+    date: row.date,
+    ta: Number(row.ta) === 1,
+    hi: Number(row.hi) === 1,
+  }));
 }
 
 /** Prebuild a capped set for SSG; remaining posts render on demand. */

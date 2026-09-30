@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
-import { getAllBlogSlugs } from "@/data/blog";
+import { getSitemapBlogs } from "@/data/blog";
 import { getAllPlaceParams, getDestinationSlugs } from "@/data/destinations";
 import { getPackageRows } from "@/data/packages";
 import { SITE_URL, absoluteUrl, localizedPath } from "@/lib/seo";
@@ -43,8 +43,8 @@ function hreflangAlternates(path: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
-  const [blogSlugs, destinationSlugs, places, packageRows] = await Promise.all([
-    getAllBlogSlugs(8000),
+  const [blogs, destinationSlugs, places, packageRows] = await Promise.all([
+    getSitemapBlogs(),
     getDestinationSlugs(),
     getAllPlaceParams(),
     getPackageRows(),
@@ -54,7 +54,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const path of staticPaths) {
       entries.push({
         url: `${SITE_URL}${localizedPath(locale, path)}`,
-        lastModified: new Date(),
         changeFrequency:
           path === "/" || path === "/kodaikanal" ? "weekly" : "monthly",
         priority:
@@ -71,7 +70,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const destPath = `/destinations/${slug}`;
       entries.push({
         url: `${SITE_URL}${localizedPath(locale, destPath)}`,
-        lastModified: new Date(),
         changeFrequency: "monthly",
         priority: 0.75,
         alternates: { languages: hreflangAlternates(destPath) },
@@ -82,7 +80,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const placePath = `/destinations/${place.destination}/places/${place.place}`;
       entries.push({
         url: `${SITE_URL}${localizedPath(locale, placePath)}`,
-        lastModified: new Date(),
         changeFrequency: "monthly",
         priority: 0.7,
         alternates: { languages: hreflangAlternates(placePath) },
@@ -93,21 +90,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const pkgPath = `/packages/${pkg.id}`;
       entries.push({
         url: `${SITE_URL}${localizedPath(locale, pkgPath)}`,
-        lastModified: new Date(),
         changeFrequency: "monthly",
         priority: 0.8,
         alternates: { languages: hreflangAlternates(pkgPath) },
       });
     }
 
-    for (const slug of blogSlugs) {
-      const postPath = `/blog/${slug}`;
+    for (const post of blogs) {
+      if (locale === "ta" && !post.ta) continue;
+      if (locale === "hi" && !post.hi) continue;
+      const postPath = `/blog/${post.slug}`;
+      const languages: Record<string, string> = {
+        "x-default": absoluteUrl(routing.defaultLocale, postPath),
+        en: absoluteUrl("en", postPath),
+      };
+      if (post.ta) languages.ta = absoluteUrl("ta", postPath);
+      if (post.hi) languages.hi = absoluteUrl("hi", postPath);
       entries.push({
         url: `${SITE_URL}${localizedPath(locale, postPath)}`,
-        lastModified: new Date(),
+        lastModified: Number.isNaN(new Date(post.date).getTime()) ? undefined : new Date(post.date),
         changeFrequency: "monthly",
         priority: 0.6,
-        alternates: { languages: hreflangAlternates(postPath) },
+        alternates: { languages },
       });
     }
   }
